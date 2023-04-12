@@ -1,166 +1,46 @@
-# Initial project work
+# Getting Started with Create React App
 
-### 1. Initialize project
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### 2. MUI library & Theme setup
+## Available Scripts
 
-### 3. Setup Code Linting tools and code snippet configuration files
+In the project directory, you can run:
 
-- ESLint
-- VS Code Custom Code Snippets for the frontend project
+### `yarn start`
 
-### 4. Setup project structure
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-- src/
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-  - components
-    - CommonPageLayout.tsx
-  - pages/
+### `yarn test`
 
-    - Home
-      - index.tsx
-    - Users
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-      - types/
+### `yarn build`
 
-        - User.d.ts
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-      - components/
-        - UserServices.tsx
-          - `login();`
-          - `getCountByType();`
-      - index.tsx
-      - Login.tsx
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-    - Divisions
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-      - components/
-        - DivisionServices.tsx
-          - `getCount();`
-      - index.tsx
+### `yarn eject`
 
-    - ...
-      - ...
-        - ...
-          - ...
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-### 5. Create a CommonPageLayout component
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-- Sample usage:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-```html
-<CommonPageLayout title="Page title" loadingCount="{loading}">
-  Content goes here...
-</CommonPageLayout>
-```
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-### 6. Setup react-router-dom
+## Learn More
 
-### 7. Design Login Page
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-- Design User Type/Interface
-
-```javascript
-interface User {
-  _id: string;
-}
-```
-
-- Email Regex
-
-### 8. Create Fake REST API Caller in Users/components/UserServices for logging user in
-
-```javascript
-UserServices.login(email: string, password: string) => {
-    data: User;
-    message: "Successfully logged in!" | "Something went wrong! Please try again";
-    error: any;
-}
-```
-
-### 9. Design Private Routes
-
-### 10. Design forgotten passwords page
-
-```javascript
-UserServices.requestForgottenPasswordReset(email: string,) => {
-    data: void;
-    message: "Successfully logged in!" | "Something went wrong! Please try again";
-    error: any;
-}
-```
-
-# Home
-
-### 11. Design HomePage
-
-- Create Fake REST API Caller in Divisions/components/DivisionServices for getting count of all the divisions
-
-```javascript
-DivisionServices.getCount() => {
-     data: Number;
-     message: "Successfully fetched count of all divisions!" | "Something went wrong! Please try again";
-     error: any;
-}
-```
-
-- Create a Fake REST API Caller in Users/components/UserServices for getting count of all staffs/workers
-
-```javascript
-UserServices.getCountByType(type: "staff"|"worker") => {
-        data: Number;
-        message: "Successfully fetched count of all staff" | "Successfully fetched count of all workers" | "Something went wrong! Please try again";
-        error: any;
-}
-```
-
-- Create a Fake REST API Caller in FR/components/FRServices for getting count of all active FRs
-
-```javascript
-FRServices.getActiveCount() => {
-     data: Number;
-     message: "Successfully fetched count of all active FRs!" | "Something went wrong! Please try again";
-     error: any;
-}
-```
-
-- Create a Fake REST API Caller in IRO/components/IROServices for getting count of all active IROs
-
-```javascript
-IROServices.getActiveCount() => {
-     data: Number;
-     message: "Successfully fetched count of all active IROs!" | "Something went wrong! Please try again";
-     error: any;
-}
-```
-
-# HR
-
-### 15. Design HR Dashboard
-
-Items:
-
-1. Manage Staff
-2. Manage Workers
-3. Approve new workers
-
-### 16. Design Manage Staff page
-
-### 17. Design Table of all all staffs
-
-````
-- Create a Fake REST API Caller in User/components/UserServices for getting count of all active Users
-
-```javascript
-UserServices.getActiveCount() => {
-     data: Number;
-     message: "Successfully fetched count of all Users!" | "Something went wrong! Please try again";
-     error: any;
-}
-````
-
-### 18. Add button for adding a new staff (Which will redirect to /users/add)
-
-### 19. Excel & PDF exports of users' data
-
-### 20. Excel imports of users' data
+To learn React, check out the [React documentation](https://reactjs.org/).
