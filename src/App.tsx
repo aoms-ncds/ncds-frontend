@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { ThemeProvider, createTheme, useMediaQuery } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-import Router from './Router';
+import Router from './extras/CommonRouter';
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
