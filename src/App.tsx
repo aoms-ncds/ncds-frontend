@@ -19,7 +19,7 @@ const App = () => {
           // },
         },
       }),
-    [prefersDarkMode]
+    [prefersDarkMode],
   );
   return (
     <ThemeProvider theme={theme}>

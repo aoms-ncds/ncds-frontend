@@ -2,16 +2,19 @@ import React from 'react';
 import HomePage from '..';
 import LoginPage from '../LoginPage';
 
-const home_page_routes: ModuleRoute = {
+const homePageRoutes: ModuleRoute = {
   base: '/',
   pages: [
     {
+      title: 'Home Page',
       path: '',
       element: <HomePage />,
       private: true,
       requiredAccessRights: ['string'],
+      showInDrawer: true,
     },
     {
+      title: 'Login page',
       path: '/login',
       element: <LoginPage />,
       private: true,
@@ -19,4 +22,4 @@ const home_page_routes: ModuleRoute = {
     },
   ],
 };
-export default home_page_routes;
+export default homePageRoutes;
