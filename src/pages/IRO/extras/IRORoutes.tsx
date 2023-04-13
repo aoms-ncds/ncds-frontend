@@ -1,5 +1,5 @@
-const iro_page_routes: ModuleRoute = {
+const iroPageRoutes: ModuleRoute = {
   base: '/',
   pages: [],
 };
-export default iro_page_routes;
+export default iroPageRoutes;

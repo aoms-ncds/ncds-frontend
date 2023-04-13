@@ -1,5 +1,5 @@
-const workers_page_routes: ModuleRoute = {
+const workersPageRoutes: ModuleRoute = {
   base: '/',
   pages: [],
 };
-export default workers_page_routes;
+export default workersPageRoutes;

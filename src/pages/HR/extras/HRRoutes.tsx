@@ -1,5 +1,5 @@
-const hr_page_routes: ModuleRoute = {
+const hrPageRoutes: ModuleRoute = {
   base: '/',
   pages: [],
 };
-export default hr_page_routes;
+export default hrPageRoutes;
