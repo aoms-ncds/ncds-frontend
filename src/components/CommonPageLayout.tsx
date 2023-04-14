@@ -20,7 +20,6 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import homePageRoutes from '../pages/Home/extras/HomeRoutes';
 import { Link, NavLink } from 'react-router-dom';
 import divisionsPageRoutes from '../pages/Divisions/extras/DivisionsRoutes';
@@ -28,9 +27,9 @@ import frPageRoutes from '../pages/FR/extras/FRRoutes';
 import hrPageRoutes from '../pages/HR/extras/HRRoutes';
 import iroPageRoutes from '../pages/IRO/extras/IRORoutes';
 import workersPageRoutes from '../pages/Workers/extras/WorkersRoutes';
+import CommonConstants from '../extras/CommonConstants';
 
 const drawerWidth = 240;
-
 
 const CommonPageLayout = (props: {
   children: JSX.Element[] | JSX.Element;
@@ -56,22 +55,25 @@ const CommonPageLayout = (props: {
     setAnchorElUser(null);
   };
   useEffect(() => {
-    if (props.loadCount && props.loadCount<0) throw Error('Load count must never be less than 0');
+    if (props.loadCount && props.loadCount < 0) {
+      throw Error('Load count must never be less than 0');
+    }
   }, [props.loadCount]);
 
   const drawer = (
     <div>
-      <Toolbar />
+      {/* <Toolbar /> */}
+      <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
       <Divider />
       <List>
         {([] as (JSX.Element | null)[]).concat(
           ...[
             homePageRoutes,
-            divisionsPageRoutes,
-            frPageRoutes,
             hrPageRoutes,
-            iroPageRoutes,
+            divisionsPageRoutes,
             workersPageRoutes,
+            frPageRoutes,
+            iroPageRoutes,
           ].map((moduleRoute) =>
             moduleRoute.pages.map((page) =>
               !page.showInDrawer ? null : (
@@ -93,9 +95,9 @@ const CommonPageLayout = (props: {
                 >
                   <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
                     <ListItemButton>
-                      <ListItemIcon sx={{ color: 'inherit' }}>
-                        <InboxIcon />
-                      </ListItemIcon>
+                      {<ListItemIcon sx={{ color: 'inherit' }}>
+                        {page.icon}
+                      </ListItemIcon>}
                       <ListItemText primary={page.title} />
                     </ListItemButton>
                   </ListItem>
@@ -129,11 +131,9 @@ const CommonPageLayout = (props: {
           >
             <MenuIcon />
           </IconButton>
-          {props.title && (
-            <Typography variant="h6" noWrap component="div">
-              {props.title}
-            </Typography>
-          )}
+          <Typography variant="h6" noWrap component="div">
+            {CommonConstants.appName}
+          </Typography>
           <Tooltip title="Open settings">
             <IconButton
               onClick={handleOpenUserMenu}
@@ -168,7 +168,9 @@ const CommonPageLayout = (props: {
             </MenuItem>
           </Menu>
         </Toolbar>
-        {(props.loadCount != undefined && props.loadCount>0) && <LinearProgress />}
+        {props.loadCount != undefined && props.loadCount > 0 && (
+          <LinearProgress />
+        )}
       </AppBar>
       <Box
         component="nav"
@@ -216,6 +218,12 @@ const CommonPageLayout = (props: {
         }}
       >
         <Toolbar />
+        {props.title && <>
+          <Typography variant='h4'>{props.title}</Typography>
+          <br />
+          <Divider />
+          <br />
+        </>}
         {props.children}
       </Box>
     </Box>

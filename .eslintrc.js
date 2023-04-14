@@ -26,6 +26,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   'rules': {
+    'prefer-promise-reject-errors': 'off',
     '@typescript-eslint/naming-convention': [
       'error',
       // {
@@ -66,6 +67,7 @@ module.exports = {
       'error',
       'always',
     ],
+    'no-unused-vars': 'warn',
     'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
     'max-len': ['error', { 'code': 200 }],

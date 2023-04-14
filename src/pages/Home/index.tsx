@@ -1,10 +1,19 @@
 import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import MinimalModuleDataAnalytics from './components/MinimalModuleDataAnalytics';
+
 const HomePage = () => {
   return (
-    <CommonPageLayout title="Home Page" loadCount={0}>
-      <Typography>Hello there!</Typography>
+    <CommonPageLayout loadCount={0} title='Home Page'>
+      {/* <Container> */}
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={6}>
+          <MinimalModuleDataAnalytics />
+        </Grid>
+      </Grid>
+      {/* </Container> */}
+
     </CommonPageLayout>
   );
 };
