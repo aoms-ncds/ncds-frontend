@@ -20,7 +20,7 @@ const HRDashboard = () => {
             primaryText='Manage workers'
             secondaryText='556'
             color='#0dcaf0'
-            targetRoute="/manage"
+            targetRoute="/workers"
           />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
@@ -28,7 +28,7 @@ const HRDashboard = () => {
             primaryText='Approve new worker'
             secondaryText='27'
             color='#8833ff'
-            targetRoute="/manage"
+            targetRoute="/workers/approval"
           />
         </Grid>
       </Grid>

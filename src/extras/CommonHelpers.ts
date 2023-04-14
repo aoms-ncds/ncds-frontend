@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { AxiosResponse } from 'axios';
 
 export const getStandardResponse = <T>(
   axiosCall: Promise<AxiosResponse<any, any>>,

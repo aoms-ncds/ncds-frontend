@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { getStandardResponse, getAuthHeader, dummyRequest } from '../../../extras/CommonHelpers';
+import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
 
 export default {
   // getCount: () => getStandardResponse<number>(axios.get('http://localhost:8080/tests/getCount', {
