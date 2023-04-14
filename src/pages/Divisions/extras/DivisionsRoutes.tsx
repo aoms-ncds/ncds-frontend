@@ -1,4 +1,5 @@
 import React from 'react';
+import ExtensionIcon from '@mui/icons-material/Extension';
 import DivisionsPage from '..';
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -11,6 +12,7 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['string'],
       showInDrawer: true,
+      icon: <ExtensionIcon />,
     },
   ],
 };

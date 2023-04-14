@@ -1,4 +1,14 @@
-export default {};
-export { };
+import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 
-declare global { }
+export default {
+  getCount: () => getStandardResponse<number>(
+    dummyRequest({
+      data: 5,
+      // error: null,
+      message: 'Network Error',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+
+};

@@ -1,17 +1,19 @@
 import React from 'react';
 import HomePage from '..';
 import LoginPage from '../LoginPage';
+import { Home as HomeIcon } from '@mui/icons-material';
 
 const homePageRoutes: ModuleRoute = {
-  base: '/',
+  base: '',
   pages: [
     {
       title: 'Home Page',
-      path: '',
+      path: '/',
       element: <HomePage />,
       private: true,
       requiredAccessRights: ['string'],
       showInDrawer: true,
+      icon: <HomeIcon />,
     },
     {
       title: 'Login page',

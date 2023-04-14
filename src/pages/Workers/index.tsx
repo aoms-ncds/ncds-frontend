@@ -1,13 +1,12 @@
 import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Typography } from '@mui/material';
 
-const DivisionsPage = () => {
+const WorkersDashboard = () => {
   return (
     <CommonPageLayout>
-
+      <div>WorkersDashboard</div>
     </CommonPageLayout>
   );
 };
 
-export default DivisionsPage;
+export default WorkersDashboard;
