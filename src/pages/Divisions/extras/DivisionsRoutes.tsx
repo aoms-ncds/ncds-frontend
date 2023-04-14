@@ -6,7 +6,7 @@ const divisionsPageRoutes: ModuleRoute = {
   base: '/divisions',
   pages: [
     {
-      title: 'Divisions Page',
+      title: 'Divisions',
       path: '/',
       element: <DivisionsPage />,
       private: true,

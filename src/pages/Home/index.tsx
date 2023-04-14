@@ -18,5 +18,6 @@ const HomePage = () => {
   );
 };
 
+
 export default HomePage;
 export const HomePagePath = '/';
