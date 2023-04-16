@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Button,
   CssBaseline,
   Divider,
   Drawer,
@@ -20,14 +21,9 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import homePageRoutes from '../pages/Home/extras/HomeRoutes';
 import { Link, NavLink } from 'react-router-dom';
-import divisionsPageRoutes from '../pages/Divisions/extras/DivisionsRoutes';
-import frPageRoutes from '../pages/FR/extras/FRRoutes';
-import hrPageRoutes from '../pages/HR/extras/HRRoutes';
-import iroPageRoutes from '../pages/IRO/extras/IRORoutes';
-import workersPageRoutes from '../pages/Workers/extras/WorkersRoutes';
 import CommonConstants from '../extras/CommonConstants';
+import { getAllModuleRoutes } from '../extras/CommonRouter';
 
 const drawerWidth = 240;
 
@@ -66,46 +62,37 @@ const CommonPageLayout = (props: {
       <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
       <Divider />
       <List>
-        {([] as (JSX.Element | null)[]).concat(
-          ...[
-            homePageRoutes,
-            hrPageRoutes,
-            divisionsPageRoutes,
-            workersPageRoutes,
-            frPageRoutes,
-            iroPageRoutes,
-          ].map((moduleRoute) =>
-            moduleRoute.pages.map((page) =>
-              !page.showInDrawer ? null : (
-                <NavLink
-                  key={page.path}
-                  to={moduleRoute.base + page.path}
-                  style={({ isActive }) =>
-                    !isActive ?
-                      {
-                        color: theme.palette.text.secondary,
-                        textDecoration: 'none',
-                      } :
-                      {
-                        color: isDark ? 'black' : 'white',
-                        textDecoration: 'none',
-                        backgroundColor: theme.palette.primary.main,
-                      }
-                  }
-                >
-                  <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
-                    <ListItemButton>
-                      {<ListItemIcon sx={{ color: 'inherit' }}>
-                        {page.icon}
-                      </ListItemIcon>}
-                      <ListItemText primary={page.title} />
-                    </ListItemButton>
-                  </ListItem>
-                </NavLink>
-              ),
+        {getAllModuleRoutes.map((moduleRoute, index) =>
+          moduleRoute.pages.map((page, _index) =>
+            !page.showInDrawer ? null : (
+              <NavLink
+                key={page.path+index+_index}
+                to={moduleRoute.base + page.path}
+                style={({ isActive }) =>
+                  !isActive ?
+                    {
+                      color: theme.palette.text.secondary,
+                      textDecoration: 'none',
+                    } :
+                    {
+                      color: isDark ? 'black' : 'white',
+                      textDecoration: 'none',
+                      backgroundColor: theme.palette.primary.main,
+                    }
+                }
+              >
+                <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                  <ListItemButton>
+                    {<ListItemIcon sx={{ color: 'inherit' }}>
+                      {page.icon}
+                    </ListItemIcon>}
+                    <ListItemText primary={page.title} />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
             ),
           ),
-        )}
+        ).flat()}
       </List>
       <Divider />
     </div>

@@ -10,16 +10,19 @@ import frPageRoutes from '../pages/FR/extras/FRRoutes';
 import hrPageRoutes from '../pages/HR/extras/HRRoutes';
 import iroPageRoutes from '../pages/IRO/extras/IRORoutes';
 import workersPageRoutes from '../pages/Workers/extras/WorkersRoutes';
+
+export const getAllModuleRoutes = [
+  homePageRoutes,
+  hrPageRoutes,
+  divisionsPageRoutes,
+  workersPageRoutes,
+  frPageRoutes,
+  iroPageRoutes,
+];
+
 const router = createBrowserRouter(
   ([] as RouteObject[]).concat(
-    ...[
-      divisionsPageRoutes,
-      frPageRoutes,
-      homePageRoutes,
-      hrPageRoutes,
-      iroPageRoutes,
-      workersPageRoutes,
-    ].map((moduleRoute) =>
+    ...getAllModuleRoutes.map((moduleRoute) =>
       moduleRoute.pages.map((page) => ({
         path: moduleRoute.base + page.path,
         element: page.element,
