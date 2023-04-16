@@ -22,6 +22,13 @@ const hrPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['string'],
     },
+    {
+      title: 'Edit staff',
+      path: '/edit',
+      element: <HRManagePage />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
   ],
 };
 export default hrPageRoutes;
