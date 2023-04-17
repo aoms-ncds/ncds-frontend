@@ -20,7 +20,8 @@ export default {
         Department: 25,
         Phone_email: '123476798',
         Spouse_of_another_employee: 'test',
-        ID_format: 'test' },
+        ID_format: 'test',
+      },
       {
         _id: 2,
         Name: 'sanjay',

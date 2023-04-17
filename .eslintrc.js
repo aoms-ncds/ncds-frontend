@@ -13,6 +13,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'google',
+    'plugin:json/recommended',
   ],
   'overrides': [
   ],
@@ -24,6 +25,7 @@ module.exports = {
   'plugins': [
     'react',
     '@typescript-eslint',
+    'json',
   ],
   'rules': {
     'prefer-promise-reject-errors': 'off',
@@ -67,6 +69,17 @@ module.exports = {
       'error',
       'always',
     ],
+    '@typescript-eslint/member-delimiter-style': ['error', {
+      'multiline': {
+        'delimiter': 'semi',
+        'requireLast': true,
+      },
+      'singleline': {
+        'delimiter': 'semi',
+        'requireLast': false,
+      },
+    }],
+    // 'json/camelcase': ['error', { 'properties': 'always' }],
     'no-unused-vars': 'warn',
     'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],

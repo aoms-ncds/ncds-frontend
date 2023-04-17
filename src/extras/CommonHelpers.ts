@@ -15,12 +15,18 @@ export const getStandardResponse = <T>(
 
 export const getAuthHeader = () => ({ Authorization: 'Bearer ' + localStorage.getItem('userToken') });
 
-export const dummyRequest = (res: {data?: any, error?: string, message?: string, result: 'success'|'fail', timeout: number}):Promise<any> => new Promise((resolve, reject) => {
-  setTimeout(() => {
-    if (res.result === 'success') {
-      resolve({ data: { data: res.data, message: res.data, error: res.error, success: true } });
-    } else {
-      reject({ data: { data: res.data, message: res.data, error: res.error, success: false } });
-    }
-  }, res.timeout);
-});
+export const dummyRequest = <T>(res: {
+  data?: T;
+  error?: string;
+  message?: string;
+  result: 'success'|'fail';
+  timeout: number;
+}):Promise<any> => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (res.result === 'success') {
+        resolve({ data: { data: res.data, message: res.message, error: res.error, success: true } });
+      } else {
+        reject({ data: { data: res.data, message: res.message, error: res.error, success: false } });
+      }
+    }, res.timeout);
+  });

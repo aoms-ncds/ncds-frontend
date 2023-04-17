@@ -11,12 +11,12 @@ declare global {
       requiredAccessRights: 'string'[];
       showInDrawer?: boolean;
       icon?: JSX.Element;
-    }[]
+    }[];
   }
-  type StandardResponse<T> = {
-    success?: boolean,
-    error?: string,
-    message?: string,
-    data: T
+  interface StandardResponse<T>{
+    success?: boolean;
+    error?: string;
+    message?: string;
+    data: T;
   }
 }

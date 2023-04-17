@@ -5,7 +5,7 @@ export default {
   //   headers: { ...getAuthHeader() },
   // })),
   getCount: () => getStandardResponse<number>(
-    dummyRequest({
+    dummyRequest<number>({
       data: 5,
       // error: null,
       message: 'Network Error',
