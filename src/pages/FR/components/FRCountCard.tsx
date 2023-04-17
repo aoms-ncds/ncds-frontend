@@ -1,14 +1,19 @@
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import React from 'react';
 
-const FRCountCard = () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const FRCountCard = (props: {
+    count: number;
+    secondaryText: string;
+    color: string;
+}) => {
   return (
     <Card>
       <CardActionArea
         sx={{
-          'backgroundColor': '#8833ff',
+          'backgroundColor': props.color,
           'color': 'white',
-          'borderRadius': 3,
+          'borderRadius': 2,
           'transition': 'all 0.3s',
           'padding': 2,
           '&:hover': {
@@ -23,8 +28,8 @@ const FRCountCard = () => {
           },
         }}>
         <CardContent>
-          <Typography variant='h5'>140</Typography>
-          <Typography variant='h6'>Applied</Typography>
+          <Typography variant='h5'>{props.count}</Typography>
+          <Typography variant='h6' align="right">{props.secondaryText}</Typography>
         </CardContent>
       </CardActionArea>
 

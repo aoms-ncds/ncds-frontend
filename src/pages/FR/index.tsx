@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import { Grid } from '@mui/material';
 import FRCountCard from './components/FRCountCard';
-
-const FRDashboard = () => {
+const frDashboard = () => {
   return (
     <CommonPageLayout title='FR Dashboard'>
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard />
+          <FRCountCard count={140}
+            secondaryText='Applied'
+            color='#29cc39'/>
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard />
+          <FRCountCard count={140} secondaryText={'Approved'} color={'#0dcaf0'} />
         </Grid>
       </Grid><br />
       <Grid container spacing={3}>
@@ -42,8 +43,8 @@ const FRDashboard = () => {
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
-            primaryText='Manage IRO'
-            secondaryText=''
+            primaryText='Manage'
+            secondaryText='IRO'
             color='#8833ff'
             targetRoute="/iro"
           />
@@ -53,4 +54,5 @@ const FRDashboard = () => {
   );
 };
 
-export default FRDashboard;
+export default frDashboard;
+
