@@ -1,18 +1,99 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Grid, Link } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle, Grid, Link, TextField, useMediaQuery } from '@mui/material';
+import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
 import DropdownButton from '../../components/DropDownButton';
 import {
   Edit as EditIcon,
   Add as AddIcon,
+  Delete as DeleteIcon,
 
 } from '@mui/icons-material';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 
 const HRManagePage = () => {
+  const [Department, setDepartment] = useState<Department[] | undefined>();
+  const [Position, setPosition] = useState<Position[] | undefined>();
   const [staffs, setStaffs] = useState<Staff[]>();
+  const [action, setAction] = useState<'add' | 'edit'>('add');
+  const [open, setOpen] = React.useState(false);
+  const [editStaff, seteditStaff] = useState<string>('');
+  const [newStaff, setNewStaff] = useState<Staff>({
+    _id: '',
+    name: '',
+    dob: '',
+    doj: '',
+    designation: '',
+    department: '',
+    phone: '',
+    email: '',
+    spouseOfAnotherEmployee: '',
+    idFormat: '',
+
+  });
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const createStaff = () => {
+    const snackbarId = enqueueSnackbar({
+      message: action === 'add' ? 'Creating Staff' : 'Updating Staff',
+      variant: 'info',
+    });
+    HRServices.createStaff(newStaff, action)
+      .then((res) => {
+        console.log(res);
+        handleClose();
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+        setNewStaff(() => ({
+          _id: '',
+          name: '',
+          dob: '',
+          doj: '',
+          designation: '',
+          department: '',
+          phone: '',
+          email: '',
+          spouseOfAnotherEmployee: '',
+          idFormat: '',
+        }));
+      })
+      .catch((err) => {
+        console.log(err);
+        // if (err.error === "Duplicate entry") {
+        //   setGroupExists(true);
+        //   setActiveStep(0);
+        // }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   useEffect(() => {
+    HRServices.getDepartment()
+    .then((res) => {
+      setDepartment(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
+    HRServices.getPosition()
+    .then((res) => {
+      setPosition(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
     HRServices.getStaffs()
       .then((res) => {
         console.log(res);
@@ -40,20 +121,39 @@ const HRManagePage = () => {
               text: 'Edit',
               component: Link,
               icon: EditIcon,
-              to: '/edit' + props.row._id,
+              onClick: () => {
+                setOpen(true);
+                setAction('edit');
+                seteditStaff(props.row.name);
+                // setNewStaff(() => ({
+                //   _id: props.row._id,
+                //   name: props.row.name,
+                // }));
+              },
+            },
+            {
+              id: 'delete',
+              text: 'Delete',
+              component: Link,
+              icon: DeleteIcon,
+              // onClick: () => {
+              //   removeStaff(props.row._id);
+              // },
             },
           ]}
         />
       ),
     },
     { field: '_id', headerName: 'id', width: 70 },
-    { field: 'Name', headerName: 'Name', width: 70 },
-    { field: 'DOB_DOJ', headerName: 'DOB, DOJ', width: 130 },
-    { field: 'Designation', headerName: 'Designation', width: 130 },
-    { field: 'Department', headerName: 'Department', width: 130 },
-    { field: 'Phone_email', headerName: 'Phone & email', width: 130 },
-    { field: 'Spouse_of_another_employee', headerName: 'Spouse_of_another_employee', width: 130 },
-    { field: 'ID_format', headerName: 'ID_format', width: 130 },
+    { field: 'name', headerName: 'Name', width: 70 },
+    { field: 'dob', headerName: 'DOB', width: 130 },
+    { field: 'doj', headerName: 'DOJ', width: 130 },
+    { field: 'designation', headerName: 'Designation', width: 130 },
+    { field: 'department', headerName: 'Department', width: 130 },
+    { field: 'phone', headerName: 'Phone Number', width: 130 },
+    { field: 'email', headerName: 'Email', width: 130 },
+    { field: 'spouseOfAnotherEmployee', headerName: 'Spouse of another employee', width: 130 },
+    { field: 'idFormat', headerName: 'ID Format', width: 130 },
   ];
   return (
     <CommonPageLayout title='Manage Staff'>
@@ -61,12 +161,121 @@ const HRManagePage = () => {
         variant="contained"
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
-        // onClick={() => {
-        // }}
+        onClick={() => {
+          handleClickOpen();
+          setAction('add');
+        }}
       >
           Add new
       </Button>
       <br/><br/>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            width: '500px',
+          },
+        }}
+      >
+        <DialogTitle>
+          {action === 'add' ? 'Add Staff' : `Edit Satff: ${editStaff} `}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>Enter Name</DialogContentText>
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item md={12}>
+                {' '}
+                <TextField
+                  label="Name"
+                  value={newStaff.name}
+                  onChange={(e) => {
+                    setNewStaff((newStaff) => ({
+                      ...newStaff,
+                      name: e.target.value,
+                    }));
+                  }}
+                  fullWidth
+                  required
+                />
+              </Grid>
+            </Grid>
+          </Container>
+          <br />
+          <DialogContentText>Official Email id</DialogContentText>
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item md={12}>
+                {' '}
+                <TextField
+                  label="Email Id"
+                  value={newStaff.email}
+                  onChange={(e) => {
+                    setNewStaff((newStaff) => ({
+                      ...newStaff,
+                      email: e.target.value,
+                    }));
+                  }}
+                  fullWidth
+                  required
+                />
+              </Grid>
+            </Grid>
+          </Container>
+          <br />
+          <DialogContentText>Department</DialogContentText>
+          <Container>
+            <Grid item xs={12} md={4}>
+              <Autocomplete
+                id='department'
+                options={Department ?? []}
+                getOptionLabel={(grp) => grp.name}
+                onChange={(e, newValue) => {
+                  if (newValue) {
+                    setNewStaff((newStaff) => ({
+                      ...newStaff,
+                      dep: newValue,
+                    }));
+                  }
+                }}
+                renderInput={(params) => <TextField {...params} label="Select Depaetment" required />}
+                fullWidth
+              />
+            </Grid>
+          </Container>
+          <br />
+          <DialogContentText>Position</DialogContentText>
+          <Container>
+            <Grid item md={12}>
+              <Autocomplete
+                id='position'
+                options={Position ?? []}
+                getOptionLabel={(grp) => grp.name}
+                onChange={(e, newValue) => {
+                  if (newValue) {
+                    setNewStaff((newStaff) => ({
+                      ...newStaff,
+                      des: newValue,
+                    }));
+                  }
+                }}
+                renderInput={(params) => <TextField {...params} label="Select Position" required />}
+                fullWidth
+              />
+            </Grid>
+
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" onClick={createStaff}>
+            {action === 'add' ? 'Add' : 'Edit'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <br />
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
           <DataGrid rows={staffs??[]} columns={columns} getRowId={(row) => row._id}/>
