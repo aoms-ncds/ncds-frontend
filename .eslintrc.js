@@ -81,6 +81,7 @@ module.exports = {
     }],
     // 'json/camelcase': ['error', { 'properties': 'always' }],
     'no-unused-vars': 'warn',
+    'react/no-multi-comp': 'error',
     'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
     'max-len': ['error', { 'code': 200 }],
