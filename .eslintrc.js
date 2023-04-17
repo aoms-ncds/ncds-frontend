@@ -26,6 +26,7 @@ module.exports = {
     'react',
     '@typescript-eslint',
     'json',
+    'eslint-plugin',
   ],
   'rules': {
     'prefer-promise-reject-errors': 'off',
@@ -84,6 +85,7 @@ module.exports = {
     'react/no-multi-comp': 'error',
     'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
+    // 'eslint-plugin/filenames': ['error', { 'extensions': ['.js', '.jsx', '.ts', '.tsx']}],
     'max-len': ['error', { 'code': 200 }],
     // 'comma-dangle': ['error', 'always',],
   },
