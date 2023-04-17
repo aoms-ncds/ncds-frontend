@@ -5,8 +5,8 @@ type Staff={
     name: string;
     dob: string;
     doj: string;
-    designation: string;
-    department: string;
+    designation: Position;
+    department: Department;
     phone: string;
     email:string
     spouseOfAnotherEmployee: string;

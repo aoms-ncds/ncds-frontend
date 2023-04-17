@@ -39,9 +39,9 @@ export default {
   createStaff: ( department: Staff,
     action: 'add' | 'edit') => getStandardResponse<number>(
       dummyRequest({
-        data: 'Added Staff ',
+        data: action,
         // error: null,
-        message: 'Added Staff',
+        message: action +'ed staff',
         result: 'success',
         timeout: 500,
       }),
@@ -53,8 +53,14 @@ export default {
         name: 'athira',
         dob: '12-11-2000',
         doj: '12-11-2000',
-        designation: 'TL',
-        department: 25,
+        designation: {
+          _id: 1,
+          name: 'TL',
+        },
+        department: {
+          _id: 1,
+          name: 'IT',
+        },
         phone: '123476798',
         email: 'test@gmail.com',
         spouseOfAnotherEmployee: 'test',
@@ -64,8 +70,14 @@ export default {
         name: 'Sanjay',
         dob: '12-11-2000',
         doj: '12-11-2000',
-        designation: 'TL',
-        department: 25,
+        designation: {
+          _id: 1,
+          name: 'TL',
+        },
+        department: {
+          _id: 1,
+          name: 'IT',
+        },
         phone: '123476798',
         email: 'test@gmail.com',
         spouseOfAnotherEmployee: 'test',
@@ -75,8 +87,14 @@ export default {
         name: 'Sanjili',
         dob: '12-11-2000',
         doj: '12-11-2000',
-        designation: 'TL',
-        department: 25,
+        designation: {
+          _id: 1,
+          name: 'TL',
+        },
+        department: {
+          _id: 1,
+          name: 'IT',
+        },
         phone: '123476798',
         email: 'test@gmail.com',
         spouseOfAnotherEmployee: 'test',

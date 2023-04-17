@@ -25,8 +25,14 @@ const HRManagePage = () => {
     name: '',
     dob: '',
     doj: '',
-    designation: '',
-    department: '',
+    designation: {
+      _id: '',
+      name: '',
+    },
+    department: {
+      _id: '',
+      name: '',
+    },
     phone: '',
     email: '',
     spouseOfAnotherEmployee: '',
@@ -58,8 +64,14 @@ const HRManagePage = () => {
           name: '',
           dob: '',
           doj: '',
-          designation: '',
-          department: '',
+          designation: {
+            _id: '',
+            name: '',
+          },
+          department: {
+            _id: '',
+            name: '',
+          },
           phone: '',
           email: '',
           spouseOfAnotherEmployee: '',
@@ -125,10 +137,18 @@ const HRManagePage = () => {
                 setOpen(true);
                 setAction('edit');
                 seteditStaff(props.row.name);
-                // setNewStaff(() => ({
-                //   _id: props.row._id,
-                //   name: props.row.name,
-                // }));
+                setNewStaff(() => ({
+                  _id: props.row._id,
+                  name: props.row.name,
+                  dob: props.row.dob,
+                  doj: props.row.doj,
+                  department: props.row.department,
+                  designation: props.row.designation,
+                  email: props.row.email,
+                  phone: props.row.phone,
+                  spouseOfAnotherEmployee: props.row.spouseOfAnotherEmployee,
+                  idFormat: props.row.idFormat,
+                }));
               },
             },
             {
@@ -229,13 +249,19 @@ const HRManagePage = () => {
             <Grid item xs={12} md={4}>
               <Autocomplete
                 id='department'
+                value={newStaff?.department}
                 options={Department ?? []}
-                getOptionLabel={(grp) => grp.name}
+                getOptionLabel={(dept) => dept.name}
+                renderOption={(props, dept, { selected }) => (
+                  <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                    {dept.name}
+                  </Box>
+                )}
                 onChange={(e, newValue) => {
                   if (newValue) {
                     setNewStaff((newStaff) => ({
                       ...newStaff,
-                      dep: newValue,
+                      department: newValue,
                     }));
                   }
                 }}
@@ -250,13 +276,19 @@ const HRManagePage = () => {
             <Grid item md={12}>
               <Autocomplete
                 id='position'
+                value={newStaff?.designation}
                 options={Position ?? []}
-                getOptionLabel={(grp) => grp.name}
+                getOptionLabel={(pos) => pos.name}
+                renderOption={(props, pos, { selected }) => (
+                  <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                    {pos.name}
+                  </Box>
+                )}
                 onChange={(e, newValue) => {
                   if (newValue) {
                     setNewStaff((newStaff) => ({
                       ...newStaff,
-                      des: newValue,
+                      designation: newValue,
                     }));
                   }
                 }}
