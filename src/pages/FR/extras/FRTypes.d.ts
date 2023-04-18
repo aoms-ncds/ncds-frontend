@@ -12,4 +12,9 @@ declare global {
         lastUpdateDate: Date;
         sanction:string;
     }
+    interface Requisition{
+        _id: string;
+        RequisitionName: string;
+    }
+
 }

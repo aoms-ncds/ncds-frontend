@@ -15,12 +15,12 @@ import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 const ManageFrPage = () => {
-  const [Frrequests, setFrrequests] = useState<Frrequest[]>();
+  const [FRRequests, setFRRequests] = useState<Frrequest[]>();
   useEffect(() => {
-    FRServices.getRequests()
+    FRServices.getAll()
    .then((res) => {
      console.log(res);
-     setFrrequests(res.data);
+     setFRRequests(res.data);
    })
   .catch((res) => {
     console.log(res);
@@ -108,6 +108,8 @@ const ManageFrPage = () => {
         variant="contained"
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
+        component={Link}
+        to="/fr/apply"
         // onClick={() => {
         // }}
       >
@@ -116,7 +118,7 @@ const ManageFrPage = () => {
       <br/><br/>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={Frrequests??[]} columns={columns} getRowId={(row) => row._id}/>
+          <DataGrid rows={FRRequests??[]} columns={columns} getRowId={(row) => row._id}/>
         </Card>
       </Grid>
     </CommonPageLayout>

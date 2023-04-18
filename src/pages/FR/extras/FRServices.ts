@@ -12,7 +12,7 @@ export default {
       }),
     );
   },
-  getRequests: () => getStandardResponse<[]>(
+  getAll: () => getStandardResponse<[]>(
     dummyRequest({
       data: [{
         _id: 1,
@@ -54,6 +54,32 @@ export default {
         Request_amount: '50000',
         Lastupdate_date: '17-04-2023',
         Sanction: 'Required' },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getRequisition: () => getStandardResponse<[]>(
+    dummyRequest({
+      data: [{
+        _id: '1',
+        RequisitionName: 'Division',
+      },
+      {
+        _id: '2',
+        RequisitionName: 'Worker',
+      },
+      {
+        _id: '3',
+        RequisitionName: 'Coordinator',
+      },
+      {
+        _id: '3',
+        RequisitionName: 'Subdivision',
+      },
 
       ],
       // error: null,
