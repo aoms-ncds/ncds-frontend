@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import { Grid } from '@mui/material';
@@ -8,14 +8,13 @@ const frDashboard = () => {
     <CommonPageLayout title='FR Dashboard'>
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={140}
-            secondaryText='Applied'
-            color='#29cc39'/>
+          <FRCountCard count={140} secondaryText='Applied' color='#29cc39'/>
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard count={140} secondaryText={'Approved'} color={'#0dcaf0'} />
         </Grid>
-      </Grid><br />
+      </Grid>
+      <br /><br />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton

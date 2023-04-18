@@ -19,8 +19,7 @@ const homePageRoutes: ModuleRoute = {
       title: 'Login page',
       path: '/login',
       element: <LoginPage />,
-      private: true,
-      requiredAccessRights: ['string'],
+      private: false,
     },
   ],
 };

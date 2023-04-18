@@ -8,7 +8,7 @@ declare global {
       path: string;
       private: boolean;
       element: JSX.Element;
-      requiredAccessRights: 'string'[];
+      requiredAccessRights?: 'string'[];
       showInDrawer?: boolean;
       icon?: JSX.Element;
     }[];

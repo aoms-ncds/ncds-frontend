@@ -65,7 +65,7 @@ const MinimalModuleDataAnalytics = () => {
       <AlertTitle><b>Something went wrong!</b></AlertTitle>
       Unable to show analytics. <br />
       {Array.from(new Set(errors)).join(',')}
-    </Alert>:
+    </Alert> :
       <Card>
         {errors.length>0 &&
         <CardContent>
