@@ -1,15 +1,15 @@
 export { };
 
 declare global {
-    type Frrequest={
+    interface Frrequest{
         _id: string;
-        Frno: string;
-        Frdate: Date;
-        Division_name: string;
-        Subdivision_name: string;
-        Main_category: string;
-        Request_amount: string;
-        Lastupdate_date: Date;
-        Sanction:string;
+        FRno: string;
+        FRdate: Date;
+        divisionName: string;
+        subdivisionName: string;
+        mainCategory: string;
+        requestAmount: string;
+        lastUpdateDate: Date;
+        sanction:string;
     }
 }
