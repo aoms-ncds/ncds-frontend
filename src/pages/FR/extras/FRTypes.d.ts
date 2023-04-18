@@ -10,6 +10,6 @@ declare global {
         Main_category: string;
         Request_amount: string;
         Lastupdate_date: Date;
-        Status:string;
+        Sanction:string;
     }
 }

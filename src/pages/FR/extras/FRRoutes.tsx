@@ -4,6 +4,7 @@ import FRDashboard from '..';
 import ApplyNewFR from '../ApplyNewFR';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
+import ViewFR from '../ViewFR';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -38,6 +39,22 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Closed FR',
       path: '/closed_FR',
       element: <ClosedFR />,
+      private: true,
+      requiredAccessRights: ['string'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'View FR',
+      path: '/view_FR/:frID',
+      element: <ViewFR />,
+      private: true,
+      requiredAccessRights: ['string'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'edit FR',
+      path: '/edit/:frID',
+      element: <ApplyNewFR />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,

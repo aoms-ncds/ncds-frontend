@@ -23,7 +23,7 @@ export default {
         Main_category: 'Fr request',
         Request_amount: '50000',
         Lastupdate_date: '17-04-2023',
-        Status: 'Pending' },
+        Sanction: 'Required' },
       {
         _id: 2,
         Frno: '1235',
@@ -33,7 +33,7 @@ export default {
         Main_category: 'Fr request',
         Request_amount: '50000',
         Lastupdate_date: '17-04-2023',
-        Status: 'Pending' },
+        Sanction: 'Required' },
       {
         _id: 3,
         Frno: '1236',
@@ -43,7 +43,7 @@ export default {
         Main_category: 'Fr request',
         Request_amount: '50000',
         Lastupdate_date: '17-04-2023',
-        Status: 'Pending' },
+        Sanction: 'Required' },
       {
         _id: 4,
         Frno: '1237',
@@ -53,7 +53,7 @@ export default {
         Main_category: 'Fr request',
         Request_amount: '50000',
         Lastupdate_date: '17-04-2023',
-        Status: 'Pending' },
+        Sanction: 'Required' },
 
       ],
       // error: null,

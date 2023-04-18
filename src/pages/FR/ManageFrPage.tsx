@@ -3,13 +3,17 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import {
   Edit as EditIcon,
+  Message as MessageIcon,
+  Preview as PreviewIcon,
   Add as AddIcon,
-  Link,
 
 } from '@mui/icons-material';
+
+import { Link } from 'react-router-dom';
 import { Button, Card, Grid } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
+import PrintIcon from '@mui/icons-material/Print';
 const ManageFrPage = () => {
   const [Frrequests, setFrrequests] = useState<Frrequest[]>();
   useEffect(() => {
@@ -31,15 +35,58 @@ const ManageFrPage = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id="FR action"
-          primaryText="Actions"
+          id='FR action'
+          primaryText='Actions'
           key={'FR action'}
           items={[
             {
               id: 'View',
               text: 'View and Manage',
               component: Link,
+              to: '/fr/view_FR/' + props.row._id,
+              icon: PreviewIcon,
+            },
+            {
+              id: 'sendbackDivision',
+              text: 'Send Back to Division',
+              component: Link,
+              to: '/sendbackDivision' + props.row._id,
+              icon: PreviewIcon,
+            },
+            {
+              id: 'remarks',
+              text: 'Remarks',
+              component: Link,
+              to: '/fr/view_FR/' + props.row._id,
+              icon: EditIcon,
+            },
+            {
+              id: 'print',
+              text: 'Print FR',
+              component: Link,
               to: '/view' + props.row._id,
+              icon: PrintIcon,
+            },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              component: Link,
+              to: '/view' + props.row._id,
+              icon: MessageIcon,
+            },
+            {
+              id: 'edit',
+              text: 'Edit',
+              component: Link,
+              to: '/edit/:frID' + props.row._id,
+              icon: EditIcon,
+            },
+            {
+              id: 'View',
+              text: 'View Details ',
+              component: Link,
+              to: '/fr/view_FR/' + props.row._id,
+              icon: PreviewIcon,
             },
           ]}
         />
@@ -53,7 +100,7 @@ const ManageFrPage = () => {
     { field: 'Main_category', headerName: 'Main Category', width: 150 },
     { field: 'Request_amount', headerName: 'Requested Amount', width: 130 },
     { field: 'Lastupdate_date', headerName: 'Last Updated', width: 130 },
-    { field: 'Status', headerName: 'Status', width: 130 },
+    { field: 'Sanction', headerName: 'Special Sanction', width: 130 },
   ];
   return (
     <CommonPageLayout title='Manage FR'>
