@@ -13,6 +13,11 @@ import FRServices from '../extras/FRServices';
 const AddFRRequests = () => {
   const [open, setOpen] = React.useState(false);
   const [Requisition, setRequisition] = useState<Requisition[]>();
+  const [SelectedRequisition, setSelectedRequisition] = useState<Requisition>({
+    _id: '',
+    RequisitionName: undefined,
+
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -46,58 +51,61 @@ const AddFRRequests = () => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <Autocomplete
-                  id='position'
-                  // value={newStaff?.designation}
+                  id='requisition'
+                  // value={(requisition) => requisition.RequisitionName}
                   options={Requisition ?? []}
-                  getOptionLabel={(requisition) => requisition.RequisitionName}
-                  renderOption={(props, pos, { selected }) => (
+                  getOptionLabel={(requisition) => requisition.RequisitionName ?? ''}
+                  renderOption={(props, requisition, { selected }) => (
                     <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                      {pos.RequisitionName}
+                      {requisition.RequisitionName}
                     </Box>
                   )}
-                  onChange={(e, newValue) => {
-                    if (newValue) {
-                      setNewStaff((newStaff) => ({
-                        ...newStaff,
-                        designation: newValue,
-                      }));
-                    }
+                  onChange={(e, selectedRequisition) => {
+                    setSelectedRequisition(() => ({
+                      ...SelectedRequisition,
+                      RequisitionName: selectedRequisition?.RequisitionName,
+                    }));
                   }}
                   renderInput={(params) => <TextField {...params} label="Requisition for" required />}
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel id="demo-simple-select-standard-label">Choose Worker</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    label=" Group type"
-                    required
-                  >
-                    <MenuItem value={'Spiritual Org'}>Spiritual Org</MenuItem>
-                    <MenuItem value={'Prayer Group'}>Prayer Group</MenuItem>
-                    <MenuItem value={'Missionary'}>Missionary</MenuItem>
-                    {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Worker Code"
-                    // value={group.description}
-                    // onChange={(e) =>
-                    //   setGroup((group) => ({
-                    //     ...group,
-                    //     description: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
+              {SelectedRequisition?.RequisitionName === 'Worker' ? (
+                <>
+                  <Grid item xs={12} md={6} lg={6}>
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel id="demo-simple-select-standard-label">Choose Worker</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label=" Group type"
+                        required
+                      >
+                        <MenuItem value={'Spiritual Org'}>Spiritual Org</MenuItem>
+                        <MenuItem value={'Prayer Group'}>Prayer Group</MenuItem>
+                        <MenuItem value={'Missionary'}>Missionary</MenuItem>
+                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={6}>
+                    <FormControl variant="outlined" fullWidth>
+                      <TextField
+                        label="Worker Code"
+                        // value={group.description}
+                        // onChange={(e) =>
+                        //   setGroup((group) => ({
+                        //     ...group,
+                        //     description: e.target.value,
+                        //   }))
+                        // }
+                        fullWidth
+                      />
+                    </FormControl>
+                  </Grid>
+                </>
+              ): null}
+
 
               <Grid item xs={12} md={12} lg={12}>
                 <Typography>Particulars</Typography> <br />

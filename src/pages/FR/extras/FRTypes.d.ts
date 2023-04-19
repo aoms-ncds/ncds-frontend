@@ -14,7 +14,7 @@ declare global {
     }
     interface Requisition{
         _id: string;
-        RequisitionName: string;
+        RequisitionName: string | undefined;
     }
 
 }
