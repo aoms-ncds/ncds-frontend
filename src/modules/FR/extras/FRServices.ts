@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 
 export default {
@@ -12,48 +13,48 @@ export default {
       }),
     );
   },
-  getAll: () => getStandardResponse<[]>(
-    dummyRequest({
+  getAll: () => getStandardResponse<Frrequest[]>(
+    dummyRequest<Frrequest[]>({
       data: [{
-        _id: 1,
-        Frno: '1234',
-        Frdate: '17-04-2023',
-        Division_name: 'test',
-        Subdivision_name: 'test',
-        Main_category: 'Fr request',
-        Request_amount: '50000',
-        Lastupdate_date: '17-04-2023',
-        Sanction: 'Required' },
+        _id: '1',
+        FRno: '1234',
+        FRdate: moment('17-04-2023'),
+        divisionName: 'test',
+        subdivisionName: 'test',
+        mainCategory: 'Fr request',
+        requestAmount: '50000',
+        lastUpdateDate: moment('17-04-2023'),
+        sanction: 'Required' },
       {
-        _id: 2,
-        Frno: '1235',
-        Frdate: '17-04-2023',
-        Division_name: 'test',
-        Subdivision_name: 'test',
-        Main_category: 'Fr request',
-        Request_amount: '50000',
-        Lastupdate_date: '17-04-2023',
-        Sanction: 'Required' },
+        _id: '2',
+        FRno: '1234',
+        FRdate: moment('17-04-2023'),
+        divisionName: 'test',
+        subdivisionName: 'test',
+        mainCategory: 'Fr request',
+        requestAmount: '50000',
+        lastUpdateDate: moment('17-04-2023'),
+        sanction: 'Required' },
       {
-        _id: 3,
-        Frno: '1236',
-        Frdate: '17-04-2023',
-        Division_name: 'test',
-        Subdivision_name: 'test',
-        Main_category: 'Fr request',
-        Request_amount: '50000',
-        Lastupdate_date: '17-04-2023',
-        Sanction: 'Required' },
+        _id: '3',
+        FRno: '1234',
+        FRdate: moment('17-04-2023'),
+        divisionName: 'test',
+        subdivisionName: 'test',
+        mainCategory: 'Fr request',
+        requestAmount: '50000',
+        lastUpdateDate: moment('17-04-2023'),
+        sanction: 'Required' },
       {
-        _id: 4,
-        Frno: '1237',
-        Frdate: '17-04-2023',
-        Division_name: 'test',
-        Subdivision_name: 'test',
-        Main_category: 'Fr request',
-        Request_amount: '50000',
-        Lastupdate_date: '17-04-2023',
-        Sanction: 'Required' },
+        _id: '4',
+        FRno: '1234',
+        FRdate: moment('17-04-2023'),
+        divisionName: 'test',
+        subdivisionName: 'test',
+        mainCategory: 'Fr request',
+        requestAmount: '50000',
+        lastUpdateDate: moment('17-04-2023'),
+        sanction: 'Required' },
 
       ],
       // error: null,
@@ -62,8 +63,8 @@ export default {
       timeout: 500,
     }),
   ),
-  getRequisition: () => getStandardResponse<[]>(
-    dummyRequest({
+  getRequisition: () => getStandardResponse<Requisition[]>(
+    dummyRequest<Requisition[]>({
       data: [{
         _id: '1',
         RequisitionName: 'Division',
@@ -77,8 +78,12 @@ export default {
         RequisitionName: 'Coordinator',
       },
       {
-        _id: '3',
+        _id: '4',
         RequisitionName: 'Subdivision',
+      },
+      {
+        _id: '4',
+        RequisitionName: 'Others',
       },
 
       ],
@@ -88,5 +93,104 @@ export default {
       timeout: 500,
     }),
   ),
+  getCoordiantor: () => getStandardResponse<Coordinator[]>(
+    dummyRequest<Coordinator[]>({
+      data: [{
+        _id: '1',
+        coordinatorName: 'Joseph',
+      },
+      {
+        _id: '2',
+        coordinatorName: 'John',
+      },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getWorker: () => getStandardResponse<IETWorker[]>(
+    dummyRequest<IETWorker[]>({
+      data: [{
+        _id: '1',
+        workerName: 'Joseph',
+        workerCode: '123ww',
+      },
+      {
+        _id: '2',
+        workerName: 'John',
+        workerCode: '123wwh',
+      },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getDivisions: () => getStandardResponse<IETDivisions[]>(
+    dummyRequest<IETDivisions[]>({
+      data: [{
+        _id: '1',
+        divisionName: 'Division 1',
+      },
+      {
+        _id: '2',
+        divisionName: 'Division 1',
+      },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getSubDivisions: () => getStandardResponse<Subdivisions[]>(
+    dummyRequest<Subdivisions[]>({
+      data: [{
+        _id: '1',
+        divisionId: '1',
+        subDivisionName: 'Sub division1',
+      },
+      {
+        _id: '1',
+        divisionId: '1',
+        subDivisionName: 'Sub division 2',
+      },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getMainCategory: () => getStandardResponse<MainCategory[]>(
+    dummyRequest<MainCategory[]>({
+      data: [{
+        _id: '1',
+        mainCategoryName: 'Main category 1',
+      },
+      {
+        _id: '2',
+        mainCategoryName: 'Main category 2',
+      },
+      {
+        _id: '3',
+        mainCategoryName: 'Main category 3',
+      },
+
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+
 
 };
