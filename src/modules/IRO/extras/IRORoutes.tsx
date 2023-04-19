@@ -5,6 +5,7 @@ import IRODashboard from '..';
 import ApplyNewFR from '../../FR/ApplyNewFR';
 import ClosedFR from '../../FR/ClosedFR';
 import ViewFR from '../../FR/ViewFR';
+import ReleaseAmount from '../ReleaseAmount';
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
   pages: [
@@ -42,8 +43,16 @@ const iroPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
+      title: 'Release Amount',
+      path: '/release_amount/:iroID',
+      element: <ReleaseAmount />,
+      private: true,
+      requiredAccessRights: ['string'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
       title: 'edit FR',
-      path: '/edit/:frID',
+      path: '/edit/:iroID',
       element: <ApplyNewFR />,
       private: true,
       requiredAccessRights: ['string'],

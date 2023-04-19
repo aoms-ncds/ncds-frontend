@@ -1,15 +1,23 @@
+import { Moment } from 'moment';
+
 export { };
 
 declare global {
     interface IROrder{
         _id: string;
         IROno: string;
-        IROdate: Date;
+        IROdate: Moment;
         divisionName: string;
         subdivisionName: string;
         mainCategory: string;
         requestAmount: string;
-        lastUpdateDate: Date;
+        lastUpdateDate: Moment;
         sanction:string;
+        releaseAmount:string;
+        transferredAmount:string;
+        transferredDate:Moment;
+        transferredBank:string;
+        modeOfPayment:string;
+        transactionNumber:string;
     }
 }
