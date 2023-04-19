@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle, Grid, Link, TextField, createFilterOptions } from '@mui/material';
+import { Autocomplete, Button, Card, Container, Dialog, DialogActions,
+  DialogContent, DialogTitle, Grid, Link, TextField, createFilterOptions } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
 import DropdownButton from '../../components/DropDownButton';
@@ -134,6 +134,36 @@ const HRManagePage = () => {
         console.log(res);
       });
   }, []);
+  const removeStaff = (id: string) => {
+    console.log('hey', id);
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing staff',
+      variant: 'info',
+    });
+    HRServices.markAsRemove(id)
+      .then((res) => {
+        console.log('Response', res);
+        if (staffs) {
+          const newDepartment = staffs.filter((staffs) => {
+            return staffs._id !== id;
+          });
+          setStaffs(newDepartment);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   const columns = [
     {
       field: '_manage',
@@ -175,9 +205,9 @@ const HRManagePage = () => {
               text: 'Delete',
               component: Link,
               icon: DeleteIcon,
-              // onClick: () => {
-              //   removeStaff(props.row._id);
-              // },
+              onClick: () => {
+                removeStaff(props.row._id);
+              },
             },
           ]}
         />
@@ -225,7 +255,6 @@ const HRManagePage = () => {
           {action === 'add' ? 'Add Staff' : `Edit Satff: ${editStaff} `}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter Name</DialogContentText>
           <Container>
             <Grid container spacing={2}>
               <Grid item md={12}>
@@ -243,12 +272,6 @@ const HRManagePage = () => {
                   required
                 />
               </Grid>
-            </Grid>
-          </Container>
-          <br />
-          <DialogContentText>Official Email id</DialogContentText>
-          <Container>
-            <Grid container spacing={2}>
               <Grid item md={12}>
                 {' '}
                 <TextField
@@ -264,178 +287,125 @@ const HRManagePage = () => {
                   required
                 />
               </Grid>
-            </Grid>
-          </Container>
-          <br />
-          <DialogContentText>Department</DialogContentText>
-          <Container>
-            <Grid item xs={12} md={4}>
-              <Autocomplete
-                value={newStaff?.department}
-                onChange={(event, newValue) => {
-                  if (typeof newValue === 'string') {
-                    setValue({
-                      name: newValue,
-                    });
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    setValue({
-                      name: newValue.inputValue,
-                    });
-                  } else {
-                    if (newValue) {
-                      setNewStaff((newStaff) => ({
-                        ...newStaff,
-                        department: newValue,
-                      }));
+              <Grid item md={12}>
+                <Autocomplete
+                  value={newStaff?.department}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setValue({
+                        name: newValue,
+                      });
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      setValue({
+                        name: newValue.inputValue,
+                      });
+                    } else {
+                      if (newValue) {
+                        setNewStaff((newStaff) => ({
+                          ...newStaff,
+                          department: newValue,
+                        }));
+                      }
                     }
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = options.some((option) => inputValue === option.name);
-                  if (inputValue !== '' && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      name: `Add "${inputValue}"`,
-                    });
-                  }
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="department"
-                options={Department ?? []}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === 'string') {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.name;
-                }}
-                renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                sx={{ width: 300 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField {...params} label="department" />
-                )}
-              />
-              {/* <Autocomplete
-                id='department'
-                value={newStaff?.department}
-                options={Department ?? []}
-                getOptionLabel={(dept) => dept.name}
-                renderOption={(props, dept, { selected }) => (
-                  <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                    {dept.name}
-                  </Box>
-                )}
-                onChange={(e, newValue) => {
-                  if (newValue) {
-                    setNewStaff((newStaff) => ({
-                      ...newStaff,
-                      department: newValue,
-                    }));
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} label="Select Depaetment" required />}
-                fullWidth
-              /> */}
-            </Grid>
-          </Container>
-          <br />
-          <DialogContentText>Position</DialogContentText>
-          <Container>
-            <Grid item md={12}>
-              <Autocomplete
-                value={newStaff?.designation}
-                onChange={(event, newValue) => {
-                  if (typeof newValue === 'string') {
-                    setValue({
-                      name: newValue,
-                    });
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    setValue({
-                      name: newValue.inputValue,
-                    });
-                  } else {
-                    if (newValue) {
-                      setNewStaff((newStaff) => ({
-                        ...newStaff,
-                        designation: newValue,
-                      }));
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.name);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        name: `Add "${inputValue}"`,
+                      });
                     }
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = options.some((option) => inputValue === option.name);
-                  if (inputValue !== '' && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      name: `Add "${inputValue}"`,
-                    });
-                  }
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="designation"
-                options={Position ?? []}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === 'string') {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.name;
-                }}
-                renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                sx={{ width: 300 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField {...params} label="designation" />
-                )}
-              />
-              {/* <Autocomplete
-                id='position'
-                value={newStaff?.designation}
-                options={Position ?? []}
-                getOptionLabel={(pos) => pos.name}
-                renderOption={(props, pos, { selected }) => (
-                  <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                    {pos.name}
-                  </Box>
-                )}
-                onChange={(e, newValue) => {
-                  if (newValue) {
-                    setNewStaff((newStaff) => ({
-                      ...newStaff,
-                      designation: newValue,
-                    }));
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} label="Select Position" required />}
-                fullWidth
-              /> */}
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="department"
+                  options={Department ?? []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="department" />
+                  )}
+                />
+              </Grid>
+              <Grid item md={12}>
+                <Autocomplete
+                  value={newStaff?.designation}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setValue({
+                        name: newValue,
+                      });
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      setValue({
+                        name: newValue.inputValue,
+                      });
+                    } else {
+                      if (newValue) {
+                        setNewStaff((newStaff) => ({
+                          ...newStaff,
+                          designation: newValue,
+                        }));
+                      }
+                    }
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.name);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        name: `Add "${inputValue}"`,
+                      });
+                    }
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="designation"
+                  options={Position ?? []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="designation" />
+                  )}
+                />
+              </Grid>
             </Grid>
-
           </Container>
         </DialogContent>
         <DialogActions>

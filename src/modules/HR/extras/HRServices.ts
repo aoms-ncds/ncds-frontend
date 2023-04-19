@@ -106,5 +106,14 @@ export default {
       timeout: 500,
     }),
   ),
+  markAsRemove: ( staffId: string) => getStandardResponse<number>(
+    dummyRequest({
+      data: staffId,
+      // error: null,
+      message: 'deleted',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
 
 };
