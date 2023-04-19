@@ -16,11 +16,12 @@ const filter = createFilterOptions<Department>();
 const HRManagePage = () => {
   const [Department, setDepartment] = useState<Department[] | undefined>();
   const [Position, setPosition] = useState<Position[] | undefined>();
-  const [staffs, setStaffs] = useState<Staff[]>();
+  const [staffs, setStaffs] = useState<Staff[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [open, setOpen] = React.useState(false);
   const [editStaff, seteditStaff] = useState<string>('');
   const [value, setValue] = useState<Department | null>(null);
+  const [loadCount, setLoadCount] = useState(0);
   const [newStaff, setNewStaff] = useState<Staff>({
     _id: '',
     name: '',
@@ -125,12 +126,15 @@ const HRManagePage = () => {
     .catch((res) => {
       console.log(res);
     });
+    setLoadCount((count) => count+1);
     HRServices.getStaffs()
       .then((res) => {
+        setLoadCount((count) => count-1);
         console.log(res);
         setStaffs(res.data);
       })
       .catch((res) => {
+        setLoadCount((count) => count-1);
         console.log(res);
       });
   }, []);
@@ -229,7 +233,7 @@ const HRManagePage = () => {
     { field: 'idFormat', headerName: 'ID Format', width: 130 },
   ];
   return (
-    <CommonPageLayout title='Manage Staff'>
+    <CommonPageLayout title='Manage Staff' loadCount={loadCount}>
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -419,7 +423,7 @@ const HRManagePage = () => {
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
-          <DataGrid rows={staffs??[]} columns={columns} getRowId={(row) => row._id}/>
+          <DataGrid rows={staffs??[]} columns={columns} getRowId={(row) => row._id} loading={staffs === null}/>
         </Card>
       </Grid>
     </CommonPageLayout>
