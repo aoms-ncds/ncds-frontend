@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogContentText, DialogTitle, Grid, Link, TextField, useMediaQuery } from '@mui/material';
-import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+  DialogContent, DialogContentText, DialogTitle, Grid, Link, TextField, createFilterOptions } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
 import DropdownButton from '../../components/DropDownButton';
 import {
@@ -12,7 +12,7 @@ import {
 
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-
+const filter = createFilterOptions<Department>();
 const HRManagePage = () => {
   const [Department, setDepartment] = useState<Department[] | undefined>();
   const [Position, setPosition] = useState<Position[] | undefined>();
@@ -20,6 +20,7 @@ const HRManagePage = () => {
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [open, setOpen] = React.useState(false);
   const [editStaff, seteditStaff] = useState<string>('');
+  const [value, setValue] = useState<Department | null>(null);
   const [newStaff, setNewStaff] = useState<Staff>({
     _id: '',
     name: '',
@@ -44,6 +45,24 @@ const HRManagePage = () => {
   };
   const handleClose = () => {
     setOpen(false);
+    setNewStaff(() => ({
+      _id: '',
+      name: '',
+      dob: '',
+      doj: '',
+      designation: {
+        _id: '',
+        name: '',
+      },
+      department: {
+        _id: '',
+        name: '',
+      },
+      phone: '',
+      email: '',
+      spouseOfAnotherEmployee: '',
+      idFormat: '',
+    }));
   };
   const createStaff = () => {
     const snackbarId = enqueueSnackbar({
@@ -168,8 +187,12 @@ const HRManagePage = () => {
     { field: 'name', headerName: 'Name', width: 70 },
     { field: 'dob', headerName: 'DOB', width: 130 },
     { field: 'doj', headerName: 'DOJ', width: 130 },
-    { field: 'designation', headerName: 'Designation', width: 130 },
-    { field: 'department', headerName: 'Department', width: 130 },
+    { field: 'designation', headerName: 'Designation', renderCell: (props: any) => (
+      <p> {props.row.designation?.name}</p>
+    ), width: 130 },
+    { field: 'department', headerName: 'Department', renderCell: (props: any) => (
+      <p> {props.row.department?.name}</p>
+    ), width: 130 },
     { field: 'phone', headerName: 'Phone Number', width: 130 },
     { field: 'email', headerName: 'Email', width: 130 },
     { field: 'spouseOfAnotherEmployee', headerName: 'Spouse of another employee', width: 130 },
@@ -248,6 +271,64 @@ const HRManagePage = () => {
           <Container>
             <Grid item xs={12} md={4}>
               <Autocomplete
+                value={newStaff?.department}
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setValue({
+                      name: newValue,
+                    });
+                  } else if (newValue && newValue.inputValue) {
+                    // Create a new value from the user input
+                    setValue({
+                      name: newValue.inputValue,
+                    });
+                  } else {
+                    if (newValue) {
+                      setNewStaff((newStaff) => ({
+                        ...newStaff,
+                        department: newValue,
+                      }));
+                    }
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  const { inputValue } = params;
+                  // Suggest the creation of a new value
+                  const isExisting = options.some((option) => inputValue === option.name);
+                  if (inputValue !== '' && !isExisting) {
+                    filtered.push({
+                      inputValue,
+                      name: `Add "${inputValue}"`,
+                    });
+                  }
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                id="department"
+                options={Department ?? []}
+                getOptionLabel={(option) => {
+                  // Value selected with enter, right from the input
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  // Add "xxx" option created dynamically
+                  if (option.inputValue) {
+                    return option.inputValue;
+                  }
+                  // Regular option
+                  return option.name;
+                }}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                sx={{ width: 300 }}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField {...params} label="department" />
+                )}
+              />
+              {/* <Autocomplete
                 id='department'
                 value={newStaff?.department}
                 options={Department ?? []}
@@ -267,7 +348,7 @@ const HRManagePage = () => {
                 }}
                 renderInput={(params) => <TextField {...params} label="Select Depaetment" required />}
                 fullWidth
-              />
+              /> */}
             </Grid>
           </Container>
           <br />
@@ -275,6 +356,64 @@ const HRManagePage = () => {
           <Container>
             <Grid item md={12}>
               <Autocomplete
+                value={newStaff?.designation}
+                onChange={(event, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setValue({
+                      name: newValue,
+                    });
+                  } else if (newValue && newValue.inputValue) {
+                    // Create a new value from the user input
+                    setValue({
+                      name: newValue.inputValue,
+                    });
+                  } else {
+                    if (newValue) {
+                      setNewStaff((newStaff) => ({
+                        ...newStaff,
+                        designation: newValue,
+                      }));
+                    }
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  const { inputValue } = params;
+                  // Suggest the creation of a new value
+                  const isExisting = options.some((option) => inputValue === option.name);
+                  if (inputValue !== '' && !isExisting) {
+                    filtered.push({
+                      inputValue,
+                      name: `Add "${inputValue}"`,
+                    });
+                  }
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                id="designation"
+                options={Position ?? []}
+                getOptionLabel={(option) => {
+                  // Value selected with enter, right from the input
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  // Add "xxx" option created dynamically
+                  if (option.inputValue) {
+                    return option.inputValue;
+                  }
+                  // Regular option
+                  return option.name;
+                }}
+                renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                sx={{ width: 300 }}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField {...params} label="designation" />
+                )}
+              />
+              {/* <Autocomplete
                 id='position'
                 value={newStaff?.designation}
                 options={Position ?? []}
@@ -294,7 +433,7 @@ const HRManagePage = () => {
                 }}
                 renderInput={(params) => <TextField {...params} label="Select Position" required />}
                 fullWidth
-              />
+              /> */}
             </Grid>
 
           </Container>
