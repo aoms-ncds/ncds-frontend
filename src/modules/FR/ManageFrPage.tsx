@@ -14,15 +14,21 @@ import { Button, Card, Grid } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 const ManageFrPage = () => {
-  const [FRRequests, setFRRequests] = useState<Frrequest[]>();
+  const [loadCount, setLoadCount] = useState(0);
+  const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);
+
   useEffect(() => {
+    setLoadCount((count) => count+1);
     FRServices.getAll()
    .then((res) => {
+     setLoadCount((count) => count-1);
      console.log(res);
      setFRRequests(res.data);
    })
   .catch((res) => {
+    setLoadCount((count) => count-1);
     console.log(res);
   });
   }, []);
@@ -103,7 +109,7 @@ const ManageFrPage = () => {
     { field: 'Sanction', headerName: 'Special Sanction', width: 130 },
   ];
   return (
-    <CommonPageLayout title='Manage FR'>
+    <CommonPageLayout title='Manage FR' loadCount={loadCount}>
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -118,7 +124,7 @@ const ManageFrPage = () => {
       <br/><br/>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={FRRequests??[]} columns={columns} getRowId={(row) => row._id}/>
+          <DataGrid rows={FRRequests??[]} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null}/>
         </Card>
       </Grid>
     </CommonPageLayout>
