@@ -13,11 +13,13 @@ type Staff={
     idFormat: string;
 }
 type Department={
-    _id: string;
+    inputValue?: string;
+    _id?: string;
     name: string;
 }
 type Position={
-    _id: string;
+    inputValue?: string;
+    _id?: string;
     name: string;
 }
 }
