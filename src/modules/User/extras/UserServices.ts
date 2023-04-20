@@ -25,6 +25,8 @@ export default {
           email: '',
           spouseOfAnotherEmployee: '',
           idFormat: '',
+          createdAt: moment(),
+          updatedAt: moment(),
         },
       },
       message: 'Successfully logged in!',

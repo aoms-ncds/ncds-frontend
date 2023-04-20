@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export { };
 
 declare global {
@@ -18,5 +20,29 @@ declare global {
     error?: string;
     message?: string;
     data: T;
+  }
+  interface MongooseDocument{
+    _id: string;
+    createdAt: Moment;
+    updatedAt: Moment;
+  }
+  interface FileObject extends MongooseDocument{
+    name: string;
+    size: number;
+    type: FileObjectType;
+    storage: 'S3'|'Drive';
+    fileId: string;
+    downloadURL: string|null;
+    private: boolean;
+  }
+  type FileObjectType =
+    'application/vnd.ms-excel'
+    |'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    |'application/pdf' | 'video/quicktime';
+    type FileObjectExtensions = '.xlsx'|'.xls';
+  interface AJAXProgress{
+    loaded: number;
+    total: number;
+    percentage: number;
   }
 }

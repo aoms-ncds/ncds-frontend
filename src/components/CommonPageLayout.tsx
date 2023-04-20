@@ -21,7 +21,7 @@ import {
 import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import CommonConstants from '../extras/CommonConstants';
+import CommonConstants from '../extras/CommonConfig';
 import { getAllModuleRoutes } from '../extras/CommonRouter';
 
 const drawerWidth = 240;

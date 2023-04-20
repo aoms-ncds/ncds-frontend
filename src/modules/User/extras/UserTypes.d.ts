@@ -3,8 +3,7 @@ import { Moment } from 'moment';
 export { };
 
 declare global {
-    interface User{
-        _id: string;
+    interface User extends MongooseDocument{
         firstName: string;
         lastName: string;
         dob: Moment;
