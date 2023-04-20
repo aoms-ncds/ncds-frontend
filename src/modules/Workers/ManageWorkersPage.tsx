@@ -101,7 +101,7 @@ const ManageWorkerPage = () => {
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
         component={Link}
-        to="/Worker/apply"
+        to="/workers/add_new_worker"
         // onClick={() => {
         // }}
       >
