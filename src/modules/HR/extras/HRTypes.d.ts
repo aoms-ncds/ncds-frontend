@@ -1,6 +1,6 @@
 export {};
 declare global{
-type Staff={
+    interface Staff{
     _id: string;
     name: string;
     dob: string;
@@ -8,16 +8,16 @@ type Staff={
     designation: Position;
     department: Department;
     phone: string;
-    email:string
+    email:string;
     spouseOfAnotherEmployee: string;
     idFormat: string;
 }
-type Department={
+ interface Department{
     inputValue?: string;
     _id?: string;
     name: string;
 }
-type Position={
+ interface Position{
     inputValue?: string;
     _id?: string;
     name: string;
