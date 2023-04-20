@@ -48,7 +48,7 @@ const ReleaseAmount = () => {
                     value={IROrelease?.releaseAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease: any) => ({
+                      setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         releaseAmount: e.target.value,
                       }))
@@ -67,7 +67,7 @@ const ReleaseAmount = () => {
                     value={IROrelease?.transferredAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease: any) => ({
+                      setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         transferredAmount: e.target.value,
                       }))
@@ -100,7 +100,7 @@ const ReleaseAmount = () => {
                     value={IROrelease?.transferredBank}
                     onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease: any) => ({
+                      setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         transferredBank: e.target.value,
                       }))
@@ -116,7 +116,7 @@ const ReleaseAmount = () => {
                     value={IROrelease?.modeOfPayment}
                     onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease: any) => ({
+                      setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         modeOfPayment: e.target.value,
                       }))
@@ -132,7 +132,7 @@ const ReleaseAmount = () => {
                     value={IROrelease?.transactionNumber}
                     onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease: any) => ({
+                      setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         transactionNumber: e.target.value,
                       }))
