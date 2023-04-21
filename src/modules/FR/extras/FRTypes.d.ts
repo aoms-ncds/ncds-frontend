@@ -39,8 +39,35 @@ declare global {
     }
 
     interface MainCategory{
+        name:string;
+        subcategory2:SubCategory2[];
+    }
+    interface SubCategory2{
+        name:string;
+        subcategory3:SubCategory3[];
+    }
+    interface SubCategory3{
+        name:string;
+        subcategory4:SubCategory4[];
+    }
+    interface SubCategory4{
+        name:string;
+        narration:string;
+    }
+    interface Month{
+        monthName:string;
+    }
+    interface Particulars{
         _id:string;
-        mainCategoryName:string;
+        FRmainCategory:string;
+        FRsubCategory1:string;
+        FRsubCategory2:string;
+        FRsubCategory3:string;
+        FRquantity:string;
+        FRmonth:string;
+        FRrequestedAmount:string;
+        FRnarration:string;
+
     }
 
 

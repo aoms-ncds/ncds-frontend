@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-
+import { categories } from './FRConfig';
 export default {
   getCount: () => {
     return getStandardResponse<number>(
@@ -171,19 +171,30 @@ export default {
   ),
   getMainCategory: () => getStandardResponse<MainCategory[]>(
     dummyRequest<MainCategory[]>({
+      data: categories,
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getMonth: () => getStandardResponse<Month[]>(
+    dummyRequest<Month[]>({
       data: [{
-        _id: '1',
-        mainCategoryName: 'Main category 1',
+        monthName: 'January',
       },
       {
-        _id: '2',
-        mainCategoryName: 'Main category 2',
+        monthName: 'February',
       },
       {
-        _id: '3',
-        mainCategoryName: 'Main category 3',
+        monthName: 'March',
       },
-
+      {
+        monthName: 'April',
+      },
+      {
+        monthName: 'May',
+      },
       ],
       // error: null,
       message: 'fetched data',
@@ -191,6 +202,16 @@ export default {
       timeout: 500,
     }),
   ),
+  addParticulars: ( particularData: Particulars,
+    action: 'add' | 'edit') => getStandardResponse<number>(
+      dummyRequest({
+        data: action,
+        // error: null,
+        message: action +'ed Particulars',
+        result: 'success',
+        timeout: 500,
+      }),
+    ),
 
 
 };
