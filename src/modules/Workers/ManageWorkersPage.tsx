@@ -14,7 +14,7 @@ import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 const ManageWorkerPage = () => {
   const [loadCount, setLoadCount] = useState(0);
-  const [WorkerRequests, setWorkerRequests] = useState<WorkersRequest[]|null>(null);
+  const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
 
   useEffect(() => {
     setLoadCount((count) => count+1);

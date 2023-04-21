@@ -13,6 +13,15 @@ export default {
       }),
     );
   },
+  addWorker: ( ) => getStandardResponse<number>(
+    dummyRequest({
+      data: 1,
+      // error: null,
+      message: 'created staff',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
   getAll: () => getStandardResponse<[]>(
     dummyRequest({
       data: [{
@@ -86,6 +95,27 @@ export default {
       ],
       // error: null,
       message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getDesignation: () => getStandardResponse<[]>(
+    dummyRequest({
+      data: [
+        { name: 'Co-ordinator' },
+        { name: 'Native Pastor' },
+        { name: 'Evangelist' },
+        { name: 'Associate Pastor' },
+        { name: 'Ordained Pastor' },
+        { name: 'Area Supervisor' },
+        { name: 'Sub-Division Supervisor' },
+        { name: 'Officiating Coordinator' },
+        { name: 'Divisional Coordinator' },
+        { name: 'Staff/Employees' },
+        { name: 'Non-Missionary' },
+      ],
+      // error: null,
+      message: 'Network Error',
       result: 'success',
       timeout: 500,
     }),

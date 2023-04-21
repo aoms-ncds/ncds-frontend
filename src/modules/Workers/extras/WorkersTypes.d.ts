@@ -3,7 +3,13 @@ import { Moment } from 'moment';
 export { };
 
 declare global {
-    interface WorkersRequest{
+    interface WorkersDetails{
+        basicDetails?: BasicDetails;
+        officialDetails?: OfficialDetails;
+        supportDetails?: SupportDetails;
+        supportStructure?: SupportStructure;
+    }
+    interface BasicDetails{
         _id : string;
         workerCode: string;
         firstName: string;
@@ -75,6 +81,25 @@ declare global {
         currentAddressPincode:string;
         spouseOfAnotherStaff:string;
 
+    }
+    interface SupportDetails{
+        _id : string;
+        currentDesignation?: Designation;
+        totalNoYearsInMinistry: number;
+        typeOfFamily: string;
+        typeofChurch:string;
+        selfSupport: string;
+    }
+    interface SupportStructure{
+        _id : string;
+        basicAllowance: string;
+        hraAllowance: number;
+        spouseAllowance: string;
+        positionalAllowance:string;
+        selfSupport: string;
+    }
+    interface Designation{
+        name: string;
     }
 
 

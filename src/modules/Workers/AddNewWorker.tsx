@@ -1,514 +1,142 @@
-import { Card, Container, CardContent, Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import React from 'react';
+import { Box, Button, CardContent, Container, Step, StepLabel, Stepper } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import WorkerServices from './extras/WorkersServices';
+import BasicDetails from './BasicDetails';
+import OfficialDetails from './OfficialDetails';
+import SupportDetails from './SupportDetails';
+import SupportStructure from './SupportStructure';
+import { enqueueSnackbar } from 'notistack';
+
 
 const AddNewWorker = () => {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const AddWorker = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    WorkerServices.addWorker()
+      .then((res) => {
+        enqueueSnackbar({
+          message: 'Added new Worker',
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   return (
-    <CommonPageLayout title='Add New Worker Page'>
-      <Card style={{ width: '100%' }}>
-      </Card>
+    <CommonPageLayout title='Add New Worker'>
       <Container>
         <CardContent>
-          <form>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" Worker Code"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">Field Missionary/ Non-Missionary</FormLabel>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="missionary"
-                    name="radio-buttons-group"
-                    row
-                  >
-                    <FormControlLabel value="missionary" control={<Radio />} label="Missionary" />
-                    <FormControlLabel value="nonMissionary" control={<Radio />} label="Non-Missionary" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="First Name"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Last Name"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Date Of Birth"
-                      // value={IROrelease?.transferredDate}
-                      // onChange={(e) =>
-                      // // eslint-disable-next-line @typescript-eslint/naming-convention
-                      //   setIROrelease((IROrelease: any) => ({
-                      //     ...IROrelease,
-                      //     transferredDate: e.target.value,
-                      //   }))
-                      // }
-                    />
+          <Box sx={{ width: '100%' }}>
+            <Stepper activeStep={activeStep}>
+              <Step>
+                <StepLabel>Basic Details</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Official Details</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Support Details</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Support Structure</StepLabel>
+              </Step>
+            </Stepper>
 
-                  </LocalizationProvider>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="female"
-                    name="radio-buttons-group"
-                    row
-                  >
-                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Age"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl>
-                  <FormLabel id="demo-radio-buttons-group-label">Marital Status</FormLabel>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="single"
-                    name="radio-buttons-group"
-                    row
-                  >
-                    <FormControlLabel value="single" control={<Radio />} label="Single" />
-                    <FormControlLabel value="married" control={<Radio />} label="Married" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Highest Qualification"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Mother Tongue"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Communication Language"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Languages Known"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Email-ID"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Mobile No"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Alternative Mobile No."
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="PAN Number"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="standard" fullWidth>
-                  <TextField
-                    label="Aadhaar"
-                    type="file"
-                    // onChange={(e) => handleFileUpload(e.target.files)}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="standard" fullWidth>
-                  <TextField
-                    label="Voter ID"
-                    type="file"
-                    // onChange={(e) => handleFileUpload(e.target.files)}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="License Number"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Permanent Address"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="City"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="District"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="State"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Country"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Pincode"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Current Address"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="City"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="District"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="State"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Country"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Pincode"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Spouse of another staff"
-                    // value={IROrelease?.releaseAmount}
-                    // onChange={(e) =>
-                    //   // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIROrelease((IROrelease) => ({
-                    //     ...IROrelease,
-                    //     releaseAmount: e.target.value,
-                    //   }))
-                    // }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </form>
+            <br />
+            {activeStep == 0 && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setActiveStep(1);
+                }}
+              ><BasicDetails/>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ float: 'right', padding: '16px 64px' }}
+                >
+                      Next
+                </Button>
+
+              </form>
+            )}
+            {activeStep == 1 && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setActiveStep(2);
+                }}
+              ><OfficialDetails/>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ float: 'right', padding: '16px 64px' }}
+                >
+                      Next
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setActiveStep(0);
+                  } }
+                  variant="outlined"
+                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                >    Go back
+                </Button>
+              </form>
+            )}
+            {activeStep == 2 && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setActiveStep(3);
+                }}
+              ><SupportDetails/>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ float: 'right', padding: '16px 64px' }}
+                >
+                      Next
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setActiveStep(1);
+                  } }
+                  variant="outlined"
+                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                >    Go back
+                </Button>
+
+              </form>
+            )}
+            {activeStep == 3 && (
+              <form
+                onSubmit={AddWorker}
+              ><SupportStructure/><Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ float: 'right', padding: '16px 64px' }}
+                >
+                Submit
+                </Button><Button
+                  type="button"
+                  onClick={() => {
+                    setActiveStep(2);
+                  } }
+                  variant="outlined"
+                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                >    Go back
+                </Button> </form>
+
+            )}
+          </Box>
         </CardContent>
       </Container>
     </CommonPageLayout>

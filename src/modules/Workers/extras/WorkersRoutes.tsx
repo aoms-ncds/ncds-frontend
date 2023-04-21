@@ -4,6 +4,7 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import AddNewWorker from '../AddNewWorker';
 
+
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
   pages: [
