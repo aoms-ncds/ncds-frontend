@@ -38,7 +38,7 @@ declare global {
   type FileObjectType =
     'application/vnd.ms-excel'
     |'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    |'application/pdf' | 'video/quicktime';
+    |'application/pdf' | 'video/quicktime' | 'image/png' | `video/${string}` | `image/${string}`;
     type FileObjectExtensions = '.xlsx'|'.xls';
   interface AJAXProgress{
     loaded: number;

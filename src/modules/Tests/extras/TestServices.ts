@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-
+const timeoutValue = 250;
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getBills: () => getStandardResponse<FileObject[]>(
@@ -46,7 +46,7 @@ export default {
       ],
       message: 'Successfully fetched list of bills',
       result: 'success',
-      timeout: 500,
+      timeout: timeoutValue,
     }),
   ),
   //   getBills: () => getStandardResponse<FileObject[]>(
@@ -54,9 +54,46 @@ export default {
   //       data: [],
   //       message: 'Network Error',
   //       result: 'fail',
-  //       timeout: 500,
+  //       timeout: timeoutValue,
   //     }),
   //   ),
+  // uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void):Promise<StandardResponse<FileObject>> => {
+  //   return new Promise((resolve, reject) => {
+  //     let percentage = 0;
+  //     const iv = setInterval(() => {
+  //       percentage += 4;
+  //       onProgress({
+  //         loaded: file.size/100*(percentage),
+  //         percentage: percentage,
+  //         total: file.size,
+  //       });
+  //       if (percentage === 100) {
+  //         clearInterval(iv);
+  //         resolve(
+  //           getStandardResponse<FileObject>(
+  //             dummyRequest<FileObject>({
+  //               data: {
+  //                 _id: 'f02nsdfsuv3r',
+  //                 name: file.name,
+  //                 size: file.size,
+  //                 type: file.type as FileObjectType,
+  //                 storage: 'Drive',
+  //                 fileId: '03v9runt3',
+  //                 downloadURL: 'fwe0nvifjr',
+  //                 private: false,
+  //                 createdAt: moment(),
+  //                 updatedAt: moment(),
+  //               },
+  //               message: 'Successfully uploaded file!',
+  //               result: 'success',
+  //               timeout: 0,
+  //             }),
+  //           ),
+  //         );
+  //       }
+  //     }, 100);
+  //   });
+  // },
   uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void) => getStandardResponse<FileObject>(
     axios.post('http://localhost:8080/', { file }, {
       onUploadProgress: function(progressEvent) {
@@ -92,4 +129,17 @@ export default {
   //     timeout: 1100,
   //   }),
   // ),
+  // deleteFile: (fileID: string) => getStandardResponse<void>(axios.delete('http://localhost:8080/'+fileID)),
+  renameFile: (fileID: string, newName: string) => getStandardResponse<void>(dummyRequest<void>({
+    result: 'success',
+    timeout: timeoutValue,
+  })),
+  deleteFile: (fileID: string) => getStandardResponse<void>(dummyRequest<void>({
+    result: 'success',
+    timeout: timeoutValue,
+  })),
+  importStaffsExcel: (staff: Staff, overwriteDuplicates: boolean) => getStandardResponse<void>(dummyRequest<void>({
+    result: 'success',
+    timeout: timeoutValue,
+  })),
 };
