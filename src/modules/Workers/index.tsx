@@ -15,6 +15,14 @@ const WorkersDashboard = () => {
             targetRoute="/workers/manage"
           />
         </Grid>
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton
+            primaryText='Approve New Workers'
+            secondaryText='12'
+            color='#0dcaf0'
+            targetRoute="/workers/approve"
+          />
+        </Grid>
       </Grid>
     </CommonPageLayout>
   );
