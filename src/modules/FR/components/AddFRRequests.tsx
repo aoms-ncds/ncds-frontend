@@ -61,6 +61,7 @@ const AddFRRequests = () => {
     FRrequestedAmount: '',
     FRnarration: '',
   });
+  const [staff, setStaff] = useState<Staff[]>();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -118,6 +119,14 @@ const AddFRRequests = () => {
     .catch((res) => {
       console.log(res);
     });
+    FRServices.getStaffs()
+    .then((res) => {
+      // console.log(res);
+      setStaff(res.data);
+    })
+   .catch((res) => {
+     console.log(res);
+   });
   }, []);
   const addParticulars = () => {
     console.log('here');
@@ -450,12 +459,12 @@ const AddFRRequests = () => {
                   <InputLabel id="demo-simple-select-standard-label">Sanctioned As Per</InputLabel>
                   <Autocomplete
                     id='Sanctioned As Per'
-                    value={subCategory2?.find((subcategory2) => subcategory2.name === particulars?.FRsubCategory1) ?? null}
-                    options={subCategory2?? []}
-                    getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
-                    renderOption={(props, subcategory2, { selected }) => (
+
+                    options={staff?? []}
+                    getOptionLabel={(staff) => staff.name ?? ''}
+                    renderOption={(props, staff, { selected }) => (
                       <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                        {subcategory2.name}
+                        {staff.name}
                       </Box>
                     )}
                     // onChange={(e, selectedSubCategory2) => {

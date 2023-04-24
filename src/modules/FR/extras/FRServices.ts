@@ -212,6 +212,97 @@ export default {
         timeout: 500,
       }),
     ),
+  getParticulars: () => getStandardResponse<Particulars[]>(
+    dummyRequest<Particulars[]>({
+      data: [{
+        _id: '1',
+        FRmainCategory: 'main',
+        FRsubCategory1: 'sub',
+        FRsubCategory2: 'sub2',
+        FRsubCategory3: 'sub3',
+        FRquantity: '12',
+        FRmonth: 'January',
+        FRrequestedAmount: '300',
+        FRnarration: 'paticularss',
+      },
+      {
+        _id: '2',
+        FRmainCategory: 'main',
+        FRsubCategory1: 'sub',
+        FRsubCategory2: 'sub2',
+        FRsubCategory3: 'sub3',
+        FRquantity: '12',
+        FRmonth: 'January',
+        FRrequestedAmount: '300',
+        FRnarration: 'paticularss',
+      },
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getStaffs: () => getStandardResponse<Staff[]>(
+    dummyRequest<Staff[]>({
+      data: [{
+        _id: '1',
+        name: 'athira',
+        dob: '12-11-2000',
+        doj: '12-11-2000',
+        designation: {
+          _id: '1',
+          name: 'TL',
+        },
+        department: {
+          _id: '1',
+          name: 'IT',
+        },
+        phone: '123476798',
+        email: 'test@gmail.com',
+        spouseOfAnotherEmployee: 'test',
+        idFormat: 'test' },
+      {
+        _id: '2',
+        name: 'Sanjay',
+        dob: '12-11-2000',
+        doj: '12-11-2000',
+        designation: {
+          _id: '1',
+          name: 'TL',
+        },
+        department: {
+          _id: '1',
+          name: 'IT',
+        },
+        phone: '123476798',
+        email: 'test@gmail.com',
+        spouseOfAnotherEmployee: 'test',
+        idFormat: 'test' },
+      {
+        _id: '3',
+        name: 'Sanjili',
+        dob: '12-11-2000',
+        doj: '12-11-2000',
+        designation: {
+          _id: '1',
+          name: 'TL',
+        },
+        department: {
+          _id: '1',
+          name: 'IT',
+        },
+        phone: '123476798',
+        email: 'test@gmail.com',
+        spouseOfAnotherEmployee: 'test',
+        idFormat: 'test' },
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
 
 
 };

@@ -1,12 +1,24 @@
 import { TableContainer, Paper,
   Table, TableHead, TableRow,
   TableCell, TableBody } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
+import FRServices from '../extras/FRServices';
 
 const FRParticularList = () => {
+  const [Particulars, setParticulars] = useState<Particulars[]>();
+  useEffect(() => {
+    FRServices.getParticulars()
+   .then((res) => {
+     console.log(res);
+     setParticulars(res.data);
+   })
+  .catch((res) => {
+    console.log(res);
+  });
+  }, []);
   return (
     <div>
       <TableContainer component={Paper}>
@@ -22,16 +34,18 @@ const FRParticularList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow >
-              <TableCell component="th" >
-                <DeleteIcon />
-              </TableCell>
-              <TableCell align="center">1</TableCell>
-              <TableCell align="center">For the support of two pasters</TableCell>
-              <TableCell align="center">2</TableCell>
-              <TableCell align="center">july</TableCell>
-              <TableCell align="center">20000</TableCell>
-            </TableRow>
+            {Particulars &&Particulars.map((item) => (
+              <TableRow key={item._id}>
+                <TableCell component="th" >
+                  <DeleteIcon />
+                </TableCell>
+                <TableCell align="center">{item._id}</TableCell>
+                <TableCell align="center">{item.FRnarration}</TableCell>
+                <TableCell align="center">{item.FRquantity}</TableCell>
+                <TableCell align="center">{item.FRmonth}</TableCell>
+                <TableCell align="center">{item.FRrequestedAmount}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
