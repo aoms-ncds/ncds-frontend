@@ -10,7 +10,8 @@ import frPageRoutes from '../modules/FR/extras/FRRoutes';
 import hrPageRoutes from '../modules/HR/extras/HRRoutes';
 import iroPageRoutes from '../modules/IRO/extras/IRORoutes';
 import workersPageRoutes from '../modules/Workers/extras/WorkersRoutes';
-import samplePageRoutes from '../modules/Samples/extras/SampleRoutes';
+import testPageRoutes from '../modules/Tests/extras/TestRoutes';
+import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
 
 export const getAllModuleRoutes = [
   homePageRoutes,
@@ -19,7 +20,8 @@ export const getAllModuleRoutes = [
   workersPageRoutes,
   frPageRoutes,
   iroPageRoutes,
-  samplePageRoutes,
+  testPageRoutes,
+  samplesPageRoutes,
 ];
 
 const router = createBrowserRouter(

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import FileUploader from '../../components/FileUploader';
+import TestServices from './extras/TestServices';
 import { Button } from '@mui/material';
-import SampleServices from './extras/SampleServices';
 import ExcelImporter from '../../components/ExcelImporter';
 
 const index = () => {
@@ -11,7 +11,7 @@ const index = () => {
   const [showExcelImporter, setShowExcelImporter] = useState(false);
 
   return (
-    <CommonPageLayout title='Samples' loadCount={loadCount}>
+    <CommonPageLayout title='Tests' loadCount={loadCount}>
       {/* File uploader starts */}
       <FileUploader
         title='Upload bills'
@@ -25,11 +25,11 @@ const index = () => {
         accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={SampleServices.getBills}
-        uploadFile={SampleServices.uploadFile}
-        renameFile={SampleServices.renameFile}
+        getFiles={TestServices.getBills}
+        uploadFile={TestServices.uploadFile}
+        renameFile={TestServices.renameFile}
         deleteFile={(fileId: string) => {
-          return SampleServices.deleteFile(fileId);
+          return TestServices.deleteFile(fileId);
         }}
         onLoad={() => setLoadCount((count) => count+1)}
         afterLoad={() => setLoadCount((count) => count-1)}
@@ -52,7 +52,7 @@ const index = () => {
           return true;
         }}
         parser={(row) => ({ ...row })}
-        uploader={(row, overwriteDuplicates) => SampleServices.importStaffsExcel(row, overwriteDuplicates)}
+        uploader={(row, overwriteDuplicates) => TestServices.importStaffsExcel(row, overwriteDuplicates)}
       />
       <Button variant='contained' onClick={() => setShowExcelImporter(true)} sx={{ ml: 1 }}>
         Show Excel Importer
