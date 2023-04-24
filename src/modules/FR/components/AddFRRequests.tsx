@@ -302,7 +302,7 @@ const AddFRRequests = () => {
                         //     }));
                         //   }
                         // }}
-                        renderInput={(params) => <TextField {...params} label="Choose Sub Division" required />}
+                        renderInput={(params) => <TextField {...params} label="Choose Division" required />}
                         fullWidth
                       />
                     </FormControl>

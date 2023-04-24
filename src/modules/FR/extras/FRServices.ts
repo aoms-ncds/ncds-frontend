@@ -195,6 +195,27 @@ export default {
       {
         monthName: 'May',
       },
+      {
+        monthName: 'June',
+      },
+      {
+        monthName: 'July',
+      },
+      {
+        monthName: 'August',
+      },
+      {
+        monthName: 'September',
+      },
+      {
+        monthName: 'October',
+      },
+      {
+        monthName: 'November',
+      },
+      {
+        monthName: 'December',
+      },
       ],
       // error: null,
       message: 'fetched data',
