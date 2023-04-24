@@ -93,82 +93,6 @@ export default {
       timeout: 500,
     }),
   ),
-  getCoordiantor: () => getStandardResponse<Coordinator[]>(
-    dummyRequest<Coordinator[]>({
-      data: [{
-        _id: '1',
-        coordinatorName: 'Joseph',
-      },
-      {
-        _id: '2',
-        coordinatorName: 'John',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getWorker: () => getStandardResponse<IETWorker[]>(
-    dummyRequest<IETWorker[]>({
-      data: [{
-        _id: '1',
-        workerName: 'Joseph',
-        workerCode: '123ww',
-      },
-      {
-        _id: '2',
-        workerName: 'John',
-        workerCode: '123wwh',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getDivisions: () => getStandardResponse<IETDivisions[]>(
-    dummyRequest<IETDivisions[]>({
-      data: [{
-        _id: '1',
-        divisionName: 'Division 1',
-      },
-      {
-        _id: '2',
-        divisionName: 'Division 1',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getSubDivisions: () => getStandardResponse<Subdivisions[]>(
-    dummyRequest<Subdivisions[]>({
-      data: [{
-        _id: '1',
-        divisionId: '1',
-        subDivisionName: 'Sub division1',
-      },
-      {
-        _id: '1',
-        divisionId: '1',
-        subDivisionName: 'Sub division 2',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
   getMainCategory: () => getStandardResponse<MainCategory[]>(
     dummyRequest<MainCategory[]>({
       data: categories,
@@ -243,7 +167,7 @@ export default {
         FRsubCategory3: 'sub3',
         FRquantity: '12',
         FRmonth: 'January',
-        FRrequestedAmount: '300',
+        FRrequestedAmount: 300,
         FRnarration: 'paticularss',
       },
       {
@@ -254,69 +178,9 @@ export default {
         FRsubCategory3: 'sub3',
         FRquantity: '12',
         FRmonth: 'January',
-        FRrequestedAmount: '300',
+        FRrequestedAmount: 300,
         FRnarration: 'paticularss',
       },
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getStaffs: () => getStandardResponse<Staff[]>(
-    dummyRequest<Staff[]>({
-      data: [{
-        _id: '1',
-        name: 'athira',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
-        designation: {
-          _id: '1',
-          name: 'TL',
-        },
-        department: {
-          _id: '1',
-          name: 'IT',
-        },
-        phone: '123476798',
-        email: 'test@gmail.com',
-        spouseOfAnotherEmployee: 'test',
-        idFormat: 'test' },
-      {
-        _id: '2',
-        name: 'Sanjay',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
-        designation: {
-          _id: '1',
-          name: 'TL',
-        },
-        department: {
-          _id: '1',
-          name: 'IT',
-        },
-        phone: '123476798',
-        email: 'test@gmail.com',
-        spouseOfAnotherEmployee: 'test',
-        idFormat: 'test' },
-      {
-        _id: '3',
-        name: 'Sanjili',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
-        designation: {
-          _id: '1',
-          name: 'TL',
-        },
-        department: {
-          _id: '1',
-          name: 'IT',
-        },
-        phone: '123476798',
-        email: 'test@gmail.com',
-        spouseOfAnotherEmployee: 'test',
-        idFormat: 'test' },
       ],
       // error: null,
       message: 'fetched data',

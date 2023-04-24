@@ -3,7 +3,12 @@ import { Container, CardContent,
   Select, MenuItem, TextField,
   Typography, Button, Dialog, Autocomplete,
   Box, DialogActions, DialogContent,
-  DialogContentText, DialogTitle } from '@mui/material';
+  DialogContentText, Paper,
+  Table, TableHead, TableRow,
+  TableCell, TableBody, DialogTitle, TableContainer } from '@mui/material';
+import {
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +16,9 @@ import FRParticularList from './FRParticularList';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import HRServices from '../../HR/extras/HRServices';
+import WorkerServices from '../../Workers/extras/WorkersServices';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 const AddFRRequests = () => {
   const [open, setOpen] = React.useState(false);
   const [requisition, setRequisition] = useState<Requisition[]>();
@@ -20,12 +28,8 @@ const AddFRRequests = () => {
 
   });
   const [coordinator, setCoordinator] = useState<Coordinator[]>();
-  const [workers, setWorkers] = useState<IETWorker[]>();
-  const [selectedWorker, setselectedWorker] = useState<IETWorker>({
-    _id: '',
-    workerName: '',
-    workerCode: '',
-  });
+  const [workers, setWorkers] = useState<WorkersRequest[]>();
+  const [selectedWorker, setselectedWorker] = useState<WorkersRequest|null>(null);
   const [divisions, setDivisions] = useState<IETDivisions[]>();
   const [subDivisions, setSubDivisions] = useState<Subdivisions[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
@@ -50,7 +54,8 @@ const AddFRRequests = () => {
   });
   const [monthName, setMonthName] = useState<Month[]>();
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [particulars, setParticulars] = useState<Particulars>({
+  const [Particulars, setParticulars] = useState<Particulars[]>();
+  const [particularDetails, setParticularDetails] = useState<Particulars>({
     _id: '',
     FRmainCategory: '',
     FRsubCategory1: '',
@@ -58,7 +63,7 @@ const AddFRRequests = () => {
     FRsubCategory3: '',
     FRquantity: '',
     FRmonth: '',
-    FRrequestedAmount: '',
+    FRrequestedAmount: 0,
     FRnarration: '',
   });
   const [staff, setStaff] = useState<Staff[]>();
@@ -77,28 +82,28 @@ const AddFRRequests = () => {
   .catch((res) => {
     console.log(res);
   });
-    FRServices.getCoordiantor()
+    HRServices.getStaffs()
     .then((res) => {
       setCoordinator(res.data);
     })
     .catch((res) => {
       console.log(res);
     });
-    FRServices.getWorker()
+    WorkerServices.getAll()
     .then((res) => {
       setWorkers(res.data);
     })
     .catch((res) => {
       console.log(res);
     });
-    FRServices.getDivisions()
+    DivisionsServices.getDivisions()
     .then((res) => {
       setDivisions(res.data);
     })
     .catch((res) => {
       console.log(res);
     });
-    FRServices.getSubDivisions()
+    DivisionsServices.getSubDivisions()
     .then((res) => {
       setSubDivisions(res.data);
     })
@@ -119,7 +124,7 @@ const AddFRRequests = () => {
     .catch((res) => {
       console.log(res);
     });
-    FRServices.getStaffs()
+    HRServices.getStaffs()
     .then((res) => {
       // console.log(res);
       setStaff(res.data);
@@ -127,6 +132,14 @@ const AddFRRequests = () => {
    .catch((res) => {
      console.log(res);
    });
+    FRServices.getParticulars()
+   .then((res) => {
+     console.log(res);
+     setParticulars(res.data);
+   })
+  .catch((res) => {
+    console.log(res);
+  });
   }, []);
   const addParticulars = () => {
     console.log('here');
@@ -134,7 +147,7 @@ const AddFRRequests = () => {
       message: 'Adding Particulars',
       variant: 'info',
     });
-    FRServices.addParticulars(particulars, action)
+    FRServices.addParticulars(particularDetails, action)
       .then((res) => {
         console.log(res);
         handleClose();
@@ -143,7 +156,7 @@ const AddFRRequests = () => {
           message: res.message,
           variant: 'success',
         });
-        setParticulars(() => ({
+        setParticularDetails(() => ({
           _id: '',
           FRmainCategory: '',
           FRsubCategory1: '',
@@ -151,7 +164,7 @@ const AddFRRequests = () => {
           FRsubCategory3: '',
           FRquantity: '',
           FRmonth: '',
-          FRrequestedAmount: '',
+          FRrequestedAmount: 0,
           FRnarration: '',
 
         }));
@@ -169,6 +182,10 @@ const AddFRRequests = () => {
         });
       });
   };
+  const totalRequestedAmount = Particulars && Particulars.reduce(
+    (total, item) => total + item.FRrequestedAmount,
+    0,
+  );
   return (
     <div>
       <Container>
@@ -215,10 +232,10 @@ const AddFRRequests = () => {
                         id='worker'
                         // value={(requisition) => requisition.RequisitionName}
                         options={workers ?? []}
-                        getOptionLabel={(worker) => worker.workerName ?? ''}
+                        getOptionLabel={(worker) => worker.firstName ?? ''}
                         renderOption={(props, worker, { selected }) => (
                           <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                            {worker.workerName}
+                            {worker.firstName}
                           </Box>
                         )}
                         onChange={(e, selectedWorker) => {
@@ -238,7 +255,7 @@ const AddFRRequests = () => {
                     <FormControl variant="outlined" fullWidth>
                       <TextField
                         label="Worker Code"
-                        value={selectedWorker.workerCode}
+                        value={selectedWorker?.workerCode}
                         // onChange={(e) =>
                         //   setGroup((group) => ({
                         //     ...group,
@@ -403,13 +420,44 @@ const AddFRRequests = () => {
                 </Button>
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
-                <FRParticularList />
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell align="center">SI NO</TableCell>
+                        <TableCell align="center">Particulars</TableCell>
+                        <TableCell align="center">Quantity</TableCell>
+                        <TableCell align="center">Month</TableCell>
+                        <TableCell align="center">Required Amount</TableCell>
+                      </TableRow>
+                    </TableHead>
+
+
+                    <TableBody>
+                      {Particulars && Particulars.map((item) => (
+                        <TableRow key={item._id}>
+                          <TableCell component="th" >
+                            <DeleteIcon />
+                          </TableCell>
+                          <TableCell align="center">{item._id}</TableCell>
+                          <TableCell align="center">{item.FRnarration}</TableCell>
+                          <TableCell align="center">{item.FRquantity}</TableCell>
+                          <TableCell align="center">{item.FRmonth}</TableCell>
+                          <TableCell align="center">{item.FRrequestedAmount}</TableCell>
+                        </TableRow>
+                      ))}
+
+                    </TableBody>
+
+                  </Table>
+                </TableContainer>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Requested Amount"
-                    value={particulars?.FRrequestedAmount}
+                    value={totalRequestedAmount}
                     // onChange={(e) =>
                     //   // eslint-disable-next-line @typescript-eslint/naming-convention
 
@@ -516,7 +564,7 @@ const AddFRRequests = () => {
                         <FormControl variant="outlined" fullWidth>
                           <Autocomplete
                             id='subcategory1'
-                            value={subCategory2?.find((subcategory2) => subcategory2.name === particulars?.FRsubCategory1) ?? null}
+                            value={subCategory2?.find((subcategory2) => subcategory2.name === particularDetails?.FRsubCategory1) ?? null}
                             options={subCategory2?? []}
                             getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
                             renderOption={(props, subcategory2, { selected }) => (
@@ -530,7 +578,7 @@ const AddFRRequests = () => {
                                   ...selectedSubCategory2,
                                   //       //       // RequisitionName: selectedRequisition?.RequisitionName,
                                 }));
-                                setParticulars((particulars) => ({
+                                setParticularDetails((particulars) => ({
                                   ...particulars,
                                   FRsubCategory1: selectedSubCategory2.name,
                                 }));
@@ -555,7 +603,7 @@ const AddFRRequests = () => {
                         <FormControl variant="outlined" fullWidth>
                           <Autocomplete
                             id='subcategory2'
-                            value={subCategory3?.find((subcategory3) => subcategory3.name === particulars?.FRsubCategory2) ?? null}
+                            value={subCategory3?.find((subcategory3) => subcategory3.name === particularDetails?.FRsubCategory2) ?? null}
                             options={subCategory3?? []}
                             getOptionLabel={(subcategory3) => subcategory3.name ?? ''}
                             renderOption={(props, subcategory3, { selected }) => (
@@ -570,7 +618,7 @@ const AddFRRequests = () => {
                                   //       //       // RequisitionName: selectedRequisition?.RequisitionName,
                                 }));
                                 setsubCategory4(selectedSubCategory3.subcategory4);
-                                setParticulars((particulars) => ({
+                                setParticularDetails((particulars) => ({
                                   ...particulars,
                                   FRsubCategory2: selectedSubCategory3.name,
                                 }));
@@ -593,7 +641,7 @@ const AddFRRequests = () => {
                         <FormControl variant="outlined" fullWidth>
                           <Autocomplete
                             id='subcategory4'
-                            value={subCategory4?.find((subcategory4) => subcategory4.name === particulars?.FRsubCategory3) ?? null}
+                            value={subCategory4?.find((subcategory4) => subcategory4.name === particularDetails?.FRsubCategory3) ?? null}
                             options={subCategory4?? []}
                             getOptionLabel={(subCategory4) => subCategory4.name ?? ''}
                             renderOption={(props, subcategory4, { selected }) => (
@@ -607,7 +655,7 @@ const AddFRRequests = () => {
                                   ...selectedSubCategory4,
                                   //       //       // RequisitionName: selectedRequisition?.RequisitionName,
                                 }));
-                                setParticulars((particulars) => ({
+                                setParticularDetails((particulars) => ({
                                   ...particulars,
                                   FRsubCategory3: selectedSubCategory4.name,
                                 }));
@@ -632,10 +680,10 @@ const AddFRRequests = () => {
                           <TextField
                             label="Quantity"
                             type={'number'}
-                            value={particulars?.FRquantity}
+                            value={particularDetails?.FRquantity}
                             onChange={(e) =>
                             // eslint-disable-next-line @typescript-eslint/naming-convention
-                              setParticulars((particulars) => ({
+                              setParticularDetails((particulars) => ({
                                 ...particulars,
                                 FRquantity: e.target.value,
                               }))
@@ -688,18 +736,15 @@ const AddFRRequests = () => {
                         {' '}
                         <FormControl variant="outlined" fullWidth>
                           <TextField
-                            label="Requisted Amount"
-                            type={'number'}
-                            value={particulars?.FRrequestedAmount}
-                            onChange={(e) =>
-                            // eslint-disable-next-line @typescript-eslint/naming-convention
-                              setParticulars((particulars) => ({
-                                ...particulars,
-                                FRrequestedAmount: e.target.value,
-                              }))
-                            }
+                            label="Requested Amount"
+                            type="number"
+                            value={particularDetails?.FRrequestedAmount}
                             fullWidth
+                            InputProps={{
+                              readOnly: true,
+                            }}
                           />
+
                         </FormControl>
                       </Grid>
                     </Grid>
