@@ -420,7 +420,7 @@ const AddFRRequests = () => {
                 </Button>
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
-                <TableContainer component={Paper}>
+                <TableContainer>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
@@ -457,6 +457,7 @@ const AddFRRequests = () => {
                 <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Requested Amount"
+                    InputLabelProps={{ shrink: true }}
                     value={totalRequestedAmount}
                     // onChange={(e) =>
                     //   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -530,7 +531,7 @@ const AddFRRequests = () => {
                     //     setsubCategory3(selectedSubCategory2.subcategory3);
                     //   }
                     // }}
-                    renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required />}
+                    renderInput={(params) => <TextField {...params} label="Sanctioned As Per" InputLabelProps={{ shrink: true }} required />}
                     fullWidth
                   />
                 </FormControl>
@@ -752,15 +753,7 @@ const AddFRRequests = () => {
                   <Container>
                     <Grid container spacing={12}>
                       <Grid item md={12}>
-                        {' '}
-                        <FormControl variant="outlined" fullWidth>
-                          <TextareaAutosize
-                            aria-label="empty textarea"
-                            placeholder=""
-                            style={{ width: 500 }}
-                            value={selectedSubCategory4.narration}
-                          />
-                        </FormControl>
+                        <TextField value={selectedSubCategory4.narration} multiline maxRows={4} fullWidth />
                       </Grid>
                     </Grid>
                   </Container>
