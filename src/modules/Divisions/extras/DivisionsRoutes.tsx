@@ -1,7 +1,7 @@
 import React from 'react';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import DivisionsPage from '..';
-import DivisionDetailsPage from '../divisionDetails';
+import DivisionDetailsPage from '../DivisionDetails';
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/divisions',
