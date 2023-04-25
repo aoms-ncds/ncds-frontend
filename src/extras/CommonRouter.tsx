@@ -11,6 +11,7 @@ import hrPageRoutes from '../modules/HR/extras/HRRoutes';
 import iroPageRoutes from '../modules/IRO/extras/IRORoutes';
 import workersPageRoutes from '../modules/Workers/extras/WorkersRoutes';
 import testsPageRoutes from '../modules/Tests/extras/TestsRoutes';
+import apppageRoutes from '../modules/Applications/extras/ApplicationsRoutes';
 
 export const getAllModuleRoutes = [
   homePageRoutes,
@@ -20,6 +21,8 @@ export const getAllModuleRoutes = [
   frPageRoutes,
   iroPageRoutes,
   testsPageRoutes,
+  apppageRoutes,
+
 ];
 
 const router = createBrowserRouter(
