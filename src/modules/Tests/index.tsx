@@ -48,7 +48,10 @@ const index = () => {
         show={showExcelImporter}
         onClose={() => setShowExcelImporter(false)}
         onFinish={() => setShowExcelImporter(false)}
-        validator={(row, rowNumber) => {
+        // validator={(row, rowNumber) => {
+        //   return true;
+        // }}
+        validator={() => {
           return true;
         }}
         parser={(row) => ({ ...row })}
