@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-
+import { categories } from './FRConfig';
 export default {
   getCount: () => {
     return getStandardResponse<number>(
@@ -93,97 +93,94 @@ export default {
       timeout: 500,
     }),
   ),
-  getCoordiantor: () => getStandardResponse<Coordinator[]>(
-    dummyRequest<Coordinator[]>({
-      data: [{
-        _id: '1',
-        coordinatorName: 'Joseph',
-      },
-      {
-        _id: '2',
-        coordinatorName: 'John',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getWorker: () => getStandardResponse<IETWorker[]>(
-    dummyRequest<IETWorker[]>({
-      data: [{
-        _id: '1',
-        workerName: 'Joseph',
-        workerCode: '123ww',
-      },
-      {
-        _id: '2',
-        workerName: 'John',
-        workerCode: '123wwh',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getDivisions: () => getStandardResponse<IETDivisions[]>(
-    dummyRequest<IETDivisions[]>({
-      data: [{
-        _id: '1',
-        divisionName: 'Division 1',
-      },
-      {
-        _id: '2',
-        divisionName: 'Division 1',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getSubDivisions: () => getStandardResponse<Subdivisions[]>(
-    dummyRequest<Subdivisions[]>({
-      data: [{
-        _id: '1',
-        divisionId: '1',
-        subDivisionName: 'Sub division1',
-      },
-      {
-        _id: '1',
-        divisionId: '1',
-        subDivisionName: 'Sub division 2',
-      },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
   getMainCategory: () => getStandardResponse<MainCategory[]>(
     dummyRequest<MainCategory[]>({
+      data: categories,
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getMonth: () => getStandardResponse<Month[]>(
+    dummyRequest<Month[]>({
+      data: [{
+        monthName: 'January',
+      },
+      {
+        monthName: 'February',
+      },
+      {
+        monthName: 'March',
+      },
+      {
+        monthName: 'April',
+      },
+      {
+        monthName: 'May',
+      },
+      {
+        monthName: 'June',
+      },
+      {
+        monthName: 'July',
+      },
+      {
+        monthName: 'August',
+      },
+      {
+        monthName: 'September',
+      },
+      {
+        monthName: 'October',
+      },
+      {
+        monthName: 'November',
+      },
+      {
+        monthName: 'December',
+      },
+      ],
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  addParticulars: ( particularData: Particulars,
+    action: 'add' | 'edit') => getStandardResponse<number>(
+      dummyRequest({
+        data: action,
+        // error: null,
+        message: action +'ed Particulars',
+        result: 'success',
+        timeout: 500,
+      }),
+    ),
+  getParticulars: () => getStandardResponse<Particulars[]>(
+    dummyRequest<Particulars[]>({
       data: [{
         _id: '1',
-        mainCategoryName: 'Main category 1',
+        FRmainCategory: 'main',
+        FRsubCategory1: 'sub',
+        FRsubCategory2: 'sub2',
+        FRsubCategory3: 'sub3',
+        FRquantity: '12',
+        FRmonth: 'January',
+        FRrequestedAmount: 300,
+        FRnarration: 'paticularss',
       },
       {
         _id: '2',
-        mainCategoryName: 'Main category 2',
+        FRmainCategory: 'main',
+        FRsubCategory1: 'sub',
+        FRsubCategory2: 'sub2',
+        FRsubCategory3: 'sub3',
+        FRquantity: '12',
+        FRmonth: 'January',
+        FRrequestedAmount: 300,
+        FRnarration: 'paticularss',
       },
-      {
-        _id: '3',
-        mainCategoryName: 'Main category 3',
-      },
-
       ],
       // error: null,
       message: 'fetched data',
