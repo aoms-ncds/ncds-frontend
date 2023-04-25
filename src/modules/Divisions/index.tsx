@@ -20,7 +20,7 @@ const DivisionsDashboardPage = () => {
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
         component={Link}
-        to="/divisions/Add"
+        to="/divisions/add"
         // onClick={() => {
         // }}
       >
