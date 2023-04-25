@@ -3,6 +3,7 @@ import WorkersDashboard from '..';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import AddNewWorker from '../AddNewWorker';
+import ApproveWorkerPage from '../ApproveWorkersPage';
 
 
 const workersPageRoutes: ModuleRoute = {
@@ -28,6 +29,13 @@ const workersPageRoutes: ModuleRoute = {
       title: 'Add New Worker',
       path: '/add_new_worker',
       element: <AddNewWorker />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Approve Workers',
+      path: '/approve',
+      element: <ApproveWorkerPage />,
       private: true,
       requiredAccessRights: ['string'],
     },
