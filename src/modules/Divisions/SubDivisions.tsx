@@ -10,13 +10,14 @@ const SubDivisionsPage = () => {
   const handleDuplicateClick = () => {
     setDuplicateCount(duplicateCount + 1);
   };
+
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <Grid container spacing={12}>
 
         <Grid item xs={12} md={12} lg={12}>
           {[...Array(duplicateCount)].map((_, index) => (
-            <SubDivisionTextfields key={index} />
+            <SubDivisionTextfields key={index} index={index}/>
           ))}
         </Grid>
       </Grid>

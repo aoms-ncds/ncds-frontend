@@ -3,8 +3,51 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, FormControl, Grid, TextField, Typography } from '@mui/material';
 
-const DivisionProfilePage = () => {
+const DivisionProfilePage = ({
+  withCardContainer = {
+    divisionName: '',
+    _id: '',
+    divisionId: '',
+    contactNumber: '',
+    emailId: '',
+    address: '',
+    noofWorkers: 0,
+    NoOfSubdivisions: 0,
+    NoOfChurches: 0,
+    coordinatorName: '',
+    coordinatorContactno: '',
+    coordinatorEmail: '',
+    seniorLeaderName: '',
+    seiorLeaderContactno: '',
+    seiorLeaderEmail: '',
+    juniorLeaderName: '',
+    juniorLeaderContactno: '',
+    juniorLeaderEmail: '',
+  },
+}: {
+  withCardContainer?: DivisionProfile;
+}) => {
   const [loadCount, setLoadCount] = useState(0);
+  const [newDivisionProfile, setNewDivisionProfile] = useState<DivisionProfile>({
+    divisionName: '',
+    _id: '',
+    divisionId: '',
+    contactNumber: '',
+    emailId: '',
+    address: '',
+    noofWorkers: 0,
+    NoOfSubdivisions: 0,
+    NoOfChurches: 0,
+    coordinatorName: '',
+    coordinatorContactno: '',
+    coordinatorEmail: '',
+    seniorLeaderName: '',
+    seiorLeaderContactno: '',
+    seiorLeaderEmail: '',
+    juniorLeaderName: '',
+    juniorLeaderContactno: '',
+    juniorLeaderEmail: '',
+  });
   return (
     <form>
       <Grid container spacing={12}>
@@ -16,13 +59,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.divisionName}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      divisionName: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -31,13 +74,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Id"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.divisionId}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      divisionId: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -46,13 +89,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.contactNumber}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      contactNumber: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -61,13 +104,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.emailId}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      emailId: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -76,13 +119,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Address"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.address}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      address: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -91,13 +134,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Workers"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.noofWorkers}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      noofWorkers: Number(e.target.value),
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -106,13 +149,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Sub Divisions"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.NoOfSubdivisions}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      NoOfSubdivisions: Number(e.target.value),
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -121,13 +164,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Churches"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.NoOfChurches}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      NoOfChurches: Number(e.target.value),
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -144,13 +187,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Co-ordinator Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.coordinatorName}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      coordinatorName: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -159,13 +202,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.coordinatorContactno}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      coordinatorContactno: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -174,13 +217,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.coordinatorEmail}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      coordinatorEmail: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -189,13 +232,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Senior Leader Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.seniorLeaderName}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      seniorLeaderName: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -205,13 +248,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.seiorLeaderContactno}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      seiorLeaderContactno: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -220,13 +263,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.seiorLeaderEmail}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      seiorLeaderEmail: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -235,13 +278,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Junior Leader Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.juniorLeaderName}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      juniorLeaderName: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -251,13 +294,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.juniorLeaderContactno}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      juniorLeaderContactno: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -266,13 +309,13 @@ const DivisionProfilePage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.juniorLeaderEmail}
+                  onChange={(e) =>
+                    setNewDivisionProfile((newDivisionProfile) => ({
+                      ...newDivisionProfile,
+                      juniorLeaderEmail: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>

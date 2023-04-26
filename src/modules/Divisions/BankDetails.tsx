@@ -2,8 +2,35 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
-const BankDetailsPage = () => {
+const BankDetailsPage = ({
+  withCardContainer = {
+    FCRABankname: '',
+    FCRABranchname: '',
+    FCRAAccountNumber: '',
+    FCRAIFSCCode: '',
+    FCRABeneficiary: '',
+    localBankname: '',
+    localBranchname: '',
+    localAccountNumber: '',
+    localIFSCCode: '',
+    localBeneficiary: '',
+  },
+}: {
+  withCardContainer?: BankDetails;
+}) => {
   const [loadCount, setLoadCount] = useState(0);
+  const [newDivisionBankDetails, setNewDivisionBankDetails] = useState<BankDetails>({
+    FCRABankname: '',
+    FCRABranchname: '',
+    FCRAAccountNumber: '',
+    FCRAIFSCCode: '',
+    FCRABeneficiary: '',
+    localBankname: '',
+    localBranchname: '',
+    localAccountNumber: '',
+    localIFSCCode: '',
+    localBeneficiary: '',
+  });
   return (
     <form>
       <Grid container spacing={12}>
@@ -15,13 +42,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Bank Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.FCRABankname}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      FCRABankname: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -30,13 +57,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Branch Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.FCRABranchname}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      FCRABranchname: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -45,13 +72,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Account Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.FCRAAccountNumber}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      FCRAAccountNumber: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -60,13 +87,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="IFSC Code"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.FCRAIFSCCode}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      FCRAIFSCCode: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -75,13 +102,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Beneficiary"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.FCRABeneficiary}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      FCRABeneficiary: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -97,13 +124,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Bank Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.localBankname}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      localBankname: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -112,13 +139,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Branch Name"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.localBranchname}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      localBranchname: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -127,13 +154,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Account Number"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.localAccountNumber}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      localAccountNumber: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -142,13 +169,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="IFSC Code"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.localIFSCCode}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      localIFSCCode: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>
@@ -157,13 +184,13 @@ const BankDetailsPage = () => {
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Beneficiary"
-                  //   value={newWorkerBasicDetails?.workerCode}
-                  //   onChange={(e) =>
-                  //     setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                  //       ...newWorkerBasicDetails,
-                  //       workerCode: e.target.value,
-                  //     }))
-                  //   }
+                  value={withCardContainer?.localBeneficiary}
+                  onChange={(e) =>
+                    setNewDivisionBankDetails((newWorkerBasicDetails) => ({
+                      ...newWorkerBasicDetails,
+                      localBeneficiary: e.target.value,
+                    }))
+                  }
                   fullWidth
                 />
               </FormControl>

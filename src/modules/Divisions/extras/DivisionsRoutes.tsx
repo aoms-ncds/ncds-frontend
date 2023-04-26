@@ -25,7 +25,7 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Divisions',
-      path: '/details/:divisionID',
+      path: '/details/:divisionIDs',
       element: <DivisionDetailsPage />,
       private: true,
       requiredAccessRights: ['string'],

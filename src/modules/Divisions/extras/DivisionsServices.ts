@@ -131,4 +131,59 @@ export default {
       timeout: 500,
     }),
   ),
+  addDivision: ( ) => getStandardResponse<number>(
+    dummyRequest({
+      data: 1,
+      // error: null,
+      message: 'created Division',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
+    dummyRequest<DivisionDetails>({
+      data: {
+        divisionProfile: {
+          divisionName: 'Division 1',
+          _id: '1',
+          divisionId: '233',
+          contactNumber: '89000333',
+          emailId: 'division@gmail.com',
+          address: 'Division address',
+          noofWorkers: 5,
+          NoOfSubdivisions: 5,
+          NoOfChurches: 5,
+          coordinatorName: 'Alex',
+          coordinatorContactno: '7884844',
+          coordinatorEmail: 'alex@gmail.com',
+          seniorLeaderName: 'Thomas',
+          seiorLeaderContactno: '678993333',
+          seiorLeaderEmail: 'thomas@gmail.com',
+          juniorLeaderName: 'Mikha',
+          juniorLeaderContactno: '67788833',
+          juniorLeaderEmail: 'mikha@gmail.com',
+        },
+        bankDetails: {
+          FCRABankname: 'FCRA',
+          FCRABranchname: 'Thodupuzha',
+          FCRAAccountNumber: '23344',
+          FCRAIFSCCode: 'ddd33',
+          FCRABeneficiary: '222',
+          localBankname: 'Canara',
+          localBranchname: 'Thodupuzha',
+          localAccountNumber: '4567799',
+          localIFSCCode: '222',
+          localBeneficiary: '22',
+
+        },
+
+
+      },
+      // error: null,
+      message: 'Approved',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+
 };
