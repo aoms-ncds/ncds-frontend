@@ -3,9 +3,9 @@
 export default {};
 
 declare global{
-    interface Applications {
+    interface Application {
         _id: string;
-        Name: string;
+        name: string;
         reason: string;
         status: string;
 

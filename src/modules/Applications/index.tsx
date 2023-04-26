@@ -10,11 +10,19 @@ const APPDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Application'
-            secondaryText='12'
+            secondaryText=''
             color='#29cc39'
-            targetRoute=""
+            targetRoute='/application/request'
           />
         </Grid>
+        {/* <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton
+            primaryText='Application Manage'
+            secondaryText='27'
+            color='#8833ff'
+            targetRoute='application/manage/'
+          />
+        </Grid> */}
       </Grid>
     </CommonPageLayout>
 
