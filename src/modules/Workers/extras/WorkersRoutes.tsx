@@ -47,6 +47,13 @@ const workersPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['string'],
     },
+    {
+      title: 'Add New Worker',
+      path: '/add_new_worker/:workersId',
+      element: <AddNewWorker />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
   ],
 };
 export default workersPageRoutes;

@@ -2,7 +2,19 @@ import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, Radio
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import WorkerServices from './extras/WorkersServices';
-const SupportDetails = () => {
+const SupportDetails = ({
+  withCardContainer = {
+    _id: '',
+    currentDesignation: { name: '' },
+    totalNoYearsInMinistry: 0,
+    typeOfFamily: 'singleMissionary',
+    typeofChurch: 'withChurch',
+    selfSupport: 'yes',
+
+  },
+}: {
+  withCardContainer?: SupportDetails;
+}) => {
   const [Designation, setDesignation] = useState<Designation[] | undefined>();
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
     _id: '',
@@ -30,7 +42,7 @@ const SupportDetails = () => {
             <Autocomplete
               id="Current Designation"
               // sx={{ width: 300 }}
-              value={newWorkerSupportDetails?.currentDesignation}
+              value={withCardContainer?.currentDesignation}
               options={Designation ?? []}
               // multiple
               // filterOptions={members}
@@ -70,7 +82,7 @@ const SupportDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Total No. Years in Ministry"
-              value={newWorkerSupportDetails?.totalNoYearsInMinistry}
+              value={withCardContainer?.totalNoYearsInMinistry}
               // onChange={(e) =>
               //   // eslint-disable-next-line @typescript-eslint/naming-convention
               //   setWorkerSupportDetails((newWorkerSupportDetails) => ({
@@ -88,7 +100,7 @@ const SupportDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="singleMissionary"
-              value={newWorkerSupportDetails?.typeOfFamily}
+              value={withCardContainer?.typeOfFamily}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
@@ -109,7 +121,7 @@ const SupportDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="withChurch"
-              value={newWorkerSupportDetails?.typeofChurch}
+              value={withCardContainer?.typeofChurch}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
@@ -130,7 +142,7 @@ const SupportDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="yes"
-              value={newWorkerSupportDetails?.selfSupport}
+              value={withCardContainer?.selfSupport}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,

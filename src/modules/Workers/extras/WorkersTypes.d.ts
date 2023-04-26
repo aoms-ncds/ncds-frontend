@@ -96,7 +96,11 @@ declare global {
         hraAllowance: number;
         spouseAllowance: string;
         positionalAllowance:string;
-        selfSupport: string;
+        specialAllowance: string;
+        impactDeduction: string;
+        telAllowance: string;
+        pionMissionaryFund: string;
+        MUTDeduction: string;
     }
     interface Designation{
         name: string;
