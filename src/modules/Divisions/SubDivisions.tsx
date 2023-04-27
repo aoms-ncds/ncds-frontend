@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 import SubDivisionTextfields from './components/SubDivisionTextfield';
-
+import AddIcon from '@mui/icons-material/Add';
 const SubDivisionsPage = () => {
   const [loadCount, setLoadCount] = useState(0);
   const [duplicateCount, setDuplicateCount] = useState(3);
@@ -15,13 +15,13 @@ const SubDivisionsPage = () => {
     <form onSubmit={(e) => e.preventDefault()}>
       <Grid container spacing={12}>
 
-        <Grid item xs={12} md={12} lg={12}>
-          {[...Array(duplicateCount)].map((_, index) => (
-            <SubDivisionTextfields key={index} index={index}/>
-          ))}
-        </Grid>
+
+        {[...Array(duplicateCount)].map((_, index) => (
+          <SubDivisionTextfields key={index} index={index}/>
+        ))}
+
       </Grid>
-      <button type="button" onClick={handleDuplicateClick}>Add Subdivision</button>
+      <button type="button" style={{ display: 'block', margin: '0 auto' }} onClick={handleDuplicateClick}><AddIcon /></button>
 
     </form>
   );

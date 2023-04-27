@@ -95,7 +95,7 @@ const DivisionDetailsPage = () => {
               </Step>
 
 
-            </Stepper>
+            </Stepper><br />
             {activeStep == 0 && (
               <form
                 onSubmit={(e) => {
@@ -112,7 +112,7 @@ const DivisionDetailsPage = () => {
                 </Button>
 
               </form>
-            )}
+            )}<br />
             {activeStep == 1 && (
               <form
                 onSubmit={(e) => {
