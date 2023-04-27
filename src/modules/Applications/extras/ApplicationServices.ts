@@ -11,11 +11,11 @@ export default {
       timeout: 500,
     }),
   ),
-  getAll: () => getStandardResponse<Applications[]>(
-    dummyRequest<Applications[]>({
+  getAll: () => getStandardResponse<Application[]>(
+    dummyRequest<Application[]>({
       data: [{
         _id: '1',
-        Name: 'rohan',
+        name: 'rohan',
         reason: 'test',
         status: 'not Appprove',
       },
@@ -25,8 +25,47 @@ export default {
       timeout: 500,
     }),
   ),
+  getApplicationById: () => getStandardResponse<Application>(
+    dummyRequest<Application>({
+      data: {
+        _id: '1',
+        name: 'rohan',
+        reason: 'test',
+        status: 'not Appprove',
+      },
+      message: 'fetched data',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  approve: () => getStandardResponse<number>(
+    dummyRequest({
+      data: 1,
+      message: 'Approved ',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  reject: () => getStandardResponse<number>(
+    dummyRequest({
+      data: 0,
+      message: 'Recjected ',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  create: ( application: Application,
+  ) => getStandardResponse<number>(
+    dummyRequest({
+
+      // error: null,
+
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  saveRelease: (ApplicationRealse: Applications)=>getStandardResponse<number>(
+  saveRelease: (ApplicationRealse: Application)=>getStandardResponse<number>(
     dummyRequest({
       data: ApplicationRealse,
       // error: null,

@@ -3,6 +3,7 @@ import React from 'react';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import APPDashboard from '..';
 import ApplicationManagePages from '../ManagePages';
+import ApplicationManage from '../ApplicationManage';
 
 const apppageRoutes : ModuleRoute = {
   base: '/application',
@@ -20,8 +21,15 @@ const apppageRoutes : ModuleRoute = {
     },
     {
       title: 'Add Request',
-      path: '/manage',
+      path: '/request',
       element: <ApplicationManagePages />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Application Manage',
+      path: '/manage/:divisionID',
+      element: <ApplicationManage />,
       private: true,
       requiredAccessRights: ['string'],
     },
