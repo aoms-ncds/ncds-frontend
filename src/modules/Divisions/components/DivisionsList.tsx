@@ -39,7 +39,7 @@ const DivisionsList = (props: DivisionsListProps) => {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: `/divisions/details/${props.row._id}`,
+              to: `/divisions/edit/${props.row._id}`,
               icon: EditIcon,
             },
           ]}

@@ -31,6 +31,14 @@ const divisionsPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
 
     },
+    {
+      title: 'Divisions',
+      path: '/edit/:editID',
+      element: <DivisionDetailsPage />,
+      private: true,
+      requiredAccessRights: ['string'],
+
+    },
   ],
 };
 export default divisionsPageRoutes;

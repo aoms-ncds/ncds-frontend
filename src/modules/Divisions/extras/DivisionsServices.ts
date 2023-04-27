@@ -140,6 +140,15 @@ export default {
       timeout: 500,
     }),
   ),
+  editDivision: () => getStandardResponse<number>(
+    dummyRequest({
+      data: 1,
+      // error: null,
+      message: 'Updated Division',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
   getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
     dummyRequest<DivisionDetails>({
       data: {

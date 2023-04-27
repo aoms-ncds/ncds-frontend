@@ -9,10 +9,13 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
 
 const DivisionDetailsPage = () => {
-  const { divisionIDs } = useParams();
+  const { divisionIDs, editID } = useParams();
   const [activeStep, setactiveStep] = useState(0);
   const [loadCount, setLoadCount] = useState(0);
-  const AddWorker = (event: React.FormEvent<HTMLFormElement>) => {
+  const onLoad = () => setLoadCount((count) => count+1);
+  const afterLoad = () => setLoadCount((count) => count-1);
+  const [action, setAction] = useState<'add' | 'edit' |'view'>('add');
+  const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     DivisionsServices.addDivision()
       .then((res) => {
@@ -28,25 +31,55 @@ const DivisionDetailsPage = () => {
         });
       });
   };
+  const EditDivision = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    DivisionsServices.editDivision()
+      .then((res) => {
+        enqueueSnackbar({
+          message: 'Updated Division',
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   const [divisionDetails, setDivisionDetails] = useState<DivisionDetails>();
   useEffect(() => {
     if (divisionIDs) {
+      setAction('view');
+      onLoad();
       DivisionsServices.getDivisionbyId(divisionIDs)
       .then((res) => {
-        // props.afterLoad();
+        afterLoad();
+        // setLoadCount((count) => count-1);
         setDivisionDetails(res.data);
       })
       .catch((err) => {
-        // / props.afterLoad();
+        afterLoad();
         console.log({ err });
       });
     }
-    // RESTClient.Users.getUsers().then(users => {
-    //     setLoading(false);
-    // })
+    if (editID) {
+      setAction('edit');
+      onLoad();
+      DivisionsServices.getDivisionbyId(editID)
+      .then((res) => {
+        afterLoad();
+
+        setDivisionDetails(res.data);
+      })
+      .catch((err) => {
+        afterLoad();
+        console.log({ err });
+      });
+    }
   }, []);
   return (
-    <CommonPageLayout title='Division Details' loadCount={loadCount}>
+    <CommonPageLayout title={action === 'add' ? 'Add Division' : (action === 'edit' ? 'Edit Division' : 'Division Details')} loadCount={loadCount}>
       <Container>
         <CardContent>
           <Box sx={{ width: '100%' }}>
@@ -60,9 +93,7 @@ const DivisionDetailsPage = () => {
               <Step>
                 <StepLabel>Bank Details</StepLabel>
               </Step>
-              <Step>
-                <StepLabel>Password</StepLabel>
-              </Step>
+
 
             </Stepper>
             {activeStep == 0 && (
@@ -109,14 +140,17 @@ const DivisionDetailsPage = () => {
             )}
             {activeStep == 2 && (
               <form
-                onSubmit={AddWorker}
-              ><BankDetailsPage withCardContainer={divisionDetails?.bankDetails}/><Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
-                Submit
-                </Button><Button
+                onSubmit={action === 'add' ? AddDivision : EditDivision}
+              ><BankDetailsPage withCardContainer={divisionDetails?.bankDetails}/>
+                {action !== 'view' && (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ float: 'right', padding: '16px 64px' }}
+                  >
+Submit
+                  </Button>
+                )}<Button
                   type="button"
                   onClick={() => {
                     setactiveStep(1);
