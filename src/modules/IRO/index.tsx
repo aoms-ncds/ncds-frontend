@@ -112,7 +112,7 @@ const IRODashboard = () => {
     <CommonPageLayout title='Internal Release Order'>
       <br/><br/>
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '80vh', width: '100%' }}>
+        <Card style={{ height: '75vh', width: '100%' }}>
           <DataGrid rows={IROrder??[]} columns={columns} getRowId={(row) => row._id}/>
         </Card>
       </Grid>

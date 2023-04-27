@@ -28,7 +28,7 @@ const HRDashboard = () => {
             primaryText='Approve new worker'
             secondaryText='27'
             color='#8833ff'
-            targetRoute="/workers/approval"
+            targetRoute="/workers/approve"
           />
         </Grid>
       </Grid>
