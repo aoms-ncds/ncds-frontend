@@ -44,16 +44,16 @@ const ManageWorkerPage = () => {
           items={[
             {
               id: 'View',
-              text: 'View and Manage',
+              text: 'View',
               component: Link,
-              to: '/Worker/view_Worker/' + props.row._id,
+              to: '/workers/profile/' + props.row._id,
               icon: PreviewIcon,
             },
             {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: '/edit/:WorkerID' + props.row._id,
+              to: '/workers/add_new_worker/' + props.row._id,
               icon: EditIcon,
             },
           ]}

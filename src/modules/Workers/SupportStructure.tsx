@@ -1,7 +1,35 @@
-import { Grid, FormControl, TextField } from '@mui/material';
-import React from 'react';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
+import React, { useState } from 'react';
 
-const SupportStructure = () => {
+const SupportStructure = ({
+  withCardContainer = {
+    _id: '',
+    basicAllowance: '',
+    hraAllowance: 1,
+    spouseAllowance: '',
+    positionalAllowance: '',
+    specialAllowance: '',
+    impactDeduction: '',
+    telAllowance: '',
+    pionMissionaryFund: '',
+    MUTDeduction: '',
+  },
+}: {
+  withCardContainer?: SupportStructure;
+}) => {
+  const [newWorkerSupportStructur, setWorkerSupportStructur] = useState<SupportStructure>({
+    _id: '',
+    basicAllowance: '',
+    hraAllowance: 1,
+    spouseAllowance: '',
+    positionalAllowance: '',
+    specialAllowance: 'yes',
+    impactDeduction: '',
+    telAllowance: '',
+    pionMissionaryFund: '',
+    MUTDeduction: '',
+
+  });
   return (
     <form>
       <Grid container spacing={3}>
@@ -9,14 +37,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="BASIC"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.basicAllowance}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  basicAllowance: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -25,12 +53,12 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="HRA"
-              // value={IROrelease?.releaseAmount}
+              value={withCardContainer?.hraAllowance}
               // onChange={(e) =>
               //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
+              //   setWorkerSupportStructur((newWorkerSupportStructur) => ({
+              //     ...newWorkerSupportStructur,
+              //     hraAllowance: e.target.value,
               //   }))
               // }
               fullWidth
@@ -41,14 +69,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="SPOUSE ALLOWANCE"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.spouseAllowance}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  spouseAllowance: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -57,14 +85,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="POSITIONAL ALLOWANCE"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.positionalAllowance}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  positionalAllowance: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -73,14 +101,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="SPECIAL ALLOWANCE"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.specialAllowance}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  specialAllowance: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -89,14 +117,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="IMPACT DEDUCTION"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.impactDeduction}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  impactDeduction: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -105,14 +133,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="TEL ALLOWANCE"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.telAllowance}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  telAllowance: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -121,14 +149,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PION Missionary Fund"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.pionMissionaryFund}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  pionMissionaryFund: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>
@@ -137,14 +165,14 @@ const SupportStructure = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="MUT Deduction(Medical Insurance)"
-              // value={IROrelease?.releaseAmount}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setIROrelease((IROrelease) => ({
-              //     ...IROrelease,
-              //     releaseAmount: e.target.value,
-              //   }))
-              // }
+              value={withCardContainer?.MUTDeduction}
+              onChange={(e) =>
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                setWorkerSupportStructur((newWorkerSupportStructur) => ({
+                  ...newWorkerSupportStructur,
+                  MUTDeduction: e.target.value,
+                }))
+              }
               fullWidth
             />
           </FormControl>

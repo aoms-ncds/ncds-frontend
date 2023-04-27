@@ -4,7 +4,46 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 
-const BasicDetails = () => {
+const BasicDetails = ({
+  withCardContainer = {
+    _id: '',
+    workerCode: '',
+    firstName: '',
+    secondName: '',
+    missionaryOrNonMissionary: 'missionary',
+    dob: moment(),
+    gender: 'female',
+    age: '',
+    maritalStatus: 'single',
+    highestQualification: '',
+    motherToungue: '',
+    communicationLanguage: '',
+    languagesKnown: '',
+    emailId: '',
+    mobileNumber: '',
+    alternativeMobileNumber: '',
+    PANnumber: '',
+    aadhaarNumber: '',
+    voterId: '',
+    licenseNumber: '',
+    permanentAddress: '',
+    permanentAddressCity: '',
+    permanentAddressDistrict: '',
+    permanentAddressState: '',
+    permanentAddressCountry: '',
+    permanentAddressPincode: '',
+    currentAddress: '',
+    currentAddressCity: '',
+    currentAddressDistrict: '',
+    currentAddressState: '',
+    currentAddressCountry: '',
+    currentAddressPincode: '',
+    spouseOfAnotherStaff: '',
+
+  },
+}: {
+  withCardContainer?: BasicDetails;
+}) => {
   const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>({
     _id: '',
     workerCode: '',
@@ -48,7 +87,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label=" Worker Code"
-              value={newWorkerBasicDetails?.workerCode}
+              value={withCardContainer?.workerCode}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -65,7 +104,7 @@ const BasicDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="missionary"
-              value={newWorkerBasicDetails?.missionaryOrNonMissionary}
+              value={withCardContainer?.missionaryOrNonMissionary}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -84,7 +123,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="First Name"
-              value={newWorkerBasicDetails?.firstName}
+              value={withCardContainer?.firstName}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -115,7 +154,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker label="Date Of Birth"
-                value={newWorkerBasicDetails?.workerCode}
+                // value={withCardContainer?.workerCode}
                 // onChange={(e) =>
                 //   setWorkerBasicDetails((newWorkerBasicDetails) => ({
                 //     ...newWorkerBasicDetails,
@@ -133,7 +172,7 @@ const BasicDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="female"
-              value={newWorkerBasicDetails?.gender}
+              value={withCardContainer?.gender}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -153,7 +192,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Age"
-              value={newWorkerBasicDetails?.age}
+              value={withCardContainer?.age}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -170,7 +209,7 @@ const BasicDetails = () => {
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               defaultValue="single"
-              value={newWorkerBasicDetails?.maritalStatus}
+              value={withCardContainer?.maritalStatus}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -189,7 +228,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Highest Qualification"
-              value={newWorkerBasicDetails?.highestQualification}
+              value={withCardContainer?.highestQualification}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -204,7 +243,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mother Tongue"
-              value={newWorkerBasicDetails?.motherToungue}
+              value={withCardContainer?.motherToungue}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -219,7 +258,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Communication Language"
-              value={newWorkerBasicDetails?.communicationLanguage}
+              value={withCardContainer?.communicationLanguage}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -234,7 +273,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Languages Known"
-              value={newWorkerBasicDetails?.languagesKnown}
+              value={withCardContainer?.languagesKnown}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -249,7 +288,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Email-ID"
-              value={newWorkerBasicDetails?.emailId}
+              value={withCardContainer?.emailId}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -264,7 +303,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mobile No"
-              value={newWorkerBasicDetails?.mobileNumber}
+              value={withCardContainer?.mobileNumber}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -279,7 +318,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Alternative Mobile No."
-              value={newWorkerBasicDetails?.alternativeMobileNumber}
+              value={withCardContainer?.alternativeMobileNumber}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -294,7 +333,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PAN Number"
-              value={newWorkerBasicDetails?.PANnumber}
+              value={withCardContainer?.PANnumber}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -327,7 +366,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="License Number"
-              value={newWorkerBasicDetails?.licenseNumber}
+              value={withCardContainer?.licenseNumber}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -342,7 +381,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Permanent Address"
-              value={newWorkerBasicDetails?.permanentAddress}
+              value={withCardContainer?.permanentAddress}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -357,7 +396,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
-              value={newWorkerBasicDetails?.permanentAddressCity}
+              value={withCardContainer?.permanentAddressCity}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -372,7 +411,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
-              value={newWorkerBasicDetails?.permanentAddressDistrict}
+              value={withCardContainer?.permanentAddressDistrict}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -387,7 +426,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
-              value={newWorkerBasicDetails?.permanentAddressState}
+              value={withCardContainer?.permanentAddressState}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -402,7 +441,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
-              value={newWorkerBasicDetails?.permanentAddressCountry}
+              value={withCardContainer?.permanentAddressCountry}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -417,7 +456,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
-              value={newWorkerBasicDetails?.permanentAddressPincode}
+              value={withCardContainer?.permanentAddressPincode}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -432,7 +471,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Current Address"
-              value={newWorkerBasicDetails?.currentAddress}
+              value={withCardContainer?.currentAddress}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -447,7 +486,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
-              value={newWorkerBasicDetails?.currentAddressCity}
+              value={withCardContainer?.currentAddressCity}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -462,7 +501,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
-              value={newWorkerBasicDetails?.currentAddressDistrict}
+              value={withCardContainer?.currentAddressDistrict}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -477,7 +516,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
-              value={newWorkerBasicDetails?.currentAddressState}
+              value={withCardContainer?.currentAddressState}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -492,7 +531,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
-              value={newWorkerBasicDetails?.currentAddressCountry}
+              value={withCardContainer?.currentAddressCountry}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -507,7 +546,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
-              value={newWorkerBasicDetails?.currentAddressPincode}
+              value={withCardContainer?.currentAddressPincode}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
@@ -522,7 +561,7 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Spouse of another staff"
-              value={newWorkerBasicDetails?.spouseOfAnotherStaff}
+              value={withCardContainer?.spouseOfAnotherStaff}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,

@@ -4,10 +4,31 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
+import { enqueueSnackbar } from 'notistack';
 const ApproveWorkerPage = () => {
   const [loadCount, setLoadCount] = useState(0);
   const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
-
+  const approveWorker = (id: string) => {
+    WorkerServices.approveWorker(id)
+      .then((res) => {
+        if (WorkerRequests) {
+          const newWorkers = WorkerRequests.filter((workerRequests) => {
+            return workerRequests._id !== id;
+          });
+          setWorkerRequests(newWorkers);
+        }
+        enqueueSnackbar({
+          message: 'Approved',
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   useEffect(() => {
     setLoadCount((count) => count+1);
     WorkerServices.getAll()
@@ -28,7 +49,7 @@ const ApproveWorkerPage = () => {
     { field: 'view', headerName: 'View', width: 130, renderCell: (props: any) => (
       <Button
         component={Link}
-        to={`/attendance/view_attendance/${props.row._id}`}
+        to={`/workers/profile/${props.row._id}`}
         variant="contained"
       >
           View
@@ -36,10 +57,12 @@ const ApproveWorkerPage = () => {
     ) },
     { field: 'Approve', headerName: 'Approve', width: 130, renderCell: (props: any) => (
       <Button
-        component={Link}
-        to={`/attendance/view_attendance/${props.row._id}`}
         variant='contained'
         color='success'
+        type="submit"
+        onClick={() => {
+          approveWorker(props.row._id);
+        } }
       >
             Approve
       </Button>
