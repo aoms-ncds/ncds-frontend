@@ -1,7 +1,7 @@
 import React from 'react';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import DivisionsPage from '..';
-import DivisionDetailsPage from '../divisionDetails';
+import DivisionDetailsPage from '../DivisionDetails';
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/divisions',
@@ -25,7 +25,15 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Divisions',
-      path: '/details/:divisionID',
+      path: '/details/:divisionIDs',
+      element: <DivisionDetailsPage />,
+      private: true,
+      requiredAccessRights: ['string'],
+
+    },
+    {
+      title: 'Divisions',
+      path: '/edit/:editID',
       element: <DivisionDetailsPage />,
       private: true,
       requiredAccessRights: ['string'],
