@@ -59,14 +59,29 @@ declare global {
 
     }
     interface IETDivisions{
-        _id: string;
-        divisionName: string ;
-        coordinator:Staff;
+        divisionName:string;
+    _id:string;
+    divisionId:string;
+    contactNumber:string;
+    emailId:string;
+    address:string;
+    noofWorkers:number;
+    NoOfSubdivisions:number;
+    NoOfChurches:number;
+    coordinatorName:string;
+    coordinatorContactno:string;
+    coordinatorEmail:string;
+    seniorLeaderName:string;
+    seiorLeaderContactno:string;
+    seiorLeaderEmail:string;
+    juniorLeaderName:string;
+   juniorLeaderContactno:string;
+    juniorLeaderEmail:string;
 
     }
     interface Subdivisions{
         _id:string;
-        division:IETDivisions;
+       // division:IETDivisions;
         subDivisionName:string;
     }
 

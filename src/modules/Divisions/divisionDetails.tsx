@@ -113,7 +113,31 @@ const DivisionDetailsPage = () => {
 
               </form>
             )}<br />
-
+            {activeStep == 1 && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setactiveStep(2);
+                }}
+              ><SubDivisionsPage withCardContainer={divisionDetails?.subDivisionDetails} />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ float: 'right', padding: '16px 64px' }}
+                >
+                      Next
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setactiveStep(0);
+                  } }
+                  variant="outlined"
+                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                >    Go back
+                </Button>
+              </form>
+            )}
             {activeStep == 2 && (
               <form
                 onSubmit={action === 'add' ? AddDivision : EditDivision}

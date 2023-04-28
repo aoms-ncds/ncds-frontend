@@ -1,19 +1,7 @@
 export { };
 
 declare global {
-    interface IETDivisions{
-        _id: string;
-        divisionName: string ;
-        coordinator:Staff;
-        numberofSubdivisions:number;
-        numberofWorkers:number;
-}
-interface Subdivisions{
-    _id:string;
-    division:IETDivisions;
-    subDivisionName:string;
-}
-interface Staff{
+    interface Staff{
     _id: string;
     name: string;
     dob: string;
