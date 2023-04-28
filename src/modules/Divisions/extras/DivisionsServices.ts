@@ -172,6 +172,21 @@ export default {
           juniorLeaderContactno: '67788833',
           juniorLeaderEmail: 'mikha@gmail.com',
         },
+        subDivisionDetails: [{
+          _id: '1',
+          subDivisionName: 'subdivision 1',
+
+        },
+        {
+          _id: '2',
+          subDivisionName: 'subdivision 2',
+
+        },
+        {
+          _id: '3',
+          subDivisionName: 'subdivision 3',
+
+        }],
         bankDetails: {
           FCRABankname: 'FCRA',
           FCRABranchname: 'Thodupuzha',

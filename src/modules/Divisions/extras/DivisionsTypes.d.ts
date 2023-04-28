@@ -72,9 +72,14 @@ interface BankDetails{
 }
 interface DivisionDetails{
     divisionProfile?: DivisionProfile;
-    // subDivisionDetails?:Subdivisions ;
+    subDivisionDetails?:SubDivision[];
     bankDetails?: BankDetails;
 }
+interface SubDivision {
+    _id:string;
+    // division:IETDivisions;
+     subDivisionName:string;
+  }
 
 
 }
