@@ -28,7 +28,7 @@ const workersPageRoutes: ModuleRoute = {
     },
     {
       title: 'Add New Worker',
-      path: '/add_new_worker',
+      path: '/add',
       element: <AddNewWorker />,
       private: true,
       requiredAccessRights: ['string'],
@@ -48,8 +48,8 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
     },
     {
-      title: 'Add New Worker',
-      path: '/add_new_worker/:workersId',
+      title: 'Edit Worker',
+      path: '/edit/:workersId',
       element: <AddNewWorker />,
       private: true,
       requiredAccessRights: ['string'],

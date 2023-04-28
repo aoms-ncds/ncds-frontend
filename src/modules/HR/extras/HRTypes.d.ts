@@ -1,10 +1,12 @@
+import { Moment } from 'moment';
+
 export {};
 declare global{
     interface Staff{
     _id: string;
     name: string;
-    dob: string;
-    doj: string;
+    dob: Moment;
+    doj: Moment;
     designation: Position;
     department: Department;
     phone: string;

@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
+import HRServices from './extras/HRServices';
 
 const HRDashboard = () => {
+  const [loadCount, setLoadCount] = useState<unknown>();
+  useEffect(() => {
+    HRServices.getCount()
+   .then((res) => {
+     console.log(res);
+     setLoadCount(res.data);
+   })
+  .catch((error) => {
+    console.log(error);
+  });
+  }, []);
   return (
     <CommonPageLayout title='HR Dashboard'>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Manage Staff'
-            secondaryText='12'
+            secondaryText={loadCount as string}
             color='#29cc39'
             targetRoute="/hr/manage"
           />
@@ -18,17 +30,17 @@ const HRDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Manage workers'
-            secondaryText='556'
+            secondaryText={loadCount as string}
             color='#0dcaf0'
-            targetRoute="/workers"
+            targetRoute="/hr/worker"
           />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Approve new worker'
-            secondaryText='27'
+            secondaryText={loadCount as string}
             color='#8833ff'
-            targetRoute="/workers/approval"
+            targetRoute="/hr/approve"
           />
         </Grid>
       </Grid>

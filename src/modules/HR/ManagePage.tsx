@@ -12,6 +12,7 @@ import {
 
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import moment from 'moment';
 const filter = createFilterOptions<Department>();
 const HRManagePage = () => {
   const [Department, setDepartment] = useState<Department[] | undefined>();
@@ -21,12 +22,13 @@ const HRManagePage = () => {
   const [open, setOpen] = React.useState(false);
   const [editStaff, seteditStaff] = useState<string>('');
   const [value, setValue] = useState<Department | null>(null);
+  console.log(value);
   const [loadCount, setLoadCount] = useState(0);
   const [newStaff, setNewStaff] = useState<Staff>({
     _id: '',
     name: '',
-    dob: '',
-    doj: '',
+    dob: moment(),
+    doj: moment(),
     designation: {
       _id: '',
       name: '',
@@ -49,8 +51,8 @@ const HRManagePage = () => {
     setNewStaff(() => ({
       _id: '',
       name: '',
-      dob: '',
-      doj: '',
+      dob: moment(),
+      doj: moment(),
       designation: {
         _id: '',
         name: '',
@@ -82,8 +84,8 @@ const HRManagePage = () => {
         setNewStaff(() => ({
           _id: '',
           name: '',
-          dob: '',
-          doj: '',
+          dob: moment(),
+          doj: moment(),
           designation: {
             _id: '',
             name: '',
@@ -346,7 +348,7 @@ const HRManagePage = () => {
                   renderOption={(props, option) => <li {...props}>{option.name}</li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} label="department" />
+                    <TextField {...params} label="Department" />
                   )}
                 />
               </Grid>
@@ -405,7 +407,7 @@ const HRManagePage = () => {
                   renderOption={(props, option) => <li {...props}>{option.name}</li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} label="designation" />
+                    <TextField {...params} label="Designation" />
                   )}
                 />
               </Grid>

@@ -5,6 +5,7 @@ import {
   Edit as EditIcon,
   Preview as PreviewIcon,
   Add as AddIcon,
+  Delete as DeleteIcon,
 
 } from '@mui/icons-material';
 
@@ -12,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 const ManageWorkerPage = () => {
   const [loadCount, setLoadCount] = useState(0);
   const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
@@ -29,6 +31,36 @@ const ManageWorkerPage = () => {
     console.log(res);
   });
   }, []);
+  const removeWorker = (id: string) => {
+    console.log('hey', id);
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing Worker',
+      variant: 'info',
+    });
+    WorkerServices.markAsRemove(id)
+      .then((res) => {
+        console.log('Response', res);
+        if (WorkerRequests) {
+          const newWorkerRequests = WorkerRequests.filter((workerRequests) => {
+            return workerRequests._id !== id;
+          });
+          setWorkerRequests(newWorkerRequests);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   const columns = [
     {
       field: '_manage',
@@ -53,8 +85,17 @@ const ManageWorkerPage = () => {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: '/workers/add_new_worker/' + props.row._id,
+              to: '/workers/edit/' + props.row._id,
               icon: EditIcon,
+            },
+            {
+              id: 'delete',
+              text: 'Delete',
+              component: Link,
+              icon: DeleteIcon,
+              onClick: () => {
+                removeWorker(props.row._id);
+              },
             },
           ]}
         />
@@ -101,7 +142,7 @@ const ManageWorkerPage = () => {
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
         component={Link}
-        to="/workers/add_new_worker"
+        to="/workers/add"
         // onClick={() => {
         // }}
       >

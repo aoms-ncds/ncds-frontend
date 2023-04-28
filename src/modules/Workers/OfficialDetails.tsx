@@ -1,49 +1,14 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import WorkerServices from './extras/WorkersServices';
 
-const OfficialDetails = ({
-  withCardContainer = {
-    _id: '',
-    workerCode: '',
-    firstName: '',
-    secondName: '',
-    missionaryOrNonMissionary: 'missionary',
-    dob: moment(),
-    gender: 'female',
-    age: '',
-    maritalStatus: 'single',
-    highestQualification: '',
-    motherToungue: '',
-    communicationLanguage: '',
-    languagesKnown: '',
-    emailId: '',
-    mobileNumber: '',
-    alternativeMobileNumber: '',
-    PANnumber: '',
-    aadhaarNumber: '',
-    voterId: '',
-    licenseNumber: '',
-    permanentAddress: '',
-    permanentAddressCity: '',
-    permanentAddressDistrict: '',
-    permanentAddressState: '',
-    permanentAddressCountry: '',
-    permanentAddressPincode: '',
-    currentAddress: '',
-    currentAddressCity: '',
-    currentAddressDistrict: '',
-    currentAddressState: '',
-    currentAddressCountry: '',
-    currentAddressPincode: '',
-    spouseOfAnotherStaff: '',
-
-  },
-}: {
-  withCardContainer?: OfficialDetails;
-}) => {
+const OfficialDetails = () => {
+  const { workersId } = useParams();
+  // const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>();
   const [newWorkerOfficialDetails, setWorkerOfficialDetails] = useState<OfficialDetails>({
     _id: '',
     workerCode: '',
@@ -77,9 +42,17 @@ const OfficialDetails = ({
     currentAddressState: '',
     currentAddressCountry: '',
     currentAddressPincode: '',
-    spouseOfAnotherStaff: '',
-
-  });
+    spouseOfAnotherStaff: '' });
+  useEffect(() => {
+    console.log(workersId);
+    if (workersId) {
+      WorkerServices.getOfficialDetailsById(workersId).then((res) => {
+        setWorkerOfficialDetails(res.data);
+      }).catch((res) => {
+        console.log(res);
+      });
+    }
+  }, []);
   return (
     <form>
       <Grid container spacing={3}>
@@ -87,7 +60,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label=" Worker Code"
-              value={withCardContainer?.workerCode}
+              value={newWorkerOfficialDetails?.workerCode}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -104,7 +77,7 @@ const OfficialDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="missionary"
-              value={withCardContainer?.missionaryOrNonMissionary}
+              value={newWorkerOfficialDetails?.missionaryOrNonMissionary}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -123,7 +96,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="First Name"
-              value={withCardContainer?.firstName}
+              value={newWorkerOfficialDetails?.firstName}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -138,7 +111,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Last Name"
-              value={withCardContainer?.secondName}
+              value={newWorkerOfficialDetails?.secondName}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -172,7 +145,7 @@ const OfficialDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="female"
-              value={withCardContainer?.gender}
+              value={newWorkerOfficialDetails?.gender}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -192,7 +165,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Age"
-              value={withCardContainer?.age}
+              value={newWorkerOfficialDetails?.age}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -209,7 +182,7 @@ const OfficialDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="single"
-              value={withCardContainer?.maritalStatus}
+              value={newWorkerOfficialDetails?.maritalStatus}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -228,7 +201,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Highest Qualification"
-              value={withCardContainer?.highestQualification}
+              value={newWorkerOfficialDetails?.highestQualification}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -243,7 +216,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mother Tongue"
-              value={withCardContainer?.motherToungue}
+              value={newWorkerOfficialDetails?.motherToungue}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -258,7 +231,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Communication Language"
-              value={withCardContainer?.communicationLanguage}
+              value={newWorkerOfficialDetails?.communicationLanguage}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -273,7 +246,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Languages Known"
-              value={withCardContainer?.languagesKnown}
+              value={newWorkerOfficialDetails?.languagesKnown}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -288,7 +261,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Email-ID"
-              value={withCardContainer?.emailId}
+              value={newWorkerOfficialDetails?.emailId}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -303,7 +276,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mobile No"
-              value={withCardContainer?.mobileNumber}
+              value={newWorkerOfficialDetails?.mobileNumber}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -318,7 +291,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Alternative Mobile No."
-              value={withCardContainer?.alternativeMobileNumber}
+              value={newWorkerOfficialDetails?.alternativeMobileNumber}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -333,7 +306,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PAN Number"
-              value={withCardContainer?.PANnumber}
+              value={newWorkerOfficialDetails?.PANnumber}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -366,7 +339,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="License Number"
-              value={withCardContainer?.licenseNumber}
+              value={newWorkerOfficialDetails?.licenseNumber}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -381,7 +354,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Permanent Address"
-              value={withCardContainer?.permanentAddress}
+              value={newWorkerOfficialDetails?.permanentAddress}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -396,7 +369,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
-              value={withCardContainer?.permanentAddressCity}
+              value={newWorkerOfficialDetails?.permanentAddressCity}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -411,7 +384,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
-              value={withCardContainer?.permanentAddressDistrict}
+              value={newWorkerOfficialDetails?.permanentAddressDistrict}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -426,7 +399,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
-              value={withCardContainer?.permanentAddressState}
+              value={newWorkerOfficialDetails?.permanentAddressState}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -441,7 +414,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
-              value={withCardContainer?.permanentAddressCountry}
+              value={newWorkerOfficialDetails?.permanentAddressCountry}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -456,7 +429,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
-              value={withCardContainer?.permanentAddressPincode}
+              value={newWorkerOfficialDetails?.permanentAddressPincode}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -471,7 +444,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Current Address"
-              value={withCardContainer?.currentAddress}
+              value={newWorkerOfficialDetails?.currentAddress}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -486,7 +459,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
-              value={withCardContainer?.currentAddressCity}
+              value={newWorkerOfficialDetails?.currentAddressCity}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -501,7 +474,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
-              value={withCardContainer?.currentAddressDistrict}
+              value={newWorkerOfficialDetails?.currentAddressDistrict}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -516,7 +489,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
-              value={withCardContainer?.currentAddressState}
+              value={newWorkerOfficialDetails?.currentAddressState}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -531,7 +504,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
-              value={withCardContainer?.currentAddressCountry}
+              value={newWorkerOfficialDetails?.currentAddressCountry}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -546,7 +519,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
-              value={withCardContainer?.currentAddressPincode}
+              value={newWorkerOfficialDetails?.currentAddressPincode}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
@@ -561,7 +534,7 @@ const OfficialDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Spouse of another staff"
-              value={withCardContainer?.spouseOfAnotherStaff}
+              value={newWorkerOfficialDetails?.spouseOfAnotherStaff}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,

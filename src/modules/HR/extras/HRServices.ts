@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 
 export default {
@@ -51,8 +52,8 @@ export default {
       data: [{
         _id: 1,
         name: 'athira',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
@@ -68,8 +69,8 @@ export default {
       {
         _id: 2,
         name: 'Sanjay',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
@@ -85,8 +86,8 @@ export default {
       {
         _id: 3,
         name: 'Sanjili',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
