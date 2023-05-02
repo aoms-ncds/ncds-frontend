@@ -24,12 +24,21 @@ export default {
       timeout: 500,
     }),
   ),
-  getPosition: () => getStandardResponse<[]>(
-    dummyRequest({
-      data: [{ _id: 1,
-        name: 'TL' },
-      { _id: 2,
-        name: 'TH' },
+  getDesignations: () => getStandardResponse<Designation[]>(
+    dummyRequest<Designation[]>({
+      data: [
+        {
+          _id: '1',
+          name: 'TL',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        {
+          _id: '2',
+          name: 'TH',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
       ],
       // error: null,
       message: 'Network Error',

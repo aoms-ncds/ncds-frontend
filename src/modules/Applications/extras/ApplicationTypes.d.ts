@@ -3,11 +3,10 @@
 export default {};
 
 declare global{
-    interface Application {
-        _id: string;
+    interface Application extends MongooseDocument{
         name: string;
         reason: string;
         status: string;
-
     }
+    type CreatableApplication = Creatable<Application>;
 }

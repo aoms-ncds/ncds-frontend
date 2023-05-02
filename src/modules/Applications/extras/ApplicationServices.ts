@@ -1,12 +1,12 @@
+import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-
 
 export default {
   getCount: () => getStandardResponse<number>(
     dummyRequest({
       data: 5,
       // error: null,
-      message: 'Network Error',
+      message: 'Successfully fetched array of Application count',
       result: 'success',
       timeout: 500,
     }),
@@ -18,6 +18,8 @@ export default {
         name: 'rohan',
         reason: 'test',
         status: 'not Appprove',
+        createdAt: moment(),
+        updatedAt: moment(),
       },
       ],
       message: 'fetched data',
@@ -25,49 +27,49 @@ export default {
       timeout: 500,
     }),
   ),
-  getApplicationById: () => getStandardResponse<Application>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getById: (applicationID: string) => getStandardResponse<Application>(
     dummyRequest<Application>({
       data: {
         _id: '1',
         name: 'rohan',
         reason: 'test',
         status: 'not Appprove',
+        createdAt: moment(),
+        updatedAt: moment(),
       },
       message: 'fetched data',
       result: 'success',
       timeout: 500,
     }),
   ),
-  approve: () => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  approve: (applicationID: string) => getStandardResponse<void>(
+    dummyRequest<void>({
       message: 'Approved ',
       result: 'success',
       timeout: 500,
     }),
   ),
-  reject: () => getStandardResponse<number>(
-    dummyRequest({
-      data: 0,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reject: (applicationID: string) => getStandardResponse<void>(
+    dummyRequest<void>({
       message: 'Recjected ',
       result: 'success',
       timeout: 500,
     }),
   ),
-  create: ( application: Application,
-  ) => getStandardResponse<number>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create: ( application: CreatableApplication ) => getStandardResponse<Application>(
     dummyRequest({
-
       // error: null,
-
       result: 'success',
       timeout: 500,
     }),
   ),
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  saveRelease: (ApplicationRealse: Application)=>getStandardResponse<number>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  saveRelease: (applicationID: string)=>getStandardResponse<void>(
     dummyRequest({
-      data: ApplicationRealse,
       // error: null,
       message: 'Network Error',
       result: 'success',

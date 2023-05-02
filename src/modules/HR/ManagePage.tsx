@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogTitle, Grid, Link, TextField, createFilterOptions } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions,
+  DialogContent, DialogTitle, Grid, Link, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
 import DropdownButton from '../../components/DropDownButton';
@@ -13,17 +13,21 @@ import {
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
-const filter = createFilterOptions<Department>();
+import DepartmentsDropdown from './components/DepartmentsDropdown';
+import DesignationsDropdown from './components/DesignationsDropdown';
+
 const HRManagePage = () => {
-  const [Department, setDepartment] = useState<Department[] | undefined>();
-  const [Position, setPosition] = useState<Position[] | undefined>();
+  const [departments, setDepartment] = useState<Department[] | undefined>();
+  const [designations, setPosition] = useState<Designation[] | undefined>();
   const [staffs, setStaffs] = useState<Staff[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [open, setOpen] = React.useState(false);
   const [editStaff, seteditStaff] = useState<string>('');
-  const [value, setValue] = useState<Department | null>(null);
-  console.log(value);
+
   const [loadCount, setLoadCount] = useState(0);
+  const onLoad = () => setLoadCount((count) => count+1);
+  const afterLoad = () => setLoadCount((count) => count-1);
+
   const [newStaff, setNewStaff] = useState<Staff>({
     _id: '',
     name: '',
@@ -32,10 +36,14 @@ const HRManagePage = () => {
     designation: {
       _id: '',
       name: '',
+      createdAt: moment(),
+      updatedAt: moment(),
     },
     department: {
       _id: '',
       name: '',
+      createdAt: moment(),
+      updatedAt: moment(),
     },
     phone: '',
     email: '',
@@ -56,10 +64,14 @@ const HRManagePage = () => {
       designation: {
         _id: '',
         name: '',
+        createdAt: moment(),
+        updatedAt: moment(),
       },
       department: {
         _id: '',
         name: '',
+        createdAt: moment(),
+        updatedAt: moment(),
       },
       phone: '',
       email: '',
@@ -81,7 +93,7 @@ const HRManagePage = () => {
           message: res.message,
           variant: 'success',
         });
-        setNewStaff(() => ({
+        setNewStaff({
           _id: '',
           name: '',
           dob: moment(),
@@ -89,16 +101,20 @@ const HRManagePage = () => {
           designation: {
             _id: '',
             name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           department: {
             _id: '',
             name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           phone: '',
           email: '',
           spouseOfAnotherEmployee: '',
           idFormat: '',
-        }));
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -121,7 +137,7 @@ const HRManagePage = () => {
     .catch((res) => {
       console.log(res);
     });
-    HRServices.getPosition()
+    HRServices.getDesignations()
     .then((res) => {
       setPosition(res.data);
     })
@@ -294,121 +310,27 @@ const HRManagePage = () => {
                 />
               </Grid>
               <Grid item md={12}>
-                <Autocomplete
-                  value={newStaff?.department}
-                  onChange={(event, newValue) => {
-                    if (typeof newValue === 'string') {
-                      setValue({
-                        name: newValue,
-                      });
-                    } else if (newValue && newValue.inputValue) {
-                      // Create a new value from the user input
-                      setValue({
-                        name: newValue.inputValue,
-                      });
-                    } else {
-                      if (newValue) {
-                        setNewStaff((newStaff) => ({
-                          ...newStaff,
-                          department: newValue,
-                        }));
-                      }
-                    }
+                <DepartmentsDropdown
+                  loadCount={loadCount}
+                  onLoad={onLoad}
+                  afterLoad={afterLoad}
+                  departments={departments}
+                  onSelect={(department) => {
+                    setNewStaff((newStaff) => ({ ...newStaff, department }));
                   }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-                    const { inputValue } = params;
-                    // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.name);
-                    if (inputValue !== '' && !isExisting) {
-                      filtered.push({
-                        inputValue,
-                        name: `Add "${inputValue}"`,
-                      });
-                    }
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="department"
-                  options={Department ?? []}
-                  getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
-                    if (typeof option === 'string') {
-                      return option;
-                    }
-                    // Add "xxx" option created dynamically
-                    if (option.inputValue) {
-                      return option.inputValue;
-                    }
-                    // Regular option
-                    return option.name;
-                  }}
-                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                  freeSolo
-                  renderInput={(params) => (
-                    <TextField {...params} label="Department" />
-                  )}
+                  selectedDepartment={newStaff.department ?? null}
                 />
               </Grid>
               <Grid item md={12}>
-                <Autocomplete
-                  value={newStaff?.designation}
-                  onChange={(event, newValue) => {
-                    if (typeof newValue === 'string') {
-                      setValue({
-                        name: newValue,
-                      });
-                    } else if (newValue && newValue.inputValue) {
-                      // Create a new value from the user input
-                      setValue({
-                        name: newValue.inputValue,
-                      });
-                    } else {
-                      if (newValue) {
-                        setNewStaff((newStaff) => ({
-                          ...newStaff,
-                          designation: newValue,
-                        }));
-                      }
-                    }
+                <DesignationsDropdown
+                  loadCount={loadCount}
+                  onLoad={onLoad}
+                  afterLoad={afterLoad}
+                  designations={designations}
+                  onSelect={(designation) => {
+                    setNewStaff((newStaff) => ({ ...newStaff, designation }));
                   }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-                    const { inputValue } = params;
-                    // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.name);
-                    if (inputValue !== '' && !isExisting) {
-                      filtered.push({
-                        inputValue,
-                        name: `Add "${inputValue}"`,
-                      });
-                    }
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="designation"
-                  options={Position ?? []}
-                  getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
-                    if (typeof option === 'string') {
-                      return option;
-                    }
-                    // Add "xxx" option created dynamically
-                    if (option.inputValue) {
-                      return option.inputValue;
-                    }
-                    // Regular option
-                    return option.name;
-                  }}
-                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                  freeSolo
-                  renderInput={(params) => (
-                    <TextField {...params} label="Designation" />
-                  )}
+                  selectedDesignation={newStaff.department ?? null}
                 />
               </Grid>
             </Grid>

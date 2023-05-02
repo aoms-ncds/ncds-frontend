@@ -2,12 +2,17 @@ import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, Radio
 import React, { useEffect, useState } from 'react';
 import WorkerServices from './extras/WorkersServices';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 const SupportDetails = () => {
   const { workersId } = useParams();
   const [Designation, setDesignation] = useState<Designation[] | undefined>();
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
     _id: '',
-    currentDesignation: { name: '' },
+    currentDesignation: {
+      name: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     totalNoYearsInMinistry: 0,
     typeOfFamily: 'singleMissionary',
     typeofChurch: 'withChurch',

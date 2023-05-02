@@ -95,6 +95,8 @@ export default {
         supportDetails: { _id: '',
           currentDesignation: {
             name: 'Co-ordinator',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           totalNoYearsInMinistry: 1,
           typeOfFamily: 'Single Missionary',

@@ -12,7 +12,7 @@ const APPDashboard = () => {
             primaryText='Application'
             secondaryText=''
             color='#29cc39'
-            targetRoute='/application/request'
+            targetRoute='/application/list'
           />
         </Grid>
         {/* <Grid item xs={12} md={6} xl={3}>

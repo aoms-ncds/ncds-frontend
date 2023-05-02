@@ -26,6 +26,7 @@ declare global {
     createdAt: Moment;
     updatedAt: Moment;
   }
+  type Creatable<T extends MongooseDocument> = Omit<T, keyof MongooseDocument> & Partial<MongooseDocument>;
   interface FileObject extends MongooseDocument{
     name: string;
     size: number;
