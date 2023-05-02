@@ -18,7 +18,10 @@ const SubDivisionsPage = ({
       },
     ]);
   };
-
+  const deleteSubDivision = (index: number) => {
+    const newSubDivisions = subDivisions.filter((_, i) => i !== index);
+    setSubDivisions(newSubDivisions);
+  };
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <Grid container spacing={12}>
@@ -41,7 +44,7 @@ const SubDivisionsPage = ({
                 </Grid>
                 <Grid item xs={6}>
                   <FormControl variant="outlined" fullWidth><br />
-                    <Button><DeleteIcon /></Button>
+                    <Button onClick={() => deleteSubDivision(index)}><DeleteIcon /></Button>
                   </FormControl>
                 </Grid>
               </Grid><br />

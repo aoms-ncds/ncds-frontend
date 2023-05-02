@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
 const BankDetailsPage = ({
@@ -18,7 +17,6 @@ const BankDetailsPage = ({
 }: {
   withCardContainer?: BankDetails;
 }) => {
-  const [loadCount, setLoadCount] = useState(0);
   const [newDivisionBankDetails, setNewDivisionBankDetails] = useState<BankDetails>(withCardContainer ||{
     FCRABankname: '',
     FCRABranchname: '',

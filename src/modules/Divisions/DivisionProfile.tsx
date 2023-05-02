@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, FormControl, Grid, TextField, Typography } from '@mui/material';
+import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
 const DivisionProfilePage = ({
   withCardContainer = {
@@ -27,7 +26,6 @@ const DivisionProfilePage = ({
 }: {
   withCardContainer?: DivisionProfile;
 }) => {
-  const [loadCount, setLoadCount] = useState(0);
   const [newDivisionProfile, setNewDivisionProfile] = useState<DivisionProfile>(
     withCardContainer || {
       divisionName: '',
