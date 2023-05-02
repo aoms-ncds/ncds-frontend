@@ -1,22 +1,10 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
-import React, { useState } from 'react';
+import { Grid, FormControl, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import WorkerServices from './extras/WorkersServices';
 
-const SupportStructure = ({
-  withCardContainer = {
-    _id: '',
-    basicAllowance: '',
-    hraAllowance: 1,
-    spouseAllowance: '',
-    positionalAllowance: '',
-    specialAllowance: '',
-    impactDeduction: '',
-    telAllowance: '',
-    pionMissionaryFund: '',
-    MUTDeduction: '',
-  },
-}: {
-  withCardContainer?: SupportStructure;
-}) => {
+const SupportStructure = () => {
+  const { workersId } = useParams();
   const [newWorkerSupportStructur, setWorkerSupportStructur] = useState<SupportStructure>({
     _id: '',
     basicAllowance: '',
@@ -27,9 +15,17 @@ const SupportStructure = ({
     impactDeduction: '',
     telAllowance: '',
     pionMissionaryFund: '',
-    MUTDeduction: '',
-
-  });
+    MUTDeduction: '' });
+  useEffect(() => {
+    console.log(workersId);
+    if (workersId) {
+      WorkerServices.getSupportStructureById(workersId).then((res) => {
+        setWorkerSupportStructur(res.data);
+      }).catch((res) => {
+        console.log(res);
+      });
+    }
+  }, []);
   return (
     <form>
       <Grid container spacing={3}>
@@ -37,7 +33,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="BASIC"
-              value={withCardContainer?.basicAllowance}
+              value={newWorkerSupportStructur?.basicAllowance}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -53,7 +49,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="HRA"
-              value={withCardContainer?.hraAllowance}
+              value={newWorkerSupportStructur?.hraAllowance}
               // onChange={(e) =>
               //   // eslint-disable-next-line @typescript-eslint/naming-convention
               //   setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -69,7 +65,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="SPOUSE ALLOWANCE"
-              value={withCardContainer?.spouseAllowance}
+              value={newWorkerSupportStructur?.spouseAllowance}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -85,7 +81,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="POSITIONAL ALLOWANCE"
-              value={withCardContainer?.positionalAllowance}
+              value={newWorkerSupportStructur?.positionalAllowance}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -101,7 +97,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="SPECIAL ALLOWANCE"
-              value={withCardContainer?.specialAllowance}
+              value={newWorkerSupportStructur?.specialAllowance}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -117,7 +113,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="IMPACT DEDUCTION"
-              value={withCardContainer?.impactDeduction}
+              value={newWorkerSupportStructur?.impactDeduction}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -133,7 +129,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="TEL ALLOWANCE"
-              value={withCardContainer?.telAllowance}
+              value={newWorkerSupportStructur?.telAllowance}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -149,7 +145,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PION Missionary Fund"
-              value={withCardContainer?.pionMissionaryFund}
+              value={newWorkerSupportStructur?.pionMissionaryFund}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({
@@ -165,7 +161,7 @@ const SupportStructure = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="MUT Deduction(Medical Insurance)"
-              value={withCardContainer?.MUTDeduction}
+              value={newWorkerSupportStructur?.MUTDeduction}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 setWorkerSupportStructur((newWorkerSupportStructur) => ({

@@ -24,6 +24,7 @@ const AddNewWorker = () => {
       WorkerServices.getWorkerById(workersId).then((res) => {
         setLoadCount((count) => count-1);
         setWorkerRequests(res.data);
+        console.log(WorkerRequests);
       }).catch((res) => {
         setLoadCount((count) => count-1);
         console.log(res);
@@ -32,10 +33,10 @@ const AddNewWorker = () => {
   }, []);
   const AddWorker = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.addWorker()
+    WorkerServices.addWorker(action)
       .then((res) => {
         enqueueSnackbar({
-          message: 'Added new Worker',
+          message: res.message,
           variant: 'success',
         });
       })
@@ -73,7 +74,7 @@ const AddNewWorker = () => {
                   e.preventDefault();
                   setActiveStep(1);
                 }}
-              ><BasicDetails withCardContainer={WorkerRequests?.basicDetails}/>
+              ><BasicDetails />
                 <Button
                   type="submit"
                   variant="contained"
@@ -90,7 +91,7 @@ const AddNewWorker = () => {
                   e.preventDefault();
                   setActiveStep(2);
                 }}
-              ><OfficialDetails withCardContainer={WorkerRequests?.officialDetails}/>
+              ><OfficialDetails />
                 <Button
                   type="submit"
                   variant="contained"
@@ -115,7 +116,7 @@ const AddNewWorker = () => {
                   e.preventDefault();
                   setActiveStep(3);
                 }}
-              ><SupportDetails withCardContainer={WorkerRequests?.supportDetails}/>
+              ><SupportDetails />
                 <Button
                   type="submit"
                   variant="contained"
@@ -138,12 +139,12 @@ const AddNewWorker = () => {
             {activeStep == 3 && (
               <form
                 onSubmit={AddWorker}
-              ><SupportStructure withCardContainer={WorkerRequests?.supportStructure}/><Button
+              ><SupportStructure /><Button
                   type="submit"
                   variant="contained"
                   sx={{ float: 'right', padding: '16px 64px' }}
                 >
-                Submit
+                  {action === 'add' ? 'Submit' : 'Update'}
                 </Button><Button
                   type="button"
                   onClick={() => {

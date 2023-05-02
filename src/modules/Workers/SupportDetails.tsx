@@ -1,44 +1,29 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Box } from '@mui/material';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import WorkerServices from './extras/WorkersServices';
-const SupportDetails = ({
-  withCardContainer = {
-    _id: '',
-    currentDesignation: {
-      _id: '',
-      name: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    totalNoYearsInMinistry: 0,
-    typeOfFamily: 'singleMissionary',
-    typeofChurch: 'withChurch',
-    selfSupport: 'yes',
-
-  },
-}: {
-  withCardContainer?: SupportDetails;
-}) => {
-  const [designations, setDesignations] = useState<Designation[] | undefined>();
+import { useParams } from 'react-router-dom';
+const SupportDetails = () => {
+  const { workersId } = useParams();
+  const [Designation, setDesignation] = useState<Designation[] | undefined>();
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
     _id: '',
-    currentDesignation: {
-      _id: 'sdjkfsdj',
-      name: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
+    currentDesignation: { name: '' },
     totalNoYearsInMinistry: 0,
     typeOfFamily: 'singleMissionary',
     typeofChurch: 'withChurch',
-    selfSupport: 'yes',
-
-  });
+    selfSupport: 'yes' });
   useEffect(() => {
-    WorkerServices.getDesignations()
+    console.log(workersId);
+    if (workersId) {
+      WorkerServices.getSupportDetailsById(workersId).then((res) => {
+        setWorkerSupportDetails(res.data);
+      }).catch((res) => {
+        console.log(res);
+      });
+    }
+    WorkerServices.getDesignation()
     .then((res) => {
-      setDesignations(res.data);
+      setDesignation(res.data);
     })
     .catch((res) => {
       console.log(res);
@@ -48,13 +33,12 @@ const SupportDetails = ({
     <form>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
-
           <FormControl variant="outlined" fullWidth>
             <Autocomplete
               id="Current Designation"
               // sx={{ width: 300 }}
-              value={withCardContainer?.currentDesignation}
-              options={designations ?? []}
+              value={newWorkerSupportDetails?.currentDesignation}
+              options={Designation ?? []}
               // multiple
               // filterOptions={members}
               fullWidth
@@ -93,7 +77,7 @@ const SupportDetails = ({
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Total No. Years in Ministry"
-              value={withCardContainer?.totalNoYearsInMinistry}
+              value={newWorkerSupportDetails?.totalNoYearsInMinistry}
               // onChange={(e) =>
               //   // eslint-disable-next-line @typescript-eslint/naming-convention
               //   setWorkerSupportDetails((newWorkerSupportDetails) => ({
@@ -111,7 +95,7 @@ const SupportDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="singleMissionary"
-              value={withCardContainer?.typeOfFamily}
+              value={newWorkerSupportDetails?.typeOfFamily}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
@@ -132,7 +116,7 @@ const SupportDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="withChurch"
-              value={withCardContainer?.typeofChurch}
+              value={newWorkerSupportDetails?.typeofChurch}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
@@ -153,7 +137,7 @@ const SupportDetails = ({
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="yes"
-              value={withCardContainer?.selfSupport}
+              value={newWorkerSupportDetails?.selfSupport}
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,

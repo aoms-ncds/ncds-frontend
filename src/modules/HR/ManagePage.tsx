@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridRowParams } from '@mui/x-data-grid';
+import { Autocomplete, Button, Card, Container, Dialog, DialogActions,
+  DialogContent, DialogTitle, Grid, Link, TextField, createFilterOptions } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
+import DropdownButton from '../../components/DropDownButton';
 import {
   Edit as EditIcon,
   Add as AddIcon,
@@ -11,44 +12,60 @@ import {
 
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import DepartmentsDropdown from './components/DepartmentsDropdown';
-import DesignationsDropdown from './components/DesignationsDropdown';
-
+import moment from 'moment';
+const filter = createFilterOptions<Department>();
 const HRManagePage = () => {
-  const [departments, setDepartments] = useState<Department[] | undefined>();
-  const [designations, setDesignations] = useState<Designation[] | undefined>();
+  const [Department, setDepartment] = useState<Department[] | undefined>();
+  const [Position, setPosition] = useState<Position[] | undefined>();
   const [staffs, setStaffs] = useState<Staff[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [open, setOpen] = React.useState(false);
   const [editStaff, seteditStaff] = useState<string>('');
-
+  const [value, setValue] = useState<Department | null>(null);
+  console.log(value);
   const [loadCount, setLoadCount] = useState(0);
-  const onLoad = () => setLoadCount((count) => count+1);
-  const afterLoad = () => setLoadCount((count) => count-1);
-
-  const [newStaff, setNewStaff] = useState<CreateStaffRequest>({
+  const [newStaff, setNewStaff] = useState<Staff>({
+    _id: '',
     name: '',
-    dob: undefined,
-    doj: undefined,
+    dob: moment(),
+    doj: moment(),
+    designation: {
+      _id: '',
+      name: '',
+    },
+    department: {
+      _id: '',
+      name: '',
+    },
     phone: '',
     email: '',
     spouseOfAnotherEmployee: '',
     idFormat: '',
+
   });
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
-    setNewStaff({
+    setNewStaff(() => ({
+      _id: '',
       name: '',
-      dob: undefined,
-      doj: undefined,
+      dob: moment(),
+      doj: moment(),
+      designation: {
+        _id: '',
+        name: '',
+      },
+      department: {
+        _id: '',
+        name: '',
+      },
       phone: '',
       email: '',
       spouseOfAnotherEmployee: '',
       idFormat: '',
-    });
+    }));
   };
   const createStaff = () => {
     const snackbarId = enqueueSnackbar({
@@ -64,15 +81,24 @@ const HRManagePage = () => {
           message: res.message,
           variant: 'success',
         });
-        setNewStaff({
+        setNewStaff(() => ({
+          _id: '',
           name: '',
-          dob: undefined,
-          doj: undefined,
+          dob: moment(),
+          doj: moment(),
+          designation: {
+            _id: '',
+            name: '',
+          },
+          department: {
+            _id: '',
+            name: '',
+          },
           phone: '',
           email: '',
           spouseOfAnotherEmployee: '',
           idFormat: '',
-        });
+        }));
       })
       .catch((err) => {
         console.log(err);
@@ -87,18 +113,17 @@ const HRManagePage = () => {
         });
       });
   };
-
   useEffect(() => {
     HRServices.getDepartment()
     .then((res) => {
-      setDepartments(res.data);
+      setDepartment(res.data);
     })
     .catch((res) => {
       console.log(res);
     });
-    HRServices.getDesignations()
+    HRServices.getPosition()
     .then((res) => {
-      setDesignations(res.data);
+      setPosition(res.data);
     })
     .catch((res) => {
       console.log(res);
@@ -145,45 +170,54 @@ const HRManagePage = () => {
         });
       });
   };
-
   const columns = [
     {
-      field: 'actions',
-      type: 'actions',
-      getActions: (params: GridRowParams) => [
-        <GridActionsCellItem
-          key={1}
-          label='Edit'
-          icon={<EditIcon />}
-          onClick={() => {
-            setOpen(true);
-            setAction('edit');
-            seteditStaff(params.row.name);
-            setNewStaff(() => ({
-              _id: params.row._id,
-              name: params.row.name,
-              dob: params.row.dob,
-              doj: params.row.doj,
-              department: params.row.department,
-              designation: params.row.designation,
-              email: params.row.email,
-              phone: params.row.phone,
-              spouseOfAnotherEmployee: params.row.spouseOfAnotherEmployee,
-              idFormat: params.row.idFormat,
-            }));
-          }}
-          showInMenu
-        />,
-        <GridActionsCellItem
-          key={1}
-          label='Delete'
-          icon={<DeleteIcon />}
-          onClick={() => {
-            removeStaff(params.row._id);
-          }}
-          showInMenu
-        />,
-      ],
+      field: '_manage',
+      headerName: 'Action',
+      minWidth: 50,
+      type: 'string',
+      renderCell: (props: any) => (
+        <DropdownButton
+          useIconButton={true}
+          id="attendance action"
+          primaryText="Actions"
+          key={'attendance action'}
+          items={[
+            {
+              id: 'edit',
+              text: 'Edit',
+              component: Link,
+              icon: EditIcon,
+              onClick: () => {
+                setOpen(true);
+                setAction('edit');
+                seteditStaff(props.row.name);
+                setNewStaff(() => ({
+                  _id: props.row._id,
+                  name: props.row.name,
+                  dob: props.row.dob,
+                  doj: props.row.doj,
+                  department: props.row.department,
+                  designation: props.row.designation,
+                  email: props.row.email,
+                  phone: props.row.phone,
+                  spouseOfAnotherEmployee: props.row.spouseOfAnotherEmployee,
+                  idFormat: props.row.idFormat,
+                }));
+              },
+            },
+            {
+              id: 'delete',
+              text: 'Delete',
+              component: Link,
+              icon: DeleteIcon,
+              onClick: () => {
+                removeStaff(props.row._id);
+              },
+            },
+          ]}
+        />
+      ),
     },
     { field: '_id', headerName: 'id', width: 70 },
     { field: 'name', headerName: 'Name', width: 70 },
@@ -200,7 +234,6 @@ const HRManagePage = () => {
     { field: 'spouseOfAnotherEmployee', headerName: 'Spouse of another employee', width: 130 },
     { field: 'idFormat', headerName: 'ID Format', width: 130 },
   ];
-
   return (
     <CommonPageLayout title='Manage Staff' loadCount={loadCount}>
       <Button
@@ -231,6 +264,7 @@ const HRManagePage = () => {
           <Container>
             <Grid container spacing={2}>
               <Grid item md={12}>
+                {' '}
                 <TextField
                   label="Name"
                   value={newStaff.name}
@@ -245,6 +279,7 @@ const HRManagePage = () => {
                 />
               </Grid>
               <Grid item md={12}>
+                {' '}
                 <TextField
                   label="Email Id"
                   value={newStaff.email}
@@ -259,27 +294,121 @@ const HRManagePage = () => {
                 />
               </Grid>
               <Grid item md={12}>
-                <DepartmentsDropdown
-                  loadCount={loadCount}
-                  onLoad={onLoad}
-                  afterLoad={afterLoad}
-                  departments={departments}
-                  onSelect={(department) => {
-                    setNewStaff((newStaff) => ({ ...newStaff, department }));
+                <Autocomplete
+                  value={newStaff?.department}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setValue({
+                        name: newValue,
+                      });
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      setValue({
+                        name: newValue.inputValue,
+                      });
+                    } else {
+                      if (newValue) {
+                        setNewStaff((newStaff) => ({
+                          ...newStaff,
+                          department: newValue,
+                        }));
+                      }
+                    }
                   }}
-                  selectedDepartment={newStaff.department ?? null}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.name);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        name: `Add "${inputValue}"`,
+                      });
+                    }
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="department"
+                  options={Department ?? []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="Department" />
+                  )}
                 />
               </Grid>
               <Grid item md={12}>
-                <DesignationsDropdown
-                  loadCount={loadCount}
-                  onLoad={onLoad}
-                  afterLoad={afterLoad}
-                  designations={designations}
-                  onSelect={(designation) => {
-                    setNewStaff((newStaff) => ({ ...newStaff, designation }));
+                <Autocomplete
+                  value={newStaff?.designation}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setValue({
+                        name: newValue,
+                      });
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      setValue({
+                        name: newValue.inputValue,
+                      });
+                    } else {
+                      if (newValue) {
+                        setNewStaff((newStaff) => ({
+                          ...newStaff,
+                          designation: newValue,
+                        }));
+                      }
+                    }
                   }}
-                  selectedDesignation={newStaff.department ?? null}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.name);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        name: `Add "${inputValue}"`,
+                      });
+                    }
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="designation"
+                  options={Position ?? []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="Designation" />
+                  )}
                 />
               </Grid>
             </Grid>

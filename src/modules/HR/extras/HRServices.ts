@@ -3,7 +3,7 @@ import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers
 
 export default {
   getCount: () => getStandardResponse<number>(
-    dummyRequest<number>({
+    dummyRequest({
       data: 5,
       // error: null,
       message: 'Network Error',
@@ -11,21 +11,12 @@ export default {
       timeout: 500,
     }),
   ),
-  getDepartment: () => getStandardResponse<Department[]>(
-    dummyRequest<Department[]>({
-      data: [
-        {
-          _id: '1',
-          name: 'IT',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        {
-          _id: '2',
-          name: 'Account',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
+  getDepartment: () => getStandardResponse<[]>(
+    dummyRequest({
+      data: [{ _id: 1,
+        name: 'IT' },
+      { _id: 2,
+        name: 'Account' },
       ],
       // error: null,
       message: 'Network Error',
@@ -33,7 +24,7 @@ export default {
       timeout: 500,
     }),
   ),
-  getDesignations: () => getStandardResponse<[]>(
+  getPosition: () => getStandardResponse<[]>(
     dummyRequest({
       data: [{ _id: 1,
         name: 'TL' },
@@ -46,7 +37,7 @@ export default {
       timeout: 500,
     }),
   ),
-  createStaff: ( department: CreateStaffRequest,
+  createStaff: ( department: Staff,
     action: 'add' | 'edit') => getStandardResponse<number>(
       dummyRequest({
         data: action,
@@ -61,8 +52,8 @@ export default {
       data: [{
         _id: 1,
         name: 'athira',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
@@ -78,8 +69,8 @@ export default {
       {
         _id: 2,
         name: 'Sanjay',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
@@ -95,8 +86,8 @@ export default {
       {
         _id: 3,
         name: 'Sanjili',
-        dob: '12-11-2000',
-        doj: '12-11-2000',
+        dob: moment('12-11-2000'),
+        doj: moment('12-11-2000'),
         designation: {
           _id: 1,
           name: 'TL',
