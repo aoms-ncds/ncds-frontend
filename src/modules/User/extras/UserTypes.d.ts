@@ -8,7 +8,7 @@ declare global {
         lastName: string;
         dob: Moment;
         doj: Moment;
-        designation: Position;
+        designation: Designation;
         department: Department;
         phone: string;
         email:string;

@@ -1,8 +1,9 @@
+import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 
 export default {
   getCount: () => getStandardResponse<number>(
-    dummyRequest({
+    dummyRequest<number>({
       data: 5,
       // error: null,
       message: 'Network Error',
@@ -10,12 +11,21 @@ export default {
       timeout: 500,
     }),
   ),
-  getDepartment: () => getStandardResponse<[]>(
-    dummyRequest({
-      data: [{ _id: 1,
-        name: 'IT' },
-      { _id: 2,
-        name: 'Account' },
+  getDepartment: () => getStandardResponse<Department[]>(
+    dummyRequest<Department[]>({
+      data: [
+        {
+          _id: '1',
+          name: 'IT',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        {
+          _id: '2',
+          name: 'Account',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
       ],
       // error: null,
       message: 'Network Error',
@@ -23,7 +33,7 @@ export default {
       timeout: 500,
     }),
   ),
-  getPosition: () => getStandardResponse<[]>(
+  getDesignations: () => getStandardResponse<[]>(
     dummyRequest({
       data: [{ _id: 1,
         name: 'TL' },
@@ -36,7 +46,7 @@ export default {
       timeout: 500,
     }),
   ),
-  createStaff: ( department: Staff,
+  createStaff: ( department: CreateStaffRequest,
     action: 'add' | 'edit') => getStandardResponse<number>(
       dummyRequest({
         data: action,

@@ -94,7 +94,10 @@ export default {
         },
         supportDetails: { _id: '',
           currentDesignation: {
+            _id: 'sdkfj',
             name: 'Co-ordinator',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           totalNoYearsInMinistry: 1,
           typeOfFamily: 'Single Missionary',
@@ -206,7 +209,7 @@ export default {
       timeout: 500,
     }),
   ),
-  getDesignation: () => getStandardResponse<[]>(
+  getDesignations: () => getStandardResponse<[]>(
     dummyRequest({
       data: [
         { name: 'Co-ordinator' },

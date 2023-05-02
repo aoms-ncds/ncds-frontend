@@ -5,7 +5,12 @@ import WorkerServices from './extras/WorkersServices';
 const SupportDetails = ({
   withCardContainer = {
     _id: '',
-    currentDesignation: { name: '' },
+    currentDesignation: {
+      _id: '',
+      name: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     totalNoYearsInMinistry: 0,
     typeOfFamily: 'singleMissionary',
     typeofChurch: 'withChurch',
@@ -15,10 +20,15 @@ const SupportDetails = ({
 }: {
   withCardContainer?: SupportDetails;
 }) => {
-  const [Designation, setDesignation] = useState<Designation[] | undefined>();
+  const [designations, setDesignations] = useState<Designation[] | undefined>();
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
     _id: '',
-    currentDesignation: { name: '' },
+    currentDesignation: {
+      _id: 'sdjkfsdj',
+      name: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     totalNoYearsInMinistry: 0,
     typeOfFamily: 'singleMissionary',
     typeofChurch: 'withChurch',
@@ -26,9 +36,9 @@ const SupportDetails = ({
 
   });
   useEffect(() => {
-    WorkerServices.getDesignation()
+    WorkerServices.getDesignations()
     .then((res) => {
-      setDesignation(res.data);
+      setDesignations(res.data);
     })
     .catch((res) => {
       console.log(res);
@@ -38,12 +48,13 @@ const SupportDetails = ({
     <form>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
+
           <FormControl variant="outlined" fullWidth>
             <Autocomplete
               id="Current Designation"
               // sx={{ width: 300 }}
               value={withCardContainer?.currentDesignation}
-              options={Designation ?? []}
+              options={designations ?? []}
               // multiple
               // filterOptions={members}
               fullWidth

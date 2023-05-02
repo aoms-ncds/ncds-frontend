@@ -22,6 +22,12 @@ const index = () => {
           'video/quicktime',
           'image/png',
         ]}
+        // limits={{
+        //   types: [],
+        //   maxItemSize: "2M",
+        //   maxItemCount: 3,
+        //   maxTotalSize: "200M"
+        // }}
         accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
@@ -33,6 +39,12 @@ const index = () => {
         }}
         onLoad={() => setLoadCount((count) => count+1)}
         afterLoad={() => setLoadCount((count) => count-1)}
+        // permissions={{
+        //   write: true,
+        //   delete: true,
+        //   rename: true,
+        //   downlao
+        // }}
       />
       <Button
         variant='contained'

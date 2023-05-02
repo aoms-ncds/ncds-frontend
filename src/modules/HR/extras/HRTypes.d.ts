@@ -1,25 +1,43 @@
+import { Moment } from 'moment';
+
 export {};
-declare global{
-    interface Staff{
+declare global {
+  // ----------------------------------------------------------------------
+  interface Staff {
     _id: string;
     name: string;
-    dob: string;
-    doj: string;
-    designation: Position;
+    dob: Moment;
+    doj: Moment;
+    designation: Designation;
     department: Department;
     phone: string;
-    email:string;
+    email: string;
     spouseOfAnotherEmployee: string;
     idFormat: string;
-}
- interface Department{
+  }
+
+  interface CreateStaffRequest extends Omit<Staff, '_id' | 'createdAt' | 'updatedAt'> {
+    dob?: Moment;
+    doj?:Moment;
+    department?: CreatableDepartment;
+    designation?: CreatableDesignation;
     inputValue?: string;
-    _id?: string;
+  }
+  // ----------------------------------------------------------------------
+  interface Department extends MongooseDocument {
     name: string;
-}
- interface Position{
+  }
+  interface CreatableDepartment extends Omit<Department, '_id'> {
     inputValue?: string;
-    _id?: string;
+    createdAt?: Moment;
+    updatedAt?: Moment;
+  }
+  // ----------------------------------------------------------------------
+  interface Designation extends MongooseDocument {
     name: string;
-}
+  }
+  interface CreatableDesignation extends Omit<Designation, '_id' | 'createdAt' | 'updatedAt'> {
+    inputValue?: string;
+  }
+  // ----------------------------------------------------------------------
 }

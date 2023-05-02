@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
 
 export default {
@@ -21,15 +22,19 @@ export default {
         coordinator: {
           _id: '1',
           name: 'athira',
-          dob: '12-11-2000',
-          doj: '12-11-2000',
+          dob: moment('12-11-2000'),
+          doj: moment('12-11-2000'),
           designation: {
             _id: ' 1',
             name: 'TL',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           department: {
             _id: '1',
             name: 'IT',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           phone: '123476798',
           email: 'test@gmail.com',
@@ -45,15 +50,19 @@ export default {
         coordinator: {
           _id: '1',
           name: 'athira',
-          dob: '12-11-2000',
-          doj: '12-11-2000',
+          dob: moment('12-11-2000'),
+          doj: moment('12-11-2000'),
           designation: {
             _id: ' 1',
             name: 'TL',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           department: {
             _id: '1',
             name: 'IT',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           phone: '123476798',
           email: 'test@gmail.com',
@@ -69,15 +78,19 @@ export default {
         coordinator: {
           _id: '1',
           name: 'athira',
-          dob: '12-11-2000',
-          doj: '12-11-2000',
+          dob: moment('12-11-2000'),
+          doj: moment('12-11-2000'),
           designation: {
             _id: ' 1',
             name: 'TL',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           department: {
             _id: '1',
             name: 'IT',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           phone: '123476798',
           email: 'test@gmail.com',
@@ -105,15 +118,19 @@ export default {
           coordinator: {
             _id: '1',
             name: 'athira',
-            dob: '12-11-2000',
-            doj: '12-11-2000',
+            dob: moment('12-11-2000'),
+            doj: moment('12-11-2000'),
             designation: {
               _id: ' 1',
               name: 'TL',
+              createdAt: moment(),
+              updatedAt: moment(),
             },
             department: {
               _id: '1',
               name: 'IT',
+              createdAt: moment(),
+              updatedAt: moment(),
             },
             phone: '123476798',
             email: 'test@gmail.com',

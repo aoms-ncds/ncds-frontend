@@ -1,6 +1,6 @@
 import React from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
+import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
 
 const HRDashboard = () => {

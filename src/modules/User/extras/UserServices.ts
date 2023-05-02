@@ -16,10 +16,14 @@ export default {
           designation: {
             _id: 'jr20j0f',
             name: 'Tech Lead',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           department: {
             _id: '0tj30rftko',
             name: 'IT',
+            createdAt: moment(),
+            updatedAt: moment(),
           },
           phone: '',
           email: '',

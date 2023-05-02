@@ -102,9 +102,6 @@ declare global {
         pionMissionaryFund: string;
         MUTDeduction: string;
     }
-    interface Designation{
-        name: string;
-    }
 
 
  }
