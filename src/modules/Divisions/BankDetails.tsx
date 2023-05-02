@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
 const BankDetailsPage = ({
@@ -18,8 +17,7 @@ const BankDetailsPage = ({
 }: {
   withCardContainer?: BankDetails;
 }) => {
-  const [loadCount, setLoadCount] = useState(0);
-  const [newDivisionBankDetails, setNewDivisionBankDetails] = useState<BankDetails>({
+  const [newDivisionBankDetails, setNewDivisionBankDetails] = useState<BankDetails>(withCardContainer ||{
     FCRABankname: '',
     FCRABranchname: '',
     FCRAAccountNumber: '',
@@ -42,7 +40,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Bank Name"
-                  value={withCardContainer?.FCRABankname}
+                  value={newDivisionBankDetails.FCRABankname || withCardContainer?.FCRABankname}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -57,7 +55,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Branch Name"
-                  value={withCardContainer?.FCRABranchname}
+                  value={newDivisionBankDetails.FCRABranchname || withCardContainer?.FCRABranchname}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -72,7 +70,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Account Number"
-                  value={withCardContainer?.FCRAAccountNumber}
+                  value={newDivisionBankDetails.FCRAAccountNumber || withCardContainer?.FCRAAccountNumber}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -87,7 +85,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="IFSC Code"
-                  value={withCardContainer?.FCRAIFSCCode}
+                  value={newDivisionBankDetails.FCRAIFSCCode || withCardContainer?.FCRAIFSCCode}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -102,7 +100,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Beneficiary"
-                  value={withCardContainer?.FCRABeneficiary}
+                  value={newDivisionBankDetails.FCRABeneficiary || withCardContainer?.FCRABeneficiary}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -124,7 +122,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Bank Name"
-                  value={withCardContainer?.localBankname}
+                  value={newDivisionBankDetails.localBankname || withCardContainer?.localBankname}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -139,7 +137,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Branch Name"
-                  value={withCardContainer?.localBranchname}
+                  value={newDivisionBankDetails.localBranchname || withCardContainer?.localBranchname}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -154,7 +152,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Account Number"
-                  value={withCardContainer?.localAccountNumber}
+                  value={newDivisionBankDetails.localAccountNumber || withCardContainer?.localAccountNumber}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -169,7 +167,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="IFSC Code"
-                  value={withCardContainer?.localIFSCCode}
+                  value={newDivisionBankDetails.localIFSCCode || withCardContainer?.localIFSCCode}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,
@@ -184,7 +182,7 @@ const BankDetailsPage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label="Beneficiary"
-                  value={withCardContainer?.localBeneficiary}
+                  value={newDivisionBankDetails.localBeneficiary || withCardContainer?.localBeneficiary}
                   onChange={(e) =>
                     setNewDivisionBankDetails((newWorkerBasicDetails) => ({
                       ...newWorkerBasicDetails,

@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, FormControl, Grid, TextField, Typography } from '@mui/material';
+import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
 const DivisionProfilePage = ({
   withCardContainer = {
@@ -27,29 +26,32 @@ const DivisionProfilePage = ({
 }: {
   withCardContainer?: DivisionProfile;
 }) => {
-  const [loadCount, setLoadCount] = useState(0);
-  const [newDivisionProfile, setNewDivisionProfile] = useState<DivisionProfile>({
-    divisionName: '',
-    _id: '',
-    divisionId: '',
-    contactNumber: '',
-    emailId: '',
-    address: '',
-    noofWorkers: 0,
-    NoOfSubdivisions: 0,
-    NoOfChurches: 0,
-    coordinatorName: '',
-    coordinatorContactno: '',
-    coordinatorEmail: '',
-    seniorLeaderName: '',
-    seiorLeaderContactno: '',
-    seiorLeaderEmail: '',
-    juniorLeaderName: '',
-    juniorLeaderContactno: '',
-    juniorLeaderEmail: '',
-  });
+  const [newDivisionProfile, setNewDivisionProfile] = useState<DivisionProfile>(
+    withCardContainer || {
+      divisionName: '',
+      _id: '',
+      divisionId: '',
+      contactNumber: '',
+      emailId: '',
+      address: '',
+      noofWorkers: 0,
+      NoOfSubdivisions: 0,
+      NoOfChurches: 0,
+      coordinatorName: '',
+      coordinatorContactno: '',
+      coordinatorEmail: '',
+      seniorLeaderName: '',
+      seiorLeaderContactno: '',
+      seiorLeaderEmail: '',
+      juniorLeaderName: '',
+      juniorLeaderContactno: '',
+      juniorLeaderEmail: '',
+    },
+  );
   return (
+
     <form>
+
       <Grid container spacing={12}>
 
         <Grid item xs={12} md={6} lg={6}>
@@ -59,7 +61,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Name"
-                  value={withCardContainer?.divisionName}
+                  value={newDivisionProfile.divisionName || withCardContainer?.divisionName}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -74,7 +76,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Id"
-                  value={withCardContainer?.divisionId}
+                  value={newDivisionProfile.divisionId || withCardContainer?.divisionId}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -89,7 +91,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={withCardContainer?.contactNumber}
+                  value={newDivisionProfile.contactNumber || withCardContainer?.contactNumber}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -104,7 +106,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
-                  value={withCardContainer?.emailId}
+                  value={newDivisionProfile.emailId || withCardContainer?.emailId}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -119,7 +121,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Address"
-                  value={withCardContainer?.address}
+                  value={newDivisionProfile.address || withCardContainer?.address}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -134,7 +136,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Workers"
-                  value={withCardContainer?.noofWorkers}
+                  value={newDivisionProfile.noofWorkers || withCardContainer?.noofWorkers}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -149,7 +151,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Sub Divisions"
-                  value={withCardContainer?.NoOfSubdivisions}
+                  value={newDivisionProfile.NoOfSubdivisions || withCardContainer?.NoOfSubdivisions}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -164,7 +166,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" No. of Churches"
-                  value={withCardContainer?.NoOfChurches}
+                  value={newDivisionProfile.NoOfChurches || withCardContainer?.NoOfChurches}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -187,7 +189,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Co-ordinator Name"
-                  value={withCardContainer?.coordinatorName}
+                  value={newDivisionProfile.coordinatorName || withCardContainer?.coordinatorName}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -202,7 +204,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={withCardContainer?.coordinatorContactno}
+                  value={newDivisionProfile.coordinatorContactno || withCardContainer?.coordinatorContactno}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -217,7 +219,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
-                  value={withCardContainer?.coordinatorEmail}
+                  value={newDivisionProfile.coordinatorEmail || withCardContainer?.coordinatorEmail}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -232,7 +234,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Senior Leader Name"
-                  value={withCardContainer?.seniorLeaderName}
+                  value={newDivisionProfile.seniorLeaderName || withCardContainer?.seniorLeaderName}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -248,7 +250,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={withCardContainer?.seiorLeaderContactno}
+                  value={newDivisionProfile.seiorLeaderContactno || withCardContainer?.seiorLeaderContactno}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -263,7 +265,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  value={withCardContainer?.seiorLeaderEmail}
+                  value={newDivisionProfile.seiorLeaderEmail || withCardContainer?.seiorLeaderEmail}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -278,7 +280,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Division Junior Leader Name"
-                  value={withCardContainer?.juniorLeaderName}
+                  value={newDivisionProfile.juniorLeaderName || withCardContainer?.juniorLeaderName}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -294,7 +296,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={withCardContainer?.juniorLeaderContactno}
+                  value={newDivisionProfile.juniorLeaderContactno || withCardContainer?.juniorLeaderContactno}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -309,7 +311,7 @@ const DivisionProfilePage = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  value={withCardContainer?.juniorLeaderEmail}
+                  value={newDivisionProfile.juniorLeaderEmail || withCardContainer?.juniorLeaderEmail}
                   onChange={(e) =>
                     setNewDivisionProfile((newDivisionProfile) => ({
                       ...newDivisionProfile,
@@ -327,6 +329,7 @@ const DivisionProfilePage = ({
         </Grid>
 
       </Grid>
+
     </form>
 
   );

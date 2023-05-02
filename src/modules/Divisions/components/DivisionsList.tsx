@@ -14,7 +14,7 @@ interface DivisionsListProps {
   afterLoad: () => void;
 }
 const DivisionsList = (props: DivisionsListProps) => {
-  const [divisions, setDivisions] = useState<IETDivisions[] | null>(null);
+  const [divisions, setDivisions] = useState<DivisionProfile[] | null>(null);
   const columns = [
     {
       field: '_manage',
@@ -58,16 +58,16 @@ const DivisionsList = (props: DivisionsListProps) => {
       ),
     },
     { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => (
-      <p> {props.row.coordinator?.name}</p>
+      <p> {props.row.coordinatorName}</p>
     ), width: 130 },
     { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => (
-      <p> {props.row.coordinator?.email}</p>
+      <p> {props.row.coordinatorEmail}</p>
     ), width: 130 },
     { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => (
-      <p> {props.row.coordinator?.phone}</p>
+      <p> {props.row.coordinatorContactno}</p>
     ), width: 130 },
-    { field: 'numberofWorkers', headerName: 'No. of Workers', width: 200 },
-    { field: 'numberofSubdivisions', headerName: 'No. of Subdivisions', width: 200 },
+    { field: 'noofWorkers', headerName: 'No. of Workers', width: 200 },
+    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', width: 200 },
 
 
   ];

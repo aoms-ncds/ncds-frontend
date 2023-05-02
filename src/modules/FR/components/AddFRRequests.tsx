@@ -12,8 +12,6 @@ import {
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useEffect, useState } from 'react';
-import FRParticularList from './FRParticularList';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import HRServices from '../../HR/extras/HRServices';
@@ -98,6 +96,7 @@ const AddFRRequests = () => {
     });
     DivisionsServices.getDivisions()
     .then((res) => {
+      console.log(res.data);
       setDivisions(res.data);
     })
     .catch((res) => {

@@ -14,91 +14,49 @@ export default {
       timeout: 500,
     }),
   ),
-  getDivisions: () => getStandardResponse<IETDivisions[]>(
-    dummyRequest<IETDivisions[]>({
+  getDivisions: () => getStandardResponse<DivisionProfile[]>(
+    dummyRequest<DivisionProfile[]>({
       data: [{
-        _id: '1',
         divisionName: 'Division 1',
-        coordinator: {
-          _id: '1',
-          name: 'athira',
-          dob: moment('12-11-2000'),
-          doj: moment('12-11-2000'),
-          designation: {
-            _id: ' 1',
-            name: 'TL',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          department: {
-            _id: '1',
-            name: 'IT',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          phone: '123476798',
-          email: 'test@gmail.com',
-          spouseOfAnotherEmployee: 'test',
-          idFormat: 'test',
-        },
-        numberofWorkers: 4,
-        numberofSubdivisions: 2,
+        _id: '1',
+        divisionId: '233',
+        contactNumber: '89000333',
+        emailId: 'division@gmail.com',
+        address: 'Division address',
+        noofWorkers: 5,
+        NoOfSubdivisions: 5,
+        NoOfChurches: 5,
+        coordinatorName: 'Alex',
+        coordinatorContactno: '7884844',
+        coordinatorEmail: 'alex@gmail.com',
+        seniorLeaderName: 'Thomas',
+        seiorLeaderContactno: '678993333',
+        seiorLeaderEmail: 'thomas@gmail.com',
+        juniorLeaderName: 'Mikha',
+        juniorLeaderContactno: '67788833',
+        juniorLeaderEmail: 'mikha@gmail.com',
+
       },
       {
-        _id: '2',
         divisionName: 'Division 2',
-        coordinator: {
-          _id: '1',
-          name: 'athira',
-          dob: moment('12-11-2000'),
-          doj: moment('12-11-2000'),
-          designation: {
-            _id: ' 1',
-            name: 'TL',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          department: {
-            _id: '1',
-            name: 'IT',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          phone: '123476798',
-          email: 'test@gmail.com',
-          spouseOfAnotherEmployee: 'test',
-          idFormat: 'test',
-        },
-        numberofWorkers: 4,
-        numberofSubdivisions: 6,
-      },
-      {
-        _id: '3',
-        divisionName: 'Division 3',
-        coordinator: {
-          _id: '1',
-          name: 'athira',
-          dob: moment('12-11-2000'),
-          doj: moment('12-11-2000'),
-          designation: {
-            _id: ' 1',
-            name: 'TL',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          department: {
-            _id: '1',
-            name: 'IT',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          phone: '123476798',
-          email: 'test@gmail.com',
-          spouseOfAnotherEmployee: 'test',
-          idFormat: 'test',
-        },
-        numberofWorkers: 4,
-        numberofSubdivisions: 12,
+        _id: '2',
+        divisionId: '233',
+        contactNumber: '89000333',
+        emailId: 'division@gmail.com',
+        address: 'Division address',
+        noofWorkers: 5,
+        NoOfSubdivisions: 5,
+        NoOfChurches: 5,
+        coordinatorName: 'Alex',
+        coordinatorContactno: '7884844',
+        coordinatorEmail: 'alex@gmail.com',
+        seniorLeaderName: 'Thomas',
+        seiorLeaderContactno: '678993333',
+        seiorLeaderEmail: 'thomas@gmail.com',
+        juniorLeaderName: 'Mikha',
+        juniorLeaderContactno: '67788833',
+        juniorLeaderEmail: 'mikha@gmail.com',
+
       },
 
       ],
@@ -108,38 +66,10 @@ export default {
       timeout: 500,
     }),
   ),
-  getSubDivisions: () => getStandardResponse<Subdivisions[]>(
-    dummyRequest<Subdivisions[]>({
+  getSubDivisions: () => getStandardResponse<SubDivision[]>(
+    dummyRequest<SubDivision[]>({
       data: [{
         _id: '2',
-        division: {
-          _id: '1',
-          divisionName: 'Division 1',
-          coordinator: {
-            _id: '1',
-            name: 'athira',
-            dob: moment('12-11-2000'),
-            doj: moment('12-11-2000'),
-            designation: {
-              _id: ' 1',
-              name: 'TL',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '1',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            phone: '123476798',
-            email: 'test@gmail.com',
-            spouseOfAnotherEmployee: 'test',
-            idFormat: 'test',
-          },
-          numberofWorkers: 4,
-          numberofSubdivisions: 5,
-        },
         subDivisionName: 'sub1',
       },
       ],
@@ -189,6 +119,21 @@ export default {
           juniorLeaderContactno: '67788833',
           juniorLeaderEmail: 'mikha@gmail.com',
         },
+        subDivisionDetails: [{
+          _id: '1',
+          subDivisionName: 'subdivision 1',
+
+        },
+        {
+          _id: '2',
+          subDivisionName: 'subdivision 2',
+
+        },
+        {
+          _id: '3',
+          subDivisionName: 'subdivision 3',
+
+        }],
         bankDetails: {
           FCRABankname: 'FCRA',
           FCRABranchname: 'Thodupuzha',

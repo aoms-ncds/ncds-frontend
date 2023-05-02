@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Grid, Typography } from '@mui/material';
+import { Button, Card, Grid } from '@mui/material';
 import DivisionsList from './components/DivisionsList';
 import {
-  Edit as EditIcon,
   Add as AddIcon,
-  Delete as DeleteIcon,
 
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
