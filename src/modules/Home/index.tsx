@@ -5,7 +5,7 @@ import MinimalModuleDataAnalytics from './components/MinimalModuleDataAnalytics'
 
 const HomePage = () => {
   return (
-    <CommonPageLayout loadCount={0} title='Home Page'>
+    <CommonPageLayout title='Home Page'>
       {/* <Container> */}
       <Grid container spacing={3}>
         <Grid item xs={12} lg={6}>

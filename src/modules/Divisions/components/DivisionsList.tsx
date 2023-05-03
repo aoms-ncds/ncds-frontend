@@ -7,13 +7,10 @@ import {
 } from '@mui/icons-material';
 import DivisionsServices from '../extras/DivisionsServices';
 import DropdownButton from '../../../components/DropDownButton';
+import { useLoader } from '../../../hooks/Loader';
 
-interface DivisionsListProps {
-  loadCount: number;
-  onLoad: () => void;
-  afterLoad: () => void;
-}
-const DivisionsList = (props: DivisionsListProps) => {
+const DivisionsList = () => {
+  const loader = useLoader();
   const [divisions, setDivisions] = useState<DivisionProfile[] | null>(null);
   const columns = [
     {
@@ -72,14 +69,14 @@ const DivisionsList = (props: DivisionsListProps) => {
 
   ];
   useEffect(() => {
-    props.onLoad();
+    loader.onLoad();
     DivisionsServices.getDivisions()
       .then((res) => {
-        props.afterLoad();
+        loader.afterLoad();
         setDivisions(res.data);
       })
       .catch((err) => {
-        props.afterLoad();
+        loader.afterLoad();
         console.log({ err });
       });
   }, []);

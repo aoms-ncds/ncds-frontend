@@ -7,12 +7,11 @@ import {
 
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { useLoader } from '../../hooks/Loader';
 const DivisionsDashboardPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
-  const onLoad = () => setLoadCount((count) => count+1);
-  const afterLoad = () => setLoadCount((count) => count-1);
+  const loader = useLoader();
   return (
-    <CommonPageLayout title='Divisions Dashboard' loadCount={loadCount}>
+    <CommonPageLayout title='Divisions Dashboard'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -27,11 +26,7 @@ const DivisionsDashboardPage = () => {
       <br/><br/>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
-          <DivisionsList
-            loadCount={loadCount}
-            onLoad={onLoad}
-            afterLoad={afterLoad}
-          />
+          <DivisionsList />
         </Card>
       </Grid>
 

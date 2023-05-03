@@ -6,9 +6,6 @@ import HRServices from '../extras/HRServices';
 const filter = createFilterOptions<CreatableDepartment>();
 
 interface DepartmentsDropdownProps{
-    loadCount: number;
-    onLoad: () => void;
-    afterLoad: () => void;
     departments?: Department[];
     selectedDepartment: Department | CreatableDepartment |null;
     onSelect: (department: Department) => void;

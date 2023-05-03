@@ -1,22 +1,17 @@
 import React, { RefAttributes, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DataGrid, GridActionsCellItem, GridActionsCellItemProps, GridRenderCellParams, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import {
   Edit as EditIcon,
   Preview as PreviewIcon,
 } from '@mui/icons-material';
 import SampleServices from '../extras/SampleServices';
-import DropdownButton from '../../../components/DropDownButton';
 import GridLinkAction from '../../../components/GridLinkAction';
-
-interface SampleComponentProps {
-  loadCount: number;
-  onLoad: () => void;
-  afterLoad: () => void;
-}
+import { useLoader } from '../../../hooks/Loader';
 
 
-const SampleComponent = (props: SampleComponentProps) => {
+const SampleComponent = () => {
+  const loader = useLoader();
   const [sampleItems, setSampleItems] = useState<SampleItem[] | null>(null);
   const columns = [
     {
@@ -32,14 +27,14 @@ const SampleComponent = (props: SampleComponentProps) => {
     { field: 'createdAt', headerName: 'Field 3', width: 400 },
   ];
   useEffect(() => {
-    props.onLoad();
+    loader.onLoad();
     SampleServices.getAll()
       .then((res) => {
-        props.afterLoad();
+        loader.afterLoad();
         setSampleItems(res.data);
       })
       .catch((err) => {
-        props.afterLoad();
+        loader.afterLoad();
         console.log({ err });
       });
   }, []);

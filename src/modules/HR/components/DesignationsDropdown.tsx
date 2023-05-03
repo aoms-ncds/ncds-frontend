@@ -7,9 +7,6 @@ import moment from 'moment';
 const filter = createFilterOptions<CreatableDesignation>();
 
 interface DesignationsDropdownProps{
-    loadCount: number;
-    onLoad: () => void;
-    afterLoad: () => void;
     designations?: Designation[];
     selectedDesignation: Designation | CreatableDesignation |null;
     onSelect: (designation: Designation) => void;

@@ -7,14 +7,15 @@ import BankDetailsPage from './BankDetails';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
+import { useLoader } from '../../hooks/Loader';
 
 const DivisionDetailsPage = () => {
+  const loader = useLoader();
   const { divisionIDs, editID } = useParams();
+
   const [activeStep, setactiveStep] = useState(0);
-  const [loadCount, setLoadCount] = useState(0);
-  const onLoad = () => setLoadCount((count) => count+1);
-  const afterLoad = () => setLoadCount((count) => count-1);
   const [action, setAction] = useState<'add' | 'edit' |'view'>('add');
+
   const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     DivisionsServices.addDivision()
@@ -53,35 +54,34 @@ const DivisionDetailsPage = () => {
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
-      onLoad();
+      loader.onLoad();
       DivisionsServices.getDivisionbyId(divisionIDs)
       .then((res) => {
-        afterLoad();
-        // setLoadCount((count) => count-1);
+        loader.afterLoad();
         setDivisionDetails(res.data);
       })
       .catch((err) => {
-        afterLoad();
+        loader.afterLoad();
         console.log({ err });
       });
     }
     if (editID) {
       setAction('edit');
-      onLoad();
+      loader.onLoad();
       DivisionsServices.getDivisionbyId(editID)
       .then((res) => {
-        afterLoad();
+        loader.afterLoad();
 
         setDivisionDetails(res.data);
       })
       .catch((err) => {
-        afterLoad();
+        loader.afterLoad();
         console.log({ err });
       });
     }
   }, []);
   return (
-    <CommonPageLayout title={action === 'add' ? 'Add Division' : (action === 'edit' ? 'Edit Division' : 'Division Details')} loadCount={loadCount}>
+    <CommonPageLayout title={action === 'add' ? 'Add Division' : (action === 'edit' ? 'Edit Division' : 'Division Details')}>
       <Container>
         <CardContent>
           <Box sx={{ width: '100%' }}>

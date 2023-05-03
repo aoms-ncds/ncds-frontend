@@ -14,20 +14,21 @@ import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import { useLoader } from '../../hooks/Loader';
 const ManageWorkerPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
 
   useEffect(() => {
-    setLoadCount((count) => count+1);
+    loader.onLoad();
     WorkerServices.getAll()
    .then((res) => {
-     setLoadCount((count) => count-1);
+     loader.afterLoad();
      console.log(res);
      setWorkerRequests(res.data);
    })
   .catch((res) => {
-    setLoadCount((count) => count-1);
+    loader.afterLoad();
     console.log(res);
   });
   }, []);
@@ -136,7 +137,7 @@ const ManageWorkerPage = () => {
 
   ];
   return (
-    <CommonPageLayout title='Manage Workers' loadCount={loadCount}>
+    <CommonPageLayout title='Manage Workers'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}

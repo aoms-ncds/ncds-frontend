@@ -3,7 +3,7 @@ import { Container, CardContent,
   Select, MenuItem, TextField,
   Typography, Button, Dialog, Autocomplete,
   Box, DialogActions, DialogContent,
-  DialogContentText, Paper,
+  DialogContentText,
   Table, TableHead, TableRow,
   TableCell, TableBody, DialogTitle, TableContainer } from '@mui/material';
 import {
@@ -25,7 +25,7 @@ const AddFRRequests = () => {
     RequisitionName: undefined,
 
   });
-  const [coordinator, setCoordinator] = useState<Coordinator[]>();
+  const [coordinator, setCoordinator] = useState<Staff[]>();
   const [workers, setWorkers] = useState<WorkersRequest[]>();
   const [selectedWorker, setselectedWorker] = useState<WorkersRequest|null>(null);
   const [divisions, setDivisions] = useState<IETDivisions[]>();
@@ -333,10 +333,10 @@ const AddFRRequests = () => {
                         id='coordinator'
                         // value={(requisition) => requisition.RequisitionName}
                         options={coordinator ?? []}
-                        getOptionLabel={(coordinator) => coordinator.coordinatorName ?? ''}
+                        getOptionLabel={(coordinator) => coordinator.name ?? ''}
                         renderOption={(props, coordinator, { selected }) => (
                           <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                            {coordinator.coordinatorName}
+                            {coordinator.name}
                           </Box>
                         )}
                         // onChange={(e, selectedRequisition) => {

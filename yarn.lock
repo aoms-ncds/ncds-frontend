@@ -1741,7 +1741,7 @@
 
 "@mui/system@^5.12.0":
   version "5.12.1"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.12.1.tgz#8452bc03159f0a6725b96bde1dee1316e308231b"
+  resolved "https://registry.npmjs.org/@mui/system/-/system-5.12.1.tgz"
   integrity sha512-Po+sicdV3bbRYXdU29XZaHPZrW7HUYUqU1qCu77GCCEMbahC756YpeyefdIYuPMUg0OdO3gKIUfDISBrkjJL+w==
   dependencies:
     "@babel/runtime" "^7.21.0"
@@ -9681,7 +9681,8 @@ ws@^8.13.0:
 
 "xlsx@https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz":
   version "0.19.2"
-  resolved "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz#8d0566a8c0c9eabfffae6fa0115d029c67ce5bf9"
+  resolved "https://cdn.sheetjs.com/xlsx-0.19.2/xlsx-0.19.2.tgz"
+  integrity sha512-UwxQlR0S/ozz4xezXrmPI7ZqxhZ1bg7I7CtFw/WW9Hi/fKtwE8IVZ903r4uxS7W8I9mxYyHrGB85pRc4jq3jMw==
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

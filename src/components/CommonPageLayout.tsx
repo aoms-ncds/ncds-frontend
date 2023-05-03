@@ -23,14 +23,15 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
 import { getAllModuleRoutes } from '../extras/CommonRouter';
+import { useLoader } from '../hooks/Loader';
 
 const drawerWidth = 240;
 
 const CommonPageLayout = (props: {
   children: JSX.Element[] | JSX.Element;
   title?: string;
-  loadCount?: number;
 }) => {
+  const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   // const { window } = props;
@@ -50,10 +51,10 @@ const CommonPageLayout = (props: {
     setAnchorElUser(null);
   };
   useEffect(() => {
-    if (props.loadCount && props.loadCount < 0) {
+    if (loader.count && loader.count < 0) {
       throw Error('Load count must never be less than 0');
     }
-  }, [props.loadCount]);
+  }, [loader.count]);
 
   const drawer = (
     <div>
@@ -154,7 +155,7 @@ const CommonPageLayout = (props: {
             </MenuItem>
           </Menu>
         </Toolbar>
-        {props.loadCount != undefined && props.loadCount > 0 && (
+        {loader.count != undefined && loader.count > 0 && (
           <LinearProgress />
         )}
       </AppBar>

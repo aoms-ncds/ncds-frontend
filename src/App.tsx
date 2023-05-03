@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { ThemeProvider, createTheme, useMediaQuery } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import Router from './extras/CommonRouter';
+import { CounterProvider as LoaderProvider } from './hooks/Loader';
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -24,7 +25,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <Router />
+        <LoaderProvider>
+          <Router />
+        </LoaderProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

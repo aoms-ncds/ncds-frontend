@@ -11,7 +11,7 @@ const StyledLink = styled(Link)`
 
 const DashboardCardButton = (props: {
     primaryText: string;
-    secondaryText: string;
+    secondaryText?: string;
     color: string;
     onClick?: React.MouseEventHandler<HTMLDivElement>;
     targetRoute?: string;

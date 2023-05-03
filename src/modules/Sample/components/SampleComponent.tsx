@@ -1,11 +1,6 @@
 import React from 'react';
 
-interface SampleComponentProps{
-  loadCount: number;
-  onLoad: () => void;
-  afterLoad: () => void;
-}
-const SampleComponent = (props: SampleComponentProps) => {
+const SampleComponent = (props) => {
   return (
     <div>SampleComponent</div>
   );

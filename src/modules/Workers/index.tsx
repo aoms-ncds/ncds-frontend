@@ -3,18 +3,22 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import WorkerServices from './extras/WorkersServices';
+import { useLoader } from '../../hooks/Loader';
 
 const WorkersDashboard = () => {
-  const [loadCount, setLoadCount] = useState<unknown>();
+  const loader = useLoader();
+  const [workersCount, setWorkerCount] = useState<number|null>(null);
   useEffect(() => {
+    loader.onLoad();
     WorkerServices.getCount()
    .then((res) => {
      console.log(res);
-     setLoadCount(res.data);
+     setWorkerCount(res.data);
    })
   .catch((error) => {
     console.log(error);
-  });
+  })
+  .finally(loader.afterLoad);
   }, []);
   return (
     <CommonPageLayout>
@@ -22,7 +26,7 @@ const WorkersDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Manage Workers'
-            secondaryText={loadCount as string}
+            secondaryText={workersCount?.toString()}
             color='#29cc39'
             targetRoute="/workers/manage"
           />
@@ -30,7 +34,7 @@ const WorkersDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Approve New Workers'
-            secondaryText={loadCount as string}
+            secondaryText={workersCount?.toString()}
             color='#0dcaf0'
             targetRoute="/workers/approve"
           />

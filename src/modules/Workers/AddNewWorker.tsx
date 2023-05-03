@@ -8,25 +8,26 @@ import SupportDetails from './SupportDetails';
 import SupportStructure from './SupportStructure';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
+import { useLoader } from '../../hooks/Loader';
 
 
 const AddNewWorker = () => {
+  const loader = useLoader();
   const { workersId } = useParams();
   console.log(workersId);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loadCount, setLoadCount] = useState(0);
   const [WorkerRequests, setWorkerRequests] = useState<WorkersDetails|null>(null);
   useEffect(() => {
     if (workersId) {
       setAction('edit');
-      setLoadCount((count) => count+1);
+      loader.onLoad();
       WorkerServices.getWorkerById(workersId).then((res) => {
-        setLoadCount((count) => count-1);
+        loader.afterLoad();
         setWorkerRequests(res.data);
         console.log(WorkerRequests);
       }).catch((res) => {
-        setLoadCount((count) => count-1);
+        loader.afterLoad();
         console.log(res);
       });
     }
@@ -48,7 +49,7 @@ const AddNewWorker = () => {
       });
   };
   return (
-    <CommonPageLayout loadCount={loadCount} title={action === 'add' ? 'Add Worker' : 'Edit Worker'}>
+    <CommonPageLayout title={action === 'add' ? 'Add Worker' : 'Edit Worker'}>
       <Container>
         <CardContent>
           <Box sx={{ width: '100%' }}>

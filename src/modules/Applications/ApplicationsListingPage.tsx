@@ -13,9 +13,10 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
+import { useLoader } from '../../hooks/Loader';
 
 const ApplicationsListingPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -27,14 +28,14 @@ const ApplicationsListingPage = () => {
 
 
   useEffect(() => {
-    setLoadCount((count) => count + 1);
+    loader.onLoad();
     ApplicationServices.getAll()
       .then((res) =>{
-        setLoadCount((count) => count - 1);
+        loader.afterLoad();
         setApplications(res.data);
       })
       .catch((error) => {
-        setLoadCount((count) => count - 1);
+        loader.afterLoad();
         enqueueSnackbar({
           message: error.message,
           variant: 'error',
@@ -92,7 +93,7 @@ const ApplicationsListingPage = () => {
 
 
   return (
-    <CommonPageLayout title='Manage Staff' loadCount={loadCount}>
+    <CommonPageLayout title='Manage Staff'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}

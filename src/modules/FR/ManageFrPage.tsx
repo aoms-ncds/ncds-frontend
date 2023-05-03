@@ -13,21 +13,22 @@ import { Button, Card, Grid } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
-import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import { useLoader } from '../../hooks/Loader';
+
 const ManageFrPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);
 
   useEffect(() => {
-    setLoadCount((count) => count+1);
+    loader.onLoad();
     FRServices.getAll()
    .then((res) => {
-     setLoadCount((count) => count-1);
+     loader.afterLoad();
      console.log(res);
      setFRRequests(res.data);
    })
   .catch((res) => {
-    setLoadCount((count) => count-1);
+    loader.afterLoad();
     console.log(res);
   });
   }, []);

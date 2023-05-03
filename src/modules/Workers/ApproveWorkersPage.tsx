@@ -5,8 +5,9 @@ import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
+import { useLoader } from '../../hooks/Loader';
 const ApproveWorkerPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
   const approveWorker = (id: string) => {
     WorkerServices.approveWorker(id)
@@ -30,15 +31,15 @@ const ApproveWorkerPage = () => {
       });
   };
   useEffect(() => {
-    setLoadCount((count) => count+1);
+    loader.onLoad();
     WorkerServices.getAll()
    .then((res) => {
-     setLoadCount((count) => count-1);
+     loader.afterLoad();
      console.log(res);
      setWorkerRequests(res.data);
    })
   .catch((res) => {
-    setLoadCount((count) => count-1);
+    loader.afterLoad();
     console.log(res);
   });
   }, []);
@@ -72,7 +73,7 @@ const ApproveWorkerPage = () => {
 
   ];
   return (
-    <CommonPageLayout title='New Workers for Approval ' loadCount={loadCount}>
+    <CommonPageLayout title='New Workers for Approval'>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid rows={WorkerRequests??[]} columns={columns} getRowId={(row) => row._id} loading={WorkerRequests === null}/>

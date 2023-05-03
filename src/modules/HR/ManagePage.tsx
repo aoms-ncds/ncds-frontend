@@ -12,180 +12,61 @@ import {
 
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import moment from 'moment';
 import DepartmentsDropdown from './components/DepartmentsDropdown';
 import DesignationsDropdown from './components/DesignationsDropdown';
+import { useLoader } from '../../hooks/Loader';
 
 const HRManagePage = () => {
+  const loader = useLoader();
+
   const [departments, setDepartment] = useState<Department[] | undefined>();
   const [designations, setPosition] = useState<Designation[] | undefined>();
   const [staffs, setStaffs] = useState<Staff[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [open, setOpen] = React.useState(false);
-  const [editStaff, seteditStaff] = useState<string>('');
-
-  const [loadCount, setLoadCount] = useState(0);
-  const onLoad = () => setLoadCount((count) => count+1);
-  const afterLoad = () => setLoadCount((count) => count-1);
-
-  const [newStaff, setNewStaff] = useState<Staff>({
-    _id: '',
+  const [showStaffFormDialog, setShowStaffFormDialog] = useState(false);
+  const [staffFormState, setStaffFormState] = useState<CreatableStaff>({
     name: '',
-    dob: moment(),
-    doj: moment(),
-    designation: {
-      _id: '',
-      name: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    department: {
-      _id: '',
-      name: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
     phone: '',
     email: '',
     spouseOfAnotherEmployee: '',
     idFormat: '',
-
   });
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-    setNewStaff(() => ({
-      _id: '',
+
+  const resetStaff = () => {
+    setStaffFormState({
       name: '',
-      dob: moment(),
-      doj: moment(),
-      designation: {
-        _id: '',
-        name: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      department: {
-        _id: '',
-        name: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
       phone: '',
       email: '',
       spouseOfAnotherEmployee: '',
       idFormat: '',
-    }));
-  };
-  const createStaff = () => {
-    const snackbarId = enqueueSnackbar({
-      message: action === 'add' ? 'Creating Staff' : 'Updating Staff',
-      variant: 'info',
     });
-    HRServices.createStaff(newStaff, action)
-      .then((res) => {
-        console.log(res);
-        handleClose();
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-        setNewStaff({
-          _id: '',
-          name: '',
-          dob: moment(),
-          doj: moment(),
-          designation: {
-            _id: '',
-            name: '',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          department: {
-            _id: '',
-            name: '',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          phone: '',
-          email: '',
-          spouseOfAnotherEmployee: '',
-          idFormat: '',
-        });
+  };
+  const handleClose = () => {
+    setShowStaffFormDialog(false);
+    resetStaff();
+  };
+
+  useEffect(() => {
+    loader.onLoad();
+    Promise.all([
+      HRServices.getDepartment(),
+      HRServices.getDesignations(),
+      HRServices.getStaffs(),
+    ])
+      .then(([departmentRes, positionRes, staffsRes]) => {
+        setDepartment(departmentRes.data);
+        setPosition(positionRes.data);
+        console.log(staffsRes);
+        setStaffs(staffsRes.data);
       })
       .catch((err) => {
         console.log(err);
-        // if (err.error === "Duplicate entry") {
-        //   setGroupExists(true);
-        //   setActiveStep(0);
-        // }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
-  useEffect(() => {
-    HRServices.getDepartment()
-    .then((res) => {
-      setDepartment(res.data);
-    })
-    .catch((res) => {
-      console.log(res);
-    });
-    HRServices.getDesignations()
-    .then((res) => {
-      setPosition(res.data);
-    })
-    .catch((res) => {
-      console.log(res);
-    });
-    setLoadCount((count) => count+1);
-    HRServices.getStaffs()
-      .then((res) => {
-        setLoadCount((count) => count-1);
-        console.log(res);
-        setStaffs(res.data);
       })
-      .catch((res) => {
-        setLoadCount((count) => count-1);
-        console.log(res);
+      .finally(() => {
+        loader.afterLoad();
       });
   }, []);
-  const removeStaff = (id: string) => {
-    console.log('hey', id);
-    const snackbarId = enqueueSnackbar({
-      message: 'Removing staff',
-      variant: 'info',
-    });
-    HRServices.markAsRemove(id)
-      .then((res) => {
-        console.log('Response', res);
-        if (staffs) {
-          const newDepartment = staffs.filter((staffs) => {
-            return staffs._id !== id;
-          });
-          setStaffs(newDepartment);
-        }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
+
   const columns = [
     {
       field: '_manage',
@@ -205,10 +86,9 @@ const HRManagePage = () => {
               component: Link,
               icon: EditIcon,
               onClick: () => {
-                setOpen(true);
+                setShowStaffFormDialog(true);
                 setAction('edit');
-                seteditStaff(props.row.name);
-                setNewStaff(() => ({
+                setStaffFormState(() => ({
                   _id: props.row._id,
                   name: props.row.name,
                   dob: props.row.dob,
@@ -228,7 +108,32 @@ const HRManagePage = () => {
               component: Link,
               icon: DeleteIcon,
               onClick: () => {
-                removeStaff(props.row._id);
+                const snackbarId = enqueueSnackbar({
+                  message: 'Removing staff',
+                  variant: 'info',
+                });
+                HRServices.markAsRemove(props.row._id)
+                  .then((res) => {
+                    if (staffs) {
+                      const newDepartment = staffs.filter((staffs) => {
+                        return staffs._id !== props.row._id;
+                      });
+                      setStaffs(newDepartment);
+                    }
+                    closeSnackbar(snackbarId);
+                    enqueueSnackbar({
+                      message: res.message,
+                      variant: 'success',
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    closeSnackbar(snackbarId);
+                    enqueueSnackbar({
+                      message: err.message,
+                      variant: 'error',
+                    });
+                  });
               },
             },
           ]}
@@ -251,13 +156,13 @@ const HRManagePage = () => {
     { field: 'idFormat', headerName: 'ID Format', width: 130 },
   ];
   return (
-    <CommonPageLayout title='Manage Staff' loadCount={loadCount}>
+    <CommonPageLayout title='Manage Staff'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
         onClick={() => {
-          handleClickOpen();
+          setShowStaffFormDialog(true);
           setAction('add');
         }}
       >
@@ -265,83 +170,99 @@ const HRManagePage = () => {
       </Button>
       <br/><br/>
       <Dialog
-        open={open}
+        open={showStaffFormDialog}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: '500px',
-          },
-        }}
+        PaperProps={{ style: { width: '500px' } }}
       >
         <DialogTitle>
-          {action === 'add' ? 'Add Staff' : `Edit Satff: ${editStaff} `}
+          {action === 'add' ? 'Add Staff' : `Edit Satff: ${staffFormState.name} `}
         </DialogTitle>
-        <DialogContent>
-          <Container>
-            <Grid container spacing={2}>
-              <Grid item md={12}>
-                {' '}
-                <TextField
-                  label="Name"
-                  value={newStaff.name}
-                  onChange={(e) => {
-                    setNewStaff((newStaff) => ({
-                      ...newStaff,
-                      name: e.target.value,
-                    }));
-                  }}
-                  fullWidth
-                  required
-                />
+        <form
+          onSubmit={() => {
+            const snackbarId = enqueueSnackbar({
+              message: action === 'add' ? 'Creating Staff' : 'Updating Staff',
+              variant: 'info',
+            });
+            HRServices.createStaff(staffFormState, action)
+            .then((res) => {
+              console.log(res);
+              handleClose();
+              closeSnackbar(snackbarId);
+              enqueueSnackbar({
+                message: res.message,
+                variant: 'success',
+              });
+              resetStaff();
+            })
+            .catch((err) => {
+              console.log(err);
+              closeSnackbar(snackbarId);
+              enqueueSnackbar({
+                message: err.message,
+                variant: 'error',
+              });
+            });
+          }}>
+          <DialogContent>
+            <br />
+            <Container>
+              <Grid container spacing={2}>
+                <Grid item md={12}>
+                  <TextField
+                    label="Name"
+                    value={staffFormState.name}
+                    onChange={(e) => {
+                      setStaffFormState((newStaff) => ({
+                        ...newStaff,
+                        name: e.target.value,
+                      }));
+                    }}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Email Id"
+                    value={staffFormState.email}
+                    onChange={(e) => {
+                      setStaffFormState((newStaff) => ({
+                        ...newStaff,
+                        email: e.target.value,
+                      }));
+                    }}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <DepartmentsDropdown
+                    departments={departments}
+                    onSelect={(department) => {
+                      setStaffFormState((newStaff) => ({ ...newStaff, department }));
+                    }}
+                    selectedDepartment={staffFormState.department ?? null}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <DesignationsDropdown
+                    designations={designations}
+                    onSelect={(designation) => {
+                      setStaffFormState((newStaff) => ({ ...newStaff, designation }));
+                    }}
+                    selectedDesignation={staffFormState.department ?? null}
+                  />
+                </Grid>
               </Grid>
-              <Grid item md={12}>
-                {' '}
-                <TextField
-                  label="Email Id"
-                  value={newStaff.email}
-                  onChange={(e) => {
-                    setNewStaff((newStaff) => ({
-                      ...newStaff,
-                      email: e.target.value,
-                    }));
-                  }}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item md={12}>
-                <DepartmentsDropdown
-                  loadCount={loadCount}
-                  onLoad={onLoad}
-                  afterLoad={afterLoad}
-                  departments={departments}
-                  onSelect={(department) => {
-                    setNewStaff((newStaff) => ({ ...newStaff, department }));
-                  }}
-                  selectedDepartment={newStaff.department ?? null}
-                />
-              </Grid>
-              <Grid item md={12}>
-                <DesignationsDropdown
-                  loadCount={loadCount}
-                  onLoad={onLoad}
-                  afterLoad={afterLoad}
-                  designations={designations}
-                  onSelect={(designation) => {
-                    setNewStaff((newStaff) => ({ ...newStaff, designation }));
-                  }}
-                  selectedDesignation={newStaff.department ?? null}
-                />
-              </Grid>
-            </Grid>
-          </Container>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" onClick={createStaff}>
-            {action === 'add' ? 'Add' : 'Edit'}
-          </Button>
-        </DialogActions>
+            </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">
+              {action === 'add' ? 'Add' : 'Edit'}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
       <br />
       <br />

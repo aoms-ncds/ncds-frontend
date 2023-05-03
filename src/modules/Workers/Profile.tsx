@@ -3,25 +3,25 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkerServices from './extras/WorkersServices';
+import { useLoader } from '../../hooks/Loader';
 const Profile = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [WorkerRequests, setWorkerRequests] = useState<WorkersDetails|null>(null);
   const { workersId } = useParams();
-  console.log(workersId);
+
   useEffect(() => {
     if (workersId) {
-      setLoadCount((count) => count+1);
+      loader.onLoad();
       WorkerServices.getWorkerById(workersId).then((res) => {
-        setLoadCount((count) => count-1);
+        loader.afterLoad();
         setWorkerRequests(res.data);
       }).catch((res) => {
-        setLoadCount((count) => count-1);
-        console.log(res);
+        loader.afterLoad();
       });
     }
   }, []);
   return (
-    <CommonPageLayout loadCount={loadCount} title='Worker Profile'>
+    <CommonPageLayout title='Worker Profile'>
       <Container>
         <Grid container>
           <Grid container md={6}>

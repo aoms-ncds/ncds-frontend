@@ -4,14 +4,15 @@ import FileUploader from '../../components/FileUploader';
 import TestServices from './extras/TestServices';
 import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
+import { useLoader } from '../../hooks/Loader';
 
 const index = () => {
-  const [loadCount, setLoadCount] = useState(0);
+  const loader = useLoader();
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showExcelImporter, setShowExcelImporter] = useState(false);
 
   return (
-    <CommonPageLayout title='Tests' loadCount={loadCount}>
+    <CommonPageLayout title='Tests'>
       {/* File uploader starts */}
       <FileUploader
         title='Upload bills'
@@ -37,14 +38,8 @@ const index = () => {
         deleteFile={(fileId: string) => {
           return TestServices.deleteFile(fileId);
         }}
-        onLoad={() => setLoadCount((count) => count+1)}
-        afterLoad={() => setLoadCount((count) => count-1)}
-        // permissions={{
-        //   write: true,
-        //   delete: true,
-        //   rename: true,
-        //   downlao
-        // }}
+        onLoad={loader.onLoad}
+        afterLoad={loader.afterLoad}
       />
       <Button
         variant='contained'
