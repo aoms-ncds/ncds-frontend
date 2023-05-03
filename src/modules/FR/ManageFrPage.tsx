@@ -109,7 +109,7 @@ const ManageFrPage = () => {
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
   ];
   return (
-    <CommonPageLayout title='Manage FR' loadCount={loadCount}>
+    <CommonPageLayout title='Manage FR'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}

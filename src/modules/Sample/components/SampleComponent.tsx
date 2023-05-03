@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SampleComponent = (props) => {
+const SampleComponent = () => {
   return (
     <div>SampleComponent</div>
   );
