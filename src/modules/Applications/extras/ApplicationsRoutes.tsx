@@ -4,6 +4,7 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import APPDashboard from '..';
 import ApplicationManagePages from '../ManagePages';
 import ApplicationManage from '../ApplicationManage';
+import AddNewApplication from '../AddNewApplication';
 
 const apppageRoutes : ModuleRoute = {
   base: '/application',
@@ -30,6 +31,13 @@ const apppageRoutes : ModuleRoute = {
       title: 'Application Manage',
       path: '/manage/:divisionID',
       element: <ApplicationManage />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Add New Application',
+      path: '/add',
+      element: <AddNewApplication />,
       private: true,
       requiredAccessRights: ['string'],
     },

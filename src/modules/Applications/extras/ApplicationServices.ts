@@ -54,7 +54,7 @@ export default {
       timeout: 500,
     }),
   ),
-  create: ( application: Application,
+  createApplication: ( application: Application,
   ) => getStandardResponse<number>(
     dummyRequest({
 
