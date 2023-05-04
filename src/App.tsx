@@ -1,11 +1,14 @@
 import React, { useMemo } from 'react';
 import { ThemeProvider, createTheme, useMediaQuery } from '@mui/material';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import Router from './extras/CommonRouter';
-import { CounterProvider as LoaderProvider } from './hooks/Loader';
+import CommonHelpers from './extras/CommonHelpers';
+import { useLoader } from './hooks/Loader';
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  CommonHelpers.setLoader(useLoader());
+  CommonHelpers.setEnqueueSnackbar(enqueueSnackbar);
 
   const theme = useMemo(
     () =>
@@ -25,9 +28,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <LoaderProvider>
-          <Router />
-        </LoaderProvider>
+        <Router />
       </SnackbarProvider>
     </ThemeProvider>
   );

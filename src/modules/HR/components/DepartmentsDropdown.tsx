@@ -2,12 +2,14 @@ import * as React from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import HRServices from '../extras/HRServices';
+import { enqueueSnackbar } from 'notistack';
+import { useLoader } from '../../../hooks/Loader';
 
 const filter = createFilterOptions<CreatableDepartment>();
 
 interface DepartmentsDropdownProps{
     departments?: Department[];
-    selectedDepartment: Department | CreatableDepartment |null;
+    selectedDepartment: Department | null;
     onSelect: (department: Department) => void;
     textFieldProps?: TextFieldProps;
 }
@@ -15,14 +17,21 @@ interface DepartmentsDropdownProps{
 const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
   const [value, setValue] = React.useState<CreatableDepartment | null>(null);
   const [departments, setDepartments] = React.useState<CreatableDepartment[]|null>(null);
+
   React.useEffect(() => {
-    if (!props.departments) {
-      HRServices.getDepartment().then((res) => {
-        setDepartments(res.data);
-      });
-    } else {
+    if (props.departments) {
       setDepartments(props.departments);
+      return;
     }
+
+    HRServices.getDepartment().then((res) => {
+      setDepartments(res.data);
+    }).catch((error) => {
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      });
+    });
   }, [props.departments]);
 
   return (

@@ -30,5 +30,12 @@ declare global {
   interface Designation extends MongooseDocument {
     name: string;
   }
-  type CreatableDesignation = Creatable<Designation>;
+
+  interface CreatableDesignation extends Creatable<Designation>{
+    inputValue?: string;
+  }
+
+  interface CreatableDesignation extends Creatable<Designation>{
+    inputValue?: string;
+  }
 }

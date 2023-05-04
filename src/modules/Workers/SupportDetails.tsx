@@ -9,6 +9,7 @@ const SupportDetails = () => {
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
     _id: '',
     currentDesignation: {
+      _id: 'sdfk',
       name: '',
       createdAt: moment(),
       updatedAt: moment(),
@@ -60,7 +61,7 @@ const SupportDetails = () => {
                   }));
                 }
               }}
-              renderOption={(props, designation, { selected }) => (
+              renderOption={(props, designation) => (
                 <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                   {designation.name}
                 </Box>

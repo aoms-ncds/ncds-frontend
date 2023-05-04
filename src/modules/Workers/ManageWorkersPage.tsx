@@ -10,7 +10,7 @@ import {
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import { Button, Card, Grid } from '@mui/material';
+import { Avatar, Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -63,6 +63,13 @@ const ManageWorkerPage = () => {
       });
   };
   const columns = [
+    {
+      field: 'image',
+      headerName: '',
+      minWidth: 50,
+      type: 'string',
+      renderCell: (props: any) => (<Avatar />),
+    },
     {
       field: '_manage',
       headerName: 'Action',

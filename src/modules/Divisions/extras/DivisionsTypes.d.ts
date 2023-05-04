@@ -1,16 +1,6 @@
 export { };
 
 declare global {
- interface Department{
-    inputValue?: string;
-    _id?: string;
-    name: string;
-}
- interface Designation{
-    inputValue?: string;
-    _id?: string;
-    name: string;
-}
 interface DivisionProfile{
     divisionName:string;
     _id:string;

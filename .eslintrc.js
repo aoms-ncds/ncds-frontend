@@ -87,7 +87,8 @@ module.exports = {
     'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
     // 'eslint-plugin/filenames': ['error', { 'extensions': ['.js', '.jsx', '.ts', '.tsx']}],
     'max-len': ['error', { 'code': 200 }],
-    'no-redeclare': ['error', { 'builtinGlobals': false }],
+    'no-redeclare': 'error',
+    'no-duplicate-imports': 'error',
     // 'comma-dangle': ['error', 'always',],
   },
 };

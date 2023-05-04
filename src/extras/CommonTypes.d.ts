@@ -15,11 +15,21 @@ declare global {
       icon?: JSX.Element;
     }[];
   }
+  interface LoaderContextType{
+    count: number;
+    onLoad: () => void;
+    afterLoad: () => void;
+}
   interface StandardResponse<T>{
     success?: boolean;
     error?: string;
     message?: string;
     data: T;
+  }
+  interface GetStandardResponseOptions{
+    autoShowLoader?: boolean;
+    autoHandleErrors?: boolean;
+    autoHandleSucces?: boolean;
   }
   interface MongooseDocument{
     _id: string;

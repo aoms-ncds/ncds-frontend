@@ -94,6 +94,7 @@ export default {
         },
         supportDetails: { _id: '',
           currentDesignation: {
+            _id: 'dsf',
             name: 'Co-ordinator',
             createdAt: moment(),
             updatedAt: moment(),

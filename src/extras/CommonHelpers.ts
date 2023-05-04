@@ -1,15 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from 'axios';
+import { EnqueueSnackbar } from 'notistack';
+let loader:LoaderContextType;
+let enqueueSnackbar: EnqueueSnackbar;
+
+export default {
+  setLoader: (_loader: LoaderContextType) => loader = _loader,
+  setEnqueueSnackbar: (_enqueueSnackbar: EnqueueSnackbar) => enqueueSnackbar = _enqueueSnackbar,
+};
 
 export const getStandardResponse = <T>(
   axiosCall: Promise<AxiosResponse<any, any>>,
-  responseFormatter?: (res: AxiosResponse<any, any>) =>StandardResponse<T>,
+  responseFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
+  options?: GetStandardResponseOptions,
 ):Promise<StandardResponse<T>> => new Promise((resolve, reject) => {
+    options && options.autoShowLoader && loader && loader.onLoad();
     axiosCall
-  .then((res) => responseFormatter ? resolve(responseFormatter(res.data)) : resolve(res.data))
+  .then((res) => {
+    options && options.autoShowLoader && loader && loader.afterLoad();
+    const parsedResponse = responseFormatter ? responseFormatter(res.data) : res.data;
+    resolve(parsedResponse);
+    options && options.autoHandleSucces && loader && enqueueSnackbar({
+      variant: 'error',
+      message: parsedResponse.message,
+    });
+  })
   .catch((error) => {
-    console.log({ test: error });
-    reject(error.response && error.response.data ? error.response.data : ({ message: error.message }));
+    options && options.autoShowLoader && loader && loader.afterLoad();
+    const parsedError = error.response && error.response.data ? error.response.data : ({ message: error.message });
+    options && options.autoHandleErrors && loader && enqueueSnackbar({
+      variant: 'error',
+      message: parsedError.message,
+    });
+    reject(parsedError);
   });
   });
 
