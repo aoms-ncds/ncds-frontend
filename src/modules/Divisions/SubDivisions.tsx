@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Button, FormControl, Grid, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import DivisionsServices from './extras/DivisionsServices';
+import { useParams } from 'react-router-dom';
 const SubDivisionsPage = ({
   withCardContainer = [],
 }: {
   withCardContainer?: SubDivision[];
 }) => {
+  const { editID } = useParams();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', subDivisionName: '' }]);
-
   const handleAddSubDivision = () => {
     setSubDivisions([
       ...subDivisions,
@@ -20,6 +23,31 @@ const SubDivisionsPage = ({
   };
   const deleteSubDivision = (index: number) => {
     const newSubDivisions = subDivisions.filter((_, i) => i !== index);
+    const deletedSubdivision=subDivisions.filter((_, i) => i == index);
+    const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
+    if (deletedSubdivisionIds.length > 0) {
+      console.log(deletedSubdivisionIds[0]);
+      if (editID) {
+        DivisionsServices.markAsRemove(deletedSubdivisionIds[0])
+      .then((res) => {
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+      }
+    }
+    enqueueSnackbar({
+      message: 'Deleted Sub Division',
+      variant: 'success',
+    });
     setSubDivisions(newSubDivisions);
   };
   return (
@@ -44,7 +72,7 @@ const SubDivisionsPage = ({
                 </Grid>
                 <Grid item xs={6}>
                   <FormControl variant="outlined" fullWidth><br />
-                    <Button onClick={() => deleteSubDivision(index)}><DeleteIcon /></Button>
+                    <Button onClick={() => deleteSubDivision(index)} style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
                   </FormControl>
                 </Grid>
               </Grid><br />

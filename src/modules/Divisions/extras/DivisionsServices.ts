@@ -156,5 +156,14 @@ export default {
       timeout: 500,
     }),
   ),
+  markAsRemove: ( subdivisionId: string) => getStandardResponse<number>(
+    dummyRequest({
+      data: subdivisionId,
+      // error: null,
+      message: 'deleted',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
 
 };
