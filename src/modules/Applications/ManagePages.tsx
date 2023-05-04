@@ -14,6 +14,7 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
+import moment from 'moment';
 
 const ApplicationManagePages = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -25,6 +26,8 @@ const ApplicationManagePages = () => {
     name: '',
     reason: '',
     status: '',
+    createdAt: moment(),
+    updatedAt: moment(),
   });
 
   useEffect(() => {
@@ -96,7 +99,7 @@ const ApplicationManagePages = () => {
 
 
   return (
-    <CommonPageLayout title='Manage Staff' loadCount={loadCount}>
+    <CommonPageLayout title='Manage Staff'>
       <Button
         variant="contained"
         sx={{ float: 'right' }}

@@ -5,7 +5,6 @@ import APPDashboard from '..';
 import ApplicationsListingPage from '../ApplicationsListingPage';
 import ApplicationApprovalPage from '../ApplicationApprovalPage';
 import ApplicationManagePages from '../ManagePages';
-import ApplicationManage from '../ApplicationManage';
 import AddNewApplication from '../AddNewApplication';
 
 const applicationRoutes : ModuleRoute = {

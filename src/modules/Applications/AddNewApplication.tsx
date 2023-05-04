@@ -5,6 +5,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import ApplicationServices from './extras/ApplicationServices';
+import moment from 'moment';
 
 const AddNewApplication = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -17,6 +18,8 @@ const AddNewApplication = () => {
     name: '',
     reason: '',
     status: '',
+    createdAt: moment(),
+    updatedAt: moment(),
   });
   const snackbarId = enqueueSnackbar({
     message: action === 'add' ? 'Creating Request' : 'Updating Request',
@@ -46,7 +49,7 @@ const AddNewApplication = () => {
       message: action === 'add' ? 'Creating Application' : 'Updating Application',
       variant: 'info',
     });
-    ApplicationServices.createApplication(Request)
+    ApplicationServices.create(Request)
       .then((res) => {
         console.log(res);
         // handleClose();
