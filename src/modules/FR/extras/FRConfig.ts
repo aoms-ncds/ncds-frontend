@@ -1,13 +1,13 @@
 export const categories = [
   {
     name: 'Maintenance Of Priest &  Preachers',
-    subcategory2: [
+    subcategory1: [
       {
         name: 'Support',
-        subcategory3: [
+        subcategory2: [
           {
             name: 'Worker',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the support of (No: of workers) of (Division Name) for the month of (mon, year)',
@@ -16,7 +16,7 @@ export const categories = [
           },
           {
             name: 'Office Assistant',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the support of office assistant Mr/Ms/Mrs (Name) of (Division) for the month of (mon,year)',
@@ -25,7 +25,7 @@ export const categories = [
           },
           {
             name: 'Prayer Group Staff',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the support of Mr/Ms/Mrs (Name) (Prayer group) for the month of (mon,year)',
@@ -34,7 +34,7 @@ export const categories = [
           },
           {
             name: 'Promotional Office Staff ',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Monthly Support of Promotional Office Staff Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -43,7 +43,7 @@ export const categories = [
           },
           {
             name: 'Youth Minister',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Monthly Support of Youth Minister Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -52,7 +52,7 @@ export const categories = [
           },
           {
             name: 'Children Minister',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Monthly Support of Childrens Minister Staff Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -61,7 +61,7 @@ export const categories = [
           },
           {
             name: 'Co-ordinator',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Monthly Support of Co-ordinator Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -70,7 +70,7 @@ export const categories = [
           },
           {
             name: 'Special Support',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Special Support of <DESIGNATION> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
@@ -81,10 +81,10 @@ export const categories = [
       },
       {
         name: 'Allowance',
-        subcategory3: [
+        subcategory2: [
           {
             name: 'Trasfer Allowance',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Newstation Allowance to Mr/Ms/Mrs<name of beneficiary> for the expense of transportation from (from place to place to)',
@@ -93,7 +93,7 @@ export const categories = [
           },
           {
             name: 'New Station Allowance',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Transfer Allowance to Mr/Ms/Mrs <Name of beneficiary>  for the expense of transportation from (from place to place to)',
@@ -105,10 +105,10 @@ export const categories = [
       },
       {
         name: 'Expense',
-        subcategory3: [
+        subcategory2: [
           {
             name: 'Vehicle Running Exps.',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the Expense for vehicle repair and maintenance charges (Vehicles reg: no:)',
@@ -117,7 +117,7 @@ export const categories = [
           },
           {
             name: 'Vehicle Repairs',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense for <Expense Name> for Mr.(Name Of Worker)',
@@ -126,7 +126,7 @@ export const categories = [
           },
           {
             name: 'TA/DA for Mission Trip',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense for <Expense Name> for Mr.(Name Of Worker)',
@@ -135,7 +135,7 @@ export const categories = [
           },
           {
             name: 'TA/DA for Field Visit',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense for <Expense Name> for Mr.(Name Of Worker)',
@@ -144,7 +144,7 @@ export const categories = [
           },
           {
             name: 'TA/DA for Native place',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense for <Expense Name> for Mr.(Name Of Worker)',
@@ -153,7 +153,7 @@ export const categories = [
           },
           {
             name: 'Travelling Expenses ( Train/flight )',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense for <Expense Name> for Mr.(Name Of Worker) in <Train/Flight>',
@@ -165,10 +165,10 @@ export const categories = [
       },
       {
         name: 'Medical Insurance (MUTT)',
-        subcategory3: [
+        subcategory2: [
           {
             name: '',
-            subcategory4: [
+            subcategory3: [
               {
                 name: '',
                 narration: '',
@@ -180,10 +180,10 @@ export const categories = [
       },
       {
         name: 'Welfare Help',
-        subcategory3: [
+        subcategory2: [
           {
             name: 'Widow care',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the special welfare for (name of ceremony) of (benefeciary name) in (division).',
@@ -192,7 +192,7 @@ export const categories = [
           },
           {
             name: 'Ceremonical Services',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: '',
@@ -201,7 +201,7 @@ export const categories = [
           },
           {
             name: 'Motor Bike',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of Motor Bike to Mr. (Name of worker) for the (purpose) at (division).',
@@ -210,7 +210,7 @@ export const categories = [
           },
           {
             name: 'Fan',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of ceiling fan to Mr. (Name of worker) who does not have ceiling fan in his residence',
@@ -219,7 +219,7 @@ export const categories = [
           },
           {
             name: 'Bicycle',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of Bicycle to Mr. (Name of worker) for the (purpose) at (division).',
@@ -228,7 +228,7 @@ export const categories = [
           },
           {
             name: 'Four Wheeler',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of (name of four wheeler) to Mr. (Name of worker) for the (purpose) at (division).',
@@ -237,7 +237,7 @@ export const categories = [
           },
           {
             name: 'Winter Clothes',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of purchasing (Name of winter cloth) for (benefeciary name/no: of group), (division), (@price of one).',
@@ -246,7 +246,7 @@ export const categories = [
           },
           {
             name: 'UPS/Inverter',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of 1 UPS/Inverter for (purpose) in (division)',
@@ -255,7 +255,7 @@ export const categories = [
           },
           {
             name: 'Computer or Laptop',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase 1 computer/laptop for (purpose) in (division)',
@@ -264,7 +264,7 @@ export const categories = [
           },
           {
             name: 'Mobile or Tablet',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase of a new (Mobile/tablet) for Mr/Mrs/Ms (name)',
@@ -273,7 +273,7 @@ export const categories = [
           },
           {
             name: 'Medical Help',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the medical help of (Benefeciary name) in (division).',
@@ -282,7 +282,7 @@ export const categories = [
           },
           {
             name: 'Electrical/ Electronic Item',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the purchase  (item name) for (purpose) in (division)',
@@ -298,13 +298,13 @@ export const categories = [
   },
   {
     name: 'Establishment Expenses',
-    subcategory2: [
+    subcategory1: [
       {
         name: 'Staff Expenses',
-        subcategory3: [
+        subcategory2: [
           {
             name: 'Head Office Staff',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -313,7 +313,7 @@ export const categories = [
           },
           {
             name: 'Salary & Other Allowances',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -322,7 +322,7 @@ export const categories = [
           },
           {
             name: 'Leave Encashment',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -331,7 +331,7 @@ export const categories = [
           },
           {
             name: 'Employee PF',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -340,7 +340,7 @@ export const categories = [
           },
           {
             name: 'Staff Welfare',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -349,7 +349,7 @@ export const categories = [
           },
           {
             name: 'Mission Trip Expenses',
-            subcategory4: [
+            subcategory3: [
               {
                 name: 'All items',
                 narration: 'Towards the expense of <STAFF EXPENSE NAME> for the month of <Month,Year>',
@@ -362,3 +362,6 @@ export const categories = [
     ],
   },
 ];
+
+export const purposes:FRPurpose[] = ['Worker', 'Subdivision', 'Division', 'Coordinator', 'Others'];
+export const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

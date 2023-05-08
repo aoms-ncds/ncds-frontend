@@ -9,7 +9,7 @@ export default {
     dummyRequest<number>({
       data: 5,
       // error: null,
-      message: 'Network Error',
+      message: 'Successfully fetched division count',
       result: 'success',
       timeout: 500,
     }),

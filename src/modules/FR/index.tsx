@@ -29,7 +29,7 @@ const frDashboard = () => {
             primaryText='Manage'
             secondaryText='Finance Request'
             color='#0dcaf0'
-            targetRoute="/fr/manage_FR"
+            targetRoute="/fr/manage"
           />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
@@ -37,7 +37,7 @@ const frDashboard = () => {
             primaryText='Closed'
             secondaryText='Finance Request'
             color='#ffc107'
-            targetRoute="fr/closed_FR"
+            targetRoute="/fr/closed"
           />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>

@@ -12,23 +12,18 @@ export default {
 export const getStandardResponse = <T>(
   axiosCall: Promise<AxiosResponse<any, any>>,
   responseFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
-  options?: GetStandardResponseOptions,
 ):Promise<StandardResponse<T>> => new Promise((resolve, reject) => {
-    options && options.autoShowLoader && loader && loader.onLoad();
+    loader && loader.onLoad();
     axiosCall
   .then((res) => {
-    options && options.autoShowLoader && loader && loader.afterLoad();
+    loader && loader.afterLoad();
     const parsedResponse = responseFormatter ? responseFormatter(res.data) : res.data;
     resolve(parsedResponse);
-    options && options.autoHandleSucces && loader && enqueueSnackbar({
-      variant: 'error',
-      message: parsedResponse.message,
-    });
   })
   .catch((error) => {
-    options && options.autoShowLoader && loader && loader.afterLoad();
+    loader && loader.afterLoad();
     const parsedError = error.response && error.response.data ? error.response.data : ({ message: error.message });
-    options && options.autoHandleErrors && loader && enqueueSnackbar({
+    loader && enqueueSnackbar({
       variant: 'error',
       message: parsedError.message,
     });

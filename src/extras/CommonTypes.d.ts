@@ -26,11 +26,6 @@ declare global {
     message?: string;
     data: T;
   }
-  interface GetStandardResponseOptions{
-    autoShowLoader?: boolean;
-    autoHandleErrors?: boolean;
-    autoHandleSucces?: boolean;
-  }
   interface MongooseDocument{
     _id: string;
     createdAt: Moment;
@@ -55,5 +50,17 @@ declare global {
     loaded: number;
     total: number;
     percentage: number;
+  }
+
+  interface DateRange{
+    startDate: Moment;
+    endDate: Moment;
+  }
+
+  interface FormComponentProps<T>{
+    value: T;
+    onChange: (newState: T) => void;
+    action: 'view'|'add'|'edit';
+    onSubmit: (data: T) => Promise<void>;
   }
 }

@@ -32,6 +32,7 @@ const ManageFrPage = () => {
     console.log(res);
   });
   }, []);
+
   const columns = [
     {
       field: '_manage',
@@ -49,7 +50,7 @@ const ManageFrPage = () => {
               id: 'View',
               text: 'View and Manage',
               component: Link,
-              to: '/fr/view_FR/' + props.row._id,
+              to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
             {
@@ -84,7 +85,7 @@ const ManageFrPage = () => {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: '/edit/:frID' + props.row._id,
+              to: `/edit/${props.row._id}/edit`,
               icon: EditIcon,
             },
             {
