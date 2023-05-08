@@ -1,10 +1,9 @@
 import React from 'react';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import FRDashboard from '..';
-import ApplyNewFR from '../ApplyNewFR';
+import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
-import ViewFR from '../ViewFR';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -21,7 +20,7 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Manage FR',
-      path: '/manage_FR',
+      path: '/manage',
       element: <ManageFRPage />,
       private: true,
       requiredAccessRights: ['string'],
@@ -30,14 +29,14 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'Apply New FR',
       path: '/apply',
-      element: <ApplyNewFR />,
+      element: <FRFormPage action='add' />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
       title: 'Closed FR',
-      path: '/closed_FR',
+      path: '/closed',
       element: <ClosedFR />,
       private: true,
       requiredAccessRights: ['string'],
@@ -45,16 +44,16 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'View FR',
-      path: '/view_FR/:frID',
-      element: <ViewFR />,
+      path: '/:frID/view',
+      element: <FRFormPage action='view' />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
       title: 'edit FR',
-      path: '/edit/:frID',
-      element: <ApplyNewFR />,
+      path: '/:frID/edit',
+      element: <FRFormPage action='edit'/>,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,

@@ -5,11 +5,17 @@ import TestServices from './extras/TestServices';
 import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
 import { useLoader } from '../../hooks/Loader';
+import DateFilter from '../../components/DateFilter';
+import moment from 'moment';
 
 const index = () => {
   const loader = useLoader();
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showExcelImporter, setShowExcelImporter] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment(),
+    endDate: moment(),
+  });
 
   return (
     <CommonPageLayout title='Tests'>
@@ -68,6 +74,18 @@ const index = () => {
         Show Excel Importer
       </Button>
       {/* Excel importer ends.. */}
+      <br /><br />
+      {/* DateFilter starts  */}
+      <DateFilter
+        dateRage={dateRange}
+        onChange={setDateRange}
+        rangeTypes={[
+          'custom',
+          'days',
+          'weeks',
+        ]}
+      />
+      {/* DateFilter ends..  */}
     </CommonPageLayout>
   );
 };

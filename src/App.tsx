@@ -4,6 +4,8 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import Router from './extras/CommonRouter';
 import CommonHelpers from './extras/CommonHelpers';
 import { useLoader } from './hooks/Loader';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -28,7 +30,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <Router />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <Router />
+        </LocalizationProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

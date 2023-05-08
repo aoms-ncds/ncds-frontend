@@ -40,10 +40,10 @@ const FRParticularList = () => {
                   <DeleteIcon />
                 </TableCell>
                 <TableCell align="center">{item._id}</TableCell>
-                <TableCell align="center">{item.FRnarration}</TableCell>
-                <TableCell align="center">{item.FRquantity}</TableCell>
-                <TableCell align="center">{item.FRmonth}</TableCell>
-                <TableCell align="center">{item.FRrequestedAmount}</TableCell>
+                <TableCell align="center">{item.narration}</TableCell>
+                <TableCell align="center">{item.quantity}</TableCell>
+                <TableCell align="center">{item.month}</TableCell>
+                <TableCell align="center">{item.requestedAmount}</TableCell>
               </TableRow>
             ))}
           </TableBody>

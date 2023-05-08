@@ -2,14 +2,13 @@ import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 
 export default {
-  getCount: (options?: GetStandardResponseOptions) => getStandardResponse<number>(
+  getCount: () => getStandardResponse<number>(
     dummyRequest({
       data: 5,
       message: 'Network Error',
       result: 'success',
       timeout: 500,
     }),
-    null, options,
   ),
   getDepartment: () => getStandardResponse<[]>(
     dummyRequest({

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-import { categories } from './FRConfig';
+import { categories, purposes } from './FRConfig';
 export default {
   getCount: () => {
     return getStandardResponse<number>(
@@ -63,84 +63,71 @@ export default {
       timeout: 500,
     }),
   ),
-  getRequisition: () => getStandardResponse<Requisition[]>(
-    dummyRequest<Requisition[]>({
-      data: [{
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getById: (fRId: string) => getStandardResponse<FR>(
+    dummyRequest<FR>({
+      data: {
         _id: '1',
-        RequisitionName: 'Division',
+        FRno: '1234',
+        date: moment(),
+        purpose: 'Worker',
+        sanctionedAmount: 43,
+        purposeWorker: {
+          _id: 'efdsdsf',
+          workerCode: 'string',
+          firstName: 'string',
+          secondName: 'string',
+          missionaryOrNonMissionary: 'string',
+          dob: moment(),
+          gender: 'string',
+          age: 'string',
+          maritalStatus: 'string',
+          highestQualification: 'string',
+          motherToungue: 'string',
+          communicationLanguage: 'string',
+          languagesKnown: 'string',
+          emailId: 'string',
+          mobileNumber: 'string',
+          alternativeMobileNumber: 'string',
+          PANnumber: 'string',
+          aadhaarNumber: 'string',
+          voterId: 'string',
+          licenseNumber: 'string',
+          permanentAddress: 'string',
+          permanentAddressCity: 'string',
+          permanentAddressDistrict: 'string',
+          permanentAddressState: 'string',
+          permanentAddressCountry: 'string',
+          permanentAddressPincode: 'string',
+          currentAddress: 'string',
+          currentAddressCity: 'string',
+          currentAddressDistrict: 'string',
+          currentAddressState: 'string',
+          currentAddressCountry: 'string',
+          currentAddressPincode: 'string',
+          spouseOfAnotherStaff: 'string',
+        },
+        createdAt: moment(),
+        updatedAt: moment(),
       },
-      {
-        _id: '2',
-        RequisitionName: 'Worker',
-      },
-      {
-        _id: '3',
-        RequisitionName: 'Coordinator',
-      },
-      {
-        _id: '4',
-        RequisitionName: 'Subdivision',
-      },
-      {
-        _id: '4',
-        RequisitionName: 'Others',
-      },
-
-      ],
       // error: null,
       message: 'fetched data',
       result: 'success',
       timeout: 500,
+    }),
+  ),
+  getPurposes: () => getStandardResponse<FRPurpose[]>(
+    dummyRequest<FRPurpose[]>({
+      data: purposes,
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 0,
     }),
   ),
   getMainCategory: () => getStandardResponse<MainCategory[]>(
     dummyRequest<MainCategory[]>({
       data: categories,
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getMonth: () => getStandardResponse<Month[]>(
-    dummyRequest<Month[]>({
-      data: [{
-        monthName: 'January',
-      },
-      {
-        monthName: 'February',
-      },
-      {
-        monthName: 'March',
-      },
-      {
-        monthName: 'April',
-      },
-      {
-        monthName: 'May',
-      },
-      {
-        monthName: 'June',
-      },
-      {
-        monthName: 'July',
-      },
-      {
-        monthName: 'August',
-      },
-      {
-        monthName: 'September',
-      },
-      {
-        monthName: 'October',
-      },
-      {
-        monthName: 'November',
-      },
-      {
-        monthName: 'December',
-      },
-      ],
       // error: null,
       message: 'fetched data',
       result: 'success',
@@ -161,25 +148,25 @@ export default {
     dummyRequest<Particulars[]>({
       data: [{
         _id: '1',
-        FRmainCategory: 'main',
-        FRsubCategory1: 'sub',
-        FRsubCategory2: 'sub2',
-        FRsubCategory3: 'sub3',
-        FRquantity: '12',
-        FRmonth: 'January',
-        FRrequestedAmount: 300,
-        FRnarration: 'paticularss',
+        mainCategory: 'main',
+        subCategory1: 'sub',
+        subCategory2: 'sub2',
+        subCategory3: 'sub3',
+        quantity: '12',
+        month: 'January',
+        requestedAmount: 300,
+        narration: 'paticularss',
       },
       {
         _id: '2',
-        FRmainCategory: 'main',
-        FRsubCategory1: 'sub',
-        FRsubCategory2: 'sub2',
-        FRsubCategory3: 'sub3',
-        FRquantity: '12',
-        FRmonth: 'January',
-        FRrequestedAmount: 300,
-        FRnarration: 'paticularss',
+        mainCategory: 'main',
+        subCategory1: 'sub',
+        subCategory2: 'sub2',
+        subCategory3: 'sub3',
+        quantity: '12',
+        month: 'January',
+        requestedAmount: 300,
+        narration: 'paticularss',
       },
       ],
       // error: null,
