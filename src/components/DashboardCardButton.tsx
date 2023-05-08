@@ -46,7 +46,7 @@ const DashboardCardButton = (props: {
         }}>
         <CardContent>
           <Typography variant='h5'>{props.primaryText}</Typography>
-          <Typography variant='h6'>{props.secondaryText}</Typography>
+          <Typography variant='h6'>{props.secondaryText ?? <>&nbsp;</>}</Typography>
         </CardContent>
         <CardActions>
           {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}
