@@ -4,14 +4,45 @@ import { DataGrid } from '@mui/x-data-grid';
 import {
   Edit as EditIcon,
   Preview as PreviewIcon,
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
 import DivisionsServices from '../extras/DivisionsServices';
 import DropdownButton from '../../../components/DropDownButton';
 import { useLoader } from '../../../hooks/Loader';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 
 const DivisionsList = () => {
   const loader = useLoader();
   const [divisions, setDivisions] = useState<DivisionProfile[] | null>(null);
+  const removeDivisions = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing Division',
+      variant: 'info',
+    });
+    DivisionsServices.divisionMarkAsRemove(id)
+      .then((res) => {
+        console.log('process delete', res);
+        if (divisions) {
+          const newDivisions = divisions.filter((divisions) => {
+            return divisions._id !== id;
+          });
+          setDivisions(newDivisions);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   const columns = [
     {
       field: '_manage',
@@ -38,6 +69,15 @@ const DivisionsList = () => {
               component: Link,
               to: `/divisions/edit/${props.row._id}`,
               icon: EditIcon,
+            },
+            {
+              id: 'delete',
+              text: 'Delete',
+              component: Link,
+              icon: DeleteIcon,
+              onClick: () => {
+                removeDivisions(props.row._id);
+              },
             },
           ]}
         />

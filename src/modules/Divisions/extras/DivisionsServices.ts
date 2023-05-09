@@ -165,5 +165,14 @@ export default {
       timeout: 500,
     }),
   ),
+  divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(
+    dummyRequest({
+      data: divisionId,
+      // error: null,
+      message: 'Division Deleted',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
 
 };
