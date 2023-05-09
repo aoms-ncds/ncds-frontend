@@ -9,15 +9,25 @@ import {
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import { Button, Card, Grid } from '@mui/material';
+import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import { useLoader } from '../../hooks/Loader';
+import SendIcon from '@mui/icons-material/Send';
+import MessageItem from '../../components/MessageItem';
+import moment from 'moment';
+import { enqueueSnackbar } from 'notistack';
 
 const ManageFrPage = () => {
   const loader = useLoader();
   const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);
+
+  const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [remark, setRemark] = useState<CreatableRemark>({
+    remark: '',
+  });
 
   useEffect(() => {
     loader.onLoad();
@@ -64,7 +74,18 @@ const ManageFrPage = () => {
               id: 'remarks',
               text: 'Remarks',
               component: Link,
-              to: '/fr/view_FR/' + props.row._id,
+              // to: '/fr/view_FR/' + props.row._id,
+              onClick: () => {
+                toggleOpenRemarks(true);
+                FRServices.getAllRemarksById(props.row._id)
+                .then((res) => setRemarks(res.data))
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                });
+              },
               icon: EditIcon,
             },
             {
@@ -109,6 +130,8 @@ const ManageFrPage = () => {
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
   ];
+
+
   return (
     <CommonPageLayout title='Manage FR'>
       <Button
@@ -128,6 +151,57 @@ const ManageFrPage = () => {
           <DataGrid rows={FRRequests??[]} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null}/>
         </Card>
       </Grid>
+      <Dialog open={openRemarks} fullWidth maxWidth="md">
+        <DialogTitle>
+           Remarks
+        </DialogTitle>
+        <DialogContent>
+          {remarks.map((remark) => (<MessageItem key={remark._id} sender={remark.createdBy.firstName + ' ' + remark.createdBy.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />))}
+
+        </DialogContent>
+        <DialogActions>
+
+          <TextField
+            id="remarkTextfield"
+            placeholder="Remarks"
+            multiline
+            value={remark?.remark}
+            onChange={(e) => setRemark((remark) => ({
+              ...remark,
+              remark: e.target.value,
+            }))}
+            InputProps={{
+              endAdornment: <InputAdornment position='end'>
+                <IconButton onClick={() => {
+                  remark.remark?
+                    FRServices.addRemarks(remark)
+                    .then((res) => {
+                      setRemarks((remarks) => [...remarks, res.data]);
+                      setRemark((remark) => ({
+                        ...remark,
+                        remark: '',
+                      }));
+                    })
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                }):'';
+                }}><SendIcon /></IconButton>
+              </InputAdornment>,
+            }}
+            fullWidth
+          />
+          <Button
+            variant="contained"
+            onClick={() => toggleOpenRemarks(false)}
+            // sx={{ ml: 'auto' }}
+          >
+            close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };
