@@ -13,11 +13,11 @@ const FRFormPage = (props: FRFormPagerops) => {
   const { frID } = useParams();
   const [requisition, setRequisition] = useState<CreatableFR>({});
   useEffect(() => {
-    if (!frID) {
+    if ( props.action !== 'add' && !frID) {
       throw new Error('FR ID Missing in URL');
     }
     if (props.action === 'edit' || props.action === 'view') {
-      FRServices.getById(frID)
+      FRServices.getById(frID as string)
       .then((res) => setRequisition(res.data))
       .catch((error) => {
         enqueueSnackbar({

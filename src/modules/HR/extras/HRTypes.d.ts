@@ -22,17 +22,11 @@ declare global {
   interface Department extends MongooseDocument {
     name: string;
   }
-  interface CreatableDepartment extends Omit<Department, '_id'> {
+  interface CreatableDepartment extends Creatable<Department> {
     inputValue?: string;
-    createdAt?: Moment;
-    updatedAt?: Moment;
   }
   interface Designation extends MongooseDocument {
     name: string;
-  }
-
-  interface CreatableDesignation extends Creatable<Designation>{
-    inputValue?: string;
   }
 
   interface CreatableDesignation extends Creatable<Designation>{

@@ -14,6 +14,7 @@ import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import { useLoader } from '../../hooks/Loader';
+import { enqueueSnackbar } from 'notistack';
 
 const ManageFrPage = () => {
   const loader = useLoader();
@@ -56,8 +57,12 @@ const ManageFrPage = () => {
             {
               id: 'sendbackDivision',
               text: 'Send Back to Division',
-              component: Link,
-              to: '/sendbackDivision' + props.row._id,
+              onClick: () => {
+                enqueueSnackbar({
+                  message: 'Sent back to divison',
+                  variant: 'success',
+                });
+              },
               icon: PreviewIcon,
             },
             {
@@ -85,14 +90,14 @@ const ManageFrPage = () => {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: `/edit/${props.row._id}/edit`,
+              to: `/fr/${props.row._id}/edit`,
               icon: EditIcon,
             },
             {
               id: 'View',
               text: 'View Details ',
               component: Link,
-              to: '/fr/view_FR/' + props.row._id,
+              to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
           ]}
