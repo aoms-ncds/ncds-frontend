@@ -1,50 +1,37 @@
 export { };
 
 declare global {
-interface DivisionProfile{
-    divisionName:string;
-    _id:string;
-    divisionId:string;
-    contactNumber:string;
-    emailId:string;
-    address:string;
-    noofWorkers:number;
-    NoOfSubdivisions:number;
-    NoOfChurches:number;
-    coordinatorName:string;
-    coordinatorContactno:string;
-    coordinatorEmail:string;
-    seniorLeaderName:string;
-    seiorLeaderContactno:string;
-    seiorLeaderEmail:string;
-    juniorLeaderName:string;
-   juniorLeaderContactno:string;
-    juniorLeaderEmail:string;
-
-
-}
+interface IETDivisions {
+    divisionName: string;
+    _id: string;
+    divisionId: string;
+    contactNumber: string;
+    email: string;
+    address: Address;
+    noofWorkers: number;
+    noOfSubdivisions: number;
+    noOfChurches: number;
+    coordinator: Staff;
+    seniorLeader: Staff;
+    juniorLeader: Staff;
+  }
 interface BankDetails{
-  FCRABankname:string;
-  FCRABranchname:string;
-  FCRAAccountNumber:string;
-  FCRAIFSCCode:string;
-  FCRABeneficiary:string;
-  localBankname:string;
-  localBranchname:string;
-  localAccountNumber:string;
-  localIFSCCode:string;
-  localBeneficiary:string;
-
-}
+  bankname:string;
+  branchname:string;
+  accountNumber:string;
+  IFSCCode:string;
+  beneficiary?:string;
+  }
 interface DivisionDetails{
-    divisionProfile?: DivisionProfile;
-    subDivisionDetails?:SubDivision[];
-    bankDetails?: BankDetails;
+  division: IETDivisions;
+  subDivisions: SubDivision[];
+  FCRABankDetails: BankDetails;
+  localBankDetails:BankDetails;
 }
 interface SubDivision {
     _id:string;
-    // division:IETDivisions;
-     subDivisionName:string;
+    division?:IETDivisions;
+    subDivisionName:string;
   }
 
 

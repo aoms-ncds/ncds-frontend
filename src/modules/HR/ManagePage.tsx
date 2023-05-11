@@ -25,20 +25,24 @@ const HRManagePage = () => {
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showStaffFormDialog, setShowStaffFormDialog] = useState(false);
   const [staffFormState, setStaffFormState] = useState<CreatableStaff>({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '',
-    spouseOfAnotherEmployee: '',
-    idFormat: '',
+    formattedId: '',
+    age: 0,
+    gender: 'Female',
   });
 
   const resetStaff = () => {
     setStaffFormState({
-      name: '',
+      firstName: '',
+      lastName: '',
       phone: '',
       email: '',
-      spouseOfAnotherEmployee: '',
-      idFormat: '',
+      formattedId: '',
+      age: 25,
+      gender: 'Female',
     });
   };
   const handleClose = () => {
@@ -90,15 +94,18 @@ const HRManagePage = () => {
                 setAction('edit');
                 setStaffFormState(() => ({
                   _id: props.row._id,
-                  name: props.row.name,
+                  firstName: props.row.firstName,
+                  lastName: props.row.lastName,
                   dob: props.row.dob,
                   doj: props.row.doj,
+                  age: props.row.age,
+                  gender: props.row.gender,
                   department: props.row.department,
                   designation: props.row.designation,
                   email: props.row.email,
                   phone: props.row.phone,
-                  spouseOfAnotherEmployee: props.row.spouseOfAnotherEmployee,
-                  idFormat: props.row.idFormat,
+                  spouse: props.row.spouse,
+                  formattedId: props.row.idFormat,
                 }));
               },
             },
@@ -152,7 +159,7 @@ const HRManagePage = () => {
     ), width: 130 },
     { field: 'phone', headerName: 'Phone Number', width: 130 },
     { field: 'email', headerName: 'Email', width: 130 },
-    { field: 'spouseOfAnotherEmployee', headerName: 'Spouse of another employee', width: 130 },
+    { field: 'spouse', headerName: 'Spouse of another employee', width: 130 },
     { field: 'idFormat', headerName: 'ID Format', width: 130 },
   ];
   return (
@@ -175,7 +182,7 @@ const HRManagePage = () => {
         PaperProps={{ style: { width: '500px' } }}
       >
         <DialogTitle>
-          {action === 'add' ? 'Add Staff' : `Edit Satff: ${staffFormState.name} `}
+          {action === 'add' ? 'Add Staff' : `Edit Satff: ${staffFormState.firstName+' '+staffFormState.lastName} `}
         </DialogTitle>
         <form
           onSubmit={() => {
@@ -210,7 +217,7 @@ const HRManagePage = () => {
                 <Grid item md={12}>
                   <TextField
                     label="Name"
-                    value={staffFormState.name}
+                    value={staffFormState.firstName+' '+staffFormState.lastName}
                     onChange={(e) => {
                       setStaffFormState((newStaff) => ({
                         ...newStaff,

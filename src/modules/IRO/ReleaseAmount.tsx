@@ -6,6 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { useNavigate } from 'react-router-dom';
+import BankDetailsFormComponent from '../Divisions/BankDetails';
 
 const ReleaseAmount = () => {
   const navigate=useNavigate();
@@ -13,16 +14,123 @@ const ReleaseAmount = () => {
     _id: '',
     IROno: '',
     IROdate: moment(),
-    divisionName: '',
-    subdivisionName: '',
+    division: {
+      divisionName: '',
+      _id: '',
+      divisionId: '',
+      contactNumber: '',
+      email: '',
+      address: {
+        buildingName: '',
+        streetAddress: '',
+        city: '',
+        district: '',
+        state: '',
+        country: '',
+        pincode: '',
+      },
+      noofWorkers: 0,
+      noOfSubdivisions: 0,
+      noOfChurches: 0,
+      coordinator: {
+        _id: '',
+        firstName: '',
+        lastName: '',
+        dob: moment(''),
+        doj: moment(''),
+        designation: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        department: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        age: 0,
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+      },
+      seniorLeader: {
+        _id: '',
+        firstName: '',
+        lastName: '',
+        dob: moment(),
+        doj: moment(),
+        designation: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        department: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        age: 0,
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+      },
+      juniorLeader: {
+        _id: '',
+        firstName: '',
+        lastName: '',
+        dob: moment(),
+        doj: moment(),
+        designation: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        department: {
+          _id: '',
+          name: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        age: 0,
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+      },
+    },
+    subDivision: {
+      _id: '',
+      subDivisionName: 'subdivision 1',
+
+    },
     mainCategory: '',
-    requestAmount: '',
+    requestAmount: 0,
     lastUpdateDate: moment(),
     sanction: '',
-    releaseAmount: '',
-    transferredAmount: '',
+    releaseAmount: 0,
+    transferredAmount: 0,
     transferredDate: moment(),
-    transferredBank: '',
+    transferredBank: {
+      bankname: '',
+      branchname: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+
+    },
     modeOfPayment: '',
     transactionNumber: '',
   });
@@ -45,12 +153,12 @@ const ReleaseAmount = () => {
                 <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Release Amount"
-                    value={IROrelease?.releaseAmount}
+                    value={Number(IROrelease?.releaseAmount)}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
-                        releaseAmount: e.target.value,
+                        releaseAmount: Number(e.target.value),
                       }))
                     }
                     fullWidth
@@ -64,12 +172,12 @@ const ReleaseAmount = () => {
                 <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Amount Transferred"
-                    value={IROrelease?.transferredAmount}
+                    value={Number(IROrelease?.transferredAmount)}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
-                        transferredAmount: e.target.value,
+                        transferredAmount: Number(e.target.value),
                       }))
                     }
                     fullWidth
@@ -95,18 +203,19 @@ const ReleaseAmount = () => {
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label="Amount Transferred (Bank)"
+                  <BankDetailsFormComponent
                     value={IROrelease?.transferredBank}
-                    onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    onChange={(newbankDetails: BankDetails) => {
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
-                        transferredBank: e.target.value,
-                      }))
-                    }
-                    fullWidth
+                        transferredBank: newbankDetails,
+                      }));
+                    }}
+                    action={'add'}
+                    title={'Amount Transferred (Bank) Details'}
                   />
+
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>

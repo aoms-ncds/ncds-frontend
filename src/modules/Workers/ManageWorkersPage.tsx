@@ -17,7 +17,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useLoader } from '../../hooks/Loader';
 const ManageWorkerPage = () => {
   const loader = useLoader();
-  const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
+  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[]|null>(null);
 
   useEffect(() => {
     loader.onLoad();
@@ -121,10 +121,10 @@ const ManageWorkerPage = () => {
     { field: 'motherToungue', headerName: 'Mother Toungue', width: 130 },
     { field: 'communicationLanguage', headerName: 'Communication Language', width: 130 },
     { field: 'languagesKnown', headerName: 'Languages Known', width: 130 },
-    { field: 'emailId', headerName: 'Email Id', width: 130 },
-    { field: 'mobileNumber', headerName: 'Mobile Number', width: 130 },
+    { field: 'email', headerName: 'Email Id', width: 130 },
+    { field: 'phone', headerName: 'Mobile Number', width: 130 },
     { field: 'alternativeMobileNumber', headerName: 'Alernative Mobile Number', width: 130 },
-    { field: 'PANnumber', headerName: 'PAN Number', width: 130 },
+    { field: 'PANNo', headerName: 'PAN Number', width: 130 },
     { field: 'aadhaarNumber', headerName: 'Aadhaar Number', width: 130 },
     { field: 'voterId', headerName: 'Voter Id', width: 130 },
     { field: 'licenseNumber', headerName: 'License Number', width: 130 },
@@ -140,7 +140,7 @@ const ManageWorkerPage = () => {
     { field: 'currentAddressState', headerName: 'State', width: 130 },
     { field: 'currentAddressCountry', headerName: 'Country', width: 130 },
     { field: 'currentAddressPincode', headerName: 'Pin Code', width: 130 },
-    { field: 'spouseOfAnotherStaff', headerName: 'Spouse Of Another Staff', width: 130 },
+    { field: 'spouse', headerName: 'Spouse Of Another Staff', width: 130 },
 
   ];
   return (

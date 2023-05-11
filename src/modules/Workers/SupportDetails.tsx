@@ -1,4 +1,4 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Box } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Box, Checkbox } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import WorkerServices from './extras/WorkersServices';
 import { useParams } from 'react-router-dom';
@@ -7,7 +7,6 @@ const SupportDetails = () => {
   const { workersId } = useParams();
   const [Designation, setDesignation] = useState<Designation[] | undefined>();
   const [newWorkerSupportDetails, setWorkerSupportDetails] = useState<SupportDetails>({
-    _id: '',
     currentDesignation: {
       _id: 'sdfk',
       name: '',
@@ -15,9 +14,9 @@ const SupportDetails = () => {
       updatedAt: moment(),
     },
     totalNoYearsInMinistry: 0,
-    typeOfFamily: 'singleMissionary',
-    typeofChurch: 'withChurch',
-    selfSupport: 'yes' });
+    typeOfFamily: 'Single Missionary',
+    typeofChurch: 'With Church',
+    selfSupport: true });
   useEffect(() => {
     console.log(workersId);
     if (workersId) {
@@ -105,14 +104,14 @@ const SupportDetails = () => {
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
-                  typeOfFamily: e.target.value,
+                  typeOfFamily: e.target.value=='s'?'Single Missionary':'Family Missionary',
                 }))
               }
               name="radio-buttons-group"
               row
             >
-              <FormControlLabel value="singleMissionary" control={<Radio />} label="Single Missionary" />
-              <FormControlLabel value="familyMissionary" control={<Radio />} label="Family Missionary" />
+              <FormControlLabel value="s" control={<Radio />} label="Single Missionary" />
+              <FormControlLabel value="f" control={<Radio />} label="Family Missionary" />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -126,36 +125,36 @@ const SupportDetails = () => {
               onChange={(e) =>
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
-                  typeofChurch: e.target.value,
+                  typeofChurch: e.target.value=='WC'?'With Church':'Without Church',
                 }))
               }
               name="radio-buttons-group"
               row
             >
-              <FormControlLabel value="withChurch" control={<Radio />} label="With Church" />
-              <FormControlLabel value="withoutChurch" control={<Radio />} label="Without Church" />
+              <FormControlLabel value="WC" control={<Radio />} label="With Church" />
+              <FormControlLabel value="WOC" control={<Radio />} label="Without Church" />
             </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Self-Support</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              // defaultValue="yes"
-              value={newWorkerSupportDetails?.selfSupport}
-              onChange={(e) =>
-                setWorkerSupportDetails((newWorkerSupportDetails) => ({
-                  ...newWorkerSupportDetails,
-                  selfSupport: e.target.value,
-                }))
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setWorkerSupportDetails((newWorkerSupportDetails) => ({
+                        ...newWorkerSupportDetails,
+                        selfSupport: true,
+                      }));
+                    }
+                  }}
+                />
               }
-              name="radio-buttons-group"
-              row
-            >
-              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-              <FormControlLabel value="no" control={<Radio />} label="No" />
-            </RadioGroup>
+              label='Self-Support'
+              sx={{ float: 'right' }}
+            />
+
           </FormControl>
         </Grid>
       </Grid>

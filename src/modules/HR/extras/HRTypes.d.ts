@@ -2,16 +2,10 @@ import { Moment } from 'moment';
 
 export {};
 declare global {
-  interface Staff extends MongooseDocument {
-    name: string;
-    dob: Moment;
-    doj: Moment;
+  interface Staff extends MongooseDocument, User {
     designation: Designation;
     department: Department;
-    phone: string;
-    email: string;
-    spouseOfAnotherEmployee: string;
-    idFormat: string;
+    formattedId: string;
   }
   interface CreatableStaff extends Creatable<Staff>{
     dob?: Moment;

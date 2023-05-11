@@ -46,61 +46,34 @@ declare global {
     _id: string;
     coordinatorName: string | undefined;
   }
-  interface IETWorker {
+  interface IETWorker extends User {
     _id: string;
     workerCode: string;
-    firstName: string;
-    secondName: string;
     missionaryOrNonMissionary: string;
-    dob: Moment;
-    gender: string;
-    age: string;
-    maritalStatus: string;
     highestQualification: string;
     motherToungue: string;
     communicationLanguage: string;
-    languagesKnown: string;
-    emailId: string;
-    mobileNumber: string;
+    languagesKnown: LanguagesList;
     alternativeMobileNumber: string;
-    PANnumber: string;
-    aadhaarNumber: string;
-    voterId: string;
+    PANNo: string;
+    aadhaar: {
+      aadhaarNo: string;
+      aadhaarFile: FileDetails;
+    };
+    voterId: {
+      voterIdNo: string;
+      voterIdFile: FileDetails;
+    };
     licenseNumber: string;
-    permanentAddress: string;
-    permanentAddressCity: string;
-    permanentAddressDistrict: string;
-    permanentAddressState: string;
-    permanentAddressCountry: string;
-    permanentAddressPincode: string;
-    currentAddress: string;
-    currentAddressCity: string;
-    currentAddressDistrict: string;
-    currentAddressState: string;
-    currentAddressCountry: string;
-    currentAddressPincode: string;
-    spouseOfAnotherStaff: string;
+    permanentAddress: Address;
+    currentAddress: Address;
   }
-  interface IETDivisions {
-    divisionName: string;
+  interface FileDetails {
     _id: string;
-    divisionId: string;
-    contactNumber: string;
-    emailId: string;
-    address: string;
-    noofWorkers: number;
-    NoOfSubdivisions: number;
-    NoOfChurches: number;
-    coordinatorName: string;
-    coordinatorContactno: string;
-    coordinatorEmail: string;
-    seniorLeaderName: string;
-    seiorLeaderContactno: string;
-    seiorLeaderEmail: string;
-    juniorLeaderName: string;
-    juniorLeaderContactno: string;
-    juniorLeaderEmail: string;
+    fileId: string;
+    file_url: string;
   }
+
   interface Subdivisions {
     _id: string;
     // division:IETDivisions;
@@ -137,8 +110,7 @@ declare global {
 
   interface Remark extends MongooseDocument {
     remark: string;
-    createdBy:User;
-
+    createdBy: User;
   }
   interface CreatableRemark extends Creatable<Remark> {
     createdBy?: User;
