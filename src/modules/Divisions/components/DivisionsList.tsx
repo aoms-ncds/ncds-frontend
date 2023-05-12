@@ -13,7 +13,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 
 const DivisionsList = () => {
   const loader = useLoader();
-  const [divisions, setDivisions] = useState<DivisionProfile[] | null>(null);
+  const [divisions, setDivisions] = useState<IETDivisions[] | null>(null);
   const removeDivisions = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Division',

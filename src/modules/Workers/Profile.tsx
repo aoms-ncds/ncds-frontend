@@ -41,7 +41,7 @@ const Profile = () => {
             <Grid item md={6} xs={12}>
               <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                 <b>Last Name:</b>&nbsp;
-                {!WorkerRequests?.basicDetails?.secondName ? 'No data' : WorkerRequests.basicDetails.secondName}
+                {!WorkerRequests?.basicDetails?.lastName ? 'No data' : WorkerRequests.basicDetails.lastName}
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>
@@ -72,25 +72,25 @@ const Profile = () => {
                 </Typography>
               </Grid>
             )}
-            {WorkerRequests?.basicDetails?.emailId && (
+            {WorkerRequests?.basicDetails?.email && (
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Email Id:</b>&nbsp;
-                  {!WorkerRequests.basicDetails.emailId ? 'No data' : WorkerRequests.basicDetails.emailId}
+                  {!WorkerRequests.basicDetails.email ? 'No data' : WorkerRequests.basicDetails.email}
                 </Typography>
               </Grid>
             )}
-            {WorkerRequests?.basicDetails?.mobileNumber && (
+            {WorkerRequests?.basicDetails?.phone && (
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Phone Num:</b>&nbsp;
-                  {!WorkerRequests.basicDetails.mobileNumber ? 'No data' : WorkerRequests.basicDetails.mobileNumber}
+                  {!WorkerRequests.basicDetails.phone ? 'No data' : WorkerRequests.basicDetails.phone}
                 </Typography>
               </Grid>
             )}
             <br />
             <br />
-            {WorkerRequests?.basicDetails?.currentAddress && (
+            {/* {WorkerRequests?.basicDetails?.currentAddress && (
               <Grid container xs={6}>
                 <Grid item xs={12}>
                   <Divider textAlign="left">
@@ -141,10 +141,10 @@ const Profile = () => {
                   </Typography>
                 </Grid>
               </Grid>
-            )}
+            )} */}
           </Grid>
           <Grid container md={6}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Divider textAlign="center">
                 <Typography variant="h6" sx={{ textDecoration: 'none' }}>
                 Official Details
@@ -191,19 +191,19 @@ const Profile = () => {
                 </Typography>
               </Grid>
             )}
-            {WorkerRequests?.officialDetails?.emailId && (
+            {WorkerRequests?.officialDetails?.email && (
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Email Id:</b>&nbsp;
-                  {!WorkerRequests.officialDetails.emailId ? 'No data' : WorkerRequests.officialDetails.emailId}
+                  {!WorkerRequests.officialDetails.email ? 'No data' : WorkerRequests.officialDetails.email}
                 </Typography>
               </Grid>
             )}
-            {WorkerRequests?.officialDetails?.mobileNumber && (
+            {WorkerRequests?.officialDetails?.phone && (
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Phone Num:</b>&nbsp;
-                  {!WorkerRequests.officialDetails.mobileNumber ? 'No data' : WorkerRequests.officialDetails.mobileNumber}
+                  {!WorkerRequests.officialDetails.phone ? 'No data' : WorkerRequests.officialDetails.phone}
                 </Typography>
               </Grid>
             )}
@@ -260,7 +260,7 @@ const Profile = () => {
                   </Typography>
                 </Grid>
               </Grid>
-            )}
+            )} */}
           </Grid>
           <br />
           <br />

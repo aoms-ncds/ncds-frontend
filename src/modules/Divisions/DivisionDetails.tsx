@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Box, Button, CardContent, Container, Step, StepLabel, Stepper } from '@mui/material';
-import DivisionProfilePage from './DivisionProfile';
+import { Box, Button, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import SubDivisionsPage from './SubDivisions';
-import BankDetailsPage from './BankDetails';
+import BankDetailsFormComponent from './BankDetails';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
 import { useLoader } from '../../hooks/Loader';
+import moment from 'moment';
+import DivisionsFormComponent from './components/DivisionsFormComponent';
 
 const DivisionDetailsPage = () => {
   const loader = useLoader();
@@ -50,7 +51,128 @@ const DivisionDetailsPage = () => {
         });
       });
   };
-  const [divisionDetails, setDivisionDetails] = useState<DivisionDetails>();
+  const [divisionDetails, setDivisionDetails] = useState<DivisionDetails>(
+    {
+      division: {
+        divisionName: '',
+        _id: '',
+        divisionId: '',
+        contactNumber: '',
+        email: '',
+        address: {
+          buildingName: '',
+          streetAddress: '',
+          city: '',
+          district: '',
+          state: '',
+          country: '',
+          pincode: '',
+        },
+        noofWorkers: 0,
+        noOfSubdivisions: 0,
+        noOfChurches: 0,
+        coordinator: {
+          _id: '',
+          firstName: '',
+          lastName: '',
+          dob: moment(''),
+          doj: moment(''),
+          designation: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          department: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          age: 0,
+          gender: 'Female',
+          phone: '',
+          email: '',
+          formattedId: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        seniorLeader: {
+          _id: '',
+          firstName: '',
+          lastName: '',
+          dob: moment(),
+          doj: moment(),
+          designation: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          department: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          age: 0,
+          gender: 'Female',
+          phone: '',
+          email: '',
+          formattedId: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        juniorLeader: {
+          _id: '',
+          firstName: '',
+          lastName: '',
+          dob: moment(),
+          doj: moment(),
+          designation: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          department: {
+            _id: '',
+            name: '',
+            createdAt: moment(),
+            updatedAt: moment(),
+          },
+          age: 0,
+          gender: 'Female',
+          phone: '',
+          email: '',
+          formattedId: '',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+      },
+      subDivisions: [{
+        _id: '',
+        subDivisionName: '',
+      }],
+      FCRABankDetails: {
+        bankname: '',
+        branchname: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+
+      },
+      localBankDetails:
+  {
+    bankname: '',
+    branchname: '',
+    accountNumber: '',
+    IFSCCode: '',
+    beneficiary: '',
+
+  },
+    },
+  );
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
@@ -104,8 +226,8 @@ const DivisionDetailsPage = () => {
                   e.preventDefault();
                   setactiveStep(1);
                 }}
-              ><DivisionProfilePage withCardContainer={divisionDetails?.divisionProfile}/>
-                <Button
+              ><DivisionsFormComponent division={divisionDetails?.division}/>
+                <br/> <Button
                   type="submit"
                   variant="contained"
                   sx={{ float: 'right', padding: '16px 64px' }}
@@ -121,7 +243,7 @@ const DivisionDetailsPage = () => {
                   e.preventDefault();
                   setactiveStep(2);
                 }}
-              ><SubDivisionsPage withCardContainer={divisionDetails?.subDivisionDetails} />
+              ><SubDivisionsPage withCardContainer={divisionDetails?.subDivisions} />
                 <Button
                   type="submit"
                   variant="contained"
@@ -141,26 +263,52 @@ const DivisionDetailsPage = () => {
               </form>
             )}
             {activeStep == 2 && (
-              <form
-                onSubmit={action === 'add' ? AddDivision : EditDivision}
-              ><BankDetailsPage withCardContainer={divisionDetails?.bankDetails}/>
-                {action !== 'view' && (
+              <>
+                <form onSubmit={action === 'add' ? AddDivision : EditDivision} >
+                  <Grid container spacing={12}>
+                    <Grid item xs={12} md={6} lg={6}>
+
+                      <BankDetailsFormComponent
+                        value={divisionDetails?.FCRABankDetails}
+                        onChange={(newbankDetails: BankDetails) => {
+                          setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails }));
+                        }}
+                        action={'add'}
+                        title='FDRA Bank Details'
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={6}>
+
+                      <BankDetailsFormComponent
+                        value={divisionDetails?.localBankDetails}
+                        onChange={(newbankDetails: BankDetails) => {
+                          setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails }));
+                        }}
+                        action={'add'}
+                        title='Local Bank Details'
+                      />
+                    </Grid>
+                  </Grid>
+                  {action !== 'view' && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                    >
+                    Submit
+                    </Button>
+                  )}
                   <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ float: 'right', padding: '16px 64px' }}
-                  >
-Submit
+                    type="button"
+                    onClick={() => {
+                      setactiveStep(1);
+                    } }
+                    variant="outlined"
+                    sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                  >    Go back
                   </Button>
-                )}<Button
-                  type="button"
-                  onClick={() => {
-                    setactiveStep(1);
-                  } }
-                  variant="outlined"
-                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                >    Go back
-                </Button> </form>
+                </form>
+              </>
 
             )}
           </Box>

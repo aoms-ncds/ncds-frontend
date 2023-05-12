@@ -1,106 +1,50 @@
 import { Moment } from 'moment';
-
+import { ExitStatus } from 'typescript';
+import { reasonToDeactivate, status } from '../extras/WorkersConfig';
 export { };
 
 declare global {
     interface WorkersDetails{
-        basicDetails?: BasicDetails;
-        officialDetails?: OfficialDetails;
+        basicDetails: IETWorker;
+        officialDetails: OfficialDetails;
         supportDetails?: SupportDetails;
         supportStructure?: SupportStructure;
     }
-    interface BasicDetails{
-        _id : string;
-        workerCode: string;
-        firstName: string;
-        secondName: string;
-        missionaryOrNonMissionary:string;
-        dob: Moment;
-        gender: string;
-        age: string;
-        maritalStatus: string;
-        highestQualification:string;
-        motherToungue:string;
-        communicationLanguage:string;
-        languagesKnown:string;
-        emailId:string;
-        mobileNumber:string;
-        alternativeMobileNumber:string;
-        PANnumber:string;
-        aadhaarNumber:string;
-        voterId:string;
-        licenseNumber:string;
-        permanentAddress:string;
-        permanentAddressCity:string;
-        permanentAddressDistrict:string;
-        permanentAddressState:string;
-        permanentAddressCountry:string;
-        permanentAddressPincode:string;
-        currentAddress:string;
-        currentAddressCity:string;
-        currentAddressDistrict:string;
-        currentAddressState:string;
-        currentAddressCountry:string;
-        currentAddressPincode:string;
-        spouseOfAnotherStaff:string;
-
-    }
 
     interface OfficialDetails{
-        _id : string;
-        workerCode: string;
-        firstName: string;
-        secondName: string;
-        missionaryOrNonMissionary:string;
-        dob: Moment;
-        gender: string;
-        age: string;
-        maritalStatus: string;
-        highestQualification:string;
-        motherToungue:string;
-        communicationLanguage:string;
-        languagesKnown:string;
-        emailId:string;
-        mobileNumber:string;
-        alternativeMobileNumber:string;
-        PANnumber:string;
-        aadhaarNumber:string;
-        voterId:string;
-        licenseNumber:string;
-        permanentAddress:string;
-        permanentAddressCity:string;
-        permanentAddressDistrict:string;
-        permanentAddressState:string;
-        permanentAddressCountry:string;
-        permanentAddressPincode:string;
-        currentAddress:string;
-        currentAddressCity:string;
-        currentAddressDistrict:string;
-        currentAddressState:string;
-        currentAddressCountry:string;
-        currentAddressPincode:string;
-        spouseOfAnotherStaff:string;
-
+        leftOrg: Moment;
+        noOfYrsInOrg: number; // autoFetch using doj and leftOrg
+        reasonToDeactivate: reasonToDeactivate;
+        remarks: string;
+        subDivision: Subdivisions;
+        status: status;
+        joinedDivOn: Moment;
+        leftDivOn: Moment;
+        residingAddress: Address;
+        noOfChurches: number;
     }
+
+    type TypeOfFamily = 'Single Missionary' | 'Family Missionary'
+    type TypeOfChurch = 'With Church' | 'Without Church'
+
+
     interface SupportDetails{
-        _id : string;
         currentDesignation?: Designation;
         totalNoYearsInMinistry: number;
-        typeOfFamily: string;
-        typeofChurch:string;
-        selfSupport: string;
+        typeOfFamily: TypeOfFamily;
+        typeofChurch:TypeOfChurch;
+        selfSupport: boolean;
     }
     interface SupportStructure{
-        _id : string;
-        basicAllowance: string;
+        basicAllowance: number;
         hraAllowance: number;
-        spouseAllowance: string;
-        positionalAllowance:string;
-        specialAllowance: string;
-        impactDeduction: string;
-        telAllowance: string;
-        pionMissionaryFund: string;
-        MUTDeduction: string;
+        spouseAllowance: number;
+        positionalAllowance:number;
+        specialAllowance: number;
+        impactDeduction: number;
+        telAllowance: number;
+        pionMissionaryFund: number;
+        MUTDeduction: number;
     }
 
 

@@ -7,16 +7,16 @@ declare global {
         _id: string;
         IROno: string;
         IROdate: Moment;
-        divisionName: string;
-        subdivisionName: string;
+        division: IETDivisions;
+        subDivision: SubDivision;
         mainCategory: string;
-        requestAmount: string;
+        requestAmount: number;
         lastUpdateDate: Moment;
         sanction:string;
-        releaseAmount:string;
-        transferredAmount:string;
+        releaseAmount:number;
+        transferredAmount:number;
         transferredDate:Moment;
-        transferredBank:string;
+        transferredBank:BankDetails;
         modeOfPayment:string;
         transactionNumber:string;
     }

@@ -61,6 +61,9 @@ declare global {
     value: T;
     onChange: (newState: T) => void;
     action: 'view'|'add'|'edit';
-    onSubmit: (data: T) => Promise<void>;
+    onSubmit?: (data: T) => Promise<void>;
+    title?: string;
   }
+
+
 }

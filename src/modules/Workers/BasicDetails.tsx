@@ -1,48 +1,66 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkerServices from './extras/WorkersServices';
+import { LanguagesList } from '../../extras/CommonConfig';
 const BasicDetails = () => {
   const { workersId } = useParams();
 
   // const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>();
-  const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>({
+  const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<IETWorker>({
     _id: '',
     workerCode: '',
     firstName: '',
-    secondName: '',
+    lastName: '',
     missionaryOrNonMissionary: 'missionary',
     dob: moment(),
-    gender: 'female',
-    age: '',
-    maritalStatus: 'single',
+    gender: 'Female',
+    age: 0,
+    maritalStatus: 'Unmarried',
     highestQualification: '',
     motherToungue: '',
     communicationLanguage: '',
-    languagesKnown: '',
-    emailId: '',
-    mobileNumber: '',
+    languagesKnown: [],
+    email: '',
+    phone: '',
     alternativeMobileNumber: '',
-    PANnumber: '',
-    aadhaarNumber: '',
-    voterId: '',
+    PANNo: 'string',
+    aadhaar: { aadhaarFile: {
+      _id: '',
+      fileId: '',
+      file_url: '',
+    }, aadhaarNo: '467389' },
+
+    voterId: { voterIdFile: {
+      _id: '',
+      fileId: '',
+      file_url: '',
+    }, voterIdNo: '467389' },
     licenseNumber: '',
-    permanentAddress: '',
-    permanentAddressCity: '',
-    permanentAddressDistrict: '',
-    permanentAddressState: '',
-    permanentAddressCountry: '',
-    permanentAddressPincode: '',
-    currentAddress: '',
-    currentAddressCity: '',
-    currentAddressDistrict: '',
-    currentAddressState: '',
-    currentAddressCountry: '',
-    currentAddressPincode: '',
-    spouseOfAnotherStaff: '' });
+    permanentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    currentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    createdAt: moment(),
+    updatedAt: moment(),
+  });
   useEffect(() => {
     console.log(workersId);
     if (workersId) {
@@ -149,15 +167,15 @@ const BasicDetails = () => {
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  gender: e.target.value,
+                  gender: e.target.value=='F'?'Female':e.target.value=='M'?'Male':'Other',
                 }))
               }
               name="radio-buttons-group"
               row
             >
-              <FormControlLabel value="female" control={<Radio />} label="Female" />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
+              <FormControlLabel value="F" control={<Radio />} label="Female" />
+              <FormControlLabel value="M" control={<Radio />} label="Male" />
+              <FormControlLabel value="O" control={<Radio />} label="Other" />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -165,11 +183,12 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Age"
+              type="number"
               value={newWorkerBasicDetails?.age}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  age: e.target.value,
+                  age: Number(e.target.value) < 0 && Number(e.target.value)>120 ? 0 : Number(e.target.value),
                 }))
               }
               fullWidth
@@ -186,14 +205,14 @@ const BasicDetails = () => {
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  maritalStatus: e.target.value,
+                  maritalStatus: e.target.value=='M'?'Married' : 'Unmarried',
                 }))
               }
               name="radio-buttons-group"
               row
             >
-              <FormControlLabel value="single" control={<Radio />} label="Single" />
-              <FormControlLabel value="married" control={<Radio />} label="Married" />
+              <FormControlLabel value="U" control={<Radio />} label="Unmarried" />
+              <FormControlLabel value="M" control={<Radio />} label="Married" />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -244,28 +263,36 @@ const BasicDetails = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
-              label="Languages Known"
-              value={newWorkerBasicDetails?.languagesKnown}
-              onChange={(e) =>
+            <Autocomplete
+              multiple
+              id="languges"
+              options={LanguagesList}
+              getOptionLabel={(option) => option}
+              onChange={(e, newvalue) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  languagesKnown: e.target.value,
+                  languagesKnown: newvalue,
                 }))
               }
-              fullWidth
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Languages Known"
+                />
+              )}
             />
+
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Email-ID"
-              value={newWorkerBasicDetails?.emailId}
+              value={newWorkerBasicDetails?.email}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  emailId: e.target.value,
+                  email: e.target.value,
                 }))
               }
               fullWidth
@@ -276,11 +303,11 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mobile No"
-              value={newWorkerBasicDetails?.mobileNumber}
+              value={newWorkerBasicDetails?.phone}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  mobileNumber: e.target.value,
+                  phone: e.target.value,
                 }))
               }
               fullWidth
@@ -306,11 +333,11 @@ const BasicDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PAN Number"
-              value={newWorkerBasicDetails?.PANnumber}
+              value={newWorkerBasicDetails?.PANNo}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  PANnumber: e.target.value,
+                  PANNo: e.target.value,
                 }))
               }
               fullWidth
@@ -350,7 +377,7 @@ const BasicDetails = () => {
             />
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        {/* <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Permanent Address"
@@ -529,22 +556,22 @@ const BasicDetails = () => {
               fullWidth
             />
           </FormControl>
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        </Grid> */}
+        {/* <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Spouse of another staff"
-              value={newWorkerBasicDetails?.spouseOfAnotherStaff}
+              value={newWorkerBasicDetails?.spouse}
               onChange={(e) =>
                 setWorkerBasicDetails((newWorkerBasicDetails) => ({
                   ...newWorkerBasicDetails,
-                  spouseOfAnotherStaff: e.target.value,
+                  spouse: e.target.value,
                 }))
               }
               fullWidth
             />
           </FormControl>
-        </Grid>
+        </Grid> */}
       </Grid>
     </form>
   );

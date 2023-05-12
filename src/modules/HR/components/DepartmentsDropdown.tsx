@@ -1,9 +1,9 @@
-import * as React from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import HRServices from '../extras/HRServices';
 import { enqueueSnackbar } from 'notistack';
 import { useLoader } from '../../../hooks/Loader';
+import React, { useEffect, useState } from 'react';
 
 const filter = createFilterOptions<CreatableDepartment>();
 
@@ -15,10 +15,10 @@ interface DepartmentsDropdownProps{
 }
 
 const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
-  const [value, setValue] = React.useState<CreatableDepartment | null>(null);
-  const [departments, setDepartments] = React.useState<CreatableDepartment[]|null>(null);
+  const [value, setValue] = useState<CreatableDepartment | null>(null);
+  const [departments, setDepartments] = useState<CreatableDepartment[]|null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.departments) {
       setDepartments(props.departments);
       return;

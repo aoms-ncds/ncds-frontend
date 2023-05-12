@@ -47,6 +47,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     narration: '',
   });
   const [staff, setStaff] = useState<Staff[]>();
+
   const handleClose = () => {
     setShowAddParticulardialog(false);
   };
@@ -164,7 +165,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         <CardContent>
           <form onSubmit={(e) => {
             e.preventDefault();
-            props.onSubmit(props.value);
+            props.onSubmit?props.onSubmit(props.value):'';
           }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -277,7 +278,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   <Autocomplete
                     value={props.value.purposeCoordinator}
                     options={coordinators ?? []}
-                    getOptionLabel={(coordinator) => coordinator.name}
+                    getOptionLabel={(coordinator) => coordinator.firstName+' '+coordinator.lastName}
                     onChange={(e, selectedCoordinator) => {
                       if (selectedCoordinator && props.action !== 'view') {
                         props.onChange({
@@ -415,10 +416,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     id='Sanctioned As Per'
 
                     options={staff?? []}
-                    getOptionLabel={(staff) => staff.name ?? ''}
+                    getOptionLabel={(staff) => staff.firstName+' '+staff.lastName ?? ''}
                     renderOption={(props, staff, { selected }) => (
                       <Box component='li' sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                        {staff.name}
+                        {staff.firstName+' '+staff.lastName}
                       </Box>
                     )}
                     // onChange={(e, selectedSubCategory2) => {

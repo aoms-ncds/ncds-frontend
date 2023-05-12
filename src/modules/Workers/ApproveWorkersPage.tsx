@@ -8,7 +8,7 @@ import { enqueueSnackbar } from 'notistack';
 import { useLoader } from '../../hooks/Loader';
 const ApproveWorkerPage = () => {
   const loader = useLoader();
-  const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
+  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[]|null>(null);
   const approveWorker = (id: string) => {
     WorkerServices.approveWorker(id)
       .then((res) => {
@@ -68,7 +68,7 @@ const ApproveWorkerPage = () => {
             Approve
       </Button>
     ) },
-    { field: 'mobileNumber', headerName: 'Phone', width: 130 },
+    { field: 'phone', headerName: 'Phone', width: 130 },
     { field: 'division', headerName: 'Division', width: 130 },
 
   ];

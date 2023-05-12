@@ -9,40 +9,57 @@ import WorkerServices from './extras/WorkersServices';
 const OfficialDetails = () => {
   const { workersId } = useParams();
   // const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>();
-  const [newWorkerOfficialDetails, setWorkerOfficialDetails] = useState<OfficialDetails>({
+  const [newWorkerOfficialDetails, setWorkerOfficialDetails] = useState<IETWorker>({
     _id: '',
     workerCode: '',
     firstName: '',
-    secondName: '',
+    lastName: '',
     missionaryOrNonMissionary: 'missionary',
     dob: moment(),
-    gender: 'female',
-    age: '',
-    maritalStatus: 'single',
+    gender: 'Female',
+    age: 0,
+    maritalStatus: 'Unmarried',
     highestQualification: '',
     motherToungue: '',
     communicationLanguage: '',
     languagesKnown: '',
-    emailId: '',
-    mobileNumber: '',
+    email: '',
+    phone: '',
     alternativeMobileNumber: '',
-    PANnumber: '',
-    aadhaarNumber: '',
-    voterId: '',
+    PANNo: 'string',
+    aadhaar: { aadhaarFile: {
+      _id: '',
+      fileId: '',
+      file_url: '',
+    }, aadhaarNo: '467389' },
+
+    voterId: { voterIdFile: {
+      _id: '',
+      fileId: '',
+      file_url: '',
+    }, voterIdNo: '467389' },
     licenseNumber: '',
-    permanentAddress: '',
-    permanentAddressCity: '',
-    permanentAddressDistrict: '',
-    permanentAddressState: '',
-    permanentAddressCountry: '',
-    permanentAddressPincode: '',
-    currentAddress: '',
-    currentAddressCity: '',
-    currentAddressDistrict: '',
-    currentAddressState: '',
-    currentAddressCountry: '',
-    currentAddressPincode: '',
-    spouseOfAnotherStaff: '' });
+    permanentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    currentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    createdAt: moment(),
+    updatedAt: moment(),
+  });
   useEffect(() => {
     console.log(workersId);
     if (workersId) {
@@ -111,11 +128,11 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Last Name"
-              value={newWorkerOfficialDetails?.secondName}
+              value={newWorkerOfficialDetails?.lastName}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  secondName: e.target.value,
+                  lastName: e.target.value,
                 }))
               }
               fullWidth
@@ -149,15 +166,15 @@ const OfficialDetails = () => {
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  gender: e.target.value,
+                  gender: e.target.value=='F'?'Female':e.target.value=='M'?'Male':'Other',
                 }))
               }
               name="radio-buttons-group"
               row
             >
-              <FormControlLabel value="female" control={<Radio />} label="Female" />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
+              <FormControlLabel value="F" control={<Radio />} label="Female" />
+              <FormControlLabel value="M" control={<Radio />} label="Male" />
+              <FormControlLabel value="O" control={<Radio />} label="Other" />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -165,11 +182,13 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Age"
+              type="number"
               value={newWorkerOfficialDetails?.age}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  age: e.target.value,
+                  age: Number(e.target.value) < 0 && Number(e.target.value)>120 ? 0 : Number(e.target.value),
+
                 }))
               }
               fullWidth
@@ -177,25 +196,22 @@ const OfficialDetails = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Marital Status</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              // defaultValue="single"
-              value={newWorkerOfficialDetails?.maritalStatus}
-              onChange={(e) =>
-                setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
-                  ...newWorkerOfficialDetails,
-                  maritalStatus: e.target.value,
-                }))
-              }
-              name="radio-buttons-group"
-              row
-            >
-              <FormControlLabel value="single" control={<Radio />} label="Single" />
-              <FormControlLabel value="married" control={<Radio />} label="Married" />
-            </RadioGroup>
-          </FormControl>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="single"
+            value={newWorkerOfficialDetails?.maritalStatus}
+            onChange={(e) =>
+              setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
+                ...newWorkerOfficialDetails,
+                maritalStatus: e.target.value=='M'?'Married' : 'Unmarried',
+              }))
+            }
+            name="radio-buttons-group"
+            row
+          >
+            <FormControlLabel value="U" control={<Radio />} label="Unmarried" />
+            <FormControlLabel value="M" control={<Radio />} label="Married" />
+          </RadioGroup>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
@@ -261,11 +277,11 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Email-ID"
-              value={newWorkerOfficialDetails?.emailId}
+              value={newWorkerOfficialDetails?.email}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  emailId: e.target.value,
+                  email: e.target.value,
                 }))
               }
               fullWidth
@@ -276,11 +292,11 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mobile No"
-              value={newWorkerOfficialDetails?.mobileNumber}
+              value={newWorkerOfficialDetails?.phone}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  mobileNumber: e.target.value,
+                  phone: e.target.value,
                 }))
               }
               fullWidth
@@ -306,11 +322,11 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="PAN Number"
-              value={newWorkerOfficialDetails?.PANnumber}
+              value={newWorkerOfficialDetails?.PANNo}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  PANnumber: e.target.value,
+                  PANNo: e.target.value,
                 }))
               }
               fullWidth
@@ -350,7 +366,7 @@ const OfficialDetails = () => {
             />
           </FormControl>
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        {/* <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Permanent Address"
@@ -534,17 +550,17 @@ const OfficialDetails = () => {
           <FormControl variant="outlined" fullWidth>
             <TextField
               label="Spouse of another staff"
-              value={newWorkerOfficialDetails?.spouseOfAnotherStaff}
+              value={newWorkerOfficialDetails?.spouse}
               onChange={(e) =>
                 setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                   ...newWorkerOfficialDetails,
-                  spouseOfAnotherStaff: e.target.value,
+                  spouse: e.target.value,
                 }))
               }
               fullWidth
             />
           </FormControl>
-        </Grid>
+        </Grid> */}
       </Grid>
     </form>
   );

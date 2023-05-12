@@ -5,22 +5,22 @@ import WorkerServices from './extras/WorkersServices';
 
 const SupportStructure = () => {
   const { workersId } = useParams();
-  const [newWorkerSupportStructur, setWorkerSupportStructur] = useState<SupportStructure>({
-    _id: '',
-    basicAllowance: '',
+  const [newWorkerSupportStructure, setNewWorkerSupportStructure] = useState<SupportStructure>({
+    basicAllowance: 0,
     hraAllowance: 1,
-    spouseAllowance: '',
-    positionalAllowance: '',
-    specialAllowance: 'yes',
-    impactDeduction: '',
-    telAllowance: '',
-    pionMissionaryFund: '',
-    MUTDeduction: '' });
+    spouseAllowance: 0,
+    positionalAllowance: 0,
+    specialAllowance: 0,
+    impactDeduction: 0,
+    telAllowance: 0,
+    pionMissionaryFund: 0,
+    MUTDeduction: 0,
+  });
   useEffect(() => {
     console.log(workersId);
     if (workersId) {
       WorkerServices.getSupportStructureById(workersId).then((res) => {
-        setWorkerSupportStructur(res.data);
+        setNewWorkerSupportStructure(res.data);
       }).catch((res) => {
         console.log(res);
       });
@@ -32,13 +32,14 @@ const SupportStructure = () => {
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
             <TextField
+              type='number'
               label="BASIC"
-              value={newWorkerSupportStructur?.basicAllowance}
+              value={Number(newWorkerSupportStructure?.basicAllowance)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  basicAllowance: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  basicAllowance: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -47,14 +48,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="HRA"
-              value={newWorkerSupportStructur?.hraAllowance}
+              value={Number(newWorkerSupportStructure?.hraAllowance)}
               // onChange={(e) =>
               //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setWorkerSupportStructur((newWorkerSupportStructur) => ({
-              //     ...newWorkerSupportStructur,
-              //     hraAllowance: e.target.value,
+              //   setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+              //     ...newWorkerSupportStructure,
+              //     hraAllowance: Number(e.target.value),
               //   }))
               // }
               fullWidth
@@ -63,14 +64,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="SPOUSE ALLOWANCE"
-              value={newWorkerSupportStructur?.spouseAllowance}
+              value={Number(newWorkerSupportStructure?.spouseAllowance)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  spouseAllowance: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  spouseAllowance: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -79,14 +80,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="POSITIONAL ALLOWANCE"
-              value={newWorkerSupportStructur?.positionalAllowance}
+              value={Number(newWorkerSupportStructure?.positionalAllowance)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  positionalAllowance: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  positionalAllowance: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -95,14 +96,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="SPECIAL ALLOWANCE"
-              value={newWorkerSupportStructur?.specialAllowance}
+              value={Number(newWorkerSupportStructure?.specialAllowance)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  specialAllowance: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  specialAllowance: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -111,14 +112,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="IMPACT DEDUCTION"
-              value={newWorkerSupportStructur?.impactDeduction}
+              value={Number(newWorkerSupportStructure?.impactDeduction)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  impactDeduction: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  impactDeduction: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -127,14 +128,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="TEL ALLOWANCE"
-              value={newWorkerSupportStructur?.telAllowance}
+              value={Number(newWorkerSupportStructure?.telAllowance)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  telAllowance: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  telAllowance: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -143,14 +144,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="PION Missionary Fund"
-              value={newWorkerSupportStructur?.pionMissionaryFund}
+              value={Number(newWorkerSupportStructure?.pionMissionaryFund)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  pionMissionaryFund: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  pionMissionaryFund: Number(e.target.value),
                 }))
               }
               fullWidth
@@ -159,14 +160,14 @@ const SupportStructure = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
-            <TextField
+            <TextField type='number'
               label="MUT Deduction(Medical Insurance)"
-              value={newWorkerSupportStructur?.MUTDeduction}
+              value={Number(newWorkerSupportStructure?.MUTDeduction)}
               onChange={(e) =>
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                setWorkerSupportStructur((newWorkerSupportStructur) => ({
-                  ...newWorkerSupportStructur,
-                  MUTDeduction: e.target.value,
+                setNewWorkerSupportStructure((newWorkerSupportStructure) => ({
+                  ...newWorkerSupportStructure,
+                  MUTDeduction: Number(e.target.value),
                 }))
               }
               fullWidth
