@@ -134,4 +134,13 @@ declare global {
     requestedAmount: number;
     narration: string;
   }
+
+  interface Remark extends MongooseDocument {
+    remark: string;
+    createdBy:User;
+
+  }
+  interface CreatableRemark extends Creatable<Remark> {
+    createdBy?: User;
+  }
 }
