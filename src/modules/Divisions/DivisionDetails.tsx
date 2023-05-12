@@ -227,7 +227,7 @@ const DivisionDetailsPage = () => {
                   setactiveStep(1);
                 }}
               ><DivisionsFormComponent division={divisionDetails?.division}/>
-                <Button
+                <br/> <Button
                   type="submit"
                   variant="contained"
                   sx={{ float: 'right', padding: '16px 64px' }}

@@ -35,7 +35,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
           <Grid item xs={12} md={12} lg={12}>
             <FormControl variant="outlined" fullWidth>
               <TextField
-                label=" Branch Name"
+                label="Branch Name"
                 value={newBankDetails.branchname }
                 onChange={(e) =>
                   setNewBankDetails((newWorkerBasicDetails) => ({
@@ -93,7 +93,6 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
             </FormControl>
           </Grid>
         </Grid>
-
       </>
     </form>
   );
