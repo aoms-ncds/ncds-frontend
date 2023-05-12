@@ -20,7 +20,7 @@ const HRDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Manage Staff'
-            secondaryText={staffCount?.toString()}
+            secondaryText={staffCount ? staffCount?.toString() : undefined}
             color='#29cc39'
             targetRoute="/hr/manage"
           />
