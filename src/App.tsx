@@ -6,6 +6,9 @@ import CommonHelpers from './extras/CommonHelpers';
 import { useLoader } from './hooks/Loader';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import axios from 'axios';
+
+axios.defaults.baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://iet-apis.pro910.app';
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');

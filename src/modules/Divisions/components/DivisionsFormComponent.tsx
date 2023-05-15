@@ -35,7 +35,6 @@ import { StaffDropdown } from '../../HR/components/StaffDropdown';
 import AddressFormComponent from '../../../components/AddressFormComponent';
 
 
-
 const DivisionsFormComponent = ({
 
   division = {
@@ -237,7 +236,6 @@ const DivisionsFormComponent = ({
   division?: IETDivisions;
 
 }) => {
-
   const [newDivision, setNewDivision] = useState<IETDivisions>(
 
     division || {
@@ -275,7 +273,6 @@ const DivisionsFormComponent = ({
       noOfSubdivisions: 0,
 
       noOfChurches: 0,
-
 
 
       coordinator: {
@@ -441,19 +438,13 @@ const DivisionsFormComponent = ({
   const [staffs, setStaffs] = useState<Staff[]>();
 
 
-
   useEffect(() => {
-
     HRServices.getStaffs().then((res) => {
-
       // console.log(res);
 
       setStaffs(res.data);
-
     });
-
   }, []);
-
 
 
   return (
@@ -481,7 +472,6 @@ const DivisionsFormComponent = ({
                 <br />
 
               </Grid>
-
 
 
               <Grid item xs={12} md={6} lg={4}>
@@ -725,7 +715,6 @@ const DivisionsFormComponent = ({
               />
 
 
-
               <Grid item xs={12}>
 
                 <br />
@@ -733,7 +722,6 @@ const DivisionsFormComponent = ({
                 <Divider textAlign="left">Leaders Details</Divider>
 
               </Grid>
-
 
 
               <Grid item xs={12} md={6} lg={4}>
@@ -745,9 +733,7 @@ const DivisionsFormComponent = ({
                     value={newDivision.coordinator}
 
                     onChange={(e, newValue) => {
-
                       if (newValue) {
-
                         setNewDivision((newDivision) => ({
 
                           ...newDivision,
@@ -755,9 +741,7 @@ const DivisionsFormComponent = ({
                           coordinator: newValue,
 
                         }));
-
                       }
-
                     }}
 
                     label={' Co-ordinator Name'}
@@ -817,9 +801,7 @@ const DivisionsFormComponent = ({
                     value={newDivision.seniorLeader}
 
                     onChange={(e, newValue) => {
-
                       if (newValue) {
-
                         setNewDivision((newDivision) => ({
 
                           ...newDivision,
@@ -827,9 +809,7 @@ const DivisionsFormComponent = ({
                           seniorLeader: newValue,
 
                         }));
-
                       }
-
                     }}
 
                     label={'Senior Leader Name'}
@@ -851,7 +831,6 @@ const DivisionsFormComponent = ({
                   label=" Contact Number"
 
                   value={newDivision.seniorLeader?newDivision.seniorLeader.phone:'' || division?.seniorLeader?division.seniorLeader.phone:''}
-
 
 
                   disabled fullWidth
@@ -891,9 +870,7 @@ const DivisionsFormComponent = ({
                     value={newDivision.juniorLeader}
 
                     onChange={(e, newValue) => {
-
                       if (newValue) {
-
                         setNewDivision((newDivision) => ({
 
                           ...newDivision,
@@ -901,9 +878,7 @@ const DivisionsFormComponent = ({
                           juniorLeader: newValue,
 
                         }));
-
                       }
-
                     }}
 
                     label={'Junior Leader Name'}
@@ -915,7 +890,6 @@ const DivisionsFormComponent = ({
               </Grid>
 
 
-
               {/* <Grid item xs={12} md={6} lg={4}>
 
               <FormControl variant="outlined" fullWidth>
@@ -925,7 +899,6 @@ const DivisionsFormComponent = ({
                   label=" Contact Number"
 
                   value={newDivision.juniorLeader?.phone || division?.juniorLeader?.phone}
-
 
 
                   disabled fullWidth
@@ -945,7 +918,6 @@ const DivisionsFormComponent = ({
                   label=" Email-ID"
 
                   value={newDivision.juniorLeader?.email || division?.juniorLeader?.email}
-
 
 
                   disabled
@@ -969,9 +941,7 @@ const DivisionsFormComponent = ({
     </form>
 
   );
-
 };
-
 
 
 export default DivisionsFormComponent;
