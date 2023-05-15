@@ -150,7 +150,6 @@ const ReleaseAmount = () => {
           <form onSubmit={saveReleaseAmount}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Release Amount"
                     value={Number(IROrelease?.releaseAmount)}
@@ -160,16 +159,14 @@ const ReleaseAmount = () => {
                         ...IROrelease,
                         releaseAmount: Number(e.target.value),
                       }))
-                    }
+                    }variant="outlined"
                     fullWidth
                   />
-                </FormControl>
               </Grid>
             </Grid>
             <br/>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Amount Transferred"
                     value={Number(IROrelease?.transferredAmount)}
@@ -179,13 +176,11 @@ const ReleaseAmount = () => {
                         ...IROrelease,
                         transferredAmount: Number(e.target.value),
                       }))
-                    }
+                    }variant="outlined"
                     fullWidth
                   />
-                </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker label="Date"
                       // value={IROrelease?.transferredDate}
@@ -199,10 +194,8 @@ const ReleaseAmount = () => {
                     />
 
                   </LocalizationProvider>
-                </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <BankDetailsFormComponent
                     value={IROrelease?.transferredBank}
                     onChange={(newbankDetails: BankDetails) => {
@@ -216,10 +209,8 @@ const ReleaseAmount = () => {
                     title={'Amount Transferred (Bank) Details'}
                   />
 
-                </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Mode of payment"
                     value={IROrelease?.modeOfPayment}
@@ -232,10 +223,8 @@ const ReleaseAmount = () => {
                     }
                     fullWidth
                   />
-                </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <TextField
                     label="Transaction No:"
                     value={IROrelease?.transactionNumber}
@@ -248,15 +237,12 @@ const ReleaseAmount = () => {
                     }
                     fullWidth
                   />
-                </FormControl>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
                   <TextField
                     type="file"
                     // onChange={(e) => handleFileUpload(e.target.files)}
                   />
-                </FormControl>
               </Grid>
             </Grid>
             <br />

@@ -38,7 +38,6 @@ const SupportDetails = () => {
     <form>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <Autocomplete
               id="Current Designation"
               // sx={{ width: 300 }}
@@ -59,7 +58,7 @@ const SupportDetails = () => {
                     currentDesignation: newValue,
                   }));
                 }
-              }}
+              }} 
               renderOption={(props, designation) => (
                 <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                   {designation.name}
@@ -76,10 +75,8 @@ const SupportDetails = () => {
                 />
               )}
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Total No. Years in Ministry"
               value={newWorkerSupportDetails?.totalNoYearsInMinistry}
@@ -92,10 +89,8 @@ const SupportDetails = () => {
               // }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Type Of Family</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -113,10 +108,8 @@ const SupportDetails = () => {
               <FormControlLabel value="s" control={<Radio />} label="Single Missionary" />
               <FormControlLabel value="f" control={<Radio />} label="Family Missionary" />
             </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Type Of Church</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -134,10 +127,8 @@ const SupportDetails = () => {
               <FormControlLabel value="WC" control={<Radio />} label="With Church" />
               <FormControlLabel value="WOC" control={<Radio />} label="Without Church" />
             </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormControlLabel
               control={
                 <Checkbox
@@ -155,7 +146,6 @@ const SupportDetails = () => {
               sx={{ float: 'right' }}
             />
 
-          </FormControl>
         </Grid>
       </Grid>
     </form>

@@ -1,96 +1,94 @@
-import React, { useState } from 'react';
-import { FormControl, Grid, TextField, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { FormControl, Grid, TextField, Typography } from "@mui/material";
 
 const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
-  const [newBankDetails, setNewBankDetails] = useState<BankDetails>(props.value?? {
-    bankname: '',
-    branchname: '',
-    accountNumber: '',
-    IFSCCode: '',
-    beneficiary: '',
-  });
+  const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
+    props.value ?? {
+      bankname: "",
+      branchname: "",
+      accountNumber: "",
+      IFSCCode: "",
+      beneficiary: "",
+    }
+  );
 
   return (
     <form>
       <>
-
-        <Typography variant="h4" component="h4" >{props.title}</Typography>
-        <br/>
+        <Typography variant="h4" component="h4">
+          {props.title}
+        </Typography>
+        <br />
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Bank Name"
-                value={newBankDetails.bankname }
-                onChange={(e) =>
-                  setNewBankDetails((newBankDetails) => ({
-                    ...newBankDetails,
-                    bankname: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Bank Name"
+              value={newBankDetails.bankname}
+              onChange={(e) =>
+                setNewBankDetails((newBankDetails) => ({
+                  ...newBankDetails,
+                  bankname: e.target.value,
+                }))
+              }
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Branch Name"
-                value={newBankDetails.branchname }
-                onChange={(e) =>
-                  setNewBankDetails((newWorkerBasicDetails) => ({
-                    ...newWorkerBasicDetails,
-                    branchname: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Branch Name"
+              value={newBankDetails.branchname}
+              onChange={(e) =>
+                setNewBankDetails((newWorkerBasicDetails) => ({
+                  ...newWorkerBasicDetails,
+                  branchname: e.target.value,
+                }))
+              }
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Account Number"
-                value={newBankDetails.accountNumber }
-                onChange={(e) =>
-                  setNewBankDetails((newBankDetails) => ({
-                    ...newBankDetails,
-                    accountNumber: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Account Number"
+              value={newBankDetails.accountNumber}
+              onChange={(e) =>
+                setNewBankDetails((newBankDetails) => ({
+                  ...newBankDetails,
+                  accountNumber: e.target.value,
+                }))
+              }
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="IFSC Code"
-                value={newBankDetails.IFSCCode }
-                onChange={(e) =>
-                  setNewBankDetails((newBankDetails) => ({
-                    ...newBankDetails,
-                    IFSCCode: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="IFSC Code"
+              value={newBankDetails.IFSCCode}
+              onChange={(e) =>
+                setNewBankDetails((newBankDetails) => ({
+                  ...newBankDetails,
+                  IFSCCode: e.target.value,
+                }))
+              }
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Beneficiary"
-                value={newBankDetails.beneficiary }
-                onChange={(e) =>
-                  setNewBankDetails((newWorkerBasicDetails) => ({
-                    ...newWorkerBasicDetails,
-                    beneficiary: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Beneficiary"
+              value={newBankDetails.beneficiary}
+              onChange={(e) =>
+                setNewBankDetails((newWorkerBasicDetails) => ({
+                  ...newWorkerBasicDetails,
+                  beneficiary: e.target.value,
+                }))
+              }
+              variant="outlined"
+              fullWidth
+            />
           </Grid>
         </Grid>
       </>

@@ -71,9 +71,7 @@ const SubDivisionsPage = ({
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControl variant="outlined" fullWidth><br />
-                    <Button onClick={() => deleteSubDivision(index)} style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
-                  </FormControl>
+                    <Button onClick={() => deleteSubDivision(index)} variant="outlined" style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
                 </Grid>
               </Grid><br />
             </div>
