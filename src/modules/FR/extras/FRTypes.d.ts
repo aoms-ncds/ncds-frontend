@@ -58,21 +58,17 @@ declare global {
     PANNo: string;
     aadhaar: {
       aadhaarNo: string;
-      aadhaarFile: FileDetails;
+      aadhaarFile: FileObject;
     };
     voterId: {
       voterIdNo: string;
-      voterIdFile: FileDetails;
+      voterIdFile: FileObject;
     };
     licenseNumber: string;
     permanentAddress: Address;
     currentAddress: Address;
   }
-  interface FileDetails {
-    _id: string;
-    fileId: string;
-    file_url: string;
-  }
+
 
   interface Subdivisions {
     _id: string;

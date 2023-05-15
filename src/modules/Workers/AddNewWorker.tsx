@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, CardContent, Container, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Button, Card, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkerServices from './extras/WorkersServices';
 import BasicDetails from './BasicDetails';
@@ -50,115 +50,131 @@ const AddNewWorker = () => {
   };
   return (
     <CommonPageLayout title={action === 'add' ? 'Add Worker' : 'Edit Worker'}>
+
+      <Container maxWidth="md">
+
+        <Stepper activeStep={activeStep}>
+          <Step>
+            <StepLabel>Basic Details</StepLabel>
+          </Step>
+
+          <Step>
+            <StepLabel>Official Details</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Support Details</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Support Structure</StepLabel>
+          </Step>
+        </Stepper>
+      </Container>
+
+      <br />
       <Container>
-        <CardContent>
-          <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}>
-              <Step>
-                <StepLabel>Basic Details</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Official Details</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Support Details</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Support Structure</StepLabel>
-              </Step>
-            </Stepper>
-
-            <br />
-            {activeStep == 0 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setActiveStep(1);
-                }}
-              ><BasicDetails />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
+        <Card>
+          <CardContent>
+            <form
+              onSubmit={AddWorker}
+            >
+              {activeStep == 0 && (
+                <Grid container spacing={2}>
+                  <BasicDetails />
+                  <Grid item xs={12} >
+                    <Button
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                      onClick={()=>setActiveStep(1)}
+                    >
                       Next
-                </Button>
+                    </Button>
+                  </Grid>
+                </Grid>
+              )}
 
-              </form>
-            )}
-            {activeStep == 1 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setActiveStep(2);
-                }}
-              ><OfficialDetails />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
+              {activeStep == 1 && (
+
+                <Grid container spacing={2}>
+                  <OfficialDetails />
+                  <Grid item xs={12} >
+                    <Button
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                      onClick={()=>setActiveStep(2)}
+                    >
                       Next
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setActiveStep(0);
-                  } }
-                  variant="outlined"
-                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                >    Go back
-                </Button>
-              </form>
-            )}
-            {activeStep == 2 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setActiveStep(3);
-                }}
-              ><SupportDetails />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setActiveStep(0);
+                      } }
+                      variant="outlined"
+                      sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                    >    Go back
+                    </Button>
+                  </Grid>
+                </Grid>
+
+              )}
+              {activeStep == 2 && (
+              // <form
+              //   onSubmit={(e) => {
+              //     e.preventDefault();
+              //     setActiveStep(4);
+              //   }}
+              //   >
+
+                <Grid container spacing={2}>
+                  <SupportDetails />
+                  <Grid item xs={12} >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                      onClick={()=>setActiveStep(3)}
+
+                    >
                       Next
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setActiveStep(1);
-                  } }
-                  variant="outlined"
-                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                >    Go back
-                </Button>
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setActiveStep(1);
+                      } }
+                      variant="outlined"
+                      sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                    >    Go back
+                    </Button>
+                  </Grid>
+                </Grid>
 
-              </form>
-            )}
-            {activeStep == 3 && (
-              <form
-                onSubmit={AddWorker}
-              ><SupportStructure /><Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
-                  {action === 'add' ? 'Submit' : 'Update'}
-                </Button><Button
-                  type="button"
-                  onClick={() => {
-                    setActiveStep(2);
-                  } }
-                  variant="outlined"
-                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                >    Go back
-                </Button> </form>
+              )}
+              {activeStep == 3 && (
+                <Grid container spacing={2}>
+                  <SupportStructure />
+                  <Grid item xs={12} >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                    >
+                      {action === 'add' ? 'Submit' : 'Update'}
+                    </Button><Button
+                      type="button"
+                      onClick={() => {
+                        setActiveStep(2);
+                      } }
+                      variant="outlined"
+                      sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                    >    Go back
+                    </Button>
+                  </Grid>
+                </Grid>
 
-            )}
-          </Box>
-        </CardContent>
+              )}</form>
+            {/* </Box> */}
+          </CardContent></Card>
       </Container>
     </CommonPageLayout>
   );

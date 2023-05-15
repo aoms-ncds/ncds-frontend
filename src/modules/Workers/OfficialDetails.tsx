@@ -29,15 +29,30 @@ const OfficialDetails = () => {
     PANNo: 'string',
     aadhaar: { aadhaarFile: {
       _id: '',
+      name: '',
+      size: 0,
+      type: 'image/png',
+      storage: 'Drive',
       fileId: '',
-      file_url: '',
+      downloadURL: null,
+      private: false,
+      createdAt: moment(),
+      updatedAt: moment(),
     }, aadhaarNo: '467389' },
 
-    voterId: { voterIdFile: {
-      _id: '',
-      fileId: '',
-      file_url: '',
-    }, voterIdNo: '467389' },
+    voterId: {
+      voterIdFile: {
+        _id: '',
+        name: '',
+        size: 0,
+        type: 'image/png',
+        storage: 'Drive',
+        fileId: '',
+        downloadURL: null,
+        private: false,
+        createdAt: moment(),
+        updatedAt: moment(),
+      }, voterIdNo: '467389' },
     licenseNumber: '',
     permanentAddress: {
       buildingName: '',

@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, Card, CardContent, Container, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
 import moment from 'moment';
 import HRServices from '../../HR/extras/HRServices';
 import { StaffDropdown } from '../../HR/components/StaffDropdown';
-import AddressFormComponent from '../../../components/AddressFormComponent';
+import AddressForm from '../../../components/AddressForm';
 
 const DivisionsFormComponent = ({
   division = {
+
     divisionName: 'Division 1',
     _id: '1',
     divisionId: '233',
@@ -103,6 +104,8 @@ const DivisionsFormComponent = ({
       createdAt: moment(),
       updatedAt: moment(),
     },
+    createdAt: moment(),
+    updatedAt: moment(),
   },
 }: {
   division?: IETDivisions;
@@ -204,8 +207,10 @@ const DivisionsFormComponent = ({
         formattedId: '',
         createdAt: moment(),
         updatedAt: moment(),
-      }
-      ,
+      },
+      createdAt: moment(),
+      updatedAt: moment(),
+
     },
   );
   const [staffs, setStaffs] = useState<Staff[]>();
@@ -220,159 +225,151 @@ const DivisionsFormComponent = ({
   }, []);
 
   return (
+    <>
 
-    <form>
-      <Card style={{ width: '100%' }}>
+
+      <Grid item xs={12} >
+        <Typography variant="h4" component="h4" >Division Details</Typography>
+        <br/>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" Division Name"
+            value={newDivision.divisionName || division?.divisionName}
+            onChange={(e) =>
+              setNewDivision((newIETDivisions) => ({
+                ...newIETDivisions,
+                divisionName: e.target.value,
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" Division Id"
+            value={newDivision.divisionId || division?.divisionId}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                divisionId: e.target.value,
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" Contact Number"
+            value={newDivision.contactNumber || division?.contactNumber}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                contactNumber: e.target.value,
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" Email ID"
+            value={newDivision.email || division?.email}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                email: e.target.value,
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" No. of Workers"
+            value={newDivision.noofWorkers || division?.noofWorkers}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                noofWorkers: Number(e.target.value),
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" No. of Sub Divisions"
+            type='number'
+            value={newDivision.noOfSubdivisions || division?.noOfSubdivisions}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                NoOfSubdivisions: Number(e.target.value),
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <TextField
+            label=" No. of Churches"
+            value={newDivision.noOfChurches || division?.noOfChurches}
+            onChange={(e) =>
+              setNewDivision((newDivision) => ({
+                ...newDivision,
+                noOfChurches: Number(e.target.value),
+              }))
+            }
+            fullWidth
+          />
+        </FormControl>
+
+
+      </Grid>
+      <AddressForm value={newDivision.address}
+        onChange={(newState: Address) => setNewDivision((newDivision) => ({
+          ...newDivision,
+          address: newState,
+        }))
+        } action={'add'} />
+
+
+      <Grid item xs={12}>
         <br />
-        <Container>
-          <CardContent>
+        <Divider textAlign="left">Leaders Details
+        </Divider>
+      </Grid>
 
-            <Grid container spacing={2}>
-
-              <Grid item xs={12} >
-                <Typography variant="h4" component="h4" >Division Details</Typography>
-                <br/>
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" Division Name"
-                    value={newDivision.divisionName || division?.divisionName}
-                    onChange={(e) =>
-                      setNewDivision((newIETDivisions) => ({
-                        ...newIETDivisions,
-                        divisionName: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" Division Id"
-                    value={newDivision.divisionId || division?.divisionId}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        divisionId: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" Contact Number"
-                    value={newDivision.contactNumber || division?.contactNumber}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        contactNumber: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" Email ID"
-                    value={newDivision.email || division?.email}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        email: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" No. of Workers"
-                    type='number'
-                    value={newDivision.noofWorkers || division?.noofWorkers}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        noofWorkers: Number(e.target.value),
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" No. of Sub Divisions"
-                    type='number'
-                    value={newDivision.noOfSubdivisions || division?.noOfSubdivisions}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        NoOfSubdivisions: Number(e.target.value),
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
-                    label=" No. of Churches"
-                    value={newDivision.noOfChurches || division?.noOfChurches}
-                    onChange={(e) =>
-                      setNewDivision((newDivision) => ({
-                        ...newDivision,
-                        noOfChurches: Number(e.target.value),
-                      }))
-                    }
-                    fullWidth
-                  />
-                </FormControl>
-
-
-              </Grid>
-              <AddressFormComponent value={newDivision.address}
-                onChange={(newState: Address) => setNewDivision((newDivision) => ({
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <StaffDropdown
+            value={newDivision.coordinator}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                setNewDivision((newDivision) => ({
                   ...newDivision,
-                  address: newState,
-                }))
-                } action={'add'} title='Address'/>
-
-
-              <Grid item xs={12}>
-                <br />
-                <Divider textAlign="left">Leaders Details
-                </Divider>
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <StaffDropdown
-                    value={newDivision.coordinator}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
-                        setNewDivision((newDivision) => ({
-                          ...newDivision,
-                          coordinator: newValue,
-                        }));
-                      }
-                    }}
-                    label={' Co-ordinator Name'} />
-                </FormControl>
-              </Grid>
-              {/* <Grid item xs={12} md={6} lg={4}>
+                  coordinator: newValue,
+                }));
+              }
+            }}
+            label={' Co-ordinator Name'} />
+        </FormControl>
+      </Grid>
+      {/* <Grid item xs={12} md={6} lg={4}>
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
@@ -392,23 +389,23 @@ const DivisionsFormComponent = ({
                 />
               </FormControl>
             </Grid> */}
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <StaffDropdown
-                    value={newDivision.seniorLeader}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
-                        setNewDivision((newDivision) => ({
-                          ...newDivision,
-                          seniorLeader: newValue,
-                        }));
-                      }
-                    }} label={'Senior Leader Name'} />
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <StaffDropdown
+            value={newDivision.seniorLeader}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                setNewDivision((newDivision) => ({
+                  ...newDivision,
+                  seniorLeader: newValue,
+                }));
+              }
+            }} label={'Senior Leader Name'} />
 
 
-                </FormControl>
-              </Grid>
-              {/*
+        </FormControl>
+      </Grid>
+      {/*
             <Grid item xs={12} md={6} lg={4}>
               <FormControl variant="outlined" fullWidth>
                 <TextField
@@ -429,22 +426,22 @@ const DivisionsFormComponent = ({
                 />
               </FormControl>
             </Grid> */}
-              <Grid item xs={12} md={6} lg={4}>
-                <FormControl variant="outlined" fullWidth>
-                  <StaffDropdown
-                    value={ newDivision.juniorLeader}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
-                        setNewDivision((newDivision) => ({
-                          ...newDivision,
-                          juniorLeader: newValue,
-                        }));
-                      }
-                    }} label={'Junior Leader Name'} />
-                </FormControl>
-              </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl variant="outlined" fullWidth>
+          <StaffDropdown
+            value={ newDivision.juniorLeader}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                setNewDivision((newDivision) => ({
+                  ...newDivision,
+                  juniorLeader: newValue,
+                }));
+              }
+            }} label={'Junior Leader Name'} />
+        </FormControl>
+      </Grid>
 
-              {/* <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
@@ -465,12 +462,8 @@ const DivisionsFormComponent = ({
                 />
               </FormControl>
             </Grid> */}
+    </>
 
-            </Grid>
-          </CardContent>
-        </Container>
-      </Card>
-    </form>
 
   );
 };

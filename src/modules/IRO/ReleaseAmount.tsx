@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { useNavigate } from 'react-router-dom';
-import BankDetailsFormComponent from '../Divisions/BankDetails';
+import BankDetailsForm from '../Divisions/components/BankDetails';
 
 const ReleaseAmount = () => {
   const navigate=useNavigate();
@@ -110,6 +110,8 @@ const ReleaseAmount = () => {
         createdAt: moment(),
         updatedAt: moment(),
       },
+      createdAt: moment(),
+      updatedAt: moment(),
     },
     subDivision: {
       _id: '',
@@ -143,33 +145,27 @@ const ReleaseAmount = () => {
   };
   return (
     <CommonPageLayout title='Release Amount Page'>
-      <Card style={{ width: '100%' }}>
-      </Card>
       <Container>
-        <CardContent>
-          <form onSubmit={saveReleaseAmount}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
+        <Card style={{ width: '100%' }}>
+          <CardContent>
+            <form onSubmit={saveReleaseAmount}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} >
                   <TextField
                     label="Release Amount"
                     value={Number(IROrelease?.releaseAmount)}
                     onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         releaseAmount: Number(e.target.value),
                       }))
-                    }
+                    } variant="outlined"
                     fullWidth
                   />
-                </FormControl>
-              </Grid>
-            </Grid>
-            <br/>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Amount Transferred"
                     value={Number(IROrelease?.transferredAmount)}
@@ -180,95 +176,85 @@ const ReleaseAmount = () => {
                         transferredAmount: Number(e.target.value),
                       }))
                     }
-                    fullWidth
+                    fullWidth variant="outlined"
                   />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Date"
-                      // value={IROrelease?.transferredDate}
-                      // onChange={(e) =>
-                      // // eslint-disable-next-line @typescript-eslint/naming-convention
-                      //   setIROrelease((IROrelease: any) => ({
-                      //     ...IROrelease,
-                      //     transferredDate: e.target.value,
-                      //   }))
-                      // }
-                    />
-
-                  </LocalizationProvider>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <BankDetailsFormComponent
-                    value={IROrelease?.transferredBank}
-                    onChange={(newbankDetails: BankDetails) => {
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        transferredBank: newbankDetails,
-                      }));
-                    }}
-                    action={'add'}
-                    title={'Amount Transferred (Bank) Details'}
+                </Grid>
+                <Grid item xs={12} md={6} >
+                  <DatePicker label="Date"
+                    value={IROrelease?.transferredDate}
+                    format="DD/MM/YYYY"
+                    sx={{ width: '100%' }}
+                    // onChange={(e) =>
+                    // // eslint-disable-next-line @typescript-eslint/naming-convention
+                    //   setIROrelease((IROrelease: any) => ({
+                    //     ...IROrelease,
+                    //     transferredDate: e.target.value,
+                    //   }))
+                    // }
                   />
 
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
+                </Grid>
+                {/* <Grid item xs={12} > */}
+                <BankDetailsForm
+                  value={IROrelease?.transferredBank}
+                  onChange={(newbankDetails: BankDetails) => {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      transferredBank: newbankDetails,
+                    }));
+                  }}
+                  action={'add'}
+                  options={{ title: 'Amount Transferred (Bank) Details' }}
+                />
+
+                {/* </Grid> */}
+                <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Mode of payment"
                     value={IROrelease?.modeOfPayment}
                     onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         modeOfPayment: e.target.value,
                       }))
                     }
-                    fullWidth
+                    fullWidth variant="outlined"
                   />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
                   <TextField
                     label="Transaction No:"
                     value={IROrelease?.transactionNumber}
                     onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         transactionNumber: e.target.value,
                       }))
-                    }
+                    } variant="outlined"
                     fullWidth
                   />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <TextField
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                  <TextField variant="outlined"
                     type="file"
                     // onChange={(e) => handleFileUpload(e.target.files)}
                   />
-                </FormControl>
+                </Grid>
               </Grid>
-            </Grid>
-            <br />
-            <Button
-              variant="contained"
-              style={{ textAlign: 'right' }}
-              type='submit'
-            >
+              <br />
+              <Button
+                variant="contained"
+                style={{ textAlign: 'right' }}
+                type='submit'
+              >
   Release Amount
-            </Button>
-          </form>
-        </CardContent>
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </Container>
     </CommonPageLayout>
   );
