@@ -549,7 +549,7 @@ export default {
     dummyRequest({
       data: 1,
       // error: null,
-      message: action+'ed Spause',
+      message: action+'ed Spouse',
       result: 'success',
       timeout: 500,
     }),
@@ -558,7 +558,7 @@ export default {
     dummyRequest({
       data: 1,
       // error: null,
-      message: action+'ed Spause',
+      message: action+'ed Spouse',
       result: 'success',
       timeout: 500,
     }),

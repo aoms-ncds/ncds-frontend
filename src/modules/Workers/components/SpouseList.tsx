@@ -89,7 +89,7 @@ const SpouseListPage = () => {
         startIcon={<AddIcon />}
         component={Link}
         to="/workers/addspouse"
-      >Add Spause</Button><br /><br />
+      >Add Spouse</Button><br /><br />
 
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>

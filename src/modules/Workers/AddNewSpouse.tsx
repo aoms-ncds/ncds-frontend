@@ -264,7 +264,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
                   }));
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Spause Of" required />}
+              renderInput={(params) => <TextField {...params} label="Spouse Of" required />}
               fullWidth
             />
             <br />
