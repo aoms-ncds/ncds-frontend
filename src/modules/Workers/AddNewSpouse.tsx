@@ -7,14 +7,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment, { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
-interface SpauseFormPagerops{
+interface SpouseFormPagerops{
     action: 'add'|'edit'|'view';
   }
 
-const AddNewSpausePage = (props: SpauseFormPagerops) => {
-  const { spauseId } = useParams();
+const AddNewSpousePage = (props: SpouseFormPagerops) => {
+  const { spouseId } = useParams();
   const [workers, setWorkers] = useState<BasicDetails[]>();
-  const [newSpause, setNewSpause] = useState<CreatableSpause>({
+  const [newSpouse, setNewSpouse] = useState<CreatableSpouse>({
     firstName: '',
     secondName: '',
     email: '',
@@ -32,9 +32,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
       // loader.afterLoad();
       console.log(res);
     });
-    if (spauseId) {
-      WorkerServices.getSpauseById(spauseId).then((res) => {
-        setNewSpause(res.data);
+    if (spouseId) {
+      WorkerServices.getSpouseById(spouseId).then((res) => {
+        setNewSpouse(res.data);
       }).catch((res) => {
         console.log(res);
       });
@@ -44,9 +44,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
   []);
   // const handleDateChange =
-  const addSpause = (event: React.FormEvent<HTMLFormElement>) => {
+  const addSpouse = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.addSpause(props.action)
+    WorkerServices.addSpouse(props.action)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,
@@ -60,9 +60,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
         });
       });
   };
-  const editSpause = (event: React.FormEvent<HTMLFormElement>) => {
+  const editSpouse = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.editSpause(props.action)
+    WorkerServices.editSpouse(props.action)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,
@@ -77,16 +77,16 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
       });
   };
   return (
-    <CommonPageLayout title={props.action === 'add' ? 'Add Spause' : 'Edit Spause'} >
-      <form onSubmit={props.action === 'add' ? addSpause : editSpause}>
+    <CommonPageLayout title={props.action === 'add' ? 'Add Spouse' : 'Edit Spouse'} >
+      <form onSubmit={props.action === 'add' ? addSpouse : editSpouse}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={6}>
 
             <TextField
               label=" First Name"
-              value={newSpause?.firstName}
+              value={newSpouse?.firstName}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   firstName: e.target.value,
                 }))
@@ -99,9 +99,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
             <TextField
               label=" Second Name"
-              value={newSpause?.secondName}
+              value={newSpouse?.secondName}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   secondName: e.target.value,
                 }))
@@ -114,9 +114,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
             <TextField
               label="Email"
-              value={newSpause?.email}
+              value={newSpouse?.email}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   email: e.target.value,
                 }))
@@ -128,9 +128,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
             <TextField
               label="Email"
-              value={newSpause?.email}
+              value={newSpouse?.email}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   email: e.target.value,
                 }))
@@ -144,9 +144,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
           <Grid item xs={12} md={6} lg={6}>
             <TextField
               label="Mobile Number"
-              value={newSpause?.mobileNo}
+              value={newSpouse?.mobileNo}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   email: e.target.value,
                 }))
@@ -160,11 +160,11 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
               <DatePicker
                 label="Date Of Birth"
-                value={newSpause?.dob}
+                value={newSpouse?.dob}
                 onChange={(date: Moment | null) => {
                   if (date) {
-                    setNewSpause((newSpause) => ({
-                      ...newSpause,
+                    setNewSpouse((newSpouse) => ({
+                      ...newSpouse,
                       dob: date,
                       // age: age,
                     }));
@@ -180,9 +180,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
             <TextField
               label="Age"
-              value={newSpause?.dob?.fromNow()}
+              value={newSpouse?.dob?.fromNow()}
               // onChange={(e) =>
-              //   setNewSpause((newchild) => ({
+              //   setNewSpouse((newchild) => ({
               //     ...newchild,
               //     age: Number(e.target.value),
               //   }))
@@ -199,9 +199,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
               // defaultValue="Yes"
               name="radio-buttons-group"
               row
-              value={newSpause.working ? 'Yes' : 'No'}
+              value={newSpouse.working ? 'Yes' : 'No'}
               onChange={(e) =>
-                setNewSpause((prev) => ({
+                setNewSpouse((prev) => ({
                   ...prev,
                   Working: e.target.value === 'Yes',
                 }))
@@ -215,9 +215,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
             <TextField
               label="Occupation"
-              value={newSpause?.occupation}
+              value={newSpouse?.occupation}
               onChange={(e) =>
-                setNewSpause((newchild) => ({
+                setNewSpouse((newchild) => ({
                   ...newchild,
                   occupation: e.target.value,
                 }))
@@ -230,9 +230,9 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
             <FormControl variant="outlined" fullWidth>
               <TextField
                 label="Qualification"
-                value={newSpause?.qualification}
+                value={newSpouse?.qualification}
                 onChange={(e) =>
-                  setNewSpause((newchild) => ({
+                  setNewSpouse((newchild) => ({
                     ...newchild,
                     qualification: e.target.value,
                   }))
@@ -244,7 +244,7 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
           <Grid item xs={12} md={6} lg={6}>
             <TextField
               label="Language Known"
-              value={newSpause?.languagesKnown}
+              value={newSpouse?.languagesKnown}
               multiline
               maxRows={4}
               fullWidth
@@ -253,14 +253,14 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <Autocomplete
-              value={newSpause?.spauseOf || null}
+              value={newSpouse?.spouseOf || null}
               options={workers ?? []}
               getOptionLabel={(worker) => worker.firstName}
               onChange={(_e, worker) => {
                 if (worker) {
-                  setNewSpause((newspause) => ({
-                    ...newspause,
-                    spauseOf: worker,
+                  setNewSpouse((newspouse) => ({
+                    ...newspouse,
+                    spouseOf: worker,
                   }));
                 }
               }}
@@ -285,4 +285,4 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
   );
 };
 
-export default AddNewSpausePage;
+export default AddNewSpousePage;

@@ -370,7 +370,7 @@ export default {
           firstName: 'Neha',
           secondName: 'Thomas',
           dob: moment(),
-          childSupport: 'Yes',
+          childSupport: 'Level 1',
           childOf: { _id: 1,
             workerCode: '111',
             firstName: 'Athira',
@@ -488,8 +488,8 @@ export default {
       timeout: 500,
     }),
   ),
-  getSpause: () => getStandardResponse<Spause[]>(
-    dummyRequest<Spause[]>({
+  getSpouse: () => getStandardResponse<Spouse[]>(
+    dummyRequest<Spouse[]>({
       data: [
         {
           _id: '1',
@@ -498,7 +498,7 @@ export default {
           dob: moment(),
           email: 'Mathew@gmail.com',
           mobileNo: '798865444',
-          spauseOf: { _id: ' 1',
+          spouseOf: { _id: ' 1',
             workerCode: '111',
             firstName: 'Athira',
             secondName: 'Haridas',
@@ -545,7 +545,7 @@ export default {
       timeout: 500,
     }),
   ),
-  addSpause: (action: string ) => getStandardResponse<number>(
+  addSpouse: (action: string ) => getStandardResponse<number>(
     dummyRequest({
       data: 1,
       // error: null,
@@ -554,7 +554,7 @@ export default {
       timeout: 500,
     }),
   ),
-  editSpause: (action: string ) => getStandardResponse<number>(
+  editSpouse: (action: string ) => getStandardResponse<number>(
     dummyRequest({
       data: 1,
       // error: null,
@@ -564,15 +564,15 @@ export default {
     }),
   ),
 
-  getSpauseById: (spauseId: string) => getStandardResponse<CreatableSpause>(
-    dummyRequest<CreatableSpause>({
+  getSpouseById: (spouseId: string) => getStandardResponse<CreatableSpouse>(
+    dummyRequest<CreatableSpouse>({
       data: {
         firstName: 'Akash',
         secondName: 'M',
         dob: moment(),
         email: 'akash@gmail.com',
         mobileNo: '798865444',
-        spauseOf: { _id: ' 1',
+        spouseOf: { _id: ' 1',
           workerCode: '111',
           firstName: 'Athira',
           secondName: 'Haridas',

@@ -11,14 +11,14 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
-const SpauseListPage = () => {
-  const [spauseList, setSpauseList] = useState<Spause[]>();
+const SpouseListPage = () => {
+  const [spouseList, setSpouseList] = useState<Spouse[]>();
   useEffect(() => {
     // loader.onLoad();
-    WorkerServices.getSpause()
+    WorkerServices.getSpouse()
      .then((res) => {
        console.log(res);
-       setSpauseList(res.data);
+       setSpouseList(res.data);
      })
     .catch((res) => {
       // loader.afterLoad();
@@ -34,22 +34,22 @@ const SpauseListPage = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='child action'
+          id='Spouse action'
           primaryText='Actions'
-          key={'child action'}
+          key={'Spouse action'}
           items={[
             {
               id: 'View',
               text: 'View',
               component: Link,
-              to: '/workers/editspause/' + props.row._id,
+              to: '/workers/editspouse/' + props.row._id,
               icon: PreviewIcon,
             },
             {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: '/workers/editspause/' + props.row._id,
+              to: '/workers/editspouse/' + props.row._id,
               icon: EditIcon,
             },
             {
@@ -75,8 +75,8 @@ const SpauseListPage = () => {
       <p> {props.row.dob?.fromNow()}</p>
     ), width: 130 },
     { field: 'qualification', headerName: 'Qualification', width: 130 },
-    { field: 'spauseOf', headerName: 'Spouse Of', renderCell: (props: any) => (
-      <p> {props.row.spauseOf?.firstName}</p>
+    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => (
+      <p> {props.row.spouseOf?.firstName}</p>
     ), width: 130 },
 
 
@@ -88,16 +88,16 @@ const SpauseListPage = () => {
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
         component={Link}
-        to="/workers/addspause"
+        to="/workers/addspouse"
       >Add Spause</Button><br /><br />
 
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={spauseList ?? []} columns={columns} getRowId={(row) => row._id} loading={spauseList === null} />
+          <DataGrid rows={spouseList ?? []} columns={columns} getRowId={(row) => row._id} loading={spouseList === null} />
         </Card>
 
       </Grid></div>
   );
 };
 
-export default SpauseListPage;
+export default SpouseListPage;

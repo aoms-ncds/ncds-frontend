@@ -8,7 +8,7 @@ import WorkersListPage from './components/WorkersList';
 import { Box, Button, Card, Grid, Tab, Tabs, Typography } from '@mui/material';
 import { TabPanel, a11yProps } from './components/TabDetails';
 import ChildListPage from './components/ChildList';
-import SpauseListPage from './components/SpauseList';
+import SpouseListPage from './components/SpouseList';
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -39,7 +39,7 @@ const ManageWorkerPage = () => {
           <WorkersListPage />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          <SpauseListPage />
+          <SpouseListPage />
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
           < ChildListPage />

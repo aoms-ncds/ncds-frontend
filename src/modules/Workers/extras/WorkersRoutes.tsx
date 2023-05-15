@@ -6,7 +6,7 @@ import AddNewWorker from '../AddNewWorker';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import Profile from '../Profile';
 import AddNewChildPage from '../AddNewChild';
-import AddNewSpausePage from '../AddNewSpause';
+import AddNewSpousePage from '../AddNewSpouse';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -70,16 +70,16 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
     },
     {
-      title: 'add Spause',
-      path: '/addspause',
-      element: <AddNewSpausePage action={'add'} />,
+      title: 'add Spouse',
+      path: '/addspouse',
+      element: <AddNewSpousePage action={'add'} />,
       private: true,
       requiredAccessRights: ['string'],
     },
     {
-      title: 'edit Spause',
-      path: '/editspause/:spauseId',
-      element: <AddNewSpausePage action={'edit'} />,
+      title: 'edit Spouse',
+      path: '/editspouse/:spouseId',
+      element: <AddNewSpousePage action={'edit'} />,
       private: true,
       requiredAccessRights: ['string'],
     },

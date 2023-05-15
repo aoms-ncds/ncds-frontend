@@ -127,22 +127,22 @@ declare global {
         occupation?: string;
         qualification?:string;
 }
-interface Spause extends MongooseDocument{
+interface Spouse extends MongooseDocument{
     firstName: string;
     secondName: string;
     email:string;
     mobileNo:string;
     dob: moment;
-    spauseOf: BasicDetails;
+    spouseOf: BasicDetails;
     working:boolean;
     occupation: string;
     qualification:string;
     languagesKnown:string;
 
 }
-interface CreatableSpause extends Creatable<Spause>{
+interface CreatableSpouse extends Creatable<Spouse>{
     dob?: moment;
-    spauseOf?: BasicDetails | null;
+    spouseOf?: BasicDetails | null;
     working?:boolean;
     occupation?: string;
     qualification?:string;
