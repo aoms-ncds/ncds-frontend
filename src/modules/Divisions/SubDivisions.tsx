@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, FormControl, Grid, TextField } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, FormControl, Grid, IconButton, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -50,36 +50,59 @@ const SubDivisionsPage = ({
     });
     setSubDivisions(newSubDivisions);
   };
+  const lastProgramNameField = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    lastProgramNameField.current?.focus();
+    // for (let i = 0; i < 50; i++) { // Used for automatically adding 50 sheets (for testing purposes)
+    //   RESTClient.Scheduling.createProgramSheet({
+    //     name: "Test sheet " + i,
+    //     cols: [1, 2, 3, 4, 5].map(item => ({ name: "Program " + item }))
+    //   })
+    // }
+  }, [subDivisions]);
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <Grid container spacing={12}>
-
-        <Grid item xs={12} md={12} lg={12}>
-          {subDivisions.map((subDivision, index) => (
-            <div key={subDivision._id}>
-              <Grid container>
-                <Grid item xs={6}>
-                  <TextField
-                    label={'Sub Division ' + (index + 1)}
-                    value={subDivision.subDivisionName}
-                    onChange={(e) => {
-                      const newSubDivisions = [...subDivisions];
-                      newSubDivisions[index].subDivisionName = e.target.value;
-                      setSubDivisions(newSubDivisions);
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                    <Button onClick={() => deleteSubDivision(index)} variant="outlined" style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
-                </Grid>
-              </Grid><br />
-            </div>
-          ))}
-          <Button onClick={handleAddSubDivision} style={{ display: 'block', margin: '0 auto' }}><AddIcon /></Button>
+    <>
+      {/* <Grid item xs={12} > */}
+      {subDivisions.map((subDivision, index) => (
+        <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
+          <TextField
+            label={`Sub Division ${index + 1}`}
+            value={subDivision.subDivisionName}
+            onChange={(e) => {
+              const newSubDivisions = [...subDivisions];
+              newSubDivisions[index].subDivisionName = e.target.value;
+              setSubDivisions(newSubDivisions);
+            }}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => {
+                    deleteSubDivision(index);
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ),
+            }}
+            inputRef={
+              index === subDivisions.length - 1 ? lastProgramNameField : null
+            }
+            fullWidth
+            required
+            autoComplete="off"
+          />
         </Grid>
+      ))}
+      <Grid item xs={12}>
+        <Button
+          variant="outlined"
+          onClick={handleAddSubDivision}
+        >
+              Add new program
+        </Button>
       </Grid>
-    </form>
+    </>
+
   );
 };
 

@@ -6,75 +6,83 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import moment from "moment";
-import { useParams } from "react-router-dom";
-import WorkerServices from "./extras/WorkersServices";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import WorkerServices from './extras/WorkersServices';
 
 const OfficialDetails = () => {
   const { workersId } = useParams();
   // const [newWorkerBasicDetails, setWorkerBasicDetails] = useState<BasicDetails>();
-  const [newWorkerOfficialDetails, setWorkerOfficialDetails] =
-    useState<IETWorker>({
-      _id: "",
-      workerCode: "",
-      firstName: "",
-      lastName: "",
-      missionaryOrNonMissionary: "missionary",
-      dob: moment(),
-      gender: "Female",
-      age: 0,
-      maritalStatus: "Unmarried",
-      highestQualification: "",
-      motherToungue: "",
-      communicationLanguage: "",
-      languagesKnown: "",
-      email: "",
-      phone: "",
-      alternativeMobileNumber: "",
-      PANNo: "string",
-      aadhaar: {
-        aadhaarFile: {
-          _id: "",
-          fileId: "",
-          file_url: "",
-        },
-        aadhaarNo: "467389",
-      },
-
-      voterId: {
-        voterIdFile: {
-          _id: "",
-          fileId: "",
-          file_url: "",
-        },
-        voterIdNo: "467389",
-      },
-      licenseNumber: "",
-      permanentAddress: {
-        buildingName: "",
-        streetAddress: "",
-        city: "",
-        district: "",
-        state: "",
-        country: "",
-        pincode: "",
-      },
-      currentAddress: {
-        buildingName: "",
-        streetAddress: "",
-        city: "",
-        district: "",
-        state: "",
-        country: "",
-        pincode: "",
-      },
+  const [newWorkerOfficialDetails, setWorkerOfficialDetails] = useState<IETWorker>({
+    _id: '',
+    workerCode: '',
+    firstName: '',
+    lastName: '',
+    missionaryOrNonMissionary: 'missionary',
+    dob: moment(),
+    gender: 'Female',
+    age: 0,
+    maritalStatus: 'Unmarried',
+    highestQualification: '',
+    motherToungue: '',
+    communicationLanguage: '',
+    languagesKnown: '',
+    email: '',
+    phone: '',
+    alternativeMobileNumber: '',
+    PANNo: 'string',
+    aadhaar: { aadhaarFile: {
+      _id: '',
+      name: '',
+      size: 0,
+      type: 'image/png',
+      storage: 'Drive',
+      fileId: '',
+      downloadURL: null,
+      private: false,
       createdAt: moment(),
       updatedAt: moment(),
-    });
+    }, aadhaarNo: '467389' },
+
+    voterId: {
+      voterIdFile: {
+        _id: '',
+        name: '',
+        size: 0,
+        type: 'image/png',
+        storage: 'Drive',
+        fileId: '',
+        downloadURL: null,
+        private: false,
+        createdAt: moment(),
+        updatedAt: moment(),
+      }, voterIdNo: '467389' },
+    licenseNumber: '',
+    permanentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    currentAddress: {
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
+    },
+    createdAt: moment(),
+    updatedAt: moment(),
+  });
   useEffect(() => {
     console.log(workersId);
     if (workersId) {
@@ -186,11 +194,11 @@ const OfficialDetails = () => {
               setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                 ...newWorkerOfficialDetails,
                 gender:
-                  e.target.value == "F"
-                    ? "Female"
-                    : e.target.value == "M"
-                    ? "Male"
-                    : "Other",
+                  e.target.value == 'F' ?
+                    'Female' :
+                    e.target.value == 'M' ?
+                      'Male' :
+                      'Other',
               }))
             }
             name="radio-buttons-group"
@@ -210,9 +218,9 @@ const OfficialDetails = () => {
               setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                 ...newWorkerOfficialDetails,
                 age:
-                  Number(e.target.value) < 0 && Number(e.target.value) > 120
-                    ? 0
-                    : Number(e.target.value),
+                  Number(e.target.value) < 0 && Number(e.target.value) > 120 ?
+                    0 :
+                    Number(e.target.value),
               }))
             }
             variant="outlined"
@@ -227,7 +235,7 @@ const OfficialDetails = () => {
             onChange={(e) =>
               setWorkerOfficialDetails((newWorkerOfficialDetails) => ({
                 ...newWorkerOfficialDetails,
-                maritalStatus: e.target.value == "M" ? "Married" : "Unmarried",
+                maritalStatus: e.target.value == 'M' ? 'Married' : 'Unmarried',
               }))
             }
             name="radio-buttons-group"

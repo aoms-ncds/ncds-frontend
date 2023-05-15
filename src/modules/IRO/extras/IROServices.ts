@@ -112,7 +112,8 @@ export default {
             formattedId: 'test',
             createdAt: moment(),
             updatedAt: moment(),
-          },
+          }, createdAt: moment(),
+          updatedAt: moment(),
         },
         subDivision: {
           _id: '1',
@@ -235,7 +236,8 @@ export default {
             formattedId: 'test',
             createdAt: moment(),
             updatedAt: moment(),
-          },
+          }, createdAt: moment(),
+          updatedAt: moment(),
         },
         subDivision: {
           _id: '1',
@@ -357,7 +359,8 @@ export default {
             formattedId: 'test',
             createdAt: moment(),
             updatedAt: moment(),
-          },
+          }, createdAt: moment(),
+          updatedAt: moment(),
         },
         subDivision: {
           _id: '1',

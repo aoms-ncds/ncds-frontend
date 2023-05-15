@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Box, Button, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import { Box, Button, Card, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import SubDivisionsPage from './SubDivisions';
-import BankDetailsFormComponent from './BankDetails';
+import BankDetailsForm from './components/BankDetails';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
@@ -148,7 +148,8 @@ const DivisionDetailsPage = () => {
           formattedId: '',
           createdAt: moment(),
           updatedAt: moment(),
-        },
+        }, createdAt: moment(),
+        updatedAt: moment(),
       },
       subDivisions: [{
         _id: '',
@@ -204,116 +205,131 @@ const DivisionDetailsPage = () => {
   }, []);
   return (
     <CommonPageLayout title={action === 'add' ? 'Add Division' : (action === 'edit' ? 'Edit Division' : 'Division Details')}>
-      <Container>
+      {/* <Box sx={{ width: '100%' }}> */}
+      <Container maxWidth="md">
+
+        <Stepper activeStep={activeStep}>
+          <Step>
+            <StepLabel>Division Profile</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Sub Divisions</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Bank Details</StepLabel>
+          </Step>
+        </Stepper><br />
+      </Container>
+      <Card style={{ width: '100%' }}>
         <CardContent>
-          <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}>
-              <Step>
-                <StepLabel>Division Profile</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Sub Divisions</StepLabel>
-              </Step>
-              <Step>
-                <StepLabel>Bank Details</StepLabel>
-              </Step>
-
-
-            </Stepper><br />
+          <form onSubmit={action === 'add' ? AddDivision : EditDivision} >
             {activeStep == 0 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setactiveStep(1);
-                }}
-              ><DivisionsFormComponent division={divisionDetails?.division}/>
-                <br/> <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
-                      Next
-                </Button>
 
-              </form>
-            )}<br />
-            {activeStep == 1 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setactiveStep(2);
-                }}
-              ><SubDivisionsPage withCardContainer={divisionDetails?.subDivisions} />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ float: 'right', padding: '16px 64px' }}
-                >
-                      Next
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setactiveStep(0);
-                  } }
-                  variant="outlined"
-                  sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                >    Go back
-                </Button>
-              </form>
-            )}
-            {activeStep == 2 && (
+
               <>
-                <form onSubmit={action === 'add' ? AddDivision : EditDivision} >
-                  <Grid container spacing={12}>
-                    <Grid item xs={12} md={6} lg={6}>
+                <Grid container spacing={2}>
 
-                      <BankDetailsFormComponent
-                        value={divisionDetails?.FCRABankDetails}
-                        onChange={(newbankDetails: BankDetails) => {
-                          setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails }));
-                        }}
-                        action={'add'}
-                        title='FDRA Bank Details'
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={6}>
+                  <DivisionsFormComponent division={divisionDetails?.division} />
+                  <br />
+                  <Grid item xs={12} >
 
-                      <BankDetailsFormComponent
-                        value={divisionDetails?.localBankDetails}
-                        onChange={(newbankDetails: BankDetails) => {
-                          setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails }));
-                        }}
-                        action={'add'}
-                        title='Local Bank Details'
-                      />
-                    </Grid>
-                  </Grid>
-                  {action !== 'view' && (
                     <Button
                       type="submit"
                       variant="contained"
                       sx={{ float: 'right', padding: '16px 64px' }}
+                      onClick={()=> setactiveStep(1)}
                     >
-                    Submit
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      setactiveStep(1);
-                    } }
-                    variant="outlined"
-                    sx={{ p: '16px 64px', mr: 2, float: 'right' }}
-                  >    Go back
-                  </Button>
-                </form>
+                      Next
+                    </Button>    <br />
+                  </Grid>
+                </Grid>
               </>
 
             )}
-          </Box>
-        </CardContent>
-      </Container>
+            {activeStep == 1 && (
+              // <form
+              //   onSubmit={(e) => {
+              //     e.preventDefault();
+              //     setactiveStep(2);
+              //   }}
+              //   >
+              <>
+                <Grid container spacing={2}>
+                  <SubDivisionsPage withCardContainer={divisionDetails?.subDivisions} />
+                  <Grid item xs={12} >
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ float: 'right', padding: '16px 64px' }}
+                      onClick={()=> setactiveStep(2)}
+                    >
+                      Next
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setactiveStep(0);
+                      } }
+                      variant="outlined"
+                      sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                    >    Go back
+                    </Button>
+
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            {activeStep == 2 && (
+              <>
+                <Grid container spacing={2}>
+
+                  <BankDetailsForm
+                    value={divisionDetails?.FCRABankDetails}
+                    onChange={(newbankDetails: BankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails }));
+                    }}
+                    action={'add'}
+                    options={{ title: 'FCRA Bank Details' }}
+                  />
+
+
+                  <BankDetailsForm
+                    value={divisionDetails?.localBankDetails}
+                    onChange={(newbankDetails: BankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails }));
+                    }}
+                    action={'add'}
+                    options={{ title: 'Local Bank Details' }}
+                  />
+                  <Grid item xs={12} >
+
+                    {action !== 'view' && (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{ float: 'right', padding: '16px 64px' }}
+                      >
+                    Submit
+                      </Button>
+                    )}
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setactiveStep(1);
+                      } }
+                      variant="outlined"
+                      sx={{ p: '16px 64px', mr: 2, float: 'right' }}
+                    >    Go back
+                    </Button>
+                  </Grid>
+                </Grid>
+              </>
+
+            )}
+          </form>
+        </CardContent></Card>
+      {/* </Box> */}
 
     </CommonPageLayout>
   );

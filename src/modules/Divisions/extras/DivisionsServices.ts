@@ -112,6 +112,8 @@ export default {
           createdAt: moment(),
           updatedAt: moment(),
         },
+        createdAt: moment(),
+        updatedAt: moment(),
       },
       {
         divisionName: 'Division 2',
@@ -209,6 +211,8 @@ export default {
           createdAt: moment(),
           updatedAt: moment(),
         },
+        createdAt: moment(),
+        updatedAt: moment(),
       },
 
       ],
@@ -348,6 +352,8 @@ export default {
             createdAt: moment(),
             updatedAt: moment(),
           },
+          createdAt: moment(),
+          updatedAt: moment(),
         },
         subDivisions: [{
           _id: '1',

@@ -1,7 +1,7 @@
 export { };
 
 declare global {
-interface IETDivisions {
+interface IETDivisions extends MongooseDocument{
     divisionName: string;
     _id: string;
     divisionId: string;
