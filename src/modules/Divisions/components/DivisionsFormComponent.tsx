@@ -375,24 +375,20 @@ const DivisionsFormComponent = ({
                 />
               </Grid>
               {/* <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
                   value={newDivision.coordinator?.phone || division?.coordinator?.phone}
                   disabled
                   fullWidth
                 />
-              </FormControl>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
                   value={newDivision.coordinator?.email || division?.coordinator?.email}
                   disabled
                   fullWidth
                 />
-              </FormControl>
             </Grid> */}
               <Grid item xs={12} md={6} lg={4}>
                 <StaffDropdown
@@ -410,24 +406,20 @@ const DivisionsFormComponent = ({
               </Grid>
               {/*
             <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
                   value={newDivision.seniorLeader?newDivision.seniorLeader.phone:'' || division?.seniorLeader?division.seniorLeader.phone:''}
 
                   disabled fullWidth
                 />
-              </FormControl>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
                   value={newDivision.seniorLeader?.email || division?.seniorLeader?.email}
                   disabled
                   fullWidth
                 />
-              </FormControl>
             </Grid> */}
               <Grid item xs={12} md={6} lg={4}>
                 <StaffDropdown
@@ -445,17 +437,14 @@ const DivisionsFormComponent = ({
               </Grid>
 
               {/* <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
                   value={newDivision.juniorLeader?.phone || division?.juniorLeader?.phone}
 
                   disabled fullWidth
                 />
-              </FormControl>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
                   value={newDivision.juniorLeader?.email || division?.juniorLeader?.email}
@@ -463,7 +452,6 @@ const DivisionsFormComponent = ({
                   disabled
                   fullWidth
                 />
-              </FormControl>
             </Grid> */}
             </Grid>
           </CardContent>

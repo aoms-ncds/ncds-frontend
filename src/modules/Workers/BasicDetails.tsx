@@ -340,7 +340,6 @@ const BasicDetails = () => {
             />
         </Grid>
         {/* <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Permanent Address"
               value={newWorkerBasicDetails?.permanentAddress}
@@ -352,10 +351,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
               value={newWorkerBasicDetails?.permanentAddressCity}
@@ -367,10 +364,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
               value={newWorkerBasicDetails?.permanentAddressDistrict}
@@ -382,10 +377,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
               value={newWorkerBasicDetails?.permanentAddressState}
@@ -397,10 +390,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
               value={newWorkerBasicDetails?.permanentAddressCountry}
@@ -412,10 +403,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
               value={newWorkerBasicDetails?.permanentAddressPincode}
@@ -427,10 +416,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Current Address"
               value={newWorkerBasicDetails?.currentAddress}
@@ -442,10 +429,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="City"
               value={newWorkerBasicDetails?.currentAddressCity}
@@ -457,10 +442,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="District"
               value={newWorkerBasicDetails?.currentAddressDistrict}
@@ -472,10 +455,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="State"
               value={newWorkerBasicDetails?.currentAddressState}
@@ -487,10 +468,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Country"
               value={newWorkerBasicDetails?.currentAddressCountry}
@@ -502,10 +481,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Pincode"
               value={newWorkerBasicDetails?.currentAddressPincode}
@@ -517,10 +494,8 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid> */}
         {/* <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Spouse of another staff"
               value={newWorkerBasicDetails?.spouse}
@@ -532,7 +507,6 @@ const BasicDetails = () => {
               }
               fullWidth
             />
-          </FormControl>
         </Grid> */}
       </Grid>
     </form>
