@@ -57,11 +57,12 @@ declare global {
     endDate: Moment;
   }
 
-  interface FormComponentProps<T>{
-    value: T;
-    onChange: (newState: T) => void;
+  interface FormComponentProps<FormState, Options={}>{
+    value: FormState;
+    options?: Options;
+    onChange: (newState: FormState) => void;
     action: 'view'|'add'|'edit';
-    onSubmit?: (data: T) => Promise<void>;
+    onSubmit?: (data: FormState) => Promise<void>;
     title?: string;
   }
 
