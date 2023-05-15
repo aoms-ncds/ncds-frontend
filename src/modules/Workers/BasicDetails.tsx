@@ -75,7 +75,6 @@ const BasicDetails = () => {
     <form>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label=" Worker Code"
               value={newWorkerBasicDetails?.workerCode}
@@ -84,13 +83,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   workerCode: e.target.value,
                 }))
-              }
+              } variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Field Missionary/ Non-Missionary</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -108,10 +105,8 @@ const BasicDetails = () => {
               <FormControlLabel value="missionary" control={<Radio />} label="Missionary" />
               <FormControlLabel value="nonMissionary" control={<Radio />} label="Non-Missionary" />
             </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="First Name"
               value={newWorkerBasicDetails?.firstName}
@@ -120,13 +115,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   firstName: e.target.value,
                 }))
-              }
+              } variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Last Name"
               // value={IROrelease?.releaseAmount}
@@ -139,10 +132,8 @@ const BasicDetails = () => {
               // }
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker label="Date Of Birth"
                 // value={newWorkerBasicDetails?.workerCode}
@@ -155,10 +146,8 @@ const BasicDetails = () => {
               />
 
             </LocalizationProvider>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -177,10 +166,8 @@ const BasicDetails = () => {
               <FormControlLabel value="M" control={<Radio />} label="Male" />
               <FormControlLabel value="O" control={<Radio />} label="Other" />
             </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Age"
               type="number"
@@ -190,13 +177,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   age: Number(e.target.value) < 0 && Number(e.target.value)>120 ? 0 : Number(e.target.value),
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Marital Status</FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
@@ -214,10 +199,8 @@ const BasicDetails = () => {
               <FormControlLabel value="U" control={<Radio />} label="Unmarried" />
               <FormControlLabel value="M" control={<Radio />} label="Married" />
             </RadioGroup>
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Highest Qualification"
               value={newWorkerBasicDetails?.highestQualification}
@@ -226,13 +209,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   highestQualification: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mother Tongue"
               value={newWorkerBasicDetails?.motherToungue}
@@ -241,13 +222,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   motherToungue: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Communication Language"
               value={newWorkerBasicDetails?.communicationLanguage}
@@ -256,13 +235,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   communicationLanguage: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <Autocomplete
               multiple
               id="languges"
@@ -282,10 +259,8 @@ const BasicDetails = () => {
               )}
             />
 
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Email-ID"
               value={newWorkerBasicDetails?.email}
@@ -294,13 +269,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   email: e.target.value,
                 }))
-              }
+              } variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Mobile No"
               value={newWorkerBasicDetails?.phone}
@@ -309,13 +282,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   phone: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="Alternative Mobile No."
               value={newWorkerBasicDetails?.alternativeMobileNumber}
@@ -324,13 +295,11 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   alternativeMobileNumber: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="PAN Number"
               value={newWorkerBasicDetails?.PANNo}
@@ -339,31 +308,25 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   PANNo: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="standard" fullWidth>
             <TextField
               label="Aadhaar"
               type="file"
             // onChange={(e) => handleFileUpload(e.target.files)}
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="standard" fullWidth>
             <TextField
               label="Voter ID"
               type="file"
             // onChange={(e) => handleFileUpload(e.target.files)}
             />
-          </FormControl>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <FormControl variant="outlined" fullWidth>
             <TextField
               label="License Number"
               value={newWorkerBasicDetails?.licenseNumber}
@@ -372,10 +335,9 @@ const BasicDetails = () => {
                   ...newWorkerBasicDetails,
                   licenseNumber: e.target.value,
                 }))
-              }
+              }variant="outlined"
               fullWidth
             />
-          </FormControl>
         </Grid>
         {/* <Grid item xs={12} md={6} lg={6}>
           <FormControl variant="outlined" fullWidth>
