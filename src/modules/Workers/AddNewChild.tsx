@@ -43,20 +43,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
 
   []);
-  const handleDateChange = (date: Moment | null) => {
-    // console.log(date);
-    if (date) {
-      const formattedDate = date.format('MM/DD/YYYY');
 
-      const age = moment(formattedDate, 'MM/DD/YYYY').month(0).from(moment().month(0));
-
-      setNewChild((newchild) => ({
-        ...newchild,
-        dob: date as Moment,
-        age: age,
-      }));
-    }
-  };
   const AddChild = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     WorkerServices.addChild(props.action)
@@ -94,169 +81,191 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
       <form onSubmit={props.action === 'add' ? AddChild : UpdateChild}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label=" First Name"
-                value={newChild?.firstName}
+            <FormControl>
+              <FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="new"
+                value={newChild?.type}
                 onChange={(e) =>
                   setNewChild((newchild) => ({
                     ...newchild,
-                    firstName: e.target.value,
+                    type: e.target.value,
                   }))
                 }
-                fullWidth
-              />
+                name="radio-buttons-group"
+                row
+              >
+                <FormControlLabel value="new" control={<Radio />} label="New" />
+                <FormControlLabel value="existing" control={<Radio />} label="Existing" />
+              </RadioGroup>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label=" Second Name"
-                value={newChild?.secondName}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    secondName: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date Of Birth"
-                  value={newChild?.dob}
-                  onChange={handleDateChange}
 
-                />
-              </LocalizationProvider>
-            </FormControl>
+            <TextField
+              label=" First Name"
+              value={newChild?.firstName}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  firstName: e.target.value,
+                }))
+              }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
+
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+            <TextField
+              label=" Second Name"
+              value={newChild?.secondName}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  secondName: e.target.value,
+                }))
+              }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Age"
-                value={newChild?.age}
-                // onChange={(e) =>
-                //   setNewChild((newchild) => ({
-                //     ...newchild,
-                //     age: Number(e.target.value),
-                //   }))
-                // }
-                fullWidth
+              <DatePicker
+                label="Date Of Birth"
+                value={newChild?.dob}
+                onChange={(date: Moment | null) => {
+                  if (date) {
+                    setNewChild((newChild) => ({
+                      ...newChild,
+                      dob: date,
+                    }));
+                  }
+                }}
+
               />
             </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+            <TextField
+              label="Age"
+              value={newChild?.dob?.fromNow()}
+              // onChange={(e) =>
+              //   setNewChild((newchild) => ({
+              //     ...newchild,
+              //     age: Number(e.target.value),
+              //   }))
+              // }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                // /defaultValue='false'
-                value={Boolean(newChild?.studying)}
+                defaultValue={false}
+                value={newChild?.studying}
                 onChange={(e) =>
                   setNewChild((newchild) => ({
                     ...newchild,
-                    studying: Boolean(e.target.value),
+                    studying: e.target.value === 'true',
                   }))
                 }
                 name="radio-buttons-group"
                 row
               >
-                <FormControlLabel value='0' control={<Radio />} label="Yes" />
-                <FormControlLabel value='1' control={<Radio />} label="No" />
+                <FormControlLabel value={true} control={<Radio />} label="Yes" />
+                <FormControlLabel value={false} control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label=" Class Of Study"
-                value={newChild?.classOfStudy}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    classOfStudy: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label=" Class Of Study"
+              value={newChild?.classOfStudy}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  classOfStudy: e.target.value,
+                }))
+              }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                // defaultValue='0'
-                value={Boolean(newChild?.studying)}
+                defaultValue={false}
+                value={newChild?.working}
                 onChange={(e) =>
                   setNewChild((newchild) => ({
                     ...newchild,
-                    Working: Boolean(e.target.value),
+                    working: e.target.value === 'true',
                   }))
                 }
                 name="radio-buttons-group"
                 row
               >
-                <FormControlLabel value='0' control={<Radio />} label="Yes" />
-                <FormControlLabel value='1' control={<Radio />} label="No" />
+                <FormControlLabel value={true} control={<Radio />} label="Yes" />
+                <FormControlLabel value={false} control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Occupation"
-                value={newChild?.occupation}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    occupation: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Occupation"
+              value={newChild?.occupation}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  occupation: e.target.value,
+                }))
+              }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Qualification"
-                value={newChild?.qualification}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    qualification: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+            <TextField
+              label="Qualification"
+              value={newChild?.qualification}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  qualification: e.target.value,
+                }))
+              }
+              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+            />
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <Autocomplete
               value={newChild?.childSupport}
-              options={childSupport?? []}
+              options={childSupport ?? []}
               getOptionLabel={(childSupport) => childSupport}
-              //   onChange={(_e, childSupport) => {
-              //     if (workers ) {
-              //       setNewChild((newchild) => ({
-              //         ...newChild,
-              //         childSupport: childSupport,
-              //       }));
-              //     }
-              //   }}
+              onChange={(_e, childSupport) => {
+                if (workers) {
+                  setNewChild((newChild) => ({
+                    ...newChild,
+                    childSupport: childSupport ?? '',
+                  }));
+                }
+              }}
               renderInput={(params) => <TextField {...params} label="Child Support" required />}
               fullWidth
             />
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <Autocomplete
-              value={newChild?.childOf}
+              value={newChild?.childOf || null}
               options={workers ?? []}
               getOptionLabel={(worker) => worker.firstName}
               onChange={(_e, workers) => {
@@ -271,8 +280,8 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               fullWidth
             />
 
-          </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          </Grid><br />
+          <Grid item lg={12}>
             <Button
               type="submit"
               variant="contained"

@@ -30,13 +30,7 @@ const ChildListPage = () => {
     });
   }, []);
   const columns = [
-    {
-      field: 'image',
-      headerName: '',
-      minWidth: 50,
-      type: 'string',
-      renderCell: (props: any) => (<Avatar />),
-    },
+
     {
       field: '_manage',
       headerName: 'Action',
@@ -53,7 +47,7 @@ const ChildListPage = () => {
               id: 'View',
               text: 'View',
               component: Link,
-              to: '/child/profile/' + props.row._id,
+              to: '/workers/childedit/' + props.row._id,
               icon: PreviewIcon,
             },
             {
@@ -80,7 +74,9 @@ const ChildListPage = () => {
     { field: 'firstName', headerName: 'First Name', width: 70 },
     { field: 'secondName', headerName: 'Second Name', width: 130 },
     { field: 'dob', headerName: 'DOB', width: 170 },
-    { field: 'age', headerName: 'Age', width: 130 },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => (
+      <p> {props.row.dob?.fromNow()}</p>
+    ), width: 130 },
     { field: 'childSupport', headerName: 'Child Support', width: 130 },
     { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => (
       <p> {props.row.childOf?.firstName}</p>

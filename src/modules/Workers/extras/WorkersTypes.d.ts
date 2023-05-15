@@ -106,13 +106,12 @@ declare global {
         type:string;
         firstName: string;
         secondName: string;
-        dob: string;
-        childOf: BasicDetails;
-        age:string;
+        dob: moment;
+        childOf: BasicDetails | null;
         childSupport: string;
         studying: boolean;
         classOfStudy: string;
-        Working:boolean;
+        working:boolean;
         occupation: string;
         qualification:string;
 
@@ -120,12 +119,11 @@ declare global {
     }
     interface CreatableChild extends Creatable<Child>{
         dob?: Moment;
-        childOf?: BasicDetails;
-        age?:string;
+        childOf?: BasicDetails | null;
         childSupport?: string;
         studying?: boolean;
         classOfStudy?: string;
-        Working?:boolean;
+        working?:boolean;
         occupation?: string;
         qualification?:string;
 }
@@ -134,9 +132,8 @@ interface Spause extends MongooseDocument{
     secondName: string;
     email:string;
     mobileNo:string;
-    dob: string;
+    dob: moment;
     spauseOf: BasicDetails;
-    age:string;
     working:boolean;
     occupation: string;
     qualification:string;
@@ -144,9 +141,8 @@ interface Spause extends MongooseDocument{
 
 }
 interface CreatableSpause extends Creatable<Spause>{
-    dob?: string;
-    spauseOf?: BasicDetails;
-    age?:string;
+    dob?: moment;
+    spauseOf?: BasicDetails | null;
     working?:boolean;
     occupation?: string;
     qualification?:string;

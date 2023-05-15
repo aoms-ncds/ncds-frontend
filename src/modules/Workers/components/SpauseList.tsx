@@ -71,10 +71,12 @@ const SpauseListPage = () => {
     { field: 'email', headerName: 'Email', width: 170 },
     { field: 'mobileNo', headerName: 'Mobile No', width: 130 },
     { field: 'dob', headerName: 'Date of Birth', width: 130 },
-    { field: 'age', headerName: 'Age', width: 130 },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => (
+      <p> {props.row.dob?.fromNow()}</p>
+    ), width: 130 },
     { field: 'qualification', headerName: 'Qualification', width: 130 },
     { field: 'spauseOf', headerName: 'Spouse Of', renderCell: (props: any) => (
-      <p> {props.row.childOf?.firstName}</p>
+      <p> {props.row.spauseOf?.firstName}</p>
     ), width: 130 },
 
 

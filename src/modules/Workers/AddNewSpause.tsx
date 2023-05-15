@@ -43,18 +43,7 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
 
 
   []);
-  const handleDateChange = (date: Moment | null) => {
-    //   // console.log(date);
-    //   if (date) {
-    //     const age = moment(date).month(0).from(moment().month(0));
-
-    //     setNewSpause((newSpause) => ({
-    //       ...newSpause,
-    //       dob: date,
-    //       age: age,
-    //     }));
-    //   }
-  };
+  // const handleDateChange =
   const addSpause = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     WorkerServices.addSpause(props.action)
@@ -92,143 +81,150 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
       <form onSubmit={props.action === 'add' ? addSpause : editSpause}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label=" First Name"
-                value={newSpause?.firstName}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    firstName: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label=" Second Name"
-                value={newSpause?.secondName}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    secondName: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Email"
-                value={newSpause?.email}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    email: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Email"
-                value={newSpause?.email}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    email: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Mobile Number"
-                value={newSpause?.mobileNo}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    email: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Date Of Birth"
-                  // value={newSpause?.dob}
-                  onChange={handleDateChange}
 
-                />
-              </LocalizationProvider>
-            </FormControl>
+            <TextField
+              label=" First Name"
+              value={newSpause?.firstName}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  firstName: e.target.value,
+                }))
+              }
+              variant="outlined" fullWidth
+            />
+
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+            <TextField
+              label=" Second Name"
+              value={newSpause?.secondName}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  secondName: e.target.value,
+                }))
+              }
+              fullWidth
+            />
+
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+            <TextField
+              label="Email"
+              value={newSpause?.email}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  email: e.target.value,
+                }))
+              }
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+            <TextField
+              label="Email"
+              value={newSpause?.email}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  email: e.target.value,
+                }))
+              }
+              fullWidth
+              // eslint-disable-next-line react/jsx-no-duplicate-props
+              variant="outlined"
+            />
+
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <TextField
+              label="Mobile Number"
+              value={newSpause?.mobileNo}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  email: e.target.value,
+                }))
+              }
+              variant="outlined" fullWidth
+            />
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Age"
-                value={newSpause?.age}
-                // onChange={(e) =>
-                //   setNewSpause((newchild) => ({
-                //     ...newchild,
-                //     age: Number(e.target.value),
-                //   }))
-                // }
-                fullWidth
+
+              <DatePicker
+                label="Date Of Birth"
+                value={newSpause?.dob}
+                onChange={(date: Moment | null) => {
+                  if (date) {
+                    setNewSpause((newSpause) => ({
+                      ...newSpause,
+                      dob: date,
+                      // age: age,
+                    }));
+                  }
+                }}
+
               />
+
             </FormControl>
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+
+
+            <TextField
+              label="Age"
+              value={newSpause?.dob?.fromNow()}
+              // onChange={(e) =>
+              //   setNewSpause((newchild) => ({
+              //     ...newchild,
+              //     age: Number(e.target.value),
+              //   }))
+              // }
+              fullWidth
+              variant="outlined" InputLabelProps={{ shrink: true }}
+            />
+
           </Grid>
 
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                // defaultValue='0'
-                value={Boolean(newSpause?.working)}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    Working: Boolean(e.target.value),
-                  }))
-                }
-                name="radio-buttons-group"
-                row
-              >
-                <FormControlLabel value='0' control={<Radio />} label="Yes" />
-                <FormControlLabel value='1' control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              // defaultValue="Yes"
+              name="radio-buttons-group"
+              row
+              value={newSpause.working ? 'Yes' : 'No'}
+              onChange={(e) =>
+                setNewSpause((prev) => ({
+                  ...prev,
+                  Working: e.target.value === 'Yes',
+                }))
+              }
+            >
+              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="No" control={<Radio />} label="No" />
+            </RadioGroup>
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
-            <FormControl variant="outlined" fullWidth>
-              <TextField
-                label="Occupation"
-                value={newSpause?.occupation}
-                onChange={(e) =>
-                  setNewSpause((newchild) => ({
-                    ...newchild,
-                    occupation: e.target.value,
-                  }))
-                }
-                fullWidth
-              />
-            </FormControl>
+
+            <TextField
+              label="Occupation"
+              value={newSpause?.occupation}
+              onChange={(e) =>
+                setNewSpause((newchild) => ({
+                  ...newchild,
+                  occupation: e.target.value,
+                }))
+              }
+              fullWidth InputLabelProps={{ shrink: true }}
+            />
+
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <FormControl variant="outlined" fullWidth>
@@ -241,7 +237,7 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
                     qualification: e.target.value,
                   }))
                 }
-                fullWidth
+                fullWidth InputLabelProps={{ shrink: true }}
               />
             </FormControl>
           </Grid>
@@ -257,22 +253,22 @@ const AddNewSpausePage = (props: SpauseFormPagerops) => {
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <Autocomplete
-              value={newSpause?.spauseOf}
+              value={newSpause?.spauseOf || null}
               options={workers ?? []}
               getOptionLabel={(worker) => worker.firstName}
-              onChange={(_e, workers) => {
-                if (workers ) {
+              onChange={(_e, worker) => {
+                if (worker) {
                   setNewSpause((newspause) => ({
                     ...newspause,
-                    spauseOf: workers,
+                    spauseOf: worker,
                   }));
                 }
               }}
               renderInput={(params) => <TextField {...params} label="Spause Of" required />}
               fullWidth
             />
-
-            <Grid item xs={12} md={12} lg={12}>
+            <br />
+            <Grid item lg={12}>
               <Button
                 type="submit"
                 variant="contained"

@@ -31,8 +31,8 @@ export default {
           secondName: 'Haridas',
           missionaryOrNonMissionary: '',
           dob: moment(),
-          gender: 'Female',
           age: '',
+          gender: 'Female',
           maritalStatus: '',
           highestQualification: '',
           motherToungue: '',
@@ -370,7 +370,6 @@ export default {
           firstName: 'Neha',
           secondName: 'Thomas',
           dob: moment(),
-          age: '2',
           childSupport: 'Yes',
           childOf: { _id: 1,
             workerCode: '111',
@@ -405,9 +404,10 @@ export default {
             currentAddressCountry: 'India',
             currentAddressPincode: '685581',
             spouseOfAnotherStaff: '' },
-          studying: 0,
+          studying: false,
           classOfStudy: '',
-          occupation: 0,
+          working: false,
+          occupation: '',
           qualification: '' },
       ],
       // error: null,
@@ -425,20 +425,6 @@ export default {
       timeout: 500,
     }),
   ),
-  getChildSupport: () => getStandardResponse<[]>(
-    dummyRequest({
-      data: [
-        { name: 'Level1' },
-        { name: 'Level2' },
-        { name: 'Level3' },
-
-      ],
-      // error: null,
-      message: 'Network Error',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
   getChildById: (childId: string) => getStandardResponse<CreatableChild>(
     dummyRequest<CreatableChild>({
       data: {
@@ -446,7 +432,6 @@ export default {
         firstName: 'Neha',
         secondName: 'Thomas',
         dob: moment(),
-        age: '2',
         childSupport: 'Level 1',
         childOf: { _id: '1',
           workerCode: '111',
@@ -483,7 +468,7 @@ export default {
           spouseOfAnotherStaff: '' },
         studying: true,
         classOfStudy: '',
-        Working: false,
+        working: false,
         occupation: '',
         qualification: '',
 
@@ -510,8 +495,7 @@ export default {
           _id: '1',
           firstName: 'Neha',
           secondName: 'Thomas',
-          dob: '12-12-2000',
-          age: '2',
+          dob: moment(),
           email: 'Mathew@gmail.com',
           mobileNo: '798865444',
           spauseOf: { _id: ' 1',
@@ -585,8 +569,7 @@ export default {
       data: {
         firstName: 'Neha',
         secondName: 'Thomas',
-        dob: '12-12-2000',
-        age: '2',
+        dob: moment(),
         email: 'Mathew@gmail.com',
         mobileNo: '798865444',
         spauseOf: { _id: ' 1',
