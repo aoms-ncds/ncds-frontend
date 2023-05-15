@@ -564,13 +564,13 @@ export default {
     }),
   ),
 
-  getSpauseById: (childId: string) => getStandardResponse<CreatableSpause>(
+  getSpauseById: (spauseId: string) => getStandardResponse<CreatableSpause>(
     dummyRequest<CreatableSpause>({
       data: {
-        firstName: 'Neha',
-        secondName: 'Thomas',
+        firstName: 'Akash',
+        secondName: 'M',
         dob: moment(),
-        email: 'Mathew@gmail.com',
+        email: 'akash@gmail.com',
         mobileNo: '798865444',
         spauseOf: { _id: ' 1',
           workerCode: '111',
