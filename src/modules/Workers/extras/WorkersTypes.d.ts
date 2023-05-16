@@ -46,6 +46,52 @@ declare global {
         pionMissionaryFund: number;
         MUTDeduction: number;
     }
+    interface Child extends MongooseDocument{
+        type:string;
+        firstName: string;
+        secondName: string;
+        dob: moment;
+        childOf: BasicDetails | null;
+        childSupport: string;
+        studying: boolean;
+        classOfStudy: string;
+        working:boolean;
+        occupation: string;
+        qualification:string;
 
 
- }
+    }
+    interface CreatableChild extends Creatable<Child>{
+        dob?: Moment;
+        childOf?: BasicDetails | null;
+        childSupport?: string;
+        studying?: boolean;
+        classOfStudy?: string;
+        working?:boolean;
+        occupation?: string;
+        qualification?:string;
+}
+interface Spouse extends MongooseDocument{
+    firstName: string;
+    secondName: string;
+    email:string;
+    mobileNo:string;
+    dob: moment;
+    spouseOf: BasicDetails;
+    working:boolean;
+    occupation: string;
+    qualification:string;
+    languagesKnown:string;
+
+}
+interface CreatableSpouse extends Creatable<Spouse>{
+    dob?: moment;
+    spouseOf?: BasicDetails | null;
+    working?:boolean;
+    occupation?: string;
+    qualification?:string;
+    languagesKnown?:string;
+}
+
+
+}
