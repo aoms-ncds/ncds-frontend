@@ -1,15 +1,10 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import axios from 'axios';
 
 export default {
   getCount: () => getStandardResponse<number>(
-    dummyRequest({
-      data: 5,
-      // error: null,
-      message: 'Network Error',
-      result: 'success',
-      timeout: 500,
-    }),
+    axios.get('/iro/count'),
   ),
   getAll: () => getStandardResponse<IROrder[]>(
     dummyRequest<IROrder[]>({

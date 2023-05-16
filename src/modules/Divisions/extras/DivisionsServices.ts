@@ -1,18 +1,13 @@
 import moment from 'moment';
 import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
+import axios from 'axios';
 
 export default {
   // getCount: () => getStandardResponse<number>(axios.get('http://localhost:8080/tests/getCount', {
   //   headers: { ...getAuthHeader() },
   // })),
   getCount: () => getStandardResponse<number>(
-    dummyRequest<number>({
-      data: 5,
-      // error: null,
-      message: 'Successfully fetched division count',
-      result: 'success',
-      timeout: 500,
-    }),
+    axios.get('/divisions/count'),
   ),
   getDivisions: () => getStandardResponse<IETDivisions[]>(
     dummyRequest<IETDivisions[]>({

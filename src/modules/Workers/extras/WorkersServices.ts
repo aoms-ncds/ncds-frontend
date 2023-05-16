@@ -1,18 +1,11 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import axios from 'axios';
 
 export default {
-  getCount: () => {
-    return getStandardResponse<number>(
-      dummyRequest({
-        data: 5,
-        // error: null,
-        message: 'Network Error',
-        result: 'success',
-        timeout: 500,
-      }),
-    );
-  },
+  getCount: () => getStandardResponse<number>(
+    axios.get('/worker/count'),
+  ),
   approveWorker: ( id:string) => getStandardResponse<number>(
     dummyRequest({
       data: id,
