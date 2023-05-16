@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-no-undef */
-import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
 import moment from 'moment';
-import HRServices from '../../HR/extras/HRServices';
-import { StaffDropdown } from '../../HR/components/StaffDropdown';
+import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
 
 const DivisionsFormComponent = ({
@@ -213,16 +212,15 @@ const DivisionsFormComponent = ({
 
     },
   );
-  const [staffs, setStaffs] = useState<Staff[]>();
 
 
-  useEffect(() => {
-    HRServices.getStaffs()
-    .then((res) => {
-      // console.log(res);
-      setStaffs(res.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   HRServices.getStaffs()
+  //   .then((res) => {
+  //     // console.log(res);
+  //     setStaffs(res.data);
+  //   });
+  // }, []);
 
   return (
     <>

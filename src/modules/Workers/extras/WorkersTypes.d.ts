@@ -49,7 +49,7 @@ declare global {
     interface Child extends MongooseDocument{
         type:string;
         firstName: string;
-        secondName: string;
+        lastName: string;
         dob: moment;
         childOf: IETWorker | null;
         childSupport: string;
@@ -73,7 +73,7 @@ declare global {
 }
 interface Spouse extends MongooseDocument{
     firstName: string;
-    secondName: string;
+    lastName: string;
     email:string;
     mobileNo:string;
     dob: moment;
@@ -81,7 +81,7 @@ interface Spouse extends MongooseDocument{
     working:boolean;
     occupation: string;
     qualification:string;
-    languagesKnown:string;
+    languagesKnown:LanguagesList[];
 
 }
 interface CreatableSpouse extends Creatable<Spouse>{
@@ -90,7 +90,7 @@ interface CreatableSpouse extends Creatable<Spouse>{
     working?:boolean;
     occupation?: string;
     qualification?:string;
-    languagesKnown?:string;
+    languagesKnown?:LanguagesList[];
 }
 
 

@@ -46,7 +46,7 @@ const ApproveWorkerPage = () => {
   const columns = [
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'secondName', headerName: 'Second Name', width: 130 },
+    { field: 'secondName', headerName: 'Last Name:', width: 130 },
     { field: 'view', headerName: 'View', width: 130, renderCell: (props: any) => (
       <Button
         component={Link}

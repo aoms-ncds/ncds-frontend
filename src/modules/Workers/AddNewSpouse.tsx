@@ -13,10 +13,10 @@ interface SpouseFormPagerops{
 
 const AddNewSpousePage = (props: SpouseFormPagerops) => {
   const { spouseId } = useParams();
-  const [workers, setWorkers] = useState<BasicDetails[]>();
+  const [workers, setWorkers] = useState<IETWorker[]>();
   const [newSpouse, setNewSpouse] = useState<CreatableSpouse>({
     firstName: '',
-    secondName: '',
+    lastName: '',
     email: '',
     mobileNo: '',
   });
@@ -98,12 +98,12 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
           <Grid item xs={12} md={6} lg={6}>
 
             <TextField
-              label=" Second Name"
-              value={newSpouse?.secondName}
+              label=" Last Name"
+              value={newSpouse?.lastName}
               onChange={(e) =>
                 setNewSpouse((newchild) => ({
                   ...newchild,
-                  secondName: e.target.value,
+                  lastName: e.target.value,
                 }))
               }
               fullWidth

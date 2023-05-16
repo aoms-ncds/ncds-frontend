@@ -67,7 +67,7 @@ const SpouseListPage = () => {
     },
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'secondName', headerName: 'Second Name', width: 130 },
+    { field: 'secondName', headerName: 'Last Name:', width: 130 },
     { field: 'email', headerName: 'Email', width: 170 },
     { field: 'mobileNo', headerName: 'Mobile No', width: 130 },
     { field: 'dob', headerName: 'Date of Birth', width: 130 },

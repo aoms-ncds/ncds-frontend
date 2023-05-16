@@ -2,7 +2,6 @@ import {
   Container,
   CardContent,
   Grid,
-  FormControl,
   InputLabel,
   Select,
   MenuItem,
@@ -14,7 +13,6 @@ import {
   Box,
   DialogActions,
   DialogContent,
-  DialogContentText,
   Table,
   TableHead,
   TableRow,
@@ -22,15 +20,11 @@ import {
   TableBody,
   DialogTitle,
   TableContainer,
-  Stack,
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import {
-  LocalizationProvider,
   DatePicker,
-  DateTimePicker,
 } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -56,6 +50,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     useState<SubCategory2>();
   const [selectedSubCategory3, setSelectedSubCategory3] =
     useState<SubCategory3>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Particulars, setParticulars] = useState<Particulars[]>();
   const [particularDetails, setParticularDetails] = useState<Particulars>({
@@ -474,6 +469,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   getOptionLabel={(staff) =>
                     staff.firstName + ' ' + staff.lastName ?? ''
                   }
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   renderOption={(props, staff, { selected }) => (
                     <Box
                       component="li"

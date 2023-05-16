@@ -14,11 +14,11 @@ interface ChildFormPagerops{
 
 const AddNewChildPage = (props: ChildFormPagerops) => {
   const { childId } = useParams();
-  const [workers, setWorkers] = useState<BasicDetails[]>();
+  const [workers, setWorkers] = useState<IETWorker[]>();
   const [newChild, setNewChild] = useState<CreatableChild>({
     type: '',
     firstName: '',
-    secondName: '',
+    lastName: '',
   });
 
   useEffect(() => {
@@ -119,8 +119,8 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
           <Grid item xs={12} md={6} lg={6}>
 
             <TextField
-              label=" Second Name"
-              value={newChild?.secondName}
+              label=" Last Name:"
+              value={newChild?.lastName}
               onChange={(e) =>
                 setNewChild((newchild) => ({
                   ...newchild,

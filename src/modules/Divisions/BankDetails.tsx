@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
-const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
+const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:string}>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
     props.value ?? {
       bankname: '',
@@ -16,7 +16,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
     <form>
       <>
         <Typography variant="h4" component="h4">
-          {props.title}
+          {props.options?.title??'Bank Details'}
         </Typography>
         <br />
         <Grid container spacing={3}>

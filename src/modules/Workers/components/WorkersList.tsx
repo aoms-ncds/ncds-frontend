@@ -16,7 +16,7 @@ import WorkerServices from '../extras/WorkersServices';
 import { Avatar, Button, Card, Grid } from '@mui/material';
 const WorkersListPage = () => {
   const loader = useLoader();
-  const [WorkerRequests, setWorkerRequests] = useState<BasicDetails[]|null>(null);
+  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[]|null>(null);
 
   useEffect(() => {
     loader.onLoad();
@@ -110,7 +110,7 @@ const WorkersListPage = () => {
     },
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'secondName', headerName: 'Second Name', width: 130 },
+    { field: 'secondName', headerName: 'Last Name:', width: 130 },
     { field: 'missionaryOrNonMissionary', headerName: 'Missionary', width: 150 },
     { field: 'dob', headerName: 'DOB', width: 170 },
     { field: 'gender', headerName: 'Gender', width: 150 },
@@ -120,8 +120,8 @@ const WorkersListPage = () => {
     { field: 'motherToungue', headerName: 'Mother Toungue', width: 130 },
     { field: 'communicationLanguage', headerName: 'Communication Language', width: 130 },
     { field: 'languagesKnown', headerName: 'Languages Known', width: 130 },
-    { field: 'emailId', headerName: 'Email Id', width: 130 },
-    { field: 'mobileNumber', headerName: 'Mobile Number', width: 130 },
+    { field: 'email', headerName: 'Email Id', width: 130 },
+    { field: 'phone', headerName: 'Mobile Number', width: 130 },
     { field: 'alternativeMobileNumber', headerName: 'Alernative Mobile Number', width: 130 },
     { field: 'PANnumber', headerName: 'PAN Number', width: 130 },
     { field: 'aadhaarNumber', headerName: 'Aadhaar Number', width: 130 },
