@@ -1,7 +1,7 @@
-import { Grid, FormControl, TextField } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import WorkerServices from "./extras/WorkersServices";
+import { Grid, FormControl, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import WorkerServices from './extras/WorkersServices';
 
 const SupportStructure = () => {
   const { workersId } = useParams();

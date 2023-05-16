@@ -5,7 +5,7 @@ export { };
 
 declare global {
     interface WorkersDetails{
-        basicDetails: IETWorker;
+        IETWorker: IETWorker;
         officialDetails: OfficialDetails;
         supportDetails?: SupportDetails;
         supportStructure?: SupportStructure;
@@ -51,7 +51,7 @@ declare global {
         firstName: string;
         secondName: string;
         dob: moment;
-        childOf: BasicDetails | null;
+        childOf: IETWorker | null;
         childSupport: string;
         studying: boolean;
         classOfStudy: string;
@@ -63,7 +63,7 @@ declare global {
     }
     interface CreatableChild extends Creatable<Child>{
         dob?: Moment;
-        childOf?: BasicDetails | null;
+        childOf?: IETWorker | null;
         childSupport?: string;
         studying?: boolean;
         classOfStudy?: string;
@@ -77,7 +77,7 @@ interface Spouse extends MongooseDocument{
     email:string;
     mobileNo:string;
     dob: moment;
-    spouseOf: BasicDetails;
+    spouseOf: IETWorker;
     working:boolean;
     occupation: string;
     qualification:string;
@@ -86,7 +86,7 @@ interface Spouse extends MongooseDocument{
 }
 interface CreatableSpouse extends Creatable<Spouse>{
     dob?: moment;
-    spouseOf?: BasicDetails | null;
+    spouseOf?: IETWorker | null;
     working?:boolean;
     occupation?: string;
     qualification?:string;
