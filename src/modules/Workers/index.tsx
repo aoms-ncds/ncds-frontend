@@ -23,14 +23,16 @@ const WorkersDashboard = () => {
   return (
     <CommonPageLayout>
       <Grid container spacing={3}>
+
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton
+          <DashboardCardButton 
             primaryText='Manage Workers'
             secondaryText={workersCount?.toString()}
             color='#29cc39'
             targetRoute="/workers/manage"
           />
         </Grid>
+
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
             primaryText='Approve New Workers'
@@ -39,6 +41,7 @@ const WorkersDashboard = () => {
             targetRoute="/workers/approve"
           />
         </Grid>
+
       </Grid>
     </CommonPageLayout>
   );
