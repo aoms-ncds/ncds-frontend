@@ -51,9 +51,9 @@ declare global {
     workerCode: string;
     missionaryOrNonMissionary: string;
     highestQualification: string;
-    motherToungue: string;
-    communicationLanguage: string;
-    languagesKnown: LanguagesList;
+    motherToungue: Language;
+    communicationLanguage: Language;
+    languagesKnown: Language[];
     alternativeMobileNumber: string;
     PANNo: string;
     aadhaar: {
@@ -68,7 +68,6 @@ declare global {
     permanentAddress: Address;
     currentAddress: Address;
   }
-
 
   interface Subdivisions {
     _id: string;

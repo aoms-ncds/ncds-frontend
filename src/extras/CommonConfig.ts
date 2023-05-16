@@ -3,7 +3,7 @@ export default {
 };
 
 
-export const LanguagesList:readonly string[] = [
+export const languages= [
   'Afrikaans',
   'Albanian - shqip',
   'Amharic - አማርኛ',
@@ -146,4 +146,4 @@ export const LanguagesList:readonly string[] = [
   'Yiddish',
   'Yoruba - Èdè Yorùbá',
   'Zulu - isiZulu',
-];
+] as const;

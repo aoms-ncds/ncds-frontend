@@ -7,7 +7,6 @@ import {
   Radio,
   RadioGroup,
   Autocomplete,
-  Checkbox,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
@@ -15,8 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkerServices from './extras/WorkersServices';
-import { LanguagesList } from '../../extras/CommonConfig';
-import AddressFormComponent from '../../components/AddressFormComponent';
+import { languages } from '../../extras/CommonConfig';
 import AddressForm from '../../components/AddressForm';
 const BasicDetails = () => {
   const { workersId } = useParams();
@@ -33,8 +31,8 @@ const BasicDetails = () => {
     age: 0,
     maritalStatus: 'Unmarried',
     highestQualification: '',
-    motherToungue: '',
-    communicationLanguage: '',
+    motherToungue: 'English (India)',
+    communicationLanguage: 'English (India)',
     languagesKnown: [],
     email: '',
     phone: '',
@@ -104,7 +102,7 @@ const BasicDetails = () => {
     // <form>
     //   <Grid container spacing={3}>
     <>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Worker Code"
@@ -140,7 +138,7 @@ const BasicDetails = () => {
           </RadioGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="First Name"
@@ -155,7 +153,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Last Name"
@@ -171,7 +169,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker label="Date Of Birth"
@@ -209,7 +207,7 @@ const BasicDetails = () => {
           </RadioGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Age"
@@ -225,7 +223,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl>
           <FormLabel id="MaritalStatus">Marital Status</FormLabel>
           <RadioGroup
@@ -246,7 +244,7 @@ const BasicDetails = () => {
           </RadioGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Highest Qualification"
@@ -261,42 +259,63 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
-          <TextField
-            label="Mother Tongue"
-            value={newWorkerBasicDetails?.motherToungue}
-            onChange={(e) =>
-              setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                ...newWorkerBasicDetails,
-                motherToungue: e.target.value,
-              }))
+          <Autocomplete
+            id="mlanguges"
+            options={languages}
+            getOptionLabel={(option) => option}
+            value={newWorkerBasicDetails.motherToungue??''}
+
+            onChange={(e, newvalue) =>
+              newvalue?
+                setWorkerBasicDetails((newWorkerBasicDetails) => ({
+                  ...newWorkerBasicDetails,
+                  motherToungue: newvalue,
+                })):''
             }
-            fullWidth
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Mother Tongue"
+              />
+            )}
           />
+
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
-          <TextField
-            label="Communication Language"
-            value={newWorkerBasicDetails?.communicationLanguage}
-            onChange={(e) =>
-              setWorkerBasicDetails((newWorkerBasicDetails) => ({
-                ...newWorkerBasicDetails,
-                communicationLanguage: e.target.value,
-              }))
+          <Autocomplete
+            id="Clanguges"
+            options={languages}
+            getOptionLabel={(option) => option}
+            value={newWorkerBasicDetails.communicationLanguage??''}
+
+            onChange={(e, newvalue) =>
+              newvalue?
+                setWorkerBasicDetails((newWorkerBasicDetails) => ({
+                  ...newWorkerBasicDetails,
+                  communicationLanguage: newvalue,
+                })):''
             }
-            fullWidth
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Communication Language"
+              />
+            )}
           />
+
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <Autocomplete
             multiple
             id="languges"
-            options={LanguagesList}
+            options={languages}
+            value={newWorkerBasicDetails.languagesKnown??[]}
             getOptionLabel={(option) => option}
             onChange={(e, newvalue) =>
               setWorkerBasicDetails((newWorkerBasicDetails) => ({
@@ -314,7 +333,7 @@ const BasicDetails = () => {
 
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Email-ID"
@@ -329,7 +348,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Mobile No"
@@ -344,7 +363,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Alternative Mobile No."
@@ -359,7 +378,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="PAN Number"
@@ -374,7 +393,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="standard" fullWidth>
           <TextField
             label="Aadhaar"
@@ -383,7 +402,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="standard" fullWidth>
           <TextField
             label="Voter ID"
@@ -392,7 +411,7 @@ const BasicDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="License Number"

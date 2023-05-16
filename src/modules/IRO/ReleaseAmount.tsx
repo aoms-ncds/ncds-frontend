@@ -222,7 +222,7 @@ const ReleaseAmount = () => {
                     fullWidth variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <TextField
                     label="Transaction No:"
                     value={IROrelease?.transactionNumber}
@@ -236,7 +236,7 @@ const ReleaseAmount = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <TextField variant="outlined"
                     type="file"
                     // onChange={(e) => handleFileUpload(e.target.files)}

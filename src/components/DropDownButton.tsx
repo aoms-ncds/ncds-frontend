@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
-import { SvgIconTypeMap,
+import {
+  SvgIconTypeMap,
   ListItemText,
   Button,
   Menu,
@@ -21,7 +22,7 @@ const DropdownButton = ({
   id?: string;
   primaryText: string;
   items: {
-    id: any;
+    id: React.Key;
     icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
       muiName: string;
     };
@@ -47,7 +48,7 @@ const DropdownButton = ({
         <Button
           id={id}
           aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
+          aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           variant={open ? 'contained' : 'outlined'}
@@ -56,7 +57,7 @@ const DropdownButton = ({
         </Button>
       )}
       <Menu
-        id="basic-menu"
+        id='basic-menu'
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
@@ -65,7 +66,7 @@ const DropdownButton = ({
         }}
       >
         {/*
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant='body2' color='text.secondary'>
                     ⌘X
                 </Typography> */}
         {items.map((item) => (
@@ -80,7 +81,7 @@ const DropdownButton = ({
           >
             {item.icon && (
               <ListItemIcon>
-                <item.icon fontSize="small" />
+                <item.icon fontSize='small' />
               </ListItemIcon>
             )}
             <ListItemText>{item.text}</ListItemText>

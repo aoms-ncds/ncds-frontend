@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Box, Button, Card, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
+import { Button, Card, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
 import SubDivisionsPage from './SubDivisions';
 import BankDetailsForm from './components/BankDetails';
 import { enqueueSnackbar } from 'notistack';

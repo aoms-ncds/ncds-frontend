@@ -80,7 +80,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
     <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'} >
       <form onSubmit={props.action === 'add' ? AddChild : UpdateChild}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
               <RadioGroup
@@ -101,7 +101,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label=" First Name"
@@ -116,7 +116,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label=" Last Name:"
@@ -131,7 +131,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl variant="outlined" fullWidth>
               <DatePicker
                 label="Date Of Birth"
@@ -148,7 +148,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label="Age"
@@ -163,7 +163,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
               <RadioGroup
@@ -184,7 +184,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <TextField
               label=" Class Of Study"
               value={newChild?.classOfStudy}
@@ -198,7 +198,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
               <RadioGroup
@@ -220,7 +220,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             </FormControl>
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <TextField
               label="Occupation"
               value={newChild?.occupation}
@@ -233,7 +233,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <TextField
               label="Qualification"
               value={newChild?.qualification}
@@ -246,7 +246,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <Autocomplete
               value={newChild?.childSupport}
               options={childSupport ?? []}
@@ -263,7 +263,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <Autocomplete
               value={newChild?.childOf || null}
               options={workers ?? []}

@@ -201,7 +201,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   readOnly={props.action === 'view'}
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <Autocomplete
                   value={props.value.purpose}
                   options={purposes ?? []}
@@ -222,7 +222,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               {props.value.purpose === 'Worker' ? (
                 <>
-                  <Grid item xs={12} md={6} lg={6}>
+                  <Grid item xs={12} md={6} >
                     <Autocomplete
                       value={props.value.purposeWorker}
                       options={workers ?? []}
@@ -241,7 +241,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} lg={6}>
+                  <Grid item xs={12} md={6} >
                     <TextField
                       label="Worker Code"
                       value={props.value.purposeWorker?.workerCode}
@@ -252,7 +252,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </>
               ) : null}
               {props.value.purpose === 'Subdivision' ? (
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <Autocomplete
                     value={props.value.purposeSubdivision}
                     options={subDivisions ?? []}
@@ -279,7 +279,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               {props.value.purpose === 'Division' ? (
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
@@ -300,7 +300,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               {props.value.purpose === 'Coordinator' ? (
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <Autocomplete
                     value={props.value.purposeCoordinator}
                     options={coordinators ?? []}
@@ -327,7 +327,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               {props.value.purpose === 'Others' ? (
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={6} >
                   <TextField
                     label="Others"
                     value={props.value.purposeOthers}
@@ -342,10 +342,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              <Grid item xs={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <Typography>Particulars</Typography> <br />
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <Autocomplete
                   value={selectedMainCategory}
                   options={mainCategorys ?? []}
@@ -377,7 +377,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   Add Purticulars
                 </Button>
               </Grid>
-              <Grid item xs={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <TableContainer>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -414,7 +414,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <TextField
                   label="Requested Amount"
                   InputLabelProps={{ shrink: true }}
@@ -427,7 +427,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
@@ -443,7 +443,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <InputLabel id="demo-simple-select-standard-label">
                   Sanctioned Bank
                 </InputLabel>
@@ -459,7 +459,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                 </Select>
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <InputLabel id="demo-simple-select-standard-label">
                   Sanctioned As Per
                 </InputLabel>
@@ -505,7 +505,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
+              <Grid item xs={12} md={6} >
                 <Button
                   variant="contained"
                   style={{ textAlign: 'right' }}

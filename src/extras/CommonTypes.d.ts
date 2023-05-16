@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { languages } from './CommonConfig';
 
 export { };
 
@@ -65,5 +66,5 @@ declare global {
     options?: Options;
   }
 
-
+type Language =typeof languages[number];
 }
