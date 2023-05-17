@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import CommonPageLayout from '../../../components/CommonPageLayout';
+import { Typography } from '@mui/material';
+import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import {
@@ -6,42 +9,53 @@ import {
   Preview as PreviewIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import DivisionsServices from '../extras/DivisionsServices';
 import DropdownButton from '../../../components/DropDownButton';
-import { useLoader } from '../../../hooks/Loader';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-
 const DivisionsList = () => {
-  const loader = useLoader();
-  const [divisions, setDivisions] = useState<IETDivisions[] | null>(null);
+  const [loadCount, setLoadCount] = useState(0);
+  const [divisions, setDivisions] = useState<DivisionDetails[] | null>(null);
+
+  useEffect(() => {
+    // loader.onLoad();
+    DivisionsServices.getDivision()
+    .then((res) => {
+    //  loader.afterLoad();
+      console.log(res.data);
+      setDivisions(res.data);
+    })
+    .catch((err) => {
+      // loader.afterLoad();
+      console.log({ err });
+    });
+  }, []);
   const removeDivisions = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Division',
       variant: 'info',
     });
     DivisionsServices.divisionMarkAsRemove(id)
-      .then((res) => {
-        console.log('process delete', res);
-        if (divisions) {
-          const newDivisions = divisions.filter((divisions) => {
-            return divisions._id !== id;
+        .then((res) => {
+          console.log('process delete', res);
+          if (divisions) {
+            const newDivisions = divisions.filter((divisions) => {
+            //  return divisions._id !== id;
+            });
+            setDivisions(newDivisions);
+          }
+          // closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
           });
-          setDivisions(newDivisions);
-        }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
+        })
+        .catch((err) => {
+          console.log(err);
+          closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
   };
   const columns = [
     {
@@ -91,35 +105,27 @@ const DivisionsList = () => {
       renderCell: (props: any) => (
         <Link to={`/divisions/details/${props.row._id}`}
           style={{
-            textDecoration: 'none', color: 'inherit' }}>{props.row.divisionName}</Link>
+            textDecoration: 'none', color: 'inherit' }}>{props.row.division.divisionName}</Link>
       ),
     },
     { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => (
       <p> {props.row.coordinatorName}</p>
     ), width: 130 },
     { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => (
-      <p> {props.row.coordinatorEmail}</p>
+      <p> {props.row.division.divisionName}</p>
     ), width: 130 },
     { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => (
-      <p> {props.row.coordinatorContactno}</p>
+      <p> {props.row.divisionName}</p>
     ), width: 130 },
-    { field: 'noofWorkers', headerName: 'No. of Workers', width: 200 },
-    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', width: 200 },
 
+    { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => (
+      <p> {props.row.division.noofWorkers}</p>
+    ), width: 130 },
+    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => (
+      <p> {props.row.division.noofSubdivisions}</p>
+    ), width: 130 },
 
   ];
-  useEffect(() => {
-    loader.onLoad();
-    DivisionsServices.getDivisions()
-      .then((res) => {
-        loader.afterLoad();
-        setDivisions(res.data);
-      })
-      .catch((err) => {
-        loader.afterLoad();
-        console.log({ err });
-      });
-  }, []);
   return (
     <DataGrid
       rows={divisions ?? []}
@@ -131,3 +137,4 @@ const DivisionsList = () => {
 };
 
 export default DivisionsList;
+

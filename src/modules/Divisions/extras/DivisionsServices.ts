@@ -217,6 +217,9 @@ export default {
       timeout: 500,
     }),
   ),
+  getDivision: () => getStandardResponse<DivisionDetails[]>(
+    axios.get('/divisions/'),
+  ),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(
     dummyRequest<SubDivision[]>({
       data: [{
@@ -229,15 +232,18 @@ export default {
       timeout: 500,
     }),
   ),
-  addDivision: ( ) => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
-      // error: null,
-      message: 'created Division',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  addDivision: (action: 'add' | 'edit'|'view', division: DivisionDetails) => {
+    return getStandardResponse<DivisionDetails>(
+      axios.post('/divisions/', division),
+    );
+  },
+
+  // ),
+  // addDivision: (staff: CreatableStaff, action: 'add' | 'edit') => {
+  //   return getStandardResponse<CreatableStaff>(
+  //     axios.post('/hr/staffs', { staff, action }),
+  //   );
+  // },
   editDivision: () => getStandardResponse<number>(
     dummyRequest({
       data: 1,
@@ -248,148 +254,148 @@ export default {
     }),
   ),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
-    dummyRequest<DivisionDetails>({
-      data: {
-        division: {
-          divisionName: 'Division 1',
-          _id: '1',
-          divisionId: '233',
-          contactNumber: '89000333',
-          email: 'division@gmail.com',
-          address: {
-            buildingName: '',
-            streetAddress: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          noofWorkers: 5,
-          noOfSubdivisions: 5,
-          noOfChurches: 5,
-          coordinator: {
-            _id: '1',
-            firstName: 'athira',
-            lastName: 'athira',
-            dob: moment('12-11-2000'),
-            doj: moment('12-11-2000'),
-            designation: {
-              _id: '1',
-              name: 'TL',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '1',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            age: 25,
-            gender: 'Female',
-            phone: '123476798',
-            email: 'test@gmail.com',
-            formattedId: 'test',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          seniorLeader: {
-            _id: '1',
-            firstName: 'athira',
-            lastName: 'athira',
-            dob: moment('12-11-2000'),
-            doj: moment('12-11-2000'),
-            designation: {
-              _id: '1',
-              name: 'TL',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '1',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            age: 25,
-            gender: 'Female',
-            phone: '123476798',
-            email: 'test@gmail.com',
-            formattedId: 'test',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          juniorLeader: {
-            _id: '1',
-            firstName: 'athira',
-            lastName: 'athira',
-            dob: moment('12-11-2000'),
-            doj: moment('12-11-2000'),
-            designation: {
-              _id: '1',
-              name: 'TL',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '1',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            age: 25,
-            gender: 'Female',
-            phone: '123476798',
-            email: 'test@gmail.com',
-            formattedId: 'test',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        subDivisions: [{
-          _id: '1',
-          subDivisionName: 'subdivision 1',
+  // getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
+  //   dummyRequest<DivisionDetails>({
+  //     data: {
+  //       division: {
+  //         divisionName: 'Division 1',
+  //         _id: '1',
+  //         divisionId: '233',
+  //         contactNumber: '89000333',
+  //         email: 'division@gmail.com',
+  //         address: {
+  //           buildingName: '',
+  //           streetAddress: '',
+  //           city: '',
+  //           district: '',
+  //           state: '',
+  //           country: '',
+  //           pincode: '',
+  //         },
+  //         noofWorkers: 5,
+  //         noOfSubdivisions: 5,
+  //         noOfChurches: 5,
+  //         coordinator: {
+  //           _id: '1',
+  //           firstName: 'athira',
+  //           lastName: 'athira',
+  //           dob: moment('12-11-2000'),
+  //           doj: moment('12-11-2000'),
+  //           designation: {
+  //             _id: '1',
+  //             name: 'TL',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           department: {
+  //             _id: '1',
+  //             name: 'IT',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           age: 25,
+  //           gender: 'Female',
+  //           phone: '123476798',
+  //           email: 'test@gmail.com',
+  //           formattedId: 'test',
+  //           createdAt: moment(),
+  //           updatedAt: moment(),
+  //         },
+  //         seniorLeader: {
+  //           _id: '1',
+  //           firstName: 'athira',
+  //           lastName: 'athira',
+  //           dob: moment('12-11-2000'),
+  //           doj: moment('12-11-2000'),
+  //           designation: {
+  //             _id: '1',
+  //             name: 'TL',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           department: {
+  //             _id: '1',
+  //             name: 'IT',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           age: 25,
+  //           gender: 'Female',
+  //           phone: '123476798',
+  //           email: 'test@gmail.com',
+  //           formattedId: 'test',
+  //           createdAt: moment(),
+  //           updatedAt: moment(),
+  //         },
+  //         juniorLeader: {
+  //           _id: '1',
+  //           firstName: 'athira',
+  //           lastName: 'athira',
+  //           dob: moment('12-11-2000'),
+  //           doj: moment('12-11-2000'),
+  //           designation: {
+  //             _id: '1',
+  //             name: 'TL',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           department: {
+  //             _id: '1',
+  //             name: 'IT',
+  //             createdAt: moment(),
+  //             updatedAt: moment(),
+  //           },
+  //           age: 25,
+  //           gender: 'Female',
+  //           phone: '123476798',
+  //           email: 'test@gmail.com',
+  //           formattedId: 'test',
+  //           createdAt: moment(),
+  //           updatedAt: moment(),
+  //         },
+  //         createdAt: moment(),
+  //         updatedAt: moment(),
+  //       },
+  //       subDivisions: [{
+  //         _id: '1',
+  //         subDivisionName: 'subdivision 1',
 
-        },
-        {
-          _id: '2',
-          subDivisionName: 'subdivision 2',
+  //       },
+  //       {
+  //         _id: '2',
+  //         subDivisionName: 'subdivision 2',
 
-        },
-        {
-          _id: '3',
-          subDivisionName: 'subdivision 3',
+  //       },
+  //       {
+  //         _id: '3',
+  //         subDivisionName: 'subdivision 3',
 
-        }],
-        FCRABankDetails: {
-          bankname: 'FCRA',
-          branchname: 'Thodupuzha',
-          accountNumber: '23344',
-          IFSCCode: 'ddd33',
-          beneficiary: '222',
-        },
-        localBankDetails:
-        {
-          bankname: 'Canara',
-          branchname: 'Thodupuzha',
-          accountNumber: '4567799',
-          IFSCCode: '222',
-          beneficiary: '22',
+  //       }],
+  //       FCRABankDetails: {
+  //         bankname: 'FCRA',
+  //         branchname: 'Thodupuzha',
+  //         accountNumber: '23344',
+  //         IFSCCode: 'ddd33',
+  //         beneficiary: '222',
+  //       },
+  //       localBankDetails:
+  //       {
+  //         bankname: 'Canara',
+  //         branchname: 'Thodupuzha',
+  //         accountNumber: '4567799',
+  //         IFSCCode: '222',
+  //         beneficiary: '22',
 
-        },
+  //       },
 
 
-      },
-      // error: null,
-      message: 'Approved',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  //     },
+  //     // error: null,
+  //     message: 'Approved',
+  //     result: 'success',
+  //     timeout: 500,
+  //   }),
+  // ),
   markAsRemove: ( subdivisionId: string) => getStandardResponse<number>(
     dummyRequest({
       data: subdivisionId,

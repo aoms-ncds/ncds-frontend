@@ -22,10 +22,14 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
           label="Bank Name"
           value={newBankDetails.bankname }
           onChange={(e) =>
-            setNewBankDetails((newBankDetails) => ({
-              ...newBankDetails,
-              bankname: e.target.value,
-            }))
+            setNewBankDetails((newBankDetails) => {
+              const newBank = {
+                ...newBankDetails,
+                bankname: e.target.value,
+              };
+              props.onChange(newBank); // Call the onChange prop with the updated division details
+              return newBank;
+            })
           }
           variant="outlined"
           fullWidth
@@ -38,10 +42,15 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
           label="Branch Name"
           value={newBankDetails.branchname }
           onChange={(e) =>
-            setNewBankDetails((newWorkerBasicDetails) => ({
-              ...newWorkerBasicDetails,
-              branchname: e.target.value,
-            }))
+            setNewBankDetails((newBankDetails) => {
+              const newBank = {
+                ...newBankDetails,
+                branchname: e.target.value,
+              };
+              props.onChange(newBank); // Call the onChange prop with the updated division details
+              return newBank;
+            })
+
           }
           variant="outlined"
           fullWidth
@@ -54,10 +63,15 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
           label="Account Number"
           value={newBankDetails.accountNumber }
           onChange={(e) =>
-            setNewBankDetails((newBankDetails) => ({
-              ...newBankDetails,
-              accountNumber: e.target.value,
-            }))
+            setNewBankDetails((newBankDetails) => {
+              const newBank = {
+                ...newBankDetails,
+                accountNumber: e.target.value,
+              };
+              props.onChange(newBank); // Call the onChange prop with the updated division details
+              return newBank;
+            })
+
           }
           variant="outlined"
           fullWidth
@@ -69,10 +83,15 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
           label="IFSC Code"
           value={newBankDetails.IFSCCode }
           onChange={(e) =>
-            setNewBankDetails((newBankDetails) => ({
-              ...newBankDetails,
-              IFSCCode: e.target.value,
-            }))
+
+            setNewBankDetails((newBankDetails) => {
+              const newBank = {
+                ...newBankDetails,
+                IFSCCode: e.target.value,
+              };
+              props.onChange(newBank); // Call the onChange prop with the updated division details
+              return newBank;
+            })
           }
           variant="outlined"
           fullWidth
@@ -83,16 +102,21 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
           label="Beneficiary"
           value={newBankDetails.beneficiary }
           onChange={(e) =>
-            setNewBankDetails((newWorkerBasicDetails) => ({
-              ...newWorkerBasicDetails,
-              beneficiary: e.target.value,
-            }))
+            setNewBankDetails((newBankDetails) => {
+              const newBank = {
+                ...newBankDetails,
+                beneficiary: e.target.value,
+              };
+              props.onChange(newBank); // Call the onChange prop with the updated division details
+              return newBank;
+            })
           }
           variant="outlined"
           fullWidth
         />
       </Grid>
-      {/* </Grid> */}
+
+
     </>
   );
 };

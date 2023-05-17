@@ -19,9 +19,10 @@ const DivisionDetailsPage = () => {
 
   const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    DivisionsServices.addDivision()
+    DivisionsServices.addDivision(action, divisionDetails)
       .then((res) => {
         console.log(res);
+        console.log(action);
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -55,7 +56,6 @@ const DivisionDetailsPage = () => {
     {
       division: {
         divisionName: '',
-        _id: '',
         divisionId: '',
         contactNumber: '',
         email: '',
@@ -172,37 +172,41 @@ const DivisionDetailsPage = () => {
     beneficiary: '',
 
   },
+      _id: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+
     },
   );
-  useEffect(() => {
-    if (divisionIDs) {
-      setAction('view');
-      loader.onLoad();
-      DivisionsServices.getDivisionbyId(divisionIDs)
-      .then((res) => {
-        loader.afterLoad();
-        setDivisionDetails(res.data);
-      })
-      .catch((err) => {
-        loader.afterLoad();
-        console.log({ err });
-      });
-    }
-    if (editID) {
-      setAction('edit');
-      loader.onLoad();
-      DivisionsServices.getDivisionbyId(editID)
-      .then((res) => {
-        loader.afterLoad();
+  // useEffect(() => {
+  //   if (divisionIDs) {
+  //     setAction('view');
+  //     loader.onLoad();
+  //    // DivisionsServices.getDivisionbyId(divisionIDs)
+  //     .then((res) => {
+  //       loader.afterLoad();
+  //       //setDivisionDetails(res.data);
+  //     })
+  //     .catch((err) => {
+  //       loader.afterLoad();
+  //       console.log({ err });
+  //     });
+  //   }
+  //   if (editID) {
+  //     setAction('edit');
+  //     loader.onLoad();
+  //     //DivisionsServices.getDivisionbyId(editID)
+  //     .then((res) => {
+  //       loader.afterLoad();
 
-        setDivisionDetails(res.data);
-      })
-      .catch((err) => {
-        loader.afterLoad();
-        console.log({ err });
-      });
-    }
-  }, []);
+  //     //  setDivisionDetails(res.data);
+  //     })
+  //     .catch((err) => {
+  //       loader.afterLoad();
+  //       console.log({ err });
+  //     });
+  //   }
+  // }, []);
   return (
     <CommonPageLayout title={action === 'add' ? 'Add Division' : (action === 'edit' ? 'Edit Division' : 'Division Details')}>
       {/* <Box sx={{ width: '100%' }}> */}
@@ -228,8 +232,16 @@ const DivisionDetailsPage = () => {
 
               <>
                 <Grid container spacing={2}>
+                  <DivisionsFormComponent
+                    value={divisionDetails?.division}
+                    onChange={(newDivision: IETDivisions) => {
+                      console.log('New division:');
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, division: newDivision }));
+                    }}
+                    action={'add'}
+                    options={{ title: 'Division Details' }}
+                  />
 
-                  <DivisionsFormComponent division={divisionDetails?.division} />
                   <br />
                   <Grid item xs={12} >
 
