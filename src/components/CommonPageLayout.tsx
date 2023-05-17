@@ -28,7 +28,7 @@ import { useLoader } from '../hooks/Loader';
 const drawerWidth = 240;
 
 const CommonPageLayout = (props: {
-  children: JSX.Element[] | JSX.Element;
+  children: React.ReactNode;
   title?: string;
 }) => {
   const loader = useLoader();

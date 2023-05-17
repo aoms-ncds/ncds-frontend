@@ -2,12 +2,13 @@ export default {
   appName: 'Indian Evangelical Team',
 };
 
-
-export const LanguagesList:readonly string[] = [
+// const languages = ['English', 'Hindi', 'Malayalam'] as const;
+export const languages= [
   'Afrikaans',
   'Albanian - shqip',
-  'Amharic - አማርኛ',
   'Arabic - العربية',
+  'Amharic - አማርኛ',
+
   'Aragonese - aragonés',
   'Armenian - հայերեն',
   'Asturian - asturianu',
@@ -146,4 +147,4 @@ export const LanguagesList:readonly string[] = [
   'Yiddish',
   'Yoruba - Èdè Yorùbá',
   'Zulu - isiZulu',
-];
+] as const;

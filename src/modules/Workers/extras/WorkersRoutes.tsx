@@ -7,10 +7,21 @@ import ApproveWorkerPage from '../ApproveWorkersPage';
 import Profile from '../Profile';
 import AddNewChildPage from '../AddNewChild';
 import AddNewSpousePage from '../AddNewSpouse';
+import NewAddWorker from '../NewAddWorker';
+import { Science } from '@mui/icons-material';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
   pages: [
+    {
+      title: 'Test Add user form',
+      path: '/tests',
+      element: <NewAddWorker />,
+      private: true,
+      requiredAccessRights: ['string'],
+      showInDrawer: true,
+      icon: <Science />,
+    },
     {
       title: 'Workers',
       path: '/',

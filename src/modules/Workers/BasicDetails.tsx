@@ -15,7 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkerServices from './extras/WorkersServices';
-import { LanguagesList } from '../../extras/CommonConfig';
+import { languages } from '../../extras/CommonConfig';
 import AddressFormComponent from '../../components/AddressFormComponent';
 import AddressForm from '../../components/AddressForm';
 const BasicDetails = () => {
@@ -296,7 +296,7 @@ const BasicDetails = () => {
           <Autocomplete
             multiple
             id="languges"
-            options={LanguagesList}
+            options={languages}
             getOptionLabel={(option) => option}
             onChange={(e, newvalue) =>
               setWorkerBasicDetails((newWorkerBasicDetails) => ({

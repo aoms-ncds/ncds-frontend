@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { languages } from './CommonConfig';
 
 export { };
 
@@ -9,10 +10,10 @@ declare global {
       title: string;
       path: string;
       private: boolean;
-      element: JSX.Element;
+      element: React.ReactNode;
       requiredAccessRights?: 'string'[];
       showInDrawer?: boolean;
-      icon?: JSX.Element;
+      icon?: React.ReactNode;
     }[];
   }
   interface LoaderContextType{
@@ -65,5 +66,5 @@ declare global {
     options?: Options;
   }
 
-
+  type Language = typeof languages[number];
 }
