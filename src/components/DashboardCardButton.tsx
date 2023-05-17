@@ -1,4 +1,4 @@
-import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
+import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 import {
   Button,
   Card,
@@ -7,9 +7,9 @@ import {
   CardContent,
   Typography,
   styled,
-} from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+} from '@mui/material';
+import React from 'react';
+import { Link } from 'react-router-dom';
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
@@ -34,21 +34,21 @@ const DashboardCardButton = (props: {
     >
       <CardActionArea
         sx={{
-          backgroundColor: props.color,
-          color: "white",
-          borderRadius: 3,
-          transition: "all 0.3s",
-          padding: 1,
-          height: 160,
-          "&:hover": {
-            boxShadow: "0 8px 16px 0 rgba(0, 0, 0, 0.6)",
-            transform: "translate(0, -2px)",
-            cursor: "pointer",
+          'backgroundColor': props.color,
+          'color': 'white',
+          'borderRadius': 3,
+          'transition': 'all 0.3s',
+          'padding': 1,
+          'height': 160,
+          '&:hover': {
+            boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
+            transform: 'translate(0, -2px)',
+            cursor: 'pointer',
           },
-          "&:active": {
-            boxShadow: "none !important",
-            transform: "translate(0, 2px)",
-            cursor: "pointer",
+          '&:active': {
+            boxShadow: 'none !important',
+            transform: 'translate(0, 2px)',
+            cursor: 'pointer',
           },
         }}
       >
@@ -64,16 +64,16 @@ const DashboardCardButton = (props: {
             variant="contained"
             endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
             sx={{
-              ml: "auto",
-              color: "black",
-              bgcolor: "white",
-              "&:hover": {
-                color: "black",
-                bgcolor: "white",
+              'ml': 'auto',
+              'color': 'black',
+              'bgcolor': 'white',
+              '&:hover': {
+                color: 'black',
+                bgcolor: 'white',
               },
-              "&:active": {
-                color: "black",
-                bgcolor: "white",
+              '&:active': {
+                color: 'black',
+                bgcolor: 'white',
               },
             }}
           >

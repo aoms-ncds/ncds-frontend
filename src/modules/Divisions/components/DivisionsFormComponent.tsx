@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-undef */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
@@ -11,106 +11,106 @@ import {
   Grid,
   TextField,
   Typography,
-} from "@mui/material";
-import moment from "moment";
-import HRServices from "../../HR/extras/HRServices";
-import StaffDropdown from "../../HR/components/StaffDropdown";
-import AddressFormComponent from "../../../components/AddressFormComponent";
+} from '@mui/material';
+import moment from 'moment';
+import HRServices from '../../HR/extras/HRServices';
+import StaffDropdown from '../../HR/components/StaffDropdown';
+import AddressFormComponent from '../../../components/AddressFormComponent';
 
 const DivisionsFormComponent = ({
   division = {
-    divisionName: "Division 1",
-    _id: "1",
-    divisionId: "233",
-    contactNumber: "89000333",
-    email: "division@gmail.com",
+    divisionName: 'Division 1',
+    _id: '1',
+    divisionId: '233',
+    contactNumber: '89000333',
+    email: 'division@gmail.com',
     address: {
-      buildingName: "",
-      streetAddress: "",
-      city: "",
-      district: "",
-      state: "",
-      country: "",
-      pincode: "",
+      buildingName: '',
+      streetAddress: '',
+      city: '',
+      district: '',
+      state: '',
+      country: '',
+      pincode: '',
     },
     noofWorkers: 5,
     noOfSubdivisions: 5,
     noOfChurches: 5,
     coordinator: {
-      _id: "1",
-      firstName: "athira",
-      lastName: "athira",
-      dob: moment("12-11-2000"),
-      doj: moment("12-11-2000"),
+      _id: '1',
+      firstName: 'athira',
+      lastName: 'athira',
+      dob: moment('12-11-2000'),
+      doj: moment('12-11-2000'),
       designation: {
-        _id: "1",
-        name: "TL",
+        _id: '1',
+        name: 'TL',
         createdAt: moment(),
         updatedAt: moment(),
       },
       department: {
-        _id: "1",
-        name: "IT",
+        _id: '1',
+        name: 'IT',
         createdAt: moment(),
         updatedAt: moment(),
       },
       age: 25,
-      gender: "Female",
-      phone: "123476798",
-      email: "test@gmail.com",
-      formattedId: "test",
+      gender: 'Female',
+      phone: '123476798',
+      email: 'test@gmail.com',
+      formattedId: 'test',
       createdAt: moment(),
       updatedAt: moment(),
     },
     seniorLeader: {
-      _id: "1",
-      firstName: "athira",
-      lastName: "athira",
-      dob: moment("12-11-2000"),
-      doj: moment("12-11-2000"),
+      _id: '1',
+      firstName: 'athira',
+      lastName: 'athira',
+      dob: moment('12-11-2000'),
+      doj: moment('12-11-2000'),
       designation: {
-        _id: "1",
-        name: "TL",
+        _id: '1',
+        name: 'TL',
         createdAt: moment(),
         updatedAt: moment(),
       },
       department: {
-        _id: "1",
-        name: "IT",
+        _id: '1',
+        name: 'IT',
         createdAt: moment(),
         updatedAt: moment(),
       },
       age: 25,
-      gender: "Female",
-      phone: "123476798",
-      email: "test@gmail.com",
-      formattedId: "test",
+      gender: 'Female',
+      phone: '123476798',
+      email: 'test@gmail.com',
+      formattedId: 'test',
       createdAt: moment(),
       updatedAt: moment(),
     },
     juniorLeader: {
-      _id: "1",
-      firstName: "athira",
-      lastName: "athira",
-      dob: moment("12-11-2000"),
-      doj: moment("12-11-2000"),
+      _id: '1',
+      firstName: 'athira',
+      lastName: 'athira',
+      dob: moment('12-11-2000'),
+      doj: moment('12-11-2000'),
       designation: {
-        _id: "1",
-        name: "TL",
+        _id: '1',
+        name: 'TL',
         createdAt: moment(),
         updatedAt: moment(),
       },
       department: {
-        _id: "1",
-        name: "IT",
+        _id: '1',
+        name: 'IT',
         createdAt: moment(),
         updatedAt: moment(),
       },
       age: 25,
-      gender: "Female",
-      phone: "123476798",
-      email: "test@gmail.com",
-      formattedId: "test",
+      gender: 'Female',
+      phone: '123476798',
+      email: 'test@gmail.com',
+      formattedId: 'test',
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -120,103 +120,103 @@ const DivisionsFormComponent = ({
 }) => {
   const [newDivision, setNewDivision] = useState<IETDivisions>(
     division || {
-      divisionName: "",
-      _id: "",
-      divisionId: "",
-      contactNumber: "",
-      email: "",
+      divisionName: '',
+      _id: '',
+      divisionId: '',
+      contactNumber: '',
+      email: '',
       address: {
-        buildingName: "",
-        streetAddress: "",
-        city: "",
-        district: "",
-        state: "",
-        country: "",
-        pincode: "",
+        buildingName: '',
+        streetAddress: '',
+        city: '',
+        district: '',
+        state: '',
+        country: '',
+        pincode: '',
       },
       noofWorkers: 0,
       noOfSubdivisions: 0,
       noOfChurches: 0,
 
       coordinator: {
-        _id: "",
-        firstName: "",
-        lastName: "",
+        _id: '',
+        firstName: '',
+        lastName: '',
         dob: moment(),
         doj: moment(),
         designation: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         department: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         age: 0,
-        gender: "Female",
-        phone: "",
-        email: "",
-        formattedId: "",
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
         createdAt: moment(),
         updatedAt: moment(),
       },
       seniorLeader: {
-        _id: "",
-        firstName: "",
-        lastName: "",
+        _id: '',
+        firstName: '',
+        lastName: '',
         dob: moment(),
         doj: moment(),
         designation: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         department: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         age: 0,
-        gender: "Female",
-        phone: "",
-        email: "",
-        formattedId: "",
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
         createdAt: moment(),
         updatedAt: moment(),
       },
       juniorLeader: {
-        _id: "",
-        firstName: "",
-        lastName: "",
+        _id: '',
+        firstName: '',
+        lastName: '',
         dob: moment(),
         doj: moment(),
         designation: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         department: {
-          _id: "",
-          name: "",
+          _id: '',
+          name: '',
           createdAt: moment(),
           updatedAt: moment(),
         },
         age: 0,
-        gender: "Female",
-        phone: "",
-        email: "",
-        formattedId: "",
+        gender: 'Female',
+        phone: '',
+        email: '',
+        formattedId: '',
         createdAt: moment(),
         updatedAt: moment(),
       },
-    }
+    },
   );
   const [staffs, setStaffs] = useState<Staff[]>();
 
@@ -229,7 +229,7 @@ const DivisionsFormComponent = ({
 
   return (
     <form>
-      <Card style={{ width: "100%" }}>
+      <Card style={{ width: '100%' }}>
         <br />
         <Container>
           <CardContent>
@@ -351,7 +351,7 @@ const DivisionsFormComponent = ({
                     address: newState,
                   }))
                 }
-                action={"add"}
+                action={'add'}
                 title="Address"
               />
 
@@ -371,7 +371,7 @@ const DivisionsFormComponent = ({
                       }));
                     }
                   }}
-                  label={" Co-ordinator Name"}
+                  label={' Co-ordinator Name'}
                 />
               </Grid>
               {/* <Grid item xs={12} md={6} lg={4}>
@@ -401,7 +401,7 @@ const DivisionsFormComponent = ({
                       }));
                     }
                   }}
-                  label={"Senior Leader Name"}
+                  label={'Senior Leader Name'}
                 />
               </Grid>
               {/*
@@ -432,7 +432,7 @@ const DivisionsFormComponent = ({
                       }));
                     }
                   }}
-                  label={"Junior Leader Name"}
+                  label={'Junior Leader Name'}
                 />
               </Grid>
 

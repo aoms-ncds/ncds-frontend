@@ -38,113 +38,113 @@ const SupportDetails = () => {
     <form>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} lg={6}>
-            <Autocomplete
-              id="Current Designation"
-              // sx={{ width: 300 }}
-              value={newWorkerSupportDetails?.currentDesignation}
-              options={Designation ?? []}
-              // multiple
-              // filterOptions={members}
-              fullWidth
-              getOptionLabel={(designation) => designation.name}
-              // value={value}
-              // getOptionLabel={function (user: User) {
-              //   return user.firstName + user.lastName;
-              // }}
-              onChange={(e, newValue) => {
-                if (newValue) {
-                  setWorkerSupportDetails((newWorkerSupportDetails) => ({
-                    ...newWorkerSupportDetails,
-                    currentDesignation: newValue,
-                  }));
-                }
-              }} 
-              renderOption={(props, designation) => (
-                <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                  {designation.name}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Current Designation"
-                  required
-                  inputProps={{
-                    ...params.inputProps,
-                  }}
-                />
-              )}
-            />
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-            <TextField
-              label="Total No. Years in Ministry"
-              value={newWorkerSupportDetails?.totalNoYearsInMinistry}
-              // onChange={(e) =>
-              //   // eslint-disable-next-line @typescript-eslint/naming-convention
-              //   setWorkerSupportDetails((newWorkerSupportDetails) => ({
-              //     ...newWorkerSupportDetails,
-              //     totalNoYearsInMinistry: e.target.value,
-              //   }))
-              // }
-              fullWidth
-            />
-        </Grid>
-        <Grid item xs={12} md={6} lg={6}>
-            <FormLabel id="demo-radio-buttons-group-label">Type Of Family</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              // defaultValue="singleMissionary"
-              value={newWorkerSupportDetails?.typeOfFamily}
-              onChange={(e) =>
+          <Autocomplete
+            id="Current Designation"
+            // sx={{ width: 300 }}
+            value={newWorkerSupportDetails?.currentDesignation}
+            options={Designation ?? []}
+            // multiple
+            // filterOptions={members}
+            fullWidth
+            getOptionLabel={(designation) => designation.name}
+            // value={value}
+            // getOptionLabel={function (user: User) {
+            //   return user.firstName + user.lastName;
+            // }}
+            onChange={(e, newValue) => {
+              if (newValue) {
                 setWorkerSupportDetails((newWorkerSupportDetails) => ({
                   ...newWorkerSupportDetails,
-                  typeOfFamily: e.target.value=='s'?'Single Missionary':'Family Missionary',
-                }))
+                  currentDesignation: newValue,
+                }));
               }
-              name="radio-buttons-group"
-              row
-            >
-              <FormControlLabel value="s" control={<Radio />} label="Single Missionary" />
-              <FormControlLabel value="f" control={<Radio />} label="Family Missionary" />
-            </RadioGroup>
+            }}
+            renderOption={(props, designation) => (
+              <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                {designation.name}
+              </Box>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Current Designation"
+                required
+                inputProps={{
+                  ...params.inputProps,
+                }}
+              />
+            )}
+          />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-            <FormLabel id="demo-radio-buttons-group-label">Type Of Church</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              // defaultValue="withChurch"
-              value={newWorkerSupportDetails?.typeofChurch}
-              onChange={(e) =>
-                setWorkerSupportDetails((newWorkerSupportDetails) => ({
-                  ...newWorkerSupportDetails,
-                  typeofChurch: e.target.value=='WC'?'With Church':'Without Church',
-                }))
-              }
-              name="radio-buttons-group"
-              row
-            >
-              <FormControlLabel value="WC" control={<Radio />} label="With Church" />
-              <FormControlLabel value="WOC" control={<Radio />} label="Without Church" />
-            </RadioGroup>
+          <TextField
+            label="Total No. Years in Ministry"
+            value={newWorkerSupportDetails?.totalNoYearsInMinistry}
+            // onChange={(e) =>
+            //   // eslint-disable-next-line @typescript-eslint/naming-convention
+            //   setWorkerSupportDetails((newWorkerSupportDetails) => ({
+            //     ...newWorkerSupportDetails,
+            //     totalNoYearsInMinistry: e.target.value,
+            //   }))
+            // }
+            fullWidth
+          />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setWorkerSupportDetails((newWorkerSupportDetails) => ({
-                        ...newWorkerSupportDetails,
-                        selfSupport: true,
-                      }));
-                    }
-                  }}
-                />
-              }
-              label='Self-Support'
-              sx={{ float: 'right' }}
-            />
+          <FormLabel id="demo-radio-buttons-group-label">Type Of Family</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            // defaultValue="singleMissionary"
+            value={newWorkerSupportDetails?.typeOfFamily}
+            onChange={(e) =>
+              setWorkerSupportDetails((newWorkerSupportDetails) => ({
+                ...newWorkerSupportDetails,
+                typeOfFamily: e.target.value=='s'?'Single Missionary':'Family Missionary',
+              }))
+            }
+            name="radio-buttons-group"
+            row
+          >
+            <FormControlLabel value="s" control={<Radio />} label="Single Missionary" />
+            <FormControlLabel value="f" control={<Radio />} label="Family Missionary" />
+          </RadioGroup>
+        </Grid>
+        <Grid item xs={12} md={6} lg={6}>
+          <FormLabel id="demo-radio-buttons-group-label">Type Of Church</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            // defaultValue="withChurch"
+            value={newWorkerSupportDetails?.typeofChurch}
+            onChange={(e) =>
+              setWorkerSupportDetails((newWorkerSupportDetails) => ({
+                ...newWorkerSupportDetails,
+                typeofChurch: e.target.value=='WC'?'With Church':'Without Church',
+              }))
+            }
+            name="radio-buttons-group"
+            row
+          >
+            <FormControlLabel value="WC" control={<Radio />} label="With Church" />
+            <FormControlLabel value="WOC" control={<Radio />} label="Without Church" />
+          </RadioGroup>
+        </Grid>
+        <Grid item xs={12} md={6} lg={6}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setWorkerSupportDetails((newWorkerSupportDetails) => ({
+                      ...newWorkerSupportDetails,
+                      selfSupport: true,
+                    }));
+                  }
+                }}
+              />
+            }
+            label='Self-Support'
+            sx={{ float: 'right' }}
+          />
 
         </Grid>
       </Grid>

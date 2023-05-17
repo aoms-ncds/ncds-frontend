@@ -23,22 +23,22 @@ import {
   DialogTitle,
   TableContainer,
   Stack,
-} from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+} from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import {
   LocalizationProvider,
   DatePicker,
   DateTimePicker,
-} from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { useEffect, useState } from "react";
-import FRServices from "../extras/FRServices";
-import { closeSnackbar, enqueueSnackbar } from "notistack";
-import HRServices from "../../HR/extras/HRServices";
-import WorkerServices from "../../Workers/extras/WorkersServices";
-import DivisionsServices from "../../Divisions/extras/DivisionsServices";
-import { Moment } from "moment";
-import { monthNames } from "../extras/FRConfig";
+} from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import React, { useEffect, useState } from 'react';
+import FRServices from '../extras/FRServices';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import HRServices from '../../HR/extras/HRServices';
+import WorkerServices from '../../Workers/extras/WorkersServices';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import { Moment } from 'moment';
+import { monthNames } from '../extras/FRConfig';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -56,18 +56,18 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     useState<SubCategory2>();
   const [selectedSubCategory3, setSelectedSubCategory3] =
     useState<SubCategory3>();
-  const [action, setAction] = useState<"add" | "edit">("add");
+  const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Particulars, setParticulars] = useState<Particulars[]>();
   const [particularDetails, setParticularDetails] = useState<Particulars>({
-    _id: "",
-    mainCategory: "",
-    subCategory1: "",
-    subCategory2: "",
-    subCategory3: "",
-    quantity: "",
-    month: "",
+    _id: '',
+    mainCategory: '',
+    subCategory1: '',
+    subCategory2: '',
+    subCategory3: '',
+    quantity: '',
+    month: '',
     requestedAmount: 0,
-    narration: "",
+    narration: '',
   });
   const [staff, setStaff] = useState<Staff[]>();
 
@@ -137,10 +137,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       });
   }, []);
   const addParticulars = () => {
-    console.log("here");
+    console.log('here');
     const snackbarId = enqueueSnackbar({
-      message: "Adding Particulars",
-      variant: "info",
+      message: 'Adding Particulars',
+      variant: 'info',
     });
 
     FRServices.addParticulars(particularDetails, action)
@@ -150,18 +150,18 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         closeSnackbar(snackbarId);
         enqueueSnackbar({
           message: res.message,
-          variant: "success",
+          variant: 'success',
         });
         setParticularDetails(() => ({
-          _id: "",
-          mainCategory: "",
-          subCategory1: "",
-          subCategory2: "",
-          subCategory3: "",
-          quantity: "",
-          month: "",
+          _id: '',
+          mainCategory: '',
+          subCategory1: '',
+          subCategory2: '',
+          subCategory3: '',
+          quantity: '',
+          month: '',
           requestedAmount: 0,
-          narration: "",
+          narration: '',
         }));
       })
       .catch((err) => {
@@ -173,7 +173,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         closeSnackbar(snackbarId);
         enqueueSnackbar({
           message: err.message,
-          variant: "error",
+          variant: 'error',
         });
       });
   };
@@ -187,7 +187,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              props.onSubmit ? props.onSubmit(props.value) : "";
+              props.onSubmit ? props.onSubmit(props.value) : '';
             }}
           >
             <Grid container spacing={3}>
@@ -196,23 +196,23 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   label="Date"
                   value={props.value.date}
                   onChange={(date) => {
-                    if (props.action !== "view") {
+                    if (props.action !== 'view') {
                       props.onChange({
                         ...props.value,
                         date: date as Moment,
                       });
                     }
                   }}
-                  readOnly={props.action === "view"}
+                  readOnly={props.action === 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
                 <Autocomplete
                   value={props.value.purpose}
                   options={purposes ?? []}
-                  getOptionLabel={(requisition) => requisition ?? ""}
+                  getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedPurpose) => {
-                    if (selectedPurpose && props.action !== "view") {
+                    if (selectedPurpose && props.action !== 'view') {
                       props.onChange({
                         ...props.value,
                         purpose: selectedPurpose,
@@ -225,7 +225,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   fullWidth
                 />
               </Grid>
-              {props.value.purpose === "Worker" ? (
+              {props.value.purpose === 'Worker' ? (
                 <>
                   <Grid item xs={12} md={6} lg={6}>
                     <Autocomplete
@@ -233,7 +233,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       options={workers ?? []}
                       getOptionLabel={(worker) => worker.firstName}
                       onChange={(_e, selectedWorker) => {
-                        if (selectedWorker && props.action !== "view") {
+                        if (selectedWorker && props.action !== 'view') {
                           props.onChange({
                             ...props.value,
                             purposeWorker: selectedWorker,
@@ -256,7 +256,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   </Grid>
                 </>
               ) : null}
-              {props.value.purpose === "Subdivision" ? (
+              {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6} lg={6}>
                   <Autocomplete
                     value={props.value.purposeSubdivision}
@@ -265,7 +265,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       subDivision.subDivisionName
                     }
                     onChange={(e, selectedSubdivision) => {
-                      if (selectedSubdivision && props.action !== "view") {
+                      if (selectedSubdivision && props.action !== 'view') {
                         props.onChange({
                           ...props.value,
                           purposeSubdivision: selectedSubdivision,
@@ -283,14 +283,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.value.purpose === "Division" ? (
+              {props.value.purpose === 'Division' ? (
                 <Grid item xs={12} md={6} lg={6}>
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
                     getOptionLabel={(division) => division.divisionName}
                     onChange={(e, selectedDivision) => {
-                      if (selectedDivision && props.action !== "view") {
+                      if (selectedDivision && props.action !== 'view') {
                         props.onChange({
                           ...props.value,
                           purposeDivision: selectedDivision,
@@ -304,16 +304,16 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.value.purpose === "Coordinator" ? (
+              {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6} lg={6}>
                   <Autocomplete
                     value={props.value.purposeCoordinator}
                     options={coordinators ?? []}
                     getOptionLabel={(coordinator) =>
-                      coordinator.firstName + " " + coordinator.lastName
+                      coordinator.firstName + ' ' + coordinator.lastName
                     }
                     onChange={(e, selectedCoordinator) => {
-                      if (selectedCoordinator && props.action !== "view") {
+                      if (selectedCoordinator && props.action !== 'view') {
                         props.onChange({
                           ...props.value,
                           purposeCoordinator: selectedCoordinator,
@@ -331,7 +331,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.value.purpose === "Others" ? (
+              {props.value.purpose === 'Others' ? (
                 <Grid item xs={12} md={6} lg={6}>
                   <TextField
                     label="Others"
@@ -435,7 +435,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6} lg={6}>
                 <TextField
                   label="Sanctioned Amount"
-                  type={"number"}
+                  type={'number'}
                   value={props.value.sanctionedAmount}
                   onChange={(e) =>
                     props.onChange({
@@ -458,8 +458,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   label=" Group type"
                   required
                 >
-                  <MenuItem value={"FCRA"}>FCRA</MenuItem>
-                  <MenuItem value={"Normal Bank"}>Normal Bank</MenuItem>
+                  <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                  <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
 
                   {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                 </Select>
@@ -472,15 +472,15 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   id="Sanctioned As Per"
                   options={staff ?? []}
                   getOptionLabel={(staff) =>
-                    staff.firstName + " " + staff.lastName ?? ""
+                    staff.firstName + ' ' + staff.lastName ?? ''
                   }
                   renderOption={(props, staff, { selected }) => (
                     <Box
                       component="li"
-                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                       {...props}
                     >
-                      {staff.firstName + " " + staff.lastName}
+                      {staff.firstName + ' ' + staff.lastName}
                     </Box>
                   )}
                   // onChange={(e, selectedSubCategory2) => {
@@ -512,7 +512,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6} lg={6}>
                 <Button
                   variant="contained"
-                  style={{ textAlign: "right" }}
+                  style={{ textAlign: 'right' }}
                   type="submit"
                 >
                   Submit
@@ -524,7 +524,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 onClose={handleClose}
                 PaperProps={{
                   style: {
-                    width: "1000px",
+                    width: '1000px',
                   },
                 }}
               >
@@ -561,7 +561,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           value={selectedSubCategory2}
                           options={selectedSubCategory1?.subcategory2 ?? []}
                           getOptionLabel={(subcategory2) =>
-                            subcategory2.name ?? ""
+                            subcategory2.name ?? ''
                           }
                           onChange={(_e, selectedSubCategory2) => {
                             if (selectedSubCategory2) {

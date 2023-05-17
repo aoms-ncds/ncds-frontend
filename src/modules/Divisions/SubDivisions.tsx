@@ -71,7 +71,7 @@ const SubDivisionsPage = ({
                   />
                 </Grid>
                 <Grid item xs={6}>
-                    <Button onClick={() => deleteSubDivision(index)} variant="outlined" style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
+                  <Button onClick={() => deleteSubDivision(index)} variant="outlined" style={{ display: 'block', margin: '0 auto' }}><DeleteIcon /></Button>
                 </Grid>
               </Grid><br />
             </div>

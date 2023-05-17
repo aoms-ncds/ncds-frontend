@@ -1,7 +1,7 @@
-import { Autocomplete, TextField, TextFieldProps } from "@mui/material";
-import { enqueueSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
-import HRServices from "../extras/HRServices";
+import { Autocomplete, TextField, TextFieldProps } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+import React, { useEffect, useState } from 'react';
+import HRServices from '../extras/HRServices';
 
 interface StaffDropdownProps {
   staffs?: Staff[];
@@ -29,7 +29,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       })
       .catch((error) => {
         enqueueSnackbar({
-          variant: "error",
+          variant: 'error',
           message: error.message,
         });
       });
@@ -43,7 +43,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      getOptionLabel={(option) => option.firstName + " " + option.lastName}
+      getOptionLabel={(option) => option.firstName + ' ' + option.lastName}
       onChange={props.onChange}
       renderInput={(params) => (
         <TextField

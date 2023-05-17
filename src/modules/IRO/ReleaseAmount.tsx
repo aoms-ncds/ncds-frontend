@@ -150,99 +150,99 @@ const ReleaseAmount = () => {
           <form onSubmit={saveReleaseAmount}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} lg={6}>
-                  <TextField
-                    label="Release Amount"
-                    value={Number(IROrelease?.releaseAmount)}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        releaseAmount: Number(e.target.value),
-                      }))
-                    }variant="outlined"
-                    fullWidth
-                  />
+                <TextField
+                  label="Release Amount"
+                  value={Number(IROrelease?.releaseAmount)}
+                  onChange={(e) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      releaseAmount: Number(e.target.value),
+                    }))
+                  }variant="outlined"
+                  fullWidth
+                />
               </Grid>
             </Grid>
             <br/>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6} lg={6}>
-                  <TextField
-                    label="Amount Transferred"
-                    value={Number(IROrelease?.transferredAmount)}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        transferredAmount: Number(e.target.value),
-                      }))
-                    }variant="outlined"
-                    fullWidth
-                  />
+                <TextField
+                  label="Amount Transferred"
+                  value={Number(IROrelease?.transferredAmount)}
+                  onChange={(e) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      transferredAmount: Number(e.target.value),
+                    }))
+                  }variant="outlined"
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Date"
-                      // value={IROrelease?.transferredDate}
-                      // onChange={(e) =>
-                      // // eslint-disable-next-line @typescript-eslint/naming-convention
-                      //   setIROrelease((IROrelease: any) => ({
-                      //     ...IROrelease,
-                      //     transferredDate: e.target.value,
-                      //   }))
-                      // }
-                    />
-
-                  </LocalizationProvider>
-              </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                  <BankDetailsFormComponent
-                    value={IROrelease?.transferredBank}
-                    onChange={(newbankDetails: BankDetails) => {
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        transferredBank: newbankDetails,
-                      }));
-                    }}
-                    action={'add'}
-                    title={'Amount Transferred (Bank) Details'}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker label="Date"
+                    // value={IROrelease?.transferredDate}
+                    // onChange={(e) =>
+                    // // eslint-disable-next-line @typescript-eslint/naming-convention
+                    //   setIROrelease((IROrelease: any) => ({
+                    //     ...IROrelease,
+                    //     transferredDate: e.target.value,
+                    //   }))
+                    // }
                   />
 
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                  <TextField
-                    label="Mode of payment"
-                    value={IROrelease?.modeOfPayment}
-                    onChange={(e) =>
+                <BankDetailsFormComponent
+                  value={IROrelease?.transferredBank}
+                  onChange={(newbankDetails: BankDetails) => {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        modeOfPayment: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      transferredBank: newbankDetails,
+                    }));
+                  }}
+                  action={'add'}
+                  title={'Amount Transferred (Bank) Details'}
+                />
+
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                  <TextField
-                    label="Transaction No:"
-                    value={IROrelease?.transactionNumber}
-                    onChange={(e) =>
+                <TextField
+                  label="Mode of payment"
+                  value={IROrelease?.modeOfPayment}
+                  onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        transactionNumber: e.target.value,
-                      }))
-                    }
-                    fullWidth
-                  />
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      modeOfPayment: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                />
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                  <TextField
-                    type="file"
-                    // onChange={(e) => handleFileUpload(e.target.files)}
-                  />
+                <TextField
+                  label="Transaction No:"
+                  value={IROrelease?.transactionNumber}
+                  onChange={(e) =>
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setIROrelease((IROrelease) => ({
+                      ...IROrelease,
+                      transactionNumber: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <TextField
+                  type="file"
+                  // onChange={(e) => handleFileUpload(e.target.files)}
+                />
               </Grid>
             </Grid>
             <br />

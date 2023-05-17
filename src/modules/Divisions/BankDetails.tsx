@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { FormControl, Grid, TextField, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
 const BankDetailsFormComponent = (props: FormComponentProps<BankDetails>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
     props.value ?? {
-      bankname: "",
-      branchname: "",
-      accountNumber: "",
-      IFSCCode: "",
-      beneficiary: "",
-    }
+      bankname: '',
+      branchname: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
   );
 
   return (
