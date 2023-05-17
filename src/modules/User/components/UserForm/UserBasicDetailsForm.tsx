@@ -1,6 +1,7 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import React from 'react';
+import { languages } from '../../../../extras/CommonConfig';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<CreatableNewUserBasicDetails, {
@@ -124,6 +125,171 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, highestQualification: e.target.value })}
           variant={props.options?.textField.variant}
           fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} >
+        <Autocomplete
+          id="mlanguges"
+          options={languages}
+          getOptionLabel={(option) => option}
+          value={props.value.motherTounge}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTounge: newvalue??undefined })}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Mother Tongue"
+              variant={props.options?.textField.variant}
+            />
+          )}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} >
+        <Autocomplete
+          id="Clanguges"
+          options={languages}
+          getOptionLabel={(option) => option}
+          value={props.value.communicationLanguage}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue??undefined })}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Communication Language"
+              variant={props.options?.textField.variant}
+            />
+          )}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} >
+        <Autocomplete
+          multiple
+          id="knownLanguages"
+          options={languages}
+          getOptionLabel={(option) => option}
+          value={props.value.knownLanguages}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue??undefined })}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Known Languages"
+              variant={props.options?.textField.variant}
+            />
+          )}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Email"
+          type="email"
+          value={props.value.email}
+          onChange={(e) => props.onChange({ ...props.value, email: e.target.value })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Phone"
+          type="tel"
+          value={props.value.phone}
+          onChange={(e) => props.onChange({ ...props.value, phone: e.target.value })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="alternativePhone"
+          type="tel"
+          value={props.value.alternativePhone}
+          onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="PAN"
+          value={props.value.email}
+          onChange={(e) => props.onChange({ ...props.value, email: e.target.value })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Aadhaar no"
+          value={props.value.aadhaar?.aadhaarNo}
+          onChange={(e) => props.onChange({
+            ...props.value,
+            aadhaar: {
+              ...props.value.aadhaar,
+              aadhaarNo: e.target.value,
+            },
+          })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} >
+        <TextField
+          label="Aadhaar"
+          type="file"
+          onChange={(e) => {
+            const file = (e.target as HTMLInputElement).files?.[0];
+            if (file) {
+              props.onChange({
+                ...props.value,
+                aadhaar: {
+                  aadhaarNo: props.value.aadhaar?.aadhaarNo??'',
+                  aadhaarFile: { file },
+                },
+              });
+            }
+          }}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Voter ID"
+          value={props.value.voterId?.voterIdNo}
+          onChange={(e) => props.onChange({
+            ...props.value,
+            voterId: {
+              ...props.value.voterId,
+              voterIdNo: e.target.value,
+            },
+          })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} >
+        <TextField
+          label="Voter ID File"
+          type="file"
+          onChange={(e) => {
+            const file = (e.target as HTMLInputElement).files?.[0];
+            if (file) {
+              props.onChange({
+                ...props.value,
+                voterId: {
+                  voterIdNo: props.value.voterId?.voterIdNo??'',
+                  voterIdFile: { file },
+                },
+              });
+            }
+          }}
         />
       </Grid>
     </>

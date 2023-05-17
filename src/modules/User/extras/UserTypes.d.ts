@@ -32,18 +32,26 @@ declare global {
     PANNo?: string;
     aadhaar?: {
       aadhaarNo: string;
-      aadhaarFile: FileObject;
+      aadhaarFile?: string;
     };
     voterId?: {
       voterIdNo: string;
-      voterIdFile: FileObject;
+      voterIdFile?: string;
     };
     licenseNumber?: string;
     permanentAddress: Address;
     currentAddress: Address;
   }
   interface CreatableNewUserBasicDetails extends Creatable<NewUserBasicDetails>{
-    gender?: NewUser['gender'];
+    gender?: NewUserBasicDetails['gender'];
+    aadhaar?: {
+      aadhaarNo: string;
+      aadhaarFile?: UploadableFile;
+    };
+    voterId?: {
+      voterIdNo: string;
+      voterIdFile?: UploadableFile;
+    };
   }
   interface NewUser extends MongooseDocument {
     workerCode: string;
