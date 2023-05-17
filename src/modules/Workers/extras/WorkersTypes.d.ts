@@ -81,7 +81,7 @@ interface Spouse extends MongooseDocument{
     working:boolean;
     occupation: string;
     qualification:string;
-    languagesKnown:LanguagesList[];
+    languagesKnown:Languages[];
 
 }
 interface CreatableSpouse extends Creatable<Spouse>{
@@ -90,7 +90,7 @@ interface CreatableSpouse extends Creatable<Spouse>{
     working?:boolean;
     occupation?: string;
     qualification?:string;
-    languagesKnown?:LanguagesList[];
+    languagesKnown?:Languages[];
 }
 
 

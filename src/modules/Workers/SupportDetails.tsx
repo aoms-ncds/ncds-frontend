@@ -38,7 +38,7 @@ const SupportDetails = () => {
     // <form>
     //   <Grid container spacing={3}>
     <>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <Autocomplete
             id="Current Designation"
@@ -79,7 +79,7 @@ const SupportDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Total No. Years in Ministry"
@@ -95,7 +95,7 @@ const SupportDetails = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl>
           <FormLabel id="demo-radio-buttons-group-label">Type Of Family</FormLabel>
           <RadioGroup
@@ -116,7 +116,7 @@ const SupportDetails = () => {
           </RadioGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl>
           <FormLabel id="demo-radio-buttons-group-label">Type Of Church</FormLabel>
           <RadioGroup
@@ -137,7 +137,7 @@ const SupportDetails = () => {
           </RadioGroup>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} >
         <FormControl>
           <FormControlLabel
             control={

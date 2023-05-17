@@ -9,27 +9,29 @@ import {
 
 import { Link } from 'react-router-dom';
 
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useLoader } from '../../../hooks/Loader';
 import WorkerServices from '../extras/WorkersServices';
 import { Avatar, Button, Card, Grid } from '@mui/material';
 const WorkersListPage = () => {
   const loader = useLoader();
-  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[]|null>(null);
+  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[] | null>(
+    null,
+  );
 
   useEffect(() => {
     loader.onLoad();
     WorkerServices.getAll()
-   .then((res) => {
-     loader.afterLoad();
-     console.log(res);
-     setWorkerRequests(res.data);
-   })
-  .catch((res) => {
-    // loader.afterLoad();
-    console.log(res);
-  });
+      .then((res) => {
+        loader.afterLoad();
+        console.log(res);
+        setWorkerRequests(res.data);
+      })
+      .catch((res) => {
+        // loader.afterLoad();
+        console.log(res);
+      });
   }, []);
   const removeWorker = (id: string) => {
     console.log('hey', id);
@@ -61,20 +63,20 @@ const WorkersListPage = () => {
         });
       });
   };
-  const columns = [
+  const columns: GridColDef<IETWorker>[] = [
     {
       field: 'image',
       headerName: '',
       minWidth: 50,
       type: 'string',
-      renderCell: (props: any) => (<Avatar />),
+      renderCell: ( ) => <Avatar />,
     },
     {
       field: '_manage',
       headerName: 'Action',
       minWidth: 50,
       type: 'string',
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id='Worker action'
@@ -111,18 +113,34 @@ const WorkersListPage = () => {
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'firstName', headerName: 'First Name', width: 70 },
     { field: 'secondName', headerName: 'Last Name:', width: 130 },
-    { field: 'missionaryOrNonMissionary', headerName: 'Missionary', width: 150 },
+    {
+      field: 'missionaryOrNonMissionary',
+      headerName: 'Missionary',
+      width: 150,
+    },
     { field: 'dob', headerName: 'DOB', width: 170 },
     { field: 'gender', headerName: 'Gender', width: 150 },
     { field: 'age', headerName: 'Age', width: 130 },
     { field: 'maritalStatus', headerName: 'Marital Status', width: 130 },
-    { field: 'highestQualification', headerName: 'Highest Qualification', width: 130 },
+    {
+      field: 'highestQualification',
+      headerName: 'Highest Qualification',
+      width: 130,
+    },
     { field: 'motherToungue', headerName: 'Mother Toungue', width: 130 },
-    { field: 'communicationLanguage', headerName: 'Communication Language', width: 130 },
+    {
+      field: 'communicationLanguage',
+      headerName: 'Communication Language',
+      width: 130,
+    },
     { field: 'languagesKnown', headerName: 'Languages Known', width: 130 },
     { field: 'email', headerName: 'Email Id', width: 130 },
     { field: 'phone', headerName: 'Mobile Number', width: 130 },
-    { field: 'alternativeMobileNumber', headerName: 'Alernative Mobile Number', width: 130 },
+    {
+      field: 'alternativeMobileNumber',
+      headerName: 'Alernative Mobile Number',
+      width: 130,
+    },
     { field: 'PANnumber', headerName: 'PAN Number', width: 130 },
     { field: 'aadhaarNumber', headerName: 'Aadhaar Number', width: 130 },
     { field: 'voterId', headerName: 'Voter Id', width: 130 },
@@ -139,25 +157,36 @@ const WorkersListPage = () => {
     { field: 'currentAddressState', headerName: 'State', width: 130 },
     { field: 'currentAddressCountry', headerName: 'Country', width: 130 },
     { field: 'currentAddressPincode', headerName: 'Pin Code', width: 130 },
-    { field: 'spouseOfAnotherStaff', headerName: 'Spouse Of Another Staff', width: 130 },
-
+    {
+      field: 'spouseOfAnotherStaff',
+      headerName: 'Spouse Of Another Staff',
+      width: 130,
+    },
   ];
   return (
-    <><Button
-      variant="contained"
-      sx={{ float: 'right' }}
-      startIcon={<AddIcon />}
-      component={Link}
-      to="/workers/add"
-    >
-          Add new
-    </Button><br /><br />
-    <Grid item xs={12} md={12}>
-      <Card style={{ height: '80vh', width: '100%' }}>
-        <DataGrid rows={WorkerRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={WorkerRequests === null} />
-      </Card>
-    </Grid></>
-
+    <>
+      <Button
+        variant='contained'
+        sx={{ float: 'right' }}
+        startIcon={<AddIcon />}
+        component={Link}
+        to='/workers/add'
+      >
+        Add new
+      </Button>
+      <br />
+      <br />
+      <Grid item xs={12} md={12}>
+        <Card style={{ height: '80vh', width: '100%' }}>
+          <DataGrid
+            rows={WorkerRequests ?? []}
+            columns={columns}
+            getRowId={(row) => row._id}
+            loading={WorkerRequests === null}
+          />
+        </Card>
+      </Grid>
+    </>
   );
 };
 

@@ -32,7 +32,7 @@ const SupportStructure = () => {
   return (
     <form>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="BASIC"
@@ -48,7 +48,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="HRA"
@@ -63,7 +63,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="SPOUSE ALLOWANCE"
@@ -79,7 +79,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="POSITIONAL ALLOWANCE"
@@ -95,7 +95,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="SPECIAL ALLOWANCE"
@@ -111,7 +111,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="IMPACT DEDUCTION"
@@ -127,7 +127,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="TEL ALLOWANCE"
@@ -143,7 +143,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="PION Missionary Fund"
@@ -159,7 +159,7 @@ const SupportStructure = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={6} >
           <TextField
             type="number"
             label="MUT Deduction(Medical Insurance)"

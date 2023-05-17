@@ -80,7 +80,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
     <CommonPageLayout title={props.action === 'add' ? 'Add Spouse' : 'Edit Spouse'} >
       <form onSubmit={props.action === 'add' ? addSpouse : editSpouse}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label=" First Name"
@@ -95,7 +95,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label=" Last Name"
@@ -110,7 +110,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label="Email"
@@ -124,7 +124,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label="Email"
@@ -141,7 +141,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <TextField
               label="Mobile Number"
               value={newSpouse?.mobileNo}
@@ -155,7 +155,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl variant="outlined" fullWidth>
 
               <DatePicker
@@ -175,7 +175,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
 
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
 
             <TextField
@@ -193,7 +193,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
 
           </Grid>
 
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               // defaultValue="Yes"
@@ -211,7 +211,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
               <FormControlLabel value="No" control={<Radio />} label="No" />
             </RadioGroup>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
 
             <TextField
               label="Occupation"
@@ -226,7 +226,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <FormControl variant="outlined" fullWidth>
               <TextField
                 label="Qualification"
@@ -241,7 +241,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <TextField
               label="Language Known"
               value={newSpouse?.languagesKnown}
@@ -251,7 +251,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             />
 
           </Grid>
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={6} >
             <Autocomplete
               value={newSpouse?.spouseOf || null}
               options={workers ?? []}

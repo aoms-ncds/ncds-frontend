@@ -20,7 +20,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
         </Typography>
         <br />
         <Grid container spacing={3}>
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <TextField
               label="Bank Name"
               value={newBankDetails.bankname}
@@ -34,7 +34,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <TextField
               label="Branch Name"
               value={newBankDetails.branchname}
@@ -48,7 +48,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <TextField
               label="Account Number"
               value={newBankDetails.accountNumber}
@@ -62,7 +62,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <TextField
               label="IFSC Code"
               value={newBankDetails.IFSCCode}
@@ -76,7 +76,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <TextField
               label="Beneficiary"
               value={newBankDetails.beneficiary}

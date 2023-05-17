@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import {
   Edit as EditIcon,
   Preview as PreviewIcon,
@@ -43,12 +43,13 @@ const DivisionsList = () => {
         });
       });
   };
-  const columns = [
+  const columns:GridColDef<IETDivisions>[] = [
     {
       field: '_manage',
       headerName: 'Action',
       minWidth: 50,
       type: 'string',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
@@ -88,20 +89,21 @@ const DivisionsList = () => {
       field: 'divisionName',
       headerName: 'Division Name',
       width: 200,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
         <Link to={`/divisions/details/${props.row._id}`}
           style={{
             textDecoration: 'none', color: 'inherit' }}>{props.row.divisionName}</Link>
       ),
     },
-    { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => (
-      <p> {props.row.coordinatorName}</p>
+    { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props) => (
+      <p> {props.row.coordinator.firstName+' '+props.row.coordinator.lastName}</p>
     ), width: 130 },
-    { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => (
-      <p> {props.row.coordinatorEmail}</p>
+    { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props) => (
+      <p> {props.row.coordinator.email}</p>
     ), width: 130 },
-    { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => (
-      <p> {props.row.coordinatorContactno}</p>
+    { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props) => (
+      <p> {props.row.coordinator.phone}</p>
     ), width: 130 },
     { field: 'noofWorkers', headerName: 'No. of Workers', width: 200 },
     { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', width: 200 },
