@@ -261,7 +261,7 @@ export default {
       timeout: 500,
     }),
   ),
-  addWorker: (action: string ) => getStandardResponse<number>(
+  createWorker: (action: string ) => getStandardResponse<number>(
     dummyRequest({
       data: 1,
       // error: null,

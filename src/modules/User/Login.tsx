@@ -9,23 +9,23 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useState } from "react";
+} from '@mui/material';
+import React, { useState } from 'react';
 import {
   Email as EmailIcon,
   Key as KeyIcon,
   Visibility as VisibilityIcon,
   VisibilityOff as VisibilityOffIcon,
-} from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+} from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/default
-import HomeServices from "./extras/HomeServices";
+import HomeServices from './extras/HomeServices';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [loginCred, setLoginCred] = useState<LoginCredentials>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const [passwordVisible, setPasswordVisiblity] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -39,29 +39,29 @@ const LoginPage = () => {
     HomeServices.loginUser(loginCred)
       .then((res) => {
         setLoading(false);
-        localStorage.setItem("userToken", res.data.token);
-        localStorage.setItem("userData", JSON.stringify(res.data.user));
-        navigate("/");
+        localStorage.setItem('userToken', res.data.token);
+        localStorage.setItem('userData', JSON.stringify(res.data.user));
+        navigate('/');
       })
       .catch((err) => {
         console.log(err);
 
         setLoading(false);
         if (
-          err.message !== "Incorrect email" &&
-          err.message !== "Incorrect password"
+          err.message !== 'Incorrect email' &&
+          err.message !== 'Incorrect password'
         ) {
           setEmailError(false);
           setPasswordError(false);
           return setUnknownError(err.message);
         }
-        if (err.message === "Incorrect email") {
+        if (err.message === 'Incorrect email') {
           return setEmailError(true);
         } else {
           setEmailError(false);
           setUnknownError(undefined);
         }
-        if (err.message === "Incorrect password") {
+        if (err.message === 'Incorrect password') {
           return setPasswordError(true);
         } else {
           setPasswordError(false);
@@ -74,10 +74,10 @@ const LoginPage = () => {
       <CssBaseline />
       <Card
         sx={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%,-50%)',
           minWidth: 260,
           maxWidth: 360,
           borderRadius: 1,
@@ -87,7 +87,7 @@ const LoginPage = () => {
           <form onSubmit={doLogin}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <Typography variant="h5" sx={{ textAlign: "center" }}>
+                <Typography variant="h5" sx={{ textAlign: 'center' }}>
                   Hey, welcome back
                 </Typography>
               </Grid>
@@ -97,7 +97,7 @@ const LoginPage = () => {
                   type="email"
                   value={loginCred.email}
                   error={emailError}
-                  helperText={emailError && "Please enter a valid email"}
+                  helperText={emailError && 'Please enter a valid email'}
                   onChange={(e) =>
                     setLoginCred((loginCred) => ({
                       ...loginCred,
@@ -120,10 +120,10 @@ const LoginPage = () => {
               <Grid item xs={12}>
                 <TextField
                   label="Password"
-                  type={passwordVisible ? "text" : "password"}
+                  type={passwordVisible ? 'text' : 'password'}
                   value={loginCred.password}
                   error={passwordError}
-                  helperText={passwordError && "Please enter a valid password"}
+                  helperText={passwordError && 'Please enter a valid password'}
                   onChange={(e) =>
                     setLoginCred((loginCred) => ({
                       ...loginCred,
@@ -158,7 +158,7 @@ const LoginPage = () => {
                 />
                 <Button
                   variant="text"
-                  sx={{ float: "right", fontSize: 10, marginTop: 2 }}
+                  sx={{ float: 'right', fontSize: 10, marginTop: 2 }}
                   component={Link}
                   to="/tests/ForgotPasswordForm"
                 >
@@ -174,7 +174,7 @@ const LoginPage = () => {
                   startIcon={isLoading && <CircularProgress size={20} />}
                   fullWidth
                 >
-                  {isLoading ? "Signing in..." : "Sign in"}
+                  {isLoading ? 'Signing in...' : 'Sign in'}
                 </Button>
               </Grid>
             </Grid>

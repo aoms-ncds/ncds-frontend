@@ -34,7 +34,7 @@ const AddNewWorker = () => {
   }, []);
   const AddWorker = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.addWorker(action)
+    WorkerServices.createWorker(action)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,

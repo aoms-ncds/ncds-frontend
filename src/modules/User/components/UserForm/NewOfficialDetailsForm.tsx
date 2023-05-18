@@ -91,6 +91,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
           )}
         />
       </Grid>
+
       <Grid item xs={12} md={6}>
         <FormControlLabel
           label="Self support"

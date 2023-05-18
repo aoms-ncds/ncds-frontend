@@ -4,6 +4,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 
 const NewAddWorker = () => {
   const [user, setUser] = useState<CreatableNewUser>({
+    kind: 'worker',
     basicDetails: {
       firstName: '',
       lastName: '',
@@ -11,9 +12,9 @@ const NewAddWorker = () => {
       currentAddress: {},
       permanentAddress: {},
     },
-    officialDetails: {
-      remarks: '',
-    },
+    officialDetails: { remarks: '' },
+    supportDetails: {},
+    supportStructure: {},
   });
 
   return (
@@ -23,7 +24,6 @@ const NewAddWorker = () => {
         action='add'
         value={user}
         onChange={(newUser) => {
-        // Implement
           setUser(newUser);
         }}
         options={{
@@ -31,6 +31,9 @@ const NewAddWorker = () => {
             variant: 'standard',
           },
         }}
+        // onSubmit={(creatableUser) => {
+        //   //
+        // }}
       />
     </CommonPageLayout>
   );

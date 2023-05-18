@@ -7,8 +7,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-
-    //
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
@@ -18,7 +16,7 @@ module.exports = {
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: 2021,
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'json', 'eslint-plugin'],
@@ -75,5 +73,6 @@ module.exports = {
     'no-duplicate-imports': 'error',
     // 'comma-dangle': ['error', 'always',],
     'react/prop-types': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };

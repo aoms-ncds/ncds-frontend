@@ -260,6 +260,7 @@ const UserBasicDetailsForm = (
           }}
           variant={props.options?.textField.variant}
           InputLabelProps={{ shrink: true }}
+          fullWidth
         />
       </Grid>
 
@@ -297,6 +298,7 @@ const UserBasicDetailsForm = (
           }}
           variant={props.options?.textField.variant}
           InputLabelProps={{ shrink: true }}
+          fullWidth
         />
       </Grid>
       <NewAddressForm

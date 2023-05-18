@@ -1,44 +1,44 @@
-import React from "react";
-import TestModule from "..";
-import { Extension as ExtensionIcon, Login } from "@mui/icons-material";
-import NewPage from "../FreshPage";
-import LoginPage from "../../User/Login";
-import ForgotPasswordFormPage from "../../User/ForgotPasswordForm";
+import React from 'react';
+import TestModule from '..';
+import { Extension as ExtensionIcon, Login } from '@mui/icons-material';
+import NewPage from '../FreshPage';
+import LoginPage from '../../User/Login';
+import ForgotPasswordFormPage from '../../User/ForgotPasswordForm';
 
 const testsPageRoutes: ModuleRoute = {
-  base: "/tests",
+  base: '/tests',
   pages: [
     {
-      title: " Tests Module page",
-      path: "",
+      title: ' Tests Module page',
+      path: '',
       element: <TestModule />,
       private: true,
-      requiredAccessRights: ["string"],
+      requiredAccessRights: ['string'],
       showInDrawer: true,
       icon: <ExtensionIcon />,
     },
     {
-      title: "New page",
-      path: "/new_page",
+      title: 'New page',
+      path: '/new_page',
       element: <NewPage />,
       private: true,
-      requiredAccessRights: ["string"],
+      requiredAccessRights: ['string'],
       showInDrawer: true,
     },
     {
-      title: "Login page",
-      path: "/Users/Login",
+      title: 'Login page',
+      path: '/Users/Login',
       element: <LoginPage />,
       private: false,
-      requiredAccessRights: ["string"],
+      requiredAccessRights: ['string'],
       showInDrawer: true,
     },
     {
-      title: "Forgot Password Page",
-      path: "/ForgotPasswordForm",
+      title: 'Forgot Password Page',
+      path: '/ForgotPasswordForm',
       element: <ForgotPasswordFormPage />,
       private: false,
-      requiredAccessRights: ["string"],
+      requiredAccessRights: ['string'],
       showInDrawer: false,
     },
   ],

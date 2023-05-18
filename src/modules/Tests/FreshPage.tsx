@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Typography } from '@mui/material';
-import { useLoader } from '../../hooks/Loader';
 
 const FreshPage = () => {
   return (
