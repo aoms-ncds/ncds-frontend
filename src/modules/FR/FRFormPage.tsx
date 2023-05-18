@@ -31,7 +31,7 @@ const FRFormPage = (props: FRFormPagerops) => {
   // const { frID }=useParams();
 
   return (
-    <CommonPageLayout title={props.action === 'add' ? 'Apply New FR': props.action === 'edit'?'Edit FR':'View FR'}>
+    <CommonPageLayout title={props.action === 'add' ? 'Apply New FR': props.action === 'edit'?'Edit FR':'View Details'}>
       <Card style={{ width: '100%' }}>
         <FRForm
           value={requisition}

@@ -62,6 +62,21 @@ const IRODashboard = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
+            {
+              id: 'Reconciliation',
+              text: 'Reconciliation',
+              icon: EditIcon,
+            },
+            {
+              id: 'Close IRO',
+              text: 'Close IRO',
+              icon: PreviewIcon,
+            },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: PrintIcon,
+            },
           ]}
         />
       ),
@@ -75,6 +90,9 @@ const IRODashboard = () => {
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
+    { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
   ];
   return (
     <CommonPageLayout title='Internal Release Order'>
