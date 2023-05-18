@@ -38,7 +38,7 @@ const DivisionsList = () => {
           console.log('process delete', res);
           if (divisions) {
             const newDivisions = divisions.filter((divisions) => {
-            //  return divisions._id !== id;
+              return divisions._id !== id;
             });
             setDivisions(newDivisions);
           }
@@ -109,20 +109,20 @@ const DivisionsList = () => {
       ),
     },
     { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => (
-      <p> {props.row.coordinatorName}</p>
+      <p> {props.row.division.coordinator.firstName}</p>
     ), width: 130 },
     { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => (
-      <p> {props.row.division.divisionName}</p>
+      <p>{props.row.division.coordinator.email}</p>
     ), width: 130 },
     { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => (
-      <p> {props.row.divisionName}</p>
+      <p>{props.row.division.coordinator.phone}</p>
     ), width: 130 },
 
     { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => (
       <p> {props.row.division.noofWorkers}</p>
     ), width: 130 },
     { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => (
-      <p> {props.row.division.noofSubdivisions}</p>
+      <p> {props.row.division.noOfSubdivisions}</p>
     ), width: 130 },
 
   ];

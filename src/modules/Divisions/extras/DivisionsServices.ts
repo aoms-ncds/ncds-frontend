@@ -235,22 +235,16 @@ export default {
     );
   },
 
-  // ),
-  // addDivision: (staff: CreatableStaff, action: 'add' | 'edit') => {
-  //   return getStandardResponse<CreatableStaff>(
-  //     axios.post('/hr/staffs', { staff, action }),
-  //   );
-  // },
-  editDivision: () => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
-      // error: null,
-      message: 'Updated Division',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  editDivision: (divisionId: string, division: DivisionDetails) => {
+    return getStandardResponse<DivisionDetails>(
+      axios.patch('/divisions/'+divisionId, division),
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
+
+    axios.get('/divisions/'+divisionId),
+  ),
   // getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
   //   dummyRequest<DivisionDetails>({
   //     data: {
@@ -403,13 +397,7 @@ export default {
     }),
   ),
   divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(
-    dummyRequest({
-      data: divisionId,
-      // error: null,
-      message: 'Division Deleted',
-      result: 'success',
-      timeout: 500,
-    }),
+    axios.delete('/divisions/'+divisionId),
   ),
 
 };
