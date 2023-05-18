@@ -210,7 +210,8 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" No. of Workers"
-            value={divisionDetails.noofWorkers || divisionDetails?.noofWorkers}
+            type='number'
+            value={divisionDetails?.noofWorkers}
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {

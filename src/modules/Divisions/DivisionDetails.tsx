@@ -148,8 +148,7 @@ const DivisionDetailsPage = () => {
           formattedId: '',
           createdAt: moment(),
           updatedAt: moment(),
-        }, createdAt: moment(),
-        updatedAt: moment(),
+        },
       },
       subDivisions: [{
         _id: '',
@@ -172,7 +171,7 @@ const DivisionDetailsPage = () => {
     beneficiary: '',
 
   },
-      _id: '',
+
       createdAt: moment(),
       updatedAt: moment(),
 

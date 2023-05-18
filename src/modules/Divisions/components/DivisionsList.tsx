@@ -130,7 +130,7 @@ const DivisionsList = () => {
     <DataGrid
       rows={divisions ?? []}
       columns={columns}
-      getRowId={(row) => row._id}
+      getRowId={(row) => row._id as string}
       loading={divisions === null}
     />
   );

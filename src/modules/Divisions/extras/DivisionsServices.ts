@@ -13,7 +13,7 @@ export default {
     dummyRequest<IETDivisions[]>({
       data: [{
         divisionName: 'Division 1',
-        _id: '1',
+        // _id: '1',
         divisionId: '233',
         contactNumber: '89000333',
         email: 'division@gmail.com',
@@ -107,12 +107,10 @@ export default {
           createdAt: moment(),
           updatedAt: moment(),
         },
-        createdAt: moment(),
-        updatedAt: moment(),
       },
       {
         divisionName: 'Division 2',
-        _id: '2',
+        // /_id: '2',
         divisionId: '233',
         contactNumber: '89000333',
         email: 'division@gmail.com',
@@ -206,8 +204,7 @@ export default {
           createdAt: moment(),
           updatedAt: moment(),
         },
-        createdAt: moment(),
-        updatedAt: moment(),
+
       },
 
       ],
