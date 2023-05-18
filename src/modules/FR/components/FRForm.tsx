@@ -21,6 +21,7 @@ import {
   DialogTitle,
   TableContainer,
   IconButton,
+  InputAdornment,
 } from '@mui/material';
 import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import {
@@ -36,6 +37,7 @@ import { Moment } from 'moment';
 import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
+import SendIcon from '@mui/icons-material/Send';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -69,7 +71,11 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [staff, setStaff] = useState<Staff[]>();
-
+  const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [remark, setRemark] = useState<CreatableRemark>({
+    remark: '',
+  });
   const handleClose = () => {
     setShowAddParticulardialog(false);
   };
@@ -516,14 +522,29 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
               <Grid item xs={12}>
+                {/* {props.action === 'edit' && ( */}
+                <Button
+                  variant="contained"
+                  color="warning"
+                  style={{ textAlign: 'left' }}
+                  // onClick={() => {
+                  //   toggleOpenRemarks(true);
+                  // }}
+                >
+                  Print FR
+                </Button>
+                {/* )} */}
+                &nbsp;
                 <div style={{ float: 'right' }}>
-                  {/* <Button
+                  <Button
                     variant="contained"
-                    style={{ textAlign: 'right' }}
-                    type="submit"
+                    color='info'
+                    onClick={() => {
+                      toggleOpenRemarks(true);
+                    }}
                   >
-                  Submit
-                  </Button> */}
+                  Remark
+                  </Button>
                 &nbsp;
                   <Button
                     variant='contained'
@@ -571,7 +592,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         const processedSnack = enqueueSnackbar({ message: 'Submitted FR to accounts!', variant: 'success' });
                         setTimeout(() => closeSnackbar(processedSnack), 500);
                       }, 500);
-                    }}>Submit to Accounts</Button>
+                    }}>Submit </Button>
                 </div>
               </Grid>
 
@@ -691,7 +712,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             }
                           }}
                           renderInput={(params) => (
-                            <TextField {...params} label="Month" required />
+                            <TextField {...params} label="For the Month" required />
                           )}
                           fullWidth
                         />
@@ -716,8 +737,22 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           value={particularDetails.narration}
                           multiline
                           maxRows={4}
+                          onChange={(e) =>
+                            setParticularDetails((particularDetails) => ({
+                              ...particularDetails,
+                              narration: e.target.value,
+                            }))
+                          }
                           fullWidth
                         />
+                      </Grid>
+                      <Grid item md={12}>
+                        <Button
+                          variant='contained'
+                          onClick={() => setShowFileUploader(true)}
+                        >
+                        Attachments
+                        </Button>
                       </Grid>
                     </Grid>
                   </Container>
@@ -734,6 +769,55 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </DialogActions>
               </Dialog>
               <br />
+              <Dialog open={openRemarks} fullWidth maxWidth="md">
+                <DialogTitle>
+           Remarks
+                </DialogTitle>
+                <DialogActions>
+
+                  <TextField
+                    id="remarkTextfield"
+                    placeholder="Remarks"
+                    multiline
+                    value={remark?.remark}
+                    onChange={(e) => setRemark((remark) => ({
+                      ...remark,
+                      remark: e.target.value,
+                    }))}
+                    InputProps={{
+                      endAdornment: <InputAdornment position='end'>
+                        <IconButton onClick={() => {
+                          remark.remark?
+                            FRServices.addRemarks(remark)
+                        .then((res) => {
+                          setRemarks((remarks) => [...remarks, res.data]);
+                          setRemark((remark) => ({
+                            ...remark,
+                            remark: '',
+                          }));
+                          toggleOpenRemarks(false);
+                        })
+                    .catch((error) => {
+                      enqueueSnackbar({
+                        variant: 'error',
+                        message: error.message,
+                      });
+                    }):'';
+                        }}><SendIcon /></IconButton>
+                      </InputAdornment>,
+                    }}
+                    fullWidth
+                  />
+                  <br />
+                  <Button
+                    variant="contained"
+                    onClick={() => toggleOpenRemarks(false)}
+                    sx={{ ml: 'auto' }}
+                  >
+            close
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
           </form>
         </CardContent>
