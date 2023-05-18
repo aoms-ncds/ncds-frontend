@@ -11,6 +11,15 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
       divisionId: '',
       contactNumber: '',
       email: '',
+      address: {
+        buildingName: '',
+        streetAddress: '',
+        city: '',
+        district: '',
+        state: '',
+        country: '',
+        pincode: '',
+      },
     },
   );
 
@@ -55,7 +64,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Division Id"
-            value={props.value.divisionName}
+            value={props.value.divisionId}
 
             onChange={(e) =>
               setNewDivision((divisionDetails) => {

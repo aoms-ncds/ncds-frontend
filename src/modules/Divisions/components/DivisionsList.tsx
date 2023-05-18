@@ -17,7 +17,7 @@ const DivisionsList = () => {
 
   useEffect(() => {
     // loader.onLoad();
-    DivisionsServices.getDivision()
+    DivisionsServices.getDivisions()
     .then((res) => {
     //  loader.afterLoad();
       console.log(res.data);
