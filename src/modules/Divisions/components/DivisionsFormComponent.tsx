@@ -4,113 +4,9 @@ import { Divider, FormControl, Grid, TextField, Typography } from '@mui/material
 import moment from 'moment';
 import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
-
-const DivisionsFormComponent = ({
-  division = {
-
-    divisionName: 'Division 1',
-    _id: '1',
-    divisionId: '233',
-    contactNumber: '89000333',
-    email: 'division@gmail.com',
-    address: {
-      buildingName: '',
-      street: '',
-      city: '',
-      district: '',
-      state: '',
-      country: '',
-      pincode: '',
-    },
-    noofWorkers: 5,
-    noOfSubdivisions: 5,
-    noOfChurches: 5,
-    coordinator: {
-      _id: '1',
-      firstName: 'athira',
-      lastName: 'athira',
-      dob: moment('12-11-2000'),
-      doj: moment('12-11-2000'),
-      designation: {
-        _id: '1',
-        name: 'TL',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      department: {
-        _id: '1',
-        name: 'IT',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      age: 25,
-      gender: 'Female',
-      phone: '123476798',
-      email: 'test@gmail.com',
-      formattedId: 'test',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    seniorLeader: {
-      _id: '1',
-      firstName: 'athira',
-      lastName: 'athira',
-      dob: moment('12-11-2000'),
-      doj: moment('12-11-2000'),
-      designation: {
-        _id: '1',
-        name: 'TL',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      department: {
-        _id: '1',
-        name: 'IT',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      age: 25,
-      gender: 'Female',
-      phone: '123476798',
-      email: 'test@gmail.com',
-      formattedId: 'test',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    juniorLeader: {
-      _id: '1',
-      firstName: 'athira',
-      lastName: 'athira',
-      dob: moment('12-11-2000'),
-      doj: moment('12-11-2000'),
-      designation: {
-        _id: '1',
-        name: 'TL',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      department: {
-        _id: '1',
-        name: 'IT',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      age: 25,
-      gender: 'Female',
-      phone: '123476798',
-      email: 'test@gmail.com',
-      formattedId: 'test',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    createdAt: moment(),
-    updatedAt: moment(),
-  },
-}: {
-  division?: IETDivisions;
-}) => {
-  const [newDivision, setNewDivision] = useState<IETDivisions>(
-    division || {
+const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:string}>) => {
+  const [divisionDetails, setNewDivision] = useState<IETDivisions>(
+    props.value ??{
       divisionName: '',
       _id: '',
       divisionId: '',
@@ -233,13 +129,18 @@ const DivisionsFormComponent = ({
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <TextField
-            label=" Division Name"
-            value={newDivision.divisionName || division?.divisionName}
+            label="Division Name"
+            value={divisionDetails?.divisionName}
             onChange={(e) =>
-              setNewDivision((newIETDivisions) => ({
-                ...newIETDivisions,
-                divisionName: e.target.value,
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  divisionName: e.target.value,
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
+
             }
             fullWidth
           />
@@ -249,12 +150,17 @@ const DivisionsFormComponent = ({
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Division Id"
-            value={newDivision.divisionId || division?.divisionId}
+            value={divisionDetails?.divisionId }
+
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                divisionId: e.target.value,
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  divisionId: e.target.value,
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
             }
             fullWidth
           />
@@ -264,12 +170,17 @@ const DivisionsFormComponent = ({
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Contact Number"
-            value={newDivision.contactNumber || division?.contactNumber}
+            value={divisionDetails?.contactNumber}
+
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                contactNumber: e.target.value,
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  contactNumber: e.target.value,
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
             }
             fullWidth
           />
@@ -279,12 +190,17 @@ const DivisionsFormComponent = ({
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Email ID"
-            value={newDivision.email || division?.email}
+            value={divisionDetails.email || divisionDetails?.email}
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                email: e.target.value,
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  email: e.target.value,
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
+
             }
             fullWidth
           />
@@ -294,12 +210,17 @@ const DivisionsFormComponent = ({
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" No. of Workers"
-            value={newDivision.noofWorkers || division?.noofWorkers}
+            type='number'
+            value={divisionDetails?.noofWorkers}
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                noofWorkers: Number(e.target.value),
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  noofWorkers: Number(e.target.value),
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
             }
             fullWidth
           />
@@ -310,12 +231,16 @@ const DivisionsFormComponent = ({
           <TextField
             label=" No. of Sub Divisions"
             type='number'
-            value={newDivision.noOfSubdivisions || division?.noOfSubdivisions}
+            value={divisionDetails.noOfSubdivisions || divisionDetails?.noOfSubdivisions}
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                NoOfSubdivisions: Number(e.target.value),
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  noOfSubdivisions: Number(e.target.value),
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
             }
             fullWidth
           />
@@ -325,12 +250,16 @@ const DivisionsFormComponent = ({
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" No. of Churches"
-            value={newDivision.noOfChurches || division?.noOfChurches}
+            value={divisionDetails.noOfChurches || divisionDetails?.noOfChurches}
             onChange={(e) =>
-              setNewDivision((newDivision) => ({
-                ...newDivision,
-                noOfChurches: Number(e.target.value),
-              }))
+              setNewDivision((divisionDetails) => {
+                const newDivision = {
+                  ...divisionDetails,
+                  noOfChurches: Number(e.target.value),
+                };
+                props.onChange(newDivision); // Call the onChange prop with the updated division details
+                return newDivision;
+              })
             }
             fullWidth
           />
@@ -338,9 +267,9 @@ const DivisionsFormComponent = ({
 
 
       </Grid>
-      <AddressForm value={newDivision.address}
-        onChange={(newState: Address) => setNewDivision((newDivision) => ({
-          ...newDivision,
+      <AddressForm value={divisionDetails.address}
+        onChange={(newState: Address) => setNewDivision((divisionDetails) => ({
+          ...divisionDetails,
           address: newState,
         }))
         } action={'add'} />
@@ -355,13 +284,17 @@ const DivisionsFormComponent = ({
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={newDivision.coordinator}
+            value={divisionDetails.coordinator}
             onChange={(e, newValue) => {
               if (newValue) {
-                setNewDivision((newDivision) => ({
-                  ...newDivision,
-                  coordinator: newValue,
-                }));
+                setNewDivision((divisionDetails) => {
+                  const newDivision = {
+                    ...divisionDetails,
+                    coordinator: newValue,
+                  };
+                  props.onChange(newDivision); // Call the onChange prop with the updated division details
+                  return newDivision;
+                });
               }
             }}
             label={' Co-ordinator Name'} />
@@ -371,7 +304,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={newDivision.coordinator?.phone || division?.coordinator?.phone}
+                  value={divisionDetails.coordinator?.phone || division?.coordinator?.phone}
                   disabled
                   fullWidth
                 />
@@ -381,7 +314,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email ID"
-                  value={newDivision.coordinator?.email || division?.coordinator?.email}
+                  value={divisionDetails.coordinator?.email || division?.coordinator?.email}
                   disabled
                   fullWidth
                 />
@@ -390,13 +323,17 @@ const DivisionsFormComponent = ({
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={newDivision.seniorLeader}
+            value={divisionDetails.seniorLeader}
             onChange={(e, newValue) => {
               if (newValue) {
-                setNewDivision((newDivision) => ({
-                  ...newDivision,
-                  seniorLeader: newValue,
-                }));
+                setNewDivision((divisionDetails) => {
+                  const newDivision = {
+                    ...divisionDetails,
+                    seniorLeader: newValue,
+                  };
+                  props.onChange(newDivision); // Call the onChange prop with the updated division details
+                  return newDivision;
+                });
               }
             }} label={'Senior Leader Name'} />
 
@@ -408,7 +345,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={newDivision.seniorLeader?newDivision.seniorLeader.phone:'' || division?.seniorLeader?division.seniorLeader.phone:''}
+                  value={divisionDetails.seniorLeader?divisionDetails.seniorLeader.phone:'' || division?.seniorLeader?division.seniorLeader.phone:''}
 
                   disabled fullWidth
                 />
@@ -418,7 +355,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  value={newDivision.seniorLeader?.email || division?.seniorLeader?.email}
+                  value={divisionDetails.seniorLeader?.email || division?.seniorLeader?.email}
                   disabled
                   fullWidth
                 />
@@ -427,13 +364,17 @@ const DivisionsFormComponent = ({
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={ newDivision.juniorLeader}
+            value={ divisionDetails.juniorLeader}
             onChange={(e, newValue) => {
               if (newValue) {
-                setNewDivision((newDivision) => ({
-                  ...newDivision,
-                  juniorLeader: newValue,
-                }));
+                setNewDivision((divisionDetails) => {
+                  const newDivision = {
+                    ...divisionDetails,
+                    juniorLeader: newValue,
+                  };
+                  props.onChange(newDivision); // Call the onChange prop with the updated division details
+                  return newDivision;
+                });
               }
             }} label={'Junior Leader Name'} />
         </FormControl>
@@ -443,7 +384,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Contact Number"
-                  value={newDivision.juniorLeader?.phone || division?.juniorLeader?.phone}
+                  value={divisionDetails.juniorLeader?.phone || division?.juniorLeader?.phone}
 
                   disabled fullWidth
                 />
@@ -453,7 +394,7 @@ const DivisionsFormComponent = ({
               <FormControl variant="outlined" fullWidth>
                 <TextField
                   label=" Email-ID"
-                  value={newDivision.juniorLeader?.email || division?.juniorLeader?.email}
+                  value={divisionDetails.juniorLeader?.email || division?.juniorLeader?.email}
 
                   disabled
                   fullWidth

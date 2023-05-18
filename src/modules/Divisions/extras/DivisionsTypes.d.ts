@@ -1,9 +1,9 @@
 export { };
 
 declare global {
-interface IETDivisions extends MongooseDocument{
+interface IETDivisions{
     divisionName: string;
-    _id: string;
+   // _id?: string;
     divisionId: string;
     contactNumber: string;
     email: string;
@@ -22,11 +22,13 @@ interface BankDetails{
   IFSCCode:string;
   beneficiary?:string;
   }
-interface DivisionDetails{
+interface DivisionDetails extends MongooseDocument{
+ // _id: GridRowId;
   division: IETDivisions;
   subDivisions: SubDivision[];
   FCRABankDetails: BankDetails;
   localBankDetails:BankDetails;
+  _id?: string;
 }
 interface SubDivision {
     _id:string;
