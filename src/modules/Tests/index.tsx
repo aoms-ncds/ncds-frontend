@@ -44,8 +44,6 @@ const index = () => {
         deleteFile={(fileId: string) => {
           return TestServices.deleteFile(fileId);
         }}
-        onLoad={loader.onLoad}
-        afterLoad={loader.afterLoad}
       />
       <Button
         variant='contained'

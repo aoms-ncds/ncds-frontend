@@ -1,12 +1,14 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React from 'react';
+import React, { useState } from 'react';
 import { languages } from '../../../../extras/CommonConfig';
+import NewAddressForm from './NewAddressForm';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<CreatableNewUserBasicDetails, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>)=> {
+  const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
   return (
     <>
       <Grid item xs={12} md={6}>
@@ -33,6 +35,7 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, firstName: e.target.value })}
           variant={props.options?.textField.variant}
           fullWidth
+          InputProps={{ required: true, autoFocus: true }}
         />
       </Grid>
 
@@ -43,6 +46,7 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, lastName: e.target.value })}
           variant={props.options?.textField.variant}
           fullWidth
+          InputProps={{ required: true }}
         />
       </Grid>
 
@@ -65,22 +69,20 @@ const UserBasicDetailsForm = (
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <FormControl variant="outlined" fullWidth>
-          <TextField
-            label="Age"
-            value={props.value.dateOfBirth?.fromNow(true)}
-            InputProps={{
-              readOnly: true,
-            }}
-            variant={props.options?.textField.variant}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-          />
-        </FormControl>
+        <TextField
+          label="Age"
+          value={props.value.dateOfBirth?.fromNow(true)}
+          InputProps={{
+            readOnly: true,
+          }}
+          variant={props.options?.textField.variant}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+        />
       </Grid>
 
       <Grid item xs={12} md={6} >
-        <FormControl>
+        <FormControl required>
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
@@ -188,6 +190,7 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, email: e.target.value })}
           variant={props.options?.textField.variant}
           fullWidth
+          InputProps={{ required: true }}
         />
       </Grid>
 
@@ -241,7 +244,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} >
         <TextField
-          label="Aadhaar"
+          label="Aadhaar File"
           type="file"
           onChange={(e) => {
             const file = (e.target as HTMLInputElement).files?.[0];
@@ -255,6 +258,8 @@ const UserBasicDetailsForm = (
               });
             }
           }}
+          variant={props.options?.textField.variant}
+          InputLabelProps={{ shrink: true }}
         />
       </Grid>
 
@@ -290,8 +295,56 @@ const UserBasicDetailsForm = (
               });
             }
           }}
+          variant={props.options?.textField.variant}
+          InputLabelProps={{ shrink: true }}
         />
       </Grid>
+      <NewAddressForm
+        action='add'
+        value={props.value.currentAddress}
+        onChange={(newAddress) => {
+          // Implement
+          if (!duplicateCurrentAddress) {
+            props.onChange({
+              ...props.value,
+              currentAddress: newAddress,
+            });
+          } else {
+            props.onChange({
+              ...props.value,
+              currentAddress: newAddress,
+              permanentAddress: newAddress,
+            });
+          }
+        }}
+        options={{
+          textField: {
+            variant: 'standard',
+          },
+          title: 'Current address',
+        }}
+      />
+      <NewAddressForm
+        action='add'
+        value={props.value.permanentAddress}
+        onChange={(newAddress) => {
+          // Implement
+          props.onChange({
+            ...props.value,
+            permanentAddress: newAddress,
+          });
+        }}
+        options={{
+          textField: {
+            variant: 'standard',
+          },
+          title: 'Permanent address',
+          copyAddressCheckBox: {
+            label: 'Same as current address',
+            onChange: (value) => setDuplicateCurrentAddress(value),
+          },
+        }}
+      />
     </>
   );
 };

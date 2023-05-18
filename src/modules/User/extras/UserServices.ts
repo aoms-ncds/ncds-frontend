@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import axios from 'axios';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,5 +26,6 @@ export default {
       result: 'success',
       timeout: 500,
     }),
+    // axios.post('/users/login'),
   ),
 };

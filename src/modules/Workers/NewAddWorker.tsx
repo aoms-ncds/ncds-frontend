@@ -11,7 +11,11 @@ const NewAddWorker = () => {
       currentAddress: {},
       permanentAddress: {},
     },
+    officialDetails: {
+      remarks: '',
+    },
   });
+
   return (
     <CommonPageLayout title='Add worker'>
       {/* {user.basicDetails.field} */}

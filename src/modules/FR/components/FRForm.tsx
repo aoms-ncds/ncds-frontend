@@ -20,8 +20,9 @@ import {
   TableBody,
   DialogTitle,
   TableContainer,
+  IconButton,
 } from '@mui/material';
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import {
   DatePicker,
 } from '@mui/x-date-pickers';
@@ -33,6 +34,8 @@ import WorkerServices from '../../Workers/extras/WorkersServices';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import { Moment } from 'moment';
 import { monthNames } from '../extras/FRConfig';
+import FileUploader from '../../../components/FileUploader';
+import TestServices from '../../Tests/extras/TestServices';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -64,6 +67,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     requestedAmount: 0,
     narration: '',
   });
+  const [showFileUploader, setShowFileUploader] = useState(false);
   const [staff, setStaff] = useState<Staff[]>();
 
   const handleClose = () => {
@@ -395,7 +399,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         Particulars.map((item) => (
                           <TableRow key={item._id}>
                             <TableCell component="th">
-                              <DeleteIcon />
+                              <IconButton>
+                                <DeleteIcon />
+                              </IconButton>
+                              <IconButton onClick={() => setShowFileUploader(true)}>
+                                <FileIcon />
+                              </IconButton>
                             </TableCell>
                             <TableCell align="center">{item._id}</TableCell>
                             <TableCell align="center">
@@ -452,6 +461,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   id="demo-simple-select-standard"
                   label=" Group type"
                   required
+                  fullWidth
                 >
                   <MenuItem value={'FCRA'}>FCRA</MenuItem>
                   <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
@@ -505,14 +515,64 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={6} >
-                <Button
-                  variant="contained"
-                  style={{ textAlign: 'right' }}
-                  type="submit"
-                >
+              <Grid item xs={12}>
+                <div style={{ float: 'right' }}>
+                  {/* <Button
+                    variant="contained"
+                    style={{ textAlign: 'right' }}
+                    type="submit"
+                  >
                   Submit
-                </Button>
+                  </Button> */}
+                &nbsp;
+                  <Button
+                    variant='contained'
+                    color='success'
+                    onClick={() => {
+                      const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
+                      setTimeout(() => {
+                        closeSnackbar(approvalSnack);
+                        const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                        setTimeout(() => closeSnackbar(approvedSnack), 500);
+                      }, 500);
+                    }}>Approve</Button>
+                    &nbsp;
+                  <Button
+                    variant='contained'
+                    color='error'
+                    onClick={() => {
+                      const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                      setTimeout(() => {
+                        closeSnackbar(rejectionSnack);
+                        const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                        setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                      }, 500);
+                    }}>Reject</Button>
+                &nbsp;
+                  <Button
+                    variant='contained'
+                    color='warning'
+                    onClick={() => {
+                      const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
+                      setTimeout(() => {
+                        closeSnackbar(processingSnack);
+                        const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
+                        setTimeout(() => closeSnackbar(processedSnack), 500);
+                      }, 500);
+                    }}>Submit to President</Button>
+                &nbsp;
+                  <Button
+                    variant='contained'
+                    color='info'
+                    onClick={() => {
+                      const processingSnack = enqueueSnackbar({ message: 'Submitting FR to accounts', variant: 'info' });
+                      setTimeout(() => {
+                        closeSnackbar(processingSnack);
+                        const processedSnack = enqueueSnackbar({ message: 'Submitted FR to accounts!', variant: 'success' });
+                        setTimeout(() => closeSnackbar(processedSnack), 500);
+                      }, 500);
+                    }}>Submit to Accounts</Button>
+                </div>
               </Grid>
 
               <Dialog
@@ -678,6 +738,31 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           </form>
         </CardContent>
       </Container>
+      <FileUploader
+        title='Upload bills'
+        types={[
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/pdf',
+          'video/quicktime',
+          'image/png',
+        ]}
+        // limits={{
+        //   types: [],
+        //   maxItemSize: "2M",
+        //   maxItemCount: 3,
+        //   maxTotalSize: "200M"
+        // }}
+        accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        getFiles={TestServices.getBills}
+        uploadFile={TestServices.uploadFile}
+        renameFile={TestServices.renameFile}
+        deleteFile={(fileId: string) => {
+          return TestServices.deleteFile(fileId);
+        }}
+      />
     </div>
   );
 };

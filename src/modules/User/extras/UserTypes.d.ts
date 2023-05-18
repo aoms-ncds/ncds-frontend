@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import OfficialDetails from '../../Workers/OfficialDetails';
 
 export {};
 
@@ -31,11 +32,11 @@ declare global {
     alternativePhone?: string;
     PANNo?: string;
     aadhaar?: {
-      aadhaarNo: string;
+      aadhaarNo?: string;
       aadhaarFile?: string;
     };
     voterId?: {
-      voterIdNo: string;
+      voterIdNo?: string;
       voterIdFile?: string;
     };
     licenseNumber?: string;
@@ -53,13 +54,36 @@ declare global {
       voterIdFile?: UploadableFile;
     };
   }
+  interface NewOfficialDetails{
+    dateOfJoining: Moment;
+    dateOfLeaving?: Moment;
+    reasonForDeactivation?: UserDeactivationReason;
+    remarks: string;
+    subdivision: SubDivision;
+    selfSupport: boolean;
+    status: NewOfficialDetailsStatus;
+    dateOfDivisionJoining?: Moment;
+    dateOfDivisionLeaving?: Moment;
+    noOfChurches: number;
+  }
+  type UserDeactivationReason = 'Voluntarily Left'|'Retired'|'Dismissed'|'Death'|'Other'
+  type NewOfficialDetailsStatus = 'ministering'|'left'|'education leave'|'sabbatical leave';
+  interface CreatableNewOfficialDetails extends Creatable<NewOfficialDetails>{
+    dateOfJoining?: Moment;
+    subdivision?: SubDivision;
+    selfSupport?: boolean;
+    status?: NewOfficialDetailsStatus;
+    noOfChurches?: number;
+  }
   interface NewUser extends MongooseDocument {
     workerCode: string;
     basicDetails: NewUserBasicDetails;
+    officialDetails: NewOfficialDetails;
   }
   interface CreatableNewUser extends Creatable<NewUser>{
     workerCode?: NewUser['workerCode'];
     basicDetails: CreatableNewUserBasicDetails;
+    officialDetails: CreatableNewOfficialDetails;
   }
 
   type Gender = 'Male' | 'Female' | 'Other';

@@ -38,8 +38,6 @@ interface FileUploaderProps{
   getFiles: () => Promise<StandardResponse<FileObject[]>>;
   renameFile: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
   deleteFile: (fileID: string) => Promise<StandardResponse<void>>;
-  onLoad: () => void;
-  afterLoad: () => void;
 }
 interface UploadingFile{
   tempID: string;
@@ -83,7 +81,6 @@ const FileUploader = (props: FileUploaderProps) => {
             },
           },
         ]);
-        props.onLoad();
         props.uploadFile(droppedFile, (progress) => {
           setUploadingFiles((_files) => _files.map((_file) => _file.tempID === tempID ? ({ ..._file, progress }):_file));
           // setUploadingFiles((files) => {
@@ -94,11 +91,9 @@ const FileUploader = (props: FileUploaderProps) => {
           //   return newFiles;
           // });
         }).then((res) => {
-          props.afterLoad();
           setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
           setFileObjects((_file) => _file ? [..._file, res.data]:[res.data]);
         }).catch((error) => {
-          props.afterLoad();
           console.log('Caught error', error);
         });
         // setFile(droppedFile);
@@ -116,14 +111,11 @@ const FileUploader = (props: FileUploaderProps) => {
 
   useEffect(() => {
     if (props.open) {
-      props.onLoad();
       props.getFiles()
       .then((res) => {
-        props.afterLoad();
         setFileObjects(res.data);
       })
       .catch((error:StandardResponse<void>) => {
-        props.afterLoad();
         setFilesFetchErrorMessage(error.message ? error.message : 'Something went wrong! Try again later');
       });
     } else {
@@ -233,13 +225,12 @@ const FileUploader = (props: FileUploaderProps) => {
                                       },
                                     ),
                                 );
-                                props.onLoad();
                                 props.renameFile(file._id, e.target.value)
                                   .then((res) => {
-                                    props.afterLoad();
+                                    // Implement
                                   })
                                   .catch((error) => {
-                                    props.afterLoad();
+                                    // Implement
                                   });
                               }}
                               disableUnderline
@@ -254,9 +245,7 @@ const FileUploader = (props: FileUploaderProps) => {
                           sx={{ ml: 'auto' }}
                           color='error'
                           onClick={() => {
-                            props.onLoad();
                             props.deleteFile(file._id).then(() => {
-                              props.afterLoad();
                               setFileObjects((fileObjects) =>
                                 !fileObjects ? null :
                                   fileObjects.filter(
@@ -265,7 +254,6 @@ const FileUploader = (props: FileUploaderProps) => {
                               );
                             }).catch((error) => {
                               console.log({ error });
-                              props.afterLoad();
                             });
                           }}
                         >
