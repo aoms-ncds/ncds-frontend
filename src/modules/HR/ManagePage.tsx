@@ -190,25 +190,25 @@ const HRManagePage = () => {
               message: action === 'add' ? 'Creating Staff' : 'Updating Staff',
               variant: 'info',
             });
-            HRServices.createStaff(staffFormState, action)
-            .then((res) => {
-              console.log(res);
-              handleClose();
-              closeSnackbar(snackbarId);
-              enqueueSnackbar({
-                message: res.message,
-                variant: 'success',
-              });
-              resetStaff();
-            })
-            .catch((err) => {
-              console.log(err);
-              closeSnackbar(snackbarId);
-              enqueueSnackbar({
-                message: err.message,
-                variant: 'error',
-              });
-            });
+            // HRServices.createStaff(staffFormState)
+            // .then((res) => {
+            //   console.log(res);
+            //   handleClose();
+            //   closeSnackbar(snackbarId);
+            //   enqueueSnackbar({
+            //     message: res.message,
+            //     variant: 'success',
+            //   });
+            //   resetStaff();
+            // })
+            // .catch((err) => {
+            //   console.log(err);
+            //   closeSnackbar(snackbarId);
+            //   enqueueSnackbar({
+            //     message: err.message,
+            //     variant: 'error',
+            //   });
+            // });
           }}>
           <DialogContent>
             <br />

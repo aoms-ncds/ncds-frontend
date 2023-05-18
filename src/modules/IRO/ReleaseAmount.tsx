@@ -21,7 +21,7 @@ const ReleaseAmount = () => {
       email: '',
       address: {
         buildingName: '',
-        streetAddress: '',
+        street: '',
         city: '',
         district: '',
         state: '',

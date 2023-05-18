@@ -65,7 +65,7 @@ export default {
           licenseNumber: '',
           permanentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -74,7 +74,7 @@ export default {
           },
           currentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -97,7 +97,7 @@ export default {
           leftDivOn: moment(),
           residingAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -494,7 +494,7 @@ export default {
           licenseNumber: '',
           permanentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -503,7 +503,7 @@ export default {
           },
           currentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -594,7 +594,7 @@ export default {
             licenseNumber: 'string',
             permanentAddress: {
               buildingName: '',
-              streetAddress: '',
+              street: '',
               city: '',
               district: '',
               state: '',
@@ -603,7 +603,7 @@ export default {
             },
             currentAddress: {
               buildingName: '',
-              streetAddress: '',
+              street: '',
               city: '',
               district: '',
               state: '',
@@ -695,7 +695,7 @@ export default {
           licenseNumber: 'string',
           permanentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -704,7 +704,7 @@ export default {
           },
           currentAddress: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',

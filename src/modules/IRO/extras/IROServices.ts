@@ -20,7 +20,7 @@ export default {
           email: 'division@gmail.com',
           address: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -144,7 +144,7 @@ export default {
           email: 'division@gmail.com',
           address: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',
@@ -267,7 +267,7 @@ export default {
           email: 'division@gmail.com',
           address: {
             buildingName: '',
-            streetAddress: '',
+            street: '',
             city: '',
             district: '',
             state: '',

@@ -67,7 +67,7 @@ const BasicDetails = () => {
     licenseNumber: '',
     permanentAddress: {
       buildingName: '',
-      streetAddress: '',
+      street: '',
       city: '',
       district: '',
       state: '',
@@ -76,7 +76,7 @@ const BasicDetails = () => {
     },
     currentAddress: {
       buildingName: '',
-      streetAddress: '',
+      street: '',
       city: '',
       district: '',
       state: '',

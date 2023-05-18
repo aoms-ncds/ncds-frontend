@@ -15,7 +15,7 @@ const DivisionsFormComponent = ({
     email: 'division@gmail.com',
     address: {
       buildingName: '',
-      streetAddress: '',
+      street: '',
       city: '',
       district: '',
       state: '',
@@ -118,7 +118,7 @@ const DivisionsFormComponent = ({
       email: '',
       address: {
         buildingName: '',
-        streetAddress: '',
+        street: '',
         city: '',
         district: '',
         state: '',

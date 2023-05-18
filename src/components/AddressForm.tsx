@@ -76,17 +76,17 @@ const AddressForm = (
         <TextField
           label="Street"
           variant="outlined"
-          value={props.value.streetAddress}
+          value={props.value.street}
           onChange={(e) =>
             props.onChange(
               isChecked ?
                 {
                   ...props.options?.sameAsAddress?.address,
-                  streetAddress: e.target.value,
+                  street: e.target.value,
                 } :
                 {
                   ...props.value,
-                  streetAddress: e.target.value,
+                  street: e.target.value,
                 },
             )
           }

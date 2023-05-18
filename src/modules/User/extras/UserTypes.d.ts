@@ -139,7 +139,7 @@ declare global {
 
   interface Address {
     buildingName?: string;
-    streetAddress?: string;
+    street?: string;
     city?: string;
     district?: string;
     state?: string;

@@ -66,7 +66,7 @@ const OfficialDetails = () => {
     licenseNumber: '',
     permanentAddress: {
       buildingName: '',
-      streetAddress: '',
+      street: '',
       city: '',
       district: '',
       state: '',
@@ -75,7 +75,7 @@ const OfficialDetails = () => {
     },
     currentAddress: {
       buildingName: '',
-      streetAddress: '',
+      street: '',
       city: '',
       district: '',
       state: '',

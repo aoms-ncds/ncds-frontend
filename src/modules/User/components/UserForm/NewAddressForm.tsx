@@ -56,11 +56,11 @@ const NewAddressForm = (
       <Grid item xs={12} md={6}>
         <TextField
           label="Street"
-          value={props.value.streetAddress}
+          value={props.value.street}
           onChange={(e) =>
             props.onChange({
               ...props.value,
-              streetAddress: e.target.value,
+              street: e.target.value,
             })
           }
           variant={props.options?.textField.variant}
