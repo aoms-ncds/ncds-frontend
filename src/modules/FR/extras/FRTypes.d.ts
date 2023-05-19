@@ -74,7 +74,7 @@ declare global {
     subCategory3: string;
     quantity: string;
     month: string;
-    requestedAmount: number;
+    requestedAmount: string;
     narration: string;
   }
 
