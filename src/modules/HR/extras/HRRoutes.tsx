@@ -4,6 +4,7 @@ import { Diversity3 as Diversity3Icon } from '@mui/icons-material';
 import HRManagePage from '../ManagePage';
 import ApproveWorkerPage from '../../Workers/ApproveWorkersPage';
 import ManageWorkerPage from '../../Workers/ManageWorkersPage';
+import StaffFormPage from '../StaffFormPage';
 
 const hrPageRoutes: ModuleRoute = {
   base: '/hr',
@@ -25,9 +26,16 @@ const hrPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
     },
     {
-      title: 'Edit staff',
-      path: '/edit',
-      element: <HRManagePage />,
+      title: 'Add New Worker',
+      path: '/add',
+      element: <StaffFormPage action='add' />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Edit Worker',
+      path: '/edit/:id',
+      element: <StaffFormPage action='edit' />,
       private: true,
       requiredAccessRights: ['string'],
     },

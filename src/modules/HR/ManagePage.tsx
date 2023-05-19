@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogTitle, Grid, Link, TextField } from '@mui/material';
+  DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import HRServices from './extras/HRServices';
 import DropdownButton from '../../components/DropDownButton';
@@ -13,6 +13,9 @@ import {
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import UserServices from '../User/extras/UserServices';
+import { Link } from 'react-router-dom';
+
+
 const HRManagePage = () => {
   const [staffs, setStaffs] = useState<User[] | null>(null);
 
@@ -107,9 +110,8 @@ const HRManagePage = () => {
         variant="contained"
         sx={{ float: 'right' }}
         startIcon={<AddIcon />}
-        onClick={() => {
-          // TODO: Implement
-        }}
+        component={Link}
+        to='/hr/add'
       >
           Add new
       </Button>
