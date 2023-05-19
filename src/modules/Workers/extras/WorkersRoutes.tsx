@@ -30,7 +30,7 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Add New Worker',
       path: '/add',
-      element: <WorkerFormPage action='edit' />,
+      element: <WorkerFormPage action='add' />,
       private: true,
       requiredAccessRights: ['string'],
     },

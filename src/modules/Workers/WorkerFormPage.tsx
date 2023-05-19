@@ -15,7 +15,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   const { id } = useParams();
 
   const [user, setUser] = useState<CreatableNewUser>({
-    workerCode: 'W123',
+    workerCode: '',
     kind: 'worker',
     basicDetails: {
       firstName: '',
@@ -27,10 +27,8 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       },
     },
     officialDetails: {
-      dateOfJoining: moment('2023-01-01'),
-      remarks: 'Lorem ipsum dolor sit amet.',
+      remarks: '',
       selfSupport: true,
-      status: 'ministering',
       dateOfDivisionJoining: moment(),
       noOfChurches: 5,
     },
@@ -39,15 +37,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       withChurch: true,
     },
     supportStructure: {
-      basic: 5000,
-      HRA: 2000,
-      spouseAllowance: 1000,
-      positionalAllowance: 500,
-      specialAllowance: 800,
-      impactDeduction: 200,
-      telAllowance: 400,
-      PIONMissionaryFund: 300,
-      MUTDeduction: 100,
     },
   });
 
@@ -86,9 +75,9 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await UserServices.createStaff(creatableUser);
+              const createdUser = await UserServices.creates(creatableUser);
             } else if (props.action ==='edit') {
-              const updatedUser = await UserServices.editStaff(creatableUser);
+              const updatedUser = await UserServices.edit(creatableUser);
             }
             enqueueSnackbar({
               variant: 'success',

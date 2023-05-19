@@ -38,10 +38,10 @@ const NewUserSupportStructureForm = (props: FormComponentProps<CreatableNewUserS
         <TextField
           label="Spouse allowance"
           type="number"
-          value={props.value.specialAllowance}
+          value={props.value.spouseAllowance}
           onChange={(e) => props.onChange({
             ...props.value,
-            specialAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
+            spouseAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
           })}
           variant={props.options?.textField.variant}
           fullWidth

@@ -40,7 +40,6 @@ export default {
               'buildingName': 'Puliyulla parambath',
               'street': '123 Main Street',
               'city': 'Example City',
-              'district': 'Kozhikkode',
               'state': 'Example State',
               'country': 'India',
               'pincode': '12345',
@@ -49,7 +48,6 @@ export default {
               'buildingName': 'Puliyulla parambath',
               'street': '456 Elm Street',
               'city': 'Current City',
-              'district': 'Kozhikkode',
               'state': 'Current State',
               'country': 'India',
               'pincode': '54321',
@@ -92,12 +90,12 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
-  createStaff: (staff: CreatableNewUser) => {
+  creates: (staff: CreatableNewUser) => {
     return getStandardResponse<CreatableStaff>(
       axios.post('/hr/staffs', staff),
     );
   },
-  editStaff: (staff: CreatableNewUser) => {
+  edit: (staff: CreatableNewUser) => {
     return getStandardResponse<CreatableStaff>(
       axios.patch('/hr/staffs/'+staff._id, staff),
     );
