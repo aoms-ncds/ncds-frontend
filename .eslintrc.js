@@ -1,26 +1,34 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
+  'env': {
+    'browser': true,
+    'es2021': true,
   },
-  extends: [
+  'extends': [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+
+    //
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
     'google',
     'plugin:json/recommended',
   ],
-  overrides: [],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: 'module',
+  'overrides': [
+  ],
+  'parser': '@typescript-eslint/parser',
+  'parserOptions': {
+    'ecmaVersion': 'latest',
+    'sourceType': 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'json', 'eslint-plugin'],
-  rules: {
+  'plugins': [
+    'react',
+    '@typescript-eslint',
+    'json',
+    'eslint-plugin',
+  ],
+  'rules': {
     'prefer-promise-reject-errors': 'off',
     '@typescript-eslint/naming-convention': [
       'error',
@@ -29,50 +37,59 @@ module.exports = {
       //   'format': ['camelCase']
       // },
       {
-        selector: 'parameter',
-        format: ['camelCase'],
-        leadingUnderscore: 'allow',
+        'selector': 'parameter',
+        'format': ['camelCase'],
+        'leadingUnderscore': 'allow',
       },
       {
-        selector: 'memberLike',
-        modifiers: ['private'],
-        format: ['camelCase'],
-        leadingUnderscore: 'require',
+        'selector': 'memberLike',
+        'modifiers': ['private'],
+        'format': ['camelCase'],
+        'leadingUnderscore': 'require',
       },
       {
-        selector: 'typeLike',
-        format: ['PascalCase'],
+        'selector': 'typeLike',
+        'format': ['PascalCase'],
       },
     ],
-    'no-multiple-empty-lines': ['error', { max: 2 }],
-    'indent': ['error', 2, { MemberExpression: 'off' }],
-    'linebreak-style': ['error', 'windows'],
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'always'],
-    '@typescript-eslint/member-delimiter-style': [
+    'no-multiple-empty-lines': ['error', { 'max': 2 }],
+    'indent': [
       'error',
-      {
-        multiline: {
-          delimiter: 'semi',
-          requireLast: true,
-        },
-        singleline: {
-          delimiter: 'semi',
-          requireLast: false,
-        },
-      },
+      2,
+      { 'MemberExpression': 'off' },
     ],
+    'linebreak-style': [
+      'error',
+      'windows',
+    ],
+    'quotes': [
+      'error',
+      'single',
+    ],
+    'semi': [
+      'error',
+      'always',
+    ],
+    '@typescript-eslint/member-delimiter-style': ['error', {
+      'multiline': {
+        'delimiter': 'semi',
+        'requireLast': true,
+      },
+      'singleline': {
+        'delimiter': 'semi',
+        'requireLast': false,
+      },
+    }],
     // 'json/camelcase': ['error', { 'properties': 'always' }],
     'no-unused-vars': 'warn',
     'react/no-multi-comp': 'error',
     'import/no-unresolved': 0,
-    'object-curly-spacing': ['error', 'always', { arraysInObjects: false }],
+    'object-curly-spacing': ['error', 'always', { 'arraysInObjects': false }],
     // 'eslint-plugin/filenames': ['error', { 'extensions': ['.js', '.jsx', '.ts', '.tsx']}],
-    'max-len': ['error', { code: 200 }],
+    'max-len': ['error', { 'code': 200 }],
     'no-redeclare': 'error',
-    'no-duplicate-imports': 'error',
+    '@typescript-eslint/no-empty-function': ['off'],
+    'react/prop-types': ['off'],
     // 'comma-dangle': ['error', 'always',],
-    'react/prop-types': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
   },
 };

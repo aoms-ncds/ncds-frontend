@@ -237,7 +237,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     <Autocomplete
                       value={props.value.purposeWorker}
                       options={workers ?? []}
-                      getOptionLabel={(worker) => worker.firstName}
+                      getOptionLabel={(worker) => worker.basicDetails.firstName}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({

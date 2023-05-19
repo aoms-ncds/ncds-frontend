@@ -18,6 +18,33 @@ export default {
       timeout: 500,
     }),
   ),
+  getDesignations: () => getStandardResponse<Designation[]>(
+    dummyRequest<Designation[]>({
+      data: [
+        {
+          _id: '1',
+          name: 'TL',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+        {
+          _id: '2',
+          name: 'TH',
+          createdAt: moment(),
+          updatedAt: moment(),
+        },
+      ],
+      // error: null,
+      message: 'Network Error',
+      result: 'success',
+      timeout: 500,
+    }),
+  ),
+  createStaff: (staff: CreatableStaff, action: 'add' | 'edit') => {
+    return getStandardResponse<CreatableStaff>(
+      axios.post('/hr/staffs', { staff, action }),
+    );
+  },
   getStaffs: () => getStandardResponse<Staff[]>(
     axios.get('/hr/staffs'),
   ),

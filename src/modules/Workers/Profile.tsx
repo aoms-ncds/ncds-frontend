@@ -18,6 +18,7 @@ const Profile = () => {
           setWorker(res.data);
         })
         .catch((res) => {
+          //
         });
     }
   }, []);
