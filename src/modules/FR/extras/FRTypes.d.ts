@@ -46,28 +46,28 @@ declare global {
     _id: string;
     coordinatorName: string | undefined;
   }
-  interface IETWorker extends User {
-    _id: string;
-    workerCode: string;
-    missionaryOrNonMissionary: string;
-    highestQualification: string;
-    motherToungue: Language;
-    communicationLanguage: Language;
-    languagesKnown: Language[];
-    alternativeMobileNumber: string;
-    PANNo: string;
-    aadhaar: {
-      aadhaarNo: string;
-      aadhaarFile: FileObject;
-    };
-    voterId: {
-      voterIdNo: string;
-      voterIdFile: FileObject;
-    };
-    licenseNumber: string;
-    permanentAddress: Address;
-    currentAddress: Address;
-  }
+  // interface IETWorker extends User {
+  //   _id: string;
+  //   workerCode: string;
+  //   missionaryOrNonMissionary: string;
+  //   highestQualification: string;
+  //   motherToungue: Language;
+  //   communicationLanguage: Language;
+  //   languagesKnown: Language[];
+  //   alternativeMobileNumber: string;
+  //   PANNo: string;
+  //   aadhaar: {
+  //     aadhaarNo: string;
+  //     aadhaarFile: FileObject;
+  //   };
+  //   voterId: {
+  //     voterIdNo: string;
+  //     voterIdFile: FileObject;
+  //   };
+  //   licenseNumber: string;
+  //   permanentAddress: Address;
+  //   currentAddress: Address;
+  // }
 
   interface Subdivisions {
     _id: string;

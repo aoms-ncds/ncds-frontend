@@ -4,18 +4,18 @@ import OfficialDetails from '../../Workers/OfficialDetails';
 export {};
 
 declare global {
-  interface User extends MongooseDocument {
-    firstName: string;
-    lastName: string;
-    dob: Moment;
-    doj?: Moment;
-    gender: Gender;
-    age: number;
-    maritalStatus?: MaritalStatus;
-    phone: string;
-    email: string;
-    spouse?: User;
-  }
+  // interface User extends MongooseDocument {
+  //   firstName: string;
+  //   lastName: string;
+  //   dob: Moment;
+  //   doj?: Moment;
+  //   gender: Gender;
+  //   age: number;
+  //   maritalStatus?: MaritalStatus;
+  //   phone: string;
+  //   email: string;
+  //   spouse?: User;
+  // }
   interface NewUserBasicDetails{
     firstName: string;
     lastName: string;
@@ -107,7 +107,7 @@ declare global {
     PIONMissionaryFund?: number;
     MUTDeduction?: number;
   }
-  interface NewUser extends MongooseDocument {
+  interface User extends MongooseDocument {
     workerCode: string;
     basicDetails: NewUserBasicDetails;
     officialDetails: NewOfficialDetails;

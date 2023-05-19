@@ -13,7 +13,7 @@ interface SpouseFormPagerops{
 
 const AddNewSpousePage = (props: SpouseFormPagerops) => {
   const { spouseId } = useParams();
-  const [workers, setWorkers] = useState<IETWorker[]>();
+  const [workers, setWorkers] = useState<User[]>();
   const [newSpouse, setNewSpouse] = useState<CreatableSpouse>({
     firstName: '',
     lastName: '',
@@ -255,7 +255,7 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
             <Autocomplete
               value={newSpouse?.spouseOf || null}
               options={workers ?? []}
-              getOptionLabel={(worker) => worker.firstName}
+              getOptionLabel={(worker) => worker.basicDetails.firstName}
               onChange={(_e, worker) => {
                 if (worker) {
                   setNewSpouse((newspouse) => ({

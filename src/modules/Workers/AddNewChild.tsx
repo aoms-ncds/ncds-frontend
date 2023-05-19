@@ -14,7 +14,7 @@ interface ChildFormPagerops{
 
 const AddNewChildPage = (props: ChildFormPagerops) => {
   const { childId } = useParams();
-  const [workers, setWorkers] = useState<IETWorker[]>();
+  const [workers, setWorkers] = useState<User[]>();
   const [newChild, setNewChild] = useState<CreatableChild>({
     type: '',
     firstName: '',

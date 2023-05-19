@@ -219,8 +219,8 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6}>
         <TextField
           label="PAN"
-          value={props.value.email}
-          onChange={(e) => props.onChange({ ...props.value, email: e.target.value })}
+          value={props.value.PANNo}
+          onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })}
           variant={props.options?.textField.variant}
           fullWidth
         />

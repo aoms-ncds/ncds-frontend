@@ -27,7 +27,15 @@ export default {
   ),
   addDivision: (action: 'add' | 'edit'|'view', division: DivisionDetails) => {
     return getStandardResponse<DivisionDetails>(
-      axios.post('/divisions/', division),
+      axios.post('/divisions/', {
+        ...division,
+        division: {
+          ...division.division,
+          coordinator: division.division.coordinator?._id,
+          juniorLeader: division.division.juniorLeader?._id,
+          seniorLeader: division.division.seniorLeader?._id,
+        },
+      }),
     );
   },
 

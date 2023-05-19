@@ -40,9 +40,9 @@ export default {
       timeout: 500,
     }),
   ),
-  createStaff: (staff: CreatableStaff) => {
+  createStaff: (staff: CreatableNewUser) => {
     return getStandardResponse<CreatableStaff>(
-      axios.post('/hr/staffs', { staff }),
+      axios.post('/hr/staffs', staff),
     );
   },
   getStaffs: () => getStandardResponse<Staff[]>(

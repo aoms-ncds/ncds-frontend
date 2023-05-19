@@ -4,18 +4,18 @@ import React, { useEffect, useState } from 'react';
 import HRServices from '../extras/HRServices';
 
 interface StaffDropdownProps {
-  staffs?: Staff[];
-  value: Staff | null | undefined;
+  staffs?: User[];
+  value: User | null | undefined;
   onChange: (
     e: React.SyntheticEvent<Element, Event>,
-    staff: Staff | null
+    staff: User | null
   ) => void;
   textFieldProps?: TextFieldProps;
   label: string;
 }
 
 const StaffDropdown = (props: StaffDropdownProps) => {
-  const [staffs, setStaffs] = useState<Staff[] | null>(null);
+  const [staffs, setStaffs] = useState<User[] | null>(null);
 
   useEffect(() => {
     if (props.staffs) {
@@ -43,7 +43,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      getOptionLabel={(option) => option.firstName + ' ' + option.lastName}
+      getOptionLabel={(option) => option.basicDetails.firstName + ' ' + option.basicDetails.lastName}
       onChange={props.onChange}
       renderInput={(params) => (
         <TextField

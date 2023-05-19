@@ -160,7 +160,15 @@ const ManageFrPage = () => {
            Remarks
         </DialogTitle>
         <DialogContent>
-          {remarks.map((remark) => (<MessageItem key={remark._id} sender={remark.createdBy.firstName + ' ' + remark.createdBy.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />))}
+          {remarks.map((remark) => (
+            <MessageItem
+              key={remark._id}
+              sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+              time={remark.updatedAt}
+              body={remark.remark}
+              isSent={true}
+            />
+          ))}
 
         </DialogContent>
         <DialogActions>

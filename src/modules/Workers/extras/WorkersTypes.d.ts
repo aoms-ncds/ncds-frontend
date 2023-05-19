@@ -86,7 +86,7 @@ interface Spouse extends MongooseDocument{
 }
 interface CreatableSpouse extends Creatable<Spouse>{
     dob?: moment;
-    spouseOf?: IETWorker | null;
+    spouseOf?: User | null;
     working?:boolean;
     occupation?: string;
     qualification?:string;

@@ -14,9 +14,9 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useLoader } from '../../../hooks/Loader';
 import WorkerServices from '../extras/WorkersServices';
 import { Avatar, Button, Card, Grid } from '@mui/material';
-const WorkersListPage = () => {
+const WorkersList = () => {
   const loader = useLoader();
-  const [WorkerRequests, setWorkerRequests] = useState<IETWorker[] | null>(
+  const [WorkerRequests, setWorkerRequests] = useState<User[] | null>(
     null,
   );
 
@@ -63,7 +63,7 @@ const WorkersListPage = () => {
         });
       });
   };
-  const columns: GridColDef<IETWorker>[] = [
+  const columns: GridColDef<User>[] = [
     {
       field: 'image',
       headerName: '',
@@ -190,4 +190,4 @@ const WorkersListPage = () => {
   );
 };
 
-export default WorkersListPage;
+export default WorkersList;

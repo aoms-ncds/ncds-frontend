@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import {
-  Add as AddIcon,
-} from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import WorkersListPage from './components/WorkersList';
-import { Box, Button, Card, Grid, Tab, Tabs, Typography } from '@mui/material';
+import WorkersList from './components/WorkersList';
+import { Card, Grid, Tab, Tabs } from '@mui/material';
 import { TabPanel, a11yProps } from './components/TabDetails';
 import ChildListPage from './components/ChildList';
 import SpouseListPage from './components/SpouseList';
@@ -36,7 +32,7 @@ const ManageWorkerPage = () => {
           <Grid item></Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>
-          <WorkersListPage />
+          <WorkersList />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           <SpouseListPage />

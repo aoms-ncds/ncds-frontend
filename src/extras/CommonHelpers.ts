@@ -11,6 +11,7 @@ export default {
 
 export const getStandardResponse = <T>(
   axiosCall: Promise<AxiosResponse<any, any>>,
+  requestFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
   responseFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
 ):Promise<StandardResponse<T>> => new Promise((resolve, reject) => {
     loader && loader.onLoad();

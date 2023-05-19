@@ -43,7 +43,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
-  const [workers, setWorkers] = useState<IETWorker[]>();
+  const [workers, setWorkers] = useState<User[]>();
   const [divisions, setDivisions] = useState<IETDivisions[]>();
   const [subDivisions, setSubDivisions] = useState<Subdivisions[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
@@ -105,7 +105,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     DivisionsServices.getDivisions()
       .then((res) => {
         console.log(res.data);
-        setDivisions(res.data);
+        // setDivisions(res.data); TODO: Fix it
       })
       .catch((res) => {
         console.log(res);
@@ -315,7 +315,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     value={props.value.purposeCoordinator}
                     options={coordinators ?? []}
                     getOptionLabel={(coordinator) =>
-                      coordinator.firstName + ' ' + coordinator.lastName
+                      coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName
                     }
                     onChange={(e, selectedCoordinator) => {
                       if (selectedCoordinator && props.action !== 'view') {
@@ -483,7 +483,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   id="Sanctioned As Per"
                   options={staff ?? []}
                   getOptionLabel={(staff) =>
-                    staff.firstName + ' ' + staff.lastName ?? ''
+                    staff.basicDetails.firstName + ' ' + staff.basicDetails.lastName ?? ''
                   }
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   renderOption={(props, staff, { selected }) => (
@@ -492,7 +492,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                       {...props}
                     >
-                      {staff.firstName + ' ' + staff.lastName}
+                      {staff.basicDetails.firstName + ' ' + staff.basicDetails.lastName}
                     </Box>
                   )}
                   // onChange={(e, selectedSubCategory2) => {
