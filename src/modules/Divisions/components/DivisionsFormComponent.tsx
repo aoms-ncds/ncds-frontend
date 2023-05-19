@@ -8,7 +8,6 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
   const [divisionDetails, setNewDivision] = useState<IETDivisions>(
     props.value ??{
       divisionName: '',
-      _id: '',
       divisionId: '',
       contactNumber: '',
       email: '',
@@ -21,91 +20,6 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         country: '',
         pincode: '',
       },
-      noofWorkers: 0,
-      noOfSubdivisions: 0,
-      noOfChurches: 0,
-
-      coordinator: {
-        _id: '',
-        firstName: '',
-        lastName: '',
-        dob: moment(),
-        doj: moment(),
-        designation: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        department: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        age: 0,
-        gender: 'Female',
-        phone: '',
-        email: '',
-        formattedId: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      seniorLeader: {
-        _id: '',
-        firstName: '',
-        lastName: '',
-        dob: moment(),
-        doj: moment(),
-        designation: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        department: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        age: 0,
-        gender: 'Female',
-        phone: '',
-        email: '',
-        formattedId: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      juniorLeader: {
-        _id: '',
-        firstName: '',
-        lastName: '',
-        dob: moment(),
-        doj: moment(),
-        designation: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        department: {
-          _id: '',
-          name: '',
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        age: 0,
-        gender: 'Female',
-        phone: '',
-        email: '',
-        formattedId: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      createdAt: moment(),
-      updatedAt: moment(),
-
     },
   );
 
@@ -130,7 +44,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label="Division Name"
-            value={divisionDetails?.divisionName}
+            value={ props.value.divisionName }
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {
@@ -150,7 +64,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Division Id"
-            value={divisionDetails?.divisionId }
+            value={props.value.divisionId}
 
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
@@ -170,7 +84,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Contact Number"
-            value={divisionDetails?.contactNumber}
+            value={props.value.contactNumber}
 
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
@@ -190,7 +104,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" Email ID"
-            value={divisionDetails.email || divisionDetails?.email}
+            value={props.value.email}
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {
@@ -211,7 +125,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
           <TextField
             label=" No. of Workers"
             type='number'
-            value={divisionDetails?.noofWorkers}
+            value={props.value.noofWorkers}
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {
@@ -222,7 +136,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
                 return newDivision;
               })
             }
-            fullWidth
+            fullWidth InputLabelProps={{ shrink: true }}
           />
         </FormControl>
       </Grid>
@@ -231,7 +145,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
           <TextField
             label=" No. of Sub Divisions"
             type='number'
-            value={divisionDetails.noOfSubdivisions || divisionDetails?.noOfSubdivisions}
+            value={props.value.noOfSubdivisions}
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {
@@ -242,7 +156,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
                 return newDivision;
               })
             }
-            fullWidth
+            fullWidth InputLabelProps={{ shrink: true }}
           />
         </FormControl>
       </Grid>
@@ -250,7 +164,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
         <FormControl variant="outlined" fullWidth>
           <TextField
             label=" No. of Churches"
-            value={divisionDetails.noOfChurches || divisionDetails?.noOfChurches}
+            value={ props.value.noOfChurches}
             onChange={(e) =>
               setNewDivision((divisionDetails) => {
                 const newDivision = {
@@ -261,13 +175,13 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
                 return newDivision;
               })
             }
-            fullWidth
+            fullWidth InputLabelProps={{ shrink: true }}
           />
         </FormControl>
 
 
       </Grid>
-      <AddressForm value={divisionDetails.address}
+      <AddressForm value={props.value.address}
         onChange={(newState: Address) => setNewDivision((divisionDetails) => ({
           ...divisionDetails,
           address: newState,
@@ -284,7 +198,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={divisionDetails.coordinator}
+            value={props.value.coordinator}
             onChange={(e, newValue) => {
               if (newValue) {
                 setNewDivision((divisionDetails) => {
@@ -323,7 +237,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={divisionDetails.seniorLeader}
+            value={props.value.seniorLeader}
             onChange={(e, newValue) => {
               if (newValue) {
                 setNewDivision((divisionDetails) => {
@@ -364,7 +278,7 @@ const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:s
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
-            value={ divisionDetails.juniorLeader}
+            value={ props.value.juniorLeader}
             onChange={(e, newValue) => {
               if (newValue) {
                 setNewDivision((divisionDetails) => {

@@ -8,12 +8,12 @@ interface IETDivisions{
     contactNumber: string;
     email: string;
     address: Address;
-    noofWorkers: number;
-    noOfSubdivisions: number;
-    noOfChurches: number;
-    coordinator: Staff;
-    seniorLeader: Staff;
-    juniorLeader: Staff;
+    noofWorkers?: number;
+    noOfSubdivisions?: number;
+    noOfChurches?: number;
+    coordinator?: Staff;
+    seniorLeader?: Staff;
+    juniorLeader?: Staff;
   }
 interface BankDetails{
   bankname:string;
