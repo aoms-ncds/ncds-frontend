@@ -7,9 +7,7 @@ import {
 
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { useLoader } from '../../hooks/Loader';
 const DivisionsDashboardPage = () => {
-  const loader = useLoader();
   return (
     <CommonPageLayout title='Divisions Dashboard'>
       <Button

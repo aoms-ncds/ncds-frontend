@@ -7,6 +7,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
 }>) => {
   return (
     <>
+      {console.log({ 'abc': props.value.dateOfJoining })}
       <Grid item xs={12} md={6}>
         <DatePicker
           label="Date of joining"

@@ -6,12 +6,10 @@ import BankDetailsForm from './components/BankDetails';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
-import { useLoader } from '../../hooks/Loader';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
 
 const DivisionDetailsPage = () => {
-  const loader = useLoader();
   const { divisionIDs, editID } = useParams();
 
   const [activeStep, setactiveStep] = useState(0);
@@ -335,28 +333,22 @@ const DivisionDetailsPage = () => {
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
-      loader.onLoad();
       DivisionsServices.getDivisionbyId(divisionIDs)
       .then((res) => {
-        loader.afterLoad();
         setDivisionDetails(res.data);
       })
       .catch((err) => {
-        loader.afterLoad();
         console.log({ err });
       });
     }
     if (editID) {
       setAction('edit');
-      loader.onLoad();
       DivisionsServices.getDivisionbyId(editID)
       .then((res) => {
         setDivisionDetails(res.data);
-        loader.afterLoad();
         console.log(divisionDetails);
       })
       .catch((err) => {
-        loader.afterLoad();
         console.log({ err });
       });
     }

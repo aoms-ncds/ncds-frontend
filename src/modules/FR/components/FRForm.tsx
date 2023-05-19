@@ -38,6 +38,7 @@ import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
+import UserServices from '../../User/extras/UserServices';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -95,7 +96,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    WorkerServices.getAll()
+    UserServices.getAll()
       .then((res) => {
         setWorkers(res.data);
       })

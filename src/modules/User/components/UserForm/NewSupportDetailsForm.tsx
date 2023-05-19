@@ -2,6 +2,7 @@ import { Autocomplete, Checkbox, FormControl, FormControlLabel, FormLabel, Grid,
 import React, { useEffect, useState } from 'react';
 import HRServices from '../../../HR/extras/HRServices';
 import { enqueueSnackbar } from 'notistack';
+import UserServices from '../../extras/UserServices';
 
 const NewSupportDetailsForm = (props: FormComponentProps<CreatableNewUserSupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
@@ -9,7 +10,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<CreatableNewUserSupport
   const [designations, setDesignations] = useState<Designation[]|null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string|false>(false);
   useEffect(() => {
-    HRServices.getDesignations()
+    UserServices.getDesignations()
     .then((res) => {
       setDesignations(res.data);
     })

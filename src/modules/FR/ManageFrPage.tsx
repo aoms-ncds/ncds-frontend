@@ -13,14 +13,12 @@ import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogT
 import FRServices from './extras/FRServices';
 import { DataGrid } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
-import { useLoader } from '../../hooks/Loader';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 
 const ManageFrPage = () => {
-  const loader = useLoader();
   const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -30,15 +28,12 @@ const ManageFrPage = () => {
   });
 
   useEffect(() => {
-    loader.onLoad();
     FRServices.getAll()
    .then((res) => {
-     loader.afterLoad();
      console.log(res);
      setFRRequests(res.data);
    })
   .catch((res) => {
-    loader.afterLoad();
     console.log(res);
   });
   }, []);

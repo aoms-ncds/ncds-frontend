@@ -4,9 +4,9 @@ import axios from 'axios';
 
 export default {
   getCount: () => getStandardResponse<number>(
-    axios.get('/worker/count'),
+    axios.get('/hr/staffs/count'),
   ),
-  approveWorker: ( id:string) => getStandardResponse<number>(
+  approve: ( id:string) => getStandardResponse<number>(
     dummyRequest({
       data: id,
       // error: null,
@@ -15,131 +15,7 @@ export default {
       timeout: 500,
     }),
   ),
-  getWorkerById: (workersId: string) => getStandardResponse<WorkersDetails>(
-    dummyRequest<WorkersDetails>({
-      data: {
-        IETWorker: {
-          _id: '',
-          workerCode: '',
-          firstName: '',
-          lastName: '',
-          missionaryOrNonMissionary: 'missionary',
-          dob: moment(),
-          gender: 'Female',
-          age: 0,
-          maritalStatus: 'Unmarried',
-          highestQualification: '',
-          motherToungue: 'Malayalam - മലയാളം',
-          communicationLanguage: 'Malayalam - മലയാളം',
-          languagesKnown: [],
-          email: '',
-          phone: '',
-          alternativeMobileNumber: '',
-          PANNo: 'string',
-          aadhaar: { aadhaarFile: {
-            _id: '',
-            name: '',
-            size: 0,
-            type: 'image/png',
-            storage: 'Drive',
-            fileId: '',
-            downloadURL: null,
-            private: false,
-            createdAt: moment(),
-            updatedAt: moment(),
-          }, aadhaarNo: '467389' },
-
-          voterId: {
-            voterIdFile: {
-              _id: '',
-              name: '',
-              size: 0,
-              type: 'image/png',
-              storage: 'Drive',
-              fileId: '',
-              downloadURL: null,
-              private: false,
-              createdAt: moment(),
-              updatedAt: moment(),
-            }, voterIdNo: '467389' },
-          licenseNumber: '',
-          permanentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          currentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        officialDetails: { noOfYrsInOrg: 0,
-          leftOrg: moment(),
-          reasonToDeactivate: 'Voluntarily Left',
-          remarks: 'Good',
-          subDivision: {
-            _id: '123',
-            subDivisionName: 'division',
-          },
-          status: 'Left',
-          joinedDivOn: moment(),
-          leftDivOn: moment(),
-          residingAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          noOfChurches: 0,
-        },
-        supportDetails: {
-          currentDesignation: {
-            _id: 'dsf',
-            name: 'Co-ordinator',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          totalNoYearsInMinistry: 1,
-          typeOfFamily: 'Single Missionary',
-          typeofChurch: 'With Church',
-          selfSupport: true,
-
-        },
-        supportStructure: {
-          basicAllowance: 0,
-          hraAllowance: 1,
-          spouseAllowance: 0,
-          positionalAllowance: 0,
-          specialAllowance: 0,
-          impactDeduction: 0,
-          telAllowance: 0,
-          pionMissionaryFund: 0,
-          MUTDeduction: 0,
-        },
-
-
-      },
-      // error: null,
-      message: 'Approved',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  createWorker: (action: string ) => getStandardResponse<number>(
+  create: (action: string ) => getStandardResponse<number>(
     dummyRequest({
       data: 1,
       // error: null,
@@ -225,31 +101,7 @@ export default {
   //     timeout: 500,
   //   }),
   // ),
-  getAll: () => getStandardResponse<User[]>(
-    axios.get('/hr/staffs'),
-  ),
-  getDesignation: () => getStandardResponse<[]>(
-    dummyRequest({
-      data: [
-        { name: 'Co-ordinator' },
-        { name: 'Native Pastor' },
-        { name: 'Evangelist' },
-        { name: 'Associate Pastor' },
-        { name: 'Ordained Pastor' },
-        { name: 'Area Supervisor' },
-        { name: 'Sub-Division Supervisor' },
-        { name: 'Officiating Coordinator' },
-        { name: 'Divisional Coordinator' },
-        { name: 'Staff/Employees' },
-        { name: 'Non-Missionary' },
-      ],
-      // error: null,
-      message: 'Network Error',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  markAsRemove: ( workerId: string) => getStandardResponse<number>(
+  delete: ( workerId: string) => getStandardResponse<number>(
     dummyRequest({
       data: workerId,
       // error: null,

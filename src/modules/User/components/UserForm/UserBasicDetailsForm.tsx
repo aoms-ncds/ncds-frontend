@@ -321,7 +321,7 @@ const UserBasicDetailsForm = (
         }}
         options={{
           textField: {
-            variant: 'standard',
+            variant: props.options?.textField.variant ?? 'outlined',
           },
           title: 'Current address',
         }}
@@ -338,7 +338,7 @@ const UserBasicDetailsForm = (
         }}
         options={{
           textField: {
-            variant: 'standard',
+            variant: props.options?.textField.variant ?? 'outlined',
           },
           title: 'Permanent address',
           copyAddressCheckBox: {

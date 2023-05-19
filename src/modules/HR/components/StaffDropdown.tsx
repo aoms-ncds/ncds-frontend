@@ -2,6 +2,7 @@ import { Autocomplete, TextField, TextFieldProps } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import HRServices from '../extras/HRServices';
+import UserServices from '../../User/extras/UserServices';
 
 interface StaffDropdownProps {
   staffs?: User[];
@@ -23,7 +24,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       return;
     }
 
-    HRServices.getStaffs()
+    UserServices.getAll()
       .then((res) => {
         setStaffs(res.data);
       })

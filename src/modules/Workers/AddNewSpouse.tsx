@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment, { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
+import UserServices from '../User/extras/UserServices';
 interface SpouseFormPagerops{
     action: 'add'|'edit'|'view';
   }
@@ -22,14 +23,12 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
   });
 
   useEffect(() => {
-    WorkerServices.getAll()
+    UserServices.getAll()
      .then((res) => {
-       // loader.afterLoad();
        console.log(res);
        setWorkers(res.data);
      })
     .catch((res) => {
-      // loader.afterLoad();
       console.log(res);
     });
     if (spouseId) {

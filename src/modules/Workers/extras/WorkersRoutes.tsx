@@ -2,7 +2,7 @@ import React from 'react';
 import WorkersDashboard from '..';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
-import AddNewWorker from '../AddNewWorker';
+import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import Profile from '../Profile';
 import AddNewChildPage from '../AddNewChild';
@@ -30,7 +30,7 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Add New Worker',
       path: '/add',
-      element: <AddNewWorker />,
+      element: <WorkerFormPage action='edit' />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -50,8 +50,8 @@ const workersPageRoutes: ModuleRoute = {
     },
     {
       title: 'Edit Worker',
-      path: '/edit/:workersId',
-      element: <AddNewWorker />,
+      path: '/edit/:id',
+      element: <WorkerFormPage action='edit' />,
       private: true,
       requiredAccessRights: ['string'],
     },

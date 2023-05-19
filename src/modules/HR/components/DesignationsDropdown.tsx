@@ -3,6 +3,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import HRServices from '../extras/HRServices';
 import moment from 'moment';
+import UserServices from '../../User/extras/UserServices';
 
 const filter = createFilterOptions<CreatableDesignation>();
 
@@ -19,7 +20,7 @@ const DesignationsDropdown = (props: DesignationsDropdownProps) => {
 
   React.useEffect(() => {
     if (!props.designations) {
-      HRServices.getDesignations().then((res) => {
+      UserServices.getDesignations().then((res) => {
         setDesignations(res.data);
       });
     } else {

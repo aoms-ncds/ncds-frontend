@@ -46,11 +46,11 @@ declare global {
   interface CreatableNewUserBasicDetails extends Creatable<NewUserBasicDetails>{
     gender?: NewUserBasicDetails['gender'];
     aadhaar?: {
-      aadhaarNo: string;
+      aadhaarNo?: string;
       aadhaarFile?: UploadableFile;
     };
     voterId?: {
-      voterIdNo: string;
+      voterIdNo?: string;
       voterIdFile?: UploadableFile;
     };
   }

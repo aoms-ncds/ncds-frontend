@@ -12,18 +12,13 @@ import {
 
 } from '@mui/icons-material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import DepartmentsDropdown from './components/DepartmentsDropdown';
-import DesignationsDropdown from './components/DesignationsDropdown';
-import { useLoader } from '../../hooks/Loader';
-
+import UserServices from '../User/extras/UserServices';
 const HRManagePage = () => {
-  const loader = useLoader();
   const [staffs, setStaffs] = useState<User[] | null>(null);
 
 
   useEffect(() => {
-    loader.onLoad();
-    HRServices.getStaffs().then((staffsRes) => {
+    UserServices.getAll().then((staffsRes) => {
       setStaffs(staffsRes.data);
     })
     .catch((err) => {

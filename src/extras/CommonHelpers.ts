@@ -11,24 +11,29 @@ export default {
 
 export const getStandardResponse = <T>(
   axiosCall: Promise<AxiosResponse<any, any>>,
-  requestFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
-  responseFormatter?: ((res: AxiosResponse<any, any>) =>StandardResponse<T>)|null,
+  responseFormatter?: ((res: any) =>T)|null,
 ):Promise<StandardResponse<T>> => new Promise((resolve, reject) => {
     loader && loader.onLoad();
     axiosCall
   .then((res) => {
-    loader && loader.afterLoad();
-    const parsedResponse = responseFormatter ? responseFormatter(res.data) : res.data;
-    resolve(parsedResponse);
+    let result:StandardResponse<T> = res.data;
+    const parsedResponse = responseFormatter ? responseFormatter(res.data.data) : null;
+    if (parsedResponse) {
+      result = { ...result, data: parsedResponse };
+    }
+    console.log({ result });
+    resolve(result);
   })
   .catch((error) => {
-    loader && loader.afterLoad();
     const parsedError = error.response && error.response.data ? error.response.data : ({ message: error.message });
     loader && enqueueSnackbar({
       variant: 'error',
       message: parsedError.message,
     });
     reject(parsedError);
+  })
+  .finally(() => {
+    loader && loader.afterLoad();
   });
   });
 

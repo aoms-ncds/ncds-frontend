@@ -9,23 +9,19 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
-import { useLoader } from '../../../hooks/Loader';
+
 import WorkerServices from '../extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
+
 const ChildListPage = () => {
-  const [loadCount, setLoadCount] = useState(0);
-  const loader = useLoader();
   const [childList, setChildList] = useState<Child[]>();
   useEffect(() => {
-    loader.onLoad();
     WorkerServices.getChild()
      .then((res) => {
-       loader.afterLoad();
        console.log(res);
        setChildList(res.data);
      })
     .catch((res) => {
-      // loader.afterLoad();
       console.log(res);
     });
   }, []);

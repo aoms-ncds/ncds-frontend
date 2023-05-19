@@ -8,6 +8,7 @@ import moment, { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { childSupport } from './extras/WorkersConfig';
 import { useParams } from 'react-router-dom';
+import UserServices from '../User/extras/UserServices';
 interface ChildFormPagerops{
     action: 'add'|'edit'|'view';
   }
@@ -22,14 +23,12 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
   });
 
   useEffect(() => {
-    WorkerServices.getAll()
+    UserServices.getAll()
      .then((res) => {
-       // loader.afterLoad();
        console.log(res);
        setWorkers(res.data);
      })
     .catch((res) => {
-      // loader.afterLoad();
       console.log(res);
     });
     if (childId) {

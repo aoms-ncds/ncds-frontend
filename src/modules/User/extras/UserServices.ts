@@ -92,4 +92,49 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
+  createStaff: (staff: CreatableNewUser) => {
+    return getStandardResponse<CreatableStaff>(
+      axios.post('/hr/staffs', staff),
+    );
+  },
+  editStaff: (staff: CreatableNewUser) => {
+    return getStandardResponse<CreatableStaff>(
+      axios.patch('/hr/staffs/'+staff._id, staff),
+    );
+  },
+  getAll: () => getStandardResponse<User[]>(
+    axios.get('/hr/staffs'),
+    (users) => users.map((item: any) => ({
+      ...item,
+      basicDetails: {
+        ...item.basicDetails,
+        dateOfBirth: moment(item.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...item.officialDetails,
+        dateOfJoining: moment(item.basicDetails.dateOfJoining),
+      },
+      createdAt: moment(item.createdAt),
+      updatedAt: moment(item.updatedAt),
+    })),
+  ),
+  getById: (workerId: string) => getStandardResponse<User|null>(
+    axios.get(`/hr/staffs/${workerId}`),
+    (data) =>({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: moment(data.basicDetails.dateOfJoining),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    }),
+  ),
+  getDesignations: () => getStandardResponse<[]>(
+    axios.get('/hr/designations'),
+  ),
 };

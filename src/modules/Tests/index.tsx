@@ -4,12 +4,10 @@ import FileUploader from '../../components/FileUploader';
 import TestServices from './extras/TestServices';
 import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
-import { useLoader } from '../../hooks/Loader';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
 
 const index = () => {
-  const loader = useLoader();
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showExcelImporter, setShowExcelImporter] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({

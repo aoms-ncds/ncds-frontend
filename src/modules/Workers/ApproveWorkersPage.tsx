@@ -5,12 +5,12 @@ import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
-import { useLoader } from '../../hooks/Loader';
+import UserServices from '../User/extras/UserServices';
+
 const ApproveWorkerPage = () => {
-  const loader = useLoader();
   const [WorkerRequests, setWorkerRequests] = useState<User[]|null>(null);
   const approveWorker = (id: string) => {
-    WorkerServices.approveWorker(id)
+    WorkerServices.approve(id)
       .then((res) => {
         if (WorkerRequests) {
           const newWorkers = WorkerRequests.filter((workerRequests) => {
@@ -31,15 +31,12 @@ const ApproveWorkerPage = () => {
       });
   };
   useEffect(() => {
-    loader.onLoad();
-    WorkerServices.getAll()
+    UserServices.getAll()
    .then((res) => {
-     loader.afterLoad();
      console.log(res);
      setWorkerRequests(res.data);
    })
   .catch((res) => {
-    loader.afterLoad();
     console.log(res);
   });
   }, []);

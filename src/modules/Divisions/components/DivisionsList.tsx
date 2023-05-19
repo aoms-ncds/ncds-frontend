@@ -16,15 +16,12 @@ const DivisionsList = () => {
   const [divisions, setDivisions] = useState<DivisionDetails[] | null>(null);
 
   useEffect(() => {
-    // loader.onLoad();
     DivisionsServices.getDivisions()
     .then((res) => {
-    //  loader.afterLoad();
       console.log(res.data);
       setDivisions(res.data);
     })
     .catch((err) => {
-      // loader.afterLoad();
       console.log({ err });
     });
   }, []);

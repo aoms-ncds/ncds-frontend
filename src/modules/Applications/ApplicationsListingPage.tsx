@@ -13,10 +13,8 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
-import { useLoader } from '../../hooks/Loader';
 
 const ApplicationsListingPage = () => {
-  const loader = useLoader();
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
@@ -28,14 +26,11 @@ const ApplicationsListingPage = () => {
 
 
   useEffect(() => {
-    loader.onLoad();
     ApplicationServices.getAll()
       .then((res) =>{
-        loader.afterLoad();
         setApplications(res.data);
       })
       .catch((error) => {
-        loader.afterLoad();
         enqueueSnackbar({
           message: error.message,
           variant: 'error',

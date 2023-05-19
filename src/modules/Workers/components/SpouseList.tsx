@@ -13,14 +13,12 @@ import { DataGrid } from '@mui/x-data-grid';
 const SpouseListPage = () => {
   const [spouseList, setSpouseList] = useState<Spouse[]>();
   useEffect(() => {
-    // loader.onLoad();
     WorkerServices.getSpouse()
      .then((res) => {
        console.log(res);
        setSpouseList(res.data);
      })
     .catch((res) => {
-      // loader.afterLoad();
       console.log(res);
     });
   }, []);

@@ -7,11 +7,9 @@ import {
 } from '@mui/icons-material';
 import SampleServices from '../extras/SampleServices';
 import GridLinkAction from '../../../components/GridLinkAction';
-import { useLoader } from '../../../hooks/Loader';
 
 
 const SampleComponent = () => {
-  const loader = useLoader();
   const [sampleItems, setSampleItems] = useState<SampleItem[] | null>(null);
   const columns = [
     {
@@ -27,14 +25,11 @@ const SampleComponent = () => {
     { field: 'createdAt', headerName: 'Field 3', width: 400 },
   ];
   useEffect(() => {
-    loader.onLoad();
     SampleServices.getAll()
       .then((res) => {
-        loader.afterLoad();
         setSampleItems(res.data);
       })
       .catch((err) => {
-        loader.afterLoad();
         console.log({ err });
       });
   }, []);

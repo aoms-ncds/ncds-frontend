@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
-import { useLoader } from '../../hooks/Loader';
 import HRServices from './extras/HRServices';
 
 const HRDashboard = () => {
-  const loader = useLoader();
   const [staffCount, setStaffCount] = useState<number|null>(null);
 
   useEffect(() => {
