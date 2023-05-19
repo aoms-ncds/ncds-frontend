@@ -177,7 +177,7 @@ export default {
         subCategory3: 'sub3',
         quantity: '12',
         month: 'January',
-        requestedAmount: 300,
+        requestedAmount: '300',
         narration: 'paticularss',
       },
       {
@@ -188,7 +188,7 @@ export default {
         subCategory3: 'sub3',
         quantity: '12',
         month: 'January',
-        requestedAmount: 300,
+        requestedAmount: '300',
         narration: 'paticularss',
       },
       ],

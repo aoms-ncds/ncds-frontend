@@ -66,7 +66,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     subCategory3: '',
     quantity: '',
     month: '',
-    requestedAmount: 0,
+    requestedAmount: '',
     narration: '',
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -165,7 +165,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           subCategory3: '',
           quantity: '',
           month: '',
-          requestedAmount: 0,
+          requestedAmount: '',
           narration: '',
         }));
       })
@@ -184,7 +184,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   };
   const totalRequestedAmount =
     Particulars &&
-    Particulars.reduce((total, item) => total + item.requestedAmount, 0);
+    Particulars.reduce((total, item) => total + item.requestedAmount, '');
   return (
     <div>
       <Container>
@@ -384,7 +384,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   variant="contained"
                   onClick={() => setShowAddParticulardialog(true)}
                 >
-                  Add Purticulars
+                  Add Particulars
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -396,8 +396,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <TableCell align="center">SI NO</TableCell>
                         <TableCell align="center">Particulars</TableCell>
                         <TableCell align="center">Quantity</TableCell>
-                        <TableCell align="center">Month</TableCell>
-                        <TableCell align="center">Required Amount</TableCell>
+                        <TableCell align="center">For the Month of</TableCell>
+                        <TableCell align="center">Requested Amount</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -479,47 +479,25 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <InputLabel id="demo-simple-select-standard-label">
                   Sanctioned As Per
                 </InputLabel>
-                <Autocomplete
-                  id="Sanctioned As Per"
-                  options={staff ?? []}
-                  getOptionLabel={(staff) =>
-                    staff.basicDetails.firstName + ' ' + staff.basicDetails.lastName ?? ''
-                  }
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  renderOption={(props, staff, { selected }) => (
-                    <Box
-                      component="li"
-                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                      {...props}
-                    >
-                      {staff.basicDetails.firstName + ' ' + staff.basicDetails.lastName}
-                    </Box>
-                  )}
-                  // onChange={(e, selectedSubCategory2) => {
-                  //   if (selectedSubCategory2) {
-                  //     setSelectedSubCategory2(() => ({
-                  //       ...selectedSubCategory2,
-                  //       //       //       // name: selectedRequisition?.name,
-                  //     }));
-                  //     setParticulars((particulars) => ({
-                  //       ...particulars,
-                  //       FRsubCategory1: selectedSubCategory2.name,
-                  //     }));
-
-                  //     // console.log(selectedMainCategory.subcategory2);
-                  //     setsubCategory3(selectedSubCategory2.subcategory3);
-                  //   }
-                  // }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Sanctioned As Per"
-                      InputLabelProps={{ shrink: true }}
-                      required
-                    />
-                  )}
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  label=" Group type"
+                  required
                   fullWidth
-                />
+                >
+                  {/* just for demo purpose to be listed from config or backend */}
+                  <MenuItem value={'As per sanction by Manager'}> As per sanction by President</MenuItem>
+                  <MenuItem value={'As per sanction'}>As per sanction</MenuItem>
+                  <MenuItem value={'As per policy'}>As per policy</MenuItem>
+                  <MenuItem value={'As Per List Attached'}>As Per List Attached</MenuItem>
+                  <MenuItem value={'As Per Ticket Attached'}> As Per Ticket Attached</MenuItem>
+                  <MenuItem value={'As Per Bill Attached'}>As Per Bill Attached</MenuItem>
+                  <MenuItem value={'As per Index Attached'}>As per Index Attached</MenuItem>
+                  <MenuItem value={'As Per Budget'}>As Per Budget</MenuItem>
+
+                  {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                </Select>
               </Grid>
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
@@ -725,7 +703,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onChange={(e) =>
                             setParticularDetails((particularDetails) => ({
                               ...particularDetails,
-                              requestedAmount: Number(e.target.value),
+                              requestedAmount: e.target.value,
                             }))
                           }
                           fullWidth
