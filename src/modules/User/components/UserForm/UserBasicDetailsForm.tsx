@@ -36,7 +36,7 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ required: true, autoFocus: true }}
-          // required
+          required
         />
       </Grid>
 
@@ -48,6 +48,7 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ required: true }}
+          required
         />
       </Grid>
 
@@ -84,7 +85,7 @@ const UserBasicDetailsForm = (
       </Grid>
 
       <Grid item xs={12} md={6} >
-        <FormControl required>
+        <FormControl >
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
@@ -94,11 +95,12 @@ const UserBasicDetailsForm = (
               gender: e.target.value as Gender|undefined,
             })}
             name="Gender"
+            // defaultValue={'Male'}
             row
           >
-            <FormControlLabel value="Male" control={<Radio />} label="Male" />
-            <FormControlLabel value="Female" control={<Radio />} label="Female" />
-            <FormControlLabel value="Other" control={<Radio />} label="Other" />
+            <FormControlLabel value='Male' control={<Radio />} label='Male' />
+            <FormControlLabel value='Female' control={<Radio />} label='Female' />
+            <FormControlLabel value='Other' control={<Radio />} label='Other' />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -193,6 +195,8 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ required: true }}
+          required
+
         />
       </Grid>
 

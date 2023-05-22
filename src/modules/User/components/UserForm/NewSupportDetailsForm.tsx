@@ -36,6 +36,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<NewUserSupportDetails, 
             helperText={designationsFetchError||(designations === null && 'Loading...')}
             variant={props.options?.textField.variant}
             fullWidth
+            required
           />}
         />
       </Grid>

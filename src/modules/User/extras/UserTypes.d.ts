@@ -20,7 +20,7 @@ declare global {
     firstName: string;
     lastName: string;
     dateOfBirth?: Moment;
-    gender: Gender;
+    gender?: Gender;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
     highestQualification?: string;

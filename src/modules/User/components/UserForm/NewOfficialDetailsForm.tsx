@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
 const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDetails, {
     textField: { variant: 'filled' | 'outlined' | 'standard' };
 }>) => {
+  const [dateError, setDateError] = useState(false);
   return (
     <>
       {console.log({ 'abc': props.value.dateOfJoining })}
@@ -12,15 +13,20 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
         <DatePicker
           label="Date of joining"
           value={props.value.dateOfJoining}
-          onChange={(newDate) => props.onChange({
-            ...props.value,
-            dateOfJoining: newDate ?? undefined,
-          })}
+          onChange={(newDate) =>{
+            props.onChange({
+              ...props.value,
+              dateOfJoining: newDate ?? undefined,
+            });
+          }}
           format='DD/MM/YYYY'
           slotProps={{
             textField: {
               variant: props.options?.textField.variant,
+              // error: dateError,
+              // helperText: dateError && 'Please select a date',
               fullWidth: true,
+              required: true,
             },
           }}
           autoFocus
