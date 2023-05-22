@@ -101,15 +101,15 @@ export default {
   //     timeout: 500,
   //   }),
   // ),
-  delete: ( workerId: string) => getStandardResponse<number>(
-    dummyRequest({
-      data: workerId,
-      // error: null,
-      message: 'deleted',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  // delete: ( workerId: string) => getStandardResponse<number>(
+  //   dummyRequest({
+  //     data: workerId,
+  //     // error: null,
+  //     message: 'deleted',
+  //     result: 'success',
+  //     timeout: 500,
+  //   }),
+  // ),
   getChild: () => getStandardResponse<[]>(
     dummyRequest({
       data: [
