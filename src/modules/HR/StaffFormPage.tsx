@@ -21,6 +21,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       firstName: '',
       lastName: '',
       email: '',
+
       permanentAddress: {
       },
       currentAddress: {

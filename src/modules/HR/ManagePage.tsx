@@ -14,6 +14,7 @@ import {
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import UserServices from '../User/extras/UserServices';
 import { Link } from 'react-router-dom';
+import UsersList from '../Workers/components/UsersList';
 
 
 const HRManagePage = () => {
@@ -29,81 +30,7 @@ const HRManagePage = () => {
     });
   }, []);
 
-  const columns = [
-    {
-      field: '_manage',
-      headerName: 'Action',
-      minWidth: 50,
-      type: 'string',
-      renderCell: (props: any) => (
-        <DropdownButton
-          useIconButton={true}
-          id="attendance action"
-          primaryText="Actions"
-          key={'attendance action'}
-          items={[
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              icon: EditIcon,
-              onClick: () => {
-                // TODO: Implement
-              },
-            },
-            {
-              id: 'delete',
-              text: 'Delete',
-              component: Link,
-              icon: DeleteIcon,
-              onClick: () => {
-                const snackbarId = enqueueSnackbar({
-                  message: 'Removing staff',
-                  variant: 'info',
-                });
-                HRServices.markAsRemove(props.row._id)
-                  .then((res) => {
-                    if (staffs) {
-                      const newDepartment = staffs.filter((staffs) => {
-                        return staffs._id !== props.row._id;
-                      });
-                      setStaffs(newDepartment);
-                    }
-                    closeSnackbar(snackbarId);
-                    enqueueSnackbar({
-                      message: res.message,
-                      variant: 'success',
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    closeSnackbar(snackbarId);
-                    enqueueSnackbar({
-                      message: err.message,
-                      variant: 'error',
-                    });
-                  });
-              },
-            },
-          ]}
-        />
-      ),
-    },
-    { field: '_id', headerName: 'id', width: 70 },
-    { field: 'name', headerName: 'Name', width: 70 },
-    { field: 'dob', headerName: 'DOB', width: 130 },
-    { field: 'doj', headerName: 'DOJ', width: 130 },
-    { field: 'designation', headerName: 'Designation', renderCell: (props: any) => (
-      <p> {props.row.designation?.name}</p>
-    ), width: 130 },
-    { field: 'department', headerName: 'Department', renderCell: (props: any) => (
-      <p> {props.row.department?.name}</p>
-    ), width: 130 },
-    { field: 'phone', headerName: 'Phone Number', width: 130 },
-    { field: 'email', headerName: 'Email', width: 130 },
-    { field: 'spouse', headerName: 'Spouse of another employee', width: 130 },
-    { field: 'idFormat', headerName: 'ID Format', width: 130 },
-  ];
+
   return (
     <CommonPageLayout title='Manage Staff'>
       <Button
@@ -120,7 +47,8 @@ const HRManagePage = () => {
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
-          <DataGrid rows={staffs??[]} columns={columns} getRowId={(row) => row._id} loading={staffs === null}/>
+          <UsersList />
+
         </Card>
       </Grid>
     </CommonPageLayout>

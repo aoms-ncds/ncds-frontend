@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import UsersList from './components/WorkersList';
+import UsersList from './components/UsersList';
 import { Button, Card, Grid, Tab, Tabs } from '@mui/material';
 import {
   Add as AddIcon,

@@ -22,8 +22,8 @@ const UserBasicDetailsForm = (
             name="Field"
             row
           >
-            <FormControlLabel value="missionary" control={<Radio />} label="Missionary" />
-            <FormControlLabel value="non-missionary" control={<Radio />} label="Non-Missionary" />
+            <FormControlLabel value="Missionary" control={<Radio />} label="Missionary" />
+            <FormControlLabel value="Non-Missionary" control={<Radio />} label="Non-Missionary" />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -65,8 +65,10 @@ const UserBasicDetailsForm = (
             textField: {
               variant: props.options?.textField.variant,
               fullWidth: true,
+              required: true,
             },
           }}
+
         />
       </Grid>
 
