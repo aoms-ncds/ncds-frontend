@@ -4,7 +4,7 @@ import HRServices from '../../../HR/extras/HRServices';
 import { enqueueSnackbar } from 'notistack';
 import UserServices from '../../extras/UserServices';
 
-const NewSupportDetailsForm = (props: FormComponentProps<CreatableNewUserSupportDetails, {
+const NewSupportDetailsForm = (props: FormComponentProps<NewUserSupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>) => {
   const [designations, setDesignations] = useState<Designation[]|null>(null);

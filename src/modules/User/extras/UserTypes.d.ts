@@ -58,7 +58,7 @@ declare global {
     dateOfJoining: Moment;
     dateOfLeaving?: Moment;
     reasonForDeactivation?: UserDeactivationReason;
-    remarks: string;
+    remarks?: string;
     subdivision: SubDivision;
     selfSupport: boolean;
     status: NewOfficialDetailsStatus;
@@ -77,26 +77,11 @@ declare global {
   }
   interface NewUserSupportDetails{
     designation?: Designation;
-    totalNoOfYearsInMinistry: number;
-    withChurch: boolean;
-  }
-  interface CreatableNewUserSupportDetails extends Creatable<NewUserSupportDetails>{
     totalNoOfYearsInMinistry?: number;
     withChurch?: boolean;
   }
 
   interface NewUserSupportStructure{
-    basic: number;
-    HRA: number;
-    spouseAllowance: number;
-    positionalAllowance: number;
-    specialAllowance: number;
-    impactDeduction: number;
-    telAllowance: number;
-    PIONMissionaryFund: number;
-    MUTDeduction: number;
-  }
-  interface CreatableNewUserSupportStructure extends Creatable<NewUserSupportStructure>{
     basic?: number;
     HRA?: number;
     spouseAllowance?: number;
@@ -119,8 +104,8 @@ declare global {
     kind: UserKind;
     basicDetails: CreatableNewUserBasicDetails;
     officialDetails: CreatableNewOfficialDetails;
-    supportDetails: CreatableNewUserSupportDetails;
-    supportStructure: CreatableNewUserSupportStructure;
+    supportDetails: NewUserSupportDetails;
+    supportStructure: NewUserSupportStructure;
   }
 
   type UserKind = 'staff'|'worker';

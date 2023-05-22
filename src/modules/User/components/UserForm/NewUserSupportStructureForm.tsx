@@ -1,7 +1,7 @@
 import { Grid, TextField } from '@mui/material';
 import React from 'react';
 
-const NewUserSupportStructureForm = (props: FormComponentProps<CreatableNewUserSupportStructure, {
+const NewUserSupportStructureForm = (props: FormComponentProps<NewUserSupportStructure, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
   }>) => {
   return (
