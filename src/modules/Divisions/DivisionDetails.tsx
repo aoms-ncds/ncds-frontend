@@ -407,7 +407,16 @@ const DivisionDetailsPage = () => {
               //   >
               <>
                 <Grid container spacing={2}>
-                  <SubDivisionsPage withCardContainer={divisionDetails?.subDivisions} />
+                  <SubDivisionsPage
+                    withCardContainer={divisionDetails?.subDivisions}
+                    onChange={(newSubDivisions: SubDivision[]) => {
+                      setDivisionDetails((divisionDetails) => ({
+                        ...divisionDetails,
+                        subDivisions: newSubDivisions,
+                      }));
+                    }}
+                  />
+
                   <Grid item xs={12} >
 
                     <Button

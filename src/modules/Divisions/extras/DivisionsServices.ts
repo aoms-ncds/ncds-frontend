@@ -25,7 +25,7 @@ export default {
       timeout: 500,
     }),
   ),
-  addDivision: (action: 'add' | 'edit'|'view', division: DivisionDetails) => {
+  addDivision: (action: 'add' | 'edit' | 'view', division: DivisionDetails) => {
     return getStandardResponse<DivisionDetails>(
       axios.post('/divisions/', {
         ...division,
@@ -36,7 +36,20 @@ export default {
           seniorLeader: division.division.seniorLeader?._id,
         },
       }),
-    );
+    )
+      .then((res) => {
+        console.log('First request completed');
+        return axios.post('/divisions/sub_division/', {
+          subDivision: division.subDivisions.map(({ _id, ...rest }) => rest),
+        });
+      })
+ .then((res) => {
+   console.log('Second request completed');
+   // Handle the response of the second request if needed
+ })
+      .catch((error) => {
+        // Handle any errors
+      });
   },
 
   editDivision: (divisionId: string, division: DivisionDetails) => {
