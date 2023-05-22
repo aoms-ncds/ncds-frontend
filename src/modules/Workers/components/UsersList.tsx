@@ -32,7 +32,7 @@ const UsersList = () => {
       message: 'Removing Worker',
       variant: 'info',
     });
-    WorkerServices.delete(id)
+    UserServices.delete(id)
       .then((res) => {
         console.log('Response', res);
         if (users) {

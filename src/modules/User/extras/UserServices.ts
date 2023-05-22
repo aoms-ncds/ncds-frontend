@@ -135,4 +135,7 @@ export default {
   getDesignations: () => getStandardResponse<[]>(
     axios.get('/hr/designations'),
   ),
+  delete: ( workerId: string) => getStandardResponse<number>(
+    axios.delete(`/hr/staffs/${workerId}`),
+  ),
 };
