@@ -19,7 +19,7 @@ declare global {
   interface NewUserBasicDetails{
     firstName: string;
     lastName: string;
-    dateOfBirth?: Moment;
+    dateOfBirth: Moment;
     gender?: Gender;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
@@ -45,6 +45,7 @@ declare global {
   }
   interface CreatableNewUserBasicDetails extends Creatable<NewUserBasicDetails>{
     gender?: NewUserBasicDetails['gender'];
+    dateOfBirth?:Moment;
     aadhaar?: {
       aadhaarNo?: string;
       aadhaarFile?: UploadableFile;
@@ -55,7 +56,7 @@ declare global {
     };
   }
   interface NewOfficialDetails{
-    dateOfJoining: Moment;
+    dateOfJoining?: Moment;
     dateOfLeaving?: Moment;
     reasonForDeactivation?: UserDeactivationReason;
     remarks?: string;
@@ -111,7 +112,7 @@ declare global {
   type UserKind = 'staff'|'worker';
   type Gender = 'Male' | 'Female' | 'Other';
   type MaritalStatus = 'Married' | 'Unmarried';
-  type WorkerField = 'missionary' | 'non-missionary';
+  type WorkerField = 'Missionary' | 'Non-Missionary';
 
   interface LoginCredentials {
     email: string;

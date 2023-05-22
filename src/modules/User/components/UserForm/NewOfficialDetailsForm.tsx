@@ -26,7 +26,6 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
               // error: dateError,
               // helperText: dateError && 'Please select a date',
               fullWidth: true,
-              required: true,
             },
           }}
           autoFocus

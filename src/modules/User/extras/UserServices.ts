@@ -22,7 +22,7 @@ export default {
             'lastName': 'Doe',
             'dateOfBirth': moment('2022-12-31T18:30:00.000Z'),
             'gender': 'Male',
-            'field': 'missionary',
+            'field': 'Missionary',
             'martialStatus': 'Married',
             'highestQualification': 'Ph.D.',
             'motherTounge': 'English',
