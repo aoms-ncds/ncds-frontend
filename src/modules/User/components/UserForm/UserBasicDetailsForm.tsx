@@ -36,6 +36,7 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ required: true, autoFocus: true }}
+          // required
         />
       </Grid>
 
@@ -74,6 +75,7 @@ const UserBasicDetailsForm = (
           value={props.value.dateOfBirth?.fromNow(true)}
           InputProps={{
             readOnly: true,
+            disabled: true,
           }}
           variant={props.options?.textField.variant}
           InputLabelProps={{ shrink: true }}

@@ -41,11 +41,12 @@ const UserForm = (props: FormComponentProps<CreatableNewUser, {
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={6}>
                       <TextField
-                        label="Worker Code"
+                        label={props.value.kind=='worker'?'Worker Code':'Staff Code'}
                         value={props.value.workerCode}
                         variant={props.options?.textField.variant}
                         InputProps={{
                           readOnly: true,
+                          disabled: true,
                         }}
                         fullWidth
                       />
