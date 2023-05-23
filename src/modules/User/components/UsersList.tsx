@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import DropdownButton from '../../../components/DropDownButton';
 import {
   Edit as EditIcon,
@@ -8,55 +8,34 @@ import {
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import WorkerServices from '../extras/WorkersServices';
-import { Avatar, Button, Card, Grid } from '@mui/material';
-import UserServices from '../../User/extras/UserServices';
+import WorkerServices from '../../Workers/extras/WorkersServices';
+import { Avatar, Card, Grid } from '@mui/material';
+import StaffServices from '../../HR/extras/StaffServices';
 
-const UsersList = <T, >(props:FormComponentProps<User[]>) => {
-  // useEffect(() => {
-  //   if (!users) {
-  //     UserServices.getAll()
-  //     .then((res) => {
-  //       console.log(res);
-  //       setUsers(res.data);
-  //     })
-  //     .catch((res) => {
-  //       console.log(res);
-  //     });
-  //   }
-  // }, []);
+const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOrWorker[], {kind: UserKind}>) => {
+  const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkerServices;
 
-  const removeWorker = (id: string) => {
-    console.log('hey', id);
+  const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
-      message: 'Removing Worker',
+      message: `Removing ${props.options?.kind}`,
       variant: 'info',
     });
-    UserServices.delete(id)
+
+    StaffOrWorkerServices.delete(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
-          const newWorkerRequests = props.value.filter((workerRequests) => {
-            return workerRequests._id !== id;
-          });
-          props.onChange(newWorkerRequests);
+          props.onChange(props.value.filter((user) => user._id !== id));
         }
         closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
+        enqueueSnackbar({ message: res.message, variant: 'success' });
       })
       .catch((err) => {
-        console.log(err);
         closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
+        enqueueSnackbar({ message: err.message, variant: 'error' });
       });
   };
-  const columns: GridColDef<User>[] = [
+
+  const columns: GridColDef<StaffOrWorker>[] = [
     {
       field: 'image',
       headerName: '',
@@ -69,25 +48,25 @@ const UsersList = <T, >(props:FormComponentProps<User[]>) => {
       headerName: 'Action',
       minWidth: 50,
       type: 'string',
-      renderCell: (props) => (
+      renderCell: (renderCellParams) => (
         <DropdownButton
           useIconButton={true}
-          id='Worker action'
+          id='user action'
           primaryText='Actions'
-          key={'Worker action'}
+          key={'User action'}
           items={[
             {
               id: 'View',
               text: 'View',
               component: Link,
-              to: '/workers/profile/' + props.row._id,
+              to: `/${props.options?.kind}s/profile/${renderCellParams.row._id}`,
               icon: PreviewIcon,
             },
             {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: '/workers/edit/' + props.row._id,
+              to: `/${props.options?.kind}s/edit/${renderCellParams.row._id}`,
               icon: EditIcon,
             },
             {
@@ -96,7 +75,7 @@ const UsersList = <T, >(props:FormComponentProps<User[]>) => {
               component: Link,
               icon: DeleteIcon,
               onClick: () => {
-                removeWorker(props.row._id);
+                execDelete(renderCellParams.row._id);
               },
             },
           ]}
@@ -104,7 +83,7 @@ const UsersList = <T, >(props:FormComponentProps<User[]>) => {
       ),
     },
     // { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'workerCode', headerName: 'Worker Code', width: 170 },
+    { field: `${props.options?.kind}Code`, headerName: `${props.options?.kind} Code`, width: 170 },
     {
       field: 'firstName',
       headerName: 'First Name',

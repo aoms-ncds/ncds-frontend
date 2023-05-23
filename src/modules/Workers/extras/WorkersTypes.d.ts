@@ -7,5 +7,5 @@ export interface IWorker extends User{
 }
 export interface CreatableIWorker extends CreatableNewUser{
     spouse: CreatableSpouse;
-    workerCode: string;
+    workerCode?: string;
 }

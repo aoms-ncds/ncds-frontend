@@ -2,8 +2,6 @@ import React from 'react';
 import HRDashboard from '..';
 import { Diversity3 as Diversity3Icon } from '@mui/icons-material';
 import HRManagePage from '../ManagePage';
-import ApproveWorkerPage from '../../Workers/ApproveWorkersPage';
-import ManageWorkerPage from '../../Workers/ManageWorkersPage';
 import StaffFormPage from '../StaffFormPage';
 
 const hrPageRoutes: ModuleRoute = {
@@ -26,30 +24,16 @@ const hrPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
     },
     {
-      title: 'Add New Worker',
+      title: 'Add New Staff',
       path: '/add',
       element: <StaffFormPage action='add' />,
       private: true,
       requiredAccessRights: ['string'],
     },
     {
-      title: 'Edit Worker',
+      title: 'Edit Staff',
       path: '/edit/:id',
       element: <StaffFormPage action='edit' />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
-    {
-      title: 'Manage Workers',
-      path: '/worker',
-      element: <ManageWorkerPage />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
-    {
-      title: 'Approve Workers',
-      path: '/approve',
-      element: <ApproveWorkerPage />,
       private: true,
       requiredAccessRights: ['string'],
     },

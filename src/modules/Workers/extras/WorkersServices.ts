@@ -1,225 +1,101 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { CreatableSpouse, Spouse } from './SpouseTypes';
-import { CreatableChild } from './ChildTypes';
 import { CreatableIWorker, IWorker } from './WorkersTypes';
 
 export default {
-  getCount: () => getStandardResponse<number>(
-    axios.get('/hr/staffs/count'),
-  ),
-  getById: (workerId: string) => getStandardResponse<IWorker|null>(
-    axios.get(`/workers/${workerId}`),
-    (data) =>({
-      ...data,
-      basicDetails: {
-        ...data.basicDetails,
-        dateOfBirth: moment(data.basicDetails.dateOfBirth),
-      },
-      officialDetails: {
-        ...data.officialDetails,
-        dateOfJoining: moment(data.basicDetails.dateOfJoining),
-      },
-      createdAt: moment(data.createdAt),
-      updatedAt: moment(data.updatedAt),
-    }),
-  ),
-  create: (staff: CreatableIWorker) => {
-    return getStandardResponse<IWorker>(
-      axios.post('/hr/staffs', staff),
-    );
-  },
-  edit: (staff: CreatableIWorker) => {
-    return getStandardResponse<IWorker>(
-      axios.patch('/hr/staffs/'+staff._id, staff),
-    );
-  },
-  delete: ( workerId: string) => getStandardResponse<number>(
-    dummyRequest({
-      data: workerId,
-      // error: null,
-      message: 'deleted',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  approve: ( id:string) => getStandardResponse<Worker>(
-    axios.patch(`/workers/${id}/approve`),
-  ),
-  reject: ( id:string) => getStandardResponse<Worker>(
-    axios.patch(`/workers/${id}/reject`),
-  ),
-  getChild: () => getStandardResponse<[]>(
-    dummyRequest({
-      data: [
-        {
-          _id: '1',
-          type: 'New',
-          firstName: 'Neha',
-          lastName: 'Thomas',
-          dob: moment(),
-          childSupport: 'Level 1',
-          childOf: { _id: 1,
-            workerCode: '111',
-            firstName: 'Athira',
-            lastName: 'Haridas',
-            missionaryOrNonMissionary: '',
-            dob: moment(),
-            gender: 'Female',
-            age: '',
-            maritalStatus: '',
-            highestQualification: '',
-            motherToungue: '',
-            communicationLanguage: '',
-            languagesKnown: [],
-            email: 'athiraharidas@gmail.com',
-            phone: '7592099483',
-            alternativeMobileNumber: '',
-            PANnumber: '',
-            aadhaarNumber: '',
-            voterId: '',
-            licenseNumber: '',
-            permanentAddress: 'Kottappady(H)',
-            permanentAddressCity: 'Thodupuzha',
-            permanentAddressDistrict: 'Idukki',
-            permanentAddressState: 'Kerala',
-            permanentAddressCountry: 'India',
-            permanentAddressPincode: '685581',
-            currentAddress: 'Kottappady(H)',
-            currentAddressCity: 'Thodupuzha',
-            currentAddressDistrict: 'Idukki',
-            currentAddressState: 'Kerala',
-            currentAddressCountry: 'India',
-            currentAddressPincode: '685581',
-            spouseOfAnotherStaff: '' },
-          studying: false,
-          classOfStudy: '',
-          working: false,
-          occupation: '',
-          qualification: '' },
-      ],
-      // error: null,
-      message: 'Network Error',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  addChild: (action: string ) => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
-      // error: null,
-      message: action+'ed Child',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getChildById: (childId: string) => getStandardResponse<CreatableChild>(
-    dummyRequest<CreatableChild>({
-      data: {
-        type: 'New',
-        firstName: 'Neha',
-        lastName: 'Thomas',
-        dob: moment(),
-        childSupport: 'Level 1',
-        childOf: { _id: '',
-          workerCode: '',
-          firstName: '',
-          lastName: '',
-          missionaryOrNonMissionary: 'Missionary',
-          dob: moment(),
-          gender: 'Male',
-          age: 0,
-          maritalStatus: 'Unmarried',
-          highestQualification: '',
-          motherToungue: 'Malayalam - മലയാളം',
-          communicationLanguage: 'Malayalam - മലയാളം',
-          languagesKnown: [],
-          email: '',
-          phone: '',
-          alternativeMobileNumber: '',
-          PANNo: 'string',
-          aadhaar: { aadhaarFile: {
-            _id: '',
-            name: '',
-            size: 0,
-            type: 'image/png',
-            storage: 'Drive',
-            fileId: '',
-            downloadURL: null,
-            private: false,
-            createdAt: moment(),
-            updatedAt: moment(),
-          }, aadhaarNo: '467389' },
+  /**
+   * Retrieves the count of workers.
+   * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the count of workers.
+   */
+  getCount: () => getStandardResponse<number>(axios.get('/workers/')),
 
-          voterId: { voterIdFile: {
-            _id: '',
-            name: '',
-            size: 0,
-            type: 'image/png',
-            storage: 'Drive',
-            fileId: '',
-            downloadURL: null,
-            private: false,
-            createdAt: moment(),
-            updatedAt: moment(),
-          }, voterIdNo: '467389' },
-          licenseNumber: '',
-          permanentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
+  /**
+   * Creates a new worker.
+   * @param {CreatableIWorker} worker - The worker to be created.
+   * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the created worker.
+   */
+  create: (worker: CreatableIWorker) =>
+    getStandardResponse<IWorker>(axios.post('/workers', worker)),
+
+  /**
+   * Edits a worker.
+   * @param {CreatableIWorker} worker - The worker to be edited.
+   * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the edited worker.
+   */
+  edit: (worker: CreatableIWorker) =>
+    getStandardResponse<IWorker>(axios.patch('/workers/' + worker._id, worker)),
+
+  /**
+   * Deletes a worker.
+   * @param {string} workerId - The ID of the worker to be deleted.
+   * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the result of the deletion.
+   */
+  delete: (workerId: string) =>
+    getStandardResponse<number>(axios.delete('/workers/' + workerId)),
+
+  /**
+   * Retrieves all workers based on optional conditions.
+   * @param {Object} conditions - Optional conditions to filter the workers (e.g., status and kind).
+   * @param {number} conditions.status - The status of the workers.
+   * @param {UserKind} conditions.kind - The kind of the workers.
+   * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
+   */
+  getAll: (conditions?: { status?: number; kind?: UserKind }) =>
+    getStandardResponse<IWorker[]>(
+      axios.get('/workers/', { params: conditions }),
+      (workers) =>
+        workers.map((worker: any) => ({
+          ...worker,
+          basicDetails: {
+            ...worker.basicDetails,
+            dateOfBirth: moment(worker.basicDetails.dateOfBirth),
           },
-          currentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
+          officialDetails: {
+            ...worker.officialDetails,
+            dateOfJoining: moment(worker.basicDetails.dateOfJoining),
           },
-          createdAt: moment(),
-          updatedAt: moment(),
+          createdAt: moment(worker.createdAt),
+          updatedAt: moment(worker.updatedAt),
+        })),
+    ),
+
+  /**
+   * Retrieves a worker by ID.
+   * @param {string} workerId - The ID of the worker to retrieve.
+   * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
+   */
+  getById: (workerId: string) =>
+    getStandardResponse<IWorker | null>(
+      axios.get(`/workers/${workerId}`),
+      (data) => ({
+        ...data,
+        basicDetails: {
+          ...data.basicDetails,
+          dateOfBirth: moment(data.basicDetails.dateOfBirth),
         },
-        studying: true,
-        classOfStudy: '',
-        working: false,
-        occupation: '',
-        qualification: '',
+        officialDetails: {
+          ...data.officialDetails,
+          dateOfJoining: moment(data.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+      }),
+    ),
 
-      },
-      // error: null,
-      message: 'Approved',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  editChild: (action: string ) => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
-      // error: null,
-      message: action+'ed Child',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  getSpouse: () => getStandardResponse<Spouse[]>(
-    axios.get('/workers/spouse/'),
-  ),
-  addSpouse: (spouse: Spouse ) => getStandardResponse<number>(
-    axios.post('/workers/spouses', spouse),
-  ),
-  editSpouse: () => getStandardResponse<number>(
-    axios.patch('/workers/spouses'),
-  ),
+  /**
+   * Approves a worker.
+   * @param {string} id - The ID of the worker to approve.
+   * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the approved worker.
+   */
+  approve: (id: string) =>
+    getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`)),
 
-  getSpouseById: (spouseId: string) => getStandardResponse<CreatableSpouse>(
-    axios.get(`/workers/spouses${spouseId}`),
-  ),
-
+  /**
+   * Rejects a worker.
+   * @param {string} id - The ID of the worker to reject.
+   * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the rejected worker.
+   */
+  reject: (id: string) =>
+    getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`)),
 };

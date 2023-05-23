@@ -1,25 +1,29 @@
-import { Autocomplete, Checkbox, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import HRServices from '../../../HR/extras/HRServices';
+import {
+  Autocomplete,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
-import UserServices from '../../extras/UserServices';
+import DesignationServices from '../../../HR/extras/DesignationServices';
 
 const NewSupportDetailsForm = (props: FormComponentProps<NewUserSupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>) => {
   const [designations, setDesignations] = useState<Designation[]|null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string|false>(false);
+
   useEffect(() => {
-    UserServices.getDesignations()
-    .then((res) => {
-      setDesignations(res.data);
-    })
+    DesignationServices.getAll()
+    .then((res) => setDesignations(res.data))
     .catch((error) => {
       setDesignationsFetchError(error.message);
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      });
+      enqueueSnackbar({ variant: 'error', message: error.message });
     });
   }, []);
 

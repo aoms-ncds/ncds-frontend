@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Grid } from '@mui/material';
 import DropdownButton from '../../../components/DropDownButton';
-import WorkerServices from '../extras/WorkersServices';
 import { Link } from 'react-router-dom';
 import {
   Edit as EditIcon,
@@ -11,10 +10,13 @@ import {
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Spouse } from '../extras/SpouseTypes';
+import SpousesServices from '../extras/SpousesServices';
+
 const SpouseListPage = () => {
   const [spouseList, setSpouseList] = useState<Spouse[]>();
+
   useEffect(() => {
-    WorkerServices.getSpouse()
+    SpousesServices.getAll()
      .then((res) => {
        console.log(res);
        setSpouseList(res.data);
@@ -23,6 +25,7 @@ const SpouseListPage = () => {
       console.log(res);
     });
   }, []);
+
   const columns = [
     {
       field: '_manage',

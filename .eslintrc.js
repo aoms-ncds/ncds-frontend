@@ -74,5 +74,6 @@ module.exports = {
     // 'comma-dangle': ['error', 'always',],
     'react/prop-types': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 };

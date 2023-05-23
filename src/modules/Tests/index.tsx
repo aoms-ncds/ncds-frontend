@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
+import { IWorker } from '../Workers/extras/WorkersTypes';
 
 const index = () => {
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -51,7 +52,7 @@ const index = () => {
       </Button>
       {/* File uploader ends.. */}
       {/* Excel importer starts */}
-      <ExcelImporter<Staff>
+      <ExcelImporter<IWorker>
         title='Import staffs from excel'
         templateURL='https://google.com'
         show={showExcelImporter}

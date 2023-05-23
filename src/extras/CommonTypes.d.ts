@@ -42,9 +42,6 @@ declare global {
     downloadURL: string|null;
     private: boolean;
   }
-  interface UploadableFile {
-    file: File;
-  }
   type FileObjectType =
     'application/vnd.ms-excel'
     |'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

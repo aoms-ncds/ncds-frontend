@@ -3,11 +3,9 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { enqueueSnackbar } from 'notistack';
 import UserForm from '../User/components/UserForm';
 import moment from 'moment';
-// import HRServices from '../HR/extras/HRServices';
 import { useParams } from 'react-router-dom';
-// import WorkersServices from './extras/WorkersServices';
-import UserServices from '../User/extras/UserServices';
-import HRServices from './extras/HRServices';
+import StaffServices from './extras/StaffServices';
+import { CreatableStaff } from './extras/StaffTypes';
 
 interface StaffFormPageProps{
   action: 'add'|'edit'|'view';
@@ -15,8 +13,7 @@ interface StaffFormPageProps{
 const StaffFormPage = (props: StaffFormPageProps) => {
   const { id } = useParams();
 
-  const [user, setUser] = useState<CreatableNewUser>({
-    workerCode: '',
+  const [staff, setStaff] = useState<CreatableStaff>({
     kind: 'staff',
     basicDetails: {
       firstName: '',
@@ -44,9 +41,9 @@ const StaffFormPage = (props: StaffFormPageProps) => {
 
   useEffect(() => {
     if (id) {
-      UserServices.getById(id).then((res) => {
+      StaffServices.getById(id).then((res) => {
         if (res.data) {
-          setUser({ ...res.data,
+          setStaff({ ...res.data,
             kind: 'staff',
             basicDetails: {
               ...res.data.basicDetails,
@@ -63,11 +60,11 @@ const StaffFormPage = (props: StaffFormPageProps) => {
 
   return (
     <CommonPageLayout title={'Add Staff'}>
-      <UserForm
+      <UserForm<CreatableStaff>
         action={props.action}
-        value={user}
+        value={staff}
         onChange={(newUser) => {
-          setUser(newUser);
+          setStaff(newUser);
         }}
         options={{
           textField: {
@@ -77,9 +74,9 @@ const StaffFormPage = (props: StaffFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await HRServices.creates(creatableUser);
+              const createdStaff = await StaffServices.create(creatableUser);
             } else if (props.action ==='edit') {
-              const updatedUser = await HRServices.edit(creatableUser);
+              const updatedStaff = await StaffServices.edit(creatableUser);
             }
             enqueueSnackbar({
               variant: 'success',

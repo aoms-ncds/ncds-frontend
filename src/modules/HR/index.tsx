@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
-import HRServices from './extras/HRServices';
+import StaffServices from './extras/StaffServices';
 
 const HRDashboard = () => {
   const [staffCount, setStaffCount] = useState<number|null>(null);
 
   useEffect(() => {
-    HRServices.getCount()
+    StaffServices.getCount()
       .then((res) => setStaffCount(res.data));
   }, []);
 

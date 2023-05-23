@@ -1,10 +1,10 @@
 import { Alert, AlertTitle, Card, CardContent, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import HRServices from '../../HR/extras/HRServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import FRServices from '../../FR/extras/FRServices';
 import IROServices from '../../IRO/extras/IROServices';
+import StaffServices from '../../HR/extras/StaffServices';
 
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -25,7 +25,7 @@ const MinimalModuleDataAnalytics = () => {
     });
 
     // Get staffs count
-    HRServices.getCount().then((res) => {
+    StaffServices.getCount().then((res) => {
       setStaffsCount(res.data.toString());
       console.log(res);
     }).catch((error) => {

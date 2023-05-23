@@ -10,7 +10,6 @@ import {
   Button,
   Dialog,
   Autocomplete,
-  Box,
   DialogActions,
   DialogContent,
   Table,
@@ -27,24 +26,25 @@ import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material'
 import {
   DatePicker,
 } from '@mui/x-date-pickers';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import HRServices from '../../HR/extras/HRServices';
-import WorkerServices from '../../Workers/extras/WorkersServices';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import { Moment } from 'moment';
 import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
-import UserServices from '../../User/extras/UserServices';
+import StaffServices from '../../HR/extras/StaffServices';
+import WorkersServices from '../../Workers/extras/WorkersServices';
+import { IWorker } from '../../Workers/extras/WorkersTypes';
+import { Staff } from '../../HR/extras/StaffTypes';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
-  const [workers, setWorkers] = useState<User[]>();
+  const [workers, setWorkers] = useState<IWorker[]>();
   const [divisions, setDivisions] = useState<IETDivisions[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
@@ -89,14 +89,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    HRServices.getStaffs()
+    StaffServices.getAll()
       .then((res) => {
         setCoordinators(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-    UserServices.getAll()
+    WorkersServices.getAll()
       .then((res) => {
         setWorkers(res.data);
       })
@@ -125,7 +125,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    HRServices.getStaffs()
+    StaffServices.getAll()
       .then((res) => {
         // console.log(res);
         setStaff(res.data);

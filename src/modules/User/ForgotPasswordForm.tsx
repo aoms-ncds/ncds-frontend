@@ -7,28 +7,16 @@ import {
   TextField,
   Button,
   InputAdornment,
-  IconButton,
   Alert,
-  AlertTitle,
   CircularProgress,
   CssBaseline,
 } from '@mui/material';
-import {
-  ArrowForwardIos as ArrowForwardIosIcon,
-  Email as EmailIcon,
-  Key as KeyIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
+import { Email as EmailIcon } from '@mui/icons-material';
 
-import { useNavigate, useSearchParams } from 'react-router-dom';
 // eslint-disable-next-line import/namespace, import/default
 import HomeServices from './extras/HomeServices';
 
 const ForgottenPasswordFormPage = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
   const [isLoading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean | null>(null);
   const [unknownError, setUnknownError] = useState<string | null>(null);

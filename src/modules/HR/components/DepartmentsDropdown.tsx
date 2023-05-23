@@ -1,9 +1,8 @@
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import HRServices from '../extras/HRServices';
-import { enqueueSnackbar } from 'notistack';
-import { useLoader } from '../../../hooks/Loader';
 import React, { useEffect, useState } from 'react';
+import DepartmentServices from '../extras/DepartmentServices';
+import { enqueueSnackbar } from 'notistack';
 
 const filter = createFilterOptions<CreatableDepartment>();
 
@@ -24,9 +23,9 @@ const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
       return;
     }
 
-    HRServices.getDepartment().then((res) => {
-      setDepartments(res.data);
-    }).catch((error) => {
+    DepartmentServices.getAll()
+    .then((res) => setDepartments(res.data))
+    .catch((error) => {
       enqueueSnackbar({
         variant: 'error',
         message: error.message,

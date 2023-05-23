@@ -1,22 +1,22 @@
 import { Autocomplete, TextField, TextFieldProps } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
-import HRServices from '../extras/HRServices';
-import UserServices from '../../User/extras/UserServices';
+import StaffServices from '../extras/StaffServices';
+import { Staff } from '../extras/StaffTypes';
 
 interface StaffDropdownProps {
-  staffs?: User[];
-  value: User | null | undefined;
+  staffs?: Staff[];
+  value: Staff | null | undefined;
   onChange: (
     e: React.SyntheticEvent<Element, Event>,
-    staff: User | null
+    staff: Staff | null
   ) => void;
   textFieldProps?: TextFieldProps;
   label: string;
 }
 
 const StaffDropdown = (props: StaffDropdownProps) => {
-  const [staffs, setStaffs] = useState<User[] | null>(null);
+  const [staffs, setStaffs] = useState<Staff[] | null>(null);
 
   useEffect(() => {
     if (props.staffs) {
@@ -24,7 +24,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       return;
     }
 
-    UserServices.getAll()
+    StaffServices.getAll()
       .then((res) => {
         setStaffs(res.data);
       })

@@ -7,24 +7,20 @@ import WorkerServices from './extras/WorkersServices';
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number|null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number|null>(null);
+
   useEffect(() => {
     WorkerServices.getCount()
-      .then((res) => {
-        console.log(res);
-        setWorkerCount(res.data);
-      })
+      .then((res) => setWorkerCount(res.data))
       .catch((error) => {
         console.log(error);
       });
     WorkerServices.getCount()
-      .then((res) => {
-        console.log(res);
-        setUnapprovedWorkersCount(res.data);
-      })
+      .then((res) => setUnapprovedWorkersCount(res.data))
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
   return (
     <CommonPageLayout>
       <Grid container spacing={3}>

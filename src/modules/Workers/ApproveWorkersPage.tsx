@@ -5,20 +5,20 @@ import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
-import UserServices from '../User/extras/UserServices';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
+import { IWorker } from './extras/WorkersTypes';
 
 const ApproveWorkerPage = () => {
-  const [WorkerRequests, setWorkerRequests] = useState<User[]|null>(null);
+  const [workers, setWorkers] = useState<IWorker[]|null>(null);
 
   const approveWorker = (id: string) => {
     WorkerServices.approve(id)
       .then((res) => {
-        if (WorkerRequests) {
-          const newWorkers = WorkerRequests.filter((workerRequests) => {
+        if (workers) {
+          const newWorkers = workers.filter((workerRequests) => {
             return workerRequests._id !== id;
           });
-          setWorkerRequests(newWorkers);
+          setWorkers(newWorkers);
         }
         enqueueSnackbar({
           message: 'Approved',
@@ -36,11 +36,11 @@ const ApproveWorkerPage = () => {
   const rejectWorker = (id: string) => {
     WorkerServices.reject(id)
       .then((res) => {
-        if (WorkerRequests) {
-          const newWorkers = WorkerRequests.filter((workerRequests) => {
+        if (workers) {
+          const newWorkers = workers.filter((workerRequests) => {
             return workerRequests._id !== id;
           });
-          setWorkerRequests(newWorkers);
+          setWorkers(newWorkers);
         }
         enqueueSnackbar({
           message: 'Rejected',
@@ -56,16 +56,16 @@ const ApproveWorkerPage = () => {
   };
 
   useEffect(() => {
-    UserServices.getAll({ status: UserLifeCycleStates.CREATED })
+    WorkerServices.getAll({ status: UserLifeCycleStates.CREATED })
    .then((res) => {
      console.log(res);
-     setWorkerRequests(res.data);
+     setWorkers(res.data);
    })
   .catch((res) => {
     console.log(res);
   });
   }, []);
-  const columns:GridColDef<User>[] = [
+  const columns:GridColDef<IWorker>[] = [
     { field: 'workerCode', headerName: 'Worker Code', width: 170 },
     {
       field: 'firstName',
@@ -119,7 +119,7 @@ const ApproveWorkerPage = () => {
     <CommonPageLayout title='New Workers for Approval'>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={WorkerRequests??[]} columns={columns} getRowId={(row) => row._id} loading={WorkerRequests === null}/>
+          <DataGrid rows={workers??[]} columns={columns} getRowId={(row) => row._id} loading={workers === null}/>
         </Card>
       </Grid>
     </CommonPageLayout>

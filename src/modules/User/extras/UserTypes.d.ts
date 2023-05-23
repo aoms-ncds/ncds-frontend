@@ -21,11 +21,11 @@ declare global {
     PANNo?: string;
     aadhaar?: {
       aadhaarNo?: string;
-      aadhaarFile?: string;
+      aadhaarFile?: FileObject;
     };
     voterId?: {
       voterIdNo?: string;
-      voterIdFile?: string;
+      voterIdFile?: FileObject;
     };
     licenseNumber?: string;
     permanentAddress: Address;
@@ -36,11 +36,11 @@ declare global {
     dateOfBirth?:Moment;
     aadhaar?: {
       aadhaarNo?: string;
-      aadhaarFile?: UploadableFile;
+      aadhaarFile?: FileObject;
     };
     voterId?: {
       voterIdNo?: string;
-      voterIdFile?: UploadableFile;
+      voterIdFile?: FileObject;
     };
   }
   interface NewOfficialDetails{
@@ -107,7 +107,7 @@ declare global {
   }
   interface LoginResponse {
     token: string;
-    user: User;
+    user: IWorker;
   }
 
   interface Address {

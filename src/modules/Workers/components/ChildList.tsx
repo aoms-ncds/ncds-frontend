@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Avatar, Button, Card, Grid } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Button, Card, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   Edit as EditIcon,
@@ -10,14 +9,14 @@ import {
 } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 
-import WorkerServices from '../extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
 import { Child } from '../extras/ChildTypes';
+import ChildrenServices from '../extras/ChildrenServices';
 
 const ChildListPage = () => {
   const [childList, setChildList] = useState<Child[]>();
   useEffect(() => {
-    WorkerServices.getChild()
+    ChildrenServices.getAll()
      .then((res) => {
        console.log(res);
        setChildList(res.data);

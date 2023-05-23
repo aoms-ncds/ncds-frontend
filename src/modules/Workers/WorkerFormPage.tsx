@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { enqueueSnackbar } from 'notistack';
 import UserForm from '../User/components/UserForm';
 import moment from 'moment';
-import HRServices from '../HR/extras/HRServices';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
-import { CreatableIWorker, IWorker } from './extras/WorkersTypes';
+import { CreatableIWorker } from './extras/WorkersTypes';
 
 interface WorkerFormPageProps{
   action: 'add'|'edit'|'view';
@@ -50,14 +49,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     if (id) {
       WorkersServices.getById(id).then((res) => {
         if (res.data) {
-          setWorker({ ...res.data,
-            kind: 'worker',
-            basicDetails: {
-              ...res.data.basicDetails,
-              aadhaar: undefined,
-              voterId: undefined,
-            },
-          });
+          setWorker(res.data);
         }
       }).catch((res) => {
         console.log(res);

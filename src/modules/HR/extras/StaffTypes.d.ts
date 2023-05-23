@@ -1,5 +1,7 @@
-export interface Staff extends User{
-    staffCode: string;
+export interface Staff extends User {
+  staffCode: string;
 }
 
-export type CreatableStaff = CreatableNewUser
+export interface CreatableStaff extends CreatableNewUser {
+  staffCode?: string;
+}

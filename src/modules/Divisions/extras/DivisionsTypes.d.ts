@@ -11,9 +11,9 @@ interface IETDivisions{
     noofWorkers?: number;
     noOfSubdivisions?: number;
     noOfChurches?: number;
-    coordinator?: User;
-    seniorLeader?: User;
-    juniorLeader?: User;
+    coordinator?: IWorker;
+    seniorLeader?: IWorker;
+    juniorLeader?: IWorker;
   }
 interface BankDetails{
   bankname:string;

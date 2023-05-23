@@ -261,7 +261,7 @@ const UserBasicDetailsForm = (
                 ...props.value,
                 aadhaar: {
                   aadhaarNo: props.value.aadhaar?.aadhaarNo??'',
-                  aadhaarFile: { file },
+                  // aadhaarFile: { file },
                 },
               });
             }
@@ -299,7 +299,7 @@ const UserBasicDetailsForm = (
                 ...props.value,
                 voterId: {
                   voterIdNo: props.value.voterId?.voterIdNo??'',
-                  voterIdFile: { file },
+                  // voterIdFile: { file },
                 },
               });
             }

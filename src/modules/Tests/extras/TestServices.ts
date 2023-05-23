@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import { IWorker } from '../../Workers/extras/WorkersTypes';
 const timeoutValue = 250;
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -138,7 +139,7 @@ export default {
     result: 'success',
     timeout: timeoutValue,
   })),
-  importStaffsExcel: (staff: Staff, overwriteDuplicates: boolean) => getStandardResponse<void>(dummyRequest<void>({
+  importStaffsExcel: (staff: IWorker, overwriteDuplicates: boolean) => getStandardResponse<void>(dummyRequest<void>({
     result: 'success',
     timeout: timeoutValue,
   })),

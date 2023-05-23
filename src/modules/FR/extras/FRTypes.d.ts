@@ -22,7 +22,7 @@ declare global {
     purposeWorker?: IETWorker;
     purposeSubdivision?: SubDivision;
     purposeDivision?: IETDivisions;
-    purposeCoordinator?: Staff;
+    purposeCoordinator?: IWorker;
     purposeOthers?: string;
     sanctionedAmount: number;
   }
@@ -99,9 +99,9 @@ declare global {
 
   interface Remark extends MongooseDocument {
     remark: string;
-    createdBy: User;
+    createdBy: IWorker;
   }
   interface CreatableRemark extends Creatable<Remark> {
-    createdBy?: User;
+    createdBy?: IWorker;
   }
 }

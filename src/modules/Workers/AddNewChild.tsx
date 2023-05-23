@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Typography, Checkbox } from '@mui/material';
+import {
+  Autocomplete,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Button,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+  Checkbox,
+} from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import moment, { Moment } from 'moment';
+import { DatePicker } from '@mui/x-date-pickers';
+import { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { childSupport } from './extras/WorkersConfig';
 import { useParams } from 'react-router-dom';
-import UserServices from '../User/extras/UserServices';
 import { CreatableChild } from './extras/ChildTypes';
+import { IWorker } from './extras/WorkersTypes';
+import ChildrenServices from './extras/ChildrenServices';
 interface ChildFormPagerops{
     action: 'add'|'edit'|'view';
   }
 
 const AddNewChildPage = (props: ChildFormPagerops) => {
   const { childId } = useParams();
-  const [workers, setWorkers] = useState<User[]>();
+  const [workers, setWorkers] = useState<IWorker[]>();
   const [newChild, setNewChild] = useState<CreatableChild>({
     type: '',
     firstName: '',
@@ -24,7 +35,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
   });
 
   useEffect(() => {
-    UserServices.getAll()
+    WorkerServices.getAll()
      .then((res) => {
        console.log(res);
        setWorkers(res.data);
@@ -32,8 +43,9 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
     .catch((res) => {
       console.log(res);
     });
+
     if (childId) {
-      WorkerServices.getChildById(childId).then((res) => {
+      ChildrenServices.getById(childId).then((res) => {
         setNewChild(res.data);
       }).catch((res) => {
         console.log(res);
@@ -46,7 +58,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
   const AddChild = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.addChild(props.action)
+    ChildrenServices.create(newChild)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,
@@ -62,7 +74,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
   };
   const UpdateChild = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    WorkerServices.editChild(props.action)
+    ChildrenServices.edit(newChild)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,
@@ -76,6 +88,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
         });
       });
   };
+
   return (
     <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'} >
       <form onSubmit={props.action === 'add' ? AddChild : UpdateChild}>
