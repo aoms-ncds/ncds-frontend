@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { Application, CreatableApplication } from './ApplicationTypes';
 
 export default {
   getCount: () => getStandardResponse<number>(

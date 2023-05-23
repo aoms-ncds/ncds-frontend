@@ -2,6 +2,7 @@ import moment from 'moment';
 import { getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 import { CreatableStaff, Staff } from './StaffTypes';
+import { StandardResponse } from '../../../extras/CommonTypes';
 
 export default {
   /**

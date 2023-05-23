@@ -2,6 +2,7 @@ import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 import { IWorker } from '../../Workers/extras/WorkersTypes';
+import { AJAXProgress, FileObject } from '../../../extras/CommonTypes';
 const timeoutValue = 250;
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

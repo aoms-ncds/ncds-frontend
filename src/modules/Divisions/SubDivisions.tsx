@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
+import { SubDivision } from './extras/DivisionsTypes';
 interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
   onChange: (newSubDivisions: SubDivision[]) => void;

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from 'axios';
 import { EnqueueSnackbar } from 'notistack';
+import { LoaderContextType, StandardResponse } from './CommonTypes';
 let loader:LoaderContextType;
 let enqueueSnackbar: EnqueueSnackbar;
 

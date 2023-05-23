@@ -1,4 +1,5 @@
 import React, { ReactNode, useContext, useMemo, useState } from 'react';
+import { LoaderContextType } from '../extras/CommonTypes';
 
 const LoaderContext = React.createContext<LoaderContextType|undefined>(undefined);
 interface LoaderProviderProps{

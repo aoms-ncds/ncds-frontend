@@ -3,6 +3,7 @@ import { ArrowBackIos as ArrowBackIosIcon, ArrowForwardIos as ArrowForwardIosIco
 import { Button, ButtonGroup, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
+import { DateRange } from '../extras/CommonTypes';
 
 type DateRangeType = 'datetime'|'days'|'weeks'|'months'|'quarter_years'|'years'|'custom';
 interface DateFilterProps{

@@ -17,6 +17,7 @@ import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import { Frrequest, Remark, CreatableRemark } from './extras/FRTypes';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);

@@ -13,6 +13,7 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
+import { Application, CreatableApplication } from './extras/ApplicationTypes';
 
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);

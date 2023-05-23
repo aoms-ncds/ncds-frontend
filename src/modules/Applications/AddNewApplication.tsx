@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
+import { Application } from './extras/ApplicationTypes';
 
 const AddNewApplication = () => {
   const [loadCount, setLoadCount] = useState(0);

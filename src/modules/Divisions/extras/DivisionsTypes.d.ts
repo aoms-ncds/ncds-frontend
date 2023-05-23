@@ -1,7 +1,6 @@
-export { };
+import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
 
-declare global {
-interface IETDivisions{
+export interface IETDivisions{
     divisionName: string;
    // _id?: string;
     divisionId: string;
@@ -15,14 +14,14 @@ interface IETDivisions{
     seniorLeader?: IWorker;
     juniorLeader?: IWorker;
   }
-interface BankDetails{
+export interface BankDetails{
   bankname:string;
   branchname:string;
   accountNumber:string;
   IFSCCode:string;
   beneficiary?:string;
   }
-interface DivisionDetails extends MongooseDocument{
+export interface DivisionDetails extends MongooseDocument{
  // _id: GridRowId;
   division: IETDivisions;
   subDivisions: SubDivision[];
@@ -30,11 +29,8 @@ interface DivisionDetails extends MongooseDocument{
   localBankDetails:BankDetails;
   _id?: string;
 }
-interface SubDivision {
+export interface SubDivision {
     _id?:string;
     division?:DivisionDetails;
     name:string;
   }
-
-
-}

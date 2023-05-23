@@ -1,5 +1,5 @@
-import { Moment } from 'moment';
 import { CreatableSpouse, Spouse } from './SpouseTypes';
+import { CreatableNewUser, User } from '../../User/extras/UserTypes';
 
 export interface IWorker extends User{
     spouse: Spouse;

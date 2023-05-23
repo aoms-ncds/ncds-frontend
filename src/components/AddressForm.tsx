@@ -2,6 +2,8 @@ import { Divider, Grid, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import React, { useState } from 'react';
+import { FormComponentProps } from '../extras/CommonTypes';
+import { Address } from '../modules/User/extras/UserTypes';
 
 const AddressForm = (
   props: FormComponentProps<

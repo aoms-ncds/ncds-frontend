@@ -3,6 +3,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import React, { useEffect, useState } from 'react';
 import DepartmentServices from '../extras/DepartmentServices';
 import { enqueueSnackbar } from 'notistack';
+import { CreatableDepartment, Department } from '../extras/DepartmentTypes';
 
 const filter = createFilterOptions<CreatableDepartment>();
 

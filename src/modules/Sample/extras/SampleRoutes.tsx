@@ -1,6 +1,7 @@
 import React from 'react';
 import SampleModule from '..';
 import { Extension as ExtensionIcon } from '@mui/icons-material';
+import { ModuleRoute } from '../../../extras/CommonTypes';
 
 const samplesPageRoutes: ModuleRoute = {
   base: '/sample',

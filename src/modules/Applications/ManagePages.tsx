@@ -15,6 +15,7 @@ import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
 import moment from 'moment';
+import { Application } from './extras/ApplicationTypes';
 
 const ApplicationManagePages = () => {
   const [loadCount, setLoadCount] = useState(0);

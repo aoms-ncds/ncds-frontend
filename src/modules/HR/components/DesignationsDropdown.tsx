@@ -2,6 +2,7 @@ import * as React from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import DesignationServices from '../extras/DesignationServices';
+import { CreatableDesignation, Designation } from '../extras/DesignationTypes';
 
 const filter = createFilterOptions<CreatableDesignation>();
 

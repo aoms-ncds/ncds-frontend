@@ -6,6 +6,7 @@ import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import Profile from '../Profile';
 import AddNewChildPage from '../AddNewChild';
+import { ModuleRoute } from '../../../extras/CommonTypes';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',

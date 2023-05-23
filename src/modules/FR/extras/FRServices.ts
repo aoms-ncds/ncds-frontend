@@ -2,6 +2,7 @@ import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import { categories, purposes } from './FRConfig';
 import axios from 'axios';
+import { CreatableRemark, FR, FRPurpose, Frrequest, MainCategory, Particulars, Remark } from './FRTypes';
 export default {
   getCount: () => getStandardResponse<number>(
     axios.get('/fr/count'),

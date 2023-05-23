@@ -1,3 +1,5 @@
+import { FRPurpose } from './FRTypes';
+
 export const categories = [
   {
     name: 'Maintenance Of Priest &  Preachers',

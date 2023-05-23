@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import SampleServices from '../extras/SampleServices';
 import GridLinkAction from '../../../components/GridLinkAction';
+import { SampleItem } from '../extras/SampleTypes';
 
 
 const SampleComponent = () => {

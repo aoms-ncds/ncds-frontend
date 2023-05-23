@@ -1,3 +1,5 @@
+import { CreatableNewUser, User } from '../../User/extras/UserTypes';
+
 export interface Staff extends User {
   staffCode: string;
 }

@@ -4,6 +4,7 @@ import FRDashboard from '..';
 import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
+import { ModuleRoute } from '../../../extras/CommonTypes';
 
 
 const divisionsPageRoutes: ModuleRoute = {

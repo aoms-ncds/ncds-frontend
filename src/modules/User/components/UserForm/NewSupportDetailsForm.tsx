@@ -11,6 +11,9 @@ import {
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import DesignationServices from '../../../HR/extras/DesignationServices';
+import { FormComponentProps } from '../../../../extras/CommonTypes';
+import { Designation } from '../../../HR/extras/DesignationTypes';
+import { NewUserSupportDetails } from '../../extras/UserTypes';
 
 const NewSupportDetailsForm = (props: FormComponentProps<NewUserSupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import { DivisionDetails, SubDivision } from './DivisionsTypes';
 
 export default {
   // getCount: () => getStandardResponse<number>(axios.get('http://localhost:8080/tests/getCount', {

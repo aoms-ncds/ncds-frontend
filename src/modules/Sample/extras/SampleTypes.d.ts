@@ -1,8 +1,5 @@
-export { };
-
-declare global {
-    interface SampleItem extends MongooseDocument{
-        name: string;
-        email: string;
-    }
+import { MongooseDocument } from '../../../extras/CommonTypes';
+export interface SampleItem extends MongooseDocument {
+  name: string;
+  email: string;
 }

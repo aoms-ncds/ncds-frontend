@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
+import { FormComponentProps } from '../../../../extras/CommonTypes';
+import { CreatableNewOfficialDetails, UserDeactivationReason, NewOfficialDetailsStatus } from '../../extras/UserTypes';
 
 const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDetails, {
     textField: { variant: 'filled' | 'outlined' | 'standard' };

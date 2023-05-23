@@ -3,7 +3,6 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card } from '@mui/material';
 import {
   Edit as EditIcon,
-  Message as MessageIcon,
   Preview as PreviewIcon,
 
 } from '@mui/icons-material';
@@ -12,6 +11,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
+import { IROrder } from './extras/IROTypes';
 
 const IRODashboard = () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();

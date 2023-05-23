@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { SampleItem } from './SampleTypes';
 
 export default {
   getAll: () => {

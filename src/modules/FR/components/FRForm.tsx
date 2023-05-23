@@ -39,6 +39,9 @@ import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { IWorker } from '../../Workers/extras/WorkersTypes';
 import { Staff } from '../../HR/extras/StaffTypes';
+import { FormComponentProps } from '../../../extras/CommonTypes';
+import { CreatableFR, FRPurpose, MainCategory, SubCategory1, SubCategory2, SubCategory3, Remark, CreatableRemark, Particulars } from '../extras/FRTypes';
+import { IETDivisions, SubDivision } from '../../Divisions/extras/DivisionsTypes';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);

@@ -1,3 +1,4 @@
+import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
 export interface Child extends MongooseDocument{
     type:string;
     firstName: string;

@@ -3,6 +3,7 @@ import HRDashboard from '..';
 import { Diversity3 as Diversity3Icon } from '@mui/icons-material';
 import HRManagePage from '../ManagePage';
 import StaffFormPage from '../StaffFormPage';
+import { ModuleRoute } from '../../../extras/CommonTypes';
 
 const hrPageRoutes: ModuleRoute = {
   base: '/hr',

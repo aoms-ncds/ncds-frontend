@@ -5,6 +5,8 @@ import NewOfficialDetailsForm from './NewOfficialDetailsForm';
 import NewSupportDetailsForm from './NewSupportDetailsForm';
 import NewUserSupportStructureForm from './NewUserSupportStructureForm';
 import SpouseForm from '../../../Workers/components/SpouseForm';
+import { FormComponentProps } from '../../../../extras/CommonTypes';
+import { CreatableNewUser } from '../../extras/UserTypes';
 
 const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<UserKind, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};

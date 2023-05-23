@@ -6,6 +6,8 @@ import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { useNavigate } from 'react-router-dom';
 import BankDetailsForm from '../Divisions/components/BankDetails';
+import { IROrder } from './extras/IROTypes';
+import { BankDetails } from '../Divisions/extras/DivisionsTypes';
 
 const ReleaseAmount = () => {
   const navigate=useNavigate();

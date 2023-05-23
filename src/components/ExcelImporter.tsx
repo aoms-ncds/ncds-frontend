@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import XLSX from 'xlsx';
+import { StandardResponse } from '../extras/CommonTypes';
 
 interface Props<T> {
     onFinish: () => void;

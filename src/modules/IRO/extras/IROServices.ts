@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import { IROrder } from './IROTypes';
 
 export default {
   getCount: () => getStandardResponse<number>(

@@ -5,6 +5,7 @@ import NewPage from '../FreshPage';
 import LoginPage from '../../User/Login';
 import Pdfview from '../pdfview';
 import ForgotPasswordFormPage from '../../User/ForgotPasswordForm';
+import { ModuleRoute } from '../../../extras/CommonTypes';
 
 const testsPageRoutes: ModuleRoute = {
   base: '/tests',
