@@ -1,8 +1,11 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
-import { Creatable, MongooseDocument } from '../../../extras/CommonTypes';
+import { Creatable, MongooseDocument, Address } from '../../../extras/CommonTypes';
 
-export interface NewUserBasicDetails {
+
+export type UserKind = 'staff' | 'worker';
+
+export interface BasicDetails {
   firstName: string;
   lastName: string;
   dateOfBirth: Moment;
@@ -29,9 +32,8 @@ export interface NewUserBasicDetails {
   permanentAddress: Address;
   currentAddress: Address;
 }
-export interface CreatableNewUserBasicDetails
-  extends Creatable<NewUserBasicDetails> {
-  gender?: NewUserBasicDetails['gender'];
+export interface CreatableBasicDetails extends Creatable<BasicDetails> {
+  gender?: BasicDetails['gender'];
   dateOfBirth?: Moment;
   aadhaar?: {
     aadhaarNo?: string;
@@ -42,44 +44,34 @@ export interface CreatableNewUserBasicDetails
     voterIdFile?: FileObject;
   };
 }
-export interface NewOfficialDetails {
+export interface OfficialDetails {
   dateOfJoining?: Moment;
   dateOfLeaving?: Moment;
-  reasonForDeactivation?: UserDeactivationReason;
+  reasonForDeactivation?: DeactivationReason;
   remarks?: string;
   subdivision: SubDivision;
   selfSupport: boolean;
-  status: NewOfficialDetailsStatus;
+  status: OfficialDetailsStatus;
   dateOfDivisionJoining?: Moment;
   dateOfDivisionLeaving?: Moment;
   noOfChurches: number;
 }
-export type UserDeactivationReason =
-  | 'Voluntarily Left'
-  | 'Retired'
-  | 'Dismissed'
-  | 'Death'
-  | 'Other';
-export type NewOfficialDetailsStatus =
-  | 'ministering'
-  | 'left'
-  | 'education leave'
-  | 'sabbatical leave';
-export interface CreatableNewOfficialDetails
-  extends Creatable<NewOfficialDetails> {
+export type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
+export type OfficialDetailsStatus = 'ministering' | 'left' | 'education leave' | 'sabbatical leave';
+export interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
   dateOfJoining?: Moment;
   subdivision?: SubDivision;
   selfSupport?: boolean;
-  status?: NewOfficialDetailsStatus;
+  status?: OfficialDetailsStatus;
   noOfChurches?: number;
 }
-export interface NewUserSupportDetails {
+export interface SupportDetails {
   designation?: Designation;
   totalNoOfYearsInMinistry?: number;
   withChurch?: boolean;
 }
 
-export interface NewUserSupportStructure {
+export interface SupportStructure {
   basic?: number;
   HRA?: number;
   spouseAllowance?: number;
@@ -91,22 +83,20 @@ export interface NewUserSupportStructure {
   MUTDeduction?: number;
 }
 export interface User extends MongooseDocument {
-  kind: UserKind;
-  basicDetails: NewUserBasicDetails;
-  officialDetails: NewOfficialDetails;
-  supportDetails: NewUserSupportDetails;
-  supportStructure: NewUserSupportStructure;
+  basicDetails: BasicDetails;
+  officialDetails: OfficialDetails;
+  supportDetails: SupportDetails;
+  supportStructure: SupportStructure;
   status?: UserLifeCycleStates;
 }
-export interface CreatableNewUser extends Creatable<NewUser> {
-  kind: UserKind;
-  basicDetails: CreatableNewUserBasicDetails;
-  officialDetails: CreatableNewOfficialDetails;
-  supportDetails: NewUserSupportDetails;
-  supportStructure: NewUserSupportStructure;
+export interface CreatableUser extends Creatable<User> {
+  basicDetails: CreatableBasicDetails;
+  officialDetails: CreatableOfficialDetails;
+  supportDetails: SupportDetails;
+  supportStructure: SupportStructure;
 }
 
-export type UserKind = 'staff' | 'worker';
+
 export type Gender = 'Male' | 'Female' | 'Other';
 export type MaritalStatus = 'Married' | 'Unmarried';
 export type WorkerField = 'Missionary' | 'Non-Missionary';
@@ -118,13 +108,4 @@ export interface LoginCredentials {
 export interface LoginResponse {
   token: string;
   user: IWorker;
-}
-
-export interface Address {
-  buildingName?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  pincode?: string;
 }

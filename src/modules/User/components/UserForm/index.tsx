@@ -6,10 +6,13 @@ import NewSupportDetailsForm from './NewSupportDetailsForm';
 import NewUserSupportStructureForm from './NewUserSupportStructureForm';
 import SpouseForm from '../../../Workers/components/SpouseForm';
 import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableNewUser } from '../../extras/UserTypes';
+import { CreatableStaff } from '../../../HR/extras/StaffTypes';
+import { CreatableIWorker } from '../../../Workers/extras/WorkersTypes';
+import { UserKind } from '../../extras/UserTypes';
 
-const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<UserKind, {
+const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: FormComponentProps<UserType, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
+  kind: UserKind;
 }>) => {
   const [activeStep, setActiveStep] = useState(0);
   return (
@@ -28,7 +31,7 @@ const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<
           <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step>
-          { props.value.kind === 'worker' && (
+          { props.options?.kind === 'worker' && (
             <Step>
               <StepLabel>Spouse details</StepLabel>
             </Step>
@@ -48,8 +51,8 @@ const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<
                   <Grid container spacing={3}>
                     <Grid item xs={12} md={6} lg={6}>
                       <TextField
-                        label={props.value.kind=='worker'?'Worker Code':'Staff Code'}
-                        value={props.value.workerCode}
+                        label={props.options?.kind=='worker'?'Worker Code':'Staff Code'}
+                        value={props.options?.kind=='worker' ? (props.value as CreatableIWorker).workerCode : (props.value as CreatableStaff).staffCode}
                         variant={props.options?.textField.variant}
                         InputProps={{
                           readOnly: true,
@@ -166,7 +169,7 @@ const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  if (props.value.kind === 'worker') {
+                  if (props.options?.kind === 'worker') {
                     setActiveStep((currentStep) => currentStep+1);
                   } else {
                     props.onSubmit && props.onSubmit(props.value);
@@ -203,12 +206,12 @@ const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<
                       type='submit'
                       variant="contained"
                       sx={{ padding: '16px 64px' }}
-                    > {props.value.kind === 'staff' ? 'Submit':'Next'} </Button>
+                    > {props.options?.kind === 'staff' ? 'Submit':'Next'} </Button>
                   </div>
                 </form>
               </CardContent>
             )}
-            {(activeStep === 4 && props.value.kind === 'worker') &&(
+            {(activeStep === 4 && props.options?.kind === 'worker') &&(
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
@@ -217,7 +220,7 @@ const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<
                   <Grid container spacing={3}>
                     <SpouseForm
                       action={props.action}
-                      value={props.value.spouse}
+                      value={(props.value as CreatableIWorker).spouse}
                       onChange={(spouse) => props.onChange({ ...props.value, spouse })}
                       options={props.options}
                     />

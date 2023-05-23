@@ -2,7 +2,6 @@ import moment from 'moment';
 import { getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 import { CreatableIWorker, IWorker } from './WorkersTypes';
-import { UserKind } from '../../User/extras/UserTypes';
 
 export default {
   /**
@@ -37,12 +36,11 @@ export default {
 
   /**
    * Retrieves all workers based on optional conditions.
-   * @param {Object} conditions - Optional conditions to filter the workers (e.g., status and kind).
+   * @param {Object} conditions - Optional conditions to filter the workers (e.g., status).
    * @param {number} conditions.status - The status of the workers.
-   * @param {UserKind} conditions.kind - The kind of the workers.
    * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
    */
-  getAll: (conditions?: { status?: number; kind?: UserKind }) =>
+  getAll: (conditions?: { status?: number }) =>
     getStandardResponse<IWorker[]>(
       axios.get('/workers/', { params: conditions }),
       (workers) =>

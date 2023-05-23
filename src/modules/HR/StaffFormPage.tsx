@@ -14,7 +14,6 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   const { id } = useParams();
 
   const [staff, setStaff] = useState<CreatableStaff>({
-    kind: 'staff',
     basicDetails: {
       firstName: '',
       lastName: '',
@@ -44,7 +43,6 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       StaffServices.getById(id).then((res) => {
         if (res.data) {
           setStaff({ ...res.data,
-            kind: 'staff',
             basicDetails: {
               ...res.data.basicDetails,
               aadhaar: undefined,
@@ -70,18 +68,18 @@ const StaffFormPage = (props: StaffFormPageProps) => {
           textField: {
             variant: 'standard',
           },
+          kind: 'staff',
         }}
-        onSubmit={async (creatableUser) => {
+        onSubmit={async (creatableStaff) => {
+          console.log(creatableStaff);
           try {
             if (props.action === 'add') {
-              const createdStaff = await StaffServices.create(creatableUser);
+              const createStaffResponse = await StaffServices.create(creatableStaff);
+              enqueueSnackbar({ variant: 'success', message: createStaffResponse.message });
             } else if (props.action ==='edit') {
-              const updatedStaff = await StaffServices.edit(creatableUser);
+              const updateStaffResponse = await StaffServices.edit(creatableStaff);
+              enqueueSnackbar({ variant: 'success', message: updateStaffResponse.message });
             }
-            enqueueSnackbar({
-              variant: 'success',
-              message: `Created new ${creatableUser.kind}`,
-            });
           } catch (error:any) {
             enqueueSnackbar({
               variant: 'error',

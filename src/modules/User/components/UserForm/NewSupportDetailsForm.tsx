@@ -13,9 +13,9 @@ import { enqueueSnackbar } from 'notistack';
 import DesignationServices from '../../../HR/extras/DesignationServices';
 import { FormComponentProps } from '../../../../extras/CommonTypes';
 import { Designation } from '../../../HR/extras/DesignationTypes';
-import { NewUserSupportDetails } from '../../extras/UserTypes';
+import { SupportDetails } from '../../extras/UserTypes';
 
-const NewSupportDetailsForm = (props: FormComponentProps<NewUserSupportDetails, {
+const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>) => {
   const [designations, setDesignations] = useState<Designation[]|null>(null);

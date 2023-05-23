@@ -71,3 +71,11 @@ export interface FormComponentProps<T, Options = undefined> {
 }
 
 export type Language = (typeof languages)[number];
+export interface Address {
+  buildingName?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  pincode?: string;
+}

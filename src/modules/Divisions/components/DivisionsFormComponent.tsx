@@ -4,9 +4,9 @@ import { Divider, FormControl, Grid, TextField, Typography } from '@mui/material
 import moment from 'moment';
 import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
-import { FormComponentProps } from '../../../extras/CommonTypes';
+import { Address, FormComponentProps } from '../../../extras/CommonTypes';
 import { IETDivisions } from '../extras/DivisionsTypes';
-import { Address } from '../../User/extras/UserTypes';
+
 const DivisionsFormComponent = (props: FormComponentProps<IETDivisions, {title:string}>) => {
   const [divisionDetails, setNewDivision] = useState<IETDivisions>(
     props.value ??{

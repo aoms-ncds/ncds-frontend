@@ -6,8 +6,7 @@ import {
   TextField,
 } from '@mui/material';
 import React from 'react';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { Address } from '../../extras/UserTypes';
+import { Address, FormComponentProps } from '../../../../extras/CommonTypes';
 
 const NewAddressForm = (
   props: FormComponentProps<

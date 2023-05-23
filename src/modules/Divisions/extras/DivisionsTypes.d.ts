@@ -1,4 +1,4 @@
-import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
+import { MongooseDocument, Creatable, Address } from '../../../extras/CommonTypes';
 
 export interface IETDivisions{
     divisionName: string;

@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableNewOfficialDetails, UserDeactivationReason, NewOfficialDetailsStatus } from '../../extras/UserTypes';
+import { CreatableOfficialDetails, DeactivationReason, OfficialDetailsStatus } from '../../extras/UserTypes';
+import { SubDivision } from '../../../Divisions/extras/DivisionsTypes';
+import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
+import { enqueueSnackbar } from 'notistack';
 
-const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDetails, {
+const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetails, {
     textField: { variant: 'filled' | 'outlined' | 'standard' };
 }>) => {
-  const [dateError, setDateError] = useState(false);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]|null>(null);
+  useEffect(() => {
+    DivisionsServices.getSubDivisions()
+      .then((res) => setSubDivisions(res.data))
+      .catch((error) => enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      }));
+  }, []);
   return (
     <>
       {console.log({ 'abc': props.value.dateOfJoining })}
@@ -62,7 +73,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <Autocomplete<UserDeactivationReason>
+        <Autocomplete<DeactivationReason>
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
           value={props.value.reasonForDeactivation}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason??undefined })}
@@ -90,6 +101,8 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
       <Grid item xs={12} md={6}>
         <Autocomplete
           options={['Dummy subdivision']}
+          value={props.value.subdivision}
+          onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal })}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -115,7 +128,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableNewOfficialDe
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <Autocomplete<NewOfficialDetailsStatus>
+        <Autocomplete<OfficialDetailsStatus>
           options={['ministering', 'left', 'education leave', 'sabbatical leave']}
           value={props.value.status}
           onChange={(e, selectedStatus) => props.onChange({

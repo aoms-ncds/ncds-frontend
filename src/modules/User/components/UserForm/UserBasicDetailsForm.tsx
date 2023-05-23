@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import { languages } from '../../../../extras/CommonConfig';
 import NewAddressForm from './NewAddressForm';
 import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableNewUserBasicDetails, WorkerField, Gender, MaritalStatus } from '../../extras/UserTypes';
+import { CreatableBasicDetails, WorkerField, Gender, MaritalStatus } from '../../extras/UserTypes';
 
 const UserBasicDetailsForm = (
-  props: FormComponentProps<CreatableNewUserBasicDetails, {
+  props: FormComponentProps<CreatableBasicDetails, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>)=> {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);

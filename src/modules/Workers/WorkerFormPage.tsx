@@ -15,7 +15,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
-    kind: 'worker',
     basicDetails: {
       firstName: '',
       lastName: '',
@@ -69,18 +68,17 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           textField: {
             variant: 'standard',
           },
+          kind: 'worker',
         }}
-        onSubmit={async (creatableUser) => {
+        onSubmit={async (creatableWorker) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await WorkersServices.create(creatableUser);
+              const createWorkerResponse = await WorkersServices.create(creatableWorker);
+              enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
             } else if (props.action ==='edit') {
-              const updatedUser = await WorkersServices.edit(creatableUser);
+              const updateWorkerResponse = await WorkersServices.edit(creatableWorker);
+              enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
-            enqueueSnackbar({
-              variant: 'success',
-              message: props.action === 'add'?`Created new ${creatableUser.kind}`:`Updated  ${creatableUser.kind}`,
-            });
           } catch (error:any) {
             enqueueSnackbar({
               variant: 'error',
