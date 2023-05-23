@@ -24,7 +24,6 @@ const ManageWorkerPage = () => {
   useEffect(() => {
     WorkersServices.getAll({ status: UserLifeCycleStates.APPROVED })
       .then((res) => {
-        console.log(res);
         setUsers(res.data);
       })
       .catch((res) => {
@@ -62,9 +61,14 @@ const ManageWorkerPage = () => {
           </Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>
-          <UsersList<IWorker> value={users} onChange={(newUsers) => {
-            setUsers(newUsers);
-          } } action={'view'} />
+          <UsersList<IWorker>
+            value={users}
+            onChange={(newUsers) => {
+              setUsers(newUsers);
+            }}
+            action={'view'}
+            options={{ kind: 'worker' }}
+          />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           <SpouseListPage />
