@@ -3,10 +3,15 @@ import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers
 import axios from 'axios';
 import { DivisionDetails, SubDivision } from './DivisionsTypes';
 
+const isObjectId = (id: string) => {
+  const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+  return objectIdPattern.test(id);
+};
 export default {
   // getCount: () => getStandardResponse<number>(axios.get('http://localhost:8080/tests/getCount', {
   //   headers: { ...getAuthHeader() },
   // })),
+
   getCount: () => getStandardResponse<number>(
     axios.get('/divisions/count'),
   ),
@@ -51,6 +56,7 @@ export default {
                 },
               );
             }
+            resolve(createdDivision);
           } catch (error) {
             reject(error);
           }
@@ -62,7 +68,46 @@ export default {
 
   editDivision: (divisionId: string, division: DivisionDetails) => {
     return getStandardResponse<DivisionDetails>(
-      axios.patch('/divisions/'+divisionId, division),
+      new Promise((resolve, reject) => {
+        // console.log(division);
+        axios.patch('/divisions/' + divisionId, {
+          ...division,
+          division: {
+            ...division.division,
+            coordinator: division.division.coordinator?._id,
+            juniorLeader: division.division.juniorLeader?._id,
+            seniorLeader: division.division.seniorLeader?._id,
+          },
+          subDivisions: [],
+        })
+          .then(async (updatedDivision) => {
+            try {
+              for (let i = 0; i < division.subDivisions.length; i++) {
+                const subDiv = division.subDivisions[i];
+
+                const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+
+                if (subDiv._id) {
+                  if (objectIdPattern.test(subDiv._id)) {
+                    await axios.patch('/divisions/sub_division/' + subDiv._id, {
+                      division: updatedDivision.data.data._id,
+                      name: subDiv.name,
+                    });
+                  } else {
+                    await axios.post('/divisions/sub_division', {
+                      division: updatedDivision.data.data._id,
+                      name: subDiv.name,
+                    });
+                  }
+                }
+              }
+              resolve(updatedDivision); // Resolve with the updated division
+            } catch (error) {
+              reject(error);
+            }
+          })
+          .catch(reject);
+      }),
     );
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -71,14 +116,8 @@ export default {
     axios.get('/divisions/'+divisionId),
   ),
 
-  markAsRemove: ( subdivisionId: string) => getStandardResponse<number>(
-    dummyRequest({
-      data: subdivisionId,
-      // error: null,
-      message: 'deleted',
-      result: 'success',
-      timeout: 500,
-    }),
+  subDivisionMarkAsRemove: ( subdivisionId: string) => getStandardResponse<number>(
+    axios.delete('/divisions/sub_division/'+subdivisionId),
   ),
   divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(
     axios.delete('/divisions/'+divisionId),

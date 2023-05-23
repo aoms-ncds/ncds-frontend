@@ -29,30 +29,36 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
     const newSubDivisions = subDivisions.filter((_, i) => i !== index);
     const deletedSubdivision=subDivisions.filter((_, i) => i == index);
     const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
-    // if (deletedSubdivisionIds.length > 0) {
-    //   console.log(deletedSubdivisionIds[0]);
-    //   if (editID) {
-    //     DivisionsServices.markAsRemove(deletedSubdivisionIds[0])
-    //   .then((res) => {
-    //     enqueueSnackbar({
-    //       message: res.message,
-    //       variant: 'success',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     enqueueSnackbar({
-    //       message: err.message,
-    //       variant: 'error',
-    //     });
-    //   });
-    //   }
-    // }
+    if (deletedSubdivisionIds.length > 0) {
+      console.log('testing neww', deletedSubdivisionIds[0]);
+      if (editID) {
+        const subdivisionId = deletedSubdivisionIds[0];
+        if (subdivisionId) {
+          DivisionsServices.subDivisionMarkAsRemove(subdivisionId)
+          .then((res) => {
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+          })
+            .catch((err) => {
+              console.log(err);
+              enqueueSnackbar({
+                message: err.message,
+                variant: 'error',
+              });
+            });
+        }
+      }
+    }
     enqueueSnackbar({
       message: 'Deleted Sub Division',
       variant: 'success',
     });
+    console.log(newSubDivisions);
     setSubDivisions(newSubDivisions);
+    onChange(newSubDivisions); // Call the onChange prop with the updated division details
+    return newSubDivisions;
   };
   const lastProgramNameField = useRef<HTMLInputElement>(null);
   useEffect(() => {
