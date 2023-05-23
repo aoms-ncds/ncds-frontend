@@ -39,14 +39,11 @@ export default {
     )
       .then((res) => {
         console.log('First request completed');
-        return axios.post('/divisions/sub_division/', {
+        axios.post('/divisions/sub_division/', {
           subDivision: division.subDivisions.map(({ _id, ...rest }) => rest),
         });
       })
- .then((res) => {
-   console.log('Second request completed');
-   // Handle the response of the second request if needed
- })
+
       .catch((error) => {
         // Handle any errors
       });
