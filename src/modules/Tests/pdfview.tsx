@@ -1,6 +1,6 @@
-import React from "react";
-import FRRecipt from "../FR/components/FRreciptTemplate";
-import { PDFViewer } from "@react-pdf/renderer";
+import React from 'react';
+import FRRecipt from '../FR/components/FRreciptTemplate';
+import { PDFViewer } from '@react-pdf/renderer';
 
 const pdfview = () => {
   return (
