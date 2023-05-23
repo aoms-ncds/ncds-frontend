@@ -53,6 +53,12 @@ export default {
       timeout: 500,
     }),
   ),
+  approve: ( id:string) => getStandardResponse<Worker>(
+    axios.patch(`/workers/${id}/approve`),
+  ),
+  reject: ( id:string) => getStandardResponse<Worker>(
+    axios.patch(`/workers/${id}/reject`),
+  ),
   getChild: () => getStandardResponse<[]>(
     dummyRequest({
       data: [

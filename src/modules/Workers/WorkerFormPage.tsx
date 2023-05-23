@@ -87,7 +87,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             }
             enqueueSnackbar({
               variant: 'success',
-              message: `Created new ${creatableUser.kind}`,
+              message: props.action === 'add'?`Created new ${creatableUser.kind}`:`Updated  ${creatableUser.kind}`,
             });
           } catch (error:any) {
             enqueueSnackbar({

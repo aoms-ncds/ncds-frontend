@@ -12,19 +12,19 @@ import WorkerServices from '../extras/WorkersServices';
 import { Avatar, Button, Card, Grid } from '@mui/material';
 import UserServices from '../../User/extras/UserServices';
 
-const UsersList = () => {
-  const [users, setUsers] = useState<User[] | null>(null);
-
-  useEffect(() => {
-    UserServices.getAll()
-      .then((res) => {
-        console.log(res);
-        setUsers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+const UsersList = <T, >(props:FormComponentProps<User[]>) => {
+  // useEffect(() => {
+  //   if (!users) {
+  //     UserServices.getAll()
+  //     .then((res) => {
+  //       console.log(res);
+  //       setUsers(res.data);
+  //     })
+  //     .catch((res) => {
+  //       console.log(res);
+  //     });
+  //   }
+  // }, []);
 
   const removeWorker = (id: string) => {
     console.log('hey', id);
@@ -35,11 +35,11 @@ const UsersList = () => {
     UserServices.delete(id)
       .then((res) => {
         console.log('Response', res);
-        if (users) {
-          const newWorkerRequests = users.filter((workerRequests) => {
+        if (props.value) {
+          const newWorkerRequests = props.value.filter((workerRequests) => {
             return workerRequests._id !== id;
           });
-          setUsers(newWorkerRequests);
+          props.onChange(newWorkerRequests);
         }
         closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -112,7 +112,7 @@ const UsersList = () => {
       valueGetter: (params) => params.row.basicDetails.firstName,
     },
     {
-      field: 'secondName',
+      field: 'lastName',
       headerName: 'Last Name:',
       width: 130,
       valueGetter: (params) => params.row.basicDetails.lastName,
@@ -222,10 +222,10 @@ const UsersList = () => {
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid
-            rows={users ?? []}
+            rows={props.value ?? []}
             columns={columns}
             getRowId={(row) => row._id}
-            loading={users === null}
+            loading={props.value.length===0}
           />
         </Card>
       </Grid>

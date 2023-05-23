@@ -100,8 +100,8 @@ export default {
       axios.patch('/hr/staffs/'+staff._id, staff),
     );
   },
-  getAll: () => getStandardResponse<User[]>(
-    axios.get('/hr/staffs'),
+  getAll: (condition?:{status?: number; kind?:UserKind}) => getStandardResponse<User[]>(
+    axios.get('/hr/staffs/', { params: condition } ),
     (users) => users.map((item: any) => ({
       ...item,
       basicDetails: {

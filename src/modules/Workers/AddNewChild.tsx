@@ -124,7 +124,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               onChange={(e) =>
                 setNewChild((newchild) => ({
                   ...newchild,
-                  secondName: e.target.value,
+                  lastName: e.target.value,
                 }))
               }
               fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
