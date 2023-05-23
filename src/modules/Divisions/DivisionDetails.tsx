@@ -71,7 +71,7 @@ const DivisionDetailsPage = () => {
         noOfChurches: 0,
         coordinator: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -146,7 +146,7 @@ const DivisionDetailsPage = () => {
         },
         seniorLeader: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -221,7 +221,7 @@ const DivisionDetailsPage = () => {
         },
         juniorLeader: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',

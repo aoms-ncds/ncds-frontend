@@ -5,8 +5,9 @@ import NewAddressForm from './NewAddressForm';
 import NewOfficialDetailsForm from './NewOfficialDetailsForm';
 import NewSupportDetailsForm from './NewSupportDetailsForm';
 import NewUserSupportStructureForm from './NewUserSupportStructureForm';
+import SpouseForm from '../../../Workers/components/SpouseForm';
 
-const UserForm = (props: FormComponentProps<CreatableNewUser, {
+const UserForm = <UserKind extends CreatableNewUser >(props: FormComponentProps<UserKind, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -26,6 +27,11 @@ const UserForm = (props: FormComponentProps<CreatableNewUser, {
           <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step>
+          { props.value.kind === 'worker' && (
+            <Step>
+              <StepLabel>Spouse details</StepLabel>
+            </Step>
+          )}
         </Stepper>
       </Container>
       <Container>
@@ -159,7 +165,11 @@ const UserForm = (props: FormComponentProps<CreatableNewUser, {
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  props.onSubmit && props.onSubmit(props.value);
+                  if (props.value.kind === 'worker') {
+                    setActiveStep((currentStep) => currentStep+1);
+                  } else {
+                    props.onSubmit && props.onSubmit(props.value);
+                  }
                 }}>
                   <Grid container spacing={3}>
                     <NewUserSupportStructureForm
@@ -169,6 +179,45 @@ const UserForm = (props: FormComponentProps<CreatableNewUser, {
                         ...props.value,
                         supportStructure: newSupportStructure,
                       })}
+                      options={props.options}
+                    />
+                  </Grid>
+
+                  <div style={{
+                    float: 'right',
+                    marginBottom: 2,
+                    marginTop: 2,
+                    padding: 20,
+                  }}>
+                    <Button
+                      onClick={() => setActiveStep(0)}
+                      sx={{ padding: '16px 64px', mr: 1 }}
+                    > Review from first step </Button>
+                    <Button
+                      onClick={() => setActiveStep((step) => step-1)}
+                      variant="outlined"
+                      sx={{ padding: '16px 64px', mr: 1 }}
+                    > Go back </Button>
+                    <Button
+                      type='submit'
+                      variant="contained"
+                      sx={{ padding: '16px 64px' }}
+                    > {props.value.kind === 'staff' ? 'Submit':'Next'} </Button>
+                  </div>
+                </form>
+              </CardContent>
+            )}
+            {(activeStep === 4 && props.value.kind === 'worker') &&(
+              <CardContent>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  props.onSubmit && props.onSubmit(props.value);
+                }}>
+                  <Grid container spacing={3}>
+                    <SpouseForm
+                      action={props.action}
+                      value={props.value.spouse}
+                      onChange={(spouse) => props.onChange({ ...props.value, spouse })}
                       options={props.options}
                     />
                   </Grid>

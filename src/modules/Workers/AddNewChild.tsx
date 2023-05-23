@@ -9,6 +9,7 @@ import { enqueueSnackbar } from 'notistack';
 import { childSupport } from './extras/WorkersConfig';
 import { useParams } from 'react-router-dom';
 import UserServices from '../User/extras/UserServices';
+import { CreatableChild } from './extras/ChildTypes';
 interface ChildFormPagerops{
     action: 'add'|'edit'|'view';
   }

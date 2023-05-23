@@ -12,6 +12,7 @@ import DropdownButton from '../../../components/DropDownButton';
 
 import WorkerServices from '../extras/WorkersServices';
 import { DataGrid } from '@mui/x-data-grid';
+import { Child } from '../extras/ChildTypes';
 
 const ChildListPage = () => {
   const [childList, setChildList] = useState<Child[]>();
