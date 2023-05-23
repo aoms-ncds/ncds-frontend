@@ -4,6 +4,8 @@ import {
   Edit as EditIcon,
   Preview as PreviewIcon,
   Delete as DeleteIcon,
+  NoAccounts as NoAccountsIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -11,6 +13,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import WorkerServices from '../../Workers/extras/WorkersServices';
 import { Avatar, Card, Grid } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
+import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 
 const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOrWorker[], {kind: UserKind}>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkerServices;
@@ -35,6 +38,62 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       });
   };
 
+  const deactivateWorker = (id: string) => {
+    console.log('hey', id);
+    const snackbarId = enqueueSnackbar({
+      message: 'Deactivating Worker',
+      variant: 'info',
+    });
+    UserServices.deactivate(id)
+      .then((res) => {
+        console.log('Response', res);
+        if (props.value) {
+          const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
+          props.onChange(newWorkerRequests);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+  const activateWorker = (id: string) => {
+    console.log('hey', id);
+    const snackbarId = enqueueSnackbar({
+      message: 'Activating Worker',
+      variant: 'info',
+    });
+    UserServices.activate(id)
+      .then((res) => {
+        console.log('Response', res);
+        if (props.value) {
+          const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
+          props.onChange(newWorkerRequests);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   const columns: GridColDef<StaffOrWorker>[] = [
     {
       field: 'image',
@@ -78,6 +137,25 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
                 execDelete(renderCellParams.row._id);
               },
             },
+            (props.row.status==UserLifeCycleStates.ACTIVE?(
+              {
+                id: 'deactivate',
+                text: 'Deactivate',
+                component: Link,
+                icon: NoAccountsIcon,
+                onClick: () => {
+                  deactivateWorker(props.row._id);
+                },
+              }):({
+              id: 'activate',
+              text: 'Activate',
+              component: Link,
+              icon: PersonIcon,
+              onClick: () => {
+                activateWorker(props.row._id);
+              },
+            })),
+
           ]}
         />
       ),
@@ -204,7 +282,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
             rows={props.value ?? []}
             columns={columns}
             getRowId={(row) => row._id}
-            loading={props.value.length===0}
+            loading={props.value===null}
           />
         </Card>
       </Grid>
