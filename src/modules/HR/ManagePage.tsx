@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Container, Dialog, DialogActions,
-  DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import HRServices from './extras/HRServices';
-import DropdownButton from '../../components/DropDownButton';
+import { Button, Card, Grid } from '@mui/material';
 import {
-  Edit as EditIcon,
   Add as AddIcon,
-  Delete as DeleteIcon,
-
 } from '@mui/icons-material';
-import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import UserServices from '../User/extras/UserServices';
 import { Link } from 'react-router-dom';
-import UsersList from '../Workers/components/UsersList';
+import UsersList from '../User/components/UsersList';
 
 
 const HRManagePage = () => {

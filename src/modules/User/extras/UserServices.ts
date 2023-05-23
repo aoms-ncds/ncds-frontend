@@ -100,6 +100,12 @@ export default {
       axios.patch('/hr/staffs/'+staff._id, staff),
     );
   },
+  activate: ( id:string) => getStandardResponse<CreatableStaff>(
+    axios.patch(`/users/${id}/activate`), // should be changed WRT module
+  ),
+  deactivate: ( id:string) => getStandardResponse<CreatableStaff>(
+    axios.patch(`/users/${id}/deactivate`), // should be changed WRT module
+  ),
   getAll: (condition?:{status?: number; kind?:UserKind}) => getStandardResponse<User[]>(
     axios.get('/hr/staffs/', { params: condition } ),
     (users) => users.map((item: any) => ({

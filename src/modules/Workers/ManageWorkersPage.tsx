@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import UsersList from './components/UsersList';
+import UsersList from '../User/components/UsersList';
 import { Button, Card, Grid, Tab, Tabs } from '@mui/material';
 import {
   Add as AddIcon,
@@ -21,7 +21,8 @@ const ManageWorkerPage = () => {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    UserServices.getAll({ status: UserLifeCycleStates.APPROVED })
+    if (currentTab==0) {
+      UserServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
         console.log(res);
         setUsers(res.data);
@@ -29,7 +30,17 @@ const ManageWorkerPage = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+    } else if (currentTab==3) {
+      UserServices.getAll({ status: UserLifeCycleStates.INACTIVE })
+    .then((res) => {
+      console.log(res);
+      setUsers(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
+    }
+  }, [currentTab]);
   return (
     <CommonPageLayout title='Manage Workers'>
       <Grid container spacing={2}>
@@ -44,7 +55,9 @@ const ManageWorkerPage = () => {
             <Tabs value={currentTab} onChange={switchTab} aria-label="basic tabs example">
               <Tab label="Workers" {...a11yProps(0)} />
               <Tab label="Spouces" {...a11yProps(1)} />
-              <Tab label="Child" {...a11yProps(1)} />
+              <Tab label="Child" {...a11yProps(2)} />
+              <Tab label="Deactivated" {...a11yProps(3)} />
+
               {/* <Tab label="Files" {...a11yProps(4)} /> */}
             </Tabs>
           </Grid>
@@ -70,6 +83,11 @@ const ManageWorkerPage = () => {
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
           < ChildListPage />
+        </TabPanel>
+        <TabPanel value={currentTab} index={3}>
+          <UsersList<User> value={users} onChange={(newUsers) => {
+            setUsers(newUsers);
+          } } action={'view'} />
         </TabPanel>
 
       </Card>

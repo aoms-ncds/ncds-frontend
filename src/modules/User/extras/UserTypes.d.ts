@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import OfficialDetails from '../../Workers/OfficialDetails';
+import UserLifeCycleStates from './UserLifeCycleStates';
 
 export {};
 
@@ -87,6 +88,8 @@ declare global {
     officialDetails: NewOfficialDetails;
     supportDetails: NewUserSupportDetails;
     supportStructure: NewUserSupportStructure;
+    status?:UserLifeCycleStates;
+
   }
   interface CreatableNewUser extends Creatable<NewUser>{
     kind: UserKind;
