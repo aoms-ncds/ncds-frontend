@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Typography, Checkbox } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -193,22 +193,19 @@ const AddNewSpousePage = (props: SpouseFormPagerops) => {
           </Grid>
 
           <Grid item xs={12} md={6} >
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              // defaultValue="Yes"
-              name="radio-buttons-group"
-              row
-              value={newSpouse.working ? 'Yes' : 'No'}
+            <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
+            <Checkbox
+              checked={newSpouse.working}
               onChange={(e) =>
                 setNewSpouse((prev) => ({
                   ...prev,
-                  Working: e.target.value === 'Yes',
+                  Working: e.target.checked,
                 }))
               }
-            >
-              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-              <FormControlLabel value="No" control={<Radio />} label="No" />
-            </RadioGroup>
+              color="primary"
+            />
+
+
           </Grid>
           <Grid item xs={12} md={6} >
 

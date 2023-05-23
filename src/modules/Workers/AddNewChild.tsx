@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Typography, Checkbox } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -163,25 +163,18 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
           </Grid>
           <Grid item xs={12} md={6} >
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue={false}
-                value={newChild?.studying}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    studying: e.target.value === 'true',
-                  }))
-                }
-                name="radio-buttons-group"
-                row
-              >
-                <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                <FormControlLabel value={false} control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
+
+            <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
+            <Checkbox
+              checked={newChild.studying}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  studying: e.target.checked,
+                }))
+              }
+              color="primary"
+            />
           </Grid>
           <Grid item xs={12} md={6} >
             <TextField
@@ -198,25 +191,19 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
           </Grid>
           <Grid item xs={12} md={6} >
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue={false}
-                value={newChild?.working}
-                onChange={(e) =>
-                  setNewChild((newchild) => ({
-                    ...newchild,
-                    working: e.target.value === 'true',
-                  }))
-                }
-                name="radio-buttons-group"
-                row
-              >
-                <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                <FormControlLabel value={false} control={<Radio />} label="No" />
-              </RadioGroup>
-            </FormControl>
+
+            <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
+            <Checkbox
+              checked={newChild.working}
+              onChange={(e) =>
+                setNewChild((newchild) => ({
+                  ...newchild,
+                  working: e.target.checked,
+                }))
+              }
+              color="primary"
+            />
+
 
           </Grid>
           <Grid item xs={12} md={6} >
