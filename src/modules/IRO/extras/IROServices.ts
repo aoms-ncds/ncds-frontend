@@ -82,7 +82,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -157,7 +157,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -232,7 +232,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -256,7 +256,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
 
         },
         mainCategory: 'Fr request',
@@ -350,7 +350,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -425,7 +425,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -500,7 +500,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -524,7 +524,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
         },
         mainCategory: 'Fr request',
         sanction: '50000',
@@ -617,7 +617,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -692,7 +692,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -767,7 +767,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -791,7 +791,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
         },
         mainCategory: 'Fr request',
         sanction: '50000',

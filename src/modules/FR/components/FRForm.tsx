@@ -46,7 +46,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [coordinators, setCoordinators] = useState<Staff[]>();
   const [workers, setWorkers] = useState<User[]>();
   const [divisions, setDivisions] = useState<IETDivisions[]>();
-  const [subDivisions, setSubDivisions] = useState<Subdivisions[]>();
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] =
     useState<MainCategory>();
@@ -268,7 +268,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     value={props.value.purposeSubdivision}
                     options={subDivisions ?? []}
                     getOptionLabel={(subDivision) =>
-                      subDivision.subDivisionName
+                      subDivision.name
                     }
                     onChange={(e, selectedSubdivision) => {
                       if (selectedSubdivision && props.action !== 'view') {

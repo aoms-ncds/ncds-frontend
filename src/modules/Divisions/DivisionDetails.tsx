@@ -17,10 +17,9 @@ const DivisionDetailsPage = () => {
 
   const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    DivisionsServices.addDivision(action, divisionDetails)
+    DivisionsServices.create(divisionDetails)
       .then((res) => {
         console.log(res);
-        console.log(action);
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -124,7 +123,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -199,7 +198,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -274,7 +273,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -298,7 +297,7 @@ const DivisionDetailsPage = () => {
       },
       subDivisions: [{
         _id: '',
-        subDivisionName: '',
+        name: '',
       }],
       FCRABankDetails: {
         bankname: '',

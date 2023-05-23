@@ -69,12 +69,6 @@ declare global {
   //   currentAddress: Address;
   // }
 
-  interface Subdivisions {
-    _id: string;
-    // division:IETDivisions;
-    subDivisionName: string;
-  }
-
   interface MainCategory {
     name: string;
     subcategory1: SubCategory1[];

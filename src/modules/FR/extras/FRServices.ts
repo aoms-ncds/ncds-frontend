@@ -259,7 +259,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -341,7 +341,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -422,7 +422,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -503,7 +503,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {

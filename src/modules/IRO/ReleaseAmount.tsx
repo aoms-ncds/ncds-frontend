@@ -83,7 +83,7 @@ const ReleaseAmount = () => {
           'noOfChurches': 5,
           'subdivision': {
             _id: 'skjdfj',
-            subDivisionName: 'ksdfj',
+            name: 'ksdfj',
           },
         },
         'supportDetails': {
@@ -158,7 +158,7 @@ const ReleaseAmount = () => {
           'noOfChurches': 5,
           'subdivision': {
             _id: 'skjdfj',
-            subDivisionName: 'ksdfj',
+            name: 'ksdfj',
           },
         },
         'supportDetails': {
@@ -233,7 +233,7 @@ const ReleaseAmount = () => {
           'noOfChurches': 5,
           'subdivision': {
             _id: 'skjdfj',
-            subDivisionName: 'ksdfj',
+            name: 'ksdfj',
           },
         },
         'supportDetails': {
@@ -257,7 +257,7 @@ const ReleaseAmount = () => {
     },
     subDivision: {
       _id: '',
-      subDivisionName: 'subdivision 1',
+      name: 'subdivision 1',
 
     },
     mainCategory: '',

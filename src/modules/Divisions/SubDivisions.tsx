@@ -14,13 +14,13 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
   onChange,
 })=> {
   const { editID } = useParams();
-  const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', subDivisionName: '' }]);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', name: '' }]);
   const handleAddSubDivision = () => {
     setSubDivisions([
       ...subDivisions,
       {
         _id: (subDivisions.length + 1).toString(),
-        subDivisionName: '',
+        name: '',
       },
     ]);
   };
@@ -70,10 +70,10 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
         <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
           <TextField
             label={`Sub Division ${index + 1}`}
-            value={subDivision.subDivisionName}
+            value={subDivision.name}
             onChange={(e) => {
               const newSubDivisions = [...subDivisions];
-              newSubDivisions[index].subDivisionName = e.target.value;
+              newSubDivisions[index].name = e.target.value;
               setSubDivisions(newSubDivisions);
               onChange(newSubDivisions); // Call the onChange prop with the updated division details
               return newSubDivisions;
