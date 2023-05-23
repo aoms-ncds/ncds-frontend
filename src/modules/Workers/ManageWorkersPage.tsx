@@ -93,7 +93,7 @@ const ManageWorkerPage = () => {
           <ChildListPage />
         </TabPanel>
         <TabPanel value={currentTab} index={3}>
-          <UsersList<User>
+          <UsersList<IWorker>
             value={users}
             onChange={(newUsers) => {
               setUsers(newUsers);

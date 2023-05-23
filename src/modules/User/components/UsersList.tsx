@@ -10,13 +10,13 @@ import {
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import WorkerServices from '../../Workers/extras/WorkersServices';
 import { Avatar, Card, Grid } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
+import WorkersServices from '../../Workers/extras/WorkersServices';
 
 const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOrWorker[], {kind: UserKind}>) => {
-  const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkerServices;
+  const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
 
   const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
@@ -44,7 +44,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       message: 'Deactivating Worker',
       variant: 'info',
     });
-    UserServices.deactivate(id)
+    StaffOrWorkerServices.deactivate(id)
       .then((res) => {
         console.log('Response', res);
         if (props.value) {
@@ -72,7 +72,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       message: 'Activating Worker',
       variant: 'info',
     });
-    UserServices.activate(id)
+    StaffOrWorkerServices.activate(id)
       .then((res) => {
         console.log('Response', res);
         if (props.value) {
@@ -137,14 +137,14 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
                 execDelete(renderCellParams.row._id);
               },
             },
-            (props.row.status==UserLifeCycleStates.ACTIVE?(
+            (renderCellParams.row.status==UserLifeCycleStates.ACTIVE?(
               {
                 id: 'deactivate',
                 text: 'Deactivate',
                 component: Link,
                 icon: NoAccountsIcon,
                 onClick: () => {
-                  deactivateWorker(props.row._id);
+                  deactivateWorker(renderCellParams.row._id);
                 },
               }):({
               id: 'activate',
@@ -152,7 +152,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
               component: Link,
               icon: PersonIcon,
               onClick: () => {
-                activateWorker(props.row._id);
+                activateWorker(renderCellParams.row._id);
               },
             })),
 

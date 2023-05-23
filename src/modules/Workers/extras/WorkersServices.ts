@@ -88,14 +88,14 @@ export default {
    * @param {string} id - The ID of the worker to approve.
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the approved worker.
    */
-  approve: (id: string) =>
-    getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`)),
+  approve: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`)),
 
   /**
    * Rejects a worker.
    * @param {string} id - The ID of the worker to reject.
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the rejected worker.
    */
-  reject: (id: string) =>
-    getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`)),
+  reject: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`)),
+  activate: ( id:string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`)),
+  deactivate: ( id:string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`)),
 };

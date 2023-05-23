@@ -77,4 +77,7 @@ export default {
         updatedAt: moment(data.updatedAt),
       }),
     ),
+
+  activate: ( id:string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`)),
+  deactivate: ( id:string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`)),
 };
