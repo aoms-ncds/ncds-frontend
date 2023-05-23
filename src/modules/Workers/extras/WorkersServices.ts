@@ -35,15 +35,6 @@ export default {
       axios.patch('/hr/staffs/'+staff._id, staff),
     );
   },
-  approve: ( id:string) => getStandardResponse<number>(
-    dummyRequest({
-      data: id,
-      // error: null,
-      message: 'Approved',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
   delete: ( workerId: string) => getStandardResponse<number>(
     dummyRequest({
       data: workerId,
