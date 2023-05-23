@@ -95,12 +95,13 @@ declare global {
   }
   interface User extends MongooseDocument {
     workerCode: string;
+    kind: UserKind;
     basicDetails: NewUserBasicDetails;
     officialDetails: NewOfficialDetails;
     supportDetails: NewUserSupportDetails;
     supportStructure: NewUserSupportStructure;
   }
-  interface CreatableNewUser extends Creatable<NewUser>{
+  interface CreatableNewUser extends Creatable<User>{
     workerCode?: NewUser['workerCode'];
     kind: UserKind;
     basicDetails: CreatableNewUserBasicDetails;

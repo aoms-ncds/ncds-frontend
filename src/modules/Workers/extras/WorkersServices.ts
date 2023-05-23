@@ -6,25 +6,24 @@ export default {
   getCount: () => getStandardResponse<number>(
     axios.get('/hr/staffs/count'),
   ),
-  approve: ( id:string) => getStandardResponse<number>(
-    dummyRequest({
-      data: id,
-      // error: null,
-      message: 'Approved',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+
   creates: (worker: CreatableNewUser) => {
-    return getStandardResponse<CreatableWorker>(
+    return getStandardResponse<Worker>(
       axios.post('/workers', worker),
     );
   },
   edit: (worker: CreatableNewUser) => {
-    return getStandardResponse<CreatableWorker>(
+    return getStandardResponse<Worker>(
       axios.patch(`/workers/${worker._id}`, worker),
     );
   },
+
+  approve: ( id:string) => getStandardResponse<Worker>(
+    axios.patch(`/workers/${id}/approve`),
+  ),
+  reject: ( id:string) => getStandardResponse<Worker>(
+    axios.patch(`/workers/${id}/reject`),
+  ),
   // getAll: () => getStandardResponse<[]>(
   //   dummyRequest({
   //     data: [{
@@ -387,6 +386,8 @@ export default {
         spouseOf: {
           '_id': '646703c19e433f67d27019b2',
           'workerCode': '22',
+         
+ 'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',

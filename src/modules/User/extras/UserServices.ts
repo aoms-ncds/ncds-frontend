@@ -11,6 +11,8 @@ export default {
         user: {
           '_id': '646703c19e433f67d27019b2',
           'workerCode': '22',
+
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -100,8 +102,8 @@ export default {
       axios.patch('/hr/staffs/'+staff._id, staff),
     );
   },
-  getAll: () => getStandardResponse<User[]>(
-    axios.get('/hr/staffs'),
+  getAll: (condition?:{status?: number; kind?:UserKind}) => getStandardResponse<User[]>(
+    axios.get('/hr/staffs/', { params: condition } ),
     (users) => users.map((item: any) => ({
       ...item,
       basicDetails: {

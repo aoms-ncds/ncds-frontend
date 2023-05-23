@@ -207,7 +207,9 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'workerCode': '22',         
+ 'kind': 'staff',
+
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -289,7 +291,9 @@ export default {
           remark: 'HI Hlo jhvaj hfgadkhjfga yukhj gfiuyakhfigfi  uaigqaufjuka jiuklfgfuaukg fgafiukf,adyuja yufafyuayiufgauiygfdiuagfukjgaukjfgaiufgiaugfiuagfiuagfk.afmlakaukgayjgfukhjagfjhafl,anhajhfukagfkuajh.kahfilahg lahifu aufg ukagfuiag uagfiuagfiu giuaguiaguiofuoauooiua or oua uoa uoa rouar iuoauoafuioa uaurua ua uoa yuar ur you8a ruak uoahyfuioafuiafuahyfuafhuafhuiaf',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'workerCode': '22',         
+ 'kind': 'staff',
+
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -370,7 +374,9 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'workerCode': '22',         
+ 'kind': 'staff',
+
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -451,7 +457,9 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'workerCode': '22',         
+ 'kind': 'staff',
+
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',

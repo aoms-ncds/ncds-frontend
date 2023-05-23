@@ -3,12 +3,14 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
 import UserServices from '../User/extras/UserServices';
+import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 
 const ApproveWorkerPage = () => {
   const [WorkerRequests, setWorkerRequests] = useState<User[]|null>(null);
+
   const approveWorker = (id: string) => {
     WorkerServices.approve(id)
       .then((res) => {
@@ -30,8 +32,31 @@ const ApproveWorkerPage = () => {
         });
       });
   };
+
+  const rejectWorker = (id: string) => {
+    WorkerServices.reject(id)
+      .then((res) => {
+        if (WorkerRequests) {
+          const newWorkers = WorkerRequests.filter((workerRequests) => {
+            return workerRequests._id !== id;
+          });
+          setWorkerRequests(newWorkers);
+        }
+        enqueueSnackbar({
+          message: 'Rejected',
+          variant: 'warning',
+        });
+      })
+      .catch((err) => {
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+
   useEffect(() => {
-    UserServices.getAll()
+    UserServices.getAll({ status: UserLifeCycleStates.CREATED })
    .then((res) => {
      console.log(res);
      setWorkerRequests(res.data);
@@ -40,10 +65,20 @@ const ApproveWorkerPage = () => {
     console.log(res);
   });
   }, []);
-  const columns = [
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'secondName', headerName: 'Last Name:', width: 130 },
+  const columns:GridColDef<User>[] = [
+    { field: 'workerCode', headerName: 'Worker Code', width: 170 },
+    {
+      field: 'firstName',
+      headerName: 'First Name',
+      width: 70,
+      valueGetter: (params) => params.row.basicDetails.firstName,
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last Name:',
+      width: 130,
+      valueGetter: (params) => params.row.basicDetails.lastName,
+    },
     { field: 'view', headerName: 'View', width: 130, renderCell: (props: any) => (
       <Button
         component={Link}
@@ -63,6 +98,17 @@ const ApproveWorkerPage = () => {
         } }
       >
             Approve
+      </Button>
+    ) },
+    { field: 'Reject', headerName: 'Reject', width: 130, renderCell: (props: any) => (
+      <Button
+        variant='contained'
+        color='error'
+        onClick={() => {
+          rejectWorker(props.row._id);
+        } }
+      >
+            Reject
       </Button>
     ) },
     { field: 'phone', headerName: 'Phone', width: 130 },

@@ -68,7 +68,7 @@ const ChildListPage = () => {
     },
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'secondName', headerName: 'Last Name:', width: 130 },
+    { field: 'lastName', headerName: 'Last Name:', width: 130 },
     { field: 'dob', headerName: 'DOB', width: 170 },
     { field: 'age', headerName: 'Age', renderCell: (props: any) => (
       <p> {props.row.dob?.fromNow()}</p>

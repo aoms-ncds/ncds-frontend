@@ -18,7 +18,7 @@ import UsersList from '../Workers/components/UsersList';
 
 
 const HRManagePage = () => {
-  const [staffs, setStaffs] = useState<User[] | null>(null);
+  const [staffs, setStaffs] = useState<User[] >([]);
 
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const HRManagePage = () => {
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
-          <UsersList />
+          <UsersList value={staffs} onChange={(newStaffs) => setStaffs(newStaffs)} action={'view'} />
 
         </Card>
       </Grid>
