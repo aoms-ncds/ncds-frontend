@@ -6,9 +6,10 @@ import { CreatableIWorker, IWorker } from './WorkersTypes';
 export default {
   /**
    * Retrieves the count of workers.
+   * @param {unknown|null} conditions - Count based on a filter condition
    * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the count of workers.
    */
-  getCount: () => getStandardResponse<number>(axios.get('/workers/')),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/count', { params: conditions })),
 
   /**
    * Creates a new worker.

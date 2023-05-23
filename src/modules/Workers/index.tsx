@@ -3,6 +3,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import WorkerServices from './extras/WorkersServices';
+import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number|null>(null);
@@ -14,7 +15,7 @@ const WorkersDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    WorkerServices.getCount()
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.CREATED })
       .then((res) => setUnapprovedWorkersCount(res.data))
       .catch((error) => {
         console.log(error);

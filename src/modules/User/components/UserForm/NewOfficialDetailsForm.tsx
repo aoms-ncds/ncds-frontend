@@ -11,6 +11,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
     textField: { variant: 'filled' | 'outlined' | 'standard' };
 }>) => {
   const [subDivisions, setSubDivisions] = useState<SubDivision[]|null>(null);
+
   useEffect(() => {
     DivisionsServices.getSubDivisions()
       .then((res) => setSubDivisions(res.data))
@@ -100,14 +101,16 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
 
       <Grid item xs={12} md={6}>
         <Autocomplete
-          options={['Dummy subdivision']}
+          options={subDivisions ?? []}
           value={props.value.subdivision}
-          onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal })}
+          getOptionLabel={(subDiv) => subDiv.name}
+          onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal??undefined })}
           renderInput={(params) => (
             <TextField
               {...params}
               label="Subdivision"
               variant={props.options?.textField.variant}
+              required
             />
           )}
         />
@@ -139,6 +142,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
             <TextField
               {...params}
               label="Status"
+              required
               variant={props.options?.textField.variant}
             />
           )}

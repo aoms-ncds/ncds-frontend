@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { DivisionDetails, SubDivision } from './DivisionsTypes';
+import { Division, SubDivision } from './DivisionsTypes';
 
 const isObjectId = (id: string) => {
   const objectIdPattern = /^[0-9a-fA-F]{24}$/;
@@ -16,31 +16,20 @@ export default {
     axios.get('/divisions/count'),
   ),
 
-  getDivisions: () => getStandardResponse<DivisionDetails[]>(
+  getDivisions: () => getStandardResponse<Division[]>(
     axios.get('/divisions/'),
   ),
-  getSubDivisions: () => getStandardResponse<SubDivision[]>(
-    dummyRequest<SubDivision[]>({
-      data: [{
-        _id: '2',
-        name: 'sub1',
-      },
-      ],
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
-  create: (division: DivisionDetails) => {
-    return getStandardResponse<DivisionDetails>(
+  getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions')),
+  create: (division: Division) => {
+    return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         axios.post('/divisions/', {
           ...division,
           division: {
-            ...division.division,
-            coordinator: division.division.coordinator?._id,
-            juniorLeader: division.division.juniorLeader?._id,
-            seniorLeader: division.division.seniorLeader?._id,
+            ...division.details,
+            coordinator: division.details.coordinator?._id,
+            juniorLeader: division.details.juniorLeader?._id,
+            seniorLeader: division.details.seniorLeader?._id,
           },
           subDivisions: [],
         })
@@ -66,17 +55,17 @@ export default {
     );
   },
 
-  editDivision: (divisionId: string, division: DivisionDetails) => {
-    return getStandardResponse<DivisionDetails>(
+  editDivision: (divisionId: string, division: Division) => {
+    return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         // console.log(division);
         axios.patch('/divisions/' + divisionId, {
           ...division,
           division: {
-            ...division.division,
-            coordinator: division.division.coordinator?._id,
-            juniorLeader: division.division.juniorLeader?._id,
-            seniorLeader: division.division.seniorLeader?._id,
+            ...division.details,
+            coordinator: division.details.coordinator?._id,
+            juniorLeader: division.details.juniorLeader?._id,
+            seniorLeader: division.details.seniorLeader?._id,
           },
           subDivisions: [],
         })
@@ -111,7 +100,7 @@ export default {
     );
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDivisionbyId: (divisionId: string) => getStandardResponse<DivisionDetails>(
+  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(
 
     axios.get('/divisions/'+divisionId),
   ),

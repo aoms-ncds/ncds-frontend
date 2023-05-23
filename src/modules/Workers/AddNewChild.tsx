@@ -148,12 +148,12 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             <FormControl variant="outlined" fullWidth>
               <DatePicker
                 label="Date Of Birth"
-                value={newChild?.dob}
+                value={newChild?.dateOfBirth}
                 onChange={(date: Moment | null) => {
                   if (date) {
                     setNewChild((newChild) => ({
                       ...newChild,
-                      dob: date,
+                      dateOfBirth: date,
                     }));
                   }
                 }}
@@ -165,7 +165,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
             <TextField
               label="Age"
-              value={newChild?.dob?.fromNow()}
+              value={newChild?.dateOfBirth?.fromNow()}
               // onChange={(e) =>
               //   setNewChild((newchild) => ({
               //     ...newchild,

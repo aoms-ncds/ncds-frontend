@@ -13,6 +13,7 @@ interface StaffDropdownProps {
   ) => void;
   textFieldProps?: TextFieldProps;
   label: string;
+  required?: boolean;
 }
 
 const StaffDropdown = (props: StaffDropdownProps) => {
@@ -50,7 +51,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
         <TextField
           {...params}
           label={props.label}
-          required
+          required={props.required === undefined ? true : props.required}
           inputProps={{
             ...params.inputProps,
           }}

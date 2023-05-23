@@ -35,6 +35,8 @@ const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
       <Grid item xs={12} md={6} lg={6}>
         <Autocomplete
           options={designations??[]}
+          value={props.value.designation}
+          onChange={(e, newValue) => props.onChange({ ...props.value, designation: newValue ?? undefined })}
           getOptionLabel={(option) => option.name}
           renderInput={(params) =><TextField
             {...params}

@@ -5,8 +5,8 @@ import { BankDetails } from '../extras/DivisionsTypes';
 
 const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(props.value?? {
-    bankname: '',
-    branchname: '',
+    bankName: '',
+    branchName: '',
     accountNumber: '',
     IFSCCode: '',
     beneficiary: '',
@@ -22,7 +22,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
       <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Bank Name"
-          value={newBankDetails.bankname }
+          value={newBankDetails.bankName }
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
@@ -42,7 +42,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
 
         <TextField
           label="Branch Name"
-          value={newBankDetails.branchname }
+          value={newBankDetails.branchName }
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {

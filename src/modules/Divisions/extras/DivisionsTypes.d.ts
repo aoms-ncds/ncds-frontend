@@ -1,7 +1,15 @@
 import { MongooseDocument, Creatable, Address } from '../../../extras/CommonTypes';
 
-export interface IETDivisions{
-    divisionName: string;
+export interface Division extends MongooseDocument{
+  // _id: GridRowId;
+   details: DivisionDetails;
+   subDivisions: SubDivision[];
+   FCRABankDetails: BankDetails;
+   localBankDetails:BankDetails;
+   _id?: string;
+ }
+export interface DivisionDetails{
+    name: string;
    // _id?: string;
     divisionId: string;
     contactNumber: string;
@@ -15,22 +23,14 @@ export interface IETDivisions{
     juniorLeader?: IWorker;
   }
 export interface BankDetails{
-  bankname:string;
-  branchname:string;
+  bankName:string;
+  branchName:string;
   accountNumber:string;
   IFSCCode:string;
   beneficiary?:string;
   }
-export interface DivisionDetails extends MongooseDocument{
- // _id: GridRowId;
-  division: IETDivisions;
-  subDivisions: SubDivision[];
-  FCRABankDetails: BankDetails;
-  localBankDetails:BankDetails;
-  _id?: string;
-}
 export interface SubDivision {
     _id?:string;
-    division?:DivisionDetails;
+    division?:Division;
     name:string;
   }

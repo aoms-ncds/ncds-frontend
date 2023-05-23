@@ -41,14 +41,14 @@ import { IWorker } from '../../Workers/extras/WorkersTypes';
 import { Staff } from '../../HR/extras/StaffTypes';
 import { FormComponentProps } from '../../../extras/CommonTypes';
 import { CreatableFR, FRPurpose, MainCategory, SubCategory1, SubCategory2, SubCategory3, Remark, CreatableRemark, Particulars } from '../extras/FRTypes';
-import { IETDivisions, SubDivision } from '../../Divisions/extras/DivisionsTypes';
+import { DivisionDetails, SubDivision } from '../../Divisions/extras/DivisionsTypes';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-  const [divisions, setDivisions] = useState<IETDivisions[]>();
+  const [divisions, setDivisions] = useState<DivisionDetails[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] =

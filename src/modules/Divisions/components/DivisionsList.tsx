@@ -11,10 +11,10 @@ import {
 } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { DivisionDetails } from '../extras/DivisionsTypes';
+import { Division } from '../extras/DivisionsTypes';
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
-  const [divisions, setDivisions] = useState<DivisionDetails[] | null>(null);
+  const [divisions, setDivisions] = useState<Division[] | null>(null);
 
   useEffect(() => {
     DivisionsServices.getDivisions()
@@ -55,7 +55,7 @@ const DivisionsList = () => {
           });
         });
   };
-  const columns:GridColDef<DivisionDetails>[] = [
+  const columns:GridColDef<Division>[] = [
     {
       field: '_manage',
       headerName: 'Action',
@@ -105,24 +105,24 @@ const DivisionsList = () => {
       renderCell: (props: any) => (
         <Link to={`/divisions/details/${props.row._id}`}
           style={{
-            textDecoration: 'none', color: 'inherit' }}>{props.row.division.divisionName}</Link>
+            textDecoration: 'none', color: 'inherit' }}>{props.row.details.name}</Link>
       ),
     },
     { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => (
-      <p> {props.row.division.coordinator?.firstName}</p>
+      <p> {props.row.details.coordinator?.firstName}</p>
     ), width: 130 },
     { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => (
-      <p>{props.row.division.coordinator?.email}</p>
+      <p>{props.row.details.coordinator?.email}</p>
     ), width: 130 },
     { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => (
-      <p>{props.row.division.coordinator?.phone}</p>
+      <p>{props.row.details.coordinator?.phone}</p>
     ), width: 130 },
 
     { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => (
-      <p> {props.row.division.noofWorkers}</p>
+      <p> {props.row.details.noofWorkers}</p>
     ), width: 130 },
     { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => (
-      <p> {props.row.division.noOfSubdivisions}</p>
+      <p> {props.row.details.noOfSubdivisions}</p>
     ), width: 130 },
 
   ];

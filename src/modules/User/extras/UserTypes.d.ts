@@ -1,6 +1,8 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
 import { Creatable, MongooseDocument, Address } from '../../../extras/CommonTypes';
+import { SubDivision } from '../../Divisions/extras/DivisionsTypes';
+import { Designation } from '../../HR/extras/DesignationTypes';
 
 
 export type UserKind = 'staff' | 'worker';
