@@ -75,13 +75,13 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await UserServices.creates(creatableUser);
+              const createdUser = await WorkersServices.creates(creatableUser);
             } else if (props.action ==='edit') {
-              const updatedUser = await UserServices.edit(creatableUser);
+              const updatedUser = await WorkersServices.edit(creatableUser);
             }
             enqueueSnackbar({
               variant: 'success',
-              message: `Created new ${creatableUser.kind}`,
+              message: props.action === 'add'?`Created new ${creatableUser.kind}`:`Updated  ${creatableUser.kind}`,
             });
           } catch (error:any) {
             enqueueSnackbar({

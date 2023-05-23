@@ -15,15 +15,16 @@ export default {
       timeout: 500,
     }),
   ),
-  create: (action: string ) => getStandardResponse<number>(
-    dummyRequest({
-      data: 1,
-      // error: null,
-      message: action+'ed staff',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  creates: (worker: CreatableNewUser) => {
+    return getStandardResponse<CreatableWorker>(
+      axios.post('/workers', worker),
+    );
+  },
+  edit: (worker: CreatableNewUser) => {
+    return getStandardResponse<CreatableWorker>(
+      axios.patch(`/workers/${worker._id}`, worker),
+    );
+  },
   // getAll: () => getStandardResponse<[]>(
   //   dummyRequest({
   //     data: [{

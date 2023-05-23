@@ -7,6 +7,7 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 // import WorkersServices from './extras/WorkersServices';
 import UserServices from '../User/extras/UserServices';
+import HRServices from './extras/HRServices';
 
 interface StaffFormPageProps{
   action: 'add'|'edit'|'view';
@@ -76,9 +77,9 @@ const StaffFormPage = (props: StaffFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await UserServices.creates(creatableUser);
+              const createdUser = await HRServices.creates(creatableUser);
             } else if (props.action ==='edit') {
-              const updatedUser = await UserServices.edit(creatableUser);
+              const updatedUser = await HRServices.edit(creatableUser);
             }
             enqueueSnackbar({
               variant: 'success',

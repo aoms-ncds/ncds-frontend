@@ -30,5 +30,15 @@ export default {
       timeout: 500,
     }),
   ),
+  creates: (staff: CreatableNewUser) => {
+    return getStandardResponse<CreatableStaff>(
+      axios.post('/hr/staffs', staff),
+    );
+  },
+  edit: (staff: CreatableNewUser) => {
+    return getStandardResponse<CreatableStaff>(
+      axios.patch('/hr/staffs/'+staff._id, staff),
+    );
+  },
 
 };

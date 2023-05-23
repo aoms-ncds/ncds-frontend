@@ -4,12 +4,17 @@ import { reasonToDeactivate, status } from '../extras/WorkersConfig';
 export { };
 
 declare global {
-    interface WorkersDetails{
-        IETWorker: IETWorker;
-        officialDetails: OfficialDetails;
-        supportDetails?: SupportDetails;
-        supportStructure?: SupportStructure;
+
+    interface Worker extends MongooseDocument, User{
+        type?:string;
+
     }
+    interface CreatableWorker extends Creatable<Worker>{ //
+        dob?: Moment;
+        doj?: Moment;
+        designation?: Designation;
+        department?: Department;
+      }
 
     interface OfficialDetails{
         leftOrg: Moment;
