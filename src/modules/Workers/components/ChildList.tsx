@@ -81,21 +81,15 @@ const ChildListPage = () => {
 
   ];
   return (
-    <div>
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        startIcon={<AddIcon />}
-        component={Link}
-        to="/workers/addchild"
-      >Add Child</Button><br /><br />
-
+    <>
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid rows={childList ?? []} columns={columns} getRowId={(row) => row._id} loading={childList === null} />
         </Card>
 
-      </Grid></div>
+      </Grid>
+    </>
   );
 };
 

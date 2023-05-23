@@ -34,7 +34,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
       if (editID) {
         const subdivisionId = deletedSubdivisionIds[0];
         if (subdivisionId) {
-          DivisionsServices.subDivisionMarkAsRemove(subdivisionId)
+          DivisionsServices.deleteSubDivision(subdivisionId)
           .then((res) => {
             enqueueSnackbar({
               message: res.message,

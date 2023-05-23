@@ -29,7 +29,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
   const { childId } = useParams();
   const [workers, setWorkers] = useState<IWorker[]>();
   const [newChild, setNewChild] = useState<CreatableChild>({
-    type: '',
+    // type: '',
     firstName: '',
     lastName: '',
   });
@@ -93,7 +93,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
     <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'} >
       <form onSubmit={props.action === 'add' ? AddChild : UpdateChild}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6} >
+          {/* <Grid item xs={12} md={6} >
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Type</FormLabel>
               <RadioGroup
@@ -113,7 +113,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                 <FormControlLabel value="existing" control={<Radio />} label="Existing" />
               </RadioGroup>
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={6} >
 
             <TextField

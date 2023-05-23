@@ -57,23 +57,25 @@ const ManageWorkerPage = () => {
               aria-label="basic tabs example"
             >
               <Tab label="Workers" {...a11yProps(0)} />
-              <Tab label="Spouces" {...a11yProps(1)} />
-              <Tab label="Child" {...a11yProps(2)} />
+              <Tab label="Spouses" {...a11yProps(1)} />
+              <Tab label="Children" {...a11yProps(2)} />
               <Tab label="Deactivated" {...a11yProps(3)} />
 
               {/* <Tab label="Files" {...a11yProps(4)} /> */}
             </Tabs>
           </Grid>
           <Grid item xs={12} lg={3}>
-            <Button
-              variant="contained"
-              sx={{ float: 'right', mt: 2, mr: 2 }}
-              startIcon={<AddIcon />}
-              component={Link}
-              to="/workers/add"
-            >
-              Add new
-            </Button>
+            { ([0, 1, 2].includes(currentTab)) && (
+              <Button
+                variant="contained"
+                sx={{ float: 'right', mt: 2, mr: 2 }}
+                startIcon={<AddIcon />}
+                component={Link}
+                to={currentTab === 0 ? '/workers/add' : currentTab === 1 ? '/workers/addspouse' : '/workers/addchild' }
+              >
+                { currentTab === 0 ? 'Add new' : currentTab === 1 ? 'Add Spouse' : 'Add Child' }
+              </Button>
+            )}
           </Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>

@@ -12,45 +12,40 @@ export default {
   //   headers: { ...getAuthHeader() },
   // })),
 
-  getCount: () => getStandardResponse<number>(
-    axios.get('/divisions/count'),
-  ),
+  getCount: () => getStandardResponse<number>(axios.get('/divisions/count')),
 
-  getDivisions: () => getStandardResponse<Division[]>(
-    axios.get('/divisions/'),
-  ),
+  getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/')),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions')),
   create: (division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
-        axios.post('/divisions/', {
-          ...division,
-          division: {
-            ...division.details,
-            coordinator: division.details.coordinator?._id,
-            juniorLeader: division.details.juniorLeader?._id,
-            seniorLeader: division.details.seniorLeader?._id,
-          },
-          subDivisions: [],
-        })
-        .then(async (createdDivision) => {
-          // Create subdivisions
-          try {
-            for (let i = 0; i < division.subDivisions.length; i++) {
-              const subDiv = division.subDivisions[i];
-              await axios.post(
-                '/divisions/sub_division/', {
+        axios
+          .post('/divisions/', {
+            ...division,
+            division: {
+              ...division.details,
+              coordinator: division.details.coordinator?._id,
+              juniorLeader: division.details.juniorLeader?._id,
+              seniorLeader: division.details.seniorLeader?._id,
+            },
+            subDivisions: [],
+          })
+          .then(async (createdDivision) => {
+            // Create subdivisions
+            try {
+              for (let i = 0; i < division.subDivisions.length; i++) {
+                const subDiv = division.subDivisions[i];
+                await axios.post('/divisions/sub_divisions/', {
                   division: createdDivision.data.data._id,
                   name: subDiv.name,
-                },
-              );
+                });
+              }
+              resolve(createdDivision);
+            } catch (error) {
+              reject(error);
             }
-            resolve(createdDivision);
-          } catch (error) {
-            reject(error);
-          }
-        })
-        .catch(reject);
+          })
+          .catch(reject);
       }),
     );
   },
@@ -59,16 +54,17 @@ export default {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         // console.log(division);
-        axios.patch('/divisions/' + divisionId, {
-          ...division,
-          division: {
-            ...division.details,
-            coordinator: division.details.coordinator?._id,
-            juniorLeader: division.details.juniorLeader?._id,
-            seniorLeader: division.details.seniorLeader?._id,
-          },
-          subDivisions: [],
-        })
+        axios
+          .patch('/divisions/' + divisionId, {
+            ...division,
+            division: {
+              ...division.details,
+              coordinator: division.details.coordinator?._id,
+              juniorLeader: division.details.juniorLeader?._id,
+              seniorLeader: division.details.seniorLeader?._id,
+            },
+            subDivisions: [],
+          })
           .then(async (updatedDivision) => {
             try {
               for (let i = 0; i < division.subDivisions.length; i++) {
@@ -78,12 +74,12 @@ export default {
 
                 if (subDiv._id) {
                   if (objectIdPattern.test(subDiv._id)) {
-                    await axios.patch('/divisions/sub_division/' + subDiv._id, {
+                    await axios.patch(`/divisions/sub_divisions/${subDiv._id}`, {
                       division: updatedDivision.data.data._id,
                       name: subDiv.name,
                     });
                   } else {
-                    await axios.post('/divisions/sub_division', {
+                    await axios.post('/divisions/sub_divisions', {
                       division: updatedDivision.data.data._id,
                       name: subDiv.name,
                     });
@@ -99,17 +95,12 @@ export default {
       }),
     );
   },
+  SubDivisionServices: {
+
+  },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(
+  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId)),
 
-    axios.get('/divisions/'+divisionId),
-  ),
-
-  subDivisionMarkAsRemove: ( subdivisionId: string) => getStandardResponse<number>(
-    axios.delete('/divisions/sub_division/'+subdivisionId),
-  ),
-  divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(
-    axios.delete('/divisions/'+divisionId),
-  ),
-
+  deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId)),
+  divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId)),
 };

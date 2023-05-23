@@ -83,21 +83,15 @@ const SpouseListPage = () => {
 
   ];
   return (
-    <div>
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        startIcon={<AddIcon />}
-        component={Link}
-        to="/workers/addspouse"
-      >Add Spouse</Button><br /><br />
-
+    <>
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid rows={spouseList ?? []} columns={columns} getRowId={(row) => row._id} loading={spouseList === null} />
         </Card>
 
-      </Grid></div>
+      </Grid>
+    </>
   );
 };
 

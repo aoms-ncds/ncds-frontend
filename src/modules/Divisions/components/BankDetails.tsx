@@ -22,12 +22,12 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
       <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Bank Name"
-          value={newBankDetails.bankName }
+          value={newBankDetails.bankName}
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
                 ...newBankDetails,
-                bankname: e.target.value,
+                bankName: e.target.value,
               };
               props.onChange(newBank); // Call the onChange prop with the updated division details
               return newBank;
@@ -47,7 +47,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
                 ...newBankDetails,
-                branchname: e.target.value,
+                branchName: e.target.value,
               };
               props.onChange(newBank); // Call the onChange prop with the updated division details
               return newBank;
