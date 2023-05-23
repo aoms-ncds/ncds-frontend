@@ -31,9 +31,9 @@ interface DivisionDetails extends MongooseDocument{
   _id?: string;
 }
 interface SubDivision {
-    _id:string;
-    division?:IETDivisions;
-    subDivisionName:string;
+    _id?:string;
+    division?:DivisionDetails;
+    name:string;
   }
 
 

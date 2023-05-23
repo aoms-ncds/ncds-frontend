@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkerServices from './extras/WorkersServices';
-import UserServices from '../User/extras/UserServices';
+import { IWorker } from './extras/WorkersTypes';
+
 const Profile = () => {
-  const [worker, setWorker] = useState<User | null>(
+  const [worker, setWorker] = useState<IWorker | null>(
     null,
   );
   const { workersId } = useParams();
 
   useEffect(() => {
     if (workersId) {
-      UserServices.getById(workersId)
+      WorkerServices.getById(workersId)
         .then((res) => {
           console.log(res.data);
           setWorker(res.data);

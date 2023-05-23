@@ -6,7 +6,6 @@ import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import Profile from '../Profile';
 import AddNewChildPage from '../AddNewChild';
-import AddNewSpousePage from '../AddNewSpouse';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -69,20 +68,20 @@ const workersPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['string'],
     },
-    {
-      title: 'add Spouse',
-      path: '/addspouse',
-      element: <AddNewSpousePage action={'add'} />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
-    {
-      title: 'edit Spouse',
-      path: '/editspouse/:spouseId',
-      element: <AddNewSpousePage action={'edit'} />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
+    // {
+    //   title: 'add Spouse',
+    //   path: '/addspouse',
+    //   element: <AddNewSpousePage action={'add'} />,
+    //   private: true,
+    //   requiredAccessRights: ['string'],
+    // },
+    // {
+    //   title: 'edit Spouse',
+    //   path: '/editspouse/:spouseId',
+    //   element: <AddNewSpousePage action={'edit'} />,
+    //   private: true,
+    //   requiredAccessRights: ['string'],
+    // },
 
   ],
 };

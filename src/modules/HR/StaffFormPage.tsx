@@ -76,7 +76,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await UserServices.creates(creatableUser);
+              const createdUser = await UserServices.create(creatableUser);
             } else if (props.action ==='edit') {
               const updatedUser = await UserServices.edit(creatableUser);
             }

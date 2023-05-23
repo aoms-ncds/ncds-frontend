@@ -17,7 +17,7 @@ export default {
     dummyRequest<SubDivision[]>({
       data: [{
         _id: '2',
-        subDivisionName: 'sub1',
+        name: 'sub1',
       },
       ],
       message: 'fetched data',
@@ -25,16 +25,36 @@ export default {
       timeout: 500,
     }),
   ),
-  addDivision: (action: 'add' | 'edit'|'view', division: DivisionDetails) => {
+  create: (division: DivisionDetails) => {
     return getStandardResponse<DivisionDetails>(
-      axios.post('/divisions/', {
-        ...division,
-        division: {
-          ...division.division,
-          coordinator: division.division.coordinator?._id,
-          juniorLeader: division.division.juniorLeader?._id,
-          seniorLeader: division.division.seniorLeader?._id,
-        },
+      new Promise((resolve, reject) => {
+        axios.post('/divisions/', {
+          ...division,
+          division: {
+            ...division.division,
+            coordinator: division.division.coordinator?._id,
+            juniorLeader: division.division.juniorLeader?._id,
+            seniorLeader: division.division.seniorLeader?._id,
+          },
+          subDivisions: [],
+        })
+        .then(async (createdDivision) => {
+          // Create subdivisions
+          try {
+            for (let i = 0; i < division.subDivisions.length; i++) {
+              const subDiv = division.subDivisions[i];
+              await axios.post(
+                '/divisions/sub_division/', {
+                  division: createdDivision.data.data._id,
+                  name: subDiv.name,
+                },
+              );
+            }
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .catch(reject);
       }),
     );
   },

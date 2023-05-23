@@ -9,8 +9,8 @@ export default {
       data: {
         token: 'skdfksj',
         user: {
+          'kind': 'staff',
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -62,7 +62,7 @@ export default {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -90,7 +90,7 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
-  creates: (staff: CreatableNewUser) => {
+  create: (staff: CreatableNewUser) => {
     return getStandardResponse<CreatableStaff>(
       axios.post('/hr/staffs', staff),
     );

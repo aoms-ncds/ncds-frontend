@@ -30,7 +30,7 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -82,7 +82,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -105,7 +105,7 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -157,7 +157,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -180,7 +180,7 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -232,7 +232,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -256,7 +256,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
 
         },
         mainCategory: 'Fr request',
@@ -298,7 +298,7 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -350,7 +350,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -373,7 +373,7 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -425,7 +425,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -448,7 +448,7 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -500,7 +500,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -524,7 +524,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
         },
         mainCategory: 'Fr request',
         sanction: '50000',
@@ -565,7 +565,7 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -617,7 +617,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -640,7 +640,7 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -692,7 +692,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -715,7 +715,7 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'workerCode': '22',
+            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -767,7 +767,7 @@ export default {
               'noOfChurches': 5,
               'subdivision': {
                 _id: 'skjdfj',
-                subDivisionName: 'ksdfj',
+                name: 'ksdfj',
               },
             },
             'supportDetails': {
@@ -791,7 +791,7 @@ export default {
         },
         subDivision: {
           _id: '1',
-          subDivisionName: 'subdivision 1',
+          name: 'subdivision 1',
         },
         mainCategory: 'Fr request',
         sanction: '50000',

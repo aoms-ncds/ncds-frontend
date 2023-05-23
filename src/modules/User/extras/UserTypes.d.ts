@@ -4,18 +4,6 @@ import OfficialDetails from '../../Workers/OfficialDetails';
 export {};
 
 declare global {
-  // interface User extends MongooseDocument {
-  //   firstName: string;
-  //   lastName: string;
-  //   dob: Moment;
-  //   doj?: Moment;
-  //   gender: Gender;
-  //   age: number;
-  //   maritalStatus?: MaritalStatus;
-  //   phone: string;
-  //   email: string;
-  //   spouse?: User;
-  // }
   interface NewUserBasicDetails{
     firstName: string;
     lastName: string;
@@ -94,14 +82,13 @@ declare global {
     MUTDeduction?: number;
   }
   interface User extends MongooseDocument {
-    workerCode: string;
+    kind: UserKind;
     basicDetails: NewUserBasicDetails;
     officialDetails: NewOfficialDetails;
     supportDetails: NewUserSupportDetails;
     supportStructure: NewUserSupportStructure;
   }
   interface CreatableNewUser extends Creatable<NewUser>{
-    workerCode?: NewUser['workerCode'];
     kind: UserKind;
     basicDetails: CreatableNewUserBasicDetails;
     officialDetails: CreatableNewOfficialDetails;

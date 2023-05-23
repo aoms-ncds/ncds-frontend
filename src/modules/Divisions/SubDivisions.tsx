@@ -5,19 +5,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
-const SubDivisionsPage = ({
-  withCardContainer = [],
-}: {
+interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
-}) => {
+  onChange: (newSubDivisions: SubDivision[]) => void;
+}
+const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
+  withCardContainer = [],
+  onChange,
+})=> {
   const { editID } = useParams();
-  const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', subDivisionName: '' }]);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', name: '' }]);
   const handleAddSubDivision = () => {
     setSubDivisions([
       ...subDivisions,
       {
         _id: (subDivisions.length + 1).toString(),
-        subDivisionName: '',
+        name: '',
       },
     ]);
   };
@@ -25,25 +28,25 @@ const SubDivisionsPage = ({
     const newSubDivisions = subDivisions.filter((_, i) => i !== index);
     const deletedSubdivision=subDivisions.filter((_, i) => i == index);
     const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
-    if (deletedSubdivisionIds.length > 0) {
-      console.log(deletedSubdivisionIds[0]);
-      if (editID) {
-        DivisionsServices.markAsRemove(deletedSubdivisionIds[0])
-      .then((res) => {
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-      }
-    }
+    // if (deletedSubdivisionIds.length > 0) {
+    //   console.log(deletedSubdivisionIds[0]);
+    //   if (editID) {
+    //     DivisionsServices.markAsRemove(deletedSubdivisionIds[0])
+    //   .then((res) => {
+    //     enqueueSnackbar({
+    //       message: res.message,
+    //       variant: 'success',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar({
+    //       message: err.message,
+    //       variant: 'error',
+    //     });
+    //   });
+    //   }
+    // }
     enqueueSnackbar({
       message: 'Deleted Sub Division',
       variant: 'success',
@@ -67,11 +70,13 @@ const SubDivisionsPage = ({
         <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
           <TextField
             label={`Sub Division ${index + 1}`}
-            value={subDivision.subDivisionName}
+            value={subDivision.name}
             onChange={(e) => {
               const newSubDivisions = [...subDivisions];
-              newSubDivisions[index].subDivisionName = e.target.value;
+              newSubDivisions[index].name = e.target.value;
               setSubDivisions(newSubDivisions);
+              onChange(newSubDivisions); // Call the onChange prop with the updated division details
+              return newSubDivisions;
             }}
             InputProps={{
               endAdornment: (

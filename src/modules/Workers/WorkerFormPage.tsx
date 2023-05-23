@@ -6,7 +6,7 @@ import moment from 'moment';
 import HRServices from '../HR/extras/HRServices';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
-import UserServices from '../User/extras/UserServices';
+import { CreatableIWorker, IWorker } from './extras/WorkersTypes';
 
 interface WorkerFormPageProps{
   action: 'add'|'edit'|'view';
@@ -14,7 +14,7 @@ interface WorkerFormPageProps{
 const WorkerFormPage = (props: WorkerFormPageProps) => {
   const { id } = useParams();
 
-  const [user, setUser] = useState<CreatableNewUser>({
+  const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
     kind: 'worker',
     basicDetails: {
@@ -38,13 +38,19 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     },
     supportStructure: {
     },
+    spouse: {
+      firstName: '',
+      lastName: '',
+      knownLanguages: [],
+
+    },
   });
 
   useEffect(() => {
     if (id) {
-      UserServices.getById(id).then((res) => {
+      WorkersServices.getById(id).then((res) => {
         if (res.data) {
-          setUser({ ...res.data,
+          setWorker({ ...res.data,
             kind: 'worker',
             basicDetails: {
               ...res.data.basicDetails,
@@ -61,11 +67,11 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   return (
     <CommonPageLayout title={'Add worker'}>
-      <UserForm
+      <UserForm<CreatableIWorker>
         action={props.action}
-        value={user}
+        value={worker}
         onChange={(newUser) => {
-          setUser(newUser);
+          setWorker(newUser);
         }}
         options={{
           textField: {
@@ -75,9 +81,9 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         onSubmit={async (creatableUser) => {
           try {
             if (props.action === 'add') {
-              const createdUser = await UserServices.creates(creatableUser);
+              const createdUser = await WorkersServices.create(creatableUser);
             } else if (props.action ==='edit') {
-              const updatedUser = await UserServices.edit(creatableUser);
+              const updatedUser = await WorkersServices.edit(creatableUser);
             }
             enqueueSnackbar({
               variant: 'success',

@@ -17,10 +17,9 @@ const DivisionDetailsPage = () => {
 
   const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    DivisionsServices.addDivision(action, divisionDetails)
+    DivisionsServices.create(divisionDetails)
       .then((res) => {
         console.log(res);
-        console.log(action);
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -72,7 +71,7 @@ const DivisionDetailsPage = () => {
         noOfChurches: 0,
         coordinator: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -124,7 +123,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -147,7 +146,7 @@ const DivisionDetailsPage = () => {
         },
         seniorLeader: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -199,7 +198,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -222,7 +221,7 @@ const DivisionDetailsPage = () => {
         },
         juniorLeader: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '22',
+          'kind': 'staff',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -274,7 +273,7 @@ const DivisionDetailsPage = () => {
             'noOfChurches': 5,
             'subdivision': {
               _id: 'skjdfj',
-              subDivisionName: 'ksdfj',
+              name: 'ksdfj',
             },
           },
           'supportDetails': {
@@ -298,7 +297,7 @@ const DivisionDetailsPage = () => {
       },
       subDivisions: [{
         _id: '',
-        subDivisionName: '',
+        name: '',
       }],
       FCRABankDetails: {
         bankname: '',
@@ -407,7 +406,16 @@ const DivisionDetailsPage = () => {
               //   >
               <>
                 <Grid container spacing={2}>
-                  <SubDivisionsPage withCardContainer={divisionDetails?.subDivisions} />
+                  <SubDivisionsPage
+                    withCardContainer={divisionDetails?.subDivisions}
+                    onChange={(newSubDivisions: SubDivision[]) => {
+                      setDivisionDetails((divisionDetails) => ({
+                        ...divisionDetails,
+                        subDivisions: newSubDivisions,
+                      }));
+                    }}
+                  />
+
                   <Grid item xs={12} >
 
                     <Button
