@@ -3,6 +3,7 @@ import TestModule from "..";
 import { Extension as ExtensionIcon, Login } from "@mui/icons-material";
 import NewPage from "../FreshPage";
 import LoginPage from "../../User/Login";
+import Pdfview from "../pdfview";
 import ForgotPasswordFormPage from "../../User/ForgotPasswordForm";
 
 const testsPageRoutes: ModuleRoute = {
@@ -40,6 +41,14 @@ const testsPageRoutes: ModuleRoute = {
       private: false,
       requiredAccessRights: ["string"],
       showInDrawer: false,
+    },
+    {
+      title: "FR Report",
+      path: "/pdfview",
+      element: <Pdfview />,
+      private: true,
+      requiredAccessRights: ["string"],
+      showInDrawer: true,
     },
   ],
 };
