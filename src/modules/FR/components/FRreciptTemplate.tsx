@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   cell: {
     border: "1px solid black",
     padding: 3,
+    height: 20,
   },
   tabletext: {
     fontSize: 10,
@@ -170,7 +171,7 @@ const FRreciptTemplate = () => {
             <View style={styles.box1}>
               <View style={{ ...styles.row }}>
                 <View style={{ ...styles.cell, width: 32 }}>
-                  <Text style={styles.tabletext}>test</Text>
+                  <Text style={styles.tabletext}></Text>
                 </View>
                 <View style={{ ...styles.cell, width: 150 }}>
                   <Text style={styles.tabletext}></Text>
