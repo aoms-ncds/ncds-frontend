@@ -1,11 +1,11 @@
-import React from "react";
-import { BorderTop, Pages } from "@mui/icons-material";
+import React from 'react';
+import { BorderTop, Pages } from '@mui/icons-material';
 import {
   PDFCell,
   PDFTable,
   PDFTableHeader,
   PDFTableRow,
-} from "../components/PDFTable";
+} from '../components/PDFTable';
 import {
   Page,
   Text,
@@ -15,16 +15,16 @@ import {
   Font,
   Svg,
   Image,
-} from "@react-pdf/renderer";
+} from '@react-pdf/renderer';
 
 Font.register({
-  family: "Oswald",
-  src: "https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf",
+  family: 'Oswald',
+  src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf',
 });
 
 const styles = StyleSheet.create({
   image: {
-    position: "absolute",
+    position: 'absolute',
     left: 140,
     height: 60,
     width: 300,
@@ -33,77 +33,77 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 80,
     fontSize: 15,
-    position: "absolute",
+    position: 'absolute',
     left: 190,
-    color: "red",
+    color: 'red',
   },
   text: {
     fontSize: 10,
-    color: "black",
-    position: "absolute",
+    color: 'black',
+    position: 'absolute',
   },
   text1: {
     fontSize: 10,
-    color: "black",
-    position: "absolute",
+    color: 'black',
+    position: 'absolute',
     marginTop: 100,
   },
   text2: {
     fontSize: 8,
-    color: "black",
-    position: "absolute",
+    color: 'black',
+    position: 'absolute',
     marginTop: 114,
   },
   h1: {
     fontSize: 10,
-    position: "absolute",
+    position: 'absolute',
     left: 50,
-    color: "black",
+    color: 'black',
   },
   box: {
     width: 490,
     height: 50,
-    border: "1pt solid black",
-    position: "absolute",
+    border: '1pt solid black',
+    position: 'absolute',
     left: 50,
   },
   box2: {
     width: 490,
     height: 30,
-    border: "1pt solid black",
-    position: "absolute",
+    border: '1pt solid black',
+    position: 'absolute',
     left: 50,
   },
   box3: {
     width: 490,
     height: 100,
-    border: "1pt solid black",
-    position: "absolute",
+    border: '1pt solid black',
+    position: 'absolute',
     left: 50,
   },
   box4: {
     width: 490,
     height: 80,
-    border: "1pt solid black",
-    position: "absolute",
+    border: '1pt solid black',
+    position: 'absolute',
     left: 50,
   },
   box5: {
     width: 80,
     height: 80,
-    border: "1pt solid black",
-    position: "absolute",
+    border: '1pt solid black',
+    position: 'absolute',
   },
   table: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     width: 490,
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   cell: {
-    border: "1px solid black",
+    border: '1px solid black',
     padding: 3,
     height: 20,
   },
@@ -181,66 +181,66 @@ const IROReciptTemplate = () => {
             <PDFTable>
               <PDFTableHeader>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"40"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'40'}
                 >
                   S No
                 </PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"80"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'80'}
                 >
                   Man Category
                 </PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"60"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'60'}
                 >
                   Narration
                 </PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"100"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'100'}
                 >
                   Requested Amount
                 </PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"100"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'100'}
                 >
                   Sanctioned Amoubt
                 </PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"110"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'110'}
                 >
                   Accountant Remarks
                 </PDFCell>
               </PDFTableHeader>
               <PDFTableRow>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"40"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'40'}
                 ></PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"80"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'80'}
                 ></PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"60"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'60'}
                 ></PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"100"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'100'}
                 ></PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"100"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'100'}
                 ></PDFCell>
                 <PDFCell
-                  style={{ textAlign: "center", fontSize: 10 }}
-                  width={"110"}
+                  style={{ textAlign: 'center', fontSize: 10 }}
+                  width={'110'}
                 ></PDFCell>
               </PDFTableRow>
             </PDFTable>
@@ -295,7 +295,7 @@ const IROReciptTemplate = () => {
           </Text>
         </div>
         <div style={{ marginTop: 210 }}>
-          <Text style={{ fontSize: 8, color: "grey", left: 30 }}>
+          <Text style={{ fontSize: 8, color: 'grey', left: 30 }}>
             This Document is electronically sigedn by authorised person of the
             Evangelical Team adding to the accuracy and content of the
             information submitted
