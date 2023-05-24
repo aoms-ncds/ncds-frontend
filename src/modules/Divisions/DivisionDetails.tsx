@@ -66,9 +66,93 @@ const DivisionDetailsPage = () => {
         country: '',
         pincode: '',
       },
-      noofWorkers: 0,
-      noOfSubdivisions: 0,
-      noOfChurches: 0,
+      coordinator: {
+        basicDetails: {
+          firstName: '',
+          lastName: '',
+          email: '',
+          dateOfBirth: moment(),
+
+          permanentAddress: {
+          },
+          currentAddress: {
+          },
+        },
+        officialDetails: {
+          remarks: '',
+          selfSupport: true,
+          dateOfDivisionJoining: moment(),
+          noOfChurches: 5,
+        },
+        supportDetails: {
+          totalNoOfYearsInMinistry: 10,
+          withChurch: true,
+        },
+        supportStructure: {
+        },
+        _id: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+        staffCode: '',
+      },
+      juniorLeader: {
+        basicDetails: {
+          firstName: '',
+          lastName: '',
+          email: '',
+          dateOfBirth: moment(),
+
+          permanentAddress: {
+          },
+          currentAddress: {
+          },
+        },
+        officialDetails: {
+          remarks: '',
+          selfSupport: true,
+          dateOfDivisionJoining: moment(),
+          noOfChurches: 5,
+        },
+        supportDetails: {
+          totalNoOfYearsInMinistry: 10,
+          withChurch: true,
+        },
+        supportStructure: {
+        },
+        _id: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+        staffCode: '',
+      },
+      seniorLeader: {
+        basicDetails: {
+          firstName: '',
+          lastName: '',
+          email: '',
+          dateOfBirth: moment(),
+
+          permanentAddress: {
+          },
+          currentAddress: {
+          },
+        },
+        officialDetails: {
+          remarks: '',
+          selfSupport: true,
+          dateOfDivisionJoining: moment(),
+          noOfChurches: 5,
+        },
+        supportDetails: {
+          totalNoOfYearsInMinistry: 10,
+          withChurch: true,
+        },
+        supportStructure: {
+        },
+        _id: '',
+        createdAt: moment(),
+        updatedAt: moment(),
+        staffCode: '',
+      },
     },
     subDivisions: [
       {
@@ -98,6 +182,7 @@ const DivisionDetailsPage = () => {
       setAction('view');
       DivisionsServices.getDivisionbyId(divisionIDs)
         .then((res) => {
+          console.log('the value areeee', res);
           setDivisionDetails(res.data);
         })
         .catch((err) => {
@@ -108,6 +193,7 @@ const DivisionDetailsPage = () => {
       setAction('edit');
       DivisionsServices.getDivisionbyId(editID)
         .then((res) => {
+          console.log('the value areeee', res);
           setDivisionDetails(res.data);
           console.log(divisionDetails);
         })
@@ -142,12 +228,13 @@ const DivisionDetailsPage = () => {
             }}>
               <Grid container spacing={2}>
                 <DivisionsFormComponent
+                  value={divisionDetails.details}
                   onChange={(newDivision: DivisionDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, details: newDivision }));
                   }}
                   action={'add'}
                   options={{ title: 'Division Details' }}
-                  value={divisionDetails.details}
+
                 />
 
                 <br />

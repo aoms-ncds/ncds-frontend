@@ -1,4 +1,5 @@
 import { MongooseDocument, Creatable, Address } from '../../../extras/CommonTypes';
+import { Staff } from '../../HR/extras/StaffTypes';
 
 export interface Division extends MongooseDocument{
   // _id: GridRowId;
@@ -18,9 +19,9 @@ export interface DivisionDetails{
     noofWorkers?: number;
     noOfSubdivisions?: number;
     noOfChurches?: number;
-    coordinator?: IWorker;
-    seniorLeader?: IWorker;
-    juniorLeader?: IWorker;
+    coordinator?:Staff;
+    seniorLeader?: Staff;
+    juniorLeader?: Staff;
   }
 export interface BankDetails{
   bankName:string;
