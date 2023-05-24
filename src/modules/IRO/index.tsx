@@ -1,106 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card } from '@mui/material';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-
-} from '@mui/icons-material';
-import PrintIcon from '@mui/icons-material/Print';
-import { DataGrid } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
-import DropdownButton from '../../components/DropDownButton';
+import { Grid } from '@mui/material';
+import DashboardCardButton from '../../components/DashboardCardButton';
 import IROServices from './extras/IROServices';
-import { IROrder } from './extras/IROTypes';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
+
 
 const IRODashboard = () => {
-  const [IROrder, setIROrder] = useState<IROrder[]>();
+  const [IROCount, setIROCount] = useState<number|null>(null);
+  const [closedIROCount, setClosedIROCount] = useState<number|null>(null);
+
   useEffect(() => {
-    IROServices.getAll()
-   .then((res) => {
-     console.log(res);
-     setIROrder(res.data);
-   })
-  .catch((res) => {
-    console.log(res);
-  });
+    IROServices.getCount()
+      .then((res) => setIROCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.CLOSED })
+      .then((res) => setClosedIROCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
-  const columns = [
-    {
-      field: '_manage',
-      headerName: 'Action',
-      minWidth: 50,
-      type: 'string',
-      renderCell: (props: any) => (
-        <DropdownButton
-          useIconButton={true}
-          id='IRO action'
-          primaryText='Actions'
-          key={'IRO action'}
-          items={[
-            {
-              id: 'View',
-              text: 'Release Amount',
-              component: Link,
-              to: '/iro/release_amount/' + props.row._id,
-              icon: PreviewIcon,
-            },
-            {
-              id: 'remarks',
-              text: 'Remarks',
-              icon: EditIcon,
-            },
-            {
-              id: 'print',
-              text: 'Print IRO',
-              icon: PrintIcon,
-            },
-            {
-              id: 'View',
-              text: 'View Details ',
-              component: Link,
-              to: `/fr/${props.row._id}/view`,
-              icon: PreviewIcon,
-            },
-            {
-              id: 'Reconciliation',
-              text: 'Reconciliation',
-              icon: EditIcon,
-            },
-            {
-              id: 'Close IRO',
-              text: 'Close IRO',
-              icon: PreviewIcon,
-            },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: PrintIcon,
-            },
-          ]}
-        />
-      ),
-    },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'IROno', headerName: 'IRO No', width: 70 },
-    { field: 'IROdate', headerName: 'IRO Date', width: 130 },
-    { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
-  ];
+
   return (
-    <CommonPageLayout title='Internal Release Order'>
-      <br/><br/>
-      <Grid item xs={12} md={12}>
-        <Card style={{ height: '75vh', width: '100%' }}>
-          <DataGrid rows={IROrder??[]} columns={columns} getRowId={(row) => row._id}/>
-        </Card>
+    <CommonPageLayout title='IRO Dashboard'>
+      <Grid container spacing={3}>
+
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton
+            primaryText='Manage IRO'
+            secondaryText={IROCount?.toString()}
+            color='#29cc39'
+            targetRoute="/iro/manage"
+          />
+        </Grid>
+
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton
+            primaryText='Closed IRO'
+            secondaryText={closedIROCount?.toString()}
+            color='#0dcaf0'
+            targetRoute="/iro/closed"
+          />
+        </Grid>
+
       </Grid>
     </CommonPageLayout>
   );
