@@ -120,14 +120,14 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
               id: 'View',
               text: 'View',
               component: Link,
-              to: `/${props.options?.kind}s/profile/${renderCellParams.row._id}`,
+              to: `/${props.options?.kind=='worker'?'workers':'hr'}/profile/${renderCellParams.row._id}`,
               icon: PreviewIcon,
             },
             {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: `/${props.options?.kind}s/edit/${renderCellParams.row._id}`,
+              to: `/${props.options?.kind=='worker'?'workers':'hr'}/edit/${renderCellParams.row._id}`,
               icon: EditIcon,
             },
             {
