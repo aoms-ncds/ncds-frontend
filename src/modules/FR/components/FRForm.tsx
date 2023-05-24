@@ -711,6 +711,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             }))
                           }
                           fullWidth
+                          required
                         />
                       </Grid>
                       <Grid item md={12}>
