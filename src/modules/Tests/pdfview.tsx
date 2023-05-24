@@ -1,5 +1,6 @@
 import React from 'react';
 import FRRecipt from '../FR/components/FRreciptTemplate';
+import IRORecipt from '../IRO/components/IROReciptTemplate';
 import { PDFViewer } from '@react-pdf/renderer';
 
 const pdfview = () => {

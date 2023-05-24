@@ -1,6 +1,12 @@
 import { BorderTop, Pages } from '@mui/icons-material';
 import React from 'react';
 import {
+  PDFCell,
+  PDFTable,
+  PDFTableHeader,
+  PDFTableRow,
+} from '../../IRO/components/PDFTable';
+import {
   Page,
   Text,
   View,
@@ -77,6 +83,7 @@ const styles = StyleSheet.create({
   cell: {
     border: '1px solid black',
     padding: 3,
+    height: 20,
   },
   tabletext: {
     fontSize: 10,
@@ -109,95 +116,79 @@ const FRreciptTemplate = () => {
             <Text style={styles.date}>Date:</Text>
           </div>
         </div>
-        <div style={{ marginTop: 200 }}>
-          <View style={styles.table}>
-            <View style={styles.row}>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Sl No</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>
-                  Financial Requisition Particulars
-                </Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Sub Division Name</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Quntity</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Description</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Need Of Month</Text>
-              </View>
-              <View style={styles.cell}>
-                <Text style={styles.tabletext}>Total</Text>
-              </View>
-            </View>
-            <View style={styles.box}>
-              <View style={{ ...styles.row }}>
-                <View style={{ ...styles.cell, width: 32 }}>
-                  <Text style={styles.tabletext}>01</Text>
-                </View>
-                <View style={{ ...styles.cell, width: 150 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 93 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 40 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 58 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 75 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.cell,
-                    width: 28,
-                    borderRight: 'none',
-                  }}
-                >
-                  <Text style={styles.tabletext}></Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.box1}>
-              <View style={{ ...styles.row }}>
-                <View style={{ ...styles.cell, width: 32 }}>
-                  <Text style={styles.tabletext}>test</Text>
-                </View>
-                <View style={{ ...styles.cell, width: 150 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 93 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 40 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 58 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View style={{ ...styles.cell, width: 75 }}>
-                  <Text style={styles.tabletext}></Text>
-                </View>
-                <View
-                  style={{
-                    ...styles.cell,
-                    width: 30,
-                  }}
-                >
-                  <Text style={styles.tabletext}></Text>
-                </View>
-              </View>
-            </View>
-          </View>
+        <div style={{ marginTop: 200, width: 500, left: 50 }}>
+          <PDFTable>
+            <PDFTableHeader>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'40'}
+              >
+                Sl No
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'80'}
+              >
+                Financial Requisition Particulars
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'60'}
+              >
+                Sub Division Name
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'100'}
+              >
+                Quntity
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'100'}
+              >
+                Description
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'110'}
+              >
+                Need Of Month
+              </PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'110'}
+              >
+                Total
+              </PDFCell>
+            </PDFTableHeader>
+            <PDFTableRow>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'40'}
+              ></PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'80'}
+              ></PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'60'}
+              ></PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'100'}
+              ></PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'100'}
+              ></PDFCell>
+              <PDFCell
+                style={{ textAlign: 'center', fontSize: 10 }}
+                width={'110'}
+              ></PDFCell>
+            </PDFTableRow>
+          </PDFTable>
         </div>
 
         <div style={{ marginTop: 290 }}>
