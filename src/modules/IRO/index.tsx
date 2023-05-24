@@ -4,6 +4,7 @@ import { Grid, Card } from '@mui/material';
 import {
   Edit as EditIcon,
   Preview as PreviewIcon,
+  Reply as ReplyIcon,
 
 } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
@@ -76,6 +77,11 @@ const IRODashboard = () => {
               id: 'Attachments',
               text: 'Attachments',
               icon: PrintIcon,
+            },
+            {
+              id: 'Send Back',
+              text: 'Send Back',
+              icon: ReplyIcon,
             },
           ]}
         />
