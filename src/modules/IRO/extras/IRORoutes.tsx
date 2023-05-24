@@ -1,9 +1,12 @@
 import React from 'react';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
-import IRODashboard from '..';
 import ReleaseAmount from '../ReleaseAmount';
 import { ModuleRoute } from '../../../extras/CommonTypes';
+import IRODashboard from '..';
+import ClosedIRO from '../ClosedIRO';
+import ManageIRO from '../ManageIRO';
+
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
   pages: [
@@ -15,6 +18,20 @@ const iroPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
       showInDrawer: true,
       icon: <RequestQuoteIcon />,
+    },
+    {
+      title: 'Manage IRO',
+      path: '/manage',
+      element: <ManageIRO />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Closed IRO',
+      path: '/closed',
+      element: <ClosedIRO />,
+      private: true,
+      requiredAccessRights: ['string'],
     },
     {
       title: 'Release Amount',
