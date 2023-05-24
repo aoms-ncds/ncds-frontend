@@ -4,8 +4,8 @@ import CommonLifeCycleStates from '../../../extras/CommonLifeCycleStates';
 export default class FRLifeCycleStates extends CommonLifeCycleStates {
   /* eslint-disable require-jsdoc */
   // Inactive states
-  public static readonly CLOSED = -201;
-  public static readonly SEND_BACK = -202;
+  public static readonly FR_CLOSED = -200;
+  public static readonly FR_SEND_BACK = -201;
 
   // Active states
   public static readonly SUBMITTED_TO_PRESIDENT = 201;
