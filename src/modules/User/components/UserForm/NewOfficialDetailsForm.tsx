@@ -148,6 +148,43 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           )}
         />
       </Grid>
+      <Grid item xs={12} md={6}>
+        <DatePicker
+          label="Joined Division On"
+          value={props.value.dateOfDivisionJoining}
+          onChange={(newDate) =>{
+            props.onChange({
+              ...props.value,
+              dateOfDivisionJoining: newDate ?? undefined,
+            });
+          }}
+          format='DD/MM/YYYY'
+          slotProps={{
+            textField: {
+              variant: props.options?.textField.variant,
+              // error: dateError,
+              // helperText: dateError && 'Please select a date',
+              fullWidth: true,
+            },
+          }}
+          autoFocus
+        />
+      </Grid>
+      <Grid item xs={12} md={6} >
+        <TextField
+          label="No. of Churches"
+          type={'number'}
+          value={props.value.noOfChurches}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              noOfChurches: Number(e.target.value),
+            })
+          }
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
     </>
   );
 };

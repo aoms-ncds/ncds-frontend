@@ -27,8 +27,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     officialDetails: {
       remarks: '',
       selfSupport: true,
-      dateOfDivisionJoining: moment(),
-      noOfChurches: 5,
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
