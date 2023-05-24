@@ -16,7 +16,7 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.CLOSED })
+    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
         console.log(error);
