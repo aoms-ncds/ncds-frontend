@@ -1,4 +1,5 @@
 import { MongooseDocument, Creatable, Address } from '../../../extras/CommonTypes';
+import { IWorker } from '../../Workers/extras/WorkersTypes';
 
 export interface Division extends MongooseDocument{
   // _id: GridRowId;

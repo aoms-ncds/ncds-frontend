@@ -3,6 +3,7 @@ import { CreatableUser, User } from '../../User/extras/UserTypes';
 import { Child } from './ChildTypes';
 
 export interface IWorker extends User{
+    firstName: string;
     spouse?: Spouse;
     children?:Child[];
     workerCode: string;

@@ -1,6 +1,4 @@
-import { DialogContent, Container, Typography, Grid, TextField, DialogActions, Button, Card } from '@mui/material';
-import { create } from '@mui/material/styles/createTransitions';
-import { DataGrid } from '@mui/x-data-grid';
+import { DialogContent, Container, Grid, TextField, DialogActions, Button, Card } from '@mui/material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -9,11 +7,9 @@ import moment from 'moment';
 import { Application } from './extras/ApplicationTypes';
 
 const AddNewApplication = () => {
-  const [loadCount, setLoadCount] = useState(0);
   const [name, setName] = useState<string>('');
   const [reason, setReason] = useState<string>('');
   const [action, setaction] = useState<'add' | 'edit'>('add');
-  const [applications, setApplications] = useState<Application[] | null>(null);
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',

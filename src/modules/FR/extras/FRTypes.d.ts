@@ -1,5 +1,8 @@
 import { Moment } from 'moment';
 import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
+import { Division, SubDivision } from '../../Divisions/extras/DivisionsTypes';
+import { IWorker } from '../../Workers/extras/WorkersTypes';
+import Divisions from '../../Divisions';
 
 export interface Frrequest {
   _id: string;
@@ -17,9 +20,9 @@ export interface FR extends MongooseDocument {
   FRno: string;
   date: Moment;
   purpose: FRPurpose;
-  purposeWorker?: IETWorker;
+  purposeWorker?: IWorker;
   purposeSubdivision?: SubDivision;
-  purposeDivision?: IETDivisions;
+  purposeDivision?: Division;
   purposeCoordinator?: IWorker;
   purposeOthers?: string;
   sanctionedAmount: number;

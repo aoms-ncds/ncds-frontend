@@ -1,7 +1,6 @@
 import { Moment } from 'moment';
 import { languages } from './CommonConfig';
 
-export {};
 
 export interface ModuleRoute {
   base: string;

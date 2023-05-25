@@ -1,8 +1,9 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
-import { Creatable, MongooseDocument, Address } from '../../../extras/CommonTypes';
+import { Creatable, MongooseDocument, Address, Language, FileObject } from '../../../extras/CommonTypes';
 import { SubDivision } from '../../Divisions/extras/DivisionsTypes';
 import { Designation } from '../../HR/extras/DesignationTypes';
+
 
 export default {};
 
@@ -111,5 +112,5 @@ export interface LoginCredentials {
 }
 export interface LoginResponse {
   token: string;
-  user: IWorker;
+  user: User;
 }
