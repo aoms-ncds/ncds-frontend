@@ -1,7 +1,8 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { LoginCredentials, LoginResponse } from './UserTypes';
+import { LoginCredentials, LoginResponse, User } from './UserTypes';
+import { RecursivePartial, StandardResponse } from '../../../extras/CommonTypes';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -91,4 +92,22 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
+
+
+  getAll: (conditions?: RecursivePartial<User>): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[]>(axios.get('/users', { params: conditions }), (users) =>
+      users.map((user: any) => ({
+        ...user,
+        basicDetails: {
+          ...user.basicDetails,
+          dateOfBirth: moment(user.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...user.officialDetails,
+          dateOfJoining: moment(user.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(user.createdAt),
+        updatedAt: moment(user.updatedAt),
+      })),
+    ),
 };

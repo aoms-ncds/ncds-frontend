@@ -70,6 +70,10 @@ export interface FormComponentProps<T, Options = undefined> {
   options?: Options;
 }
 
+export type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]>:T[P];
+};
+
 export type Language = (typeof languages)[number];
 export interface Address {
   buildingName?: string;
@@ -79,3 +83,4 @@ export interface Address {
   country?: string;
   pincode?: string;
 }
+
