@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
 import { CreatableIWorker } from './extras/WorkersTypes';
+import { CreatableSpouse } from './extras/SpouseTypes';
 
 interface WorkerFormPageProps{
   action: 'add'|'edit'|'view';
@@ -13,6 +14,7 @@ interface WorkerFormPageProps{
 const WorkerFormPage = (props: WorkerFormPageProps) => {
   const { id } = useParams();
 
+  const [spouse, setSpouse] = useState<CreatableSpouse>();
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
     basicDetails: {
@@ -44,7 +46,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   useEffect(() => {
     if (id) {
-      WorkersServices.getById(id).then((res) => {
+      WorkersServices.getByIdWithSpouse(id).then((res) => {
         if (res.data) {
           setWorker(res.data);
         }
@@ -55,7 +57,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   }, []);
 
   return (
-    <CommonPageLayout title={'Add worker'}>
+    <CommonPageLayout title={props.action=='add'?'Add':props.action=='edit'?'Edit':'View'+'worker'}>
       <UserForm<CreatableIWorker>
         action={props.action}
         value={worker}

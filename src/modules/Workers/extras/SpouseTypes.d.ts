@@ -12,7 +12,7 @@ export interface Spouse extends MongooseDocument{
     working?:boolean;
     occupation?: string;
     qualification?:string;
-    knownLanguages:Language[];
+    knownLanguages?:Language[];
 
 }
 export interface CreatableSpouse extends Creatable<Spouse>{
