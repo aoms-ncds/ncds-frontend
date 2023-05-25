@@ -4,10 +4,11 @@ import axios from 'axios';
 import { IROrder } from './IROTypes';
 
 export default {
-  getCount: () => getStandardResponse<number>(
-    axios.get('/iro/count'),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(
+    axios.get('/iro/count', { params: conditions }),
   ),
-  getAll: () => getStandardResponse<IROrder[]>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getAll: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(
     dummyRequest<IROrder[]>({
       data: [{
         _id: '1',

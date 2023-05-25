@@ -82,6 +82,29 @@ export default {
         updatedAt: moment(data.updatedAt),
       }),
     ),
+  /**
+   * Retrieves a worker by ID.
+   * @param {string} workerId - The ID of the worker to retrieve.
+   * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
+   */
+  getByIdWithSpouse: (workerId: string) =>
+    getStandardResponse<IWorker | null>(
+      axios.get(`/workers/${workerId}/spouse`),
+      (data) => ({
+        ...data,
+        basicDetails: {
+          ...data.basicDetails,
+          dateOfBirth: moment(data.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...data.officialDetails,
+          dateOfJoining: moment(data.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+      }),
+    ),
+
 
   /**
    * Approves a worker.

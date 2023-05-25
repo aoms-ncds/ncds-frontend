@@ -96,7 +96,7 @@ const DivisionsList = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'Division Id', width: 130 },
+    { field: 'divisionId', headerName: 'Division Id', width: 130, valueGetter: (props) => props.row.details.divisionId },
     {
       field: 'divisionName',
       headerName: 'Division Name',
