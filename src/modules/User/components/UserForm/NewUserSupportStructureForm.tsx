@@ -8,7 +8,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
   }>) => {
   return (
     <>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Basic"
           type="number"
@@ -22,7 +22,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="HRA"
           type="number"
@@ -36,7 +36,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Spouse allowance"
           type="number"
@@ -50,7 +50,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Positional allowance"
           type="number"
@@ -64,7 +64,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Special allowance"
           type="number"
@@ -78,7 +78,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Impact deduction"
           type="number"
@@ -92,7 +92,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Tel allowance"
           type="number"
@@ -106,7 +106,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="PISON Missionary fund"
           type="number"
@@ -120,7 +120,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="MUT Deduction (Medical Insurance)"
           type="number"

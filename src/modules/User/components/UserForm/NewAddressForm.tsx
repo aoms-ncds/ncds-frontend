@@ -40,7 +40,7 @@ const NewAddressForm = (
           </Divider>
         </Grid>
       )}
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Building name"
           value={props.value.buildingName}
@@ -54,7 +54,7 @@ const NewAddressForm = (
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Street"
           value={props.value.street}
@@ -68,7 +68,7 @@ const NewAddressForm = (
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="City"
           value={props.value.city}
@@ -82,7 +82,7 @@ const NewAddressForm = (
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="State"
           value={props.value.state}
@@ -96,7 +96,7 @@ const NewAddressForm = (
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Country"
           value={props.value.country}
@@ -110,7 +110,7 @@ const NewAddressForm = (
           fullWidth
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Pin code"
           value={props.value.pincode}
