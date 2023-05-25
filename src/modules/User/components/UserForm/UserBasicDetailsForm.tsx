@@ -311,6 +311,19 @@ const UserBasicDetailsForm = (
           fullWidth
         />
       </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="License no"
+          value={props.value.licenseNumber}
+          onChange={(e) => props.onChange({
+            ...props.value,
+            licenseNumber: e.target.value,
+          })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
       <NewAddressForm
         action='add'
         value={props.value.currentAddress}
