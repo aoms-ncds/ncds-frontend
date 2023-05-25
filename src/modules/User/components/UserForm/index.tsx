@@ -38,6 +38,9 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
               <StepLabel>Spouse details</StepLabel>
             </Step>
           )}
+          <Step>
+            <StepLabel>Children details</StepLabel>
+          </Step>
         </Stepper>
       </Container>
       <Container>
