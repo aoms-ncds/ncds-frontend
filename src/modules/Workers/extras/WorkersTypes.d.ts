@@ -2,10 +2,10 @@ import { CreatableSpouse, Spouse } from './SpouseTypes';
 import { CreatableUser, User } from '../../User/extras/UserTypes';
 
 export interface IWorker extends User{
-    spouse: Spouse;
+    spouse?: Spouse;
     workerCode: string;
 }
 export interface CreatableIWorker extends CreatableUser{
-    spouse: CreatableSpouse;
+    spouse?: CreatableSpouse;
     workerCode?: string;
 }

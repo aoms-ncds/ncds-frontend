@@ -110,7 +110,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
           variant="outlined"
           onClick={handleAddSubDivision}
         >
-              Add new program
+              Add new Division
         </Button>
       </Grid>
     </>
