@@ -15,6 +15,10 @@ export default {
         IROno: '1234',
         IROdate: moment(),
         division: {
+          details:{
+            name:'',
+            
+          }
           divisionName: 'Division 1',
           divisionId: '233',
           contactNumber: '89000333',
@@ -79,7 +83,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -155,7 +159,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -231,7 +235,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -271,8 +275,8 @@ export default {
         transferredAmount: 0,
         transferredDate: moment(),
         transferredBank: {
-          bankname: 'Canara',
-          branchname: 'Thodupuzha',
+          bankName: 'Canara',
+          branchName: 'Thodupuzha',
           accountNumber: '4567799',
           IFSCCode: '222',
           beneficiary: '22',
@@ -349,7 +353,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -424,7 +428,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -499,7 +503,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -538,8 +542,8 @@ export default {
         transferredAmount: 0,
         transferredDate: moment(),
         transferredBank: {
-          bankname: 'Canara',
-          branchname: 'Thodupuzha',
+          bankName: 'Canara',
+          branchName: 'Thodupuzha',
           accountNumber: '4567799',
           IFSCCode: '222',
           beneficiary: '22',
@@ -616,7 +620,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -691,7 +695,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -766,7 +770,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -805,8 +809,8 @@ export default {
         transferredAmount: 0,
         transferredDate: moment(),
         transferredBank: {
-          bankname: 'Canara',
-          branchname: 'Thodupuzha',
+          bankName: 'Canara',
+          branchName: 'Thodupuzha',
           accountNumber: '4567799',
           IFSCCode: '222',
           beneficiary: '22',
