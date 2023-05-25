@@ -23,6 +23,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
           }
           variant={props.options?.textField.variant}
           fullWidth
+          required
         />
       </Grid>
 
@@ -38,6 +39,8 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
           }
           variant={props.options?.textField.variant}
           fullWidth
+          required
+
         />
       </Grid>
 

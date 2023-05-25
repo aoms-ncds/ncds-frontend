@@ -9,12 +9,16 @@ import { FormComponentProps } from '../../../../extras/CommonTypes';
 import { CreatableStaff } from '../../../HR/extras/StaffTypes';
 import { CreatableIWorker } from '../../../Workers/extras/WorkersTypes';
 import { UserKind } from '../../extras/UserTypes';
+import { CreatableSpouse } from '../../../Workers/extras/SpouseTypes';
 
 const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: FormComponentProps<UserType, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
   kind: UserKind;
 }>) => {
   const [activeStep, setActiveStep] = useState(0);
+  const [spouse, setSpouce] = useState<CreatableSpouse>({ firstName: '',
+    lastName: '',
+  });
   return (
     <>
       <Container maxWidth="md">
@@ -31,7 +35,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
           <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step>
-          { props.options?.kind === 'worker' && (
+          { props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married' && (
             <Step>
               <StepLabel>Spouse details</StepLabel>
             </Step>
@@ -169,7 +173,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  if (props.options?.kind === 'worker') {
+                  if (props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married') {
                     setActiveStep((currentStep) => currentStep+1);
                   } else {
                     props.onSubmit && props.onSubmit(props.value);
@@ -211,7 +215,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                 </form>
               </CardContent>
             )}
-            {(activeStep === 4 && props.options?.kind === 'worker') &&(
+            {(activeStep === 4 && props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married') &&(
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
@@ -220,7 +224,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                   <Grid container spacing={3}>
                     <SpouseForm
                       action={props.action}
-                      value={(props.value as CreatableIWorker).spouse}
+                      value={(props.value as CreatableIWorker).spouse??spouse}
                       onChange={(spouse) => props.onChange({ ...props.value, spouse })}
                       options={props.options}
                     />
