@@ -127,7 +127,20 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
-
+      {props.value.martialStatus==='Married'&&(
+        <Grid item xs={12} md={6} lg={4}>
+          <UserDropdown
+            users={spouseList}
+            value={props.value.spouseOfAnotherUser}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                props.onChange({ ...props.value, spouseOfAnotherUser: newValue });
+              }
+            }} label={'Spouse of another User'}
+            required={false}
+          />
+        </Grid>
+      )}
       <Grid item xs={12} md={6}>
         <TextField
           label="Highest Qualification"
