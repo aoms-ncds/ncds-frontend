@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
-import { FormComponentProps } from '../../extras/CommonTypes';
-import { BankDetails } from './extras/DivisionsTypes';
 
 const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:string}>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
@@ -30,7 +28,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
                 setNewBankDetails((newBankDetails) => {
                   const newBank = {
                     ...newBankDetails,
-                    bankname: e.target.value,
+                    bankName: e.target.value,
                   };
                   props.onChange(newBank); // Call the onChange prop with the updated division details
                   return newBank;
@@ -48,7 +46,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
                 setNewBankDetails((newBankDetails) => {
                   const newBank = {
                     ...newBankDetails,
-                    branchname: e.target.value,
+                    branchName: e.target.value,
                   };
                   props.onChange(newBank); // Call the onChange prop with the updated division details
                   return newBank;

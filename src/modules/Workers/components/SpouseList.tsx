@@ -9,7 +9,6 @@ import {
   Add as AddIcon,
 } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
-import { Spouse } from '../extras/SpouseTypes';
 import SpousesServices from '../extras/SpousesServices';
 
 const SpouseListPage = () => {

@@ -6,7 +6,6 @@ import ApplicationsListingPage from '../ApplicationsListingPage';
 import ApplicationApprovalPage from '../ApplicationApprovalPage';
 import ApplicationManagePages from '../ManagePages';
 import AddNewApplication from '../AddNewApplication';
-import { ModuleRoute } from '../../../extras/CommonTypes';
 
 const applicationRoutes : ModuleRoute = {
   base: '/application',

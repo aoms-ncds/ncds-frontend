@@ -12,7 +12,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
-import { IROrder } from './extras/IROTypes';
 
 const ManageIRO= () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();

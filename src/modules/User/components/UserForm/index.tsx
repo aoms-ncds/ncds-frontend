@@ -5,11 +5,6 @@ import NewOfficialDetailsForm from './NewOfficialDetailsForm';
 import NewSupportDetailsForm from './NewSupportDetailsForm';
 import NewUserSupportStructureForm from './NewUserSupportStructureForm';
 import SpouseForm from '../../../Workers/components/SpouseForm';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableStaff } from '../../../HR/extras/StaffTypes';
-import { CreatableIWorker } from '../../../Workers/extras/WorkersTypes';
-import { UserKind } from '../../extras/UserTypes';
-import { CreatableSpouse } from '../../../Workers/extras/SpouseTypes';
 
 const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: FormComponentProps<UserType, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};

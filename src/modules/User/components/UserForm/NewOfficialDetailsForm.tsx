@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableOfficialDetails, DeactivationReason, OfficialDetailsStatus } from '../../extras/UserTypes';
-import { SubDivision } from '../../../Divisions/extras/DivisionsTypes';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
 

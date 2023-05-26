@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { Division, SubDivision } from './DivisionsTypes';
 
 const isObjectId = (id: string) => {
   const objectIdPattern = /^[0-9a-fA-F]{24}$/;

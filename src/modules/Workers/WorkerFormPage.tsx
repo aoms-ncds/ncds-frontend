@@ -5,8 +5,6 @@ import UserForm from '../User/components/UserForm';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
-import { CreatableIWorker } from './extras/WorkersTypes';
-import { CreatableSpouse } from './extras/SpouseTypes';
 
 interface WorkerFormPageProps{
   action: 'add'|'edit'|'view';

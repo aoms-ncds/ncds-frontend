@@ -11,7 +11,7 @@ import {
 } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Division } from '../extras/DivisionsTypes';
+
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);

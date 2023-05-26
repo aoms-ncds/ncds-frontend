@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkerServices from './extras/WorkersServices';
-import { IWorker } from './extras/WorkersTypes';
 
 const Profile = () => {
   const [worker, setWorker] = useState<IWorker | null>(

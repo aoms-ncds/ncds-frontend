@@ -5,7 +5,6 @@ import UserForm from '../User/components/UserForm';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import StaffServices from './extras/StaffServices';
-import { CreatableStaff } from './extras/StaffTypes';
 
 interface StaffFormPageProps{
   action: 'add'|'edit'|'view';

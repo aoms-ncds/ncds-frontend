@@ -20,7 +20,6 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/default
 import HomeServices from './extras/HomeServices';
-import { LoginCredentials } from './extras/UserTypes';
 
 const LoginPage = () => {
   const navigate = useNavigate();

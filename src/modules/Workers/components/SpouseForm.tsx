@@ -1,10 +1,8 @@
 import React from 'react';
-import { CreatableSpouse } from '../extras/SpouseTypes';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import { languages } from '../../../extras/CommonConfig';
-import { FormComponentProps } from '../../../extras/CommonTypes';
 
 const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
     textField: { variant: 'filled' | 'outlined' | 'standard' };

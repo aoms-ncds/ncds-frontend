@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { LoginCredentials, LoginResponse } from './UserTypes';
+import { FilterQuery } from 'mongoose';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -10,8 +10,9 @@ export default {
       data: {
         token: 'skdfksj',
         user: {
-          'kind': 'staff',
+
           '_id': '646703c19e433f67d27019b2',
+          'workerCode': '',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -91,4 +92,23 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
+
+  getAll: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[]>(axios.get('/users', { params: {
+      filterQuery: JSON.stringify(conditions),
+    } }), (users) =>
+      users.map((user: any) => ({
+        ...user,
+        basicDetails: {
+          ...user.basicDetails,
+          dateOfBirth: moment(user.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...user.officialDetails,
+          dateOfJoining: moment(user.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(user.createdAt),
+        updatedAt: moment(user.updatedAt),
+      })),
+    ),
 };

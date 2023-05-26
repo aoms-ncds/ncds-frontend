@@ -10,7 +10,6 @@ import {
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
 import { enqueueSnackbar } from 'notistack';
-import { Frrequest } from '../extras/FRTypes';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<Frrequest[] | null>(null);

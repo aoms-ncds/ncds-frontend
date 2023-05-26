@@ -4,7 +4,6 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from '@mui/m
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Application } from './extras/ApplicationTypes';
 
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();

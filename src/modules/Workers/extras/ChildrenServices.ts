@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { getStandardResponse } from '../../../extras/CommonHelpers';
-import { Child, CreatableChild } from './ChildTypes';
-import { StandardResponse } from '../../../extras/CommonTypes';
 
 export default {
   /**

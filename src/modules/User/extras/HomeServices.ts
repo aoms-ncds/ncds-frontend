@@ -1,5 +1,4 @@
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-import { LoginCredentials, LoginResponse } from './UserTypes';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -30,24 +30,89 @@ import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
-import { IWorker } from '../../Workers/extras/WorkersTypes';
-import { Staff } from '../../HR/extras/StaffTypes';
-import { FormComponentProps } from '../../../extras/CommonTypes';
-import { CreatableFR, FRPurpose, MainCategory, SubCategory1, SubCategory2, SubCategory3, Remark, CreatableRemark, Particulars } from '../extras/FRTypes';
-import { DivisionDetails, SubDivision } from '../../Divisions/extras/DivisionsTypes';
+
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
+  const [worker, setWorker] = useState<IWorker>({
+    _id: '',
+    workerCode: '',
+    basicDetails: {
+      firstName: '',
+      lastName: '',
+      dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
+      gender: 'Male',
+      field: 'Missionary',
+      martialStatus: 'Married',
+      highestQualification: 'Ph.D.',
+      motherTounge: 'English',
+      communicationLanguage: 'English',
+      knownLanguages: [
+        'English',
+        'Malayalam - മലയാളം',
+      ],
+      email: 'abcd@gmail.com',
+      phone: '1234567890',
+      alternativePhone: '9876543210',
+      PANNo: 'ABCD1234',
+      licenseNumber: 'L12345678',
+      permanentAddress: {
+        buildingName: 'Puliyulla parambath',
+        street: '123 Main Street',
+        city: 'Example City',
+        state: 'Example State',
+        country: 'India',
+        pincode: '12345',
+      },
+      currentAddress: {
+        buildingName: 'Puliyulla parambath',
+        street: '456 Elm Street',
+        city: 'Current City',
+        state: 'Current State',
+        country: 'India',
+        pincode: '54321',
+      },
+    },
+    officialDetails: {
+      dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
+      remarks: 'Lorem ipsum dolor sit amet.',
+      selfSupport: true,
+      status: 'ministering',
+      dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+      noOfChurches: 5,
+      subdivision: {
+        _id: 'skjdfj',
+        name: 'ksdfj',
+      },
+    },
+    supportDetails: {
+      totalNoOfYearsInMinistry: 10,
+      withChurch: true,
+    },
+    supportStructure: {
+      basic: 5000,
+      HRA: 2000,
+      spouseAllowance: 1000,
+      positionalAllowance: 500,
+      specialAllowance: 800,
+      impactDeduction: 200,
+      telAllowance: 400,
+      PIONMissionaryFund: 300,
+      MUTDeduction: 100,
+    },
+    createdAt: moment('2023-05-19T05:06:09.292Z'),
+    updatedAt: moment('2023-05-19T05:06:09.292Z'),
+  });
   const [divisions, setDivisions] = useState<DivisionDetails[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
@@ -826,8 +891,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         getFiles={TestServices.getBills}
         uploadFile={TestServices.uploadFile}
         renameFile={TestServices.renameFile}
-        deleteFile={(fileId: string) => {
-          return TestServices.deleteFile(fileId);
+        deleteFile={(fileID:string ) => {
+          return TestServices.deleteFile(fileID);
         }}
       />
     </div>

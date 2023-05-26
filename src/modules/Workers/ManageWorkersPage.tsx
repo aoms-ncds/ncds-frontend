@@ -9,7 +9,6 @@ import SpouseListPage from './components/SpouseList';
 import { Link } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import WorkersServices from './extras/WorkersServices';
-import { IWorker } from './extras/WorkersTypes';
 
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);

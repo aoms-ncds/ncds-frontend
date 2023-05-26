@@ -7,7 +7,6 @@ import {
 import { Link } from 'react-router-dom';
 import UsersList from '../User/components/UsersList';
 import StaffServices from './extras/StaffServices';
-import { Staff } from './extras/StaffTypes';
 
 
 const HRManagePage = () => {

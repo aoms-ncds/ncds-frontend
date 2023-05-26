@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-no-undef */
-import React, { useState } from 'react';
+import React from 'react';
 import { Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
 import moment from 'moment';
 import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
-import { Address, FormComponentProps } from '../../../extras/CommonTypes';
-import { DivisionDetails } from '../extras/DivisionsTypes';
+
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, {title:string}>) => {
   return (

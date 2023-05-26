@@ -1,5 +1,9 @@
 import { Moment } from 'moment';
-export interface IROrder {
+
+export default {};
+
+declare global{
+   interface IROrder {
   _id: string;
   IROno: string;
   IROdate: Moment;
@@ -15,4 +19,5 @@ export interface IROrder {
   transferredBank: BankDetails;
   modeOfPayment: string;
   transactionNumber: string;
+}
 }

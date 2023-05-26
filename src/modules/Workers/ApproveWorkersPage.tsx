@@ -6,7 +6,6 @@ import WorkerServices from './extras/WorkersServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
-import { IWorker } from './extras/WorkersTypes';
 
 const ApproveWorkerPage = () => {
   const [workers, setWorkers] = useState<IWorker[]|null>(null);

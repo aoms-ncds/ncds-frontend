@@ -18,8 +18,6 @@ import { Moment } from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { childSupport } from './extras/WorkersConfig';
 import { useParams } from 'react-router-dom';
-import { CreatableChild } from './extras/ChildTypes';
-import { IWorker } from './extras/WorkersTypes';
 import ChildrenServices from './extras/ChildrenServices';
 interface ChildFormPagerops{
     action: 'add'|'edit'|'view';

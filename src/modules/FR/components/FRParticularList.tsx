@@ -6,7 +6,6 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
-import { Particulars } from '../extras/FRTypes';
 
 const FRParticularList = () => {
   const [Particulars, setParticulars] = useState<Particulars[]>();

@@ -1,19 +1,42 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { languages } from '../../../../extras/CommonConfig';
 import NewAddressForm from './NewAddressForm';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableBasicDetails, WorkerField, Gender, MaritalStatus } from '../../extras/UserTypes';
+import UsersDropdown from '../UsersDropdown';
+import UserServices from '../../extras/UserServices';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<CreatableBasicDetails, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>)=> {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
+
+  const [spouseList, setSpouseList] = useState<User[]>([]);
+
+  useEffect(() => {
+    // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
+    if (props.value.martialStatus=='Married') {
+      UserServices.getAll({
+        $and: [
+          { status: -1 },
+          { 'basicDetails.gender': props.value.gender=='Male'?'Female':props.value.gender=='Female'?'Male':'Other' },
+        ],
+      })
+    .then((res) => {
+      console.log(res);
+      setSpouseList(res.data);
+    })
+   .catch((res) => {
+     console.log(res);
+   });
+    }
+  }, [props.value.gender, props.value.martialStatus]);
+
+
   return (
     <>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="Field">Field</FormLabel>
           <RadioGroup
@@ -30,7 +53,7 @@ const UserBasicDetailsForm = (
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="First name"
           value={props.value.firstName}
@@ -42,7 +65,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Last name"
           value={props.value.lastName}
@@ -54,7 +77,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Birth"
           value={props.value.dateOfBirth}
@@ -74,7 +97,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Age"
           value={props.value.dateOfBirth?.fromNow(true)}
@@ -88,7 +111,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <FormControl >
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
@@ -109,7 +132,7 @@ const UserBasicDetailsForm = (
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <FormControl>
           <FormLabel id="martialStatus">Martial Status</FormLabel>
           <RadioGroup
@@ -127,9 +150,9 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
-      {props.value.martialStatus==='Married'&&(
+      {props.value.martialStatus==='Married' &&(
         <Grid item xs={12} md={6} lg={4}>
-          <UserDropdown
+          <UsersDropdown
             users={spouseList}
             value={props.value.spouseOfAnotherUser}
             onChange={(e, newValue) => {
@@ -138,10 +161,11 @@ const UserBasicDetailsForm = (
               }
             }} label={'Spouse of another User'}
             required={false}
+            textFieldProps={ { variant: props.options?.textField.variant }}
           />
         </Grid>
       )}
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Highest Qualification"
           value={props.value.highestQualification}
@@ -151,7 +175,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           id="mlanguges"
           options={languages}
@@ -168,7 +192,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           id="Clanguges"
           options={languages}
@@ -185,7 +209,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           multiple
           id="knownLanguages"
@@ -203,7 +227,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Email"
           type="email"
@@ -217,7 +241,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Phone"
           type="tel"
@@ -228,7 +252,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="alternativePhone"
           type="tel"
@@ -239,7 +263,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="PAN"
           value={props.value.PANNo}
@@ -249,7 +273,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Aadhaar no"
           value={props.value.aadhaar?.aadhaarNo}
@@ -265,7 +289,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Aadhaar File"
           type="file"
@@ -287,7 +311,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Voter ID"
           value={props.value.voterId?.voterIdNo}
@@ -303,7 +327,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Voter ID File"
           type="file"
