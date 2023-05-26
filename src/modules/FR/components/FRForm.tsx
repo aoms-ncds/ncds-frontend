@@ -61,9 +61,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [Particulars, setParticulars] = useState<Particulars[]>();
+  const [Particulars, setParticulars] = useState<Particulars[]>([]);
   const [particularDetails, setParticularDetails] = useState<Particulars>({
-    _id: '',
     mainCategory: '',
     subCategory1: '',
     subCategory2: '',
@@ -136,14 +135,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    FRServices.getParticulars()
-      .then((res) => {
-        console.log(res);
-        setParticulars(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+    // FRServices.getParticulars()
+    //   .then((res) => {
+    //     console.log(res);
+    //     setParticulars(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
   }, []);
   const addParticulars = () => {
     console.log('here');
@@ -152,9 +151,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       variant: 'info',
     });
 
-    FRServices.addParticulars(particularDetails, action)
+    FRServices.addParticulars(particularDetails)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setParticulars((prevParticulars) => [...prevParticulars, res.data]);
         handleClose();
         closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -162,7 +162,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           variant: 'success',
         });
         setParticularDetails(() => ({
-          _id: '',
           mainCategory: '',
           subCategory1: '',
           subCategory2: '',
@@ -188,7 +187,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   };
   const totalRequestedAmount =
     Particulars &&
-    Particulars.reduce((total, item) => total + item.requestedAmount, '');
+    Particulars.reduce(
+      (total, item) => total + Number(item.requestedAmount),
+      0,
+    );
   return (
     <div>
       <Container>
@@ -626,7 +628,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             if (selectedSubCategory2) {
                               setParticularDetails((particularDetails) => ({
                                 ...particularDetails,
-                                subCategory1: selectedSubCategory2.name,
+                                subCategory2: selectedSubCategory2.name,
                               }));
                               setselectedSubCategory2(selectedSubCategory2);
                             }
@@ -650,7 +652,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             if (selectedSubCategory3) {
                               setParticularDetails((particularDetails) => ({
                                 ...particularDetails,
-                                subCategory1: selectedSubCategory3.name,
+                                subCategory3: selectedSubCategory3.name,
                                 narration: selectedSubCategory3.narration,
                               }));
                               setSelectedSubCategory3(selectedSubCategory3);

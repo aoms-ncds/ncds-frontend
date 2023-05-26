@@ -2,60 +2,13 @@ import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import { categories, purposes } from './FRConfig';
 import axios from 'axios';
-import { CreatableRemark, FR, FRPurpose, Frrequest, MainCategory, Particulars, Remark } from './FRTypes';
+import { CreatableFR, CreatableRemark, FR, FRPurpose, Frrequest, MainCategory, Particulars, Remark } from './FRTypes';
 export default {
   getCount: () => getStandardResponse<number>(
     axios.get('/fr/count'),
   ),
   getAll: () => getStandardResponse<Frrequest[]>(
-    dummyRequest<Frrequest[]>({
-      data: [{
-        _id: '1',
-        FRno: '1234',
-        FRdate: moment('17-04-2023'),
-        divisionName: 'test',
-        subdivisionName: 'test',
-        mainCategory: 'Fr request',
-        requestAmount: '50000',
-        lastUpdateDate: moment('17-04-2023'),
-        sanction: 'Required' },
-      {
-        _id: '2',
-        FRno: '1234',
-        FRdate: moment('17-04-2023'),
-        divisionName: 'test',
-        subdivisionName: 'test',
-        mainCategory: 'Fr request',
-        requestAmount: '50000',
-        lastUpdateDate: moment('17-04-2023'),
-        sanction: 'Required' },
-      {
-        _id: '3',
-        FRno: '1234',
-        FRdate: moment('17-04-2023'),
-        divisionName: 'test',
-        subdivisionName: 'test',
-        mainCategory: 'Fr request',
-        requestAmount: '50000',
-        lastUpdateDate: moment('17-04-2023'),
-        sanction: 'Required' },
-      {
-        _id: '4',
-        FRno: '1234',
-        FRdate: moment('17-04-2023'),
-        divisionName: 'test',
-        subdivisionName: 'test',
-        mainCategory: 'Fr request',
-        requestAmount: '50000',
-        lastUpdateDate: moment('17-04-2023'),
-        sanction: 'Required' },
-
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
+    axios.get('/fr/'),
   ),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getById: (fRId: string) => getStandardResponse<FR>(
@@ -158,16 +111,12 @@ export default {
       timeout: 500,
     }),
   ),
-  addParticulars: ( particularData: Particulars,
-    action: 'add' | 'edit') => getStandardResponse<number>(
-      dummyRequest({
-        data: action,
-        // error: null,
-        message: action +'ed Particulars',
-        result: 'success',
-        timeout: 500,
-      }),
-    ),
+  addParticulars: ( particularData: Particulars) => getStandardResponse<Particulars>(
+    axios.post('/fr/particulars', particularData),
+  ),
+  createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
+    axios.post('/fr/', frRequest),
+  ),
   getParticulars: () => getStandardResponse<Particulars[]>(
     dummyRequest<Particulars[]>({
       data: [{
