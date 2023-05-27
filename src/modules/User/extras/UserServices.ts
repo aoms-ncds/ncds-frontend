@@ -82,6 +82,7 @@ export default {
             'PIONMissionaryFund': 300,
             'MUTDeduction': 100,
           },
+          'children': [],
           'createdAt': moment('2023-05-19T05:06:09.292Z'),
           'updatedAt': moment('2023-05-19T05:06:09.292Z'),
         },

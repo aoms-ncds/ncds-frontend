@@ -38,6 +38,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       knownLanguages: [],
 
     },
+    children: [],
   });
 
   useEffect(() => {

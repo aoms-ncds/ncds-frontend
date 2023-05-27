@@ -2,7 +2,7 @@ import React from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
-import { languages } from '../../../extras/CommonConfig';
+import { languages } from '../../../../extras/CommonConfig';
 
 const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
     textField: { variant: 'filled' | 'outlined' | 'standard' };
@@ -98,6 +98,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
           value={props.value.dateOfBirth?.fromNow()}
           variant={props.options?.textField.variant}
           fullWidth
+          disabled
         />
       </Grid>
 

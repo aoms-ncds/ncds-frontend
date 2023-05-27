@@ -97,6 +97,7 @@ declare global{
   officialDetails: CreatableOfficialDetails;
   supportDetails: SupportDetails;
   supportStructure: SupportStructure;
+
 }
 
 
