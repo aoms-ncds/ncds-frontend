@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { enqueueSnackbar } from 'notistack';
 import UserForm from '../User/components/UserForm';
-import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
 
@@ -12,7 +11,6 @@ interface WorkerFormPageProps{
 const WorkerFormPage = (props: WorkerFormPageProps) => {
   const { id } = useParams();
 
-  const [spouse, setSpouse] = useState<CreatableSpouse>();
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
     basicDetails: {

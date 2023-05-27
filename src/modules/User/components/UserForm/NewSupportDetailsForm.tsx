@@ -29,7 +29,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
 
   return (
     <>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={designations??[]}
           value={props.value.designation}
@@ -47,7 +47,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Total number of years in ministry"
           type="number"
@@ -61,7 +61,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="Field">Field</FormLabel>
           <RadioGroup

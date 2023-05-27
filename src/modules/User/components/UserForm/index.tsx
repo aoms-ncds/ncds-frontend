@@ -11,7 +11,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
   kind: UserKind;
 }>) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [spouse, setSpouce] = useState<CreatableSpouse>({ firstName: '',
+  const spouse:CreatableSpouse=({ firstName: '',
     lastName: '',
   });
   return (
@@ -48,7 +48,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                   setActiveStep((step) => step+1);
                 }}>
                   <Grid container spacing={3}>
-                    <Grid item xs={12} md={6} lg={6}>
+                    <Grid item xs={12} md={6} lg={8}>
                       <TextField
                         label={props.options?.kind=='worker'?'Worker Code':'Staff Code'}
                         value={props.options?.kind=='worker' ? (props.value as CreatableIWorker).workerCode : (props.value as CreatableStaff).staffCode}
@@ -69,7 +69,16 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                           basicDetails: newUserBasicDetails,
                         })
                       }
-                      options={props.options}
+                      options={
+                        { ...props.options,
+                          spouse: {
+                            spouseOfAnother: (props.value as CreatableStaff).spouseOfAnother,
+                            onChange:
+                              (newSpouse:User) => props.onChange({
+                                ...props.value,
+                                spouseOfAnother: newSpouse,
+                              }),
+                          } } }
                     />
                   </Grid>
 

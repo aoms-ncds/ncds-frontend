@@ -9,7 +9,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
 }>) => {
   return (
     <>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="First name"
           value={props.value.firstName}
@@ -25,7 +25,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Last name"
           value={props.value.lastName}
@@ -42,7 +42,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Email"
           type="email"
@@ -58,7 +58,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Phone number"
           type="tel"
@@ -74,7 +74,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Birth"
           value={props.value.dateOfBirth}
@@ -92,7 +92,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Age"
           value={props.value.dateOfBirth?.fromNow()}
@@ -101,7 +101,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <FormControlLabel
           label="Working"
           control={
@@ -116,7 +116,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Occupation"
           value={props.value.occupation}
@@ -131,7 +131,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Qualification"
           value={props.value.qualification}
@@ -146,7 +146,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           multiple
           id="knownLanguages"

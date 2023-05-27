@@ -33,7 +33,7 @@ declare global{
   licenseNumber?: string;
   permanentAddress: Address;
   currentAddress: Address;
-  spouseOfAnotherUser?:User;
+  spouseOfAnother?:User;
 }
  interface CreatableBasicDetails extends Creatable<BasicDetails> {
   gender?: BasicDetails['gender'];
@@ -46,7 +46,6 @@ declare global{
     voterIdNo?: string;
     voterIdFile?: FileObject;
   };
-  spouseOfAnotherUser?:User;
 }
  interface OfficialDetails {
   dateOfJoining?: Moment;
@@ -55,18 +54,18 @@ declare global{
   remarks?: string;
   subdivision: SubDivision;
   selfSupport: boolean;
-  status: OfficialDetailsStatus;
+  offiStatus: OfficialDetailsStatus;
   dateOfDivisionJoining?: Moment;
   dateOfDivisionLeaving?: Moment;
   noOfChurches: number;
 }
  type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
- type OfficialDetailsStatus = 'ministering' | 'left' | 'education leave' | 'sabbatical leave';
+ type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave';
  interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
   dateOfJoining?: Moment;
   subdivision?: SubDivision;
   selfSupport?: boolean;
-  status?: OfficialDetailsStatus;
+  offiStatus?: OfficialDetailsStatus;
   noOfChurches?: number;
 }
  interface SupportDetails {
