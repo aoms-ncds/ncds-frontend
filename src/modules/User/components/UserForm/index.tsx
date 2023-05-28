@@ -24,35 +24,28 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
   });
 
   const { editID } = useParams();
-  const [children, setChildren] = useState<CreatableChild[]>((props.value as CreatableIWorker).children.length > 0 ? (props.value as CreatableIWorker).children : [{
-    // type: '',
-    firstName: '',
-    lastName: '',
-  }]);
+  // const [children, setChildren] = useState<CreatableChild[]>((props.value as CreatableIWorker).children.length > 0 ? (props.value as CreatableIWorker).children : [{
+  //   // type: '',
+  //   firstName: '',
+  //   lastName: '',
+  // }]);
   const [newChild, setNewChild] = useState<CreatableChild>({
     // type: '',
     firstName: '',
     lastName: '',
   });
   const [index, setIndex] = useState<number>(0);
+  const [childAction, setchildAction] = useState<'add'|'edit'>('add');
 
   const [open, toggleOpen] = useState(false);
   const handleAddChild = () => {
-    props.onChange({
-      ...props.value,
-      children: [...(props.value as CreatableIWorker).children, { _id: (children.length + 1).toString(),
-        firstName: '',
-        lastName: '' }],
-
+    toggleOpen(true);
+    setchildAction('add');
+    setNewChild({
+      // type: '',
+      firstName: '',
+      lastName: '',
     });
-    // setChildren([
-    //   ...children,
-    //   {
-    //     _id: (children.length + 1).toString(),
-    //     firstName: '',
-    //     lastName: '',
-    //   },
-    // ]);
   };
   const deleteChild = (_index: number) => {
     props.onChange({
@@ -60,8 +53,8 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
       children: (props.value as CreatableIWorker).children.filter((_, i) => i !== _index),
 
     });
-    const newChildren = (props.value as CreatableIWorker).children.filter((_, i) => i !== _index);
-    const deletedChild=children.filter((_, i) => i == index);
+    // const newChildren = (props.value as CreatableIWorker).children.filter((_, i) => i !== _index);
+    // const deletedChild=children.filter((_, i) => i == index);
   //   const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
   //   if (deletedSubdivisionIds.length > 0) {
   //     console.log('testing neww', deletedSubdivisionIds[0]);
@@ -95,16 +88,16 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
   //   return newChildren;
   // };
   };
-  const lastProgramNameField = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    lastProgramNameField.current?.focus();
-    // for (let i = 0; i < 50; i++) { // Used for automatically adding 50 sheets (for testing purposes)
-    //   RESTClient.Scheduling.createProgramSheet({
-    //     name: "Test sheet " + i,
-    //     cols: [1, 2, 3, 4, 5].map(item => ({ name: "Program " + item }))
-    //   })
-    // }
-  }, [children]);
+  // const lastProgramNameField = useRef<HTMLInputElement>(null);
+  // useEffect(() => {
+  //   lastProgramNameField.current?.focus();
+  //   // for (let i = 0; i < 50; i++) { // Used for automatically adding 50 sheets (for testing purposes)
+  //   //   RESTClient.Scheduling.createProgramSheet({
+  //   //     name: "Test sheet " + i,
+  //   //     cols: [1, 2, 3, 4, 5].map(item => ({ name: "Program " + item }))
+  //   //   })
+  //   // }
+  // }, [children]);
   return (
     <>
       <Container maxWidth="md">
@@ -329,10 +322,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                 marginTop: 2,
                 padding: 20,
               }}>
-                {/* <Button
-                      onClick={() => setActiveStep(0)}
-                      sx={{ padding: '16px 64px', mr: 1 }}
-                    > Review from first step </Button> */}
+
                 <Button
                   onClick={() => setActiveStep((step) => step-1)}
                   variant="outlined"
@@ -342,7 +332,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                   type='submit'
                   variant="contained"
                   sx={{ padding: '16px 64px' }}
-                > Submit </Button>
+                > Next </Button>
               </div>
             </form>
           )}
@@ -365,16 +355,8 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                           toggleOpen(true);
                           setNewChild(child);
                           setIndex(i);
-                        // const newChildren = [...children];
-                          // newChildren[index].name = e.target.value;
-                          // setChildren(newChildren);
-                          // onChange(newChildren); // Call the onChange prop with the updated division details
-                          // return newChildren;
+                          setchildAction('edit');
                         }}
-
-                        // inputRef={
-                        //   i === children.length - 1 ? lastProgramNameField : null
-                        // }
                         fullWidth
                         required
                         autoComplete="off"
@@ -400,28 +382,30 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                   Add New Child
                   </Button>
                 </Grid>
-                <Grid item xs={12} sx={{
-                  float: 'right',
-                  marginBottom: 2,
-                  marginTop: 2,
-                  padding: 20,
-                }}>
-                  <Button
-                    onClick={() => setActiveStep(0)}
-                    sx={{ padding: '16px 64px', mr: 1 }}
-                  > Review from first step </Button>
-                  <Button
-                    onClick={() => setActiveStep((step) => step-1)}
-                    variant="outlined"
-                    sx={{ padding: '16px 64px', mr: 1 }}
-                  > Go back </Button>
-                  <Button
-                    type='submit'
-                    variant="contained"
-                    sx={{ padding: '16px 64px' }}
-                  > Submit </Button>
-                </Grid>
               </Grid>
+              {/* <Grid item xs={12} sx={{ justifyContent: 'flex-end' }}> */}
+              <div style={{ float: 'right',
+                marginBottom: 2,
+                marginTop: 2,
+                padding: 20 }}>
+                <Button
+                  onClick={() => setActiveStep(0)}
+                  sx={{ padding: '16px 64px', mr: 1 }}
+                > Review from first step </Button>
+                <Button
+                  onClick={() => setActiveStep((step) => step-1)}
+                  variant="outlined"
+                  sx={{ padding: '16px 64px', mr: 1 }}
+                > Go back </Button>
+                <Button
+                  type='submit'
+                  variant="contained"
+                  sx={{ padding: '16px 64px' }}
+                > Submit </Button>
+              </div>
+
+              {/* </Grid> */}
+              {/* </Grid> */}
             </form>
 
 
@@ -442,17 +426,16 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
         <form onSubmit={(e)=>{
           e.preventDefault();
           toggleOpen(false);
-          // setChildren((kids) =>
-          //   kids?.map((kid, _index) =>
-          //     _index === index ?
-          //       newChild :
-          //       kid,
-          //   ) ?? null);
-          props.onChange({
-            ...props.value,
-            children: (props.value as CreatableIWorker).children.map((child, childIndex)=>
-              childIndex==index?newChild:child),
-          });
+          childAction=='add'?
+            props.onChange({
+              ...props.value,
+              children: [...(props.value as CreatableIWorker).children, newChild],
+            }):
+            props.onChange({
+              ...props.value,
+              children: (props.value as CreatableIWorker).children.map((child, childIndex)=>
+                childIndex==index?newChild:child),
+            });
         }}>
           <DialogTitle>Add Child</DialogTitle>
           <DialogContent>
