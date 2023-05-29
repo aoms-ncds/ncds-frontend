@@ -66,6 +66,10 @@ export default {
       officialDetails: {
         ...data.officialDetails,
         dateOfJoining: moment(data.basicDetails.dateOfJoining),
+        dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
+        dateOfDivisionJoining: moment(data.basicDetails.dateOfDivisionJoining),
+        dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
+        dateOfDivisionLeaving: moment(data.basicDetails.dateOfDivisionLeaving),
       },
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),

@@ -15,7 +15,7 @@ const usersPageRoutes: ModuleRoute = {
     // },
     {
       title: 'View Profile',
-      path: '/:userId',
+      path: '/:userKind/:userId',
       element: <Profile />,
       private: true,
       requiredAccessRights: ['string'],

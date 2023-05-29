@@ -1,183 +1,216 @@
-import { Container, Divider, Grid, Typography } from '@mui/material';
+/* eslint-disable max-len */
+/* eslint-disable react/no-multi-comp */
+import { Avatar, Box, Card, Container, Divider, Grid, List, ListItem, ListItemText, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import WorkerServices from '../Workers/extras/WorkersServices';
+import StaffServices from '../HR/extras/StaffServices';
+import WorkersServices from '../Workers/extras/WorkersServices';
+
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+const TabPanel = (props: TabPanelProps) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+};
+
+const a11yProps = (index: number) => ({ 'id': `simple-tab-${index}`, 'aria-controls': `simple-tabpanel-${index}` });
 
 const Profile = () => {
-  const [worker, setWorker] = useState<IWorker | null>(null);
-  const { workersId } = useParams();
+  const [user, setUser] = useState<IWorker | Staff|null>(null);
+  const { userId, userKind } = useParams();
+  const [currentTab, setCurrentTab] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
+  };
 
   useEffect(() => {
-    if (workersId) {
-      WorkerServices.getById(workersId)
+    if (userId && userKind === 'staff') {
+      StaffServices.getById(userId)
         .then((res) => {
           console.log(res.data);
-          setWorker(res.data);
+          setUser(res.data);
+        })
+        .catch((res) => {});
+    } else if (userId && userKind === 'worker') {
+      WorkersServices.getById(userId)
+        .then((res) => {
+          console.log(res.data);
+          setUser(res.data);
         })
         .catch((res) => {});
     }
   }, []);
   return (
-    <CommonPageLayout title="Worker Profile">
-      <Container>
-        <Grid container>
-          <Grid container md={6}>
-            <Grid item xs={12}>
-              <Divider textAlign="left">
-                <Typography variant="h6" sx={{ textDecoration: 'none' }}>
-                  Basic Details
-                </Typography>
-              </Divider>
+    <CommonPageLayout>
+      <div style={{ display: 'inline-block', marginRight: 10 }}>
+        <Avatar
+          sx={{ height: 50, width: 50 }}
+          src='https://mui.com/static/images/avatar/3.jpg'
+        />
+      </div> <Typography variant="h4" component='span'>Profile of {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}</Typography>
+      <br />
+      <Divider />
+      <br />
+      <Card>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="Basic Details" {...a11yProps(0)} />
+              <Tab label="Official Details" {...a11yProps(1)} />
+              <Tab label="Support Details" {...a11yProps(2)} />
+              <Tab label="Support Structure" {...a11yProps(3)} />
+              {/* <Tab label="Spouse Details" {...a11yProps(4)} />
+              <Tab label="Offsprings Details" {...a11yProps(5)} /> */}
+            </Tabs>
+          </Box>
+          <TabPanel value={currentTab} index={0}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First name:</Typography> {user?.basicDetails.firstName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last name: </Typography> {user?.basicDetails.lastName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of birth: </Typography> {user?.basicDetails.dateOfBirth.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Martial status: </Typography> {user?.basicDetails.martialStatus} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Highest qualification: </Typography> {user?.basicDetails.highestQualification} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Mother tounge: </Typography> {user?.basicDetails.motherTounge} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Communication language: </Typography> {user?.basicDetails.communicationLanguage} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known languages: </Typography> {user?.basicDetails.knownLanguages?.join(', ')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {user?.basicDetails.email} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {user?.basicDetails.phone} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Slternative phone: </Typography> {user?.basicDetails.alternativePhone} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PAN No: </Typography> {user?.basicDetails.PANNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>voterId: </Typography> {user?.basicDetails.voterId?.voterIdNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>licenseNumber: </Typography> {user?.basicDetails.licenseNumber} </Grid>
+              <Grid item xs={12}> <Divider textAlign='left'>Permanent address</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building name: </Typography> {user?.basicDetails.permanentAddress.buildingName??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress.street??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.permanentAddress.city??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.permanentAddress.state??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.permanentAddress.country??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.permanentAddress.pincode??'---------------'} </Grid>
+              <Grid item xs={12}> <Divider textAlign='left'>Current official address</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building name: </Typography> {user?.basicDetails.currentOfficialAddress.buildingName??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.currentOfficialAddress.street??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.currentOfficialAddress.city??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.currentOfficialAddress.state??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.currentOfficialAddress.country??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.currentOfficialAddress.pincode??'---------------'} </Grid>
+              <Grid item xs={12}> <Divider textAlign='left'>Residing address</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building name: </Typography> {user?.basicDetails.residingAddress.buildingName??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.residingAddress.street??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.residingAddress.city??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.residingAddress.state??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.residingAddress.country??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.residingAddress.pincode??'---------------'} </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography variant="body2" sx={{ textDecoration: '' }}>
-                <b>First Name:</b>&nbsp;
-                {!worker?.basicDetails?.firstName ? 'No data' : worker?.basicDetails.firstName}
-              </Typography>
+          </TabPanel>
+          <TabPanel value={currentTab} index={1}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving:</Typography> {user?.officialDetails.dateOfJoining?.format('dddd, DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining:</Typography> {user?.officialDetails.dateOfLeaving?.format('dddd, DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Reason for deactivation:</Typography> {user?.officialDetails.reasonForDeactivation} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Subdivision:</Typography> {user?.officialDetails.subdivision?.name} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>SelfSupport:</Typography> {user?.officialDetails.selfSupport} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of division joining:</Typography> {user?.officialDetails.dateOfDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of previous division leaving:</Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of division leaving:</Typography> {user?.officialDetails.dateOfDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>no of churches:</Typography> {user?.officialDetails.noOfChurches} </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                <b>Last Name:</b>&nbsp;
-                {!worker?.basicDetails?.lastName ? 'No data' : worker.basicDetails.lastName}
-              </Typography>
+          </TabPanel>
+          <TabPanel value={currentTab} index={2}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>designation: </Typography> {user?.supportDetails.designation?.name} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>totalNoOfYearsInMinistry: </Typography> {user?.supportDetails.totalNoOfYearsInMinistry} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>withChurch: </Typography> {user?.supportDetails.withChurch} </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                <>
-                  <b>DOB:</b>&nbsp;
-                  {!worker?.basicDetails?.dateOfBirth ? 'No data' : worker.basicDetails.dateOfBirth.format('DD/MM/YYYY')}
-                </>
-              </Typography>
+          </TabPanel>
+          <TabPanel value={currentTab} index={3}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Basic: </Typography> {user?.supportStructure.basic} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>HRA: </Typography> {user?.supportStructure.HRA} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse allowance: </Typography> {user?.supportStructure.spouseAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Positional allowance: </Typography> {user?.supportStructure.positionalAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special allowance: </Typography> {user?.supportStructure.specialAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact deduction: </Typography> {user?.supportStructure.impactDeduction} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel allowance: </Typography> {user?.supportStructure.telAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION missionary fund: </Typography> {user?.supportStructure.PIONMissionaryFund} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>MUT deduction: </Typography> {user?.supportStructure.MUTDeduction} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total amount: </Typography>
+                {
+                  (user?.supportStructure.basic ?? 0) +
+                  (user?.supportStructure.HRA ?? 0) +
+                  (user?.supportStructure.spouseAllowance ?? 0) +
+                  (user?.supportStructure.positionalAllowance ?? 0) +
+                  (user?.supportStructure.specialAllowance ?? 0) +
+                  (user?.supportStructure.telAllowance ?? 0)
+                }
+              </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total deduction: </Typography>
+                {
+                  (user?.supportStructure.impactDeduction ?? 0) +
+                   (user?.supportStructure.PIONMissionaryFund ?? 0) +
+                   (user?.supportStructure.MUTDeduction ?? 0)
+                }
+              </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Net amount: </Typography>
+                {
+                  (user?.supportStructure.basic ?? 0) +
+                  (user?.supportStructure.HRA ?? 0) +
+                  (user?.supportStructure.spouseAllowance ?? 0) +
+                  (user?.supportStructure.positionalAllowance ?? 0) +
+                  (user?.supportStructure.specialAllowance ?? 0) +
+                  (user?.supportStructure.telAllowance ?? 0) -
+                  (
+                    (user?.supportStructure.impactDeduction ?? 0) +
+                    (user?.supportStructure.PIONMissionaryFund ?? 0) +
+                    (user?.supportStructure.MUTDeduction ?? 0)
+                  )
+                }
+              </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                <b>Work Code:</b>&nbsp;
-                {!worker?.workerCode ? 'No data' : worker.workerCode}
-              </Typography>
-            </Grid>
+          </TabPanel>
+          {/* <TabPanel value={currentTab} index={4}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}>
 
-            <Grid item md={6} xs={12}>
-              <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                <b>Maternal Status:</b>&nbsp;
-                {!worker?.basicDetails?.martialStatus ? 'No data' : worker.basicDetails.martialStatus}
-              </Typography>
+              </Grid>
             </Grid>
-            {worker?.basicDetails?.gender && (
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Gender:</b>&nbsp;
-                  {!worker.basicDetails.gender ? 'No data' : worker.basicDetails.gender}
-                </Typography>
-              </Grid>
-            )}
-            {worker?.basicDetails?.email && (
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Email Id:</b>&nbsp;
-                  {!worker.basicDetails.email ? 'No data' : worker.basicDetails.email}
-                </Typography>
-              </Grid>
-            )}
-            {worker?.basicDetails?.phone && (
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Phone Num:</b>&nbsp;
-                  {!worker.basicDetails.phone ? 'No data' : worker.basicDetails.phone}
-                </Typography>
-              </Grid>
-            )}
-          </Grid>
+          </TabPanel>
+          <TabPanel value={currentTab} index={5}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}>
 
-          <Grid container md={6}>
-            <Grid item xs={12}>
-              <Grid item xs={12}>
-                <Divider textAlign="left">
-                  <Typography variant="h6" sx={{ textDecoration: 'none' }}>
-                    Support Details
-                  </Typography>
-                </Divider>
-              </Grid>
-              <br />
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: '' }}>
-                  <b>Current Designation:</b>&nbsp;
-                  {!worker?.supportDetails?.designation?.name ? 'No data' : worker.supportDetails.designation.name}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Total No Years In Ministry:</b>&nbsp;
-                  {!worker?.supportDetails?.totalNoOfYearsInMinistry ? 'No data' : worker.supportDetails.totalNoOfYearsInMinistry}
-                </Typography>
-              </Grid>
-              {/* <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Type Of Family:</b>&nbsp;
-                  {!worker?.supportDetails? ?
-                    'No data' :
-                    worker.supportDetails}
-                </Typography>
-              </Grid> */}
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Type of Church:</b>&nbsp;
-                  {!worker?.supportDetails?.withChurch ? 'No data' : worker.supportDetails.withChurch ? 'With church' : 'Without church'}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Self Support:</b>&nbsp;
-                  {!worker?.officialDetails.selfSupport ? 'No data' : worker.officialDetails.selfSupport ? 'Yes' : 'No'}
-                </Typography>
               </Grid>
             </Grid>
-
-            <Grid item xs={12}>
-              <br />
-              <br />
-              <Grid item xs={12}>
-                <Divider textAlign="left">
-                  <Typography variant="h6" sx={{ textDecoration: 'none' }}>
-                    Support Structure
-                  </Typography>
-                </Divider>
-              </Grid>
-              <br />
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: '' }}>
-                  <b>Basic Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.basic ? 'No data' : worker.supportStructure.basic}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>HRA Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.HRA ? 'No data' : worker.supportStructure.HRA}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Spouse Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.spouseAllowance ? 'No data' : worker.supportStructure.spouseAllowance}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Positional Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.positionalAllowance ? 'No data' : worker.supportStructure.positionalAllowance}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography variant="body2" sx={{ textDecoration: 'none' }}>
-                  <b>Special Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.specialAllowance ? 'No data' : worker.supportStructure.specialAllowance}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
+          </TabPanel> */}
+        </Box>
+      </Card>
     </CommonPageLayout>
   );
 };
