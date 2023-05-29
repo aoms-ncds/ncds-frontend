@@ -31,7 +31,8 @@ declare global {
     };
     licenseNumber?: string;
     permanentAddress: Address;
-    currentAddress: Address;
+    currentOfficialAddress: Address;
+    residingAddress: Address;
     spouseOfAnother?: User;
   }
   interface CreatableBasicDetails extends Creatable<BasicDetails> {
@@ -51,10 +52,12 @@ declare global {
     dateOfLeaving?: Moment;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
+    division?: Division;
     subdivision?: SubDivision;
     selfSupport: boolean;
     status: OfficialDetailsStatus;
     dateOfDivisionJoining?: Moment;
+    dateOfPreviousDivisionLeaving?: Moment;
     dateOfDivisionLeaving?: Moment;
     noOfChurches: number;
   }
@@ -62,6 +65,7 @@ declare global {
   type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave';
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
+    division?: Division;
     subdivision?: SubDivision;
     selfSupport?: boolean;
     offiStatus?: OfficialDetailsStatus;

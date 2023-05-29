@@ -18,7 +18,8 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       lastName: '',
       email: '',
       permanentAddress: {},
-      currentAddress: {},
+      currentOfficialAddress: {},
+      residingAddress: {},
     },
     officialDetails: {
       remarks: '',

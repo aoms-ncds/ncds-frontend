@@ -19,12 +19,14 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       email: '',
 
       permanentAddress: {},
-      currentAddress: {},
+      currentOfficialAddress: {},
+      residingAddress: {},
     },
     officialDetails: {
       remarks: '',
       selfSupport: true,
       dateOfDivisionJoining: moment(),
+      dateOfPreviousDivisionLeaving: moment(),
       noOfChurches: 5,
       status: 'Ministering',
     },

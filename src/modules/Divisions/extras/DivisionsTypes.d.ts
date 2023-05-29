@@ -1,6 +1,3 @@
-import { MongooseDocument, Creatable, Address } from '../../../extras/CommonTypes';
-import { IWorker } from '../../Workers/extras/WorkersTypes';
-import { Staff } from '../../HR/extras/StaffTypes';
 export default {};
 
 declare global {

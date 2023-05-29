@@ -12,11 +12,12 @@ const NewOfficialDetailsForm = (
     }
   >,
 ) => {
+  const [divisions, setDivisions] = useState<Division[]|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
 
   useEffect(() => {
-    DivisionsServices.getSubDivisions()
-      .then((res) => setSubDivisions(res.data))
+    DivisionsServices.getDivisions()
+      .then((res) => setDivisions(res.data))
       .catch((error) =>
         enqueueSnackbar({
           variant: 'error',
@@ -101,11 +102,46 @@ const NewOfficialDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
+          options={divisions ?? []}
+          value={props.value.division}
+          getOptionLabel={(div) => div.details.name}
+          onChange={(event, newVal) => {
+            props.onChange({ ...props.value, division: newVal ?? undefined });
+            if (!newVal) {
+              setSubDivisions([]);
+            }
+            DivisionsServices.getSubDivisionsByDivisionId(newVal?._id as string)
+            .then((res) => setSubDivisions(res.data))
+            .catch((error) =>
+              enqueueSnackbar({
+                variant: 'error',
+                message: error.message,
+              }),
+            );
+          }}
+          renderInput={(params) => <TextField
+            {...params}
+            label="Division"
+            helperText={!divisions ? 'Loading divisions...' : 'Select a division'}
+            variant={props.options?.textField.variant}
+            required
+          />}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
           options={subDivisions ?? []}
           value={props.value.subdivision}
           getOptionLabel={(subDiv) => subDiv.name}
           onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal ?? undefined })}
-          renderInput={(params) => <TextField {...params} label="Subdivision" variant={props.options?.textField.variant} required />}
+          renderInput={(params) => <TextField
+            {...params}
+            label="Sub division"
+            helperText={!divisions ? 'Loading sub divisions...' : 'Select a sub division'}
+            variant={props.options?.textField.variant}
+            required
+          />}
         />
       </Grid>
 
@@ -124,12 +160,34 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Joined Division On"
+          label="Joined current division on"
           value={props.value.dateOfDivisionJoining}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
               dateOfDivisionJoining: newDate ?? undefined,
+            });
+          }}
+          format="DD/MM/YYYY"
+          slotProps={{
+            textField: {
+              variant: props.options?.textField.variant,
+              // error: dateError,
+              // helperText: dateError && 'Please select a date',
+              fullWidth: true,
+            },
+          }}
+          autoFocus
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <DatePicker
+          label="Left previous division on"
+          value={props.value.dateOfPreviousDivisionLeaving}
+          onChange={(newDate) => {
+            props.onChange({
+              ...props.value,
+              dateOfPreviousDivisionLeaving: newDate ?? undefined,
             });
           }}
           format="DD/MM/YYYY"

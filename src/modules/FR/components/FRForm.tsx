@@ -68,7 +68,15 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         country: 'India',
         pincode: '12345',
       },
-      currentAddress: {
+      currentOfficialAddress: {
+        buildingName: 'Puliyulla parambath',
+        street: '456 Elm Street',
+        city: 'Current City',
+        state: 'Current State',
+        country: 'India',
+        pincode: '54321',
+      },
+      residingAddress: {
         buildingName: 'Puliyulla parambath',
         street: '456 Elm Street',
         city: 'Current City',
@@ -83,6 +91,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       selfSupport: true,
       status: 'Ministering',
       dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+      dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
       noOfChurches: 5,
       subdivision: {
         _id: 'skjdfj',
@@ -108,7 +117,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     createdAt: moment('2023-05-19T05:06:09.292Z'),
     updatedAt: moment('2023-05-19T05:06:09.292Z'),
   });
-  const [divisions, setDivisions] = useState<DivisionDetails[]>();
+  const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory>();
@@ -293,7 +302,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     <Autocomplete
                       value={props.value.purposeWorker}
                       options={workers ?? []}
-                      getOptionLabel={(worker) => worker.firstName}
+                      getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({
@@ -335,7 +344,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
-                    getOptionLabel={(division) => division.divisionName}
+                    getOptionLabel={(division) => division.details.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
                         props.onChange({
