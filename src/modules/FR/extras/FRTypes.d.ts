@@ -14,6 +14,7 @@ export interface Frrequest {
   requestAmount: string;
   lastUpdateDate: Moment;
   sanction: string;
+  Particulars:Particulars[];
 }
 export interface FR extends MongooseDocument {
   _id: string;
@@ -26,6 +27,7 @@ export interface FR extends MongooseDocument {
   purposeCoordinator?: IWorker;
   purposeOthers?: string;
   sanctionedAmount: number;
+  Particulars?:Particulars[];
 }
 export interface CreatableFR extends Creatable<FR> {
   date?: FR['date'];
@@ -65,7 +67,7 @@ export interface SubCategory3 {
   narration: string;
 }
 export interface Particulars {
-  _id: string;
+  _id?: string;
   mainCategory: string;
   subCategory1: string;
   subCategory2: string;
@@ -74,6 +76,8 @@ export interface Particulars {
   month: string;
   requestedAmount: string;
   narration: string;
+  FR?:FR;
+
 }
 
 export interface Remark extends MongooseDocument {
