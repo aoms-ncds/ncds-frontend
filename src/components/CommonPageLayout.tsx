@@ -22,7 +22,7 @@ import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
-import { getAllModuleRoutes } from '../extras/CommonRouter';
+import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
 
 const drawerWidth = 240;
@@ -59,7 +59,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string }) 
       <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
       <Divider />
       <List>
-        {getAllModuleRoutes
+        {allModuleRoutes
           .map((moduleRoute, index) =>
             moduleRoute.pages.map((page, _index) =>
               !page.showInDrawer ? null : (
@@ -133,7 +133,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string }) 
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem component={Link} to={'/users/profile/me'} onClick={handleCloseUserMenu}>
+            <MenuItem component={Link} to={'/users/me'} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Profile</Typography>
             </MenuItem>
           </Menu>

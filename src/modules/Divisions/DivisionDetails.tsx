@@ -86,6 +86,8 @@ const DivisionDetailsPage = () => {
       IFSCCode: '',
       beneficiary: '',
     },
+    createdAt: moment(),
+    updatedAt: moment(),
   });
   useEffect(() => {
     if (divisionIDs) {

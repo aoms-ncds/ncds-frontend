@@ -356,18 +356,18 @@ const UserBasicDetailsForm = (
       </Grid>
       <NewAddressForm
         action="add"
-        value={props.value.currentAddress}
+        value={props.value.currentOfficialAddress}
         onChange={(newAddress) => {
           // Implement
           if (!duplicateCurrentAddress) {
             props.onChange({
               ...props.value,
-              currentAddress: newAddress,
+              currentOfficialAddress: newAddress,
             });
           } else {
             props.onChange({
               ...props.value,
-              currentAddress: newAddress,
+              currentOfficialAddress: newAddress,
               permanentAddress: newAddress,
             });
           }
@@ -376,7 +376,7 @@ const UserBasicDetailsForm = (
           textField: {
             variant: props.options?.textField?.variant ?? 'outlined',
           },
-          title: 'Current address',
+          title: 'Current Official address',
         }}
       />
       <NewAddressForm
@@ -396,8 +396,31 @@ const UserBasicDetailsForm = (
           title: 'Permanent address',
           copyAddressCheckBox: {
             label: 'Same as current address',
-            onChange: (value) => setDuplicateCurrentAddress(value),
+            onChange: (value) => {
+              setDuplicateCurrentAddress(value);
+              props.onChange({
+                ...props.value,
+                permanentAddress: props.value.currentOfficialAddress,
+              });
+            },
           },
+        }}
+      />
+      <NewAddressForm
+        action="add"
+        value={props.value.residingAddress}
+        onChange={(newAddress) => {
+          // Implement
+          props.onChange({
+            ...props.value,
+            residingAddress: newAddress,
+          });
+        }}
+        options={{
+          textField: {
+            variant: props.options?.textField?.variant ?? 'outlined',
+          },
+          title: 'Residing address',
         }}
       />
     </>

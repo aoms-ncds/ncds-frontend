@@ -19,10 +19,10 @@ declare global {
     FRno: string;
     date: Moment;
     purpose: FRPurpose;
-    purposeWorker?: IETWorker;
+    purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
-    purposeDivision?: IETDivisions;
-    purposeCoordinator?: IStaff;
+    purposeDivision?: Division;
+    purposeCoordinator?: Staff;
     purposeOthers?: string;
     sanctionedAmount: number;
   }

@@ -83,7 +83,7 @@ const ApproveWorkerPage = () => {
       headerName: 'View',
       width: 130,
       renderCell: (props: any) => (
-        <Button component={Link} to={`/workers/profile/${props.row._id}`} variant="contained">
+        <Button component={Link} to={`/users/${props.row._id}`} variant="contained">
           View
         </Button>
       ),

@@ -15,6 +15,7 @@ export default {
 
   getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/')),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions')),
+  getSubDivisionsByDivisionId: (division: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division } })),
   create: (division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {

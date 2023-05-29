@@ -112,7 +112,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               id: 'View',
               text: 'View',
               component: Link,
-              to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/profile/${renderCellParams.row._id}`,
+              to: `/users/${renderCellParams.row._id}`,
               icon: PreviewIcon,
             },
             {

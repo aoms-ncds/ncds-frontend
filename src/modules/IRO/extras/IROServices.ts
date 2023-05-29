@@ -32,6 +32,7 @@ export default {
                 noOfChurches: 5,
                 coordinator: {
                   _id: '646703c19e433f67d27019b2',
+                  staffCode: 'IETWK00003',
                   basicDetails: {
                     aadhaar: {
                       aadhaarNo: '123456789012',
@@ -62,7 +63,15 @@ export default {
                       country: 'India',
                       pincode: '12345',
                     },
-                    currentAddress: {
+                    currentOfficialAddress: {
+                      buildingName: 'Puliyulla parambath',
+                      street: '456 Elm Street',
+                      city: 'Current City',
+                      state: 'Current State',
+                      country: 'India',
+                      pincode: '54321',
+                    },
+                    residingAddress: {
                       buildingName: 'Puliyulla parambath',
                       street: '456 Elm Street',
                       city: 'Current City',
@@ -77,6 +86,7 @@ export default {
                     selfSupport: true,
                     status: 'Ministering',
                     dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
                     noOfChurches: 5,
                     subdivision: {
                       _id: 'skjdfj',
@@ -102,8 +112,8 @@ export default {
                   updatedAt: moment('2023-05-19T05:06:09.292Z'),
                 },
                 seniorLeader: {
+                  staffCode: 'IETWK00001',
                   _id: '646703c19e433f67d27019b2',
-
                   basicDetails: {
                     aadhaar: {
                       aadhaarNo: '123456789012',
@@ -134,7 +144,15 @@ export default {
                       country: 'India',
                       pincode: '12345',
                     },
-                    currentAddress: {
+                    currentOfficialAddress: {
+                      buildingName: 'Puliyulla parambath',
+                      street: '456 Elm Street',
+                      city: 'Current City',
+                      state: 'Current State',
+                      country: 'India',
+                      pincode: '54321',
+                    },
+                    residingAddress: {
                       buildingName: 'Puliyulla parambath',
                       street: '456 Elm Street',
                       city: 'Current City',
@@ -149,6 +167,7 @@ export default {
                     selfSupport: true,
                     status: 'Ministering',
                     dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
                     noOfChurches: 5,
                     subdivision: {
                       _id: 'skjdfj',
@@ -175,7 +194,7 @@ export default {
                 },
                 juniorLeader: {
                   _id: '646703c19e433f67d27019b2',
-
+                  staffCode: 'IETWK00002',
                   basicDetails: {
                     aadhaar: {
                       aadhaarNo: '123456789012',
@@ -206,7 +225,15 @@ export default {
                       country: 'India',
                       pincode: '12345',
                     },
-                    currentAddress: {
+                    currentOfficialAddress: {
+                      buildingName: 'Puliyulla parambath',
+                      street: '456 Elm Street',
+                      city: 'Current City',
+                      state: 'Current State',
+                      country: 'India',
+                      pincode: '54321',
+                    },
+                    residingAddress: {
                       buildingName: 'Puliyulla parambath',
                       street: '456 Elm Street',
                       city: 'Current City',
@@ -221,6 +248,7 @@ export default {
                     selfSupport: true,
                     status: 'Ministering',
                     dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
                     noOfChurches: 5,
                     subdivision: {
                       _id: 'skjdfj',
@@ -261,6 +289,8 @@ export default {
                 IFSCCode: 'ksdfjdskfj',
                 beneficiary: 'ksdfjdskfj',
               },
+              createdAt: moment(),
+              updatedAt: moment(),
             },
             subDivision: {
               _id: '1',
