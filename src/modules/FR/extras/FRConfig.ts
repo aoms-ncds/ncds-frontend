@@ -1,4 +1,3 @@
-import { FRPurpose } from './FRTypes';
 
 export const categories = [
   {

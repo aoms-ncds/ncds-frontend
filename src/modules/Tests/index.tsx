@@ -6,8 +6,6 @@ import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
-import { IWorker } from '../Workers/extras/WorkersTypes';
-import { DateRange } from '../../extras/CommonTypes';
 
 const index = () => {
   const [showFileUploader, setShowFileUploader] = useState(false);

@@ -23,7 +23,6 @@ import {
 } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useRef, useState } from 'react';
-import { AJAXProgress, FileObject, FileObjectType, StandardResponse } from '../extras/CommonTypes';
 
 interface FileUploaderProps{
   id?: string;

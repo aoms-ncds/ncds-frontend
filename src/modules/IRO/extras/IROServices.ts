@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { IROrder } from './IROTypes';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(
@@ -36,7 +35,6 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -111,7 +109,6 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
 
             'basicDetails': {
               'aadhaar': {
@@ -187,7 +184,6 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
 
             'basicDetails': {
               'aadhaar': {
@@ -306,7 +302,6 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -381,7 +376,6 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -456,7 +450,6 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -573,7 +566,6 @@ export default {
           noOfChurches: 5,
           coordinator: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -648,7 +640,6 @@ export default {
           },
           seniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -723,7 +714,6 @@ export default {
           },
           juniorLeader: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',

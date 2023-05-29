@@ -8,7 +8,6 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
-import { BankDetails, Division, DivisionDetails, SubDivision } from './extras/DivisionsTypes';
 
 const DivisionDetailsPage = () => {
   const { divisionIDs, editID } = useParams();

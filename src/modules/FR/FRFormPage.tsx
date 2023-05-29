@@ -5,7 +5,6 @@ import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
 import { useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
-import { CreatableFR } from './extras/FRTypes';
 
 interface FRFormPagerops{
   action: 'add'|'edit'|'view';

@@ -11,9 +11,6 @@ import {
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import DesignationServices from '../../../HR/extras/DesignationServices';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { Designation } from '../../../HR/extras/DesignationTypes';
-import { SupportDetails } from '../../extras/UserTypes';
 
 const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
   textField: {variant: 'filled' | 'outlined' | 'standard'};
@@ -32,7 +29,7 @@ const NewSupportDetailsForm = (props: FormComponentProps<SupportDetails, {
 
   return (
     <>
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={designations??[]}
           value={props.value.designation}

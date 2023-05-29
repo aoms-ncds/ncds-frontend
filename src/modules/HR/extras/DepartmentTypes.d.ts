@@ -1,8 +1,10 @@
-import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
+export default {};
 
-export interface Department extends MongooseDocument {
+declare global{
+ interface Department extends MongooseDocument {
     name: string;
 }
-export interface CreatableDepartment extends Creatable<Department> {
+ interface CreatableDepartment extends Creatable<Department> {
     inputValue?: string;
+}
 }

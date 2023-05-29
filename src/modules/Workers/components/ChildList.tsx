@@ -10,7 +10,6 @@ import {
 import DropdownButton from '../../../components/DropDownButton';
 
 import { DataGrid } from '@mui/x-data-grid';
-import { Child } from '../extras/ChildTypes';
 import ChildrenServices from '../extras/ChildrenServices';
 
 const ChildListPage = () => {

@@ -1,23 +1,43 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { languages } from '../../../../extras/CommonConfig';
 import NewAddressForm from './NewAddressForm';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableBasicDetails, WorkerField, Gender, MaritalStatus, User } from '../../extras/UserTypes';
+import UsersDropdown from '../UsersDropdown';
 import UserServices from '../../extras/UserServices';
-import UserDropdown from '../UserDropdown';
+import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<CreatableBasicDetails, {
-    textField: {variant: 'filled' | 'outlined' | 'standard'};
+    textField?: {variant: 'filled' | 'outlined' | 'standard'};
+    kind?: UserKind | undefined;
+    spouse:{
+      spouseOfAnother?:User;
+      onChange:(newSpouse:User)=>void;
+    };
 }>)=> {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
 
-  const [spouseList, setSpouseList] = useState<User[]>();
+  const [spouseList, setSpouseList] = useState<User[]>([]);
+
   useEffect(() => {
-    UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } });
-  }, [props.value.gender]);
+    // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
+    if (props.value.martialStatus=='Married'&&props.options?.kind==='staff') {
+      UserServices.getAll({
+        $and: [
+          { status: CommonLifeCycleStates.ACTIVE },
+          { 'basicDetails.gender': props.value.gender=='Male'?'Female':props.value.gender=='Female'?'Male':'Other' },
+        ],
+      })
+    .then((res) => {
+      console.log(res);
+      setSpouseList(res.data);
+    })
+   .catch((res) => {
+     console.log(res);
+   });
+    }
+  }, [props.value.gender, props.value.martialStatus]);
 
 
   return (
@@ -44,7 +64,7 @@ const UserBasicDetailsForm = (
           label="First name"
           value={props.value.firstName}
           onChange={(e) => props.onChange({ ...props.value, firstName: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
           InputProps={{ required: true, autoFocus: true }}
           required
@@ -56,7 +76,7 @@ const UserBasicDetailsForm = (
           label="Last name"
           value={props.value.lastName}
           onChange={(e) => props.onChange({ ...props.value, lastName: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
           InputProps={{ required: true }}
           required
@@ -74,7 +94,7 @@ const UserBasicDetailsForm = (
           format='DD/MM/YYYY'
           slotProps={{
             textField: {
-              variant: props.options?.textField.variant,
+              variant: props.options?.textField?.variant,
               fullWidth: true,
               required: true,
             },
@@ -91,7 +111,7 @@ const UserBasicDetailsForm = (
             readOnly: true,
             disabled: true,
           }}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           InputLabelProps={{ shrink: true }}
           fullWidth
         />
@@ -136,17 +156,18 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
-      {props.value.martialStatus==='Married'&&(
+      {props.value.martialStatus==='Married' && props.options?.kind==='staff'&&(
         <Grid item xs={12} md={6} lg={4}>
-          <UserDropdown
+          <UsersDropdown
             users={spouseList}
-            value={props.value.spouseOfAnotherUser}
+            value={props.options?.spouse.spouseOfAnother}
             onChange={(e, newValue) => {
               if (newValue) {
-                props.onChange({ ...props.value, spouseOfAnotherUser: newValue });
+                props.options?.spouse.onChange(newValue);
               }
             }} label={'Spouse of another User'}
             required={false}
+            textFieldProps={ { variant: props.options?.textField?.variant }}
           />
         </Grid>
       )}
@@ -155,7 +176,7 @@ const UserBasicDetailsForm = (
           label="Highest Qualification"
           value={props.value.highestQualification}
           onChange={(e) => props.onChange({ ...props.value, highestQualification: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -171,7 +192,7 @@ const UserBasicDetailsForm = (
             <TextField
               {...params}
               label="Mother Tongue"
-              variant={props.options?.textField.variant}
+              variant={props.options?.textField?.variant}
             />
           )}
         />
@@ -188,7 +209,7 @@ const UserBasicDetailsForm = (
             <TextField
               {...params}
               label="Communication Language"
-              variant={props.options?.textField.variant}
+              variant={props.options?.textField?.variant}
             />
           )}
         />
@@ -206,7 +227,7 @@ const UserBasicDetailsForm = (
             <TextField
               {...params}
               label="Known Languages"
-              variant={props.options?.textField.variant}
+              variant={props.options?.textField?.variant}
             />
           )}
         />
@@ -218,7 +239,7 @@ const UserBasicDetailsForm = (
           type="email"
           value={props.value.email}
           onChange={(e) => props.onChange({ ...props.value, email: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
           InputProps={{ required: true }}
           required
@@ -232,7 +253,7 @@ const UserBasicDetailsForm = (
           type="tel"
           value={props.value.phone}
           onChange={(e) => props.onChange({ ...props.value, phone: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -243,7 +264,7 @@ const UserBasicDetailsForm = (
           type="tel"
           value={props.value.alternativePhone}
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -253,7 +274,7 @@ const UserBasicDetailsForm = (
           label="PAN"
           value={props.value.PANNo}
           onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -269,7 +290,7 @@ const UserBasicDetailsForm = (
               aadhaarNo: e.target.value,
             },
           })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -290,7 +311,7 @@ const UserBasicDetailsForm = (
               });
             }
           }}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           InputLabelProps={{ shrink: true }}
           fullWidth
         />
@@ -307,7 +328,7 @@ const UserBasicDetailsForm = (
               voterIdNo: e.target.value,
             },
           })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
@@ -328,7 +349,7 @@ const UserBasicDetailsForm = (
               });
             }
           }}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           InputLabelProps={{ shrink: true }}
           fullWidth
         />
@@ -366,7 +387,7 @@ const UserBasicDetailsForm = (
         }}
         options={{
           textField: {
-            variant: props.options?.textField.variant ?? 'outlined',
+            variant: props.options?.textField?.variant ?? 'outlined',
           },
           title: 'Current address',
         }}
@@ -383,7 +404,7 @@ const UserBasicDetailsForm = (
         }}
         options={{
           textField: {
-            variant: props.options?.textField.variant ?? 'outlined',
+            variant: props.options?.textField?.variant ?? 'outlined',
           },
           title: 'Permanent address',
           copyAddressCheckBox: {

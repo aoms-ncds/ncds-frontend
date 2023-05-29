@@ -14,8 +14,6 @@ import { Avatar, Card, Grid } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
-import { FormComponentProps } from '../../../extras/CommonTypes';
-import { User, UserKind } from '../extras/UserTypes';
 
 const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOrWorker[], {kind: UserKind}>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;

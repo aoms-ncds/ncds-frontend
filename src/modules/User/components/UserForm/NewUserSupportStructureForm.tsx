@@ -1,7 +1,5 @@
 import { Grid, TextField } from '@mui/material';
 import React from 'react';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { SupportStructure } from '../../extras/UserTypes';
 
 const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
@@ -80,12 +78,12 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Tel allowance"
+          label="Impact deduction"
           type="number"
-          value={props.value.telAllowance}
+          value={props.value.impactDeduction}
           onChange={(e) => props.onChange({
             ...props.value,
-            telAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
+            impactDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
           })}
           variant={props.options?.textField.variant}
           fullWidth
@@ -94,12 +92,12 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Impact deduction"
+          label="Tel allowance"
           type="number"
-          value={props.value.impactDeduction}
+          value={props.value.telAllowance}
           onChange={(e) => props.onChange({
             ...props.value,
-            impactDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
+            telAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
           })}
           variant={props.options?.textField.variant}
           fullWidth

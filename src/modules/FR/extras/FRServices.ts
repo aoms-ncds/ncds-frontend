@@ -157,7 +157,7 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
+            'workerCode': '',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -227,6 +227,7 @@ export default {
               'PIONMissionaryFund': 300,
               'MUTDeduction': 100,
             },
+            'children': [],
             'createdAt': moment('2023-05-19T05:06:09.292Z'),
             'updatedAt': moment('2023-05-19T05:06:09.292Z'),
           },
@@ -239,7 +240,7 @@ export default {
           remark: 'HI Hlo jhvaj hfgadkhjfga yukhj gfiuyakhfigfi  uaigqaufjuka jiuklfgfuaukg fgafiukf,adyuja yufafyuayiufgauiygfdiuagfukjgaukjfgaiufgiaugfiuagfiuagfk.afmlakaukgayjgfukhjagfjhafl,anhajhfukagfkuajh.kahfilahg lahifu aufg ukagfuiag uagfiuagfiu giuaguiaguiofuoauooiua or oua uoa uoa rouar iuoauoafuioa uaurua ua uoa yuar ur you8a ruak uoahyfuioafuiafuahyfuafhuafhuiaf',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
+            'workerCode': '',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -309,6 +310,7 @@ export default {
               'PIONMissionaryFund': 300,
               'MUTDeduction': 100,
             },
+            'children': [],
             'createdAt': moment('2023-05-19T05:06:09.292Z'),
             'updatedAt': moment('2023-05-19T05:06:09.292Z'),
           },
@@ -320,7 +322,7 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
+            'workerCode': '',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -390,6 +392,7 @@ export default {
               'PIONMissionaryFund': 300,
               'MUTDeduction': 100,
             },
+            'children': [],
             'createdAt': moment('2023-05-19T05:06:09.292Z'),
             'updatedAt': moment('2023-05-19T05:06:09.292Z'),
           },
@@ -401,7 +404,7 @@ export default {
           remark: 'HI Hlo',
           createdBy: {
             '_id': '646703c19e433f67d27019b2',
-            'kind': 'staff',
+            'workerCode': '',
             'basicDetails': {
               'aadhaar': {
                 'aadhaarNo': '123456789012',
@@ -471,6 +474,7 @@ export default {
               'PIONMissionaryFund': 300,
               'MUTDeduction': 100,
             },
+            'children': [],
             'createdAt': moment('2023-05-19T05:06:09.292Z'),
             'updatedAt': moment('2023-05-19T05:06:09.292Z'),
           },

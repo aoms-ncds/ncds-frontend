@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getStandardResponse } from '../../../extras/CommonHelpers';
-import { CreatableSpouse, Spouse } from './SpouseTypes';
 
 export default {
   /**

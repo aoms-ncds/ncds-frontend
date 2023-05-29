@@ -3,6 +3,7 @@ import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers
 import axios from 'axios';
 import { LoginCredentials, LoginResponse, User } from './UserTypes';
 import { RecursivePartial, StandardResponse } from '../../../extras/CommonTypes';
+import { FilterQuery } from 'mongoose';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,6 +13,7 @@ export default {
         token: 'skdfksj',
         user: {
           '_id': '646703c19e433f67d27019b2',
+          'workerCode': '',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -58,7 +60,7 @@ export default {
             'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
             'remarks': 'Lorem ipsum dolor sit amet.',
             'selfSupport': true,
-            'status': 'Ministering',
+            'offiStatus': 'Ministering',
             'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
             'noOfChurches': 5,
             'subdivision': {
@@ -81,6 +83,7 @@ export default {
             'PIONMissionaryFund': 300,
             'MUTDeduction': 100,
           },
+          'children': [],
           'createdAt': moment('2023-05-19T05:06:09.292Z'),
           'updatedAt': moment('2023-05-19T05:06:09.292Z'),
         },
@@ -92,9 +95,10 @@ export default {
     // axios.post('/users/login'),
   ),
 
-
-  getAll: (conditions?: RecursivePartial<User>): Promise<StandardResponse<User[]>> =>
-    getStandardResponse<User[]>(axios.get('/users', { params: conditions }), (users) =>
+  getAll: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[]>(axios.get('/users', { params: {
+      filterQuery: JSON.stringify(conditions),
+    } }), (users) =>
       users.map((user: any) => ({
         ...user,
         basicDetails: {

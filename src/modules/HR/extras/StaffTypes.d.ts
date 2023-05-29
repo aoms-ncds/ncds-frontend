@@ -1,9 +1,13 @@
-import { CreatableUser, User } from '../../User/extras/UserTypes';
+export default {};
 
-export interface Staff extends User {
-  staffCode: string;
-}
+declare global {
+   interface Staff extends User {
+    staffCode: string;
+    spouseOfAnother?:User;
+  }
 
-export interface CreatableStaff extends CreatableUser {
-  staffCode?: string;
+   interface CreatableStaff extends CreatableUser {
+    staffCode?: string;
+    spouseOfAnother?:User;
+  }
 }

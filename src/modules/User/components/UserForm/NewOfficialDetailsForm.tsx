@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableOfficialDetails, DeactivationReason, OfficialDetailsStatus } from '../../extras/UserTypes';
-import { SubDivision } from '../../../Divisions/extras/DivisionsTypes';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
 
@@ -119,10 +116,10 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<OfficialDetailsStatus>
           options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
-          value={props.value.status}
+          value={props.value.offiStatus}
           onChange={(e, selectedStatus) => props.onChange({
             ...props.value,
-            status: selectedStatus??undefined,
+            offiStatus: selectedStatus??undefined,
           })}
           renderInput={(params) => (
             <TextField
@@ -169,9 +166,9 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           }
           variant={props.options?.textField.variant}
           fullWidth
+          required
         />
       </Grid>
-
       <Grid item xs={12} md={6} lg={4}>
         <FormControlLabel
           label="Self support"

@@ -1,6 +1,9 @@
 import { Moment } from 'moment';
-import { BankDetails, Division, SubDivision } from '../../Divisions/extras/DivisionsTypes';
-export interface IROrder {
+
+export default {};
+
+declare global{
+   interface IROrder {
   _id: string;
   IROno: string;
   IROdate: Moment;
@@ -16,4 +19,5 @@ export interface IROrder {
   transferredBank: BankDetails;
   modeOfPayment: string;
   transactionNumber: string;
+}
 }

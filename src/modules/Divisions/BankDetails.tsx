@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
-import { FormComponentProps } from '../../extras/CommonTypes';
-import { BankDetails } from './extras/DivisionsTypes';
 
 const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:string}>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(

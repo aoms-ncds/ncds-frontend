@@ -2,7 +2,6 @@ import { Autocomplete, TextField, TextFieldProps } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import StaffServices from '../extras/StaffServices';
-import { Staff } from '../extras/StaffTypes';
 
 interface StaffDropdownProps {
   staffs?: Staff[];
@@ -55,6 +54,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
           inputProps={{
             ...params.inputProps,
           }}
+          {...props.textFieldProps}
         />
       )}
     />
