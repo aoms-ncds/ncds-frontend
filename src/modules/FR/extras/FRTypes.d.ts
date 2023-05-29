@@ -23,14 +23,27 @@ export interface FR extends MongooseDocument {
   purposeDivision?: IETDivisions;
   purposeCoordinator?: IWorker;
   purposeOthers?: string;
+  requestedAmount: number;
+  mainCategory:string;
   sanctionedAmount: number;
   Particulars?:Particulars[];
+  sanctionedAsPer?:string;
+  sanctionedBank?:string;
 }
 export interface CreatableFR extends Creatable<FR> {
   date?: FR['date'];
   FRno?: FR['FRno'];
   purpose?: FR['purpose'];
   sanctionedAmount?: FR['sanctionedAmount'];
+  Particulars?: FR['Particulars'];
+  requestedAmount?: FR['requestedAmount'];
+  mainCategory?:FR['mainCategory'];
+  purposeWorker?: FR['purposeWorker'];
+  purposeSubdivision?: FR['purposeSubdivision'];
+  purposeDivision?: FR['purposeDivision'];
+  purposeCoordinator?: FR['purposeCoordinator'];
+  sanctionedAsPer?:FR['sanctionedAsPer'];
+  sanctionedBank?:FR['sanctionedBank'];
 }
 // export interface FRPurpose{
 //     _id: string;

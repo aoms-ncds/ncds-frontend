@@ -79,6 +79,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
   });
+
+
   const handleClose = () => {
     setShowAddParticulardialog(false);
   };
@@ -135,6 +137,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
+    if (props.value.Particulars) {
+      setParticulars(props.value.Particulars);
+      console.log(Particulars);
+    }
     // FRServices.getParticulars()
     //   .then((res) => {
     //     console.log(res);
@@ -143,7 +149,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, []);
+  }, [props.value.Particulars]);
   const addParticulars = () => {
     console.log('here');
     const snackbarId = enqueueSnackbar({
@@ -171,6 +177,11 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           requestedAmount: '',
           narration: '',
         }));
+        props.onChange({
+          ...props.value,
+          Particulars: [...(props.value.Particulars || []), res.data],
+
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -186,11 +197,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       });
   };
   const totalRequestedAmount =
-    Particulars &&
-    Particulars.reduce(
-      (total, item) => total + Number(item.requestedAmount),
-      0,
-    );
+  Particulars &&
+  Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
     <div>
       <Container>
@@ -198,24 +206,24 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              props.onSubmit ? props.onSubmit(props.value) : '';
+              if (props.onSubmit) {
+                props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
+              }
             }}
           >
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  value={props.value.date}
-                  onChange={(date) => {
-                    if (props.action !== 'view') {
-                      props.onChange({
-                        ...props.value,
-                        date: date as Moment,
-                      });
-                    }
-                  }}
-                  readOnly={props.action === 'view'}
+                  // value={props.value.date}
+                  // onChange={(newDate) => props.onChange({
+                  //   ...props.value,
+                  //   date: newDate ?? undefined,
+                  // })}
+                  format='DD/MM/YYYY'
+
                 />
+
               </Grid>
               <Grid item xs={12} md={6} >
                 <Autocomplete
@@ -372,6 +380,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         ...particularDetails,
                         mainCategory: selectedMainCategory.name,
                       }));
+                      props.onChange({
+                        ...props.value,
+                        mainCategory: selectedMainCategory.name,
+                      });
                       setSelectedMainCategory(selectedMainCategory);
                     }
                   }}
@@ -461,6 +473,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   }
                   variant="outlined"
                   fullWidth
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
 
@@ -471,7 +484,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  label=" Group type"
+                  label=""
+                  value={props.value.sanctionedBank}
+                  onChange={(e) =>
+                    props.onChange({
+                      ...props.value,
+                      sanctionedBank: e.target.value,
+                    })
+                  }
                   required
                   fullWidth
                 >
@@ -488,9 +508,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  label=" Group type"
+                  label=""
                   required
                   fullWidth
+                  value={props.value.sanctionedAsPer}
+                  onChange={(e) => {
+                    console.log(e.target.value); // Add this console log statement
+                    props.onChange({
+                      ...props.value,
+                      sanctionedAsPer: e.target.value,
+                    });
+                  }}
                 >
                   {/* just for demo purpose to be listed from config or backend */}
                   <MenuItem value={'As per sanction by Manager'}> As per sanction by President</MenuItem>
@@ -501,8 +529,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   <MenuItem value={'As Per Bill Attached'}>As Per Bill Attached</MenuItem>
                   <MenuItem value={'As per Index Attached'}>As per Index Attached</MenuItem>
                   <MenuItem value={'As Per Budget'}>As Per Budget</MenuItem>
-
-                  {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                 </Select>
               </Grid>
               <Grid item xs={12}>
@@ -570,12 +596,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     variant='contained'
                     color='info'
                     onClick={() => {
-                      const processingSnack = enqueueSnackbar({ message: 'Submitting FR to accounts', variant: 'info' });
-                      setTimeout(() => {
-                        closeSnackbar(processingSnack);
-                        const processedSnack = enqueueSnackbar({ message: 'Submitted FR to accounts!', variant: 'success' });
-                        setTimeout(() => closeSnackbar(processedSnack), 500);
-                      }, 500);
+                      if (props.onSubmit) {
+                        props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
+                      }
                     }}>Submit </Button>
                 </div>
               </Grid>

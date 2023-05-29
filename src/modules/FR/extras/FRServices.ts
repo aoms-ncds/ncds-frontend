@@ -10,89 +10,8 @@ export default {
   getAll: () => getStandardResponse<Frrequest[]>(
     axios.get('/fr/'),
   ),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getById: (fRId: string) => getStandardResponse<FR>(
-    dummyRequest<FR>({
-      data: {
-        _id: '1',
-        FRno: '1234',
-        date: moment(),
-        purpose: 'Worker',
-        sanctionedAmount: 43,
-        purposeWorker: {
-          _id: 'efdsdsf',
-          workerCode: 'string',
-          firstName: 'string',
-          lastName: 'string',
-          missionaryOrNonMissionary: 'string',
-          dob: moment(),
-          gender: 'Male',
-          age: 0,
-          maritalStatus: 'Unmarried',
-          highestQualification: 'string',
-          motherToungue: 'Malayalam - മലയാളം',
-          communicationLanguage: 'Malayalam - മലയാളം',
-          languagesKnown: [],
-          email: 'string',
-          phone: 'string',
-          alternativeMobileNumber: 'string',
-          PANNo: 'string',
-          aadhaar: { aadhaarFile: {
-            _id: '',
-            name: '',
-            size: 0,
-            type: 'image/png',
-            storage: 'Drive',
-            fileId: '',
-            downloadURL: null,
-            private: false,
-            createdAt: moment(),
-            updatedAt: moment(),
-          }, aadhaarNo: '467389' },
+  getById: (fRId: string) => getStandardResponse<FR>(axios.get('/fr/' + fRId)),
 
-          voterId: { voterIdFile: {
-            _id: '',
-            name: '',
-            size: 0,
-            type: 'image/png',
-            storage: 'Drive',
-            fileId: '',
-            downloadURL: null,
-            private: false,
-            createdAt: moment(),
-            updatedAt: moment(),
-          }, voterIdNo: '467389' },
-          licenseNumber: 'string',
-          permanentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          currentAddress: {
-            buildingName: '',
-            street: '',
-            city: '',
-            district: '',
-            state: '',
-            country: '',
-            pincode: '',
-          },
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        createdAt: moment(),
-        updatedAt: moment(),
-      },
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
       data: purposes,
@@ -114,9 +33,45 @@ export default {
   addParticulars: ( particularData: Particulars) => getStandardResponse<Particulars>(
     axios.post('/fr/particulars', particularData),
   ),
-  createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
-    axios.post('/fr/', frRequest),
-  ),
+  // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
+  //   axios.post('/fr/', frRequest),
+  // ),
+  createFRRequests: (frRequest: CreatableFR) => {
+    return getStandardResponse<CreatableFR>(
+      new Promise((resolve, reject) => {
+        axios
+          .post('/fr/', {
+            ...frRequest,
+            Particulars: [],
+          })
+          .then(async (createdFR) => {
+            // Create partcularsisions
+            try {
+              if (frRequest.Particulars) {
+                for (let i = 0; i < frRequest.Particulars.length; i++) {
+                  const partculars = frRequest.Particulars[i];
+                  await axios.patch('/fr/particulars/' + partculars._id, {
+                    FR: createdFR.data.data._id,
+                    mainCategory: partculars.mainCategory,
+                    subCategory1: partculars.subCategory1,
+                    subCategory2: partculars.subCategory2,
+                    subCategory3: partculars.subCategory3,
+                    quantity: partculars.quantity,
+                    month: partculars.month,
+                    requestedAmount: partculars.requestedAmount,
+                    narration: partculars.narration,
+                  });
+                }
+              }
+              resolve(createdFR);
+            } catch (error) {
+              reject(error);
+            }
+          })
+          .catch(reject);
+      }),
+    );
+  },
   getParticulars: () => getStandardResponse<Particulars[]>(
     dummyRequest<Particulars[]>({
       data: [{
@@ -207,7 +162,7 @@ export default {
               'status': 'ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
-              'subdivision': {
+              'partcularsision': {
                 _id: 'skjdfj',
                 name: 'ksdfj',
               },
@@ -289,7 +244,7 @@ export default {
               'status': 'ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
-              'subdivision': {
+              'partcularsision': {
                 _id: 'skjdfj',
                 name: 'ksdfj',
               },
@@ -370,7 +325,7 @@ export default {
               'status': 'ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
-              'subdivision': {
+              'partcularsision': {
                 _id: 'skjdfj',
                 name: 'ksdfj',
               },
@@ -451,7 +406,7 @@ export default {
               'status': 'ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
-              'subdivision': {
+              'partcularsision': {
                 _id: 'skjdfj',
                 name: 'ksdfj',
               },
@@ -523,6 +478,42 @@ export default {
       timeout: 500,
     }),
   ),
+  updateFRRequests: (frID: string, frRequest: CreatableFR) => {
+    return getStandardResponse<CreatableFR>(
+      new Promise((resolve, reject) => {
+        console.log(frRequest);
+        axios
+          .patch('/fr/' + frID, {
+            ...frRequest,
+            particulars: [],
+          })
+          .then(async (updatedFR) => {
+            try {
+              if (frRequest.Particulars) {
+                for (let i = 0; i < frRequest.Particulars.length; i++) {
+                  const partculars = frRequest.Particulars[i];
+                  await axios.patch('/fr/particulars/' + partculars._id, {
+                    FR: updatedFR.data.data._id,
+                    mainCategory: partculars.mainCategory,
+                    subCategory1: partculars.subCategory1,
+                    subCategory2: partculars.subCategory2,
+                    subCategory3: partculars.subCategory3,
+                    quantity: partculars.quantity,
+                    month: partculars.month,
+                    requestedAmount: partculars.requestedAmount,
+                    narration: partculars.narration,
+                  });
+                }
+              }
+              resolve(updatedFR); // Resolve with the updated division
+            } catch (error) {
+              reject(error);
+            }
+          })
+          .catch(reject);
+      }),
+    );
+  },
 
 
 };

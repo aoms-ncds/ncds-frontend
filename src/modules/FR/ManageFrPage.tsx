@@ -122,10 +122,15 @@ const ManageFrPage = () => {
     },
     { field: '_id', headerName: 'SI No', width: 70 },
     { field: 'FRno', headerName: 'FR No', width: 70 },
-    { field: 'FRdate', headerName: 'FR Date', width: 130 },
+    { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
+      <p> {props.row.date}</p>
+    ), width: 130 },
+
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
     { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
+    { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
+      <p> {props.row.mainCategory}</p>
+    ), width: 130 },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
