@@ -4,9 +4,14 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import { languages } from '../../../../extras/CommonConfig';
 
-const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
-    textField: { variant: 'filled' | 'outlined' | 'standard' };
-}>) => {
+const SpouseForm = (
+  props: FormComponentProps<
+    CreatableSpouse,
+    {
+      textField: { variant: 'filled' | 'outlined' | 'standard' };
+    }
+  >,
+) => {
   return (
     <>
       <Grid item xs={12} md={6} lg={4}>
@@ -38,7 +43,6 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
           variant={props.options?.textField.variant}
           fullWidth
           required
-
         />
       </Grid>
 
@@ -93,13 +97,7 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField
-          label="Age"
-          value={props.value.dateOfBirth?.fromNow()}
-          variant={props.options?.textField.variant}
-          fullWidth
-          disabled
-        />
+        <TextField label="Age" value={props.value.dateOfBirth?.fromNow()} variant={props.options?.textField.variant} fullWidth disabled />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
@@ -108,10 +106,12 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
           control={
             <Checkbox
               value={props.value.working}
-              onChange={(e) => props.onChange({
-                ...props.value,
-                working: e.target.checked,
-              })}
+              onChange={(e) =>
+                props.onChange({
+                  ...props.value,
+                  working: e.target.checked,
+                })
+              }
             />
           }
         />
@@ -147,21 +147,15 @@ const SpouseForm = (props: FormComponentProps<CreatableSpouse, {
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           multiple
           id="knownLanguages"
           options={languages}
           getOptionLabel={(option) => option}
           value={props.value.knownLanguages}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Known Languages"
-              variant={props.options?.textField.variant}
-            />
-          )}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField.variant} />}
         />
       </Grid>
     </>

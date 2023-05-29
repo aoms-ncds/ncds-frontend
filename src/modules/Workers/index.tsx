@@ -6,8 +6,8 @@ import WorkerServices from './extras/WorkersServices';
 import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
 
 const WorkersDashboard = () => {
-  const [workersCount, setWorkerCount] = useState<number|null>(null);
-  const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number|null>(null);
+  const [workersCount, setWorkerCount] = useState<number | null>(null);
+  const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
 
   useEffect(() => {
     WorkerServices.getCount()
@@ -23,27 +23,15 @@ const WorkersDashboard = () => {
   }, []);
 
   return (
-    <CommonPageLayout title='Workers Dashboard'>
+    <CommonPageLayout title="Workers Dashboard">
       <Grid container spacing={3}>
-
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton
-            primaryText='Manage Workers'
-            secondaryText={workersCount?.toString()}
-            color='#29cc39'
-            targetRoute="/workers/manage"
-          />
+          <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#29cc39" targetRoute="/workers/manage" />
         </Grid>
 
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton
-            primaryText='Approve New Workers'
-            secondaryText={unapprovedWorkersCount?.toString()}
-            color='#0dcaf0'
-            targetRoute="/workers/approve"
-          />
+          <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="#0dcaf0" targetRoute="/workers/approve" />
         </Grid>
-
       </Grid>
     </CommonPageLayout>
   );

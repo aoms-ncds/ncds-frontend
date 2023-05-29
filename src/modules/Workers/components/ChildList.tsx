@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon,
-} from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 
 import { DataGrid } from '@mui/x-data-grid';
@@ -16,16 +11,15 @@ const ChildListPage = () => {
   const [childList, setChildList] = useState<Child[]>();
   useEffect(() => {
     ChildrenServices.getAll()
-     .then((res) => {
-       console.log(res);
-       setChildList(res.data);
-     })
-    .catch((res) => {
-      console.log(res);
-    });
+      .then((res) => {
+        console.log(res);
+        setChildList(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
   const columns = [
-
     {
       field: '_manage',
       headerName: 'Action',
@@ -34,8 +28,8 @@ const ChildListPage = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='child action'
-          primaryText='Actions'
+          id="child action"
+          primaryText="Actions"
           key={'child action'}
           items={[
             {
@@ -69,15 +63,9 @@ const ChildListPage = () => {
     { field: 'firstName', headerName: 'First Name', width: 70 },
     { field: 'lastName', headerName: 'Last Name:', width: 130 },
     { field: 'dob', headerName: 'DOB', width: 170 },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => (
-      <p> {props.row.dob?.fromNow()}</p>
-    ), width: 130 },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 130 },
     { field: 'childSupport', headerName: 'Child Support', width: 130 },
-    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => (
-      <p> {props.row.childOf?.firstName}</p>
-    ), width: 130 },
-
-
+    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => <p> {props.row.childOf?.firstName}</p>, width: 130 },
   ];
   return (
     <>
@@ -86,7 +74,6 @@ const ChildListPage = () => {
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid rows={childList ?? []} columns={columns} getRowId={(row) => row._id} loading={childList === null} />
         </Card>
-
       </Grid>
     </>
   );

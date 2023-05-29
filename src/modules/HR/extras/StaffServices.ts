@@ -14,24 +14,21 @@ export default {
    * @param {CreatableStaff} staff - The staff member to be created.
    * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the created staff member.
    */
-  create: (staff: CreatableStaff) =>
-    getStandardResponse<Staff>(axios.post('/hr/staffs', staff)),
+  create: (staff: CreatableStaff) => getStandardResponse<Staff>(axios.post('/hr/staffs', staff)),
 
   /**
    * Edits a staff member.
    * @param {CreatableNewUser} staff - The staff member to be edited.
    * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the edited staff member.
    */
-  edit: (staff: CreatableStaff): Promise<StandardResponse<Staff>> =>
-    getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff)),
+  edit: (staff: CreatableStaff): Promise<StandardResponse<Staff>> => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff)),
 
   /**
    * Deletes a staff member.
    * @param {string} staffId - The ID of the staff member to be deleted.
    * @return {Promise<StandardResponse<Staff[]>>} A promise that resolves to the response containing the updated list of staff members.
    */
-  delete: (staffId: string) =>
-    getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`)),
+  delete: (staffId: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`)),
 
   /**
    * Retrieves all staff members.
@@ -60,23 +57,20 @@ export default {
    * @return {Promise<StandardResponse<Staff|null>>} A promise that resolves to the response containing the retrieved staff member or null if not found.
    */
   getById: (staffId: string) =>
-    getStandardResponse<Staff | null>(
-      axios.get(`/hr/staffs/${staffId}`),
-      (data) => ({
-        ...data,
-        basicDetails: {
-          ...data.basicDetails,
-          dateOfBirth: moment(data.basicDetails.dateOfBirth),
-        },
-        officialDetails: {
-          ...data.officialDetails,
-          dateOfJoining: moment(data.basicDetails.dateOfJoining),
-        },
-        createdAt: moment(data.createdAt),
-        updatedAt: moment(data.updatedAt),
-      }),
-    ),
+    getStandardResponse<Staff | null>(axios.get(`/hr/staffs/${staffId}`), (data) => ({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: moment(data.basicDetails.dateOfJoining),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
 
-  activate: ( id:string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`)),
-  deactivate: ( id:string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`)),
+  activate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`)),
+  deactivate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`)),
 };

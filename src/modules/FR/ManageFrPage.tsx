@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
-import {
-  Edit as EditIcon,
-  Message as MessageIcon,
-  Preview as PreviewIcon,
-  Add as AddIcon,
-} from '@mui/icons-material';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
@@ -19,7 +14,7 @@ import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 
 const ManageFrPage = () => {
-  const [FRRequests, setFRRequests] = useState<Frrequest[]|null>(null);
+  const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -29,13 +24,13 @@ const ManageFrPage = () => {
 
   useEffect(() => {
     FRServices.getAll()
-   .then((res) => {
-     console.log(res);
-     setFRRequests(res.data);
-   })
-  .catch((res) => {
-    console.log(res);
-  });
+      .then((res) => {
+        console.log(res);
+        setFRRequests(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
 
   const columns = [
@@ -47,8 +42,8 @@ const ManageFrPage = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='FR action'
-          primaryText='Actions'
+          id="FR action"
+          primaryText="Actions"
           key={'FR action'}
           items={[
             {
@@ -77,13 +72,13 @@ const ManageFrPage = () => {
               onClick: () => {
                 toggleOpenRemarks(true);
                 FRServices.getAllRemarksById(props.row._id)
-                .then((res) => setRemarks(res.data))
-                .catch((error) => {
-                  enqueueSnackbar({
-                    variant: 'error',
-                    message: error.message,
+                  .then((res) => setRemarks(res.data))
+                  .catch((error) => {
+                    enqueueSnackbar({
+                      variant: 'error',
+                      message: error.message,
+                    });
                   });
-                });
               },
               icon: EditIcon,
             },
@@ -130,9 +125,8 @@ const ManageFrPage = () => {
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
   ];
 
-
   return (
-    <CommonPageLayout title='Manage FR'>
+    <CommonPageLayout title="Manage FR">
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -142,61 +136,61 @@ const ManageFrPage = () => {
         // onClick={() => {
         // }}
       >
-          Add new
+        Add new
       </Button>
-      <br/><br/>
+      <br />
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={FRRequests??[]} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null}/>
+          <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
         </Card>
       </Grid>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
-        <DialogTitle>
-           Remarks
-        </DialogTitle>
+        <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
           {remarks.map((remark) => (
-            <MessageItem
-              key={remark._id}
-              sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
-              time={remark.updatedAt}
-              body={remark.remark}
-              isSent={true}
-            />
+            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
           ))}
-
         </DialogContent>
         <DialogActions>
-
           <TextField
             id="remarkTextfield"
             placeholder="Remarks"
             multiline
             value={remark?.remark}
-            onChange={(e) => setRemark((remark) => ({
-              ...remark,
-              remark: e.target.value,
-            }))}
+            onChange={(e) =>
+              setRemark((remark) => ({
+                ...remark,
+                remark: e.target.value,
+              }))
+            }
             InputProps={{
-              endAdornment: <InputAdornment position='end'>
-                <IconButton onClick={() => {
-                  remark.remark?
-                    FRServices.addRemarks(remark)
-                    .then((res) => {
-                      setRemarks((remarks) => [...remarks, res.data]);
-                      setRemark((remark) => ({
-                        ...remark,
-                        remark: '',
-                      }));
-                    })
-                .catch((error) => {
-                  enqueueSnackbar({
-                    variant: 'error',
-                    message: error.message,
-                  });
-                }):'';
-                }}><SendIcon /></IconButton>
-              </InputAdornment>,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      remark.remark ?
+                        FRServices.addRemarks(remark)
+                            .then((res) => {
+                              setRemarks((remarks) => [...remarks, res.data]);
+                              setRemark((remark) => ({
+                                ...remark,
+                                remark: '',
+                              }));
+                            })
+                            .catch((error) => {
+                              enqueueSnackbar({
+                                variant: 'error',
+                                message: error.message,
+                              });
+                            }) :
+                        '';
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
             fullWidth
           />

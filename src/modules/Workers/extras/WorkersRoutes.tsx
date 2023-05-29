@@ -29,7 +29,7 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Add New Worker',
       path: '/add',
-      element: <WorkerFormPage action='add' />,
+      element: <WorkerFormPage action="add" />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -50,7 +50,7 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Edit Worker',
       path: '/edit/:id',
-      element: <WorkerFormPage action='edit' />,
+      element: <WorkerFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -82,7 +82,6 @@ const workersPageRoutes: ModuleRoute = {
     //   private: true,
     //   requiredAccessRights: ['string'],
     // },
-
   ],
 };
 export default workersPageRoutes;

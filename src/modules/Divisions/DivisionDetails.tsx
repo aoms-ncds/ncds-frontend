@@ -65,93 +65,6 @@ const DivisionDetailsPage = () => {
         country: '',
         pincode: '',
       },
-      coordinator: {
-        basicDetails: {
-          firstName: '',
-          lastName: '',
-          email: '',
-          dateOfBirth: moment(),
-
-          permanentAddress: {
-          },
-          currentAddress: {
-          },
-        },
-        officialDetails: {
-          remarks: '',
-          selfSupport: true,
-          dateOfDivisionJoining: moment(),
-          noOfChurches: 5,
-        },
-        supportDetails: {
-          totalNoOfYearsInMinistry: 10,
-          withChurch: true,
-        },
-        supportStructure: {
-        },
-        _id: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-        staffCode: '',
-      },
-      juniorLeader: {
-        basicDetails: {
-          firstName: '',
-          lastName: '',
-          email: '',
-          dateOfBirth: moment(),
-
-          permanentAddress: {
-          },
-          currentAddress: {
-          },
-        },
-        officialDetails: {
-          remarks: '',
-          selfSupport: true,
-          dateOfDivisionJoining: moment(),
-          noOfChurches: 5,
-        },
-        supportDetails: {
-          totalNoOfYearsInMinistry: 10,
-          withChurch: true,
-        },
-        supportStructure: {
-        },
-        _id: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-        staffCode: '',
-      },
-      seniorLeader: {
-        basicDetails: {
-          firstName: '',
-          lastName: '',
-          email: '',
-          dateOfBirth: moment(),
-
-          permanentAddress: {
-          },
-          currentAddress: {
-          },
-        },
-        officialDetails: {
-          remarks: '',
-          selfSupport: true,
-          dateOfDivisionJoining: moment(),
-          noOfChurches: 5,
-        },
-        supportDetails: {
-          totalNoOfYearsInMinistry: 10,
-          withChurch: true,
-        },
-        supportStructure: {
-        },
-        _id: '',
-        createdAt: moment(),
-        updatedAt: moment(),
-        staffCode: '',
-      },
     },
     subDivisions: [
       {
@@ -219,10 +132,12 @@ const DivisionDetailsPage = () => {
       <Card style={{ width: '100%' }}>
         <CardContent>
           {activeStep == 0 && (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              setactiveStep(1);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setactiveStep(1);
+              }}
+            >
               <Grid container spacing={2}>
                 <DivisionsFormComponent
                   value={divisionDetails.details}
@@ -231,17 +146,12 @@ const DivisionDetailsPage = () => {
                   }}
                   action={'add'}
                   options={{ title: 'Division Details' }}
-
                 />
 
                 <br />
                 <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ float: 'right', padding: '16px 64px' }}
-                  >
-                      Next
+                  <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
+                    Next
                   </Button>{' '}
                   <br />
                 </Grid>
@@ -267,12 +177,8 @@ const DivisionDetailsPage = () => {
                 />
 
                 <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ float: 'right', padding: '16px 64px' }}
-                  >
-                      Next
+                  <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
+                    Next
                   </Button>
                   <Button
                     type="button"
@@ -283,7 +189,7 @@ const DivisionDetailsPage = () => {
                     sx={{ p: '16px 64px', mr: 2, float: 'right' }}
                   >
                     {' '}
-                      Go back
+                    Go back
                   </Button>
                 </Grid>
               </Grid>
@@ -295,7 +201,7 @@ const DivisionDetailsPage = () => {
                 <BankDetailsForm
                   value={divisionDetails?.FCRABankDetails}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: (newbankDetails as BankDetails) }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
                   }}
                   action={'add'}
                   options={{ title: 'FCRA Bank Details' }}
@@ -304,19 +210,15 @@ const DivisionDetailsPage = () => {
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: (newbankDetails as BankDetails) }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails as BankDetails }));
                   }}
                   action={'add'}
                   options={{ title: 'Local Bank Details' }}
                 />
                 <Grid item xs={12}>
                   {action !== 'view' && (
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{ float: 'right', padding: '16px 64px' }}
-                    >
-                        Submit
+                    <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
+                      Submit
                     </Button>
                   )}
                   <Button
@@ -328,7 +230,7 @@ const DivisionDetailsPage = () => {
                     sx={{ p: '16px 64px', mr: 2, float: 'right' }}
                   >
                     {' '}
-                      Go back
+                    Go back
                   </Button>
                 </Grid>
               </Grid>

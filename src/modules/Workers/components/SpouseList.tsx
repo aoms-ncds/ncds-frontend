@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Grid } from '@mui/material';
 import DropdownButton from '../../../components/DropDownButton';
 import { Link } from 'react-router-dom';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon,
-} from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import SpousesServices from '../extras/SpousesServices';
 
@@ -16,13 +11,13 @@ const SpouseListPage = () => {
 
   useEffect(() => {
     SpousesServices.getAll()
-     .then((res) => {
-       console.log(res);
-       setSpouseList(res.data);
-     })
-    .catch((res) => {
-      console.log(res);
-    });
+      .then((res) => {
+        console.log(res);
+        setSpouseList(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
 
   const columns = [
@@ -34,8 +29,8 @@ const SpouseListPage = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='Spouse action'
-          primaryText='Actions'
+          id="Spouse action"
+          primaryText="Actions"
           key={'Spouse action'}
           items={[
             {
@@ -71,15 +66,9 @@ const SpouseListPage = () => {
     { field: 'email', headerName: 'Email', width: 170 },
     { field: 'mobileNo', headerName: 'Mobile No', width: 130 },
     { field: 'dob', headerName: 'Date of Birth', width: 130 },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => (
-      <p> {props.row.dob?.fromNow()}</p>
-    ), width: 130 },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 130 },
     { field: 'qualification', headerName: 'Qualification', width: 130 },
-    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => (
-      <p> {props.row.spouseOf?.firstName}</p>
-    ), width: 130 },
-
-
+    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => <p> {props.row.spouseOf?.firstName}</p>, width: 130 },
   ];
   return (
     <>
@@ -88,7 +77,6 @@ const SpouseListPage = () => {
         <Card style={{ height: '80vh', width: '100%' }}>
           <DataGrid rows={spouseList ?? []} columns={columns} getRowId={(row) => row._id} loading={spouseList === null} />
         </Card>
-
       </Grid>
     </>
   );

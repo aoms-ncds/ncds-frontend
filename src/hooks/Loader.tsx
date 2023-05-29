@@ -1,23 +1,22 @@
 import React, { ReactNode, useContext, useMemo, useState } from 'react';
 
-const LoaderContext = React.createContext<LoaderContextType|undefined>(undefined);
-interface LoaderProviderProps{
-    children: ReactNode;
+const LoaderContext = React.createContext<LoaderContextType | undefined>(undefined);
+interface LoaderProviderProps {
+  children: ReactNode;
 }
 export const LoaderProvider = (props: LoaderProviderProps) => {
   const [count, setCount] = useState(0);
 
-  const value = useMemo<LoaderContextType>(() => ({
-    count,
-    onLoad: () => setCount((count) => count+1),
-    afterLoad: () => setCount((count) => count-1),
-  }), [count]);
-
-  return (
-    <LoaderContext.Provider value={value}>
-      {props.children}
-    </LoaderContext.Provider>
+  const value = useMemo<LoaderContextType>(
+    () => ({
+      count,
+      onLoad: () => setCount((count) => count + 1),
+      afterLoad: () => setCount((count) => count - 1),
+    }),
+    [count],
   );
+
+  return <LoaderContext.Provider value={value}>{props.children}</LoaderContext.Provider>;
 };
 
 export const useLoader = () => {

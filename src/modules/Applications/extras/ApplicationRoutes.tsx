@@ -7,19 +7,17 @@ import ApplicationApprovalPage from '../ApplicationApprovalPage';
 import ApplicationManagePages from '../ManagePages';
 import AddNewApplication from '../AddNewApplication';
 
-const applicationRoutes : ModuleRoute = {
+const applicationRoutes: ModuleRoute = {
   base: '/application',
   pages: [
     {
-
-
       title: 'Application',
       path: '/',
       element: <APPDashboard />,
       private: true,
       requiredAccessRights: ['string'],
       showInDrawer: true,
-      icon: <AccessAlarmIcon/>,
+      icon: <AccessAlarmIcon />,
     },
     {
       title: 'Add Request',
@@ -44,6 +42,5 @@ const applicationRoutes : ModuleRoute = {
     },
   ],
 };
-
 
 export default applicationRoutes;

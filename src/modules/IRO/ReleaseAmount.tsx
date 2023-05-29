@@ -8,12 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import BankDetailsForm from '../Divisions/components/BankDetails';
 
 const ReleaseAmount = () => {
-  const navigate=useNavigate();
-  const [IROrelease, setIROrelease] = useState<Partial<IROrder>|null>(null);
-  const saveReleaseAmount=(e: { preventDefault: () => void })=>{
+  const navigate = useNavigate();
+  const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
+  const saveReleaseAmount = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (IROrelease) {
-      IROServices.saveRelease(IROrelease).then((res)=>{
+      IROServices.saveRelease(IROrelease).then((res) => {
         console.log(res.data);
         navigate('/iro/');
       });
@@ -23,23 +23,24 @@ const ReleaseAmount = () => {
     // IROServices.getOne() // TODO: Implement REST API Call
   }, []);
   return (
-    <CommonPageLayout title='Release Amount Page'>
+    <CommonPageLayout title="Release Amount Page">
       <Container>
         <Card style={{ width: '100%' }}>
           <CardContent>
             <form onSubmit={saveReleaseAmount}>
               <Grid container spacing={3}>
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                   <TextField
                     label="Release Amount"
                     value={Number(IROrelease?.releaseAmount)}
                     onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
                         releaseAmount: Number(e.target.value),
                       }))
-                    } variant="outlined"
+                    }
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
@@ -55,11 +56,13 @@ const ReleaseAmount = () => {
                         transferredAmount: Number(e.target.value),
                       }))
                     }
-                    fullWidth variant="outlined"
+                    fullWidth
+                    variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={12} md={6} >
-                  <DatePicker label="Date"
+                <Grid item xs={12} md={6}>
+                  <DatePicker
+                    label="Date"
                     value={IROrelease?.transferredDate}
                     format="DD/MM/YYYY"
                     sx={{ width: '100%' }}
@@ -71,7 +74,6 @@ const ReleaseAmount = () => {
                     //   }))
                     // }
                   />
-
                 </Grid>
                 {/* <Grid item xs={12} > */}
                 <BankDetailsForm
@@ -99,10 +101,11 @@ const ReleaseAmount = () => {
                         modeOfPayment: e.target.value,
                       }))
                     }
-                    fullWidth variant="outlined"
+                    fullWidth
+                    variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Transaction No:"
                     value={IROrelease?.transactionNumber}
@@ -112,24 +115,22 @@ const ReleaseAmount = () => {
                         ...IROrelease,
                         transactionNumber: e.target.value,
                       }))
-                    } variant="outlined"
+                    }
+                    variant="outlined"
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} md={6} >
-                  <TextField variant="outlined"
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    variant="outlined"
                     type="file"
                     // onChange={(e) => handleFileUpload(e.target.files)}
                   />
                 </Grid>
               </Grid>
               <br />
-              <Button
-                variant="contained"
-                style={{ textAlign: 'right' }}
-                type='submit'
-              >
-  Release Amount
+              <Button variant="contained" style={{ textAlign: 'right' }} type="submit">
+                Release Amount
               </Button>
             </form>
           </CardContent>

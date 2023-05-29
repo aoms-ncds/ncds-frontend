@@ -4,13 +4,13 @@ import { Button, ButtonGroup, Divider, Grid, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
 
-type DateRangeType = 'datetime'|'days'|'weeks'|'months'|'quarter_years'|'years'|'custom';
-interface DateFilterProps{
-    dateRage: DateRange;
-    onChange: (newDateRange: DateRange) => void;
-    rangeTypes: DateRangeType[];
-    min?: Moment;
-    max?: Moment;
+type DateRangeType = 'datetime' | 'days' | 'weeks' | 'months' | 'quarter_years' | 'years' | 'custom';
+interface DateFilterProps {
+  dateRage: DateRange;
+  onChange: (newDateRange: DateRange) => void;
+  rangeTypes: DateRangeType[];
+  min?: Moment;
+  max?: Moment;
 }
 const DateFilter = (props: DateFilterProps) => {
   const [currentRangeType, setCurrentRangeType] = useState<DateRangeType>('weeks');
@@ -20,20 +20,10 @@ const DateFilter = (props: DateFilterProps) => {
         <>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={3} xl={2}>
-              <DatePicker
-                label="Start date"
-                value={props.dateRage.startDate}
-                slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                format='DD/MM/YYYY hh:mm:ss A'
-              />
+              <DatePicker label="Start date" value={props.dateRage.startDate} slotProps={{ textField: { size: 'small', fullWidth: true } }} format="DD/MM/YYYY hh:mm:ss A" />
             </Grid>
             <Grid item xs={12} md={6} lg={3} xl={2}>
-              <DatePicker
-                label="End date"
-                value={props.dateRage.endDate}
-                slotProps={{ textField: { size: 'small', fullWidth: true } }}
-                format='DD/MM/YYYY hh:mm:ss A'
-              />
+              <DatePicker label="End date" value={props.dateRage.endDate} slotProps={{ textField: { size: 'small', fullWidth: true } }} format="DD/MM/YYYY hh:mm:ss A" />
             </Grid>
           </Grid>
         </>
@@ -48,17 +38,19 @@ const DateFilter = (props: DateFilterProps) => {
                 {currentRangeType === 'days' && (
                   <Button
                     sx={{ pr: 0, m: 0 }}
-                    variant='contained'
-                    onClick={() => props.onChange({
-                      startDate: props.dateRage.startDate.clone().subtract(1, 'day').startOf('D'),
-                      endDate: props.dateRage.startDate.clone().subtract(1, 'day').endOf('D'),
-                    })}
+                    variant="contained"
+                    onClick={() =>
+                      props.onChange({
+                        startDate: props.dateRage.startDate.clone().subtract(1, 'day').startOf('D'),
+                        endDate: props.dateRage.startDate.clone().subtract(1, 'day').endOf('D'),
+                      })
+                    }
                   >
                     <ArrowBackIosIcon />
                   </Button>
                 )}
                 <Button
-                  variant={currentRangeType==='days' ? 'contained' : 'outlined'}
+                  variant={currentRangeType === 'days' ? 'contained' : 'outlined'}
                   onClick={() => {
                     setCurrentRangeType('days');
                     props.onChange({
@@ -67,24 +59,24 @@ const DateFilter = (props: DateFilterProps) => {
                     });
                   }}
                 >
-                Day
+                  Day
                   {currentRangeType === 'days' && (
                     <>
-                      <Divider orientation='vertical' sx={{ ml: 1, height: '80%', bgcolor: 'black' }} />
-                      <Typography variant='caption'>
-                        {(props.dateRage.startDate.format('DD/MM/YYYY')+' To '+props.dateRage.startDate.format('DD/MM/YYYY'))}
-                      </Typography>
+                      <Divider orientation="vertical" sx={{ ml: 1, height: '80%', bgcolor: 'black' }} />
+                      <Typography variant="caption">{props.dateRage.startDate.format('DD/MM/YYYY') + ' To ' + props.dateRage.startDate.format('DD/MM/YYYY')}</Typography>
                     </>
                   )}
                 </Button>
                 {currentRangeType === 'days' && (
                   <Button
                     sx={{ pr: 0, m: 0 }}
-                    variant='contained'
-                    onClick={() => props.onChange({
-                      startDate: props.dateRage.startDate.clone().add(1, 'day'),
-                      endDate: props.dateRage.startDate.clone().add(1, 'day'),
-                    })}
+                    variant="contained"
+                    onClick={() =>
+                      props.onChange({
+                        startDate: props.dateRage.startDate.clone().add(1, 'day'),
+                        endDate: props.dateRage.startDate.clone().add(1, 'day'),
+                      })
+                    }
                   >
                     <ArrowForwardIosIcon />
                   </Button>
@@ -99,17 +91,19 @@ const DateFilter = (props: DateFilterProps) => {
                 {currentRangeType === 'weeks' && (
                   <Button
                     sx={{ pr: 0, m: 0 }}
-                    variant='contained'
-                    onClick={() => props.onChange({
-                      startDate: props.dateRage.startDate.clone().subtract(1, 'week').startOf('D'),
-                      endDate: props.dateRage.startDate.clone().subtract(1, 'week').endOf('D'),
-                    })}
+                    variant="contained"
+                    onClick={() =>
+                      props.onChange({
+                        startDate: props.dateRage.startDate.clone().subtract(1, 'week').startOf('D'),
+                        endDate: props.dateRage.startDate.clone().subtract(1, 'week').endOf('D'),
+                      })
+                    }
                   >
                     <ArrowBackIosIcon />
                   </Button>
                 )}
                 <Button
-                  variant={currentRangeType==='weeks' ? 'contained' : 'outlined'}
+                  variant={currentRangeType === 'weeks' ? 'contained' : 'outlined'}
                   onClick={() => {
                     setCurrentRangeType('weeks');
                     props.onChange({
@@ -118,24 +112,24 @@ const DateFilter = (props: DateFilterProps) => {
                     });
                   }}
                 >
-                Week
+                  Week
                   {currentRangeType === 'weeks' && (
                     <>
-                      <Divider orientation='vertical' sx={{ ml: 1, height: '80%', bgcolor: 'black' }} />
-                      <Typography variant='caption'>
-                        {(props.dateRage.startDate.format('DD/MM/YYYY')+' To '+props.dateRage.startDate.format('DD/MM/YYYY'))}
-                      </Typography>
+                      <Divider orientation="vertical" sx={{ ml: 1, height: '80%', bgcolor: 'black' }} />
+                      <Typography variant="caption">{props.dateRage.startDate.format('DD/MM/YYYY') + ' To ' + props.dateRage.startDate.format('DD/MM/YYYY')}</Typography>
                     </>
                   )}
                 </Button>
                 {currentRangeType === 'weeks' && (
                   <Button
                     sx={{ pr: 0, m: 0 }}
-                    variant='contained'
-                    onClick={() => props.onChange({
-                      startDate: props.dateRage.startDate.clone().add(1, 'week').startOf('D'),
-                      endDate: props.dateRage.startDate.clone().add(1, 'week').endOf('D'),
-                    })}
+                    variant="contained"
+                    onClick={() =>
+                      props.onChange({
+                        startDate: props.dateRage.startDate.clone().add(1, 'week').startOf('D'),
+                        endDate: props.dateRage.startDate.clone().add(1, 'week').endOf('D'),
+                      })
+                    }
                   >
                     <ArrowForwardIosIcon />
                   </Button>

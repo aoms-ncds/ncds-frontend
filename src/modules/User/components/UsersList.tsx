@@ -1,12 +1,6 @@
 import React from 'react';
 import DropdownButton from '../../../components/DropDownButton';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-  Delete as DeleteIcon,
-  NoAccounts as NoAccountsIcon,
-  Person as PersonIcon,
-} from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -15,7 +9,7 @@ import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 
-const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOrWorker[], {kind: UserKind}>) => {
+const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
 
   const execDelete = (id: string) => {
@@ -100,7 +94,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       headerName: '',
       minWidth: 50,
       type: 'string',
-      renderCell: ( ) => <Avatar />,
+      renderCell: () => <Avatar />,
     },
     {
       field: '_manage',
@@ -110,22 +104,22 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       renderCell: (renderCellParams) => (
         <DropdownButton
           useIconButton={true}
-          id='user action'
-          primaryText='Actions'
+          id="user action"
+          primaryText="Actions"
           key={'User action'}
           items={[
             {
               id: 'View',
               text: 'View',
               component: Link,
-              to: `/${props.options?.kind=='worker'?'workers':'hr'}/profile/${renderCellParams.row._id}`,
+              to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/profile/${renderCellParams.row._id}`,
               icon: PreviewIcon,
             },
             {
               id: 'edit',
               text: 'Edit',
               component: Link,
-              to: `/${props.options?.kind=='worker'?'workers':'hr'}/edit/${renderCellParams.row._id}`,
+              to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${renderCellParams.row._id}`,
               icon: EditIcon,
             },
             {
@@ -137,7 +131,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
                 execDelete(renderCellParams.row._id);
               },
             },
-            (renderCellParams.row.status==UserLifeCycleStates.ACTIVE?(
+            renderCellParams.row.status == UserLifeCycleStates.ACTIVE ?
               {
                 id: 'deactivate',
                 text: 'Deactivate',
@@ -146,16 +140,16 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
                 onClick: () => {
                   deactivateWorker(renderCellParams.row._id);
                 },
-              }):({
-              id: 'activate',
-              text: 'Activate',
-              component: Link,
-              icon: PersonIcon,
-              onClick: () => {
-                activateWorker(renderCellParams.row._id);
+              } :
+              {
+                id: 'activate',
+                text: 'Activate',
+                component: Link,
+                icon: PersonIcon,
+                onClick: () => {
+                  activateWorker(renderCellParams.row._id);
+                },
               },
-            })),
-
           ]}
         />
       ),
@@ -178,7 +172,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       field: 'missionaryOrNonMissionary',
       headerName: 'Field',
       width: 150,
-      valueGetter: (params) =>params.row.basicDetails.field,
+      valueGetter: (params) => params.row.basicDetails.field,
     },
     {
       field: 'dob',
@@ -205,7 +199,6 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       valueGetter: (params) => params.row.basicDetails.martialStatus,
     },
     {
-
       field: 'highestQualification',
       headerName: 'Highest Qualification',
       width: 130,
@@ -218,7 +211,6 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       valueGetter: (params) => params.row.basicDetails.motherTounge,
     },
     {
-
       field: 'communicationLanguage',
       headerName: 'Communication Language',
       width: 130,
@@ -278,12 +270,7 @@ const UsersList = <StaffOrWorker extends User >(props:FormComponentProps<StaffOr
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid
-            rows={props.value ?? []}
-            columns={columns}
-            getRowId={(row) => row._id}
-            loading={props.value===null}
-          />
+          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
         </Card>
       </Grid>
     </>

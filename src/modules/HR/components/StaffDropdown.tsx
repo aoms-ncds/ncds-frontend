@@ -6,10 +6,7 @@ import StaffServices from '../extras/StaffServices';
 interface StaffDropdownProps {
   staffs?: Staff[];
   value: Staff | null | undefined;
-  onChange: (
-    e: React.SyntheticEvent<Element, Event>,
-    staff: Staff | null
-  ) => void;
+  onChange: (e: React.SyntheticEvent<Element, Event>, staff: Staff | null) => void;
   textFieldProps?: TextFieldProps;
   label: string;
   required?: boolean;

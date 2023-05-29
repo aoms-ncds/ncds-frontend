@@ -4,33 +4,40 @@ import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
 
-const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetails, {
-    textField: { variant: 'filled' | 'outlined' | 'standard' };
-}>) => {
-  const [subDivisions, setSubDivisions] = useState<SubDivision[]|null>(null);
+const NewOfficialDetailsForm = (
+  props: FormComponentProps<
+    CreatableOfficialDetails,
+    {
+      textField: { variant: 'filled' | 'outlined' | 'standard' };
+    }
+  >,
+) => {
+  const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
 
   useEffect(() => {
     DivisionsServices.getSubDivisions()
       .then((res) => setSubDivisions(res.data))
-      .catch((error) => enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      }));
+      .catch((error) =>
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        }),
+      );
   }, []);
   return (
     <>
-      {console.log({ 'abc': props.value.dateOfJoining })}
+      {console.log({ abc: props.value.dateOfJoining })}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date of joining"
           value={props.value.dateOfJoining}
-          onChange={(newDate) =>{
+          onChange={(newDate) => {
             props.onChange({
               ...props.value,
               dateOfJoining: newDate ?? undefined,
             });
           }}
-          format='DD/MM/YYYY'
+          format="DD/MM/YYYY"
           slotProps={{
             textField: {
               variant: props.options?.textField.variant,
@@ -56,11 +63,13 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         <DatePicker
           label="Left organization on"
           value={props.value.dateOfLeaving}
-          onChange={(newDate) => props.onChange({
-            ...props.value,
-            dateOfLeaving: newDate ?? undefined,
-          })}
-          format='DD/MM/YYYY'
+          onChange={(newDate) =>
+            props.onChange({
+              ...props.value,
+              dateOfLeaving: newDate ?? undefined,
+            })
+          }
+          format="DD/MM/YYYY"
           slotProps={{
             textField: {
               variant: props.options?.textField.variant,
@@ -74,14 +83,8 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         <Autocomplete<DeactivationReason>
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
           value={props.value.reasonForDeactivation}
-          onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Reason for deactivation"
-              variant={props.options?.textField.variant}
-            />
-          )}
+          onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Reason for deactivation" variant={props.options?.textField.variant} />}
         />
       </Grid>
 
@@ -101,15 +104,8 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           options={subDivisions ?? []}
           value={props.value.subdivision}
           getOptionLabel={(subDiv) => subDiv.name}
-          onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Subdivision"
-              variant={props.options?.textField.variant}
-              required
-            />
-          )}
+          onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Subdivision" variant={props.options?.textField.variant} required />}
         />
       </Grid>
 
@@ -117,31 +113,26 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         <Autocomplete<OfficialDetailsStatus>
           options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
           value={props.value.offiStatus}
-          onChange={(e, selectedStatus) => props.onChange({
-            ...props.value,
-            offiStatus: selectedStatus??undefined,
-          })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Status"
-              required
-              variant={props.options?.textField.variant}
-            />
-          )}
+          onChange={(e, selectedStatus) =>
+            props.onChange({
+              ...props.value,
+              offiStatus: selectedStatus ?? undefined,
+            })
+          }
+          renderInput={(params) => <TextField {...params} label="Status" required variant={props.options?.textField.variant} />}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Joined Division On"
           value={props.value.dateOfDivisionJoining}
-          onChange={(newDate) =>{
+          onChange={(newDate) => {
             props.onChange({
               ...props.value,
               dateOfDivisionJoining: newDate ?? undefined,
             });
           }}
-          format='DD/MM/YYYY'
+          format="DD/MM/YYYY"
           slotProps={{
             textField: {
               variant: props.options?.textField.variant,
@@ -153,7 +144,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           autoFocus
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="No. of Churches"
           type={'number'}
@@ -174,10 +165,12 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           label="Self support"
           control={
             <Checkbox
-              onChange={(e) => props.onChange({
-                ...props.value,
-                selfSupport: e.target.checked,
-              })}
+              onChange={(e) =>
+                props.onChange({
+                  ...props.value,
+                  selfSupport: e.target.checked,
+                })
+              }
             />
           }
         />

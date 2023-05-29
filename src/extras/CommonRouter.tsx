@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  RouteObject,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import homePageRoutes from '../modules/Home/extras/HomeRoutes';
 import divisionsPageRoutes from '../modules/Divisions/extras/DivisionsRoutes';
@@ -14,17 +10,7 @@ import testPageRoutes from '../modules/Tests/extras/TestRoutes';
 import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
 import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes';
 
-export const getAllModuleRoutes = [
-  homePageRoutes,
-  hrPageRoutes,
-  divisionsPageRoutes,
-  workersPageRoutes,
-  frPageRoutes,
-  iroPageRoutes,
-  testPageRoutes,
-  samplesPageRoutes,
-  applicationRoutes,
-];
+export const getAllModuleRoutes = [homePageRoutes, hrPageRoutes, divisionsPageRoutes, workersPageRoutes, frPageRoutes, iroPageRoutes, testPageRoutes, samplesPageRoutes, applicationRoutes];
 
 const router = createBrowserRouter(
   ([] as RouteObject[]).concat(

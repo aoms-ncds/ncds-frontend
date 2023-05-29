@@ -73,14 +73,13 @@ const AddNewApplication = () => {
       <Card style={{ width: '100%' }}>
         <DialogContent>
           <Container>
-
             <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>
                 <Grid item md={6}>
                   <TextField label="Name" value={Request.name} onChange={handleNameChange} fullWidth required />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline/>
+                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline />
                 </Grid>
               </Grid>
               <DialogActions>
@@ -97,5 +96,3 @@ const AddNewApplication = () => {
 };
 
 export default AddNewApplication;
-
-

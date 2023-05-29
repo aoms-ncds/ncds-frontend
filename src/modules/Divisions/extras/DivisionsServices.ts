@@ -94,9 +94,7 @@ export default {
       }),
     );
   },
-  SubDivisionServices: {
-
-  },
+  SubDivisionServices: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId)),
 

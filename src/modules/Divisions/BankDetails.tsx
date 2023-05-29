@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, Grid, TextField, Typography } from '@mui/material';
 
-const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:string}>) => {
+const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, { title: string }>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
     props.value ?? {
       bankName: '',
@@ -15,14 +15,14 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
   return (
     <form>
       <>
-        <Typography variant='h4' component="h4">
-          {props.options?.title??'Bank Details'}
+        <Typography variant="h4" component="h4">
+          {props.options?.title ?? 'Bank Details'}
         </Typography>
         <br />
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
-              label='Bank Name'
+              label="Bank Name"
               value={newBankDetails.bankName}
               onChange={(e) =>
                 setNewBankDetails((newBankDetails) => {
@@ -51,7 +51,6 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
                   props.onChange(newBank); // Call the onChange prop with the updated division details
                   return newBank;
                 })
-
               }
               variant="outlined"
               fullWidth
@@ -70,7 +69,6 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
                   props.onChange(newBank); // Call the onChange prop with the updated division details
                   return newBank;
                 })
-
               }
               variant="outlined"
               fullWidth
@@ -81,7 +79,6 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, {title:
               label="IFSC Code"
               value={newBankDetails.IFSCCode}
               onChange={(e) =>
-
                 setNewBankDetails((newBankDetails) => {
                   const newBank = {
                     ...newBankDetails,

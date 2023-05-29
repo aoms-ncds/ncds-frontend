@@ -4,7 +4,7 @@ import { languages } from './CommonConfig';
 export default {};
 
 declare global {
-   interface ModuleRoute {
+  interface ModuleRoute {
     base: string;
     pages: {
       title: string;
@@ -16,24 +16,24 @@ declare global {
       icon?: React.ReactNode;
     }[];
   }
-   interface LoaderContextType {
+  interface LoaderContextType {
     count: number;
     onLoad: () => void;
     afterLoad: () => void;
   }
-   interface StandardResponse<T> {
+  interface StandardResponse<T> {
     success?: boolean;
     error?: string;
     message?: string;
     data: T;
   }
-   interface MongooseDocument {
+  interface MongooseDocument {
     _id: string;
     createdAt: Moment;
     updatedAt: Moment;
   }
-   type Creatable<T extends MongooseDocument> = Omit<T, keyof MongooseDocument> & Partial<MongooseDocument>;
-   interface FileObject extends MongooseDocument {
+  type Creatable<T extends MongooseDocument> = Omit<T, keyof MongooseDocument> & Partial<MongooseDocument>;
+  interface FileObject extends MongooseDocument {
     name: string;
     size: number;
     type: FileObjectType;
@@ -42,7 +42,7 @@ declare global {
     downloadURL: string | null;
     private: boolean;
   }
-   type FileObjectType =
+  type FileObjectType =
     | 'application/vnd.ms-excel'
     | 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     | 'application/pdf'
@@ -50,19 +50,19 @@ declare global {
     | 'image/png'
     | `video/${string}`
     | `image/${string}`;
-   type FileObjectExtensions = '.xlsx' | '.xls';
-   interface AJAXProgress {
+  type FileObjectExtensions = '.xlsx' | '.xls';
+  interface AJAXProgress {
     loaded: number;
     total: number;
     percentage: number;
   }
 
-   interface DateRange {
+  interface DateRange {
     startDate: Moment;
     endDate: Moment;
   }
 
-   interface FormComponentProps<T, Options = undefined> {
+  interface FormComponentProps<T, Options = undefined> {
     value: T;
     onChange: (newState: T) => void;
     action: 'view' | 'add' | 'edit';
@@ -70,18 +70,17 @@ declare global {
     options?: Options;
   }
 
-export type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]>:T[P];
-};
+  export type RecursivePartial<T> = {
+    [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
+  };
 
-export type Language = (typeof languages)[number];
-export interface Address {
-  buildingName?: string;
-  street?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  pincode?: string;
-}
-
+  export type Language = (typeof languages)[number];
+  export interface Address {
+    buildingName?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    pincode?: string;
+  }
 }

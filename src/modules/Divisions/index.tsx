@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Grid } from '@mui/material';
 import DivisionsList from './components/DivisionsList';
-import {
-  Add as AddIcon,
-
-} from '@mui/icons-material';
+import { Add as AddIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 const DivisionsDashboardPage = () => {
   return (
-    <CommonPageLayout title='Divisions Dashboard'>
+    <CommonPageLayout title="Divisions Dashboard">
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -19,15 +16,15 @@ const DivisionsDashboardPage = () => {
         // onClick={() => {
         // }}
       >
-          Add new
+        Add new
       </Button>
-      <br/><br/>
+      <br />
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
           <DivisionsList />
         </Card>
       </Grid>
-
     </CommonPageLayout>
   );
 };

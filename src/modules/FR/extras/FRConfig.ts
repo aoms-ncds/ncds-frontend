@@ -1,4 +1,3 @@
-
 export const categories = [
   {
     name: 'Maintenance Of Priest &  Preachers',
@@ -101,7 +100,6 @@ export const categories = [
               },
             ],
           },
-
         ],
       },
       {
@@ -161,7 +159,6 @@ export const categories = [
               },
             ],
           },
-
         ],
       },
       {
@@ -176,7 +173,6 @@ export const categories = [
               },
             ],
           },
-
         ],
       },
       {
@@ -290,11 +286,8 @@ export const categories = [
               },
             ],
           },
-
         ],
       },
-
-
     ],
   },
   {
@@ -357,12 +350,11 @@ export const categories = [
               },
             ],
           },
-
         ],
       },
     ],
   },
 ];
 
-export const purposes:FRPurpose[] = ['Worker', 'Subdivision', 'Division', 'Coordinator', 'Others'];
+export const purposes: FRPurpose[] = ['Worker', 'Subdivision', 'Division', 'Coordinator', 'Others'];
 export const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

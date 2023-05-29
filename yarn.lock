@@ -1975,7 +1975,7 @@
 
 "@react-pdf/types@^2.3.1":
   version "2.3.1"
-  resolved "https://registry.npmjs.org/@react-pdf/types/-/types-2.3.1.tgz"
+  resolved "https://registry.yarnpkg.com/@react-pdf/types/-/types-2.3.1.tgz#a379f4621e8be6c8f2d0205787854854781f7a87"
   integrity sha512-FiwAsNp2oQ2W39xAU1PCjY6YNjEuypQykEA6VMz4WZ4ERvyOBB4M5B8063lA8YYBcjYB8xQOa9og4UH1eqMbgg==
 
 "@react-pdf/yoga@^4.1.2":

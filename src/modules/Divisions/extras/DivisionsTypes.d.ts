@@ -3,9 +3,8 @@ import { IWorker } from '../../Workers/extras/WorkersTypes';
 import { Staff } from '../../HR/extras/StaffTypes';
 export default {};
 
-
 declare global {
- interface Division extends MongooseDocument {
+  interface Division extends MongooseDocument {
     // _id: GridRowId;
     details: DivisionDetails;
     subDivisions: SubDivision[];
@@ -13,7 +12,7 @@ declare global {
     localBankDetails: BankDetails;
     _id?: string;
   }
-interface DivisionDetails {
+  interface DivisionDetails {
     name: string;
     // _id?: string;
     divisionId: string;
@@ -28,7 +27,7 @@ interface DivisionDetails {
     juniorLeader?: Staff;
   }
 
-   interface BankDetails {
+  interface BankDetails {
     bankName: string;
     branchName: string;
     accountNumber: string;
@@ -36,7 +35,7 @@ interface DivisionDetails {
     beneficiary?: string;
   }
 
-   interface SubDivision {
+  interface SubDivision {
     _id?: string;
     division?: Division;
     name: string;

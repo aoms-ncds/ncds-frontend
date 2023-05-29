@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 
-const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title?:string}>) => {
-  const [newBankDetails, setNewBankDetails] = useState<BankDetails>(props.value?? {
-    bankName: '',
-    branchName: '',
-    accountNumber: '',
-    IFSCCode: '',
-    beneficiary: '',
-  });
+const BankDetailsForm = (props: FormComponentProps<BankDetails | undefined, { title?: string }>) => {
+  const [newBankDetails, setNewBankDetails] = useState<BankDetails>(
+    props.value ?? {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+  );
 
   return (
     <>
-      <Grid item xs={12} >
-        <Typography variant="h4" component="h4" >{props.options?.title ?? 'Bank Details'}</Typography>
+      <Grid item xs={12}>
+        <Typography variant="h4" component="h4">
+          {props.options?.title ?? 'Bank Details'}
+        </Typography>
       </Grid>
-      <br/>
+      <br />
       {/* <Grid container spacing={3}> */}
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Bank Name"
           value={newBankDetails.bankName}
@@ -34,13 +38,11 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title
           variant="outlined"
           fullWidth
         />
-
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-
         <TextField
           label="Branch Name"
-          value={newBankDetails.branchName }
+          value={newBankDetails.branchName}
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
@@ -50,18 +52,15 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title
               props.onChange(newBank); // Call the onChange prop with the updated division details
               return newBank;
             })
-
           }
           variant="outlined"
           fullWidth
         />
-
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-
         <TextField
           label="Account Number"
-          value={newBankDetails.accountNumber }
+          value={newBankDetails.accountNumber}
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
@@ -71,19 +70,16 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title
               props.onChange(newBank); // Call the onChange prop with the updated division details
               return newBank;
             })
-
           }
           variant="outlined"
           fullWidth
         />
-
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="IFSC Code"
-          value={newBankDetails.IFSCCode }
+          value={newBankDetails.IFSCCode}
           onChange={(e) =>
-
             setNewBankDetails((newBankDetails) => {
               const newBank = {
                 ...newBankDetails,
@@ -100,7 +96,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Beneficiary"
-          value={newBankDetails.beneficiary }
+          value={newBankDetails.beneficiary}
           onChange={(e) =>
             setNewBankDetails((newBankDetails) => {
               const newBank = {
@@ -115,8 +111,6 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title
           fullWidth
         />
       </Grid>
-
-
     </>
   );
 };

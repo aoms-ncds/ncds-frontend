@@ -9,10 +9,7 @@ interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
   onChange: (newSubDivisions: SubDivision[]) => void;
 }
-const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
-  withCardContainer = [],
-  onChange,
-})=> {
+const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer = [], onChange }) => {
   const { editID } = useParams();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', name: '' }]);
   const handleAddSubDivision = () => {
@@ -26,7 +23,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
   };
   const deleteSubDivision = (index: number) => {
     const newSubDivisions = subDivisions.filter((_, i) => i !== index);
-    const deletedSubdivision=subDivisions.filter((_, i) => i == index);
+    const deletedSubdivision = subDivisions.filter((_, i) => i == index);
     const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
     if (deletedSubdivisionIds.length > 0) {
       console.log('testing neww', deletedSubdivisionIds[0]);
@@ -37,19 +34,19 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
         if (subdivisionId) {
           if (objectIdPattern.test(subdivisionId)) {
             DivisionsServices.deleteSubDivision(subdivisionId)
-          .then((res) => {
-            enqueueSnackbar({
-              message: res.message,
-              variant: 'success',
-            });
-          })
-            .catch((err) => {
-              console.log(err);
-              enqueueSnackbar({
-                message: err.message,
-                variant: 'error',
+              .then((res) => {
+                enqueueSnackbar({
+                  message: res.message,
+                  variant: 'success',
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                enqueueSnackbar({
+                  message: err.message,
+                  variant: 'error',
+                });
               });
-            });
           }
         }
       }
@@ -85,7 +82,6 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
               newSubDivisions[index].name = e.target.value;
               setSubDivisions(newSubDivisions);
 
-
               onChange(newSubDivisions); // Call the onChange prop with the updated division details
               return newSubDivisions;
             }}
@@ -100,10 +96,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
                 </IconButton>
               ),
             }}
-
-            inputRef={
-              index === subDivisions.length - 1 ? lastProgramNameField : null
-            }
+            inputRef={index === subDivisions.length - 1 ? lastProgramNameField : null}
             fullWidth
             required
             autoComplete="off"
@@ -111,15 +104,11 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
         </Grid>
       ))}
       <Grid item xs={12}>
-        <Button
-          variant="outlined"
-          onClick={handleAddSubDivision}
-        >
-              Add new Sub Division
+        <Button variant="outlined" onClick={handleAddSubDivision}>
+          Add new Sub Division
         </Button>
       </Grid>
     </>
-
   );
 };
 

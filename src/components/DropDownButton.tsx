@@ -1,16 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
-import {
-  SvgIconTypeMap,
-  ListItemText,
-  Button,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  IconButton,
-} from '@mui/material';
-import { OverridableComponent } from '@mui/material/OverridableComponent';
-import { MoreVert } from '@mui/icons-material';
+import { ListItemText, Button, Menu, MenuItem, ListItemIcon, IconButton } from '@mui/material';
+import { MoreVert, SvgIconComponent } from '@mui/icons-material';
 import ReactPDF from '@react-pdf/renderer';
 
 const DropdownButton = ({
@@ -24,17 +15,12 @@ const DropdownButton = ({
   primaryText: string;
   items: {
     id: React.Key;
-    icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
-      muiName: string;
-    };
+    icon?: SvgIconComponent;
     text: string;
     onClick?: (arg0: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
     component?: any;
     to?: string;
-    document?: React.ReactElement<
-      ReactPDF.DocumentProps,
-      string | React.JSXElementConstructor<any>
-    >;
+    document?: React.ReactElement<ReactPDF.DocumentProps, string | React.JSXElementConstructor<any>>;
     fileName?: string;
   }[];
 }) => {
@@ -51,19 +37,12 @@ const DropdownButton = ({
           <MoreVert />
         </IconButton>
       ) : (
-        <Button
-          id={id}
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup='true'
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          variant={open ? 'contained' : 'outlined'}
-        >
+        <Button id={id} aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick} variant={open ? 'contained' : 'outlined'}>
           {primaryText}
         </Button>
       )}
       <Menu
-        id='basic-menu'
+        id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
@@ -89,7 +68,7 @@ const DropdownButton = ({
           >
             {item.icon && (
               <ListItemIcon>
-                <item.icon fontSize='small' />
+                <item.icon fontSize="small" />
               </ListItemIcon>
             )}
             <ListItemText>{item.text}</ListItemText>

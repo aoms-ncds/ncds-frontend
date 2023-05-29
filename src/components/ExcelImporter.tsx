@@ -1,34 +1,17 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  LinearProgress,
-  Checkbox,
-  Typography,
-  FormControlLabel,
-  Alert,
-  AlertTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, LinearProgress, Checkbox, Typography, FormControlLabel, Alert, AlertTitle } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import XLSX from 'xlsx';
 
 interface Props<T> {
-    onFinish: () => void;
-    onClose: () => void;
-    show: boolean;
-    title: string;
-    templateURL: string;
-    validator: (row: any, rowNumber: number) => string | true;
-    parser: (row: any) => T;
-    uploader: (
-        row: T,
-        overwriteDuplicates: boolean
-    ) => Promise<StandardResponse<void>>;
-
+  onFinish: () => void;
+  onClose: () => void;
+  show: boolean;
+  title: string;
+  templateURL: string;
+  validator: (row: any, rowNumber: number) => string | true;
+  parser: (row: any) => T;
+  uploader: (row: T, overwriteDuplicates: boolean) => Promise<StandardResponse<void>>;
 }
 const ExcelImporter = <T, >(props: Props<T>) => {
   const [overwriteDuplicates, setOverwriteDuplicates] = useState(false);
@@ -42,10 +25,9 @@ const ExcelImporter = <T, >(props: Props<T>) => {
     const droppedFile = event.dataTransfer.files[0];
     if (
       droppedFile.type === 'application/vnd.ms-excel' ||
-            droppedFile.type ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-            droppedFile.name.endsWith('.xls') ||
-            droppedFile.name.endsWith('.xlsx')
+      droppedFile.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      droppedFile.name.endsWith('.xls') ||
+      droppedFile.name.endsWith('.xlsx')
     ) {
       setFile(droppedFile);
       readFileContent(droppedFile);
@@ -58,9 +40,7 @@ const ExcelImporter = <T, >(props: Props<T>) => {
     }
   };
 
-  const handleFileInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     setFile(selectedFile);
     if (selectedFile) readFileContent(selectedFile);
@@ -113,38 +93,14 @@ const ExcelImporter = <T, >(props: Props<T>) => {
     <>
       <Dialog open={props.show && file == null} fullWidth>
         <DialogTitle>{props.title}</DialogTitle>
-        <DialogContent
-          onDrop={handleDrop}
-          onDragOver={(event) => event.preventDefault()}
-        >
+        <DialogContent onDrop={handleDrop} onDragOver={(event) => event.preventDefault()}>
           <label htmlFor="file-input">
-            <div
-              style={{ height: 80, width: 550, backgroundColor: 'gray' }}
-              onDragStart={(event) => event.preventDefault()}
-            >
-              <DialogContentText
-                sx={{ textAlign: 'center', pt: 4, color: 'black' }}
-              >
-                                Choose an Excel file and drag and drop it here.
-              </DialogContentText>
+            <div style={{ height: 80, width: 550, backgroundColor: 'gray' }} onDragStart={(event) => event.preventDefault()}>
+              <DialogContentText sx={{ textAlign: 'center', pt: 4, color: 'black' }}>Choose an Excel file and drag and drop it here.</DialogContentText>
             </div>
           </label>
-          <input
-            type="file"
-            id="file-input"
-            accept=".xlsx,.xls"
-            onChange={handleFileInputChange}
-            style={{ display: 'none' }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                value={overwriteDuplicates}
-                onChange={(e) => setOverwriteDuplicates(e.target.checked)}
-              />
-            }
-            label="Overwrite duplicates"
-          />
+          <input type="file" id="file-input" accept=".xlsx,.xls" onChange={handleFileInputChange} style={{ display: 'none' }} />
+          <FormControlLabel control={<Checkbox value={overwriteDuplicates} onChange={(e) => setOverwriteDuplicates(e.target.checked)} />} label="Overwrite duplicates" />
         </DialogContent>
         <DialogActions>
           <Button
@@ -159,25 +115,22 @@ const ExcelImporter = <T, >(props: Props<T>) => {
               props.onClose();
             }}
           >
-                        close
+            close
           </Button>
-                    &nbsp;  &nbsp;
-          <Button variant="contained"
-            component="a" href={props.templateURL}
-          >Download Template</Button>
+          &nbsp; &nbsp;
+          <Button variant="contained" component="a" href={props.templateURL}>
+            Download Template
+          </Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={props.show && file !== null} fullWidth>
         <DialogTitle> Uploading...</DialogTitle>
         <DialogContent>
-          <LinearProgress
-            variant="determinate"
-            value={((finishedRows ?? 0) / (totalRows ?? 0)) * 100}
-          />
+          <LinearProgress variant="determinate" value={((finishedRows ?? 0) / (totalRows ?? 0)) * 100} />
           <br />
           <Typography>
-                        Finished {finishedRows} items out of {totalRows}
+            Finished {finishedRows} items out of {totalRows}
           </Typography>
         </DialogContent>
       </Dialog>
@@ -186,26 +139,21 @@ const ExcelImporter = <T, >(props: Props<T>) => {
         <DialogTitle> Done</DialogTitle>
         <DialogContent>
           <DialogContentText>
-
-
             <div>
               {(totalRows ?? 0) - errors.length} items were uploaded
               {errors && errors.length > 0 && `, but ${errors.length} of them failed`}
               <br /> <br />
-              {errors && errors.length > 0 &&
-                                (<Alert severity="error">
-                                  <AlertTitle>Errors: </AlertTitle>
-                                  {errors.map((err, index) => (
-                                    <Typography key={index}>
-                                      <b>{index + 1}.</b> {err}
-                                    </Typography>
-                                  ))}
-                                </Alert>)
-              }
-
+              {errors && errors.length > 0 && (
+                <Alert severity="error">
+                  <AlertTitle>Errors: </AlertTitle>
+                  {errors.map((err, index) => (
+                    <Typography key={index}>
+                      <b>{index + 1}.</b> {err}
+                    </Typography>
+                  ))}
+                </Alert>
+              )}
             </div>
-
-
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -221,7 +169,7 @@ const ExcelImporter = <T, >(props: Props<T>) => {
               props.onFinish();
             }}
           >
-                        Close
+            Close
           </Button>
         </DialogActions>
       </Dialog>

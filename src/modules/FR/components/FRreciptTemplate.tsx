@@ -1,21 +1,7 @@
 import { BorderTop, Pages } from '@mui/icons-material';
 import React from 'react';
-import {
-  PDFCell,
-  PDFTable,
-  PDFTableHeader,
-  PDFTableRow,
-} from '../../IRO/components/PDFTable';
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Font,
-  Svg,
-  Image,
-} from '@react-pdf/renderer';
+import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
+import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
 
 Font.register({
   family: 'Oswald',
@@ -119,108 +105,54 @@ const FRreciptTemplate = () => {
         <div style={{ marginTop: 200, width: 500, left: 50 }}>
           <PDFTable>
             <PDFTableHeader>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'40'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
                 Sl No
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'80'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
                 Financial Requisition Particulars
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'60'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                 Sub Division Name
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'100'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                 Quntity
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'100'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                 Description
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'110'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
                 Need Of Month
               </PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'110'}
-              >
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
                 Total
               </PDFCell>
             </PDFTableHeader>
             <PDFTableRow>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'40'}
-              ></PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'80'}
-              ></PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'60'}
-              ></PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'100'}
-              ></PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'100'}
-              ></PDFCell>
-              <PDFCell
-                style={{ textAlign: 'center', fontSize: 10 }}
-                width={'110'}
-              ></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
             </PDFTableRow>
           </PDFTable>
         </div>
 
         <div style={{ marginTop: 290 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>
-            Senior Leader Sign
-          </Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>
-            Junior Leader Sign
-          </Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>
-            Junior Leader Sign
-          </Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Senior Leader Sign</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text>
         </div>
         <div style={{ marginTop: 10, fontSize: 10 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>
-            Date:
-          </Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>
-            Date:
-          </Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>
-            Date:
-          </Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Date:</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Date:</Text>
         </div>
 
         <div style={{ marginTop: 80 }}>
           <Text style={{ fontSize: 12, paddingLeft: 40, paddingRight: 40 }}>
-            * The Original requisition must reach Delhi Office by 15 of the
-            previous month for which money is requested. If it is not received
-            in Delhi Office by that date, it will be presumed that there is no
-            needs of finance in your area for the month of you haw balance
-            of money with you
+            * The Original requisition must reach Delhi Office by 15 of the previous month for which money is requested. If it is not received in Delhi Office by that date, it will be presumed that
+            there is no needs of finance in your area for the month of you haw balance of money with you
           </Text>
           <Text
             style={{

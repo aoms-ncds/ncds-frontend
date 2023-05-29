@@ -6,10 +6,7 @@ import UserServices from '../extras/UserServices';
 interface UserDropdownProps {
   users?: User[];
   value: User | null | undefined;
-  onChange: (
-    e: React.SyntheticEvent<Element, Event>,
-    User: User | null
-  ) => void;
+  onChange: (e: React.SyntheticEvent<Element, Event>, User: User | null) => void;
   textFieldProps?: TextFieldProps;
   label: string;
   required?: boolean;

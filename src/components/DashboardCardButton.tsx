@@ -1,13 +1,5 @@
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  Typography,
-  styled,
-} from '@mui/material';
+import { Button, Card, CardActionArea, CardActions, CardContent, Typography, styled } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 const StyledLink = styled(Link)`
@@ -17,13 +9,7 @@ const StyledLink = styled(Link)`
 // transform: translate(0, -2px);
 // cursor: pointer;
 
-const DashboardCardButton = (props: {
-  primaryText: string;
-  secondaryText?: string;
-  color: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  targetRoute?: string;
-}) => {
+const DashboardCardButton = (props: { primaryText: string; secondaryText?: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string }) => {
   return (
     <Card
       onClick={props.onClick}
@@ -54,9 +40,7 @@ const DashboardCardButton = (props: {
       >
         <CardContent sx={{ padding: 1 }}>
           <Typography variant="h6">{props.primaryText}</Typography>
-          <Typography variant="h6">
-            {props.secondaryText ?? <>&nbsp;</>}
-          </Typography>
+          <Typography variant="h6">{props.secondaryText ?? <>&nbsp;</>}</Typography>
         </CardContent>
         <CardActions>
           {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}

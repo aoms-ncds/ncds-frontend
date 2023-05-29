@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
-import {
-  Edit as EditIcon,
-  Message as MessageIcon,
-  Preview as PreviewIcon,
-  Print as PrintIcon,
-} from '@mui/icons-material';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
 import { enqueueSnackbar } from 'notistack';
@@ -23,8 +18,8 @@ const ClosedFRsTable = () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='FR action'
-          primaryText='Actions'
+          id="FR action"
+          primaryText="Actions"
           key={'FR action'}
           items={[
             {
@@ -65,14 +60,7 @@ const ClosedFRsTable = () => {
         console.log({ err });
       });
   }, []);
-  return (
-    <DataGrid
-      rows={closedFRs ?? []}
-      columns={columns}
-      getRowId={(row) => row._id}
-      loading={closedFRs === null}
-    />
-  );
+  return <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} />;
 };
 
 export default ClosedFRsTable;

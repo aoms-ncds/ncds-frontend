@@ -1,10 +1,4 @@
-import {
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  Grid,
-  TextField,
-} from '@mui/material';
+import { Checkbox, Divider, FormControlLabel, Grid, TextField } from '@mui/material';
 import React from 'react';
 
 const NewAddressForm = (
@@ -23,18 +17,15 @@ const NewAddressForm = (
   return (
     <>
       <Grid item xs={props.options?.copyAddressCheckBox !== undefined ? 6 : 12}>
-        <Divider sx={{ mt: '10px' }} textAlign="left">{props.options?.title ?? 'Address'}</Divider>
+        <Divider sx={{ mt: '10px' }} textAlign="left">
+          {props.options?.title ?? 'Address'}
+        </Divider>
       </Grid>
       {props.options?.copyAddressCheckBox !== undefined && (
         <Grid item xs={6}>
           <Divider textAlign="left">
             {props.options?.copyAddressCheckBox !== undefined && (
-              <FormControlLabel
-                control={
-                  <Checkbox onChange={(e) => props.options?.copyAddressCheckBox?.onChange(e.target.checked)}/>
-                }
-                label={props.options.copyAddressCheckBox.label}
-              />
+              <FormControlLabel control={<Checkbox onChange={(e) => props.options?.copyAddressCheckBox?.onChange(e.target.checked)} />} label={props.options.copyAddressCheckBox.label} />
             )}
           </Divider>
         </Grid>

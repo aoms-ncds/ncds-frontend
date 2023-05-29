@@ -5,9 +5,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkerServices from './extras/WorkersServices';
 
 const Profile = () => {
-  const [worker, setWorker] = useState<IWorker | null>(
-    null,
-  );
+  const [worker, setWorker] = useState<IWorker | null>(null);
   const { workersId } = useParams();
 
   useEffect(() => {
@@ -17,8 +15,7 @@ const Profile = () => {
           console.log(res.data);
           setWorker(res.data);
         })
-        .catch((res) => {
-        });
+        .catch((res) => {});
     }
   }, []);
   return (
@@ -36,9 +33,7 @@ const Profile = () => {
             <Grid item md={6} xs={12}>
               <Typography variant="body2" sx={{ textDecoration: '' }}>
                 <b>First Name:</b>&nbsp;
-                {!worker?.basicDetails?.firstName ?
-                  'No data' :
-                  worker?.basicDetails.firstName}
+                {!worker?.basicDetails?.firstName ? 'No data' : worker?.basicDetails.firstName}
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>
@@ -107,17 +102,13 @@ const Profile = () => {
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: '' }}>
                   <b>Current Designation:</b>&nbsp;
-                  {!worker?.supportDetails?.designation?.name ?
-                    'No data' :
-                    worker.supportDetails.designation.name}
+                  {!worker?.supportDetails?.designation?.name ? 'No data' : worker.supportDetails.designation.name}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Total No Years In Ministry:</b>&nbsp;
-                  {!worker?.supportDetails?.totalNoOfYearsInMinistry ?
-                    'No data' :
-                    worker.supportDetails.totalNoOfYearsInMinistry}
+                  {!worker?.supportDetails?.totalNoOfYearsInMinistry ? 'No data' : worker.supportDetails.totalNoOfYearsInMinistry}
                 </Typography>
               </Grid>
               {/* <Grid item md={6} xs={12}>
@@ -131,15 +122,13 @@ const Profile = () => {
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Type of Church:</b>&nbsp;
-                  {!worker?.supportDetails?.withChurch ? 'No data' : (worker.supportDetails.withChurch ? 'With church':'Without church')}
+                  {!worker?.supportDetails?.withChurch ? 'No data' : worker.supportDetails.withChurch ? 'With church' : 'Without church'}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Self Support:</b>&nbsp;
-                  {!worker?.officialDetails.selfSupport ?
-                    'No data' :
-                    worker.officialDetails.selfSupport ? 'Yes':'No'}
+                  {!worker?.officialDetails.selfSupport ? 'No data' : worker.officialDetails.selfSupport ? 'Yes' : 'No'}
                 </Typography>
               </Grid>
             </Grid>
@@ -158,41 +147,31 @@ const Profile = () => {
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: '' }}>
                   <b>Basic Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.basic ?
-                    'No data' :
-                    worker.supportStructure.basic}
+                  {!worker?.supportStructure?.basic ? 'No data' : worker.supportStructure.basic}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>HRA Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.HRA ?
-                    'No data' :
-                    worker.supportStructure.HRA}
+                  {!worker?.supportStructure?.HRA ? 'No data' : worker.supportStructure.HRA}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Spouse Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.spouseAllowance ?
-                    'No data' :
-                    worker.supportStructure.spouseAllowance}
+                  {!worker?.supportStructure?.spouseAllowance ? 'No data' : worker.supportStructure.spouseAllowance}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Positional Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.positionalAllowance ?
-                    'No data' :
-                    worker.supportStructure.positionalAllowance}
+                  {!worker?.supportStructure?.positionalAllowance ? 'No data' : worker.supportStructure.positionalAllowance}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography variant="body2" sx={{ textDecoration: 'none' }}>
                   <b>Special Allowance:</b>&nbsp;
-                  {!worker?.supportStructure?.specialAllowance ?
-                    'No data' :
-                    worker.supportStructure.specialAllowance}
+                  {!worker?.supportStructure?.specialAllowance ? 'No data' : worker.supportStructure.specialAllowance}
                 </Typography>
               </Grid>
             </Grid>
