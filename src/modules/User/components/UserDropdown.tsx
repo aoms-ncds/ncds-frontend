@@ -2,7 +2,6 @@ import { Autocomplete, TextField, TextFieldProps } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import UserServices from '../extras/UserServices';
-import { User } from '../extras/UserTypes';
 
 interface UserDropdownProps {
   users?: User[];

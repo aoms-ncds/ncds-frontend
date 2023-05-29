@@ -54,7 +54,7 @@ declare global{
   remarks?: string;
   subdivision?: SubDivision;
   selfSupport: boolean;
-  offiStatus: OfficialDetailsStatus;
+  status: OfficialDetailsStatus;
   dateOfDivisionJoining?: Moment;
   dateOfDivisionLeaving?: Moment;
   noOfChurches: number;

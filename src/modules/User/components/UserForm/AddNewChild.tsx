@@ -246,7 +246,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             <Autocomplete
               value={newChild?.childOf || null}
               options={workers ?? []}
-              getOptionLabel={(worker) => worker.firstName}
+              getOptionLabel={(worker) => worker.basicDetails.firstName}
               onChange={(_e, workers) => {
                 if (workers ) {
                   setNewChild((newchild) => ({

@@ -87,7 +87,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
       remarks: 'Lorem ipsum dolor sit amet.',
       selfSupport: true,
-      offiStatus: 'Ministering',
+      status: 'Ministering',
       dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
       noOfChurches: 5,
       subdivision: {
@@ -129,6 +129,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Particulars, setParticulars] = useState<Particulars[]>([]);
   const [particularDetails, setParticularDetails] = useState<Particulars>({
+    _id: '',
     mainCategory: '',
     subCategory1: '',
     subCategory2: '',
@@ -228,6 +229,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           variant: 'success',
         });
         setParticularDetails(() => ({
+          _id: '',
           mainCategory: '',
           subCategory1: '',
           subCategory2: '',

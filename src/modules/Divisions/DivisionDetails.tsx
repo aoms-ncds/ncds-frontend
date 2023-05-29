@@ -173,8 +173,6 @@ const DivisionDetailsPage = () => {
       IFSCCode: '',
       beneficiary: '',
     },
-    createdAt: moment(),
-    updatedAt: moment(),
   });
   useEffect(() => {
     if (divisionIDs) {
@@ -296,8 +294,8 @@ const DivisionDetailsPage = () => {
               <Grid container spacing={2}>
                 <BankDetailsForm
                   value={divisionDetails?.FCRABankDetails}
-                  onChange={(newbankDetails: BankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails }));
+                  onChange={(newbankDetails) => {
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: (newbankDetails as BankDetails) }));
                   }}
                   action={'add'}
                   options={{ title: 'FCRA Bank Details' }}
@@ -305,8 +303,8 @@ const DivisionDetailsPage = () => {
 
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
-                  onChange={(newbankDetails: BankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails }));
+                  onChange={(newbankDetails) => {
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: (newbankDetails as BankDetails) }));
                   }}
                   action={'add'}
                   options={{ title: 'Local Bank Details' }}

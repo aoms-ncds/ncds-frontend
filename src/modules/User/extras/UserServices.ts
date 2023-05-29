@@ -1,8 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { LoginCredentials, LoginResponse, User } from './UserTypes';
-import { RecursivePartial, StandardResponse } from '../../../extras/CommonTypes';
 import { FilterQuery } from 'mongoose';
 
 export default {
@@ -13,7 +11,6 @@ export default {
         token: 'skdfksj',
         user: {
           '_id': '646703c19e433f67d27019b2',
-          'workerCode': '',
           'basicDetails': {
             'aadhaar': {
               'aadhaarNo': '123456789012',
@@ -60,7 +57,7 @@ export default {
             'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
             'remarks': 'Lorem ipsum dolor sit amet.',
             'selfSupport': true,
-            'offiStatus': 'Ministering',
+            'status': 'Ministering',
             'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
             'noOfChurches': 5,
             'subdivision': {
@@ -83,7 +80,6 @@ export default {
             'PIONMissionaryFund': 300,
             'MUTDeduction': 100,
           },
-          'children': [],
           'createdAt': moment('2023-05-19T05:06:09.292Z'),
           'updatedAt': moment('2023-05-19T05:06:09.292Z'),
         },

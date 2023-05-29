@@ -25,6 +25,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     officialDetails: {
       remarks: '',
       selfSupport: true,
+      status: 'Ministering',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,

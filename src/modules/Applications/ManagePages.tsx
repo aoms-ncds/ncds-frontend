@@ -10,7 +10,6 @@ import { Button, Card, Grid } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import GridLinkAction from '../../components/GridLinkAction';
-import { Application } from './extras/ApplicationTypes';
 import moment from 'moment';
 
 const ApplicationManagePages = () => {

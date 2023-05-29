@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 
-const BankDetailsForm = (props: FormComponentProps<BankDetails, {title?:string}>) => {
+const BankDetailsForm = (props: FormComponentProps<BankDetails|undefined, {title?:string}>) => {
   const [newBankDetails, setNewBankDetails] = useState<BankDetails>(props.value?? {
     bankName: '',
     branchName: '',

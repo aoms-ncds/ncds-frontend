@@ -363,7 +363,7 @@ const UserBasicDetailsForm = (
             ...props.value,
             licenseNumber: e.target.value,
           })}
-          variant={props.options?.textField.variant}
+          variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
