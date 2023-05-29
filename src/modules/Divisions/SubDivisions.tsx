@@ -33,8 +33,11 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
       console.log('testing neww', deletedSubdivisionIds[0]);
       if (editID) {
         const subdivisionId = deletedSubdivisionIds[0];
+        const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+
         if (subdivisionId) {
-          DivisionsServices.deleteSubDivision(subdivisionId)
+          if (objectIdPattern.test(subdivisionId)) {
+            DivisionsServices.deleteSubDivision(subdivisionId)
           .then((res) => {
             enqueueSnackbar({
               message: res.message,
@@ -48,6 +51,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
                 variant: 'error',
               });
             });
+          }
         }
       }
     }
@@ -62,7 +66,6 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
   };
   const lastProgramNameField = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    lastProgramNameField.current?.focus();
     // for (let i = 0; i < 50; i++) { // Used for automatically adding 50 sheets (for testing purposes)
     //   RESTClient.Scheduling.createProgramSheet({
     //     name: "Test sheet " + i,
@@ -82,6 +85,8 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
               const newSubDivisions = [...subDivisions];
               newSubDivisions[index].name = e.target.value;
               setSubDivisions(newSubDivisions);
+
+
               onChange(newSubDivisions); // Call the onChange prop with the updated division details
               return newSubDivisions;
             }}
@@ -96,6 +101,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({
                 </IconButton>
               ),
             }}
+
             inputRef={
               index === subDivisions.length - 1 ? lastProgramNameField : null
             }

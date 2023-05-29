@@ -54,9 +54,9 @@ export interface OfficialDetails {
   dateOfLeaving?: Moment;
   reasonForDeactivation?: DeactivationReason;
   remarks?: string;
-  subdivision: SubDivision;
+  subdivision?: SubDivision;
   selfSupport: boolean;
-  status: OfficialDetailsStatus;
+  status?: OfficialDetailsStatus;
   dateOfDivisionJoining?: Moment;
   dateOfDivisionLeaving?: Moment;
   noOfChurches: number;
