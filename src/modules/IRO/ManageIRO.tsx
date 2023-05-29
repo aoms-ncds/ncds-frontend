@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import { IROrder } from './extras/IROTypes';
+import IROReciptTemplate from './components/IROReciptTemplate';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const ManageIRO= () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();
@@ -55,6 +57,9 @@ const ManageIRO= () => {
               id: 'print',
               text: 'Print IRO',
               icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <IROReciptTemplate />,
+              fileName: 'IROReciept.pdf',
             },
             {
               id: 'View',

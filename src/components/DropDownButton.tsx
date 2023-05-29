@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { MoreVert } from '@mui/icons-material';
+import ReactPDF from '@react-pdf/renderer';
 
 const DropdownButton = ({
   useIconButton = false,
@@ -30,6 +31,11 @@ const DropdownButton = ({
     onClick?: (arg0: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
     component?: any;
     to?: string;
+    document?: React.ReactElement<
+      ReactPDF.DocumentProps,
+      string | React.JSXElementConstructor<any>
+    >;
+    fileName?: string;
   }[];
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -77,6 +83,8 @@ const DropdownButton = ({
               item.onClick && item.onClick(event);
             }}
             component={item.component}
+            document={item.document}
+            filename={item.fileName}
             to={item.to}
           >
             {item.icon && (
