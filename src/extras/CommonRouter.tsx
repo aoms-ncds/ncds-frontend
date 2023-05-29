@@ -9,12 +9,24 @@ import workersPageRoutes from '../modules/Workers/extras/WorkersRoutes';
 import testPageRoutes from '../modules/Tests/extras/TestRoutes';
 import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
 import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes';
+import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 
-export const getAllModuleRoutes = [homePageRoutes, hrPageRoutes, divisionsPageRoutes, workersPageRoutes, frPageRoutes, iroPageRoutes, testPageRoutes, samplesPageRoutes, applicationRoutes];
+export const allModuleRoutes = [
+  homePageRoutes,
+  hrPageRoutes,
+  divisionsPageRoutes,
+  workersPageRoutes,
+  usersPageRoutes,
+  frPageRoutes,
+  iroPageRoutes,
+  testPageRoutes,
+  samplesPageRoutes,
+  applicationRoutes,
+];
 
 const router = createBrowserRouter(
   ([] as RouteObject[]).concat(
-    ...getAllModuleRoutes.map((moduleRoute) =>
+    ...allModuleRoutes.map((moduleRoute) =>
       moduleRoute.pages.map((page) => ({
         path: moduleRoute.base + page.path,
         element: page.element,

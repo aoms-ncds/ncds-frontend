@@ -396,7 +396,13 @@ const UserBasicDetailsForm = (
           title: 'Permanent address',
           copyAddressCheckBox: {
             label: 'Same as current address',
-            onChange: (value) => setDuplicateCurrentAddress(value),
+            onChange: (value) => {
+              setDuplicateCurrentAddress(value);
+              props.onChange({
+                ...props.value,
+                permanentAddress: props.value.currentOfficialAddress,
+              });
+            },
           },
         }}
       />

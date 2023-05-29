@@ -4,7 +4,7 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
-import Profile from '../Profile';
+import Profile from '../../User/Profile';
 import AddNewChildPage from '../AddNewChild';
 
 const workersPageRoutes: ModuleRoute = {
@@ -37,13 +37,6 @@ const workersPageRoutes: ModuleRoute = {
       title: 'Approve Workers',
       path: '/approve',
       element: <ApproveWorkerPage />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
-    {
-      title: 'View Profile',
-      path: '/profile/:workersId',
-      element: <Profile />,
       private: true,
       requiredAccessRights: ['string'],
     },
