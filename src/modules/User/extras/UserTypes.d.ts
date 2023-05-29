@@ -1,9 +1,11 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
-import { Creatable, MongooseDocument, Address } from '../../../extras/CommonTypes';
+import { Creatable, MongooseDocument, Address, Language, FileObject } from '../../../extras/CommonTypes';
 import { SubDivision } from '../../Divisions/extras/DivisionsTypes';
 import { Designation } from '../../HR/extras/DesignationTypes';
 
+
+export default {};
 
 export type UserKind = 'staff' | 'worker';
 
@@ -33,6 +35,7 @@ export interface BasicDetails {
   licenseNumber?: string;
   permanentAddress: Address;
   currentAddress: Address;
+  spouseOfAnotherUser?:User;
 }
 export interface CreatableBasicDetails extends Creatable<BasicDetails> {
   gender?: BasicDetails['gender'];
@@ -59,7 +62,7 @@ export interface OfficialDetails {
   noOfChurches: number;
 }
 export type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
-export type OfficialDetailsStatus = 'ministering' | 'left' | 'education leave' | 'sabbatical leave';
+export type OfficialDetailsStatus = 'Ministering'| 'Left'| 'Education Leave'| 'Sabbatical Leave';
 export interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
   dateOfJoining?: Moment;
   subdivision?: SubDivision;
@@ -109,5 +112,5 @@ export interface LoginCredentials {
 }
 export interface LoginResponse {
   token: string;
-  user: IWorker;
+  user: User;
 }

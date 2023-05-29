@@ -8,7 +8,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
   }>) => {
   return (
     <>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Basic"
           type="number"
@@ -22,7 +22,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="HRA"
           type="number"
@@ -36,7 +36,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Spouse allowance"
           type="number"
@@ -50,7 +50,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Positional allowance"
           type="number"
@@ -64,7 +64,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Special allowance"
           type="number"
@@ -78,21 +78,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
-        <TextField
-          label="Impact deduction"
-          type="number"
-          value={props.value.impactDeduction}
-          onChange={(e) => props.onChange({
-            ...props.value,
-            impactDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-          })}
-          variant={props.options?.textField.variant}
-          fullWidth
-        />
-      </Grid>
-
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Tel allowance"
           type="number"
@@ -106,7 +92,21 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Impact deduction"
+          type="number"
+          value={props.value.impactDeduction}
+          onChange={(e) => props.onChange({
+            ...props.value,
+            impactDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
+          })}
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="PISON Missionary fund"
           type="number"
@@ -120,7 +120,7 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="MUT Deduction (Medical Insurance)"
           type="number"
@@ -131,6 +131,39 @@ const NewUserSupportStructureForm = (props: FormComponentProps<SupportStructure,
           })}
           variant={props.options?.textField.variant}
           fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Total amount"
+          value={(props.value.basic??0)+(props.value.HRA??0)+(props.value.spouseAllowance??0)+(props.value.positionalAllowance??0)+(props.value.specialAllowance??0)+(props.value.telAllowance??0)}
+          variant={props.options?.textField.variant}
+          fullWidth
+          disabled
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Total deduction"
+          value={(props.value.impactDeduction??0)+(props.value.PIONMissionaryFund??0)+(props.value.MUTDeduction??0)}
+          variant={props.options?.textField.variant}
+          fullWidth
+          disabled
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="Net amount"
+          value={
+            ((props.value.basic??0)+(props.value.HRA??0)+(props.value.spouseAllowance??0)+(props.value.positionalAllowance??0)+(props.value.specialAllowance??0)+(props.value.telAllowance??0)) -
+            ((props.value.impactDeduction??0)+(props.value.PIONMissionaryFund??0)+(props.value.MUTDeduction??0))
+          }
+          variant={props.options?.textField.variant}
+          fullWidth
+          disabled
         />
       </Grid>
     </>

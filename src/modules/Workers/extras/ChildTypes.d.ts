@@ -1,9 +1,11 @@
+import { Moment } from 'moment';
 import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
+import { IWorker } from './WorkersTypes';
 export interface Child extends MongooseDocument{
     firstName: string;
     lastName: string;
-    dateOfBirth: moment;
-    childOf: IETWorker | null;
+    dateOfBirth: Moment;
+    childOf: IWorker | null;
     childSupport: string;
     studying: boolean;
     classOfStudy: string;
@@ -13,7 +15,7 @@ export interface Child extends MongooseDocument{
 }
 export interface CreatableChild extends Creatable<Child>{
     dateOfBirth?: Moment;
-    childOf?: IETWorker | null;
+    childOf?: IWorker | null;
     childSupport?: string;
     studying?: boolean;
     classOfStudy?: string;

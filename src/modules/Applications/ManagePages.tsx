@@ -1,46 +1,26 @@
 import { Link } from 'react-router-dom';
-import React, { Component, useEffect, useState } from 'react';
-import DropdownButton from '../../components/DropDownButton';
+import React, { useEffect, useState } from 'react';
 import {
-  Edit as EditIcon,
-  Message as MessageIcon,
   Preview as PreviewIcon,
   Add as AddIcon,
 
 } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Button, Card, Grid } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
-import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
-import moment from 'moment';
 import { Application } from './extras/ApplicationTypes';
 
 const ApplicationManagePages = () => {
-  const [loadCount, setLoadCount] = useState(0);
   const [applications, setApplications] = useState<Application[] | null>(null);
-  const [action, setaction] = useState<'add' | 'edit'>('add');
-  const [open, setOpen] = React.useState(false);
-  const [Request, setRequest] = useState<Application>({
-    _id: '',
-    name: '',
-    reason: '',
-    status: '',
-    createdAt: moment(),
-    updatedAt: moment(),
-  });
 
   useEffect(() => {
-    setLoadCount((count) => count + 1);
     ApplicationServices.getAll()
       .then((res) =>{
-        setLoadCount((count) => count - 1);
-        console.log(res);
         setApplications(res.data);
       })
       .catch((res: any) => {
-        setLoadCount((count) => count - 1);
         console.log(res);
       });
   }, []);

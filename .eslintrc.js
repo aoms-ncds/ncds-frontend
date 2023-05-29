@@ -16,6 +16,8 @@ module.exports = {
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
     ecmaVersion: 2021,
     sourceType: 'module',
   },
@@ -65,7 +67,7 @@ module.exports = {
     // 'json/camelcase': ['error', { 'properties': 'always' }],
     'no-unused-vars': 'warn',
     'react/no-multi-comp': 'error',
-    'import/no-unresolved': 0,
+    // 'import/no-unresolved': 0,
     'object-curly-spacing': ['error', 'always', { arraysInObjects: false }],
     // 'eslint-plugin/filenames': ['error', { 'extensions': ['.js', '.jsx', '.ts', '.tsx']}],
     'max-len': ['error', { code: 200 }],

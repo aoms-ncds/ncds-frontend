@@ -1,19 +1,28 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { languages } from '../../../../extras/CommonConfig';
 import NewAddressForm from './NewAddressForm';
 import { FormComponentProps } from '../../../../extras/CommonTypes';
-import { CreatableBasicDetails, WorkerField, Gender, MaritalStatus } from '../../extras/UserTypes';
+import { CreatableBasicDetails, WorkerField, Gender, MaritalStatus, User } from '../../extras/UserTypes';
+import UserServices from '../../extras/UserServices';
+import UserDropdown from '../UserDropdown';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<CreatableBasicDetails, {
     textField: {variant: 'filled' | 'outlined' | 'standard'};
 }>)=> {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
+
+  const [spouseList, setSpouseList] = useState<User[]>();
+  useEffect(() => {
+    UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } });
+  }, [props.value.gender]);
+
+
   return (
     <>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="Field">Field</FormLabel>
           <RadioGroup
@@ -30,7 +39,7 @@ const UserBasicDetailsForm = (
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="First name"
           value={props.value.firstName}
@@ -42,7 +51,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Last name"
           value={props.value.lastName}
@@ -54,7 +63,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Birth"
           value={props.value.dateOfBirth}
@@ -74,7 +83,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Age"
           value={props.value.dateOfBirth?.fromNow(true)}
@@ -88,7 +97,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <FormControl >
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
@@ -109,7 +118,7 @@ const UserBasicDetailsForm = (
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <FormControl>
           <FormLabel id="martialStatus">Martial Status</FormLabel>
           <RadioGroup
@@ -127,8 +136,21 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
-
-      <Grid item xs={12} md={6}>
+      {props.value.martialStatus==='Married'&&(
+        <Grid item xs={12} md={6} lg={4}>
+          <UserDropdown
+            users={spouseList}
+            value={props.value.spouseOfAnotherUser}
+            onChange={(e, newValue) => {
+              if (newValue) {
+                props.onChange({ ...props.value, spouseOfAnotherUser: newValue });
+              }
+            }} label={'Spouse of another User'}
+            required={false}
+          />
+        </Grid>
+      )}
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Highest Qualification"
           value={props.value.highestQualification}
@@ -138,7 +160,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           id="mlanguges"
           options={languages}
@@ -155,7 +177,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           id="Clanguges"
           options={languages}
@@ -172,7 +194,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <Autocomplete
           multiple
           id="knownLanguages"
@@ -190,7 +212,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Email"
           type="email"
@@ -204,7 +226,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Phone"
           type="tel"
@@ -215,7 +237,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="alternativePhone"
           type="tel"
@@ -226,7 +248,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="PAN"
           value={props.value.PANNo}
@@ -236,7 +258,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Aadhaar no"
           value={props.value.aadhaar?.aadhaarNo}
@@ -252,7 +274,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Aadhaar File"
           type="file"
@@ -274,7 +296,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Voter ID"
           value={props.value.voterId?.voterIdNo}
@@ -290,7 +312,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="Voter ID File"
           type="file"
@@ -308,6 +330,19 @@ const UserBasicDetailsForm = (
           }}
           variant={props.options?.textField.variant}
           InputLabelProps={{ shrink: true }}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="License no"
+          value={props.value.licenseNumber}
+          onChange={(e) => props.onChange({
+            ...props.value,
+            licenseNumber: e.target.value,
+          })}
+          variant={props.options?.textField.variant}
           fullWidth
         />
       </Grid>

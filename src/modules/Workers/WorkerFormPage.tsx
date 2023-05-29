@@ -57,7 +57,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   }, []);
 
   return (
-    <CommonPageLayout title={props.action=='add'?'Add':props.action=='edit'?'Edit':'View'+'worker'}>
+    <CommonPageLayout title={props.action=='add'?'Add':props.action=='edit'?'Edit':'View'+' worker'}>
       <UserForm<CreatableIWorker>
         action={props.action}
         value={worker}

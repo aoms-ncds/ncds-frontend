@@ -1,7 +1,8 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { LoginCredentials, LoginResponse } from './UserTypes';
+import { LoginCredentials, LoginResponse, User } from './UserTypes';
+import { RecursivePartial, StandardResponse } from '../../../extras/CommonTypes';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -10,7 +11,6 @@ export default {
       data: {
         token: 'skdfksj',
         user: {
-          'kind': 'staff',
           '_id': '646703c19e433f67d27019b2',
           'basicDetails': {
             'aadhaar': {
@@ -58,7 +58,7 @@ export default {
             'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
             'remarks': 'Lorem ipsum dolor sit amet.',
             'selfSupport': true,
-            'status': 'ministering',
+            'status': 'Ministering',
             'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
             'noOfChurches': 5,
             'subdivision': {
@@ -91,4 +91,22 @@ export default {
     }),
     // axios.post('/users/login'),
   ),
+
+
+  getAll: (conditions?: RecursivePartial<User>): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[]>(axios.get('/users', { params: conditions }), (users) =>
+      users.map((user: any) => ({
+        ...user,
+        basicDetails: {
+          ...user.basicDetails,
+          dateOfBirth: moment(user.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...user.officialDetails,
+          dateOfJoining: moment(user.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(user.createdAt),
+        updatedAt: moment(user.updatedAt),
+      })),
+    ),
 };

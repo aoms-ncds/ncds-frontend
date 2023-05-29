@@ -16,9 +16,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
   kind: UserKind;
 }>) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [spouse, setSpouce] = useState<CreatableSpouse>({ firstName: '',
-    lastName: '',
-  });
+  const [spouse, setSpouse] = useState<CreatableSpouse>({ firstName: '', lastName: '', knownLanguages: []});
   return (
     <>
       <Container maxWidth="md">
@@ -35,11 +33,14 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
           <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step>
-          { props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married' && (
+          { props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus==='Married' && (
             <Step>
               <StepLabel>Spouse details</StepLabel>
             </Step>
           )}
+          <Step>
+            <StepLabel>Children details</StepLabel>
+          </Step>
         </Stepper>
       </Container>
       <Container>
@@ -173,7 +174,7 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();
-                  if (props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married') {
+                  if (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus==='Married') {
                     setActiveStep((currentStep) => currentStep+1);
                   } else {
                     props.onSubmit && props.onSubmit(props.value);
@@ -210,12 +211,12 @@ const UserForm = <UserType extends CreatableStaff|CreatableIWorker >(props: Form
                       type='submit'
                       variant="contained"
                       sx={{ padding: '16px 64px' }}
-                    > {props.options?.kind === 'staff' ? 'Submit':'Next'} </Button>
+                    > {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus==='Married' ?'Next' :'Submit'} </Button>
                   </div>
                 </form>
               </CardContent>
             )}
-            {(activeStep === 4 && props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus=='Married') &&(
+            {(activeStep === 4 && props.options?.kind === 'worker'&& props.value.basicDetails.martialStatus==='Married') &&(
               <CardContent>
                 <form onSubmit={(e) => {
                   e.preventDefault();

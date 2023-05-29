@@ -255,7 +255,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -337,7 +337,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -418,7 +418,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {
@@ -499,7 +499,7 @@ export default {
               'dateOfJoining': moment('2022-12-31T18:30:00.000Z'),
               'remarks': 'Lorem ipsum dolor sit amet.',
               'selfSupport': true,
-              'status': 'ministering',
+              'status': 'Ministering',
               'dateOfDivisionJoining': moment('2023-05-19T04:32:00.077Z'),
               'noOfChurches': 5,
               'subdivision': {

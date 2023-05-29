@@ -1,9 +1,10 @@
 import { Moment } from 'moment';
+import { BankDetails, Division, SubDivision } from '../../Divisions/extras/DivisionsTypes';
 export interface IROrder {
   _id: string;
   IROno: string;
   IROdate: Moment;
-  division: IETDivisions;
+  division: Division;
   subDivision: SubDivision;
   mainCategory: string;
   requestAmount: number;

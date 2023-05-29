@@ -23,7 +23,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
   return (
     <>
       {console.log({ 'abc': props.value.dateOfJoining })}
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date of joining"
           value={props.value.dateOfJoining}
@@ -45,7 +45,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           autoFocus
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="No of years with the organization"
           value={props.value.dateOfJoining?.fromNow(true)}
@@ -55,7 +55,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Left organization on"
           value={props.value.dateOfLeaving}
@@ -73,7 +73,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<DeactivationReason>
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
           value={props.value.reasonForDeactivation}
@@ -88,7 +88,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Remarks"
           value={props.value.remarks}
@@ -99,7 +99,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={subDivisions ?? []}
           value={props.value.subdivision}
@@ -116,23 +116,9 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
-        <FormControlLabel
-          label="Self support"
-          control={
-            <Checkbox
-              onChange={(e) => props.onChange({
-                ...props.value,
-                selfSupport: e.target.checked,
-              })}
-            />
-          }
-        />
-      </Grid>
-
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<OfficialDetailsStatus>
-          options={['ministering', 'left', 'education leave', 'sabbatical leave']}
+          options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
           value={props.value.status}
           onChange={(e, selectedStatus) => props.onChange({
             ...props.value,
@@ -148,7 +134,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           )}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Joined Division On"
           value={props.value.dateOfDivisionJoining}
@@ -170,7 +156,7 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           autoFocus
         />
       </Grid>
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6} lg={4} >
         <TextField
           label="No. of Churches"
           type={'number'}
@@ -183,6 +169,20 @@ const NewOfficialDetailsForm = (props: FormComponentProps<CreatableOfficialDetai
           }
           variant={props.options?.textField.variant}
           fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControlLabel
+          label="Self support"
+          control={
+            <Checkbox
+              onChange={(e) => props.onChange({
+                ...props.value,
+                selfSupport: e.target.checked,
+              })}
+            />
+          }
         />
       </Grid>
     </>

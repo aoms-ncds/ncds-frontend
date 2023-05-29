@@ -1,6 +1,6 @@
 import { Moment } from 'moment';
 import { IWorker } from './WorkersTypes';
-import { MongooseDocument, Creatable } from '../../../extras/CommonTypes';
+import { MongooseDocument, Creatable, Language } from '../../../extras/CommonTypes';
 
 export interface Spouse extends MongooseDocument{
     firstName: string;
@@ -12,7 +12,8 @@ export interface Spouse extends MongooseDocument{
     working?:boolean;
     occupation?: string;
     qualification?:string;
-    knownLanguages?:Language[];
+    knownLanguages:Language[];
+    hasChildren?:boolean;
 
 }
 export interface CreatableSpouse extends Creatable<Spouse>{
