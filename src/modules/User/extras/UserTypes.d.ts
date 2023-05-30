@@ -56,9 +56,8 @@ declare global {
     subdivision?: SubDivision;
     selfSupport: boolean;
     status: OfficialDetailsStatus;
-    dateOfDivisionJoining?: Moment;
+    dateOfCurrentDivisionJoining?: Moment;
     dateOfPreviousDivisionLeaving?: Moment;
-    dateOfDivisionLeaving?: Moment;
     noOfChurches: number;
   }
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
@@ -68,7 +67,7 @@ declare global {
     division?: Division;
     subdivision?: SubDivision;
     selfSupport?: boolean;
-    offiStatus?: OfficialDetailsStatus;
+    status?: OfficialDetailsStatus;
     noOfChurches?: number;
   }
   interface SupportDetails {

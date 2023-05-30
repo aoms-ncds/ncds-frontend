@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export default {};
 
 declare global {

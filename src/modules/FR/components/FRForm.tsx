@@ -90,7 +90,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       remarks: 'Lorem ipsum dolor sit amet.',
       selfSupport: true,
       status: 'Ministering',
-      dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+      dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
       dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
       noOfChurches: 5,
       subdivision: {

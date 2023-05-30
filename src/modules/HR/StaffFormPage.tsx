@@ -25,7 +25,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
     officialDetails: {
       remarks: '',
       selfSupport: true,
-      dateOfDivisionJoining: moment(),
+      dateOfCurrentDivisionJoining: moment(),
       dateOfPreviousDivisionLeaving: moment(),
       noOfChurches: 5,
       status: 'Ministering',

@@ -27,7 +27,7 @@ import { useLoader } from '../hooks/Loader';
 
 const drawerWidth = 240;
 
-const CommonPageLayout = (props: { children: React.ReactNode; title?: string }) => {
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -52,6 +52,10 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string }) 
       throw Error('Load count must never be less than 0');
     }
   }, [loader.count]);
+
+  useEffect(() => {
+    document.title = props.title ? (`IET : ${props.title}`) : 'Indian Evangelical Team';
+  }, [props.title]);
 
   const drawer = (
     <div>
@@ -182,7 +186,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string }) 
         }}
       >
         <Toolbar />
-        {props.title && (
+        {props.title && !props.hidePageHeader && (
           <>
             <Typography variant="h4">{props.title}</Typography>
             <br />

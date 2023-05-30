@@ -148,11 +148,11 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<OfficialDetailsStatus>
           options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
-          value={props.value.offiStatus}
+          value={props.value.status}
           onChange={(e, selectedStatus) =>
             props.onChange({
               ...props.value,
-              offiStatus: selectedStatus ?? undefined,
+              status: selectedStatus ?? undefined,
             })
           }
           renderInput={(params) => <TextField {...params} label="Status" required variant={props.options?.textField.variant} />}
@@ -161,11 +161,11 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Joined current division on"
-          value={props.value.dateOfDivisionJoining}
+          value={props.value.dateOfCurrentDivisionJoining}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
-              dateOfDivisionJoining: newDate ?? undefined,
+              dateOfCurrentDivisionJoining: newDate ?? undefined,
             });
           }}
           format="DD/MM/YYYY"

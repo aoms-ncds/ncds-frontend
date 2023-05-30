@@ -63,7 +63,10 @@ const Profile = () => {
     }
   }, []);
   return (
-    <CommonPageLayout>
+    <CommonPageLayout
+      title={`Profile of ${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
+      hidePageHeader={true}
+    >
       <div style={{ display: 'inline-block', marginRight: 10 }}>
         <Avatar
           sx={{ height: 50, width: 50 }}
@@ -81,8 +84,8 @@ const Profile = () => {
               <Tab label="Official Details" {...a11yProps(1)} />
               <Tab label="Support Details" {...a11yProps(2)} />
               <Tab label="Support Structure" {...a11yProps(3)} />
-              {/* <Tab label="Spouse Details" {...a11yProps(4)} />
-              <Tab label="Offsprings Details" {...a11yProps(5)} /> */}
+              { userKind ==='worker' && (user as unknown as IWorker)?.spouse && <Tab label="Spouse Details" {...a11yProps(4)} />}
+              {userKind ==='worker' && (user as unknown as IWorker)?.children.length > 0 && <Tab label="Offsprings Details" {...a11yProps(5)} />}
             </Tabs>
           </Box>
           <TabPanel value={currentTab} index={0}>
@@ -135,11 +138,10 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Subdivision:</Typography> {user?.officialDetails.subdivision?.name} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>SelfSupport:</Typography> {user?.officialDetails.selfSupport} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>SelfSupport:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of division joining:</Typography> {user?.officialDetails.dateOfDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of previous division leaving:</Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of division leaving:</Typography> {user?.officialDetails.dateOfDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current division:</Typography> {user?.officialDetails.dateOfCurrentDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>no of churches:</Typography> {user?.officialDetails.noOfChurches} </Grid>
             </Grid>
           </TabPanel>
@@ -147,7 +149,7 @@ const Profile = () => {
             <Grid container spacing={3}>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>designation: </Typography> {user?.supportDetails.designation?.name} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>totalNoOfYearsInMinistry: </Typography> {user?.supportDetails.totalNoOfYearsInMinistry} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>withChurch: </Typography> {user?.supportDetails.withChurch} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>withChurch: </Typography> {user?.supportDetails.withChurch ? 'Yes': (user?.supportDetails.withChurch === false ? 'No' : 'Not specified')} </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value={currentTab} index={3}>
@@ -195,21 +197,43 @@ const Profile = () => {
               </Grid>
             </Grid>
           </TabPanel>
-          {/* <TabPanel value={currentTab} index={4}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}>
-
-              </Grid>
-            </Grid>
+          <TabPanel value={currentTab} index={4}>
+            {userKind ==='worker' && (user as unknown as IWorker)?.spouse && <Grid container spacing={3}>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First name: </Typography> {(user as unknown as IWorker)?.spouse?.firstName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last name: </Typography> {(user as unknown as IWorker)?.spouse?.lastName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {(user as unknown as IWorker)?.spouse?.email} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {(user as unknown as IWorker)?.spouse?.phone} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Working: </Typography> {(user as unknown as IWorker)?.spouse?.working} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {(user as unknown as IWorker)?.spouse?.occupation} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {(user as unknown as IWorker)?.spouse?.qualification} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known languages: </Typography> {(user as unknown as IWorker)?.spouse?.knownLanguages?.join(', ')} </Grid>
+            </Grid>}
           </TabPanel>
           <TabPanel value={currentTab} index={5}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}>
-
+            <Container>
+              <br />
+              <Grid container spacing={3}>
+                {userKind ==='worker' && (user as unknown as IWorker)?.children.length > 0 && (user as unknown as IWorker)?.children.map((child) => (
+                  <Grid key={child._id} item xs={12} lg={6}>
+                    <Grid container spacing={3} sx={{ border: '1px dashed grey', borderRadius: 2, pb: 3 }}>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>firstName: </Typography> {child.firstName} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>lastName: </Typography> {child.lastName} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>dateOfBirth: </Typography> {child.dateOfBirth.format('dddd DD/MM/YYYY')} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>childSupport: </Typography> {child.childSupport} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>studying: </Typography> {child.studying} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>classOfStudy: </Typography> {child.classOfStudy} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>working: </Typography> {child.working} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>occupation: </Typography> {child.occupation} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>qualification: </Typography> {child.qualification} </Grid>
+                    </Grid>
+                  </Grid>
+                ))}
               </Grid>
-            </Grid>
-          </TabPanel> */}
+            </Container>
+          </TabPanel>
         </Box>
+        <br />
       </Card>
     </CommonPageLayout>
   );
