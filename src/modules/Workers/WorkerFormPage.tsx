@@ -41,7 +41,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   useEffect(() => {
     if (id) {
-      WorkersServices.getByIdWithSpouse(id)
+      WorkersServices.getById(id)
         .then((res) => {
           if (res.data) {
             setWorker(res.data);
