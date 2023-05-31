@@ -61,7 +61,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="First name"
+          label="First Name"
           value={props.value.firstName}
           onChange={(e) => props.onChange({ ...props.value, firstName: e.target.value })}
           variant={props.options?.textField?.variant}
@@ -73,7 +73,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Last name"
+          label="Last Name"
           value={props.value.lastName}
           onChange={(e) => props.onChange({ ...props.value, lastName: e.target.value })}
           variant={props.options?.textField?.variant}
@@ -165,7 +165,7 @@ const UserBasicDetailsForm = (
               if (newValue) {
                 props.options?.spouse.onChange(newValue);
               }
-            }} label={'Spouse of another User'}
+            }} label={'Spouse Of Another User'}
             required={false}
             textFieldProps={ { variant: props.options?.textField?.variant }}
           />
@@ -260,7 +260,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="alternativePhone"
+          label="Alternative Phone"
           type="tel"
           value={props.value.alternativePhone}
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
@@ -281,7 +281,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Aadhaar no"
+          label="Aadhaar No"
           value={props.value.aadhaar?.aadhaarNo}
           onChange={(e) => props.onChange({
             ...props.value,
@@ -395,7 +395,7 @@ const UserBasicDetailsForm = (
           },
           title: 'Permanent address',
           copyAddressCheckBox: {
-            label: 'Same as current address',
+            label: 'Same as Current Address',
             onChange: (value) => setDuplicateCurrentAddress(value),
           },
         }}

@@ -23,11 +23,11 @@ const NewAddressForm = (
   return (
     <>
       <Grid item xs={props.options?.copyAddressCheckBox !== undefined ? 6 : 12}>
-        <Divider sx={{ mt: '10px' }} textAlign="left">{props.options?.title ?? 'Address'}</Divider>
+        <Divider sx={{ mt: '10px' }} textAlign="left"><b>{props.options?.title ?? 'Address'}</b></Divider>
       </Grid>
       {props.options?.copyAddressCheckBox !== undefined && (
         <Grid item xs={6}>
-          <Divider textAlign="left">
+          <Divider textAlign="right">
             {props.options?.copyAddressCheckBox !== undefined && (
               <FormControlLabel
                 control={
