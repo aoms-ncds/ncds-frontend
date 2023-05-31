@@ -1,23 +1,19 @@
-import { TableContainer, Paper,
-  Table, TableHead, TableRow,
-  TableCell, TableBody } from '@mui/material';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import {
-  Delete as DeleteIcon,
-} from '@mui/icons-material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 
 const FRParticularList = () => {
   const [Particulars, setParticulars] = useState<Particulars[]>();
   useEffect(() => {
     FRServices.getParticulars()
-   .then((res) => {
-     console.log(res);
-     setParticulars(res.data);
-   })
-  .catch((res) => {
-    console.log(res);
-  });
+      .then((res) => {
+        console.log(res);
+        setParticulars(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
   return (
     <div>
@@ -34,18 +30,19 @@ const FRParticularList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Particulars &&Particulars.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell component="th" >
-                  <DeleteIcon />
-                </TableCell>
-                <TableCell align="center">{item._id}</TableCell>
-                <TableCell align="center">{item.narration}</TableCell>
-                <TableCell align="center">{item.quantity}</TableCell>
-                <TableCell align="center">{item.month}</TableCell>
-                <TableCell align="center">{item.requestedAmount}</TableCell>
-              </TableRow>
-            ))}
+            {Particulars &&
+              Particulars.map((item) => (
+                <TableRow key={item._id}>
+                  <TableCell component="th">
+                    <DeleteIcon />
+                  </TableCell>
+                  <TableCell align="center">{item._id}</TableCell>
+                  <TableCell align="center">{item.narration}</TableCell>
+                  <TableCell align="center">{item.quantity}</TableCell>
+                  <TableCell align="center">{item.month}</TableCell>
+                  <TableCell align="center">{item.requestedAmount}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

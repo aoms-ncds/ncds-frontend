@@ -14,24 +14,21 @@ export default {
    * @param {CreatableIWorker} worker - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the created worker.
    */
-  create: (worker: CreatableIWorker) =>
-    getStandardResponse<IWorker>(axios.post('/workers', worker)),
+  create: (worker: CreatableIWorker) => getStandardResponse<IWorker>(axios.post('/workers', worker)),
 
   /**
    * Edits a worker.
    * @param {CreatableIWorker} worker - The worker to be edited.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the edited worker.
    */
-  edit: (worker: CreatableIWorker) =>
-    getStandardResponse<IWorker>(axios.patch('/workers/' + worker._id, worker)),
+  edit: (worker: CreatableIWorker) => getStandardResponse<IWorker>(axios.patch('/workers/' + worker._id, worker)),
 
   /**
    * Deletes a worker.
    * @param {string} workerId - The ID of the worker to be deleted.
    * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the result of the deletion.
    */
-  delete: (workerId: string) =>
-    getStandardResponse<number>(axios.delete('/workers/' + workerId)),
+  delete: (workerId: string) => getStandardResponse<number>(axios.delete('/workers/' + workerId)),
 
   /**
    * Retrieves all workers based on optional conditions.
@@ -40,22 +37,20 @@ export default {
    * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
    */
   getAll: (conditions?: { status?: number }) =>
-    getStandardResponse<IWorker[]>(
-      axios.get('/workers/', { params: conditions }),
-      (workers) =>
-        workers.map((worker: any) => ({
-          ...worker,
-          basicDetails: {
-            ...worker.basicDetails,
-            dateOfBirth: moment(worker.basicDetails.dateOfBirth),
-          },
-          officialDetails: {
-            ...worker.officialDetails,
-            dateOfJoining: moment(worker.basicDetails.dateOfJoining),
-          },
-          createdAt: moment(worker.createdAt),
-          updatedAt: moment(worker.updatedAt),
-        })),
+    getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions }), (workers) =>
+      workers.map((worker: any) => ({
+        ...worker,
+        basicDetails: {
+          ...worker.basicDetails,
+          dateOfBirth: moment(worker.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...worker.officialDetails,
+          dateOfJoining: moment(worker.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(worker.createdAt),
+        updatedAt: moment(worker.updatedAt),
+      })),
     ),
 
   /**
@@ -64,45 +59,50 @@ export default {
    * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
    */
   getById: (workerId: string) =>
-    getStandardResponse<IWorker | null>(
-      axios.get(`/workers/${workerId}`),
-      (data) => ({
-        ...data,
-        basicDetails: {
-          ...data.basicDetails,
-          dateOfBirth: moment(data.basicDetails.dateOfBirth),
-        },
-        officialDetails: {
-          ...data.officialDetails,
-          dateOfJoining: moment(data.basicDetails.dateOfJoining),
-        },
-        createdAt: moment(data.createdAt),
-        updatedAt: moment(data.updatedAt),
-      }),
-    ),
+    getStandardResponse<IWorker | null>(axios.get(`/workers/${workerId}`), (data) => ({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: moment(data.basicDetails.dateOfJoining),
+        dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
+        dateOfCurrentDivisionJoining: moment(data.basicDetails.dateOfCurrentDivisionJoining),
+        dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
+      },
+      spouse: !data.spouse ? undefined : {
+        ...data.spouse,
+        dateOfBirth: moment(data.spouse.dateOfBirth),
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      children: !data.children ? undefined : data.children.map((child: any) => ({
+        ...child,
+        dateOfBirth: moment(child.dateOfBirth),
+      })),
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
   /**
    * Retrieves a worker by ID.
    * @param {string} workerId - The ID of the worker to retrieve.
    * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
    */
   getByIdWithSpouse: (workerId: string) =>
-    getStandardResponse<IWorker | null>(
-      axios.get(`/workers/${workerId}/spouse`),
-      (data) => ({
-        ...data,
-        basicDetails: {
-          ...data.basicDetails,
-          dateOfBirth: moment(data.basicDetails.dateOfBirth),
-        },
-        officialDetails: {
-          ...data.officialDetails,
-          dateOfJoining: moment(data.basicDetails.dateOfJoining),
-        },
-        createdAt: moment(data.createdAt),
-        updatedAt: moment(data.updatedAt),
-      }),
-    ),
-
+    getStandardResponse<IWorker | null>(axios.get(`/workers/${workerId}/spouse`), (data) => ({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: moment(data.basicDetails.dateOfJoining),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
 
   /**
    * Approves a worker.
@@ -117,6 +117,6 @@ export default {
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the rejected worker.
    */
   reject: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`)),
-  activate: ( id:string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`)),
-  deactivate: ( id:string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`)),
+  activate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`)),
+  deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`)),
 };

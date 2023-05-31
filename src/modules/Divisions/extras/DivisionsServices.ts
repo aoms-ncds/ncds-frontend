@@ -15,6 +15,7 @@ export default {
 
   getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/')),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions')),
+  getSubDivisionsByDivisionId: (division: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division } })),
   create: (division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
@@ -94,9 +95,7 @@ export default {
       }),
     );
   },
-  SubDivisionServices: {
-
-  },
+  SubDivisionServices: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId)),
 

@@ -22,15 +22,12 @@ import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
-import { getAllModuleRoutes } from '../extras/CommonRouter';
+import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
 
 const drawerWidth = 240;
 
-const CommonPageLayout = (props: {
-  children: React.ReactNode;
-  title?: string;
-}) => {
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -56,43 +53,47 @@ const CommonPageLayout = (props: {
     }
   }, [loader.count]);
 
+  useEffect(() => {
+    document.title = props.title ? (`IET : ${props.title}`) : 'Indian Evangelical Team';
+  }, [props.title]);
+
   const drawer = (
     <div>
       {/* <Toolbar /> */}
       <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
       <Divider />
       <List>
-        {getAllModuleRoutes.map((moduleRoute, index) =>
-          moduleRoute.pages.map((page, _index) =>
-            !page.showInDrawer ? null : (
-              <NavLink
-                key={page.path+index+_index}
-                to={moduleRoute.base + page.path}
-                style={({ isActive }) =>
-                  !isActive ?
-                    {
-                      color: theme.palette.text.secondary,
-                      textDecoration: 'none',
-                    } :
-                    {
-                      color: isDark ? 'black' : 'white',
-                      textDecoration: 'none',
-                      backgroundColor: theme.palette.primary.main,
-                    }
-                }
-              >
-                <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
-                  <ListItemButton>
-                    {<ListItemIcon sx={{ color: 'inherit' }}>
-                      {page.icon}
-                    </ListItemIcon>}
-                    <ListItemText primary={page.title} />
-                  </ListItemButton>
-                </ListItem>
-              </NavLink>
+        {allModuleRoutes
+          .map((moduleRoute, index) =>
+            moduleRoute.pages.map((page, _index) =>
+              !page.showInDrawer ? null : (
+                <NavLink
+                  key={page.path + index + _index}
+                  to={moduleRoute.base + page.path}
+                  style={({ isActive }) =>
+                    !isActive ?
+                      {
+                        color: theme.palette.text.secondary,
+                        textDecoration: 'none',
+                      } :
+                      {
+                        color: isDark ? 'black' : 'white',
+                        textDecoration: 'none',
+                        backgroundColor: theme.palette.primary.main,
+                      }
+                  }
+                >
+                  <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                    <ListItemButton>
+                      {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
+                      <ListItemText primary={page.title} />
+                    </ListItemButton>
+                  </ListItem>
+                </NavLink>
+              ),
             ),
-          ),
-        ).flat()}
+          )
+          .flat()}
       </List>
       <Divider />
     </div>
@@ -109,24 +110,14 @@ const CommonPageLayout = (props: {
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
+          <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
             {CommonConstants.appName}
           </Typography>
           <Tooltip title="Open settings">
-            <IconButton
-              onClick={handleOpenUserMenu}
-              sx={{ p: 0, marginLeft: 'auto' }}
-              color="inherit"
-            >
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, marginLeft: 'auto' }} color="inherit">
               <PersonIcon fontSize="large" />
             </IconButton>
           </Tooltip>
@@ -146,24 +137,14 @@ const CommonPageLayout = (props: {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem
-              component={Link}
-              to={'/users/profile/me'}
-              onClick={handleCloseUserMenu}
-            >
+            <MenuItem component={Link} to={'/users/me'} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Profile</Typography>
             </MenuItem>
           </Menu>
         </Toolbar>
-        {loader.count != undefined && loader.count > 0 && (
-          <LinearProgress />
-        )}
+        {loader.count != undefined && loader.count > 0 && <LinearProgress />}
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
+      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
@@ -205,12 +186,14 @@ const CommonPageLayout = (props: {
         }}
       >
         <Toolbar />
-        {props.title && <>
-          <Typography variant='h4'>{props.title}</Typography>
-          <br />
-          <Divider />
-          <br />
-        </>}
+        {props.title && !props.hidePageHeader && (
+          <>
+            <Typography variant="h4">{props.title}</Typography>
+            <br />
+            <Divider />
+            <br />
+          </>
+        )}
         {props.children}
       </Box>
     </Box>

@@ -1,6 +1,4 @@
-import { DialogContent, Container, Typography, Grid, TextField, DialogActions, Button, Card } from '@mui/material';
-import { create } from '@mui/material/styles/createTransitions';
-import { DataGrid } from '@mui/x-data-grid';
+import { DialogContent, Container, Grid, TextField, DialogActions, Button, Card } from '@mui/material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -8,11 +6,9 @@ import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
 
 const AddNewApplication = () => {
-  const [loadCount, setLoadCount] = useState(0);
   const [name, setName] = useState<string>('');
   const [reason, setReason] = useState<string>('');
   const [action, setaction] = useState<'add' | 'edit'>('add');
-  const [applications, setApplications] = useState<Application[] | null>(null);
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',
@@ -77,14 +73,13 @@ const AddNewApplication = () => {
       <Card style={{ width: '100%' }}>
         <DialogContent>
           <Container>
-
             <form onSubmit={handleSubmit}>
               <Grid container spacing={3}>
                 <Grid item md={6}>
                   <TextField label="Name" value={Request.name} onChange={handleNameChange} fullWidth required />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline/>
+                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline />
                 </Grid>
               </Grid>
               <DialogActions>
@@ -101,5 +96,3 @@ const AddNewApplication = () => {
 };
 
 export default AddNewApplication;
-
-

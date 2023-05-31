@@ -1,0 +1,15 @@
+{
+    "extends": ["tslint:recommended", "tslint-plugin-tslint-typed"],
+    "rules": {
+      "no-implicit-dependencies": false,
+      "no-submodule-imports": false,
+      "no-implicit-this": false,
+      "no-duplicate-imports": false,
+      "typedef": [true, "call-signature"],
+      "tslint-typed": true
+    },
+    "linterOptions": {
+      "exclude": ["node_modules/**/*.ts"]
+    }
+  }
+  

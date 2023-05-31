@@ -8,96 +8,111 @@ import StaffServices from '../../HR/extras/StaffServices';
 
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
-  const [divisionsCount, setDivisionsCount] = useState<string|null>(null);
-  const [staffsCount, setStaffsCount] = useState<string|null>(null);
-  const [workersCount, setWorkersCount] = useState<string|null>(null);
-  const [frCount, setFrCount] = useState<string|null>(null);
-  const [iroCount, setIroCount] = useState<string|null>(null);
+  const [divisionsCount, setDivisionsCount] = useState<string | null>(null);
+  const [staffsCount, setStaffsCount] = useState<string | null>(null);
+  const [workersCount, setWorkersCount] = useState<string | null>(null);
+  const [frCount, setFrCount] = useState<string | null>(null);
+  const [iroCount, setIroCount] = useState<string | null>(null);
 
   useEffect(() => {
     // Get divisions count
-    DivisionsServices.getCount().then((res) => {
-      setDivisionsCount(res.data.toString());
-      console.log(res);
-    }).catch((error) => {
-      setErrors((errors) => [...errors, error.message]);
-      setDivisionsCount('Unable to load!');
-    });
+    DivisionsServices.getCount()
+      .then((res) => {
+        setDivisionsCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setDivisionsCount('Unable to load!');
+      });
 
     // Get staffs count
-    StaffServices.getCount().then((res) => {
-      setStaffsCount(res.data.toString());
-      console.log(res);
-    }).catch((error) => {
-      setErrors((errors) => [...errors, error.message]);
-      setStaffsCount('Unable to load!');
-    });
+    StaffServices.getCount()
+      .then((res) => {
+        setStaffsCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setStaffsCount('Unable to load!');
+      });
 
     // Get workers count
-    WorkersServices.getCount().then((res) => {
-      setWorkersCount(res.data.toString());
-      console.log(res);
-    }).catch((error) => {
-      setErrors((errors) => [...errors, error.message]);
-      setWorkersCount('Unable to load!');
-    });
+    WorkersServices.getCount()
+      .then((res) => {
+        setWorkersCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setWorkersCount('Unable to load!');
+      });
 
     // Get FR count
-    FRServices.getCount().then((res) => {
-      setFrCount(res.data.toString());
-      console.log(res);
-    }).catch((error) => {
-      setErrors((errors) => [...errors, error.message]);
-      setFrCount('Unable to load!');
-    });
+    FRServices.getCount()
+      .then((res) => {
+        setFrCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setFrCount('Unable to load!');
+      });
 
     // Get IRO count
-    IROServices.getCount().then((res) => {
-      setIroCount(res.data.toString());
-      console.log(res);
-    }).catch((error) => {
-      setErrors((errors) => [...errors, error.message]);
-      setIroCount('Unable to load!');
-    });
+    IROServices.getCount()
+      .then((res) => {
+        setIroCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setIroCount('Unable to load!');
+      });
   }, []);
-  return (
-    errors?.length>5 ? <Alert color='error'>
-      <AlertTitle><b>Something went wrong!</b></AlertTitle>
+  return errors?.length > 5 ? (
+    <Alert color="error">
+      <AlertTitle>
+        <b>Something went wrong!</b>
+      </AlertTitle>
       Unable to show analytics. <br />
       {Array.from(new Set(errors)).join(',')}
-    </Alert> :
-      <Card>
-        {errors.length>0 &&
+    </Alert>
+  ) : (
+    <Card>
+      {errors.length > 0 && (
         <CardContent>
-          <Alert color='error'>
-            <AlertTitle><b>Something went wrong!</b></AlertTitle>
+          <Alert color="error">
+            <AlertTitle>
+              <b>Something went wrong!</b>
+            </AlertTitle>
             {Array.from(new Set(errors)).join(',')}
           </Alert>
         </CardContent>
-        }
-        <List>
-          <ListItemButton>
-            <ListItemText primary="No. of Divisions:" />
-            <Typography variant='body1'>{divisionsCount}</Typography>
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary="No. of staffs:" />
-            <Typography variant='body1'>{staffsCount}</Typography>
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary="No. of workers:" />
-            <Typography variant='body1'>{workersCount}</Typography>
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary="FR:" />
-            <Typography variant='body1'>{frCount}</Typography>
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemText primary="IRO:" />
-            <Typography variant='body1'>{iroCount}</Typography>
-          </ListItemButton>
-        </List>
-      </Card>
+      )}
+      <List>
+        <ListItemButton>
+          <ListItemText primary="No. of Divisions:" />
+          <Typography variant="body1">{divisionsCount}</Typography>
+        </ListItemButton>
+        <ListItemButton>
+          <ListItemText primary="No. of staffs:" />
+          <Typography variant="body1">{staffsCount}</Typography>
+        </ListItemButton>
+        <ListItemButton>
+          <ListItemText primary="No. of workers:" />
+          <Typography variant="body1">{workersCount}</Typography>
+        </ListItemButton>
+        <ListItemButton>
+          <ListItemText primary="FR:" />
+          <Typography variant="body1">{frCount}</Typography>
+        </ListItemButton>
+        <ListItemButton>
+          <ListItemText primary="IRO:" />
+          <Typography variant="body1">{iroCount}</Typography>
+        </ListItemButton>
+      </List>
+    </Card>
   );
 };
 

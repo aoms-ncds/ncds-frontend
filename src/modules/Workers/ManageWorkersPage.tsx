@@ -50,11 +50,7 @@ const ManageWorkerPage = () => {
       <Card>
         <Grid container spacing={0} justifyContent="space-between">
           <Grid item xs={12} lg={9}>
-            <Tabs
-              value={currentTab}
-              onChange={switchTab}
-              aria-label="basic tabs example"
-            >
+            <Tabs value={currentTab} onChange={switchTab} aria-label="basic tabs example">
               <Tab label="Workers" {...a11yProps(0)} />
               <Tab label="Spouses" {...a11yProps(1)} />
               <Tab label="Children" {...a11yProps(2)} />
@@ -64,15 +60,15 @@ const ManageWorkerPage = () => {
             </Tabs>
           </Grid>
           <Grid item xs={12} lg={3}>
-            { ([0, 1, 2].includes(currentTab)) && (
+            {[0, 1, 2].includes(currentTab) && (
               <Button
                 variant="contained"
                 sx={{ float: 'right', mt: 2, mr: 2 }}
                 startIcon={<AddIcon />}
                 component={Link}
-                to={currentTab === 0 ? '/workers/add' : currentTab === 1 ? '/workers/addspouse' : '/workers/addchild' }
+                to={currentTab === 0 ? '/workers/add' : currentTab === 1 ? '/workers/addspouse' : '/workers/addchild'}
               >
-                { currentTab === 0 ? 'Add new' : currentTab === 1 ? 'Add Spouse' : 'Add Child' }
+                {currentTab === 0 ? 'Add new' : currentTab === 1 ? 'Add Spouse' : 'Add Child'}
               </Button>
             )}
           </Grid>

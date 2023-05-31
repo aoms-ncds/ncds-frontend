@@ -2,7 +2,7 @@ import { Moment } from 'moment';
 export default {};
 
 declare global {
-   interface Spouse extends MongooseDocument {
+  interface Spouse extends MongooseDocument {
     firstName: string;
     lastName: string;
     email?: string;
@@ -14,7 +14,7 @@ declare global {
     qualification?: string;
     knownLanguages?: Language[];
   }
-   interface CreatableSpouse extends Creatable<Spouse> {
+  interface CreatableSpouse extends Creatable<Spouse> {
     spouseOf?: IWorker;
   }
 }

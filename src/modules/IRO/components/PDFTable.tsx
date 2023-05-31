@@ -1,12 +1,9 @@
 /* eslint-disable react/no-multi-comp */
 import React, { Fragment, ReactNode } from 'react';
 import { View, StyleSheet, Text } from '@react-pdf/renderer';
-import { Style } from '@react-pdf/types/style';
+import { Style } from '@react-pdf/types';
 
-export const PDFTable = (props: {
-  children: JSX.Element | JSX.Element[] | ReactNode;
-  style?: Style;
-}) => (
+export const PDFTable = (props: { children: JSX.Element | JSX.Element[] | ReactNode; style?: Style }) => (
   <View
     style={{
       flexDirection: 'row',
@@ -21,10 +18,7 @@ export const PDFTable = (props: {
   </View>
 );
 
-export const PDFTableHeader = (props: {
-  children: JSX.Element | JSX.Element[];
-  style?: Style;
-}) => (
+export const PDFTableHeader = (props: { children: JSX.Element | JSX.Element[]; style?: Style }) => (
   <View
     style={{
       flexDirection: 'row',
@@ -43,10 +37,7 @@ export const PDFTableHeader = (props: {
   </View>
 );
 
-export const PDFTableRow = (props: {
-  children: JSX.Element | JSX.Element[];
-  style?: Style;
-}) => (
+export const PDFTableRow = (props: { children: JSX.Element | JSX.Element[]; style?: Style }) => (
   <View
     style={{
       flexDirection: 'row',
@@ -62,11 +53,7 @@ export const PDFTableRow = (props: {
   </View>
 );
 
-export const PDFCell = (props: {
-  children?: JSX.Element | JSX.Element[] | string;
-  width: string;
-  style?: Style;
-}) => (
+export const PDFCell = (props: { children?: JSX.Element | JSX.Element[] | string; width: string; style?: Style }) => (
   <Text
     style={{
       width: props.width,

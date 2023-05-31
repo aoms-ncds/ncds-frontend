@@ -8,37 +8,37 @@ import UserServices from '../../extras/UserServices';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 
 const UserBasicDetailsForm = (
-  props: FormComponentProps<CreatableBasicDetails, {
-    textField?: {variant: 'filled' | 'outlined' | 'standard'};
-    kind?: UserKind | undefined;
-    spouse:{
-      spouseOfAnother?:User;
-      onChange:(newSpouse:User)=>void;
-    };
-}>)=> {
+  props: FormComponentProps<
+    CreatableBasicDetails,
+    {
+      textField?: { variant: 'filled' | 'outlined' | 'standard' };
+      kind?: UserKind | undefined;
+      spouse: {
+        spouseOfAnother?: User;
+        onChange: (newSpouse: User) => void;
+      };
+    }
+  >,
+) => {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
 
   const [spouseList, setSpouseList] = useState<User[]>([]);
 
   useEffect(() => {
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
-    if (props.value.martialStatus=='Married'&&props.options?.kind==='staff') {
+    if (props.value.martialStatus == 'Married' && props.options?.kind === 'staff') {
       UserServices.getAll({
-        $and: [
-          { status: CommonLifeCycleStates.ACTIVE },
-          { 'basicDetails.gender': props.value.gender=='Male'?'Female':props.value.gender=='Female'?'Male':'Other' },
-        ],
+        $and: [{ status: CommonLifeCycleStates.ACTIVE }, { 'basicDetails.gender': props.value.gender == 'Male' ? 'Female' : props.value.gender == 'Female' ? 'Male' : 'Other' }],
       })
-    .then((res) => {
-      console.log(res);
-      setSpouseList(res.data);
-    })
-   .catch((res) => {
-     console.log(res);
-   });
+        .then((res) => {
+          console.log(res);
+          setSpouseList(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     }
   }, [props.value.gender, props.value.martialStatus]);
-
 
   return (
     <>
@@ -49,7 +49,7 @@ const UserBasicDetailsForm = (
             aria-labelledby="Field"
             // defaultValue="missionar
             value={props.value.field}
-            onChange={(e) =>props.onChange({ ...props.value, field: e.target.value as WorkerField|undefined })}
+            onChange={(e) => props.onChange({ ...props.value, field: e.target.value as WorkerField | undefined })}
             name="Field"
             row
           >
@@ -87,11 +87,13 @@ const UserBasicDetailsForm = (
         <DatePicker
           label="Date Of Birth"
           value={props.value.dateOfBirth}
-          onChange={(newDate) => props.onChange({
-            ...props.value,
-            dateOfBirth: newDate ?? undefined,
-          })}
-          format='DD/MM/YYYY'
+          onChange={(newDate) =>
+            props.onChange({
+              ...props.value,
+              dateOfBirth: newDate ?? undefined,
+            })
+          }
+          format="DD/MM/YYYY"
           slotProps={{
             textField: {
               variant: props.options?.textField?.variant,
@@ -99,7 +101,6 @@ const UserBasicDetailsForm = (
               required: true,
             },
           }}
-
         />
       </Grid>
 
@@ -117,37 +118,41 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
-        <FormControl >
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl>
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
             value={props.value.gender}
-            onChange={(e) =>props.onChange({
-              ...props.value,
-              gender: e.target.value as Gender|undefined,
-            })}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                gender: e.target.value as Gender | undefined,
+              })
+            }
             name="Gender"
             // defaultValue={'Male'}
             row
           >
-            <FormControlLabel value='Male' control={<Radio />} label='Male' />
-            <FormControlLabel value='Female' control={<Radio />} label='Female' />
-            <FormControlLabel value='Other' control={<Radio />} label='Other' />
+            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+            <FormControlLabel value="Other" control={<Radio />} label="Other" />
           </RadioGroup>
         </FormControl>
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="martialStatus">Martial Status</FormLabel>
           <RadioGroup
             aria-labelledby="martialStatus"
             value={props.value.martialStatus}
-            onChange={(e) =>props.onChange({
-              ...props.value,
-              martialStatus: e.target.value as MaritalStatus|undefined,
-            })}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                martialStatus: e.target.value as MaritalStatus | undefined,
+              })
+            }
             name="martialStatus"
             row
           >
@@ -156,7 +161,7 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
-      {props.value.martialStatus==='Married' && props.options?.kind==='staff'&&(
+      {props.value.martialStatus === 'Married' && props.options?.kind === 'staff' && (
         <Grid item xs={12} md={6} lg={4}>
           <UsersDropdown
             users={spouseList}
@@ -167,7 +172,7 @@ const UserBasicDetailsForm = (
               }
             }} label={'Spouse Of Another User'}
             required={false}
-            textFieldProps={ { variant: props.options?.textField?.variant }}
+            textFieldProps={{ variant: props.options?.textField?.variant }}
           />
         </Grid>
       )}
@@ -181,55 +186,37 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           id="mlanguges"
           options={languages}
           getOptionLabel={(option) => option}
           value={props.value.motherTounge}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTounge: newvalue??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Mother Tongue"
-              variant={props.options?.textField?.variant}
-            />
-          )}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTounge: newvalue ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Mother Tongue" variant={props.options?.textField?.variant} />}
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           id="Clanguges"
           options={languages}
           getOptionLabel={(option) => option}
           value={props.value.communicationLanguage}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Communication Language"
-              variant={props.options?.textField?.variant}
-            />
-          )}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Communication Language" variant={props.options?.textField?.variant} />}
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           multiple
           id="knownLanguages"
           options={languages}
           getOptionLabel={(option) => option}
           value={props.value.knownLanguages}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue??undefined })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Known Languages"
-              variant={props.options?.textField?.variant}
-            />
-          )}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
+          renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField?.variant} />}
         />
       </Grid>
 
@@ -243,7 +230,6 @@ const UserBasicDetailsForm = (
           fullWidth
           InputProps={{ required: true }}
           required
-
         />
       </Grid>
 
@@ -270,32 +256,28 @@ const UserBasicDetailsForm = (
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField
-          label="PAN"
-          value={props.value.PANNo}
-          onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })}
-          variant={props.options?.textField?.variant}
-          fullWidth
-        />
+        <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Aadhaar No"
           value={props.value.aadhaar?.aadhaarNo}
-          onChange={(e) => props.onChange({
-            ...props.value,
-            aadhaar: {
-              ...props.value.aadhaar,
-              aadhaarNo: e.target.value,
-            },
-          })}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              aadhaar: {
+                ...props.value.aadhaar,
+                aadhaarNo: e.target.value,
+              },
+            })
+          }
           variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Aadhaar File"
           type="file"
@@ -305,7 +287,7 @@ const UserBasicDetailsForm = (
               props.onChange({
                 ...props.value,
                 aadhaar: {
-                  aadhaarNo: props.value.aadhaar?.aadhaarNo??'',
+                  aadhaarNo: props.value.aadhaar?.aadhaarNo ?? '',
                   // aadhaarFile: { file },
                 },
               });
@@ -321,19 +303,21 @@ const UserBasicDetailsForm = (
         <TextField
           label="Voter ID"
           value={props.value.voterId?.voterIdNo}
-          onChange={(e) => props.onChange({
-            ...props.value,
-            voterId: {
-              ...props.value.voterId,
-              voterIdNo: e.target.value,
-            },
-          })}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              voterId: {
+                ...props.value.voterId,
+                voterIdNo: e.target.value,
+              },
+            })
+          }
           variant={props.options?.textField?.variant}
           fullWidth
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4} >
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Voter ID File"
           type="file"
@@ -343,7 +327,7 @@ const UserBasicDetailsForm = (
               props.onChange({
                 ...props.value,
                 voterId: {
-                  voterIdNo: props.value.voterId?.voterIdNo??'',
+                  voterIdNo: props.value.voterId?.voterIdNo ?? '',
                   // voterIdFile: { file },
                 },
               });
@@ -354,20 +338,35 @@ const UserBasicDetailsForm = (
           fullWidth
         />
       </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          label="License no"
+          value={props.value.licenseNumber}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              licenseNumber: e.target.value,
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
       <NewAddressForm
-        action='add'
-        value={props.value.currentAddress}
+        action="add"
+        value={props.value.currentOfficialAddress}
         onChange={(newAddress) => {
           // Implement
           if (!duplicateCurrentAddress) {
             props.onChange({
               ...props.value,
-              currentAddress: newAddress,
+              currentOfficialAddress: newAddress,
             });
           } else {
             props.onChange({
               ...props.value,
-              currentAddress: newAddress,
+              currentOfficialAddress: newAddress,
               permanentAddress: newAddress,
             });
           }
@@ -376,11 +375,11 @@ const UserBasicDetailsForm = (
           textField: {
             variant: props.options?.textField?.variant ?? 'outlined',
           },
-          title: 'Current address',
+          title: 'Current Official address',
         }}
       />
       <NewAddressForm
-        action='add'
+        action="add"
         value={props.value.permanentAddress}
         onChange={(newAddress) => {
           // Implement
@@ -395,9 +394,26 @@ const UserBasicDetailsForm = (
           },
           title: 'Permanent address',
           copyAddressCheckBox: {
-            label: 'Same as Current Address',
+            label: 'Same as current address',
             onChange: (value) => setDuplicateCurrentAddress(value),
           },
+        }}
+      />
+      <NewAddressForm
+        action="add"
+        value={props.value.residingAddress}
+        onChange={(newAddress) => {
+          // Implement
+          props.onChange({
+            ...props.value,
+            residingAddress: newAddress,
+          });
+        }}
+        options={{
+          textField: {
+            variant: props.options?.textField?.variant ?? 'outlined',
+          },
+          title: 'Residing address',
         }}
       />
     </>

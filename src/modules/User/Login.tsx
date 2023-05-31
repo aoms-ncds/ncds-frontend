@@ -1,22 +1,6 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  CssBaseline,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import {
-  Email as EmailIcon,
-  Key as KeyIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-} from '@mui/icons-material';
+import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/default
 import HomeServices from './extras/HomeServices';
@@ -47,10 +31,7 @@ const LoginPage = () => {
         console.log(err);
 
         setLoading(false);
-        if (
-          err.message !== 'Incorrect email' &&
-          err.message !== 'Incorrect password'
-        ) {
+        if (err.message !== 'Incorrect email' && err.message !== 'Incorrect password') {
           setEmailError(false);
           setPasswordError(false);
           return setUnknownError(err.message);
@@ -138,17 +119,7 @@ const LoginPage = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position="start">
-                        <IconButton
-                          onClick={() =>
-                            setPasswordVisiblity((visible) => !visible)
-                          }
-                        >
-                          {!passwordVisible ? (
-                            <VisibilityIcon />
-                          ) : (
-                            <VisibilityOffIcon />
-                          )}
-                        </IconButton>
+                        <IconButton onClick={() => setPasswordVisiblity((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
                       </InputAdornment>
                     ),
                   }}
@@ -156,24 +127,12 @@ const LoginPage = () => {
                   fullWidth
                   required
                 />
-                <Button
-                  variant="text"
-                  sx={{ float: 'right', fontSize: 10, marginTop: 2 }}
-                  component={Link}
-                  to="/tests/ForgotPasswordForm"
-                >
+                <Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2 }} component={Link} to="/tests/ForgotPasswordForm">
                   Forgotten password?
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ p: 1 }}
-                  disabled={isLoading}
-                  startIcon={isLoading && <CircularProgress size={20} />}
-                  fullWidth
-                >
+                <Button type="submit" variant="contained" sx={{ p: 1 }} disabled={isLoading} startIcon={isLoading && <CircularProgress size={20} />} fullWidth>
                   {isLoading ? 'Signing in...' : 'Sign in'}
                 </Button>
               </Grid>

@@ -36,9 +36,7 @@ const AddressFormComponent = (
                       props.options?.sameAsAddress?.isSame(e.target.checked);
                       setisChecked(e.target.checked);
                       if (e.target.checked) {
-                        props.onChange(
-                          props.options?.sameAsAddress?.address ?? props.value,
-                        );
+                        props.onChange(props.options?.sameAsAddress?.address ?? props.value);
                       }
                     }}
                   />

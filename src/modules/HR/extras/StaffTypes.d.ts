@@ -1,13 +1,13 @@
 export default {};
 
 declare global {
-   interface Staff extends User {
+  interface Staff extends User {
     staffCode: string;
-    spouseOfAnother?:User;
+    spouseOfAnother?: User;
   }
 
-   interface CreatableStaff extends CreatableUser {
+  interface CreatableStaff extends CreatableUser {
     staffCode?: string;
-    spouseOfAnother?:User;
+    spouseOfAnother?: User;
   }
 }

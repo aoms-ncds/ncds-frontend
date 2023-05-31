@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import {
-  Autocomplete,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Button,
-  Grid,
-  Radio,
-  RadioGroup,
-  TextField,
-  Checkbox,
-} from '@mui/material';
+import { Autocomplete, FormControl, FormControlLabel, FormLabel, Button, Grid, Radio, RadioGroup, TextField, Checkbox } from '@mui/material';
 import WorkerServices from './extras/WorkersServices';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
@@ -19,9 +8,9 @@ import { enqueueSnackbar } from 'notistack';
 import { childSupport } from './extras/WorkersConfig';
 import { useParams } from 'react-router-dom';
 import ChildrenServices from './extras/ChildrenServices';
-interface ChildFormPagerops{
-    action: 'add'|'edit'|'view';
-  }
+interface ChildFormPagerops {
+  action: 'add' | 'edit' | 'view';
+}
 
 const AddNewChildPage = (props: ChildFormPagerops) => {
   const { childId } = useParams();
@@ -34,25 +23,24 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
   useEffect(() => {
     WorkerServices.getAll()
-     .then((res) => {
-       console.log(res);
-       setWorkers(res.data);
-     })
-    .catch((res) => {
-      console.log(res);
-    });
-
-    if (childId) {
-      ChildrenServices.getById(childId).then((res) => {
-        setNewChild(res.data);
-      }).catch((res) => {
+      .then((res) => {
+        console.log(res);
+        setWorkers(res.data);
+      })
+      .catch((res) => {
         console.log(res);
       });
+
+    if (childId) {
+      ChildrenServices.getById(childId)
+        .then((res) => {
+          setNewChild(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     }
-  },
-
-
-  []);
+  }, []);
 
   const AddChild = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -89,11 +77,10 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
   };
 
   return (
-    <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'} >
+    <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'}>
       <form onSubmit={props.action === 'add' ? AddChild : UpdateChild}>
         <Grid container spacing={3}>
-
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label=" First Name"
               value={newChild?.firstName}
@@ -103,11 +90,12 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                   firstName: e.target.value,
                 }))
               }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
-
           </Grid>
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label=" Last Name:"
               value={newChild?.lastName}
@@ -117,11 +105,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                   lastName: e.target.value,
                 }))
               }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <FormControl variant="outlined" fullWidth>
               <DatePicker
                 label="Date Of Birth"
@@ -134,12 +124,11 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                     }));
                   }
                 }}
-
               />
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label="Age"
               value={newChild?.dateOfBirth?.fromNow()}
@@ -149,11 +138,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               //     age: Number(e.target.value),
               //   }))
               // }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
             <Checkbox
               checked={newChild.studying}
@@ -167,7 +158,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label=" Class Of Study"
               value={newChild?.classOfStudy}
@@ -177,11 +168,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                   classOfStudy: e.target.value,
                 }))
               }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
             <Checkbox
               checked={newChild.working}
@@ -195,7 +188,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label="Occupation"
               value={newChild?.occupation}
@@ -205,11 +198,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                   occupation: e.target.value,
                 }))
               }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <TextField
               label="Qualification"
               value={newChild?.qualification}
@@ -219,11 +214,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
                   qualification: e.target.value,
                 }))
               }
-              fullWidth variant="outlined" InputLabelProps={{ shrink: true }}
+              fullWidth
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <Autocomplete
               value={newChild?.childSupport}
               options={childSupport ?? []}
@@ -241,13 +238,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} >
+          <Grid item xs={12} md={6}>
             <Autocomplete
               value={newChild?.childOf || null}
               options={workers ?? []}
-              getOptionLabel={(worker) => worker.firstName}
+              getOptionLabel={(worker) => worker.basicDetails.firstName}
               onChange={(_e, workers) => {
-                if (workers ) {
+                if (workers) {
                   setNewChild((newchild) => ({
                     ...newchild,
                     childOf: workers,
@@ -257,17 +254,13 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
               renderInput={(params) => <TextField {...params} label="Child Of" required />}
               fullWidth
             />
-          </Grid><br />
+          </Grid>
+          <br />
 
           <Grid item lg={12}>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ float: 'right', padding: '16px 64px' }}
-            >
+            <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
               {props.action === 'add' ? 'Submit' : 'Update'}
             </Button>
-
           </Grid>
         </Grid>
       </form>

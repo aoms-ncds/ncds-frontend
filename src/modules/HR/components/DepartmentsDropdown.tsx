@@ -6,16 +6,16 @@ import { enqueueSnackbar } from 'notistack';
 
 const filter = createFilterOptions<CreatableDepartment>();
 
-interface DepartmentsDropdownProps{
-    departments?: Department[];
-    selectedDepartment: Department | null;
-    onSelect: (department: Department) => void;
-    textFieldProps?: TextFieldProps;
+interface DepartmentsDropdownProps {
+  departments?: Department[];
+  selectedDepartment: Department | null;
+  onSelect: (department: Department) => void;
+  textFieldProps?: TextFieldProps;
 }
 
 const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
   const [value, setValue] = useState<CreatableDepartment | null>(null);
-  const [departments, setDepartments] = useState<CreatableDepartment[]|null>(null);
+  const [departments, setDepartments] = useState<CreatableDepartment[] | null>(null);
 
   useEffect(() => {
     if (props.departments) {
@@ -24,13 +24,13 @@ const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
     }
 
     DepartmentServices.getAll()
-    .then((res) => setDepartments(res.data))
-    .catch((error) => {
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
+      .then((res) => setDepartments(res.data))
+      .catch((error) => {
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        });
       });
-    });
   }, [props.departments]);
 
   return (
@@ -84,9 +84,7 @@ const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
       }}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       freeSolo
-      renderInput={(params) => (
-        <TextField {...params} {...props.textFieldProps} label="Department" fullWidth />
-      )}
+      renderInput={(params) => <TextField {...params} {...props.textFieldProps} label="Department" fullWidth />}
       fullWidth
     />
   );

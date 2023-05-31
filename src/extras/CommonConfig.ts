@@ -3,7 +3,7 @@ export default {
 };
 
 // const languages = ['English', 'Hindi', 'Malayalam'] as const;
-export const languages= [
+export const languages = [
   'Afrikaans',
   'Albanian - shqip',
   'Arabic - العربية',

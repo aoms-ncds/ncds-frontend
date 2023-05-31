@@ -5,8 +5,8 @@ import UserForm from '../User/components/UserForm';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
 
-interface WorkerFormPageProps{
-  action: 'add'|'edit'|'view';
+interface WorkerFormPageProps {
+  action: 'add' | 'edit' | 'view';
 }
 const WorkerFormPage = (props: WorkerFormPageProps) => {
   const { id } = useParams();
@@ -17,44 +17,44 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       firstName: '',
       lastName: '',
       email: '',
-      permanentAddress: {
-      },
-      currentAddress: {
-      },
+      permanentAddress: {},
+      currentOfficialAddress: {},
+      residingAddress: {},
     },
     officialDetails: {
       remarks: '',
       selfSupport: true,
+      status: 'Ministering',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
       withChurch: true,
     },
-    supportStructure: {
-    },
+    supportStructure: {},
     spouse: {
       firstName: '',
       lastName: '',
       knownLanguages: [],
-
     },
     children: [],
   });
 
   useEffect(() => {
     if (id) {
-      WorkersServices.getByIdWithSpouse(id).then((res) => {
-        if (res.data) {
-          setWorker(res.data);
-        }
-      }).catch((res) => {
-        console.log(res);
-      });
+      WorkersServices.getByIdWithSpouse(id)
+        .then((res) => {
+          if (res.data) {
+            setWorker(res.data);
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     }
   }, []);
 
   return (
-    <CommonPageLayout title={props.action=='add'?'Add':props.action=='edit'?'Edit':'View'+'worker'}>
+    <CommonPageLayout title={props.action == 'add' ? 'Add' : props.action == 'edit' ? 'Edit' : 'View' + ' worker'}>
       <UserForm<CreatableIWorker>
         action={props.action}
         value={worker}
@@ -72,11 +72,11 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             if (props.action === 'add') {
               const createWorkerResponse = await WorkersServices.create(creatableWorker);
               enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
-            } else if (props.action ==='edit') {
+            } else if (props.action === 'edit') {
               const updateWorkerResponse = await WorkersServices.edit(creatableWorker);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
-          } catch (error:any) {
+          } catch (error: any) {
             enqueueSnackbar({
               variant: 'error',
               message: error.message,

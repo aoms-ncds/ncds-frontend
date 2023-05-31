@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-  Alert,
-  CircularProgress,
-  CssBaseline,
-} from '@mui/material';
+import { Grid, Card, CardContent, Typography, TextField, Button, InputAdornment, Alert, CircularProgress, CssBaseline } from '@mui/material';
 import { Email as EmailIcon } from '@mui/icons-material';
 
 // eslint-disable-next-line import/namespace, import/default
@@ -101,11 +90,7 @@ const ForgottenPasswordFormPage = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                {success && (
-                  <Alert severity="success">
-                    A password rest email has been sent to {email}!
-                  </Alert>
-                )}
+                {success && <Alert severity="success">A password rest email has been sent to {email}!</Alert>}
                 {unknownError && (
                   <Alert severity="error">
                     Error: <b>{unknownError}</b>
@@ -116,19 +101,13 @@ const ForgottenPasswordFormPage = () => {
                   <Button
                     type="submit"
                     variant={'contained'}
-                    color={
-                      success ? 'success' : unknownError ? 'error' : 'primary'
-                    }
+                    color={success ? 'success' : unknownError ? 'error' : 'primary'}
                     sx={{ p: 1 }}
                     disabled={isLoading || unknownError != null}
                     startIcon={isLoading && <CircularProgress size={20} />}
                     fullWidth
                   >
-                    {isLoading ?
-                      'Please wait...' :
-                      unknownError ?
-                        'Oops!' :
-                        'Proceed'}
+                    {isLoading ? 'Please wait...' : unknownError ? 'Oops!' : 'Proceed'}
                   </Button>
                 )}
               </Grid>

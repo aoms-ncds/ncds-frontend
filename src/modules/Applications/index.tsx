@@ -5,15 +5,10 @@ import DashboardCardButton from '../../components/DashboardCardButton';
 
 const APPDashboard = () => {
   return (
-    <CommonPageLayout title='Application Dashboard'>
+    <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton
-            primaryText='Application'
-            secondaryText=''
-            color='#29cc39'
-            targetRoute='/application/list'
-          />
+          <DashboardCardButton primaryText="Application" secondaryText="" color="#29cc39" targetRoute="/application/list" />
         </Grid>
         {/* <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton
@@ -25,7 +20,6 @@ const APPDashboard = () => {
         </Grid> */}
       </Grid>
     </CommonPageLayout>
-
   );
 };
 

@@ -21,7 +21,7 @@ const AddressForm = (
     <>
       <Grid item xs={props.options?.sameAsAddress?.address ? 6 : 12}>
         <br />
-        <Divider textAlign="left">{props.options?.title??'Address'}</Divider>
+        <Divider textAlign="left">{props.options?.title ?? 'Address'}</Divider>
       </Grid>
 
       {props.options?.sameAsAddress?.address && (
@@ -36,9 +36,7 @@ const AddressForm = (
                       props.options?.sameAsAddress?.isSame(e.target.checked);
                       setisChecked(e.target.checked);
                       if (e.target.checked) {
-                        props.onChange(
-                          props.options?.sameAsAddress?.address ?? props.value,
-                        );
+                        props.onChange(props.options?.sameAsAddress?.address ?? props.value);
                       }
                     }}
                   />

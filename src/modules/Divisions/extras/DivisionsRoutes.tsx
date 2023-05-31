@@ -21,7 +21,6 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <DivisionDetailsPage />,
       private: true,
       requiredAccessRights: ['string'],
-
     },
     {
       title: 'Divisions',
@@ -29,7 +28,6 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <DivisionDetailsPage />,
       private: true,
       requiredAccessRights: ['string'],
-
     },
     {
       title: 'Divisions',
@@ -37,7 +35,6 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <DivisionDetailsPage />,
       private: true,
       requiredAccessRights: ['string'],
-
     },
   ],
 };

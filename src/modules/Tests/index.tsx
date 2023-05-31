@@ -16,17 +16,11 @@ const index = () => {
   });
 
   return (
-    <CommonPageLayout title='Tests'>
+    <CommonPageLayout title="Tests">
       {/* File uploader starts */}
       <FileUploader
-        title='Upload bills'
-        types={[
-          'application/vnd.ms-excel',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          'application/pdf',
-          'video/quicktime',
-          'image/png',
-        ]}
+        title="Upload bills"
+        types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
         // limits={{
         //   types: [],
         //   maxItemSize: "2M",
@@ -43,17 +37,14 @@ const index = () => {
           return TestServices.deleteFile(fileId);
         }}
       />
-      <Button
-        variant='contained'
-        onClick={() => setShowFileUploader(true)}
-      >
-          Show File Uploader
+      <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+        Show File Uploader
       </Button>
       {/* File uploader ends.. */}
       {/* Excel importer starts */}
       <ExcelImporter<IWorker>
-        title='Import staffs from excel'
-        templateURL='https://google.com'
+        title="Import staffs from excel"
+        templateURL="https://google.com"
         show={showExcelImporter}
         onClose={() => setShowExcelImporter(false)}
         onFinish={() => setShowExcelImporter(false)}
@@ -66,21 +57,14 @@ const index = () => {
         parser={(row) => ({ ...row })}
         uploader={(row, overwriteDuplicates) => TestServices.importStaffsExcel(row, overwriteDuplicates)}
       />
-      <Button variant='contained' onClick={() => setShowExcelImporter(true)} sx={{ ml: 1 }}>
+      <Button variant="contained" onClick={() => setShowExcelImporter(true)} sx={{ ml: 1 }}>
         Show Excel Importer
       </Button>
       {/* Excel importer ends.. */}
-      <br /><br />
+      <br />
+      <br />
       {/* DateFilter starts  */}
-      <DateFilter
-        dateRage={dateRange}
-        onChange={setDateRange}
-        rangeTypes={[
-          'custom',
-          'days',
-          'weeks',
-        ]}
-      />
+      <DateFilter dateRage={dateRange} onChange={setDateRange} rangeTypes={['custom', 'days', 'weeks']} />
       {/* DateFilter ends..  */}
     </CommonPageLayout>
   );

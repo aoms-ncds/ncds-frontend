@@ -4,7 +4,7 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
-import Profile from '../Profile';
+import Profile from '../../User/Profile';
 import AddNewChildPage from '../AddNewChild';
 
 const workersPageRoutes: ModuleRoute = {
@@ -29,7 +29,7 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Add New Worker',
       path: '/add',
-      element: <WorkerFormPage action='add' />,
+      element: <WorkerFormPage action="add" />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -41,16 +41,9 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
     },
     {
-      title: 'View Profile',
-      path: '/profile/:workersId',
-      element: <Profile />,
-      private: true,
-      requiredAccessRights: ['string'],
-    },
-    {
       title: 'Edit Worker',
       path: '/edit/:id',
-      element: <WorkerFormPage action='edit' />,
+      element: <WorkerFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -82,7 +75,6 @@ const workersPageRoutes: ModuleRoute = {
     //   private: true,
     //   requiredAccessRights: ['string'],
     // },
-
   ],
 };
 export default workersPageRoutes;

@@ -26,14 +26,14 @@ const hrPageRoutes: ModuleRoute = {
     {
       title: 'Add New Staff',
       path: '/add',
-      element: <StaffFormPage action='add' />,
+      element: <StaffFormPage action="add" />,
       private: true,
       requiredAccessRights: ['string'],
     },
     {
       title: 'Edit Staff',
       path: '/edit/:id',
-      element: <StaffFormPage action='edit' />,
+      element: <StaffFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['string'],
     },

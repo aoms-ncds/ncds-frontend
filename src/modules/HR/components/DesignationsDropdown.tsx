@@ -5,16 +5,16 @@ import DesignationServices from '../extras/DesignationServices';
 
 const filter = createFilterOptions<CreatableDesignation>();
 
-interface DesignationsDropdownProps{
-    designations?: Designation[];
-    selectedDesignation: Designation | CreatableDesignation |null;
-    onSelect: (designation: Designation) => void;
-    textFieldProps?: TextFieldProps;
+interface DesignationsDropdownProps {
+  designations?: Designation[];
+  selectedDesignation: Designation | CreatableDesignation | null;
+  onSelect: (designation: Designation) => void;
+  textFieldProps?: TextFieldProps;
 }
 
 const DesignationsDropdown = (props: DesignationsDropdownProps) => {
   const [value, setValue] = React.useState<CreatableDesignation | null>(null);
-  const [designations, setDesignations] = React.useState<CreatableDesignation[]|null>(null);
+  const [designations, setDesignations] = React.useState<CreatableDesignation[] | null>(null);
 
   React.useEffect(() => {
     if (!props.designations) {
@@ -77,9 +77,7 @@ const DesignationsDropdown = (props: DesignationsDropdownProps) => {
       }}
       renderOption={(props, option) => <li {...props}>{option.name}</li>}
       freeSolo
-      renderInput={(params) => (
-        <TextField {...params} {...props.textFieldProps} label="Designation" fullWidth />
-      )}
+      renderInput={(params) => <TextField {...params} {...props.textFieldProps} label="Designation" fullWidth />}
       fullWidth
     />
   );

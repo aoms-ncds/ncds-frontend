@@ -1,12 +1,13 @@
+import { Moment } from 'moment';
+
 export default {};
 
-
 declare global {
-   interface Child extends MongooseDocument {
+  interface Child extends MongooseDocument {
     firstName: string;
     lastName: string;
-    dateOfBirth: moment;
-    childOf: IETWorker | null;
+    dateOfBirth: Moment;
+    childOf: IWorker | null;
     childSupport: string;
     studying: boolean;
     classOfStudy: string;
@@ -14,9 +15,9 @@ declare global {
     occupation: string;
     qualification: string;
   }
-   interface CreatableChild extends Creatable<Child> {
+  interface CreatableChild extends Creatable<Child> {
     dateOfBirth?: Moment;
-    childOf?: IETWorker | null;
+    childOf?: IWorker | null;
     childSupport?: string;
     studying?: boolean;
     classOfStudy?: string;

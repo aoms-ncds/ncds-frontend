@@ -3,7 +3,7 @@ import { Moment } from 'moment';
 export default {};
 
 declare global {
-   interface Frrequest {
+  interface Frrequest {
     _id: string;
     FRno: string;
     FRdate: Moment;
@@ -14,19 +14,19 @@ declare global {
     lastUpdateDate: Moment;
     sanction: string;
   }
-   interface FR extends MongooseDocument {
+  interface FR extends MongooseDocument {
     _id: string;
     FRno: string;
     date: Moment;
     purpose: FRPurpose;
-    purposeWorker?: IETWorker;
+    purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
-    purposeDivision?: IETDivisions;
-    purposeCoordinator?: IStaff;
+    purposeDivision?: Division;
+    purposeCoordinator?: Staff;
     purposeOthers?: string;
     sanctionedAmount: number;
   }
-   interface CreatableFR extends Creatable<FR> {
+  interface CreatableFR extends Creatable<FR> {
     date?: FR['date'];
     FRno?: FR['FRno'];
     purpose?: FR['purpose'];
@@ -36,29 +36,29 @@ declare global {
   //     _id: string;
   //     name: string;
   // }
-   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
-   interface Coordinator {
+  type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
+  interface Coordinator {
     _id: string;
     coordinatorName: string | undefined;
   }
 
-   interface MainCategory {
+  interface MainCategory {
     name: string;
     subcategory1: SubCategory1[];
   }
-   interface SubCategory1 {
+  interface SubCategory1 {
     name: string;
     subcategory2: SubCategory2[];
   }
-   interface SubCategory2 {
+  interface SubCategory2 {
     name: string;
     subcategory3: SubCategory3[];
   }
-   interface SubCategory3 {
+  interface SubCategory3 {
     name: string;
     narration: string;
   }
-   interface Particulars {
+  interface Particulars {
     _id: string;
     mainCategory: string;
     subCategory1: string;
@@ -70,11 +70,11 @@ declare global {
     narration: string;
   }
 
-   interface Remark extends MongooseDocument {
+  interface Remark extends MongooseDocument {
     remark: string;
     createdBy: IWorker;
   }
-   interface CreatableRemark extends Creatable<Remark> {
+  interface CreatableRemark extends Creatable<Remark> {
     createdBy?: IWorker;
   }
 }

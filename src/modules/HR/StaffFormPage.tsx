@@ -6,8 +6,8 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import StaffServices from './extras/StaffServices';
 
-interface StaffFormPageProps{
-  action: 'add'|'edit'|'view';
+interface StaffFormPageProps {
+  action: 'add' | 'edit' | 'view';
 }
 const StaffFormPage = (props: StaffFormPageProps) => {
   const { id } = useParams();
@@ -18,40 +18,43 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       lastName: '',
       email: '',
 
-      permanentAddress: {
-      },
-      currentAddress: {
-      },
+      permanentAddress: {},
+      currentOfficialAddress: {},
+      residingAddress: {},
     },
     officialDetails: {
       remarks: '',
       selfSupport: true,
-      dateOfDivisionJoining: moment(),
+      dateOfCurrentDivisionJoining: moment(),
+      dateOfPreviousDivisionLeaving: moment(),
       noOfChurches: 5,
+      status: 'Ministering',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
       withChurch: true,
     },
-    supportStructure: {
-    },
+    supportStructure: {},
   });
 
   useEffect(() => {
     if (id) {
-      StaffServices.getById(id).then((res) => {
-        if (res.data) {
-          setStaff({ ...res.data,
-            basicDetails: {
-              ...res.data.basicDetails,
-              aadhaar: undefined,
-              voterId: undefined,
-            },
-          });
-        }
-      }).catch((res) => {
-        console.log(res);
-      });
+      StaffServices.getById(id)
+        .then((res) => {
+          if (res.data) {
+            setStaff({
+              ...res.data,
+              basicDetails: {
+                ...res.data.basicDetails,
+                aadhaar: undefined,
+                voterId: undefined,
+              },
+            });
+          }
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     }
   }, []);
 
@@ -75,11 +78,11 @@ const StaffFormPage = (props: StaffFormPageProps) => {
             if (props.action === 'add') {
               const createStaffResponse = await StaffServices.create(creatableStaff);
               enqueueSnackbar({ variant: 'success', message: createStaffResponse.message });
-            } else if (props.action ==='edit') {
+            } else if (props.action === 'edit') {
               const updateStaffResponse = await StaffServices.edit(creatableStaff);
               enqueueSnackbar({ variant: 'success', message: updateStaffResponse.message });
             }
-          } catch (error:any) {
+          } catch (error: any) {
             enqueueSnackbar({
               variant: 'error',
               message: error.message,

@@ -51,7 +51,6 @@ const UsersDropdown = (props: UserDropdownProps) => {
           inputProps={{
             ...params.inputProps,
           }}
-          {...props.textFieldProps}
         />
       )}
     />

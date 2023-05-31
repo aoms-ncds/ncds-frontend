@@ -5,7 +5,6 @@ import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
 
-
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
   pages: [
@@ -29,7 +28,7 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'Apply New FR',
       path: '/apply',
-      element: <FRFormPage action='add' />,
+      element: <FRFormPage action="add" />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,
@@ -45,7 +44,7 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'View FR',
       path: '/:frID/view',
-      element: <FRFormPage action='view' />,
+      element: <FRFormPage action="view" />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,
@@ -53,13 +52,11 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'edit FR',
       path: '/:frID/edit',
-      element: <FRFormPage action='edit'/>,
+      element: <FRFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['string'],
       icon: <RequestPageOutlinedIcon />,
     },
-
-
   ],
 };
 export default divisionsPageRoutes;

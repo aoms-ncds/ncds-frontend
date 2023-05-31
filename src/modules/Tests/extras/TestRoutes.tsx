@@ -1,7 +1,6 @@
 import React from 'react';
 import TestModule from '..';
 import { Extension as ExtensionIcon, Login } from '@mui/icons-material';
-import NewPage from '../FreshPage';
 import LoginPage from '../../User/Login';
 import Pdfview from '../pdfview';
 import ForgotPasswordFormPage from '../../User/ForgotPasswordForm';
@@ -17,14 +16,6 @@ const testsPageRoutes: ModuleRoute = {
       requiredAccessRights: ['string'],
       showInDrawer: true,
       icon: <ExtensionIcon />,
-    },
-    {
-      title: 'New page',
-      path: '/new_page',
-      element: <NewPage />,
-      private: true,
-      requiredAccessRights: ['string'],
-      showInDrawer: true,
     },
     {
       title: 'Login page',

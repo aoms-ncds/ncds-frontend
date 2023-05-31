@@ -23,9 +23,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
-import {
-  DatePicker,
-} from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -37,7 +35,6 @@ import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
-
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -57,10 +54,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       highestQualification: 'Ph.D.',
       motherTounge: 'English',
       communicationLanguage: 'English',
-      knownLanguages: [
-        'English',
-        'Malayalam - മലയാളം',
-      ],
+      knownLanguages: ['English', 'Malayalam - മലയാളം'],
       email: 'abcd@gmail.com',
       phone: '1234567890',
       alternativePhone: '9876543210',
@@ -74,7 +68,15 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         country: 'India',
         pincode: '12345',
       },
-      currentAddress: {
+      currentOfficialAddress: {
+        buildingName: 'Puliyulla parambath',
+        street: '456 Elm Street',
+        city: 'Current City',
+        state: 'Current State',
+        country: 'India',
+        pincode: '54321',
+      },
+      residingAddress: {
         buildingName: 'Puliyulla parambath',
         street: '456 Elm Street',
         city: 'Current City',
@@ -87,8 +89,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
       remarks: 'Lorem ipsum dolor sit amet.',
       selfSupport: true,
-      offiStatus: 'Ministering',
-      dateOfDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+      status: 'Ministering',
+      dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
+      dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
       noOfChurches: 5,
       subdivision: {
         _id: 'skjdfj',
@@ -114,20 +117,16 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     createdAt: moment('2023-05-19T05:06:09.292Z'),
     updatedAt: moment('2023-05-19T05:06:09.292Z'),
   });
-  const [divisions, setDivisions] = useState<DivisionDetails[]>();
+  const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
-  const [selectedMainCategory, setSelectedMainCategory] =
-    useState<MainCategory>();
-  const [selectedSubCategory1, setSelectedSubCategory1] =
-    useState<SubCategory1>();
-  const [selectedSubCategory2, setselectedSubCategory2] =
-    useState<SubCategory2>();
-  const [selectedSubCategory3, setSelectedSubCategory3] =
-    useState<SubCategory3>();
+  const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory>();
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1>();
+  const [selectedSubCategory2, setselectedSubCategory2] = useState<SubCategory2>();
+  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [Particulars, setParticulars] = useState<Particulars[]>();
+  const [Particulars, setParticulars] = useState<Particulars[]>([]);
   const [particularDetails, setParticularDetails] = useState<Particulars>({
     _id: '',
     mainCategory: '',
@@ -202,14 +201,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    FRServices.getParticulars()
-      .then((res) => {
-        console.log(res);
-        setParticulars(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+    // FRServices.getParticulars()
+    //   .then((res) => {
+    //     console.log(res);
+    //     setParticulars(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
   }, []);
   const addParticulars = () => {
     console.log('here');
@@ -218,9 +217,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       variant: 'info',
     });
 
-    FRServices.addParticulars(particularDetails, action)
+    FRServices.addParticulars(particularDetails)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setParticulars((prevParticulars) => [...prevParticulars, res.data]);
         handleClose();
         closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -252,9 +252,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         });
       });
   };
-  const totalRequestedAmount =
-    Particulars &&
-    Particulars.reduce((total, item) => total + item.requestedAmount, '');
+  const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
     <div>
       <Container>
@@ -281,7 +279,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   readOnly={props.action === 'view'}
                 />
               </Grid>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={6}>
                 <Autocomplete
                   value={props.value.purpose}
                   options={purposes ?? []}
@@ -294,19 +292,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       });
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Requisition for" required />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Requisition for" required />}
                   fullWidth
                 />
               </Grid>
               {props.value.purpose === 'Worker' ? (
                 <>
-                  <Grid item xs={12} md={6} >
+                  <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={props.value.purposeWorker}
                       options={workers ?? []}
-                      getOptionLabel={(worker) => worker.firstName}
+                      getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({
@@ -315,30 +311,21 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           });
                         }
                       }}
-                      renderInput={(params) => (
-                        <TextField {...params} label="Choose Worker" required />
-                      )}
+                      renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} >
-                    <TextField
-                      label="Worker Code"
-                      value={props.value.purposeWorker?.workerCode}
-                      fullWidth
-                      disabled
-                    />
+                  <Grid item xs={12} md={6}>
+                    <TextField label="Worker Code" value={props.value.purposeWorker?.workerCode} fullWidth disabled />
                   </Grid>
                 </>
               ) : null}
               {props.value.purpose === 'Subdivision' ? (
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeSubdivision}
                     options={subDivisions ?? []}
-                    getOptionLabel={(subDivision) =>
-                      subDivision.name
-                    }
+                    getOptionLabel={(subDivision) => subDivision.name}
                     onChange={(e, selectedSubdivision) => {
                       if (selectedSubdivision && props.action !== 'view') {
                         props.onChange({
@@ -347,23 +334,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         });
                       }
                     }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Choose Sub Division"
-                        required
-                      />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="Choose Sub Division" required />}
                     fullWidth
                   />
                 </Grid>
               ) : null}
               {props.value.purpose === 'Division' ? (
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
-                    getOptionLabel={(division) => division.divisionName}
+                    getOptionLabel={(division) => division.details.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
                         props.onChange({
@@ -372,21 +353,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         });
                       }
                     }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Choose Division" required />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="Choose Division" required />}
                     fullWidth
                   />
                 </Grid>
               ) : null}
               {props.value.purpose === 'Coordinator' ? (
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeCoordinator}
                     options={coordinators ?? []}
-                    getOptionLabel={(coordinator) =>
-                      coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName
-                    }
+                    getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                     onChange={(e, selectedCoordinator) => {
                       if (selectedCoordinator && props.action !== 'view') {
                         props.onChange({
@@ -395,19 +372,13 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         });
                       }
                     }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Choose Coordinator"
-                        required
-                      />
-                    )}
+                    renderInput={(params) => <TextField {...params} label="Choose Coordinator" required />}
                     fullWidth
                   />
                 </Grid>
               ) : null}
               {props.value.purpose === 'Others' ? (
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <TextField
                     label="Others"
                     value={props.value.purposeOthers}
@@ -425,7 +396,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12}>
                 <Typography>Particulars</Typography> <br />
               </Grid>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={6}>
                 <Autocomplete
                   value={selectedMainCategory}
                   options={mainCategorys ?? []}
@@ -439,21 +410,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       setSelectedMainCategory(selectedMainCategory);
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Choose Main Category"
-                      required
-                    />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
-                <Button
-                  variant="contained"
-                  onClick={() => setShowAddParticulardialog(true)}
-                >
+                <Button variant="contained" onClick={() => setShowAddParticulardialog(true)}>
                   Add Particulars
                 </Button>
               </Grid>
@@ -483,23 +445,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               </IconButton>
                             </TableCell>
                             <TableCell align="center">{item._id}</TableCell>
-                            <TableCell align="center">
-                              {item.narration}
-                            </TableCell>
-                            <TableCell align="center">
-                              {item.quantity}
-                            </TableCell>
+                            <TableCell align="center">{item.narration}</TableCell>
+                            <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
-                            <TableCell align="center">
-                              {item.requestedAmount}
-                            </TableCell>
+                            <TableCell align="center">{item.requestedAmount}</TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={6}>
                 <TextField
                   label="Requested Amount"
                   InputLabelProps={{ shrink: true }}
@@ -512,7 +468,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={6}>
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
@@ -528,34 +484,18 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} >
-                <InputLabel id="demo-simple-select-standard-label">
-                  Sanctioned Bank
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  label=" Group type"
-                  required
-                  fullWidth
-                >
+              <Grid item xs={12} md={6}>
+                <InputLabel id="demo-simple-select-standard-label">Sanctioned Bank</InputLabel>
+                <Select labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" label=" Group type" required fullWidth>
                   <MenuItem value={'FCRA'}>FCRA</MenuItem>
                   <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
 
                   {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                 </Select>
               </Grid>
-              <Grid item xs={12} md={6} >
-                <InputLabel id="demo-simple-select-standard-label">
-                  Sanctioned As Per
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  label=" Group type"
-                  required
-                  fullWidth
-                >
+              <Grid item xs={12} md={6}>
+                <InputLabel id="demo-simple-select-standard-label">Sanctioned As Per</InputLabel>
+                <Select labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" label=" Group type" required fullWidth>
                   {/* just for demo purpose to be listed from config or backend */}
                   <MenuItem value={'As per sanction by Manager'}> As per sanction by President</MenuItem>
                   <MenuItem value={'As per sanction'}>As per sanction</MenuItem>
@@ -586,17 +526,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <div style={{ float: 'right' }}>
                   <Button
                     variant="contained"
-                    color='info'
+                    color="info"
                     onClick={() => {
                       toggleOpenRemarks(true);
                     }}
                   >
-                  Remark
+                    Remark
                   </Button>
-                &nbsp;
+                  &nbsp;
                   <Button
-                    variant='contained'
-                    color='success'
+                    variant="contained"
+                    color="success"
                     onClick={() => {
                       const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
                       setTimeout(() => {
@@ -604,11 +544,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
                         setTimeout(() => closeSnackbar(approvedSnack), 500);
                       }, 500);
-                    }}>Approve</Button>
-                    &nbsp;
+                    }}
+                  >
+                    Approve
+                  </Button>
+                  &nbsp;
                   <Button
-                    variant='contained'
-                    color='error'
+                    variant="contained"
+                    color="error"
                     onClick={() => {
                       const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
                       setTimeout(() => {
@@ -616,11 +559,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
                         setTimeout(() => closeSnackbar(rejectedSnack), 500);
                       }, 500);
-                    }}>Reject</Button>
-                &nbsp;
+                    }}
+                  >
+                    Reject
+                  </Button>
+                  &nbsp;
                   <Button
-                    variant='contained'
-                    color='warning'
+                    variant="contained"
+                    color="warning"
                     onClick={() => {
                       const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                       setTimeout(() => {
@@ -628,11 +574,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
                         setTimeout(() => closeSnackbar(processedSnack), 500);
                       }, 500);
-                    }}>Submit to President</Button>
-                &nbsp;
+                    }}
+                  >
+                    Submit to President
+                  </Button>
+                  &nbsp;
                   <Button
-                    variant='contained'
-                    color='info'
+                    variant="contained"
+                    color="info"
                     onClick={() => {
                       const processingSnack = enqueueSnackbar({ message: 'Submitting FR to accounts', variant: 'info' });
                       setTimeout(() => {
@@ -640,7 +589,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         const processedSnack = enqueueSnackbar({ message: 'Submitted FR to accounts!', variant: 'success' });
                         setTimeout(() => closeSnackbar(processedSnack), 500);
                       }, 500);
-                    }}>Submit </Button>
+                    }}
+                  >
+                    Submit{' '}
+                  </Button>
                 </div>
               </Grid>
 
@@ -671,13 +623,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               setSelectedSubCategory1(selectedSubCategory1);
                             }
                           }}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Sub Category 1"
-                              required
-                            />
-                          )}
+                          renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
                           fullWidth
                         />
                       </Grid>
@@ -685,25 +631,17 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <Autocomplete
                           value={selectedSubCategory2}
                           options={selectedSubCategory1?.subcategory2 ?? []}
-                          getOptionLabel={(subcategory2) =>
-                            subcategory2.name ?? ''
-                          }
+                          getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
                           onChange={(_e, selectedSubCategory2) => {
                             if (selectedSubCategory2) {
                               setParticularDetails((particularDetails) => ({
                                 ...particularDetails,
-                                subCategory1: selectedSubCategory2.name,
+                                subCategory2: selectedSubCategory2.name,
                               }));
                               setselectedSubCategory2(selectedSubCategory2);
                             }
                           }}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Sub Category 2"
-                              required
-                            />
-                          )}
+                          renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                           fullWidth
                         />
                       </Grid>
@@ -716,19 +654,13 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             if (selectedSubCategory3) {
                               setParticularDetails((particularDetails) => ({
                                 ...particularDetails,
-                                subCategory1: selectedSubCategory3.name,
+                                subCategory3: selectedSubCategory3.name,
                                 narration: selectedSubCategory3.narration,
                               }));
                               setSelectedSubCategory3(selectedSubCategory3);
                             }
                           }}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Sub Category 3"
-                              required
-                            />
-                          )}
+                          renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
                           fullWidth
                         />
                       </Grid>
@@ -759,9 +691,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               }));
                             }
                           }}
-                          renderInput={(params) => (
-                            <TextField {...params} label="For the Month" required />
-                          )}
+                          renderInput={(params) => <TextField {...params} label="For the Month" required />}
                           fullWidth
                         />
                       </Grid>
@@ -796,11 +726,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         />
                       </Grid>
                       <Grid item md={12}>
-                        <Button
-                          variant='contained'
-                          onClick={() => setShowFileUploader(true)}
-                        >
-                        Attachments
+                        <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                          Attachments
                         </Button>
                       </Grid>
                     </Grid>
@@ -808,62 +735,60 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    onClick={addParticulars}
-                  >
+                  <Button type="submit" variant="contained" onClick={addParticulars}>
                     Save
                   </Button>
                 </DialogActions>
               </Dialog>
               <br />
               <Dialog open={openRemarks} fullWidth maxWidth="md">
-                <DialogTitle>
-           Remarks
-                </DialogTitle>
+                <DialogTitle>Remarks</DialogTitle>
                 <DialogActions>
-
                   <TextField
                     id="remarkTextfield"
                     placeholder="Remarks"
                     multiline
                     value={remark?.remark}
-                    onChange={(e) => setRemark((remark) => ({
-                      ...remark,
-                      remark: e.target.value,
-                    }))}
+                    onChange={(e) =>
+                      setRemark((remark) => ({
+                        ...remark,
+                        remark: e.target.value,
+                      }))
+                    }
                     InputProps={{
-                      endAdornment: <InputAdornment position='end'>
-                        <IconButton onClick={() => {
-                          remark.remark?
-                            FRServices.addRemarks(remark)
-                        .then((res) => {
-                          setRemarks((remarks) => [...remarks, res.data]);
-                          setRemark((remark) => ({
-                            ...remark,
-                            remark: '',
-                          }));
-                          toggleOpenRemarks(false);
-                        })
-                    .catch((error) => {
-                      enqueueSnackbar({
-                        variant: 'error',
-                        message: error.message,
-                      });
-                    }):'';
-                        }}><SendIcon /></IconButton>
-                      </InputAdornment>,
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              remark.remark ?
+                                FRServices.addRemarks(remark)
+                                    .then((res) => {
+                                      setRemarks((remarks) => [...remarks, res.data]);
+                                      setRemark((remark) => ({
+                                        ...remark,
+                                        remark: '',
+                                      }));
+                                      toggleOpenRemarks(false);
+                                    })
+                                    .catch((error) => {
+                                      enqueueSnackbar({
+                                        variant: 'error',
+                                        message: error.message,
+                                      });
+                                    }) :
+                                '';
+                            }}
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     }}
                     fullWidth
                   />
                   <br />
-                  <Button
-                    variant="contained"
-                    onClick={() => toggleOpenRemarks(false)}
-                    sx={{ ml: 'auto' }}
-                  >
-            close
+                  <Button variant="contained" onClick={() => toggleOpenRemarks(false)} sx={{ ml: 'auto' }}>
+                    close
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -872,14 +797,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         </CardContent>
       </Container>
       <FileUploader
-        title='Upload bills'
-        types={[
-          'application/vnd.ms-excel',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          'application/pdf',
-          'video/quicktime',
-          'image/png',
-        ]}
+        title="Upload bills"
+        types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
         // limits={{
         //   types: [],
         //   maxItemSize: "2M",
@@ -892,7 +811,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         getFiles={TestServices.getBills}
         uploadFile={TestServices.uploadFile}
         renameFile={TestServices.renameFile}
-        deleteFile={(fileID:string ) => {
+        deleteFile={(fileID: string) => {
           return TestServices.deleteFile(fileID);
         }}
       />

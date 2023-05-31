@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card } from '@mui/material';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-  Reply as ReplyIcon,
-
-} from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
+import IROReciptTemplate from './components/IROReciptTemplate';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
-const ManageIRO= () => {
+const ManageIRO = () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();
   useEffect(() => {
     IROServices.getAll()
-   .then((res) => {
-     console.log(res);
-     setIROrder(res.data);
-   })
-  .catch((res) => {
-    console.log(res);
-  });
+      .then((res) => {
+        console.log(res);
+        setIROrder(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
   const columns = [
     {
@@ -34,8 +31,8 @@ const ManageIRO= () => {
       renderCell: (props: any) => (
         <DropdownButton
           useIconButton={true}
-          id='IRO action'
-          primaryText='Actions'
+          id="IRO action"
+          primaryText="Actions"
           key={'IRO action'}
           items={[
             {
@@ -54,6 +51,9 @@ const ManageIRO= () => {
               id: 'print',
               text: 'Print IRO',
               icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <IROReciptTemplate />,
+              fileName: 'IROReciept.pdf',
             },
             {
               id: 'View',
@@ -100,11 +100,12 @@ const ManageIRO= () => {
     { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
   ];
   return (
-    <CommonPageLayout title='Internal Release Order'>
-      <br/><br/>
+    <CommonPageLayout title="Internal Release Order">
+      <br />
+      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '75vh', width: '100%' }}>
-          <DataGrid rows={IROrder??[]} columns={columns} getRowId={(row) => row._id}/>
+          <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
         </Card>
       </Grid>
     </CommonPageLayout>
