@@ -30,7 +30,7 @@ const NewOfficialDetailsForm = (
       {console.log({ abc: props.value.dateOfJoining })}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date of joining"
+          label="Date Of Joining"
           value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -52,7 +52,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="No of years with the organization"
+          label="No Of Years With The Organization"
           value={props.value.dateOfJoining?.fromNow(true)}
           variant={props.options?.textField.variant}
           fullWidth
@@ -62,7 +62,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Left organization on"
+          label="Left Organization On"
           value={props.value.dateOfLeaving}
           onChange={(newDate) =>
             props.onChange({
@@ -137,7 +137,7 @@ const NewOfficialDetailsForm = (
           onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal ?? undefined })}
           renderInput={(params) => <TextField
             {...params}
-            label="Sub division"
+            label="Sub Division"
             helperText={!divisions ? 'Loading sub divisions...' : 'Select a sub division'}
             variant={props.options?.textField.variant}
             required
@@ -160,7 +160,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Joined current division on"
+          label="Date Of Joining Current Division"
           value={props.value.dateOfCurrentDivisionJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -182,7 +182,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Left previous division on"
+          label="Date of Leaving Previous Division"
           value={props.value.dateOfPreviousDivisionLeaving}
           onChange={(newDate) => {
             props.onChange({
@@ -204,7 +204,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="No. of Churches"
+          label="No. Of Churches"
           type={'number'}
           value={props.value.noOfChurches}
           onChange={(e) =>
@@ -220,7 +220,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControlLabel
-          label="Self support"
+          label="Self Support"
           control={
             <Checkbox
               onChange={(e) =>

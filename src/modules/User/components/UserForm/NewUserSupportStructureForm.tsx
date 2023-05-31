@@ -45,7 +45,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Spouse allowance"
+          label="Spouse Allowance"
           type="number"
           value={props.value.spouseAllowance}
           onChange={(e) =>
@@ -61,7 +61,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Positional allowance"
+          label="Positional Allowance"
           type="number"
           value={props.value.positionalAllowance}
           onChange={(e) =>
@@ -77,7 +77,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Special allowance"
+          label="Special Allowance"
           type="number"
           value={props.value.specialAllowance}
           onChange={(e) =>
@@ -93,7 +93,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Impact deduction"
+          label="Impact Deduction"
           type="number"
           value={props.value.impactDeduction}
           onChange={(e) =>
@@ -109,7 +109,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Tel allowance"
+          label="Tel Allowance"
           type="number"
           value={props.value.telAllowance}
           onChange={(e) =>
@@ -125,7 +125,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="PISON Missionary fund"
+          label="PISON Missionary Fund"
           type="number"
           value={props.value.PIONMissionaryFund}
           onChange={(e) =>
@@ -157,7 +157,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6}>
         <TextField
-          label="Total amount"
+          label="Total Amount"
           value={
             (props.value.basic ?? 0) +
             (props.value.HRA ?? 0) +
@@ -174,7 +174,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6}>
         <TextField
-          label="Total deduction"
+          label="Total Deduction"
           value={(props.value.impactDeduction ?? 0) + (props.value.PIONMissionaryFund ?? 0) + (props.value.MUTDeduction ?? 0)}
           variant={props.options?.textField.variant}
           fullWidth
@@ -184,7 +184,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6}>
         <TextField
-          label="Net amount"
+          label="Net Amount"
           value={
             (props.value.basic ?? 0) +
             (props.value.HRA ?? 0) +

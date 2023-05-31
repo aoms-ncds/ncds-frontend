@@ -32,8 +32,8 @@ const NewAddressForm = (
       )}
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Building name"
-          value={props.value.buildingName}
+          label="Building Name"
+          value={props.value?.buildingName}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -47,7 +47,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Street"
-          value={props.value.street}
+          value={props.value?.street}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -61,7 +61,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="City"
-          value={props.value.city}
+          value={props.value?.city}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -75,7 +75,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="State"
-          value={props.value.state}
+          value={props.value?.state}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -89,7 +89,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Country"
-          value={props.value.country}
+          value={props.value?.country}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -102,8 +102,8 @@ const NewAddressForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Pin code"
-          value={props.value.pincode}
+          label="Pin Code"
+          value={props.value?.pincode}
           onChange={(e) =>
             props.onChange({
               ...props.value,
