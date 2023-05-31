@@ -10,9 +10,9 @@ const NewOfficialDetailsForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
     }
-  >,
+  >
 ) => {
-  const [divisions, setDivisions] = useState<Division[]|null>(null);
+  const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const NewOfficialDetailsForm = (
         enqueueSnackbar({
           variant: 'error',
           message: error.message,
-        }),
+        })
       );
   }, []);
   return (
@@ -30,7 +30,7 @@ const NewOfficialDetailsForm = (
       {console.log({ abc: props.value.dateOfJoining })}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date of joining"
+          label="Date of Joining"
           value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -52,7 +52,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="No of years with the organization"
+          label="No of years with the Organization"
           value={props.value.dateOfJoining?.fromNow(true)}
           variant={props.options?.textField.variant}
           fullWidth
@@ -62,7 +62,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Left organization on"
+          label="Left Organization On"
           value={props.value.dateOfLeaving}
           onChange={(newDate) =>
             props.onChange({
@@ -85,7 +85,7 @@ const NewOfficialDetailsForm = (
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
           value={props.value.reasonForDeactivation}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason ?? undefined })}
-          renderInput={(params) => <TextField {...params} label="Reason for deactivation" variant={props.options?.textField.variant} />}
+          renderInput={(params) => <TextField {...params} label="Reason for Deactivation" variant={props.options?.textField.variant} />}
         />
       </Grid>
 
@@ -111,21 +111,17 @@ const NewOfficialDetailsForm = (
               setSubDivisions([]);
             }
             DivisionsServices.getSubDivisionsByDivisionId(newVal?._id as string)
-            .then((res) => setSubDivisions(res.data))
-            .catch((error) =>
-              enqueueSnackbar({
-                variant: 'error',
-                message: error.message,
-              }),
-            );
+              .then((res) => setSubDivisions(res.data))
+              .catch((error) =>
+                enqueueSnackbar({
+                  variant: 'error',
+                  message: error.message,
+                })
+              );
           }}
-          renderInput={(params) => <TextField
-            {...params}
-            label="Division"
-            helperText={!divisions ? 'Loading divisions...' : 'Select a division'}
-            variant={props.options?.textField.variant}
-            required
-          />}
+          renderInput={(params) => (
+            <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant} required />
+          )}
         />
       </Grid>
 
@@ -135,13 +131,9 @@ const NewOfficialDetailsForm = (
           value={props.value.subdivision}
           getOptionLabel={(subDiv) => subDiv.name}
           onChange={(event, newVal) => props.onChange({ ...props.value, subdivision: newVal ?? undefined })}
-          renderInput={(params) => <TextField
-            {...params}
-            label="Sub division"
-            helperText={!divisions ? 'Loading sub divisions...' : 'Select a sub division'}
-            variant={props.options?.textField.variant}
-            required
-          />}
+          renderInput={(params) => (
+            <TextField {...params} label="Sub Division" helperText={!divisions ? 'Loading sub divisions...' : 'Select a Sub Division'} variant={props.options?.textField.variant} required />
+          )}
         />
       </Grid>
 
@@ -160,7 +152,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Joined current division on"
+          label="Joined Current Division On"
           value={props.value.dateOfCurrentDivisionJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -182,7 +174,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Left previous division on"
+          label="Left Previous Division On"
           value={props.value.dateOfPreviousDivisionLeaving}
           onChange={(newDate) => {
             props.onChange({
@@ -220,7 +212,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControlLabel
-          label="Self support"
+          label="Self Support"
           control={
             <Checkbox
               onChange={(e) =>

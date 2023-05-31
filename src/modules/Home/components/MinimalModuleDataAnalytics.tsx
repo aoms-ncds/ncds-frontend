@@ -96,11 +96,11 @@ const MinimalModuleDataAnalytics = () => {
           <Typography variant="body1">{divisionsCount}</Typography>
         </ListItemButton>
         <ListItemButton>
-          <ListItemText primary="No. of staffs:" />
+          <ListItemText primary="No. of Staffs:" />
           <Typography variant="body1">{staffsCount}</Typography>
         </ListItemButton>
         <ListItemButton>
-          <ListItemText primary="No. of workers:" />
+          <ListItemText primary="No. of Workers:" />
           <Typography variant="body1">{workersCount}</Typography>
         </ListItemButton>
         <ListItemButton>

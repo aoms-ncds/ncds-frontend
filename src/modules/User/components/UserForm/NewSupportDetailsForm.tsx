@@ -9,7 +9,7 @@ const NewSupportDetailsForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
     }
-  >,
+  >
 ) => {
   const [designations, setDesignations] = useState<Designation[] | null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);
@@ -47,7 +47,7 @@ const NewSupportDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Total number of years in ministry"
+          label="Total Number of years in Ministry"
           type="number"
           value={props.value.totalNoOfYearsInMinistry}
           onChange={(e) =>
@@ -73,7 +73,7 @@ const NewSupportDetailsForm = (
             row
           >
             <FormControlLabel value={'with church'} control={<Radio />} label="With Church" />
-            <FormControlLabel value={'without church'} control={<Radio />} label="Without church" />
+            <FormControlLabel value={'without church'} control={<Radio />} label="Without Church" />
           </RadioGroup>
         </FormControl>
       </Grid>

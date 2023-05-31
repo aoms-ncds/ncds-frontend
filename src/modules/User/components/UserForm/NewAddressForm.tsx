@@ -12,7 +12,7 @@ const NewAddressForm = (
         onChange: (checked: boolean) => void;
       };
     }
-  >,
+  >
 ) => {
   return (
     <>
@@ -32,7 +32,7 @@ const NewAddressForm = (
       )}
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Building name"
+          label="Building Name"
           value={props.value.buildingName}
           onChange={(e) =>
             props.onChange({
@@ -102,7 +102,7 @@ const NewAddressForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Pin code"
+          label="Pin Code"
           value={props.value.pincode}
           onChange={(e) =>
             props.onChange({

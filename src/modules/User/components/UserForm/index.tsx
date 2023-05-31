@@ -38,7 +38,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       textField: { variant: 'filled' | 'outlined' | 'standard' };
       kind: UserKind;
     }
-  >,
+  >
 ) => {
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
@@ -449,15 +449,15 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           onSubmit={(e) => {
             e.preventDefault();
             toggleOpen(false);
-            childAction == 'add' ?
-              props.onChange({
-                ...props.value,
-                children: [...(props.value as CreatableIWorker).children, newChild],
-              }) :
-              props.onChange({
-                ...props.value,
-                children: (props.value as CreatableIWorker).children.map((child, childIndex) => (childIndex == index ? newChild : child)),
-              });
+            childAction == 'add'
+              ? props.onChange({
+                  ...props.value,
+                  children: [...(props.value as CreatableIWorker).children, newChild],
+                })
+              : props.onChange({
+                  ...props.value,
+                  children: (props.value as CreatableIWorker).children.map((child, childIndex) => (childIndex == index ? newChild : child)),
+                });
           }}
         >
           <DialogTitle>Add Child</DialogTitle>
