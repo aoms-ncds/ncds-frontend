@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-multi-comp */
-import { Avatar, Box, Card, Container, Divider, Grid, List, ListItem, ListItemText, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Card, Container, Divider, Grid, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
