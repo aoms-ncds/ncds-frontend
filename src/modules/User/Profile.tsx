@@ -90,7 +90,7 @@ const Profile = () => {
           </Box>
           <TabPanel value={currentTab} index={0}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff).staffCode : (user as IWorker).workerCode} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First name:</Typography> {user?.basicDetails.firstName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last name: </Typography> {user?.basicDetails.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of birth: </Typography> {user?.basicDetails.dateOfBirth.format('dddd DD/MM/YYYY')} </Grid>
