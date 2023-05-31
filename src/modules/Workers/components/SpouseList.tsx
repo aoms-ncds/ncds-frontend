@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Grid } from '@mui/material';
 import DropdownButton from '../../../components/DropDownButton';
 import { Link } from 'react-router-dom';
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import SpousesServices from '../extras/SpousesServices';
 
