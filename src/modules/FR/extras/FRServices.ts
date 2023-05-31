@@ -1,8 +1,8 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
-import { categories, purposes } from './FRConfig';
+import { categories, purposes, sanctionedAsPers } from './FRConfig';
 import axios from 'axios';
-import { CreatableFR, CreatableRemark, FR, FRPurpose, Frrequest, MainCategory, Particulars, Remark } from './FRTypes';
+import { CreatableFR, CreatableRemark, FR, FRPurpose, Frrequest, MainCategory, Particulars, Remark, SanctionedAsPer } from './FRTypes';
 export default {
   getCount: () => getStandardResponse<number>(
     axios.get('/fr/count'),
@@ -11,7 +11,7 @@ export default {
     axios.get('/fr/'),
   ),
   getById: (fRId: string) => getStandardResponse<FR>(axios.get('/fr/' + fRId)),
-
+  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete('/fr/particulars/' + particularid)),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
       data: purposes,
@@ -21,6 +21,16 @@ export default {
       timeout: 0,
     }),
   ),
+  getSanctionedAsPer: () => getStandardResponse<SanctionedAsPer[]>(
+    dummyRequest<SanctionedAsPer[]>({
+      data: sanctionedAsPers,
+      // error: null,
+      message: 'fetched data',
+      result: 'success',
+      timeout: 0,
+    }),
+  ),
+
   getMainCategory: () => getStandardResponse<MainCategory[]>(
     dummyRequest<MainCategory[]>({
       data: categories,
@@ -509,6 +519,22 @@ export default {
             } catch (error) {
               reject(error);
             }
+          })
+          .catch(reject);
+      }),
+    );
+  },
+
+  manageFRRequests: (frID: string, operation:string, frRequest: CreatableFR) => {
+    return getStandardResponse<CreatableFR>(
+      new Promise((resolve, reject) => {
+        console.log(frRequest);
+        axios
+          .patch('/fr/' + frID+'/'+operation, {
+            ...frRequest,
+          })
+          .then(async (updatedFR) => {
+            resolve(updatedFR);
           })
           .catch(reject);
       }),

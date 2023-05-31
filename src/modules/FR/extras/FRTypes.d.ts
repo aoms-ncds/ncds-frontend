@@ -16,7 +16,7 @@ export interface Frrequest {
 export interface FR extends MongooseDocument {
   _id: string;
   FRno: string;
-  date: Moment;
+  FRdate: Moment | undefined;
   purpose: FRPurpose;
   purposeWorker?: IETWorker;
   purposeSubdivision?: SubDivision;
@@ -29,9 +29,10 @@ export interface FR extends MongooseDocument {
   Particulars?:Particulars[];
   sanctionedAsPer?:string;
   sanctionedBank?:string;
+  status?:string;
 }
 export interface CreatableFR extends Creatable<FR> {
-  date?: FR['date'];
+  FRdate?: Moment;
   FRno?: FR['FRno'];
   purpose?: FR['purpose'];
   sanctionedAmount?: FR['sanctionedAmount'];
@@ -44,6 +45,7 @@ export interface CreatableFR extends Creatable<FR> {
   purposeCoordinator?: FR['purposeCoordinator'];
   sanctionedAsPer?:FR['sanctionedAsPer'];
   sanctionedBank?:FR['sanctionedBank'];
+  status?:string;
 }
 // export interface FRPurpose{
 //     _id: string;
@@ -55,6 +57,16 @@ export type FRPurpose =
   | 'Division'
   | 'Coordinator'
   | 'Others';
+
+export type SanctionedAsPer =
+  | 'As per sanction by Manager'
+  | 'As per policy'
+  | 'As Per List Attached'
+  | 'As Per Ticket Attached'
+  | 'As Per Bill Attached'
+  |'As per Index Attached'
+  |'As Per Budget'
+  ;
 export interface Coordinator {
   _id: string;
   coordinatorName: string | undefined;

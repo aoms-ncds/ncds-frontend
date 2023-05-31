@@ -75,6 +75,34 @@ const FRFormPage = (props: FRFormPagerops) => {
       // });
     }
   };
+  const manageFR = async (requisition: CreatableFR) => {
+    try {
+      const operation=requisition.status;
+
+
+      const snackbarId = enqueueSnackbar({
+        message: operation === 'approve' ? 'Approving' :operation === 'reject'? 'Rejecting':'Sending To President'+'FR Request',
+        variant: 'info',
+      });
+      console.log(requisition);
+
+      if (operation && frID) {
+        const res = await FRServices.manageFRRequests(frID, operation, requisition);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      // Handle error conditions if needed
+      // closeSnackbar(snackbarId);
+      // enqueueSnackbar({
+      //   message: err.message,
+      //   variant: 'error',
+      // });
+    }
+  };
   // const { frID }=useParams();
 
   return (
@@ -84,7 +112,7 @@ const FRFormPage = (props: FRFormPagerops) => {
           value={requisition}
           onChange={(newReq) => setRequisition(newReq)}
           action={props.action}
-          onSubmit={props.action === 'add' ? addFR : editFR} // Pass the addFR function to the onSubmit prop
+          onSubmit={props.action === 'add' ? addFR :props.action === 'edit'? editFR:manageFR} // Pass the addFR function to the onSubmit prop
         />
       </Card>
 

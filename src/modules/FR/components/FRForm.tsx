@@ -40,12 +40,13 @@ import WorkersServices from '../../Workers/extras/WorkersServices';
 import { IWorker } from '../../Workers/extras/WorkersTypes';
 import { Staff } from '../../HR/extras/StaffTypes';
 import { FormComponentProps } from '../../../extras/CommonTypes';
-import { CreatableFR, FRPurpose, MainCategory, SubCategory1, SubCategory2, SubCategory3, Remark, CreatableRemark, Particulars } from '../extras/FRTypes';
+import { CreatableFR, FRPurpose, MainCategory, SubCategory1, SubCategory2, SubCategory3, Remark, CreatableRemark, Particulars, SanctionedAsPer } from '../extras/FRTypes';
 import { DivisionDetails, SubDivision } from '../../Divisions/extras/DivisionsTypes';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
   const [divisions, setDivisions] = useState<DivisionDetails[]>();
@@ -89,6 +90,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .then((res) => {
         console.log(res);
         setPurposes(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    FRServices.getSanctionedAsPer()
+      .then((res) => {
+        console.log(res);
+        setSanctionedAsPer(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -196,6 +205,26 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         });
       });
   };
+  const deleteParticular = (particularid: string) => {
+    // Perform delete logic
+    const updatedParticulars = Particulars.filter((item) => item._id !== particularid);
+    setParticulars(updatedParticulars);
+    FRServices.deleteParticulars(particularid)
+    .then((res) => {
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'success',
+      });
+    })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+    // Implement your delete logic here, such as making an API request
+  };
   const totalRequestedAmount =
   Particulars &&
   Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -215,26 +244,27 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  // value={props.value.date}
-                  // onChange={(newDate) => props.onChange({
-                  //   ...props.value,
-                  //   date: newDate ?? undefined,
-                  // })}
-                  format='DD/MM/YYYY'
+                  //  value={props.value.FRdate}
+                  //  onChange={(newDate) => props.onChange({
+                  //    ...props.value,
+                  //    FRdate: newDate ?? undefined,
+                  //  })}
+                  // format='DD/MM/YYYY'
+
 
                 />
 
               </Grid>
               <Grid item xs={12} md={6} >
                 <Autocomplete
-                  value={props.value.purpose}
+                  value={props.value.purpose || ''}
                   options={purposes ?? []}
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedPurpose) => {
                     if (selectedPurpose && props.action !== 'view') {
                       props.onChange({
                         ...props.value,
-                        purpose: selectedPurpose,
+                        purpose: selectedPurpose as FRPurpose,
                       });
                     }
                   }}
@@ -243,6 +273,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   )}
                   fullWidth
                 />
+
+
               </Grid>
               {props.value.purpose === 'Worker' ? (
                 <>
@@ -278,32 +310,23 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6} >
                   <Autocomplete
-                    value={props.value.purposeSubdivision}
                     options={subDivisions ?? []}
-                    getOptionLabel={(subDivision) =>
-                      subDivision.name
-                    }
-                    onChange={(e, selectedSubdivision) => {
-                      if (selectedSubdivision && props.action !== 'view') {
-                        props.onChange({
-                          ...props.value,
-                          purposeSubdivision: selectedSubdivision,
-                        });
-                      }
-                    }}
+                    value={props.value.purposeSubdivision}
+                    getOptionLabel={(subDiv) => subDiv.name}
+                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal??undefined })}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Choose Sub Division"
+                        label="Subdivision"
                         required
                       />
                     )}
-                    fullWidth
                   />
                 </Grid>
               ) : null}
               {props.value.purpose === 'Division' ? (
                 <Grid item xs={12} md={6} >
+
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
@@ -424,7 +447,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           <TableRow key={item._id}>
                             <TableCell component="th">
                               <IconButton>
-                                <DeleteIcon />
+                                <DeleteIcon onClick={() => deleteParticular(item._id || '')} />
                               </IconButton>
                               <IconButton onClick={() => setShowFileUploader(true)}>
                                 <FileIcon />
@@ -484,8 +507,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
-                  label=""
-                  value={props.value.sanctionedBank}
+                  label="Sanctioned Bank"
+                  value={props.value.sanctionedBank || ''}
                   onChange={(e) =>
                     props.onChange({
                       ...props.value,
@@ -502,34 +525,24 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 </Select>
               </Grid>
               <Grid item xs={12} md={6} >
-                <InputLabel id="demo-simple-select-standard-label">
-                  Sanctioned As Per
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  label=""
-                  required
-                  fullWidth
-                  value={props.value.sanctionedAsPer}
-                  onChange={(e) => {
-                    console.log(e.target.value); // Add this console log statement
-                    props.onChange({
-                      ...props.value,
-                      sanctionedAsPer: e.target.value,
-                    });
+                <Autocomplete
+                  value={props.value.sanctionedAsPer || ''}
+                  options={sanctionedAsPer ?? []}
+                  getOptionLabel={(requisition) => requisition ?? ''}
+                  onChange={(_e, selectedSanction) => {
+                    if (selectedSanction && props.action !== 'view') {
+                      props.onChange({
+                        ...props.value,
+                        sanctionedAsPer: selectedSanction as SanctionedAsPer,
+                      });
+                    }
                   }}
-                >
-                  {/* just for demo purpose to be listed from config or backend */}
-                  <MenuItem value={'As per sanction by Manager'}> As per sanction by President</MenuItem>
-                  <MenuItem value={'As per sanction'}>As per sanction</MenuItem>
-                  <MenuItem value={'As per policy'}>As per policy</MenuItem>
-                  <MenuItem value={'As Per List Attached'}>As Per List Attached</MenuItem>
-                  <MenuItem value={'As Per Ticket Attached'}> As Per Ticket Attached</MenuItem>
-                  <MenuItem value={'As Per Bill Attached'}>As Per Bill Attached</MenuItem>
-                  <MenuItem value={'As per Index Attached'}>As per Index Attached</MenuItem>
-                  <MenuItem value={'As Per Budget'}>As Per Budget</MenuItem>
-                </Select>
+                  renderInput={(params) => (
+                    <TextField {...params} label=" Sanctioned As Per" required />
+                  )}
+                  fullWidth
+                />
+
               </Grid>
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
@@ -556,41 +569,74 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   Remark
                   </Button>
                 &nbsp;
-                  <Button
-                    variant='contained'
-                    color='success'
-                    onClick={() => {
-                      const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
-                      setTimeout(() => {
-                        closeSnackbar(approvalSnack);
-                        const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
-                        setTimeout(() => closeSnackbar(approvedSnack), 500);
-                      }, 500);
-                    }}>Approve</Button>
-                    &nbsp;
-                  <Button
-                    variant='contained'
-                    color='error'
-                    onClick={() => {
-                      const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                      setTimeout(() => {
-                        closeSnackbar(rejectionSnack);
-                        const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
-                        setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                      }, 500);
-                    }}>Reject</Button>
+                  {props.action === 'view' ? (
+                    <>
+                      {/* Only display buttons if props.action is 'view' */}
+                      &nbsp;
+                      <Button
+                        variant='contained'
+                        color='success'
+                        onClick={() => {
+                          const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
+                          if (props.onSubmit) {
+                            const updatedValue = { ...props.value, status: 'approve' }; // Create a new object with updated status
+                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                          }
+                          setTimeout(() => {
+                            closeSnackbar(approvalSnack);
+                            const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                            setTimeout(() => closeSnackbar(approvedSnack), 500);
+                          }, 500);
+                        }}>Approve</Button>
                 &nbsp;
-                  <Button
-                    variant='contained'
-                    color='warning'
-                    onClick={() => {
-                      const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
-                      setTimeout(() => {
-                        closeSnackbar(processingSnack);
-                        const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
-                        setTimeout(() => closeSnackbar(processedSnack), 500);
-                      }, 500);
-                    }}>Submit to President</Button>
+                    </>
+                  ) : null}
+
+                  {props.action === 'view' ? (
+                    <>
+                      {/* Only display buttons if props.action is 'view' */}
+                      &nbsp;
+                      <Button
+                        variant='contained'
+                        color='error'
+                        onClick={() => {
+                          const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                          if (props.onSubmit) {
+                            const updatedValue = { ...props.value, status: 'reject' }; // Create a new object with updated status
+                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                          }
+                          setTimeout(() => {
+                            closeSnackbar(rejectionSnack);
+                            const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                            setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                          }, 500);
+                        }}>Reject</Button>
+                &nbsp;
+                    </>
+                  ) : null}
+
+                  {props.action === 'view' ? (
+                    <>
+                      {/* Only display buttons if props.action is 'view' */}
+                      <Button
+                        variant='contained'
+                        color='warning'
+                        onClick={() => {
+                          const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
+                          if (props.onSubmit) {
+                            const updatedValue = { ...props.value, status: 'sendToPresident' }; // Create a new object with updated status
+                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                          }
+
+                          setTimeout(() => {
+                            closeSnackbar(processingSnack);
+                            const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
+                            setTimeout(() => closeSnackbar(processedSnack), 500);
+                          }, 500);
+                        }}>Submit to President</Button>
+                    </>
+                  ) : null}
+
                 &nbsp;
                   <Button
                     variant='contained'
