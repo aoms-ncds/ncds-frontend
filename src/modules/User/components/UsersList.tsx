@@ -131,25 +131,25 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 execDelete(renderCellParams.row._id);
               },
             },
-            renderCellParams.row.status == UserLifeCycleStates.ACTIVE
-              ? {
-                  id: 'deactivate',
-                  text: 'Deactivate',
-                  component: Link,
-                  icon: NoAccountsIcon,
-                  onClick: () => {
-                    deactivateWorker(renderCellParams.row._id);
-                  },
-                }
-              : {
-                  id: 'activate',
-                  text: 'Activate',
-                  component: Link,
-                  icon: PersonIcon,
-                  onClick: () => {
-                    activateWorker(renderCellParams.row._id);
-                  },
+            renderCellParams.row.status == UserLifeCycleStates.ACTIVE ?
+              {
+                id: 'deactivate',
+                text: 'Deactivate',
+                component: Link,
+                icon: NoAccountsIcon,
+                onClick: () => {
+                  deactivateWorker(renderCellParams.row._id);
                 },
+              } :
+              {
+                id: 'activate',
+                text: 'Activate',
+                component: Link,
+                icon: PersonIcon,
+                onClick: () => {
+                  activateWorker(renderCellParams.row._id);
+                },
+              },
           ]}
         />
       ),

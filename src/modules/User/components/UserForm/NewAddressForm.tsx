@@ -12,7 +12,7 @@ const NewAddressForm = (
         onChange: (checked: boolean) => void;
       };
     }
-  >
+  >,
 ) => {
   return (
     <>

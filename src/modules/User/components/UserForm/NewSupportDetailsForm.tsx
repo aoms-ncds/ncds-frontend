@@ -9,7 +9,7 @@ const NewSupportDetailsForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
     }
-  >
+  >,
 ) => {
   const [designations, setDesignations] = useState<Designation[] | null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);

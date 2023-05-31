@@ -760,8 +760,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <InputAdornment position="end">
                           <IconButton
                             onClick={() => {
-                              remark.remark
-                                ? FRServices.addRemarks(remark)
+                              remark.remark ?
+                                FRServices.addRemarks(remark)
                                     .then((res) => {
                                       setRemarks((remarks) => [...remarks, res.data]);
                                       setRemark((remark) => ({
@@ -775,8 +775,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                         variant: 'error',
                                         message: error.message,
                                       });
-                                    })
-                                : '';
+                                    }) :
+                                '';
                             }}
                           >
                             <SendIcon />

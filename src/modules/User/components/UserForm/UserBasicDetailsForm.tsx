@@ -18,7 +18,7 @@ const UserBasicDetailsForm = (
         onChange: (newSpouse: User) => void;
       };
     }
-  >
+  >,
 ) => {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
 

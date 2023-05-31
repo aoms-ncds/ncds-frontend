@@ -1,7 +1,7 @@
 import React from 'react';
 import HomePage from '..';
-import LoginPage from '../LoginPage';
 import { Home as HomeIcon } from '@mui/icons-material';
+import LoginPage from '../../User/Login';
 
 const homePageRoutes: ModuleRoute = {
   base: '',

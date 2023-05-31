@@ -7,7 +7,7 @@ const NewUserSupportStructureForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
     }
-  >
+  >,
 ) => {
   return (
     <>

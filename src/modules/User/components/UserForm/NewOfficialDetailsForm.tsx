@@ -10,7 +10,7 @@ const NewOfficialDetailsForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
     }
-  >
+  >,
 ) => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
@@ -22,7 +22,7 @@ const NewOfficialDetailsForm = (
         enqueueSnackbar({
           variant: 'error',
           message: error.message,
-        })
+        }),
       );
   }, []);
   return (
@@ -116,7 +116,7 @@ const NewOfficialDetailsForm = (
                 enqueueSnackbar({
                   variant: 'error',
                   message: error.message,
-                })
+                }),
               );
           }}
           renderInput={(params) => (
