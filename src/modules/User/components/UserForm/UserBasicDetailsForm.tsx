@@ -123,7 +123,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
-            value={props.value.gender}
+            value={props.value.gender }
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -156,8 +156,8 @@ const UserBasicDetailsForm = (
             name="martialStatus"
             row
           >
-            <FormControlLabel value="Married" control={<Radio />} label="Married" />
-            <FormControlLabel value="Unmarried" control={<Radio />} label="Unmarried" />
+            <FormControlLabel value='Married' control={<Radio />} label="Married" />
+            <FormControlLabel value='Unmarried' control={<Radio />} label="Unmarried" />
           </RadioGroup>
         </FormControl>
       </Grid>
