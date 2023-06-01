@@ -1,5 +1,6 @@
 import React from 'react';
 import Profile from '../Profile';
+import PermissionManager from '../PermissionManager';
 
 const usersPageRoutes: ModuleRoute = {
   base: '/users',
@@ -17,6 +18,13 @@ const usersPageRoutes: ModuleRoute = {
       title: 'View Profile',
       path: '/:userKind/:userId',
       element: <Profile />,
+      private: true,
+      requiredAccessRights: ['string'],
+    },
+    {
+      title: 'Permission Manager',
+      path: '/:userId/permission_manager',
+      element: <PermissionManager />,
       private: true,
       requiredAccessRights: ['string'],
     },
