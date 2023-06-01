@@ -53,7 +53,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] =
-    useState<MainCategory>();
+    useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] =
     useState<SubCategory1>();
   const [selectedSubCategory2, setselectedSubCategory2] =
@@ -86,6 +86,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     setShowAddParticulardialog(false);
   };
   useEffect(() => {
+    const selectedMainCategoryObj = mainCategorys?.find((category) => category.name === props.value.mainCategory);
+    setSelectedMainCategory(selectedMainCategoryObj);
     FRServices.getPurposes()
       .then((res) => {
         console.log(res);
@@ -244,12 +246,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  //  value={props.value.FRdate}
-                  //  onChange={(newDate) => props.onChange({
-                  //    ...props.value,
-                  //    FRdate: newDate ?? undefined,
-                  //  })}
-                  // format='DD/MM/YYYY'
+                  value={props.value.FRdate}
+                  onChange={(newDate) => props.onChange({
+                    ...props.value,
+                    FRdate: newDate ?? undefined,
+                  })}
+                  format='DD/MM/YYYY'
 
 
                 />

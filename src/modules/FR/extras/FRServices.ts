@@ -10,7 +10,7 @@ export default {
   getAll: () => getStandardResponse<Frrequest[]>(
     axios.get('/fr/'),
   ),
-  getById: (fRId: string) => getStandardResponse<FR>(axios.get('/fr/' + fRId)),
+
   deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete('/fr/particulars/' + particularid)),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
@@ -43,6 +43,16 @@ export default {
   addParticulars: ( particularData: Particulars) => getStandardResponse<Particulars>(
     axios.post('/fr/particulars', particularData),
   ),
+  getById: (fRId: string) =>
+    getStandardResponse<FR>(
+      axios.get('/fr/' + fRId),
+      (data) => ({
+        ...data,
+        FRdate: moment(data.FRdate),
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+      }),
+    ),
   // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
   //   axios.post('/fr/', frRequest),
   // ),
