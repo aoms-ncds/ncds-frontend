@@ -1,17 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import { Grid } from '@mui/material';
 import FRCountCard from './components/FRCountCard';
+import FRServices from './extras/FRServices';
+import FRLifeCycleStates from './extras/FRLifeCycleStates';
 const frDashboard = () => {
+  const [appliedFrCount, setappliedFrCount] = useState<number | null>(null);
+  const [approvedfrCount, setapprovedfrCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    FRServices.getCount()
+      .then((res) => setappliedFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.FR_APPROVED })
+      .then((res) => setapprovedfrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <CommonPageLayout title="FR Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={140} secondaryText="Applied" color="#29cc39" />
+          <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#29cc39" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={140} secondaryText={'Approved'} color={'#0dcaf0'} />
+          <FRCountCard count={approvedfrCount?.toString()} secondaryText={'Approved'} color={'#0dcaf0'} />
         </Grid>
       </Grid>
       <br />
