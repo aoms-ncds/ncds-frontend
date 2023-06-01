@@ -2,7 +2,7 @@ import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import React from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FRCountCard = (props: { count: number; secondaryText: string; color: string }) => {
+const FRCountCard = (props: { count?: string; secondaryText: string; color: string }) => {
   return (
     <Card
       sx={{

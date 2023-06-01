@@ -3,9 +3,9 @@ import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers
 import { categories, purposes, sanctionedAsPers } from './FRConfig';
 import axios from 'axios';
 export default {
-  getCount: () => getStandardResponse<number>(
-    axios.get('/fr/count'),
-  ),
+
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions })),
+
   getAll: () => getStandardResponse<Frrequest[]>(
     axios.get('/fr/'),
   ),
