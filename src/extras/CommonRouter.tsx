@@ -52,6 +52,7 @@ const Router = () => {
                     page.element
                 )
             ),
+          // element: page.element,
         })),
       ),
     ),
