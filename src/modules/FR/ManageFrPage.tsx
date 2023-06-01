@@ -6,12 +6,13 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add a
 import { Link } from 'react-router-dom';
 import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import { Frrequest, Remark, CreatableRemark, Particulars } from './extras/FRTypes';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
@@ -21,6 +22,7 @@ const ManageFrPage = () => {
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
   });
+  const [particulars, setParticulars] = useState<Particulars[]>([]);
 
   useEffect(() => {
     FRServices.getAll()
@@ -115,14 +117,37 @@ const ManageFrPage = () => {
       ),
     },
     { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'FRno', headerName: 'FR No', width: 70 },
-    { field: 'FRdate', headerName: 'FR Date', width: 130 },
-    { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
+    { field: '_id', headerName: 'FR No', width: 70 },
+    { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
+      <p> {props.row.date}</p>
+    ), width: 130 },
+    { field: 'divisionName', headerName: 'Division Name', renderCell: (props: any) => (
+      <p> {props.row.purposeDivision?.DivisionDetails.name}</p>
+    ), width: 130 },
+    { field: 'subdivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
+      <p> {props.row.purposeSubdivision?.name}</p>
+    ), width: 130 },
+    { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
+      <p> {props.row.mainCategory}</p>
+    ), width: 130 },
+    {
+      field: 'requestedAmount',
+      headerName: 'Requested Amount',
+      width: 130,
+      renderCell: (params: GridCellParams) => {
+        const frRequest = params.row as Frrequest;
+        const particularAmount = frRequest.Particulars.reduce(
+          (total, particular) => total + Number(particular.requestedAmount),
+          0,
+        );
+        return <p>{particularAmount}</p>;
+      },
+    },
+
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
+    { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
+      <p> {props.row.sanctionedAsPer}</p>
+    ), width: 130 },
   ];
 
   return (
