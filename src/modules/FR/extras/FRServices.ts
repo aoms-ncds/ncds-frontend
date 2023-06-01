@@ -10,7 +10,6 @@ export default {
   getAll: () => getStandardResponse<Frrequest[]>(
     axios.get('/fr/'),
   ),
-
   deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete('/fr/particulars/' + particularid)),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({

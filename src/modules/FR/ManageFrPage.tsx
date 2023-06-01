@@ -122,7 +122,7 @@ const ManageFrPage = () => {
       ),
     },
     { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'FRno', headerName: 'FR No', width: 70 },
+    { field: '_id', headerName: 'FR No', width: 70 },
     { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
       <p> {props.row.date}</p>
     ), width: 130 },
@@ -132,7 +132,6 @@ const ManageFrPage = () => {
     { field: 'subdivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeSubdivision?.name}</p>
     ), width: 130 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
     { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
       <p> {props.row.mainCategory}</p>
     ), width: 130 },
