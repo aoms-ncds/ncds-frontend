@@ -4,7 +4,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 
 const FRParticularList = () => {
-  const [Particulars, setParticulars] = useState<Particulars[]>();
+  const [Particulars, setParticulars] = useState<Particular[]>();
   useEffect(() => {
     FRServices.getParticulars()
       .then((res) => {

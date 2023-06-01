@@ -38,7 +38,7 @@ export default {
       timeout: 500,
     }),
   ),
-  addParticulars: ( particularData: Particulars) => getStandardResponse<Particulars>(
+  addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', particularData),
   ),
   getById: (fRId: string) =>
@@ -90,8 +90,8 @@ export default {
       }),
     );
   },
-  getParticulars: () => getStandardResponse<Particulars[]>(
-    dummyRequest<Particulars[]>({
+  getParticulars: () => getStandardResponse<Particular[]>(
+    dummyRequest<Particular[]>({
       data: [{
         _id: '1',
         mainCategory: 'main',

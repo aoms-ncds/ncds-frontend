@@ -131,9 +131,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [Particulars, setParticulars] = useState<Particulars[]>([]);
-  const [particularDetails, setParticularDetails] = useState<Particulars>({
-    _id: '',
+  const [Particulars, setParticulars] = useState<Particular[]>([]);
+  const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
     subCategory1: '',
     subCategory2: '',
@@ -238,7 +237,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       variant: 'info',
     });
 
-    FRServices.addParticulars(particularDetails)
+    FRServices.addParticulars(newParticular)
       .then((res) => {
         console.log(res.data);
         setParticulars((prevParticulars) => [...prevParticulars, res.data]);
@@ -248,7 +247,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           message: res.message,
           variant: 'success',
         });
-        setParticularDetails(() => ({
+        setNewParticular(() => ({
           _id: '',
           mainCategory: '',
           subCategory1: '',
@@ -452,7 +451,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   getOptionLabel={(mainCategory) => mainCategory.name}
                   onChange={(e, selectedMainCategory) => {
                     if (selectedMainCategory) {
-                      setParticularDetails((particularDetails) => ({
+                      setNewParticular((particularDetails) => ({
                         ...particularDetails,
                         mainCategory: selectedMainCategory.name,
                       }));
@@ -487,7 +486,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     </TableHead>
                     <TableBody>
                       {Particulars &&
-                        Particulars.map((item) => (
+                        Particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th">
                               <IconButton>
@@ -497,7 +496,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                 <FileIcon />
                               </IconButton>
                             </TableCell>
-                            <TableCell align="center">{item._id}</TableCell>
+                            <TableCell align="center">{index+1}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
@@ -707,7 +706,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           getOptionLabel={(subcategory2) => subcategory2.name}
                           onChange={(_e, selectedSubCategory1) => {
                             if (selectedSubCategory1) {
-                              setParticularDetails((particularDetails) => ({
+                              setNewParticular((particularDetails) => ({
                                 ...particularDetails,
                                 subCategory1: selectedSubCategory1.name,
                               }));
@@ -725,7 +724,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
                           onChange={(_e, selectedSubCategory2) => {
                             if (selectedSubCategory2) {
-                              setParticularDetails((particularDetails) => ({
+                              setNewParticular((particularDetails) => ({
                                 ...particularDetails,
                                 subCategory2: selectedSubCategory2.name,
                               }));
@@ -743,7 +742,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           getOptionLabel={(subCategory3) => subCategory3.name}
                           onChange={(e, selectedSubCategory3) => {
                             if (selectedSubCategory3) {
-                              setParticularDetails((particularDetails) => ({
+                              setNewParticular((particularDetails) => ({
                                 ...particularDetails,
                                 subCategory3: selectedSubCategory3.name,
                                 narration: selectedSubCategory3.narration,
@@ -759,9 +758,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <TextField
                           label="Quantity"
                           type="number"
-                          value={particularDetails?.quantity}
+                          value={newParticular?.quantity}
                           onChange={(e) =>
-                            setParticularDetails((particularDetails) => ({
+                            setNewParticular((particularDetails) => ({
                               ...particularDetails,
                               quantity: e.target.value,
                             }))
@@ -771,12 +770,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       </Grid>
                       <Grid item md={12}>
                         <Autocomplete
-                          value={particularDetails.month}
+                          value={newParticular.month}
                           options={monthNames ?? []}
                           getOptionLabel={(monthName) => monthName}
                           onChange={(e, selectedMonth) => {
                             if (selectedMonth) {
-                              setParticularDetails((particularDetails) => ({
+                              setNewParticular((particularDetails) => ({
                                 ...particularDetails,
                                 month: selectedMonth,
                               }));
@@ -790,9 +789,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <TextField
                           label="Requested Amount"
                           type="number"
-                          value={particularDetails?.requestedAmount}
+                          value={newParticular?.requestedAmount}
                           onChange={(e) =>
-                            setParticularDetails((particularDetails) => ({
+                            setNewParticular((particularDetails) => ({
                               ...particularDetails,
                               requestedAmount: e.target.value,
                             }))
@@ -804,11 +803,11 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       <Grid item md={12}>
                         <TextField
                           label="Narration"
-                          value={particularDetails.narration}
+                          value={newParticular.narration}
                           multiline
                           maxRows={4}
                           onChange={(e) =>
-                            setParticularDetails((particularDetails) => ({
+                            setNewParticular((particularDetails) => ({
                               ...particularDetails,
                               narration: e.target.value,
                             }))

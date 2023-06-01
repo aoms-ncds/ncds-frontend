@@ -13,7 +13,7 @@ declare global{
     requestAmount: string;
     lastUpdateDate: Moment;
     sanction: string;
-    Particulars:Particulars[];
+    Particulars:Particular[];
   }
   interface FR extends MongooseDocument {
     _id: string;
@@ -28,7 +28,7 @@ declare global{
     requestedAmount: number;
     mainCategory:string;
     sanctionedAmount: number;
-    Particulars?:Particulars[];
+    Particulars?:Particular[];
     sanctionedAsPer?:string;
     sanctionedBank?:string;
     status?:string;
@@ -129,7 +129,7 @@ declare global{
       name: string;
       narration: string;
     }
-    interface Particulars {
+    interface Particular {
       _id: string;
       mainCategory: string;
       subCategory1: string;
@@ -140,6 +140,7 @@ declare global{
       requestedAmount: string;
       narration: string;
     }
+    type CreatableParticular = Creatable<Particular>;
 
     interface Remark extends MongooseDocument {
       remark: string;

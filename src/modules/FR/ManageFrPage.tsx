@@ -21,7 +21,7 @@ const ManageFrPage = () => {
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
   });
-  const [particulars, setParticulars] = useState<Particulars[]>([]);
+  const [particulars, setParticulars] = useState<Particular[]>([]);
 
   useEffect(() => {
     FRServices.getAll()
