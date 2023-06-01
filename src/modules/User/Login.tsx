@@ -1,12 +1,15 @@
 import { Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/default
 import HomeServices from './extras/HomeServices';
+import { useAuth } from '../../hooks/Authentication';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+
   const [loginCred, setLoginCred] = useState<LoginCredentials>({
     email: '',
     password: '',
@@ -25,7 +28,10 @@ const LoginPage = () => {
         setLoading(false);
         localStorage.setItem('userToken', res.data.token);
         localStorage.setItem('userData', JSON.stringify(res.data.user));
-        navigate('/');
+        setUser(res.data.user as Staff|IWorker);
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectURL = urlParams.get('redirect');
+        navigate(redirectURL ?? '/');
       })
       .catch((err) => {
         console.log(err);
@@ -50,6 +56,12 @@ const LoginPage = () => {
         }
       });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user]);
   return (
     <>
       <CssBaseline />
