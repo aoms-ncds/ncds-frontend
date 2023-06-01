@@ -67,45 +67,55 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: moment(data.basicDetails.dateOfJoining),
-        dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
-        dateOfCurrentDivisionJoining: moment(data.basicDetails.dateOfCurrentDivisionJoining),
-        dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
+        dateOfJoining: data.basicDetails.dateOfJoining? moment(data.basicDetails.dateOfJoining):undefined,
+        dateOfLeaving: data.basicDetails.dateOfLeaving?moment(data.basicDetails.dateOfLeaving):undefined,
+        dateOfCurrentDivisionJoining: data.basicDetails.dateOfCurrentDivisionJoining? moment(data.basicDetails.dateOfCurrentDivisionJoining):undefined,
+        dateOfPreviousDivisionLeaving: data.basicDetails.dateOfPreviousDivisionLeaving?moment(data.basicDetails.dateOfPreviousDivisionLeaving):undefined,
       },
       spouse: !data.spouse ? undefined : {
         ...data.spouse,
-        dateOfBirth: moment(data.spouse.dateOfBirth),
+        dateOfBirth: data.spouse.dateOfBirth?moment(data.spouse.dateOfBirth):undefined,
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       children: !data.children ? undefined : data.children.map((child: any) => ({
         ...child,
-        dateOfBirth: moment(child.dateOfBirth),
+        dateOfBirth: child.dateOfBirth? moment(child.dateOfBirth):undefined,
       })),
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
-  /**
-   * Retrieves a worker by ID.
-   * @param {string} workerId - The ID of the worker to retrieve.
-   * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
-   */
-  getByIdWithSpouse: (workerId: string) =>
-    getStandardResponse<IWorker | null>(axios.get(`/workers/${workerId}/spouse`), (data) => ({
-      ...data,
-      basicDetails: {
-        ...data.basicDetails,
-        dateOfBirth: moment(data.basicDetails.dateOfBirth),
-      },
-      officialDetails: {
-        ...data.officialDetails,
-        dateOfJoining: moment(data.basicDetails.dateOfJoining),
-        dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
-        dateOfCurrentDivisionJoining: moment(data.basicDetails.dateOfCurrentDivisionJoining),
-        dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
-      },
-      createdAt: moment(data.createdAt),
-      updatedAt: moment(data.updatedAt),
-    })),
+
+  // /**
+  //  * Retrieves a worker by ID.
+  //  * @param {string} workerId - The ID of the worker to retrieve.
+  //  * @return {Promise<StandardResponse<IWorker|null>>} A promise that resolves to the response containing the retrieved worker or null if not found.
+  //  */
+  // getByIdWithSpouse: (workerId: string) =>
+  //   getStandardResponse<IWorker | null>(axios.get(`/workers/${workerId}/spouse`), (data) => ({
+  //     ...data,
+  //     basicDetails: {
+  //       ...data.basicDetails,
+  //       dateOfBirth: moment(data.basicDetails.dateOfBirth),
+  //     },
+  //     officialDetails: {
+  //       ...data.officialDetails,
+  //       dateOfJoining: moment(data.basicDetails.dateOfJoining),
+  //       dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
+  //       dateOfCurrentDivisionJoining: moment(data.basicDetails.dateOfCurrentDivisionJoining),
+  //       dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
+  //     },
+  //     spouse: !data.spouse ? undefined : {
+  //       ...data.spouse,
+  //       dateOfBirth: moment(data.spouse.dateOfBirth),
+  //     },
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     children: !data.children ? undefined : data.children.map((child: any) => ({
+  //       ...child,
+  //       dateOfBirth: moment(child.dateOfBirth),
+  //     })),
+  //     createdAt: moment(data.createdAt),
+  //     updatedAt: moment(data.updatedAt),
+  //   })),
 
   /**
    * Approves a worker.

@@ -17,13 +17,13 @@ const NewAddressForm = (
   return (
     <>
       <Grid item xs={props.options?.copyAddressCheckBox !== undefined ? 6 : 12}>
-        <Divider sx={{ mt: '10px' }} textAlign="left">
+        <Divider sx={{ mt: '10px' }} textAlign="left"><b>
           {props.options?.title ?? 'Address'}
-        </Divider>
+        </b></Divider>
       </Grid>
       {props.options?.copyAddressCheckBox !== undefined && (
         <Grid item xs={6}>
-          <Divider textAlign="left">
+          <Divider textAlign="right">
             {props.options?.copyAddressCheckBox !== undefined && (
               <FormControlLabel control={<Checkbox onChange={(e) => props.options?.copyAddressCheckBox?.onChange(e.target.checked)} />} label={props.options.copyAddressCheckBox.label} />
             )}
@@ -33,7 +33,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Building Name"
-          value={props.value.buildingName}
+          value={props.value?.buildingName}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -47,7 +47,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Street"
-          value={props.value.street}
+          value={props.value?.street}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -61,7 +61,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="City"
-          value={props.value.city}
+          value={props.value?.city}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -75,7 +75,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="State"
-          value={props.value.state}
+          value={props.value?.state}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -89,7 +89,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Country"
-          value={props.value.country}
+          value={props.value?.country}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -103,7 +103,7 @@ const NewAddressForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Pin Code"
-          value={props.value.pincode}
+          value={props.value?.pincode}
           onChange={(e) =>
             props.onChange({
               ...props.value,

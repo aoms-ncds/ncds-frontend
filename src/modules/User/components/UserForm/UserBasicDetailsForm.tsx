@@ -123,7 +123,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
-            value={props.value.gender}
+            value={props.value.gender }
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -156,8 +156,8 @@ const UserBasicDetailsForm = (
             name="martialStatus"
             row
           >
-            <FormControlLabel value="Married" control={<Radio />} label="Married" />
-            <FormControlLabel value="Unmarried" control={<Radio />} label="Unmarried" />
+            <FormControlLabel value='Married' control={<Radio />} label="Married" />
+            <FormControlLabel value='Unmarried' control={<Radio />} label="Unmarried" />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -170,8 +170,7 @@ const UserBasicDetailsForm = (
               if (newValue) {
                 props.options?.spouse.onChange(newValue);
               }
-            }}
-            label={'Spouse of another User'}
+            }} label={'Spouse Of Another User'}
             required={false}
             textFieldProps={{ variant: props.options?.textField?.variant }}
           />
@@ -247,7 +246,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Alternative PhoneNo"
+          label="Alternative Phone"
           type="tel"
           value={props.value.alternativePhone}
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}

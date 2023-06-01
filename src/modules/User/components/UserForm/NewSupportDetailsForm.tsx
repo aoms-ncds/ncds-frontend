@@ -47,7 +47,7 @@ const NewSupportDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Total Number of years in Ministry"
+          label="Total Number Of Years In Ministry"
           type="number"
           value={props.value.totalNoOfYearsInMinistry}
           onChange={(e) =>

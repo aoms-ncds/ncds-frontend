@@ -70,12 +70,12 @@ declare global {
     options?: Options;
   }
 
-  export type RecursivePartial<T> = {
+ type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
   };
 
-  export type Language = (typeof languages)[number];
-  export interface Address {
+  type Language = (typeof languages)[number];
+  interface Address {
     buildingName?: string;
     street?: string;
     city?: string;

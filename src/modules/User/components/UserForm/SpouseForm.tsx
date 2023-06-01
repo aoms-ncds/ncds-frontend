@@ -16,7 +16,7 @@ const SpouseForm = (
     <>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="First name"
+          label="First Name"
           value={props.value.firstName}
           onChange={(e) =>
             props.onChange({
@@ -32,7 +32,7 @@ const SpouseForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Last name"
+          label="Last Name"
           value={props.value.lastName}
           onChange={(e) =>
             props.onChange({
@@ -64,7 +64,7 @@ const SpouseForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Phone number"
+          label="Phone Number"
           type="tel"
           value={props.value.phone}
           onChange={(e) =>
