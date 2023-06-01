@@ -191,8 +191,8 @@ const UserBasicDetailsForm = (
           id="mlanguges"
           options={languages}
           getOptionLabel={(option) => option}
-          value={props.value.motherTounge}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTounge: newvalue ?? undefined })}
+          value={props.value.motherTongue}
+          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTongue: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Mother Tongue" variant={props.options?.textField?.variant} />}
         />
       </Grid>

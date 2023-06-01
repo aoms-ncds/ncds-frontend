@@ -26,7 +26,7 @@ export default {
               field: 'Missionary',
               martialStatus: 'Married',
               highestQualification: 'Ph.D.',
-              motherTounge: 'English',
+              motherTongue: 'English',
               communicationLanguage: 'English',
               knownLanguages: ['English', 'Malayalam - മലയാളം'],
               email: 'abcd@gmail.com',
