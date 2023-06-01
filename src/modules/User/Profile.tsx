@@ -143,7 +143,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.dateOfCurrentDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>No of Churches:</Typography> {user?.officialDetails.noOfChurches} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value={currentTab} index={2}>
@@ -160,7 +160,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse Allowance: </Typography> {user?.supportStructure.spouseAllowance} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Positional Allowance: </Typography> {user?.supportStructure.positionalAllowance} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special Allowance: </Typography> {user?.supportStructure.specialAllowance} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact Deduction: </Typography> {user?.supportStructure.impactDeduction} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Miscellaneous Deduction: </Typography> {user?.supportStructure.impactDeduction} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure.telAllowance} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION Missionary Fund: </Typography> {user?.supportStructure.PIONMissionaryFund} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>MUT Deduction: </Typography> {user?.supportStructure.MUTDeduction} </Grid>

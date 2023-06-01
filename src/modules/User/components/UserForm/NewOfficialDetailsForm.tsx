@@ -200,7 +200,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="No. Of Churches"
+          label="Churches Planted"
           type={'number'}
           value={props.value.noOfChurches}
           onChange={(e) =>
