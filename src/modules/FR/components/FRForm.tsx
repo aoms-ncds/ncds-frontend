@@ -21,6 +21,7 @@ import {
   TableContainer,
   IconButton,
   InputAdornment,
+  FormControl,
 } from '@mui/material';
 import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -121,14 +122,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
-  const [selectedMainCategory, setSelectedMainCategory] =
-    useState<MainCategory | undefined>();
-  const [selectedSubCategory1, setSelectedSubCategory1] =
-    useState<SubCategory1>();
-  const [selectedSubCategory2, setselectedSubCategory2] =
-    useState<SubCategory2>();
-  const [selectedSubCategory3, setSelectedSubCategory3] =
-    useState<SubCategory3>();
+  const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1>();
+  const [selectedSubCategory2, setselectedSubCategory2] = useState<SubCategory2>();
+  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Particulars, setParticulars] = useState<Particulars[]>([]);
@@ -150,7 +147,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
   });
-
 
   const handleClose = () => {
     setShowAddParticulardialog(false);
@@ -262,7 +258,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         props.onChange({
           ...props.value,
           Particulars: [...(props.value.Particulars || []), res.data],
-
         });
       })
       .catch((err) => {
@@ -283,12 +278,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     const updatedParticulars = Particulars.filter((item) => item._id !== particularid);
     setParticulars(updatedParticulars);
     FRServices.deleteParticulars(particularid)
-    .then((res) => {
-      enqueueSnackbar({
-        message: res.message,
-        variant: 'success',
-      });
-    })
+      .then((res) => {
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
       .catch((err) => {
         console.log(err);
         enqueueSnackbar({
@@ -298,9 +293,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       });
     // Implement your delete logic here, such as making an API request
   };
-  const totalRequestedAmount =
-  Particulars &&
-  Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
     <div>
       <Container>
@@ -318,15 +311,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <DatePicker
                   label="Date"
                   value={props.value.FRdate}
-                  onChange={(newDate) => props.onChange({
-                    ...props.value,
-                    FRdate: newDate ?? undefined,
-                  })}
-                  format='DD/MM/YYYY'
-
-
+                  onChange={(newDate) =>
+                    props.onChange({
+                      ...props.value,
+                      FRdate: newDate ?? undefined,
+                    })
+                  }
+                  format="DD/MM/YYYY"
                 />
-
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
@@ -344,8 +336,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   renderInput={(params) => <TextField {...params} label="Requisition For" required />}
                   fullWidth
                 />
-
-
               </Grid>
               {props.value.purpose === 'Worker' ? (
                 <>
@@ -377,19 +367,13 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     options={subDivisions ?? []}
                     value={props.value.purposeSubdivision}
                     getOptionLabel={(subDiv) => subDiv.name}
-                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal??undefined })}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Subdivision"
-                        required
-                      />
-                    )}
+                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
+                    renderInput={(params) => <TextField {...params} label="Subdivision" required />}
                   />
                 </Grid>
               ) : null}
               {props.value.purpose === 'Division' ? (
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeDivision}
                     options={divisions ?? []}
@@ -538,31 +522,29 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} >
-                <InputLabel id="demo-simple-select-standard-label">
-                  Sanctioned Bank
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  label="Sanctioned Bank"
-                  value={props.value.sanctionedBank || ''}
-                  onChange={(e) =>
-                    props.onChange({
-                      ...props.value,
-                      sanctionedBank: e.target.value,
-                    })
-                  }
-                  required
-                  fullWidth
-                >
-                  <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                  <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
+                  <Select
+                    labelId="sanctioned_bank"
+                    label="Sanctioned Bank"
+                    value={props.value.sanctionedBank || ''}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        sanctionedBank: e.target.value,
+                      })
+                    }
+                    required
+                  >
+                    <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                    <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
 
-                  {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                </Select>
+                    {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={6}>
                 <Autocomplete
                   value={props.value.sanctionedAsPer || ''}
                   options={sanctionedAsPer ?? []}
@@ -575,12 +557,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       });
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField {...params} label=" Sanctioned As Per" required />
-                  )}
+                  renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required />}
                   fullWidth
                 />
-
               </Grid>
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
@@ -606,14 +585,14 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   >
                     Remark
                   </Button>
-                &nbsp;
+                  &nbsp;
                   {props.action === 'view' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <Button
-                        variant='contained'
-                        color='success'
+                        variant="contained"
+                        color="success"
                         onClick={() => {
                           const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
                           if (props.onSubmit) {
@@ -625,18 +604,20 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
                             setTimeout(() => closeSnackbar(approvedSnack), 500);
                           }, 500);
-                        }}>Approve</Button>
-                &nbsp;
+                        }}
+                      >
+                        Approve
+                      </Button>
+                      &nbsp;
                     </>
                   ) : null}
-
                   {props.action === 'view' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <Button
-                        variant='contained'
-                        color='error'
+                        variant="contained"
+                        color="error"
                         onClick={() => {
                           const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
                           if (props.onSubmit) {
@@ -648,17 +629,19 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
                             setTimeout(() => closeSnackbar(rejectedSnack), 500);
                           }, 500);
-                        }}>Reject</Button>
-                &nbsp;
+                        }}
+                      >
+                        Reject
+                      </Button>
+                      &nbsp;
                     </>
                   ) : null}
-
                   {props.action === 'view' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <Button
-                        variant='contained'
-                        color='warning'
+                        variant="contained"
+                        color="warning"
                         onClick={() => {
                           const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                           if (props.onSubmit) {
@@ -671,11 +654,13 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
                             setTimeout(() => closeSnackbar(processedSnack), 500);
                           }, 500);
-                        }}>Submit to President</Button>
+                        }}
+                      >
+                        Submit to President
+                      </Button>
                     </>
                   ) : null}
-
-                &nbsp;
+                  &nbsp;
                   <Button
                     variant="contained"
                     color="info"
@@ -683,7 +668,10 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       if (props.onSubmit) {
                         props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
                       }
-                    }}>Submit </Button>
+                    }}
+                  >
+                    Submit{' '}
+                  </Button>
                 </div>
               </Grid>
 
