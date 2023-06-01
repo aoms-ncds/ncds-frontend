@@ -123,7 +123,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
-            value={props.value.gender }
+            value={props.value.gender ?? null}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -131,7 +131,6 @@ const UserBasicDetailsForm = (
               })
             }
             name="Gender"
-            // defaultValue={'Male'}
             row
           >
             <FormControlLabel value="Male" control={<Radio />} label="Male" />
@@ -146,7 +145,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="martialStatus">Martial Status</FormLabel>
           <RadioGroup
             aria-labelledby="martialStatus"
-            value={props.value.martialStatus}
+            value={props.value.martialStatus ?? null}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -191,7 +190,7 @@ const UserBasicDetailsForm = (
           id="mlanguges"
           options={languages}
           getOptionLabel={(option) => option}
-          value={props.value.motherTongue}
+          value={props.value.motherTongue ?? null}
           onChange={(e, newvalue) => props.onChange({ ...props.value, motherTongue: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Mother Tongue" variant={props.options?.textField?.variant} />}
         />
@@ -202,7 +201,7 @@ const UserBasicDetailsForm = (
           id="Clanguges"
           options={languages}
           getOptionLabel={(option) => option}
-          value={props.value.communicationLanguage}
+          value={props.value.communicationLanguage ?? null}
           onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Communication Language" variant={props.options?.textField?.variant} />}
         />
@@ -214,7 +213,7 @@ const UserBasicDetailsForm = (
           id="knownLanguages"
           options={languages}
           getOptionLabel={(option) => option}
-          value={props.value.knownLanguages}
+          value={props.value.knownLanguages??[]}
           onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField?.variant} />}
         />
