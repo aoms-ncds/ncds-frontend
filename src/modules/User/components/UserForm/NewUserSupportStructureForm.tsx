@@ -93,7 +93,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Impact Deduction"
+          label="Miscellaneous Deduction"
           type="number"
           value={props.value.impactDeduction}
           onChange={(e) =>
