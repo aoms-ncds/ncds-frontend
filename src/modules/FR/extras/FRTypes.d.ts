@@ -23,7 +23,7 @@ declare global{
     purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
     purposeDivision?: Divisions;
-    purposeCoordinator?: IWorker;
+    purposeCoordinator?: Staff;
     purposeOthers?: string;
     requestedAmount: number;
     mainCategory:string;
@@ -74,7 +74,6 @@ declare global{
     coordinatorName: string | undefined;
   }
 
-  declare global {
     interface Frrequest {
       _id: string;
       FRno: string;
@@ -150,5 +149,3 @@ declare global{
       createdBy?: IWorker;
     }
   }
-
-}

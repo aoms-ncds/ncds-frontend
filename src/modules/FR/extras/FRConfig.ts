@@ -1,4 +1,4 @@
-import { FRPurpose, SanctionedAsPer } from './FRTypes';
+
 
 export const categories = [
   {
