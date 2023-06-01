@@ -14,7 +14,7 @@ declare global {
     field?: WorkerField;
     martialStatus?: MaritalStatus;
     highestQualification?: string;
-    motherTounge?: Language;
+    motherTongue?: Language;
     communicationLanguage?: Language;
     knownLanguages?: Language[];
     email: string;
