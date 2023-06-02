@@ -23,12 +23,12 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       residingAddress: {},
     },
     officialDetails: {
-      remarks: '',
+      dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
+      remarks: 'Lorem ipsum dolor sit amet.',
       selfSupport: true,
-      dateOfCurrentDivisionJoining: moment(),
-      dateOfPreviousDivisionLeaving: moment(),
-      noOfChurches: 5,
       status: 'Ministering',
+      divisionHistory: [],
+      noOfChurches: 5,
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
