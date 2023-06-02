@@ -8,7 +8,7 @@ const settingsRoutes: ModuleRoute = {
   base: '/settings',
   pages: [
     {
-      title: 'Settings Dashboard',
+      title: 'Settings ',
       path: '/',
       element: <SettingsDashboard />,
       private: true,
@@ -18,13 +18,14 @@ const settingsRoutes: ModuleRoute = {
     },
     {
       title: 'Languages',
-      path: '/Languages',
+      path: '/languages',
       element: <Languages />,
       private: true,
       requiredAccessRights: ['string'],
       showInDrawer: false,
       icon: <Lang />,
     },
+
   ],
 };
 export default settingsRoutes;

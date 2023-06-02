@@ -1,11 +1,13 @@
-import { getStandardResponse } from '../../../extras/CommonHelpers';
+import moment from 'moment';
+import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 export default {
 
   getAll: (conditions?: { status?: number }) =>
     getStandardResponse<ILanguage[]>(
-      axios.get('/Settings/language/', { params: conditions }),
+      axios.get('/settings/language/', { params: conditions }),
     ),
-
-
+  create: (lang: CreatableLanguage) => getStandardResponse<ILanguage>(
+    axios.post('/settings/language', lang),
+  ),
 };
