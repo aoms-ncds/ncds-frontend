@@ -25,10 +25,10 @@ const StaffFormPage = (props: StaffFormPageProps) => {
     officialDetails: {
       remarks: '',
       selfSupport: true,
-      dateOfCurrentDivisionJoining: moment(),
-      dateOfPreviousDivisionLeaving: moment(),
-      noOfChurches: 5,
-      status: 'Ministering',
+      // dateOfCurrentDivisionJoining: moment(),
+      // dateOfPreviousDivisionLeaving: moment(),
+      // noOfChurches: 5,
+      // status: 'Ministering',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
