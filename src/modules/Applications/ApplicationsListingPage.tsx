@@ -14,7 +14,7 @@ const ApplicationsListingPage = () => {
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     name: '',
     reason: '',
-    status: '',
+    status: "Not Aproved",
   });
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const ApplicationsListingPage = () => {
   ];
 
   return (
-    <CommonPageLayout title="Manage Staff">
+    <CommonPageLayout title="Application">
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -89,14 +89,15 @@ const ApplicationsListingPage = () => {
       <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form
-          onSubmit={() => {
+          onSubmit={(e) => {
+            e.preventDefault();
             const snackbarId = enqueueSnackbar({
               message: action === 'add' ? 'Creating Request' : 'Updating Request',
               variant: 'info',
             });
             ApplicationServices.create(applicationFormState)
               .then((res) => {
-                console.log(res);
+                console.log(res,"another Ressssssssss");
                 setShowApplicationFormDialog(false);
                 closeSnackbar(snackbarId);
                 enqueueSnackbar({
@@ -135,16 +136,17 @@ const ApplicationsListingPage = () => {
                     fullWidth
                     required
                   />
+                  
                 </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Reason"
-                    value={applicationFormState.name}
+                    value={applicationFormState.reason}
                     onChange={(e) => {
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       setApplicationFormState(() => ({
                         ...applicationFormState,
-                        name: e.target.value,
+                        reason: e.target.value,
                       }));
                     }}
                     fullWidth

@@ -7,29 +7,36 @@ import moment from 'moment';
 
 const AddNewApplication = () => {
   const [name, setName] = useState<string>('');
-  const [reason, setReason] = useState<string>('');
+  const [reason, setReason] = useState<string>('qq');
   const [action, setaction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',
-    reason: '',
+    reason: '', 
     status: '',
     createdAt: moment(),
     updatedAt: moment(),
   });
+  
   const snackbarId = enqueueSnackbar({
     message: action === 'add' ? 'Creating Request' : 'Updating Request',
     variant: 'info',
   });
 
-  const handleNameChange = (e: any) => {
-    setRequest(e.target.value);
+  const handleNameChange = (event:any) => {
+    setRequest((prevRequest) => ({
+      ...prevRequest,
+      name: event.target.value,
+    }));
   };
-
-  const handleReasonChange = (e: any) => {
-    setRequest(e.target.value);
+  
+  const handleReasonChange = (event:any) => {
+    setRequest((prevRequest) => ({
+      ...prevRequest,
+      reason: event.target.value,
+    }));
   };
-
+  
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
@@ -46,8 +53,8 @@ const AddNewApplication = () => {
       variant: 'info',
     });
     ApplicationServices.create(Request)
-      .then((res) => {
-        console.log(res);
+      .then((res:any) => {
+        console.log(res,"resssssssssssss");
         // handleClose();
         // closeSnackbar(snackbarId);
         enqueueSnackbar({

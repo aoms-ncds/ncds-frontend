@@ -46,7 +46,7 @@ const ApplicationApprovalPage = () => {
               </Typography>
 
               <Typography variant="h5" component="h2">
-                File: &nbsp;{' '}
+                : &nbsp;{' '}
                 <Button component="span" variant="outlined">
                   {' '}
                   View File{' '}
