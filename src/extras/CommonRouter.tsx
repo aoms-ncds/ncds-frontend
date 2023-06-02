@@ -12,6 +12,7 @@ import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes'
 import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import { useAuth } from '../hooks/Authentication';
 import LoadingPage from '../modules/Common/LoadingPage';
+import UserServices from '../modules/User/extras/UserServices';
 
 export const allModuleRoutes = [
   homePageRoutes,
@@ -29,6 +30,7 @@ const Router = () => {
   const { user, setUser } = useAuth();
 
   useEffect(() => {
+    // UserServices.getAll
     setTimeout(() => {
       localStorage.getItem('userData') ?
         setUser(JSON.parse(localStorage.getItem('userData') as string)) :

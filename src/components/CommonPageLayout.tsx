@@ -60,7 +60,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const drawer = (
     <div>
       {/* <Toolbar /> */}
-      <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
+      <center>
+        <img src="/iet_logo.png" alt="" style={{ height: 100 }} />
+      </center>
       <Divider />
       <List>
         {allModuleRoutes
