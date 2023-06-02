@@ -52,20 +52,26 @@ declare global {
     dateOfLeaving?: Moment;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
-    division?: Division;
-    subdivision?: SubDivision;
+    divisionHistory:{
+      division?: Division;
+      subdivision?: SubDivision;
+      dateOfDivisionJoining?: Moment;
+      dateOfDivisionLeaving?: Moment;
+    }[];
     selfSupport: boolean;
     status: OfficialDetailsStatus;
-    dateOfCurrentDivisionJoining?: Moment;
-    dateOfPreviousDivisionLeaving?: Moment;
     noOfChurches: number;
   }
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
-  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave';
+  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|'Deactivated'|null;
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
-    division?: Division;
-    subdivision?: SubDivision;
+    divisionHistory:{
+      division?: Division;
+      subdivision?: SubDivision;
+      dateOfDivisionJoining?: Moment;
+      dateOfDivisionLeaving?: Moment;
+    }[];
     selfSupport?: boolean;
     status?: OfficialDetailsStatus;
     noOfChurches?: number;

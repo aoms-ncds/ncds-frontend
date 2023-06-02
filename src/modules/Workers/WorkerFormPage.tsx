@@ -22,6 +22,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       residingAddress: {},
     },
     officialDetails: {
+      divisionHistory: [],
       remarks: '',
       selfSupport: true,
       // status: '',
