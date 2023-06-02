@@ -46,7 +46,12 @@ export default {
         },
         officialDetails: {
           ...worker.officialDetails,
-          dateOfJoining: moment(worker.basicDetails.dateOfJoining),
+          dateOfJoining: worker.officialDetails.dateOfJoining? moment(worker.officialDetails.dateOfJoining):undefined,
+          divisionHistory: {
+            ...worker.officialDetails.divisionHistory,
+            dateOfDivisionJoining: worker.officialDetails.divisionHistory.dateOfDivisionJoining? moment(worker.officialDetails.divisionHistory.dateOfDivisionJoining):undefined,
+            dateOfDivisionLeaving: worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving?moment(worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving):undefined,
+          },
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
@@ -67,10 +72,12 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.basicDetails.dateOfJoining? moment(data.basicDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.basicDetails.dateOfLeaving?moment(data.basicDetails.dateOfLeaving):undefined,
-        dateOfCurrentDivisionJoining: data.basicDetails.dateOfCurrentDivisionJoining? moment(data.basicDetails.dateOfCurrentDivisionJoining):undefined,
-        dateOfPreviousDivisionLeaving: data.basicDetails.dateOfPreviousDivisionLeaving?moment(data.basicDetails.dateOfPreviousDivisionLeaving):undefined,
+        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        divisionHistory: {
+          ...data.officialDetails.divisionHistory,
+          dateOfDivisionJoining: data.officialDetails.divisionHistory.dateOfDivisionJoining? moment(data.officialDetails.divisionHistory.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: data.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving?moment(data.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving):undefined,
+        },
       },
       spouse: !data.spouse ? undefined : {
         ...data.spouse,
@@ -101,7 +108,7 @@ export default {
   //       ...data.officialDetails,
   //       dateOfJoining: moment(data.basicDetails.dateOfJoining),
   //       dateOfLeaving: moment(data.basicDetails.dateOfLeaving),
-  //       dateOfCurrentDivisionJoining: moment(data.basicDetails.dateOfCurrentDivisionJoining),
+  //       divisionHistory.dateOfDivisionJoining: moment(data.basicDetails.divisionHistory.dateOfDivisionJoining),
   //       dateOfPreviousDivisionLeaving: moment(data.basicDetails.dateOfPreviousDivisionLeaving),
   //     },
   //     spouse: !data.spouse ? undefined : {

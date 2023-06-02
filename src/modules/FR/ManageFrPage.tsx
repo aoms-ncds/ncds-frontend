@@ -123,7 +123,7 @@ const ManageFrPage = () => {
     { field: 'divisionName', headerName: 'Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeDivision?.DivisionDetails.name}</p>
     ), width: 130 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
+    { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeSubdivision?.name}</p>
     ), width: 130 },
     { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (

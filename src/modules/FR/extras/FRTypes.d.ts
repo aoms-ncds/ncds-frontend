@@ -8,7 +8,7 @@ declare global{
     FRno: string;
     FRdate: Moment;
     divisionName: string;
-    subdivisionName: string;
+    subDivisionName: string;
     mainCategory: string;
     requestAmount: string;
     lastUpdateDate: Moment;
@@ -79,7 +79,7 @@ declare global{
       FRno: string;
       FRdate: Moment;
       divisionName: string;
-      subdivisionName: string;
+      subDivisionName: string;
       mainCategory: string;
       requestAmount: string;
       lastUpdateDate: Moment;

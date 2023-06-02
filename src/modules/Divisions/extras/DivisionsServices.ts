@@ -31,7 +31,7 @@ export default {
             subDivisions: [],
           })
           .then(async (createdDivision) => {
-            // Create subdivisions
+            // Create subDivisions
             try {
               for (let i = 0; i < division.subDivisions.length; i++) {
                 const subDiv = division.subDivisions[i];
@@ -99,6 +99,6 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId)),
 
-  deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId)),
+  deleteSubDivision: (subDivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subDivisionId)),
   divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId)),
 };

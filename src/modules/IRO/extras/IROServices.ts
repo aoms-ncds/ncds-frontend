@@ -279,7 +279,7 @@ export default {
             },
             subDivision: {
               _id: '1',
-              name: 'subdivision 1',
+              name: 'subDivision 1',
             },
             mainCategory: 'Fr request',
             sanction: '50000',

@@ -44,7 +44,7 @@ const NewOfficialDetailsForm = (
   };
 
   useEffect(() => {
-    // setcurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
+    setcurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
@@ -82,23 +82,34 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="No Of Years With The Organization"
-          value={props.value.dateOfJoining?.fromNow(true)}
+          value={props.value.status!='Left'?props.value.dateOfJoining?.fromNow(true):props.value.dateOfLeaving?.from(props.value.dateOfJoining, true)}
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ readOnly: true }}
           InputLabelProps={{ shrink: true }}
         />
       </Grid>
-
+      {/* {console.log(props.value.divisionHistory)}
+      {console.log(props.value.divisionHistory[0].division?.details.name)} */}
+      {/* {props.value.divisionHistory.length>0? props.value.divisionHistory[props.value.divisionHistory.length-1].subDivision:null} */}
+      {/* {props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?.details.name} */}
+      {/* {props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?.details.name} */}
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={divisions ?? []}
-          value={props.value.divisionHistory.length>0?props.value.divisionHistory[props.value.divisionHistory.length-1].division:defaultDivisionDetails}
+          value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
+          // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
-            // if (currentDivision?._id!==newVal?._id) {
-            props.onChange({ ...props.value, divisionHistory: [...props.value.divisionHistory, { division: newVal ?? undefined }]});
-            // }
+            if (currentDivision?._id!==newVal?._id) {
+              props.onChange({ ...props.value, divisionHistory: [
+                ...props.value.divisionHistory, {
+                  division: newVal ?? undefined,
+                  subDivision: undefined,
+                  dateOfDivisionJoining: null,
+                  dateOfDivisionLeaving: null,
+                }]});
+            }
             if (!newVal) {
               setSubDivisions([]);
             }
@@ -120,7 +131,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={subDivisions ?? []}
-          value={props.value.divisionHistory.length>0?props.value.divisionHistory[props.value.divisionHistory.length-1].subdivision:null}
+          value={(props.value.divisionHistory.length>0)?props.value.divisionHistory[props.value.divisionHistory.length-1].subDivision:null}
           getOptionLabel={(subDiv) => subDiv.name}
           onChange={(event, newVal) =>
             props.onChange({
@@ -129,7 +140,8 @@ const NewOfficialDetailsForm = (
                 ...props.value.divisionHistory.slice(0, -1),
                 {
                   ...props.value.divisionHistory[props.value.divisionHistory.length - 1],
-                  subdivision: newVal ?? undefined,
+                  subDivision: newVal ?? undefined,
+
                 },
               ],
             })
@@ -147,7 +159,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Joining Current Division"
-          value={props.value.divisionHistory.length>0?props.value.divisionHistory[props.value.divisionHistory.length-1].dateOfDivisionJoining:undefined}
+          value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory.length-1]?.dateOfDivisionJoining: null}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
@@ -175,8 +187,8 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date of Leaving Previous Division"
-          value={props.value.divisionHistory.length>1?props.value.divisionHistory[props.value.divisionHistory.length-2].dateOfDivisionLeaving:null}
-          disabled={props.value.divisionHistory.length<=1}
+          value={(props.value.divisionHistory.length>1)?props.value.divisionHistory[props.value.divisionHistory.length-2].dateOfDivisionLeaving:null}
+          disabled={(props.value.divisionHistory.length==1)}
           onChange={(newDate) => {
             if (props.value.divisionHistory.length>1) {
               props.onChange({
@@ -206,7 +218,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<OfficialDetailsStatus>
-          options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave', 'Deactivated']}
+          options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
           value={props.value.status}
           onChange={(e, selectedStatus) =>
             props.onChange({
@@ -221,7 +233,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Left Organization On"
-          value={props.value.dateOfLeaving}
+          value={props.value.status!='Left'?null:props.value.dateOfLeaving}
           disabled={props.value.status!='Left'}
           onChange={(newDate) =>
             props.onChange({
@@ -241,7 +253,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<DeactivationReason>
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
-          disabled={props.value.status!='Deactivated'}
+          disabled={ props.value.status!='Left'}
           value={props.value.reasonForDeactivation}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Reason for Deactivation" variant={props.options?.textField.variant} />}

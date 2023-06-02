@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-multi-comp */
-import { Avatar, Box, Card, Container, Divider, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Container, Divider, Grid, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import StaffServices from '../HR/extras/StaffServices';
 import WorkersServices from '../Workers/extras/WorkersServices';
+import StaffServices from '../HR/extras/StaffServices';
+import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
 
 
 interface TabPanelProps {
@@ -40,7 +41,42 @@ const Profile = () => {
   const [user, setUser] = useState<IWorker | Staff|null>(null);
   const { userId, userKind } = useParams();
   const [currentTab, setCurrentTab] = React.useState(0);
-
+  const columns: GridColDef<DivisionHistory>[] = [
+    {
+      field: 'division',
+      headerName: 'Division',
+      width: 200,
+      renderCell: (props: any) => (
+        <Link
+          to={`/divisions/details/${props.row.division._id}`}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+          }}
+        >
+          {props.row.division.details.name}
+        </Link>
+      ),
+    },
+    {
+      field: 'subDivison',
+      headerName: 'Sub Division',
+      width: 200,
+      valueGetter: (params) => params.row.subDivision?.name,
+    },
+    {
+      field: 'dateOfDivisionJoining',
+      headerName: 'From',
+      width: 200,
+      valueGetter: (params) => params.row.dateOfDivisionJoining?.format('DD/MM/YYYY'),
+    },
+    {
+      field: 'dateOfDivisionLeaving',
+      headerName: 'To',
+      width: 200,
+      valueGetter: (params) => params.row.dateOfDivisionLeaving?.format('DD/MM/YYYY'),
+    },
+  ];
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
@@ -98,7 +134,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field??'---------------'} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Martial Status: </Typography> {user?.basicDetails.martialStatus} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Highest Qualification: </Typography> {user?.basicDetails.highestQualification} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Mother Tounge: </Typography> {user?.basicDetails.motherTongue} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Mother Tongue: </Typography> {user?.basicDetails.motherTongue} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Communication Language: </Typography> {user?.basicDetails.communicationLanguage} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known Languages: </Typography> {user?.basicDetails.knownLanguages?.join(', ')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {user?.basicDetails.email} </Grid>
@@ -133,18 +169,47 @@ const Profile = () => {
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving:</Typography> {user?.officialDetails.dateOfJoining?.format('dddd, DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Joining:</Typography> {user?.officialDetails.dateOfLeaving?.format('dddd, DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Reason for Deactivation:</Typography> {user?.officialDetails.reasonForDeactivation} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid> */}
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Sub Division:</Typography> {user?.officialDetails.subdivision?.name} </Grid> */}
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Self Support:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Joining:</Typography> {user?.officialDetails.dateOfJoining?.format('dddd, DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>No Of Years With The Organization:</Typography> {user?.officialDetails.status!='Left'?user?.officialDetails.dateOfJoining?.fromNow(true):user?.officialDetails.dateOfLeaving?.from(user?.officialDetails.dateOfJoining, true)} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid> */}
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.dateOfCurrentDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid> */}
+              {user?.officialDetails.status=='Left'&&(
+                <>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving:</Typography> {user?.officialDetails.dateOfLeaving?.format('dddd, DD/MM/YYYY')} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Reason for Deactivation:</Typography> {user?.officialDetails.reasonForDeactivation} </Grid>
+                </>
+              )}
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Self Support:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid>
+
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid> */}
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Sub Division:</Typography> {user?.officialDetails.subDivision?.name} </Grid> */}
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid> */}
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.divisionHistory.dateOfDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid> */}
             </Grid>
+            <Container maxWidth='md' >
+              <Card>
+                <CardContent>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} >
+                      <Divider textAlign="center">
+
+                        <Typography variant="h5" color="text.secondary" gutterBottom>
+                  DIVISION HISTORY
+                        </Typography>
+                      </Divider>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <DataGrid
+                  rows={user?.officialDetails.divisionHistory ?? []}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  style={{ height: '40vh', width: '100%', justifyContent: 'center' }}
+                />
+              </Card>
+            </Container>
+
           </TabPanel>
           <TabPanel value={currentTab} index={2}>
             <Grid container spacing={3}>

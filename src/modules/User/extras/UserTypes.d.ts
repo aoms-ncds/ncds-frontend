@@ -49,29 +49,32 @@ declare global {
   }
   interface OfficialDetails {
     dateOfJoining?: Moment;
-    dateOfLeaving?: Moment;
+    dateOfLeaving?: Moment|null;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
-    divisionHistory:{
-      division?: Division;
-      subdivision?: SubDivision;
-      dateOfDivisionJoining?: Moment;
-      dateOfDivisionLeaving?: Moment;
-    }[];
+    divisionHistory:DivisionHistory[];
     selfSupport: boolean;
     status: OfficialDetailsStatus;
     noOfChurches: number;
   }
+  type DivisionHistory ={
+    _id:string;
+    division: Division;
+    subDivision: SubDivision;
+    dateOfDivisionJoining?: Moment|null;
+    dateOfDivisionLeaving?: Moment|null;
+  };
+  type CreatableDivisionHistory ={
+    division?: Division;
+    subDivision?: SubDivision;
+    dateOfDivisionJoining?: Moment|null;
+    dateOfDivisionLeaving?: Moment|null;
+  };
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
-  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|'Deactivated'|null;
+  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|null;
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
-    divisionHistory:{
-      division?: Division;
-      subdivision?: SubDivision;
-      dateOfDivisionJoining?: Moment;
-      dateOfDivisionLeaving?: Moment;
-    }[];
+    divisionHistory:CreatableDivisionHistory[];
     selfSupport?: boolean;
     status?: OfficialDetailsStatus;
     noOfChurches?: number;
