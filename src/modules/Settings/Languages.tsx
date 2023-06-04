@@ -15,6 +15,35 @@ const Languages = () => {
   });
   const [dialogAction, setDialogAction] = React.useState<'add'|'edit'|false>(false);
 
+  const removeLanguage = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing Language',
+      variant: 'info',
+    });
+    LanguagesServices.delete(id)
+      .then((res) => {
+        console.log('process delete', res);
+        if (languages) {
+          const newLanguage = languages.filter((languages) => {
+            return languages._id !== id;
+          });
+          setLanguages(newLanguage);
+        }
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+
 
   const columns: GridColDef<ILanguage>[] = [
     {
@@ -49,12 +78,15 @@ const Languages = () => {
       headerName: 'Delete',
       width: 100,
       headerAlign: 'center',
-      renderCell: () => {
+      renderCell: (params) => {
         return (
           <Button
             variant="text"
             color="error"
             startIcon={<DeleteIcon />}
+            onClick={() => {
+              removeLanguage(params.row._id);
+            }}
           >
             Delete
           </Button>

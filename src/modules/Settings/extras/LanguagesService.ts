@@ -14,4 +14,7 @@ export default {
   edit: (lang: CreatableLanguage) => getStandardResponse<ILanguage>(
     axios.patch(`/settings/language/${lang._id}`, lang)),
 
+  delete: (languageId: string) => getStandardResponse<number>(
+    axios.delete('/settings/language/' + languageId +'/force')),
+
 };
