@@ -1,5 +1,4 @@
-import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 export default {
 
@@ -17,4 +16,6 @@ export default {
   delete: (languageId: string) => getStandardResponse<number>(
     axios.delete('/settings/language/' + languageId +'/force')),
 
+  getCount: (conditions?: unknown) => getStandardResponse<number>(
+    axios.get('/settings/language/count', { params: conditions })),
 };
