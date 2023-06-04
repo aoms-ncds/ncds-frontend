@@ -10,4 +10,8 @@ export default {
   create: (lang: CreatableLanguage) => getStandardResponse<ILanguage>(
     axios.post('/settings/language', lang),
   ),
+
+  edit: (lang: CreatableLanguage) => getStandardResponse<ILanguage>(
+    axios.patch(`/settings/language/${lang._id}`, lang)),
+
 };
