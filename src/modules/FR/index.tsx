@@ -26,26 +26,26 @@ const frDashboard = () => {
     <CommonPageLayout title="FR Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#29cc39" />
+          <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#0a1172" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={approvedfrCount?.toString()} secondaryText={'Approved'} color={'#0dcaf0'} />
+          <FRCountCard count={approvedfrCount?.toString()} secondaryText={'Approved'} color={'#3cb043'} />
         </Grid>
       </Grid>
       <br />
       <br />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#29cc39" targetRoute="/fr/apply" />
+          <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#003049" targetRoute="/fr/apply" />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#0dcaf0" targetRoute="/fr/manage" />
+          <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#de2828" targetRoute="/fr/manage" />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#ffc107" targetRoute="/fr/closed" />
+          <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#f77f00" targetRoute="/fr/closed" />
         </Grid>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#8833ff" targetRoute="/iro" />
+          <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#fcbf49" targetRoute="/iro" />
         </Grid>
       </Grid>
     </CommonPageLayout>

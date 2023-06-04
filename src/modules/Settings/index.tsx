@@ -8,7 +8,7 @@ const SettingsDashboard = () => {
     <CommonPageLayout title="Settings">
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3} width={350}>
-          <DashboardCardButton primaryText="Manage" secondaryText="Languages" color="#29cc39" targetRoute="/settings/Languages" />
+          <DashboardCardButton primaryText="Manage" secondaryText="Languages" color="#003049" targetRoute="/settings/Languages" />
         </Grid>
       </Grid>
     </CommonPageLayout>
