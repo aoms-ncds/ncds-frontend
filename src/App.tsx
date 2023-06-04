@@ -45,7 +45,7 @@ const App = () => {
           MuiAppBar: {
             styleOverrides: {
               root: {
-                backgroundColor: prefersDarkMode ? '#1b253d' : '#d8cfab',
+                backgroundColor: '#c4161c',
               },
             },
           },
