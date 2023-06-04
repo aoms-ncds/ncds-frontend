@@ -50,6 +50,8 @@ const Languages = () => {
       field: 'Languages',
       headerName: 'Languages',
       align: 'left',
+      width: 150,
+      headerAlign: 'center',
       valueGetter: (params) => params.row.name,
     },
     {
