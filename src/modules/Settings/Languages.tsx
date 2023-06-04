@@ -110,6 +110,7 @@ const Languages = () => {
           .then((res) => {
             setLanguages((langs) => langs === null ? [res.data] : [...langs, res.data]);
           });
+          handleClose();
         }}>
           <DialogTitle>Add Language</DialogTitle>
           <DialogContent>
@@ -128,7 +129,7 @@ const Languages = () => {
           </DialogContent>
           <DialogActions>
             <Button type='submit' variant='contained' sx={{ right: 20, marginBottom: 2 }}
-              color="success">Add</Button>
+              color="success" >Add</Button>
           </DialogActions>
         </form>
       </Dialog>
