@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import LanguagesServices from '../Settings/extras/LanguagesService';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
-import { Form, Link } from 'react-router-dom';
-import ApplicationServices from '../Applications/extras/ApplicationServices';
 
 
 const Languages = () => {
-  const execDelete = (id: string) => {
-    const snackbarId = enqueueSnackbar({
-      message: 'Removing Language',
-      variant: 'info',
-    });
-  };
+  const [languages, setLanguages] = useState<ILanguage[]|null>(null);
+  const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
+    name: '',
+  });
+  const [dialogAction, setDialogAction] = React.useState<'add'|'edit'|false>(false);
+
 
   const columns: GridColDef<ILanguage>[] = [
     {
@@ -30,12 +28,16 @@ const Languages = () => {
       headerName: 'Edit',
       width: 100,
       headerAlign: 'center',
-      renderCell: () => {
+      renderCell: (params) => {
         return (
           <Button
             variant="text"
             color="primary"
             startIcon={<EditIcon />}
+            onClick={()=>{
+              setDialogAction('edit');
+              setNewLanguage(params.row);
+            }}
           >
             Edit
           </Button>
@@ -61,11 +63,6 @@ const Languages = () => {
     },
   ];
 
-  const [languages, setLanguages] = useState<ILanguage[]|null>(null);
-  const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
-    name: '',
-  });
-
   useEffect(() => {
     LanguagesServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
         .then((res) => {
@@ -87,32 +84,35 @@ const Languages = () => {
   }, []);
 
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    setDialogAction(false);
   };
 
   return (
 
     <CommonPageLayout title='Languages'>
-      <Button variant="contained" sx={{ float: 'right', marginBottom: 3 }} startIcon={<AddIcon />} onClick={handleClickOpen}>
+      <Button variant="contained" sx={{ float: 'right', marginBottom: 3 }} startIcon={<AddIcon />} onClick={() => {
+        setDialogAction('add');
+      }}>
         Add new
       </Button>
-      <Dialog open={open} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
+      <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={(e) => {
           e.preventDefault();
-          LanguagesServices.create(newLanguage)
-          .then((res) => {
-            setLanguages((langs) => langs === null ? [res.data] : [...langs, res.data]);
-          });
+          if (dialogAction === 'add') {
+            LanguagesServices.create(newLanguage)
+            .then((res) => {
+              setLanguages((langs) => langs === null ? [res.data] : [...langs, res.data]);
+            });
+          } else {
+            LanguagesServices.edit(newLanguage)
+            .then((res) => {
+              setLanguages((langs) => langs === null ? null: langs?.map((lang) => lang._id === newLanguage._id ? res.data : lang));
+            });
+          }
           handleClose();
         }}>
-          <DialogTitle>Add Language</DialogTitle>
+          <DialogTitle>{dialogAction === 'add'? 'Add':'Edit'} Language</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
