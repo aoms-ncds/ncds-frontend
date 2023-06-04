@@ -55,7 +55,7 @@ const DivisionsList = () => {
     {
       field: '_manage',
       headerName: 'Action',
-      minWidth: 50,
+      width: 60,
       type: 'string',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
@@ -92,11 +92,11 @@ const DivisionsList = () => {
         />
       ),
     },
-    { field: 'divisionId', headerName: 'Division Id', width: 130, valueGetter: (props) => props.row.details.divisionId },
+    { field: 'divisionId', headerName: 'Division Id', width: 110, valueGetter: (props) => props.row.details.divisionId },
     {
       field: 'divisionName',
       headerName: 'Division Name',
-      width: 200,
+      width: 120,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
         <Link
@@ -112,10 +112,10 @@ const DivisionsList = () => {
     },
     { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => <p> {props.row.details.coordinator?.firstName}</p>, width: 130 },
     { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => <p>{props.row.details.coordinator?.email}</p>, width: 130 },
-    { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>, width: 130 },
+    { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>, width: 140 },
 
-    { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>, width: 130 },
-    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>, width: 130 },
+    { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>, width: 120 },
+    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>, width: 150 },
   ];
   return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} />;
 };

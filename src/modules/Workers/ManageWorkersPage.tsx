@@ -60,15 +60,15 @@ const ManageWorkerPage = () => {
             </Tabs>
           </Grid>
           <Grid item xs={12} lg={3}>
-            {[0, 1, 2].includes(currentTab) && (
+            {currentTab === 0 && (
               <Button
                 variant="contained"
                 sx={{ float: 'right', mt: 2, mr: 2 }}
                 startIcon={<AddIcon />}
                 component={Link}
-                to={currentTab === 0 ? '/workers/add' : currentTab === 1 ? '/workers/addspouse' : '/workers/addchild'}
+                to={'/workers/add'}
               >
-                {currentTab === 0 ? 'Add new' : currentTab === 1 ? 'Add Spouse' : 'Add Child'}
+                Add New
               </Button>
             )}
           </Grid>
