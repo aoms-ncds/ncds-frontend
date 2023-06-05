@@ -14,7 +14,7 @@ const ApplicationManagePages = () => {
   useEffect(() => {
     ApplicationServices.getAll()
       .then((res) => {
-        setApplications(res.data);
+        // setApplications(res.data);
       })
       .catch((res: any) => {
         console.log(res);

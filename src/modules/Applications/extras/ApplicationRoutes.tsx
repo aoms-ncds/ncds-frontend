@@ -22,7 +22,7 @@ const applicationRoutes: ModuleRoute = {
     {
       title: 'Add Request',
       path: '/list',
-      element: <ApplicationsListingPage />,
+      element: <ApplicationsListingPage   />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -40,6 +40,14 @@ const applicationRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['string'],
     },
+    // {
+    //   title: 'Add New Application',
+    //   path: '/:applicationID/edit',
+    //   element: <AddNewApplication />,
+    //   private: true,
+    //   requiredAccessRights: ['string'],
+    // },
+    
   ],
 };
 

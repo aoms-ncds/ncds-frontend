@@ -6,11 +6,14 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
+import { useParams } from 'react-router-dom';
 
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
+  const [status, settStatus] = useState('Not Aprove');
+  const [editid, setEditId] = useState<any>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     name: '',
     reason: '',
@@ -28,7 +31,78 @@ const ApplicationsListingPage = () => {
           variant: 'error',
         });
       });
+  }, [applicationFormState]);
+
+
+  const EditApplication = (e: any) => {
+    e.preventDefault();
+    if (editid) {
+      ApplicationServices.editApplication(editid, applicationFormState)
+        .then((res) => {
+          console.log(res);
+          setShowApplicationFormDialog(false);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+          return ApplicationServices.getAll();
+        })
+        .then((res) => {
+          setApplications(res.data);
+        })
+        .catch((err) => {
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
+        });
+    }
+  };
+  
+  useEffect(() => {
+    ApplicationServices.getAll()
+      .then((res) => {
+        setApplications(res.data);
+      })
+      .catch((error) => {
+        enqueueSnackbar({
+          message: error.message,
+          variant: 'error',
+        });
+      });
   }, []);
+  
+
+  const AddApplication = (event: any) => {
+    event.preventDefault();
+    const snackbarId = enqueueSnackbar({
+      message: action === 'add' ? 'Creating Request' : 'Updating Request',
+      variant: 'info',
+    });
+   
+    ApplicationServices.create(applicationFormState)
+      .then((res) => {
+        console.log(res, 'another Ressssssssss');
+        setShowApplicationFormDialog(false);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+        setApplicationFormState(() => ({
+          name: '',
+          reason: '',
+          status: '',
+        }));
+      })
+      .catch((err) => {
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
 
   const columns = [
     {
@@ -42,17 +116,22 @@ const ApplicationsListingPage = () => {
           icon={<EditIcon />}
           showInMenu
           onClick={() => {
+            setEditId(params.id);
+            setAction('edit');
             setApplicationFormState(params.row);
             setShowApplicationFormDialog(true);
+
+            console.log(editid, 'hhhhhhhhhhhhh');
           }}
         />,
+
         <GridLinkAction
           key={2}
           label="Approve"
           icon={<ThumbUpIcon />}
           showInMenu
           onClick={() => {
-            throw new Error('Approve operation not implemented');
+            settStatus('Aprove');
           }}
         />,
         <GridLinkAction
@@ -61,7 +140,7 @@ const ApplicationsListingPage = () => {
           icon={<ThumbDownIcon />}
           showInMenu
           onClick={() => {
-            throw new Error('Reject operation not implemented');
+            settStatus('Note Aprove');
           }}
         />,
       ],
@@ -73,7 +152,8 @@ const ApplicationsListingPage = () => {
   ];
 
   return (
-    <CommonPageLayout title="Manage Staff">
+    <CommonPageLayout title="Application ">
+      {status}
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -88,37 +168,8 @@ const ApplicationsListingPage = () => {
       <br />
       <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
-        <form
-          onSubmit={() => {
-            const snackbarId = enqueueSnackbar({
-              message: action === 'add' ? 'Creating Request' : 'Updating Request',
-              variant: 'info',
-            });
-            ApplicationServices.create(applicationFormState)
-              .then((res) => {
-                console.log(res);
-                setShowApplicationFormDialog(false);
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-                setApplicationFormState(() => ({
-                  name: '',
-                  reason: '',
-                  status: '',
-                }));
-              })
-              .catch((err) => {
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
-          }}
-        >
-          <DialogTitle>{action === 'add' ? 'Add Request' : `Edit Request: ${applicationFormState} `}</DialogTitle>
+        <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
+          <DialogTitle>{action === 'add' ? 'Add Request' : `Edit Request:`}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>
@@ -139,12 +190,12 @@ const ApplicationsListingPage = () => {
                 <Grid item md={12}>
                   <TextField
                     label="Reason"
-                    value={applicationFormState.name}
+                    value={applicationFormState.reason}
                     onChange={(e) => {
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       setApplicationFormState(() => ({
                         ...applicationFormState,
-                        name: e.target.value,
+                        reason: e.target.value,
                       }));
                     }}
                     fullWidth
