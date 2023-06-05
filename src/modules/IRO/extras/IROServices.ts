@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
 export default {
-  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions })),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAll: (conditions?: { status?: number }) =>
     getStandardResponse<IROrder[]>(

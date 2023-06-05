@@ -1,15 +1,13 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import { categories, purposes, sanctionedAsPers } from './FRConfig';
 import axios from 'axios';
 export default {
 
-  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions })),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
-  getAll: () => getStandardResponse<Frrequest[]>(
-    axios.get('/fr/'),
-  ),
-  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete('/fr/particulars/' + particularid)),
+  getAll: () => getStandardResponse<Frrequest[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
+  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete(`/fr/particulars/${particularid}`, { headers: { ...getAuthHeader() } })),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
       data: purposes,
@@ -39,11 +37,11 @@ export default {
     }),
   ),
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
-    axios.post('/fr/particulars', particularData),
+    axios.post('/fr/particulars', particularData, { headers: { ...getAuthHeader() } }),
   ),
   getById: (fRId: string) =>
     getStandardResponse<FR>(
-      axios.get('/fr/' + fRId),
+      axios.get(`/fr/${fRId}`, { headers: { ...getAuthHeader() } }),
       (data) => ({
         ...data,
         FRdate: moment(data.FRdate),
@@ -68,7 +66,7 @@ export default {
               if (frRequest.Particulars) {
                 for (let i = 0; i < frRequest.Particulars.length; i++) {
                   const partculars = frRequest.Particulars[i];
-                  await axios.patch('/fr/particulars/' + partculars._id, {
+                  await axios.patch(`/fr/particulars/${partculars._id}`, {
                     FR: createdFR.data.data._id,
                     mainCategory: partculars.mainCategory,
                     subCategory1: partculars.subCategory1,
@@ -78,7 +76,7 @@ export default {
                     month: partculars.month,
                     requestedAmount: partculars.requestedAmount,
                     narration: partculars.narration,
-                  });
+                  }, { headers: { ...getAuthHeader() } });
                 }
               }
               resolve(createdFR);
@@ -860,7 +858,7 @@ export default {
               if (frRequest.Particulars) {
                 for (let i = 0; i < frRequest.Particulars.length; i++) {
                   const partculars = frRequest.Particulars[i];
-                  await axios.patch('/fr/particulars/' + partculars._id, {
+                  await axios.patch(`/fr/particulars/${partculars._id}`, {
                     FR: updatedFR.data.data._id,
                     mainCategory: partculars.mainCategory,
                     subCategory1: partculars.subCategory1,
@@ -870,7 +868,7 @@ export default {
                     month: partculars.month,
                     requestedAmount: partculars.requestedAmount,
                     narration: partculars.narration,
-                  });
+                  }, { headers: { ...getAuthHeader() } });
                 }
               }
               resolve(updatedFR); // Resolve with the updated division

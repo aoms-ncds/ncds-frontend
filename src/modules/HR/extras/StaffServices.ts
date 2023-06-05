@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getStandardResponse } from '../../../extras/CommonHelpers';
+import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
 export default {
@@ -7,35 +7,35 @@ export default {
    * Retrieves the count of staff members.
    * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the count of staff members.
    */
-  getCount: () => getStandardResponse<number>(axios.get('/hr/staffs/count')),
+  getCount: () => getStandardResponse<number>(axios.get('/hr/staffs/count', { headers: { ...getAuthHeader() } })),
 
   /**
    * Creates a new staff member.
    * @param {CreatableStaff} staff - The staff member to be created.
    * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the created staff member.
    */
-  create: (staff: CreatableStaff) => getStandardResponse<Staff>(axios.post('/hr/staffs', staff)),
+  create: (staff: CreatableStaff) => getStandardResponse<Staff>(axios.post('/hr/staffs', staff, { headers: { ...getAuthHeader() } })),
 
   /**
    * Edits a staff member.
    * @param {CreatableNewUser} staff - The staff member to be edited.
    * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the edited staff member.
    */
-  edit: (staff: CreatableStaff): Promise<StandardResponse<Staff>> => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff)),
+  edit: (staff: CreatableStaff): Promise<StandardResponse<Staff>> => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff, { headers: { ...getAuthHeader() } })),
 
   /**
    * Deletes a staff member.
    * @param {string} staffId - The ID of the staff member to be deleted.
    * @return {Promise<StandardResponse<Staff[]>>} A promise that resolves to the response containing the updated list of staff members.
    */
-  delete: (staffId: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`)),
+  delete: (staffId: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`, { headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all staff members.
    * @return {Promise<StandardResponse<Staff[]>>} A promise that resolves to the response containing the list of all staff members.
    */
   getAll: (): Promise<StandardResponse<Staff[]>> =>
-    getStandardResponse<Staff[]>(axios.get('/hr/staffs'), (staffs) =>
+    getStandardResponse<Staff[]>(axios.get('/hr/staffs', { headers: { ...getAuthHeader() } }), (staffs) =>
       staffs.map((staff: any) => ({
         ...staff,
         basicDetails: {
@@ -57,7 +57,7 @@ export default {
    * @return {Promise<StandardResponse<Staff|null>>} A promise that resolves to the response containing the retrieved staff member or null if not found.
    */
   getById: (staffId: string) =>
-    getStandardResponse<Staff | null>(axios.get(`/hr/staffs/${staffId}`), (data) => ({
+    getStandardResponse<Staff | null>(axios.get(`/hr/staffs/${staffId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       basicDetails: {
         ...data.basicDetails,
@@ -76,6 +76,6 @@ export default {
       updatedAt: moment(data.updatedAt),
     })),
 
-  activate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`)),
-  deactivate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`)),
+  activate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`, { headers: { ...getAuthHeader() } })),
+  deactivate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`, { headers: { ...getAuthHeader() } })),
 };

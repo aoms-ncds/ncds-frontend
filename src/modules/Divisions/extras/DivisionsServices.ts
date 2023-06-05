@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getStandardResponse, dummyRequest } from '../../../extras/CommonHelpers';
+import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
 const isObjectId = (id: string) => {
@@ -11,11 +11,11 @@ export default {
   //   headers: { ...getAuthHeader() },
   // })),
 
-  getCount: () => getStandardResponse<number>(axios.get('/divisions/count')),
+  getCount: () => getStandardResponse<number>(axios.get('/divisions/count', { headers: { ...getAuthHeader() } })),
 
-  getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/')),
-  getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions')),
-  getSubDivisionsByDivisionId: (division: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division } })),
+  getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/', { headers: { ...getAuthHeader() } })),
+  getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
+  getSubDivisionsByDivisionId: (division: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division }, headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ export default {
               seniorLeader: division.details.seniorLeader?._id,
             },
             subDivisions: [],
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (createdDivision) => {
             // Create subdivisions
             try {
@@ -38,7 +38,7 @@ export default {
                 await axios.post('/divisions/sub_divisions/', {
                   division: createdDivision.data.data._id,
                   name: subDiv.name,
-                });
+                }, { headers: { ...getAuthHeader() } });
               }
               resolve(createdDivision);
             } catch (error) {
@@ -77,12 +77,12 @@ export default {
                     await axios.patch(`/divisions/sub_divisions/${subDiv._id}`, {
                       division: updatedDivision.data.data._id,
                       name: subDiv.name,
-                    });
+                    }, { headers: { ...getAuthHeader() } });
                   } else {
                     await axios.post('/divisions/sub_divisions', {
                       division: updatedDivision.data.data._id,
                       name: subDiv.name,
-                    });
+                    }, { headers: { ...getAuthHeader() } });
                   }
                 }
               }
@@ -97,8 +97,8 @@ export default {
   },
   SubDivisionServices: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId)),
+  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
 
-  deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId)),
-  divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId)),
+  deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId, { headers: { ...getAuthHeader() } })),
+  divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
 };
