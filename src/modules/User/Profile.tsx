@@ -59,10 +59,10 @@ const Profile = () => {
       ),
     },
     {
-      field: 'subDivison',
+      field: 'subDivision',
       headerName: 'Sub Division',
       width: 200,
-      valueGetter: (params) => params.row.subDivision?.name,
+      valueGetter: (params) => params.row.subDivision?.name??null,
     },
     {
       field: 'dateOfDivisionJoining',

@@ -65,8 +65,8 @@ declare global {
     dateOfDivisionLeaving?: Moment|null;
   };
   type CreatableDivisionHistory ={
-    division?: Division;
-    subDivision?: SubDivision;
+    division?: Division|null;
+    subDivision?: SubDivision|null;
     dateOfDivisionJoining?: Moment|null;
     dateOfDivisionLeaving?: Moment|null;
   };

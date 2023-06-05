@@ -73,11 +73,11 @@ export default {
       officialDetails: {
         ...data.officialDetails,
         dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
-        divisionHistory: {
-          ...data.officialDetails.divisionHistory,
-          dateOfDivisionJoining: data.officialDetails.divisionHistory.dateOfDivisionJoining? moment(data.officialDetails.divisionHistory.dateOfDivisionJoining):undefined,
-          dateOfDivisionLeaving: data.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving?moment(data.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving):undefined,
-        },
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+          ...divHis,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+        })),
       },
       spouse: !data.spouse ? undefined : {
         ...data.spouse,
