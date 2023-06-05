@@ -2,9 +2,8 @@ import { Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconBut
 import React, { useEffect, useState } from 'react';
 import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-// eslint-disable-next-line import/default
-import HomeServices from './extras/HomeServices';
 import { useAuth } from '../../hooks/Authentication';
+import UserServices from './extras/UserServices';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ const LoginPage = () => {
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setLoading(true);
-    HomeServices.loginUser(loginCred)
+    UserServices.login(loginCred)
       .then((res) => {
         setLoading(false);
         localStorage.setItem('userToken', res.data.token);

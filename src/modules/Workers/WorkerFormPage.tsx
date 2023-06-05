@@ -25,7 +25,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       divisionHistory: [],
       remarks: '',
       selfSupport: true,
-      status: 'Ministering',
+      // status: '',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,

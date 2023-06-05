@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, Card, CardContent, Typography, TextField, Button, InputAdornment, Alert, CircularProgress, CssBaseline } from '@mui/material';
 import { Email as EmailIcon } from '@mui/icons-material';
-
-// eslint-disable-next-line import/namespace, import/default
-import HomeServices from './extras/HomeServices';
+import UserServices from './extras/UserServices';
 
 const ForgottenPasswordFormPage = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -15,7 +13,7 @@ const ForgottenPasswordFormPage = () => {
     e.preventDefault();
     if (email) {
       setLoading(true);
-      HomeServices.requestForgottenPasswordReset(email)
+      UserServices.requestForgottenPasswordReset(email)
         .then((res) => {
           console.log({ res });
           if (res.success) {

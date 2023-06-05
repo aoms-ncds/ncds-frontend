@@ -25,11 +25,11 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage IRO" secondaryText={IROCount?.toString()} color="#29cc39" targetRoute="/iro/manage" />
+          <DashboardCardButton primaryText="Manage IRO" secondaryText={IROCount?.toString()} color="#003049" targetRoute="/iro/manage" />
         </Grid>
 
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Closed IRO" secondaryText={closedIROCount?.toString()} color="#0dcaf0" targetRoute="/iro/closed" />
+          <DashboardCardButton primaryText="Closed IRO" secondaryText={closedIROCount?.toString()} color="#de2828" targetRoute="/iro/closed" />
         </Grid>
       </Grid>
     </CommonPageLayout>
