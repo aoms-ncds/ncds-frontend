@@ -14,10 +14,11 @@ declare global {
     field?: WorkerField;
     martialStatus?: MaritalStatus;
     highestQualification?: string;
-    motherTongue?: Language;
-    communicationLanguage?: Language;
-    knownLanguages?: Language[];
+    motherTongue?: Types.ObjectId;
+    communicationLanguage?: Types.ObjectId;
+    knownLanguages?: Types.ObjectId[];
     email: string;
+    email2?: string;
     phone?: string;
     alternativePhone?: string;
     PANNo?: string;
