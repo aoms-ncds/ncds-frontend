@@ -36,5 +36,6 @@ declare global {
     _id?: string;
     division?: Division;
     name: string;
+    leader?: Staff;
   }
 }
