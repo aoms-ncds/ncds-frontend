@@ -58,7 +58,7 @@ const ApplicationsListingPage = () => {
         });
     }
   };
-  
+
   useEffect(() => {
     ApplicationServices.getAll()
       .then((res) => {
@@ -71,7 +71,7 @@ const ApplicationsListingPage = () => {
         });
       });
   }, []);
-  
+
 
   const AddApplication = (event: any) => {
     event.preventDefault();
@@ -79,7 +79,7 @@ const ApplicationsListingPage = () => {
       message: action === 'add' ? 'Creating Request' : 'Updating Request',
       variant: 'info',
     });
-   
+
     ApplicationServices.create(applicationFormState)
       .then((res) => {
         console.log(res, 'another Ressssssssss');
@@ -169,7 +169,7 @@ const ApplicationsListingPage = () => {
       <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
-          <DialogTitle>{action === 'add' ? 'Add Request' : `Edit Request:`}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>

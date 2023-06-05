@@ -8,8 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
   const navigate = useNavigate();
-  console.log(applicationID,"ID")
-  
+  console.log(applicationID, 'ID');
+
 
   const [applications, setApplications] = useState<Application | null>(null);
 

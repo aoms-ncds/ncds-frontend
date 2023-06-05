@@ -13,7 +13,7 @@ export default {
         message: 'Successfully fetched array of Application count',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
   getAll: () => getStandardResponse<Application[]>(axios.get('/application/')),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get('/application/' + applicationID)),
@@ -23,7 +23,7 @@ export default {
         message: 'Approved ',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   reject: (applicationID: string) =>
@@ -32,7 +32,7 @@ export default {
         message: 'Recjected ',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (application: CreatableApplication) => {
@@ -56,11 +56,11 @@ export default {
               rejects(error);
             }
           });
-      })
+      }),
     );
   },
 
-  editApplication:(applicationID:any,application: CreatableApplication) => {
+  editApplication: (applicationID:any, application: CreatableApplication) => {
     console.log(application, ' updateddd');
     return getStandardResponse<Application>(
       new Promise((resolve, rejects) => {
@@ -81,7 +81,7 @@ export default {
               rejects(error);
             }
           });
-      })
+      }),
     );
   },
 
@@ -93,6 +93,6 @@ export default {
         message: 'Network Error',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
 };
