@@ -8,6 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
   const navigate = useNavigate();
+  console.log(applicationID,"ID")
+  
 
   const [applications, setApplications] = useState<Application | null>(null);
 
@@ -19,6 +21,8 @@ const ApplicationApprovalPage = () => {
 
     ApplicationServices.getById(applicationID as string)
       .then((res) => {
+        console.log(res, 'resresresIDID');
+
         setApplications(res.data);
       })
       .catch((res) => {
@@ -44,12 +48,11 @@ const ApplicationApprovalPage = () => {
                 {' '}
                 Reason: {applications?.reason}{' '}
               </Typography>
-
               <Typography variant="h5" component="h2">
                 : &nbsp;{' '}
                 <Button component="span" variant="outlined">
                   {' '}
-                  View File{' '}
+                  View File
                 </Button>
               </Typography>
             </Grid>
