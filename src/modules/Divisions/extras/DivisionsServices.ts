@@ -38,6 +38,7 @@ export default {
                 await axios.post('/divisions/sub_divisions/', {
                   division: createdDivision.data.data._id,
                   name: subDiv.name,
+                  leader: subDiv.leader?._id,
                 }, { headers: { ...getAuthHeader() } });
               }
               resolve(createdDivision);

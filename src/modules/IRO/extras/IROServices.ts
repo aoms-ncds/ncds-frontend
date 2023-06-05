@@ -274,6 +274,13 @@ export default {
                 IFSCCode: 'ksdfjdskfj',
                 beneficiary: 'ksdfjdskfj',
               },
+              otherBankDetails: {
+                accountNumber: 'ksdfjdskfj',
+                bankName: 'ksdfjdskfj',
+                branchName: 'ksdfjdskfj',
+                IFSCCode: 'ksdfjdskfj',
+                beneficiary: 'ksdfjdskfj',
+              },
               createdAt: moment(),
               updatedAt: moment(),
             },
