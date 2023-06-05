@@ -109,7 +109,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             autoComplete="off"
           />
           <Grid>
-
+            <br/>
           </Grid>
 
           <StaffDropdown

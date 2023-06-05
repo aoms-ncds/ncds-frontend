@@ -39,6 +39,13 @@ const NewOfficialDetailsForm = (
       IFSCCode: '',
       beneficiary: '',
     },
+    otherBankDetails: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
     createdAt: moment(),
     updatedAt: moment(),
   };
