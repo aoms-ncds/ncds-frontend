@@ -215,7 +215,6 @@ const DivisionDetailsPage = () => {
                   action={'add'}
                   options={{ title: 'FCRA Bank Details' }}
                 />
-
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
                   onChange={(newbankDetails) => {
