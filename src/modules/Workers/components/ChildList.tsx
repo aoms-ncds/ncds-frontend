@@ -23,7 +23,8 @@ const ChildListPage = () => {
     {
       field: '_manage',
       headerName: 'Action',
-      minWidth: 50,
+      width: 50,
+      AlignHeader: 'center',
       type: 'string',
       renderCell: (props: any) => (
         <DropdownButton
@@ -59,13 +60,13 @@ const ChildListPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'lastName', headerName: 'Last Name:', width: 130 },
-    { field: 'dob', headerName: 'DOB', width: 170 },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 130 },
-    { field: 'childSupport', headerName: 'Child Support', width: 130 },
-    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => <p> {props.row.childOf?.firstName}</p>, width: 130 },
+    { field: '_id', headerName: 'SI No', width: 55, AlignHeader: 'center' },
+    { field: 'firstName', headerName: 'First Name', width: 100, AlignHeader: 'center' },
+    { field: 'lastName', headerName: 'Last Name:', width: 100, AlignHeader: 'center' },
+    { field: 'dob', headerName: 'DOB', width: 70, AlignHeader: 'center' },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 70, AlignHeader: 'center' },
+    { field: 'childSupport', headerName: 'Child Support', width: 110, AlignHeader: 'center' },
+    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => <p> {props.row.childOf?.firstName}</p>, width: 80, AlignHeader: 'center' },
   ];
   return (
     <>
