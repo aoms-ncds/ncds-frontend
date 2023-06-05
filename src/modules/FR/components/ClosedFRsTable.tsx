@@ -44,7 +44,7 @@ const ClosedFRsTable = () => {
     { field: 'FRno', headerName: 'FR No', width: 70 },
     { field: 'FRdate', headerName: 'FR Date', width: 130 },
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
+    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
     { field: 'mainCategory', headerName: 'Main Category', width: 150 },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },

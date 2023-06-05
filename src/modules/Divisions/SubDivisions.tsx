@@ -31,12 +31,12 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
     if (deletedSubdivisionIds.length > 0) {
       console.log('testing new', deletedSubdivisionIds[0]);
       if (editID) {
-        const subdivisionId = deletedSubdivisionIds[0];
+        const subDivisionId = deletedSubdivisionIds[0];
         const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
-        if (subdivisionId) {
-          if (objectIdPattern.test(subdivisionId)) {
-            DivisionsServices.deleteSubDivision(subdivisionId)
+        if (subDivisionId) {
+          if (objectIdPattern.test(subDivisionId)) {
+            DivisionsServices.deleteSubDivision(subDivisionId)
               .then((res) => {
                 enqueueSnackbar({
                   message: res.message,

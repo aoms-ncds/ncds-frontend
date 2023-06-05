@@ -80,7 +80,7 @@ const ClosedIRO = () => {
     { field: 'IROno', headerName: 'IRO No', width: 70 },
     { field: 'IROdate', headerName: 'IRO Date', width: 130 },
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subdivisionName', headerName: 'Sub Division Name', width: 170 },
+    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
     { field: 'mainCategory', headerName: 'Main Category', width: 150 },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },

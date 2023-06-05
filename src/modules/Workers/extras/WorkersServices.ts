@@ -46,7 +46,12 @@ export default {
         },
         officialDetails: {
           ...worker.officialDetails,
-          dateOfJoining: moment(worker.basicDetails.dateOfJoining),
+          dateOfJoining: worker.officialDetails.dateOfJoining? moment(worker.officialDetails.dateOfJoining):undefined,
+          divisionHistory: {
+            ...worker.officialDetails.divisionHistory,
+            dateOfDivisionJoining: worker.officialDetails.divisionHistory.dateOfDivisionJoining? moment(worker.officialDetails.divisionHistory.dateOfDivisionJoining):undefined,
+            dateOfDivisionLeaving: worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving?moment(worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving):undefined,
+          },
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
@@ -67,10 +72,12 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.basicDetails.dateOfJoining? moment(data.basicDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.basicDetails.dateOfLeaving?moment(data.basicDetails.dateOfLeaving):undefined,
-        dateOfCurrentDivisionJoining: data.basicDetails.dateOfCurrentDivisionJoining? moment(data.basicDetails.dateOfCurrentDivisionJoining):undefined,
-        dateOfPreviousDivisionLeaving: data.basicDetails.dateOfPreviousDivisionLeaving?moment(data.basicDetails.dateOfPreviousDivisionLeaving):undefined,
+        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+          ...divHis,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+        })),
       },
       spouse: !data.spouse ? undefined : {
         ...data.spouse,

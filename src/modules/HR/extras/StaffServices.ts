@@ -56,7 +56,7 @@ export default {
    * @param {string} staffId - The ID of the staff member to retrieve.
    * @return {Promise<StandardResponse<Staff|null>>} A promise that resolves to the response containing the retrieved staff member or null if not found.
    */
-  getById: (staffId: string) =>
+  getById: (staffId: string): Promise<StandardResponse<Staff | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/hr/staffs/${staffId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       basicDetails: {
@@ -67,10 +67,13 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.basicDetails.dateOfJoining? moment(data.basicDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.basicDetails.dateOfLeaving?moment(data.basicDetails.dateOfLeaving):undefined,
-        dateOfCurrentDivisionJoining: data.basicDetails.dateOfCurrentDivisionJoining? moment(data.basicDetails.dateOfCurrentDivisionJoining):undefined,
-        dateOfPreviousDivisionLeaving: data.basicDetails.dateOfPreviousDivisionLeaving?moment(data.basicDetails.dateOfPreviousDivisionLeaving):undefined,
+        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+          ...divHis,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+        })),
       },
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),

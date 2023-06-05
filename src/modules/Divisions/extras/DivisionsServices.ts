@@ -15,7 +15,7 @@ export default {
 
   getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/', { headers: { ...getAuthHeader() } })),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
-  getSubDivisionsByDivisionId: (division: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division }, headers: { ...getAuthHeader() } })),
+  getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { division: divisionId }, headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ export default {
             subDivisions: [],
           }, { headers: { ...getAuthHeader() } })
           .then(async (createdDivision) => {
-            // Create subdivisions
+            // Create subDivisions
             try {
               for (let i = 0; i < division.subDivisions.length; i++) {
                 const subDiv = division.subDivisions[i];

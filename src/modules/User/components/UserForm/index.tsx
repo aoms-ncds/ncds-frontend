@@ -78,9 +78,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     //   if (deletedSubdivisionIds.length > 0) {
     //     console.log('testing neww', deletedSubdivisionIds[0]);
     //     if (editID) {
-    //       const subdivisionId = deletedSubdivisionIds[0];
-    //       if (subdivisionId) {
-    //         DivisionsServices.deleteChild(subdivisionId)
+    //       const subDivisionId = deletedSubdivisionIds[0];
+    //       if (subDivisionId) {
+    //         DivisionsServices.deleteChild(subDivisionId)
     //         .then((res) => {
     //           enqueueSnackbar({
     //             message: res.message,

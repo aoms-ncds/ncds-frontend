@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
-import { languages } from '../../../../extras/CommonConfig';
+import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
+import LanguagesService from '../../../Settings/extras/LanguagesService';
 
 const SpouseForm = (
   props: FormComponentProps<
@@ -12,6 +13,12 @@ const SpouseForm = (
     }
   >,
 ) => {
+  const [languages, setLanguages] = useState<ILanguage[]>([]);
+  useEffect(() => {
+    LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE })
+  .then((res) =>
+    setLanguages(res.data));
+  }, []);
   return (
     <>
       <Grid item xs={12} md={6} lg={4}>
