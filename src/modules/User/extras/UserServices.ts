@@ -29,6 +29,26 @@ export default {
           updatedAt: moment(user.updatedAt),
         })),
     ),
+  getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
+    getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+          ...divHis,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+        })),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
 
   getMe: (conditions?: FilterQuery<User>): Promise<StandardResponse<IWorker|Staff>> =>
     getStandardResponse<IWorker|Staff>(
@@ -51,5 +71,9 @@ export default {
         createdAt: moment(me.createdAt),
         updatedAt: moment(me.updatedAt),
       }),
+    ),
+  editPermission: (userID: string, permission: {name: string; value: boolean}) =>
+    getStandardResponse<void>(
+      axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } }),
     ),
 };

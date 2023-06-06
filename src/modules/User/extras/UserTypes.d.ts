@@ -5,7 +5,22 @@ export default {};
 
 declare global {
   type UserKind = 'staff' | 'worker';
+  interface IUserPermissions extends MongooseDocument {
+    ADMIN_ACCESS: boolean;
+    READ_WORKERS: boolean;
+    WRITE_WORKERS: boolean;
+    READ_STAFFS: boolean;
+    WRITE_STAFFS: boolean;
+    READ_DIVISIONS: boolean;
+    WRITE_DIVISIONS: boolean;
+    READ_FR: boolean;
+    WRITE_FR: boolean;
+    READ_IRO: boolean;
+    WRITE_IRO: boolean;
+    READ_XYZ: boolean;
+    WRITE_XYZ: boolean;
 
+  }
   interface BasicDetails {
     firstName: string;
     lastName: string;
@@ -104,6 +119,7 @@ declare global {
     supportDetails: SupportDetails;
     supportStructure: SupportStructure;
     status?: UserLifeCycleStates;
+    permissions?: IUserPermissions;
   }
   interface CreatableUser extends Creatable<User> {
     basicDetails: CreatableBasicDetails;
