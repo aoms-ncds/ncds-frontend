@@ -13,6 +13,7 @@ declare global {
     gender?: Gender;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
+    religion?:Religion;
     highestQualification?: string;
     motherTongue?: Types.ObjectId;
     communicationLanguage?: Types.ObjectId;
@@ -114,7 +115,7 @@ declare global {
   type Gender = 'Male' | 'Female' | 'Other';
   type MaritalStatus = 'Married' | 'Unmarried';
   type WorkerField = 'Missionary' | 'Non-Missionary';
-
+type Religion='Hindu'| 'Muslim'| 'Christian'|'Sikh';
   interface LoginCredentials {
     email: string;
     password: string;
