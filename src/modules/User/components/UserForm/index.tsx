@@ -30,6 +30,8 @@ import { Moment } from 'moment';
 import { useParams } from 'react-router-dom';
 import { childSupport } from '../../../Workers/extras/WorkersConfig';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ChildrenServices from '../../../Workers/extras/ChildrenServices';
+import { enqueueSnackbar } from 'notistack';
 
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   props: FormComponentProps<
@@ -44,11 +46,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
 
   const { editID } = useParams();
-  // const [children, setChildren] = useState<CreatableChild[]>((props.value as CreatableIWorker).children.length > 0 ? (props.value as CreatableIWorker).children : [{
-  //   // type: '',
-  //   firstName: '',
-  //   lastName: '',
-  // }]);
+
   const [newChild, setNewChild] = useState<CreatableChild>({
     // type: '',
     firstName: '',
@@ -72,41 +70,20 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       ...props.value,
       children: (props.value as CreatableIWorker).children.filter((_, i) => i !== _index),
     });
-    // const newChildren = (props.value as CreatableIWorker).children.filter((_, i) => i !== _index);
-    // const deletedChild=children.filter((_, i) => i == index);
-    //   const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
-    //   if (deletedSubdivisionIds.length > 0) {
-    //     console.log('testing neww', deletedSubdivisionIds[0]);
-    //     if (editID) {
-    //       const subDivisionId = deletedSubdivisionIds[0];
-    //       if (subDivisionId) {
-    //         DivisionsServices.deleteChild(subDivisionId)
-    //         .then((res) => {
-    //           enqueueSnackbar({
-    //             message: res.message,
-    //             variant: 'success',
-    //           });
-    //         })
-    //           .catch((err) => {
-    //             console.log(err);
-    //             enqueueSnackbar({
-    //               message: err.message,
-    //               variant: 'error',
-    //             });
-    //           });
-    //       }
-    //     }
-    //   }
-    //   enqueueSnackbar({
-    //     message: 'Deleted Sub Division',
-    //     variant: 'success',
-    //   });
-    //   console.log(newChildren);
-    //   setChildren(newChildren);
-    //   onChange(newChildren); // Call the onChange prop with the updated division details
-    //   return newChildren;
-    // };
   };
+  const [childSupport, setChildSupport] = useState<ChildSupport[]>([]);
+
+  useEffect(() => {
+    ChildrenServices.getAllChildSupport()
+    .then((res)=>setChildSupport(res.data))
+    .catch((error) =>
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      }),
+    );
+  }, []);
+
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {
   //   lastProgramNameField.current?.focus();
@@ -618,15 +595,25 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   <Autocomplete
                     value={newChild?.childSupport}
                     options={childSupport ?? []}
-                    getOptionLabel={(childSupport) => childSupport}
+                    getOptionLabel={(childSupport) => childSupport.name}
                     onChange={(_e, childSupport) => {
                       setNewChild((newChild) => ({
                         ...newChild,
-                        childSupport: childSupport ?? '',
+                        childSupport: childSupport??undefined,
                       }));
                     }}
                     renderInput={(params) => <TextField {...params} label="Child Support" variant={props.options?.textField.variant} required />}
                     fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label="Child Support Amount"
+                    value={newChild?.childSupport?.amount}
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true }}
+                    disabled
                   />
                 </Grid>
               </Grid>

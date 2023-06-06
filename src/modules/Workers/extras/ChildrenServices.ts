@@ -28,4 +28,11 @@ export default {
    * @return {Promise<StandardResponse<Child>>} A promise that resolves to the response containing the edited child record.
    */
   edit: (child: CreatableChild): Promise<StandardResponse<Child>> => getStandardResponse<Child>(axios.patch(`/workers/children/${child._id}`, child, { headers: { ...getAuthHeader() } })),
+
+  /**
+   * Retrieves all child support records.
+   * @return {Promise<StandardResponse<ChildSupport[]>>} A promise that resolves to the response containing the list of all child records.
+   */
+  getAllChildSupport: (): Promise<StandardResponse<ChildSupport[]>> => getStandardResponse<ChildSupport[]>(axios.get('/workers/childSupport/', { headers: { ...getAuthHeader() } })),
+
 };
