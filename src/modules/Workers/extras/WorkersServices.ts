@@ -73,6 +73,7 @@ export default {
       officialDetails: {
         ...data.officialDetails,
         dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
         divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
           ...divHis,
           dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
@@ -82,11 +83,15 @@ export default {
       spouse: !data.spouse ? undefined : {
         ...data.spouse,
         dateOfBirth: data.spouse.dateOfBirth?moment(data.spouse.dateOfBirth):undefined,
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       children: !data.children ? undefined : data.children.map((child: any) => ({
         ...child,
         dateOfBirth: child.dateOfBirth? moment(child.dateOfBirth):undefined,
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
       })),
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),

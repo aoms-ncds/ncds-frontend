@@ -52,9 +52,18 @@ const NewOfficialDetailsForm = (
   const [newDiv, setnewDiv] = useState<Division|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleopenDivConfirm] = useState<boolean>(false);
+
   useEffect(() => {
-    console.log(props.value.divisionHistory);
-  }, [props.value.divisionHistory]);
+    DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
+    .then((res) => setSubDivisions(res.data))
+    .catch((error) =>
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      }),
+    );
+    // console.log(props.value.divisionHistory);
+  }, [newDiv]);
 
   useEffect(() => {
     // if (props.action!='add') {
@@ -126,8 +135,8 @@ const NewOfficialDetailsForm = (
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
+            setnewDiv(newVal);
             if (props.action==='edit') {
-              setnewDiv(newVal);
               if (newVal?._id!=props.value.divisionHistory[props.value.divisionHistory.length-1].division?._id) {
                 toggleopenDivConfirm(true);
               }
@@ -140,6 +149,7 @@ const NewOfficialDetailsForm = (
                   dateOfDivisionLeaving: null,
                 }]});
             }
+
             // newVal?._id!==currentDiv._id? (
             //   props.onChange({ ...props.value, divisionHistory: [
             //     ...props.value.divisionHistory, {
@@ -159,14 +169,6 @@ const NewOfficialDetailsForm = (
             if (!newVal) {
               setSubDivisions([]);
             }
-            DivisionsServices.getSubDivisionsByDivisionId(newVal?._id as string)
-              .then((res) => setSubDivisions(res.data))
-              .catch((error) =>
-                enqueueSnackbar({
-                  variant: 'error',
-                  message: error.message,
-                }),
-              );
           }}
           renderInput={(params) => (
             <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant} required />
