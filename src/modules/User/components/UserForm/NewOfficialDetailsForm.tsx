@@ -135,6 +135,7 @@ const NewOfficialDetailsForm = (
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
+            setnewDiv(newVal);
             if (props.action==='edit') {
               if (newVal?._id!=props.value.divisionHistory[props.value.divisionHistory.length-1].division?._id) {
                 toggleopenDivConfirm(true);
@@ -148,7 +149,7 @@ const NewOfficialDetailsForm = (
                   dateOfDivisionLeaving: null,
                 }]});
             }
-            setnewDiv(newVal);
+
             // newVal?._id!==currentDiv._id? (
             //   props.onChange({ ...props.value, divisionHistory: [
             //     ...props.value.divisionHistory, {

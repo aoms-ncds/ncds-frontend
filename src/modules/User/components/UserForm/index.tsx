@@ -594,7 +594,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={newChild?.childSupport}
-                    options={childSupport ?? []}
+                    options={childSupport }
                     getOptionLabel={(childSupport) => childSupport.name}
                     onChange={(_e, childSupport) => {
                       setNewChild((newChild) => ({
