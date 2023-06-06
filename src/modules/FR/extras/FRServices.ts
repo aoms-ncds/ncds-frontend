@@ -808,44 +808,12 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(
-      dummyRequest({
-        data: {
-          _id: '1',
-          remark: remark.remark,
-          createdBy: {
-            _id: '32490245',
-            firstName: 'Jishnu',
-            lastName: 'Raj',
-            dob: moment(),
-            doj: moment(),
-            designation: {
-              _id: 'jr20j0f',
-              name: 'Tech Lead',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '0tj30rftko',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            phone: '',
-            email: '',
-
-            idFormat: '',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        message: 'Remarks Updated',
-        result: 'success',
-        timeout: 500,
-      },
-      ),
+      axios.post('/fr/remarks', {
+        ...remark,
+        createdBy: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null,
+      }),
     ),
+
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
     return getStandardResponse<CreatableFR>(
       new Promise((resolve, reject) => {

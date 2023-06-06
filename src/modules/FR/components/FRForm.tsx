@@ -222,7 +222,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     //   });
   }, [props.value.Particulars]);
   const addParticulars = () => {
-    console.log('here');
     const snackbarId = enqueueSnackbar({
       message: 'Adding Particulars',
       variant: 'info',
@@ -842,6 +841,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                         remark: '',
                                       }));
                                       toggleOpenRemarks(false);
+                                      enqueueSnackbar(res.message, { variant: 'success' });
                                     })
                                     .catch((error) => {
                                       enqueueSnackbar({
