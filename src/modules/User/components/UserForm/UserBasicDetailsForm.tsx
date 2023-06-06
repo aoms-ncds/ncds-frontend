@@ -183,6 +183,19 @@ const UserBasicDetailsForm = (
         </Grid>
       )}
       <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete<Religion>
+          options={['Hindu', 'Muslim', 'Christian', 'Sikh']}
+          value={props.value.religion??null}
+          onChange={(e, selectedReligion) =>
+            props.onChange({
+              ...props.value,
+              religion: selectedReligion ?? undefined,
+            })
+          }
+          renderInput={(params) => <TextField {...params} label="Religion" variant={props.options?.textField?.variant} />}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Highest Qualification"
           value={props.value.highestQualification}
