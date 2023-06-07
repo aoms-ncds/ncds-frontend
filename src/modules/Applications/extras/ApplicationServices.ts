@@ -3,7 +3,6 @@ import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers
 import axios from 'axios';
 import { rejects } from 'assert';
 
-
 export default {
   getCount: () =>
     getStandardResponse<number>(
@@ -15,25 +14,11 @@ export default {
         timeout: 500,
       }),
     ),
-  getAll: () => getStandardResponse<Application[]>(axios.get('/application/')),
+  getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application', { params: conditions })),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get('/application/' + applicationID)),
-  approve: (applicationID: string) =>
-    getStandardResponse<void>(
-      dummyRequest<void>({
-        message: 'Approved ',
-        result: 'success',
-        timeout: 500,
-      }),
-    ),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  reject: (applicationID: string) =>
-    getStandardResponse<void>(
-      dummyRequest<void>({
-        message: 'Recjected ',
-        result: 'success',
-        timeout: 500,
-      }),
-    ),
+  approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`)),
+  reject: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`)),
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (application: CreatableApplication) => {
     console.log(application, ' ...application, ...application, ...application,');
@@ -60,12 +45,11 @@ export default {
     );
   },
 
-  editApplication: (applicationID:any, application: CreatableApplication) => {
-    console.log(application, ' updateddd');
+  editApplication: (applicationID: any, application: CreatableApplication) => {
     return getStandardResponse<Application>(
       new Promise((resolve, rejects) => {
         axios
-          .patch('/application/'+applicationID, {
+          .patch('/application/' + applicationID, {
             ...application,
             application: {
               name: application.name,
@@ -84,7 +68,6 @@ export default {
       }),
     );
   },
-
 
   saveRelease: (applicationID: string) =>
     getStandardResponse<void>(
