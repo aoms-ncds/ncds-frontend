@@ -148,3 +148,6 @@ export default {
 //   'Yoruba - Èdè Yorùbá',
 //   'Zulu - isiZulu',
 // ] as const;
+
+export const KB = 1024;
+export const MB = 1024*1024;

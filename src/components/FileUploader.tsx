@@ -1,4 +1,4 @@
-import { Delete as DeleteIcon, InsertDriveFile, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
+import { Delete as DeleteIcon, InsertDriveFile, PanToolSharp, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -27,8 +27,13 @@ import React, { useEffect, useRef, useState } from 'react';
 interface FileUploaderProps {
   id?: string;
   title: string;
-  types: FileObjectType[];
-  accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
+  types: FileObjectType[]; // pass the type of file you need to upload
+  // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
+  limits:{
+    maxItemSize?: number;
+   maxItemCount?: number;
+   maxTotalSize?: number;
+  };
   open: boolean;
   onClose: () => void;
   uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
@@ -56,11 +61,24 @@ const FileUploader = (props: FileUploaderProps) => {
   const [dragged, setDragged] = useState(false);
 
   const uploadFile = (files: FileList) => {
+    if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
+      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
+
+      enqueueSnackbar({
+        message: 'Maximum files Allowed Exceeded.  ',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: `Maximum files Allowed:${props.limits.maxItemCount}`,
+        variant: 'info',
+      });
+      return;
+    }
     for (let i = 0; i < files.length; i++) {
       const droppedFile = files[i];
-      if (props.types.includes(droppedFile.type as FileObjectType)) {
+      if (validateFile(droppedFile)) {
         const tempID = new Date().getTime().toString();
-        // console.log('Looping');
+        console.log(droppedFile.size);
         console.log('Uploading');
         setUploadingFiles((_files) => [
           ..._files,
@@ -90,6 +108,10 @@ const FileUploader = (props: FileUploaderProps) => {
           .then((res) => {
             setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
             setFileObjects((_file) => (_file ? [..._file, res.data] : [res.data]));
+            enqueueSnackbar({
+              message: `Successfully Uploaded  ${res.data.name}`,
+              variant: 'success',
+            });
           })
           .catch((error) => {
             console.log('Caught error', error);
@@ -97,13 +119,57 @@ const FileUploader = (props: FileUploaderProps) => {
         // setFile(droppedFile);
         // setUploadingFiles
         // readFileContent(droppedFile);
-      } else {
-        // Show error message
-        enqueueSnackbar({
-          message: ' Please Drop an Excel file Only',
-          variant: 'info',
-        });
       }
+    }
+  };
+
+  const validateFile=(file:File)=>{
+    let totalSize=0;
+    fileObjects?.map((_file)=>totalSize+=_file.size);
+
+    if (props.limits.maxItemCount && fileObjects && fileObjects?.length+1>props.limits.maxItemCount) {
+      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
+
+      enqueueSnackbar({
+        message: 'Maximum files Allowed Exceeded.  ',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: `Maximum files Allowed:${convertFileSize(props.limits.maxItemCount).size.toFixed(0)} ${convertFileSize(props.limits.maxItemCount).type}`,
+        variant: 'info',
+      });
+      return false;
+    } else if (props.limits.maxTotalSize && totalSize+file.size>props.limits.maxTotalSize) {
+      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
+
+      enqueueSnackbar({
+        message: ` Maximum Total File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxTotalSize).size.toFixed(0)} ${convertFileSize(props.limits.maxTotalSize).type}`,
+        variant: 'error',
+      });
+      return false;
+    } else if (props.limits.maxItemSize && file.size>props.limits.maxItemSize) {
+      // console.log(file.size+' ----- '+props.limits.maxItemSize);
+
+      enqueueSnackbar({
+        message: ` File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxItemSize).size.toFixed(0)}${convertFileSize(props.limits.maxItemSize).type}`,
+        variant: 'error',
+      });
+      return false;
+    } else if (!props.types.includes(file.type as FileObjectType)) {
+      enqueueSnackbar({
+        message: 'Invalid File Type',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: ` Expected file types ${props.types.join(', ')} `,
+        variant: 'info',
+      });
+      return false;
+    } else {
+      // console.log(fileObjects?fileObjects.length+1:''+' ----- '+props.limits.maxItemCount);
+      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
+      // console.log(file.size+' ----- '+props.limits.maxItemSize);
+      return true;
     }
   };
 
@@ -236,7 +302,7 @@ const FileUploader = (props: FileUploaderProps) => {
                             disableUnderline
                             fullWidth
                           />
-                          <Typography variant="caption">{(file.size / 1000 / 1000).toFixed(2)} MB</Typography>
+                          <Typography variant="caption">{(file?.size / 1000 / 1000).toFixed(2)} MB</Typography>
                         </Grid>
                       </Grid>
                     </CardContent>
@@ -291,7 +357,7 @@ const FileUploader = (props: FileUploaderProps) => {
           {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
             <>
               <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-                No files found!
+              Drag and Drop here
               </Typography>
             </>
           )}
@@ -304,7 +370,7 @@ const FileUploader = (props: FileUploaderProps) => {
           <input
             type="file"
             id={props.id ?? 'file-input'}
-            accept={props.accept.join(',')}
+            accept={props.types.join(',')}
             value=""
             onChange={(event) => {
               if (event.target.files) {

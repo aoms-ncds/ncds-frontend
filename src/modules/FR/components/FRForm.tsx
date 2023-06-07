@@ -872,13 +872,12 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       <FileUploader
         title="Upload bills"
         types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
-        // limits={{
-        //   types: [],
-        //   maxItemSize: "2M",
-        //   maxItemCount: 3,
-        //   maxTotalSize: "200M"
-        // }}
-        accept={['video/*']}
+        limits={{
+          maxItemSize: 2048,
+          maxItemCount: 3,
+          maxTotalSize: 8000,
+        }}
+        // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         getFiles={TestServices.getBills}
