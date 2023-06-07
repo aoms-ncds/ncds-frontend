@@ -6,7 +6,7 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add a
 import { Link } from 'react-router-dom';
 import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
@@ -34,11 +34,13 @@ const ManageFrPage = () => {
       });
   }, []);
 
-  const columns = [
+  const columns: GridColDef<Frrequest>[] = [
     {
       field: '_manage',
       headerName: 'Action',
-      minWidth: 50,
+      width: 50,
+      align: 'center',
+      headerAlign: 'center',
       type: 'string',
       renderCell: (props: any) => (
         <DropdownButton
@@ -115,24 +117,29 @@ const ManageFrPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: '_id', headerName: 'FR No', width: 70 },
+    {
+      field: 'slno', headerName: 'SI No', width: 70, align: 'center', headerAlign: 'center',
+    },
+    {
+      field: '_id', headerName: 'FR No', width: 70, align: 'center', headerAlign: 'center',
+    },
     { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
       <p> {props.row.date}</p>
-    ), width: 130 },
+    ), width: 80, align: 'center', headerAlign: 'center' },
     { field: 'divisionName', headerName: 'Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeDivision?.DivisionDetails.name}</p>
-    ), width: 130 },
+    ), width: 130, align: 'center', headerAlign: 'center' },
     { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeSubdivision?.name}</p>
-    ), width: 130 },
+    ), width: 160, align: 'center', headerAlign: 'center' },
     { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
       <p> {props.row.mainCategory}</p>
-    ), width: 130 },
+    ), width: 130, align: 'center', headerAlign: 'center' },
     {
       field: 'requestedAmount',
       headerName: 'Requested Amount',
-      width: 130,
+      width: 150,
+      align: 'center', headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as Frrequest;
         const particularAmount = frRequest.Particulars.reduce(
@@ -143,10 +150,10 @@ const ManageFrPage = () => {
       },
     },
 
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
+    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
       <p> {props.row.sanctionedAsPer}</p>
-    ), width: 130 },
+    ), width: 150, align: 'center', headerAlign: 'center' },
   ];
 
   return (

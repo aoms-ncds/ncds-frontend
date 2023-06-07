@@ -59,7 +59,7 @@ export default {
           .post('/fr/', {
             ...frRequest,
             Particulars: [],
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (createdFR) => {
             // Create partcularsisions
             try {

@@ -237,9 +237,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           message: res.message,
           variant: 'success',
         });
-        setNewParticular(() => ({
-          _id: '',
-          mainCategory: '',
+        setNewParticular((particularDetails) => ({
+          ...particularDetails,
           subCategory1: '',
           subCategory2: '',
           subCategory3: '',
@@ -350,8 +349,18 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField label="Worker Code" value={props.value.purposeWorker?.workerCode} fullWidth disabled />
+                    <TextField
+                      label="Worker Code"
+                      value={props.value.purposeWorker?.workerCode}
+                      fullWidth
+                      disabled
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
                   </Grid>
+
+
                 </>
               ) : null}
               {props.value.purpose === 'Subdivision' ? (
@@ -361,7 +370,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     value={props.value.purposeSubdivision}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
-                    renderInput={(params) => <TextField {...params} label="Subdivision" required />}
+                    renderInput={(params) => <TextField {...params} label="Subdivision" />}
                   />
                 </Grid>
               ) : null}
