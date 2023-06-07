@@ -80,17 +80,7 @@ const ApplicationsListingPage = () => {
           variant: 'success',
         });
 
-        ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
-          .then((res) => {
-            setApplications(res.data);
-          })
-          .catch((error) => {
-            enqueueSnackbar({
-              message: error.message,
-              variant: 'error',
-            });
-          });
-
+        setApplications((prevApps) => (!prevApps ? [res.data] : [...prevApps, res.data]));
         setApplicationFormState(() => ({
           name: '',
           reason: '',
