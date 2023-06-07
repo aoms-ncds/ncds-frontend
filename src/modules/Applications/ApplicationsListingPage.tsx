@@ -8,6 +8,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
 import { useParams } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
+
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
@@ -21,7 +22,7 @@ const ApplicationsListingPage = () => {
   });
 
   useEffect(() => {
-    ApplicationServices.getAll({ status: UserLifeCycleStates.WAITING_FOR_HR_APPROVAL })
+    ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
       .then((res) => {
         setApplications(res.data);
       })
@@ -31,9 +32,9 @@ const ApplicationsListingPage = () => {
           variant: 'error',
         });
       });
-  }, [applicationFormState]);
+  }, []);
 
-  const EditApplication = (e: any) => {
+  const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editid) {
       ApplicationServices.editApplication(editid, applicationFormState)
@@ -43,13 +44,13 @@ const ApplicationsListingPage = () => {
             message: res.message,
             variant: 'success',
           });
-          const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
+          setApplicationFormState({
             name: '',
             reason: '',
             status: '',
           });
 
-          return ApplicationServices.getAll({ status: UserLifeCycleStates.WAITING_FOR_HR_APPROVAL });
+          return ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED });
         })
         .then((res) => {
           setApplications(res.data);
@@ -63,7 +64,7 @@ const ApplicationsListingPage = () => {
     }
   };
 
-  const AddApplication = (event: any) => {
+  const AddApplication = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const snackbarId = enqueueSnackbar({
       message: action === 'add' ? 'Creating Request' : 'Updating Request',
@@ -78,6 +79,18 @@ const ApplicationsListingPage = () => {
           message: res.message,
           variant: 'success',
         });
+
+        ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
+          .then((res) => {
+            setApplications(res.data);
+          })
+          .catch((error) => {
+            enqueueSnackbar({
+              message: error.message,
+              variant: 'error',
+            });
+          });
+
         setApplicationFormState(() => ({
           name: '',
           reason: '',
