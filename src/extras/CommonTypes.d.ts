@@ -22,7 +22,6 @@ declare global {
     afterLoad: () => void;
   }
   interface StandardResponse<T> {
-    status(status: any): unknown;
     success?: boolean;
     error?: string;
     message?: string;
