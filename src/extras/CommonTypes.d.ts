@@ -50,6 +50,7 @@ declare global {
     | 'image/png'
     | `video/${string}`
     | `image/${string}`;
+
   type FileObjectExtensions = '.xlsx' | '.xls';
   interface AJAXProgress {
     loaded: number;

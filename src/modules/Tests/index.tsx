@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
+import { MB } from '../../extras/CommonConfig';
 
 const index = () => {
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -20,14 +21,23 @@ const index = () => {
       {/* File uploader starts */}
       <FileUploader
         title="Upload bills"
-        types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
-        // limits={{
-        //   types: [],
-        //   maxItemSize: "2M",
-        //   maxItemCount: 3,
-        //   maxTotalSize: "200M"
-        // }}
-        accept={['video/*']}
+        types={['application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/pdf',
+          'video/quicktime',
+          'image/png',
+          'video/mkv',
+          'video/mp4',
+          'image/jpg',
+          'image/jpeg',
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 5*MB,
+          maxItemCount: 3,
+          maxTotalSize: 15*MB,
+        }}
+        // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         getFiles={TestServices.getBills}
