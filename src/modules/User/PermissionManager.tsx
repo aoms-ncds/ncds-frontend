@@ -28,7 +28,7 @@ const PermissionManager = () => {
                 label={key.replaceAll('_', ' ')}
                 control={
                   <Checkbox
-                    checked={user?.permissions && user?.permissions[key as keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>]}
+                    checked={user?.permissions && user?.permissions[key as Permission]}
                     onChange={(e) =>{
                       const checked = e.target.checked;
                       setUser((user) => (!user || !user.permissions) ? null : ({
