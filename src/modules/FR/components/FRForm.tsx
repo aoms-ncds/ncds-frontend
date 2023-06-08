@@ -36,6 +36,7 @@ import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
+import { MB } from '../../../extras/CommonConfig';
 
 const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -302,7 +303,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  value={props.value.FRdate}
+                  value={props.value.FRdate || moment()}
                   onChange={(newDate) =>
                     props.onChange({
                       ...props.value,
@@ -310,6 +311,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     })
                   }
                   format="DD/MM/YYYY"
+                  slotProps={{ textField: { fullWidth: true } }}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -882,9 +884,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         title="Upload bills"
         types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
         limits={{
-          maxItemSize: 2048,
+          maxItemSize: 6*MB,
           maxItemCount: 3,
-          maxTotalSize: 8000,
+          maxTotalSize: 18*MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
