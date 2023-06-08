@@ -93,7 +93,7 @@ const FRreciptTemplate = () => {
       <Page size="A4">
         <Image src="/iet_logo.png" style={styles.image} />
         <div>
-          <Text style={styles.title}>REQUISTION FOR FINANCE</Text>
+          <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>ADDRESS</Text>
           <Text style={styles.frno}>FRNO:</Text>
           <Text style={styles.month}>For the Month of______</Text>
@@ -115,7 +115,7 @@ const FRreciptTemplate = () => {
                 Sub Division Name
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                Quntity
+                Quantity
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                 Description

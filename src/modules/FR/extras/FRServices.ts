@@ -856,7 +856,7 @@ export default {
         axios
           .patch('/fr/' + frID+'/'+operation, {
             ...frRequest,
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
             resolve(updatedFR);
           })
