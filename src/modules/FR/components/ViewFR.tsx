@@ -130,9 +130,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
     subCategory1: '',
     subCategory2: '',
     subCategory3: '',
-    quantity: '',
+    // quantity: 0,
     month: '',
-    requestedAmount: '',
+    // requestedAmount: '',
     narration: '',
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -243,9 +243,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
           subCategory1: '',
           subCategory2: '',
           subCategory3: '',
-          quantity: '',
+          // quantity: '',
           month: '',
-          requestedAmount: '',
+          // requestedAmount: '',
           narration: '',
         }));
         props.onChange({
@@ -732,7 +732,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onChange={(e) =>
                             setNewParticular((particularDetails) => ({
                               ...particularDetails,
-                              quantity: e.target.value,
+                              quantity: Number(e.target.value),
+
                             }))
                           }
                           fullWidth
@@ -763,7 +764,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onChange={(e) =>
                             setNewParticular((particularDetails) => ({
                               ...particularDetails,
-                              requestedAmount: e.target.value,
+                              requestedAmount: Number( e.target.value),
                             }))
                           }
                           fullWidth
