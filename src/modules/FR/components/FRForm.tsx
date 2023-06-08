@@ -22,6 +22,8 @@ import {
   IconButton,
   InputAdornment,
   FormControl,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -129,9 +131,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     subCategory1: '',
     subCategory2: '',
     subCategory3: '',
-    quantity: '',
     month: '',
-    requestedAmount: '',
     narration: '',
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -243,9 +243,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           subCategory1: '',
           subCategory2: '',
           subCategory3: '',
-          quantity: '',
           month: '',
-          requestedAmount: '',
           narration: '',
         }));
         props.onChange({
@@ -744,10 +742,61 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onChange={(e) =>
                             setNewParticular((particularDetails) => ({
                               ...particularDetails,
-                              quantity: e.target.value,
+                              quantity: Number(e.target.value),
                             }))
                           }
                           fullWidth
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <TextField
+                          label="Requested Amount"
+                          type="number"
+                          value={newParticular?.unitPrice}
+                          onChange={(e) =>
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              unitPrice: Number(e.target.value),
+                              requestedAmount: Number(e.target.value),
+                            }))
+                          }
+                          fullWidth
+                          required
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <FormControlLabel
+                          label="Multiply By Quantity"
+                          control={
+                            <Checkbox
+                              onChange={(e) =>
+                                setNewParticular((particularDetails) => ({
+                                  ...particularDetails,
+                                  requestedAmount:
+                                  e.target.checked ?
+                                    (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) :
+                                    particularDetails?.unitPrice ?? 0,
+                                }))
+                              }
+                            />
+
+                          }
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <TextField
+                          label="Total Amount"
+                          type="number"
+                          value={newParticular?.requestedAmount}
+                          onChange={(e) =>
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              requestedAmount: Number(e.target.value),
+                            }))
+                          }
+                          fullWidth
+                          required
+                          InputLabelProps={{ shrink: true }}
                         />
                       </Grid>
                       <Grid item md={12}>
@@ -767,21 +816,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           fullWidth
                         />
                       </Grid>
-                      <Grid item md={12}>
-                        <TextField
-                          label="Requested Amount"
-                          type="number"
-                          value={newParticular?.requestedAmount}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              requestedAmount: e.target.value,
-                            }))
-                          }
-                          fullWidth
-                          required
-                        />
-                      </Grid>
+
                       <Grid item md={12}>
                         <TextField
                           label="Narration"

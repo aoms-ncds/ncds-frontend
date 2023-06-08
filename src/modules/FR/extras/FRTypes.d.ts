@@ -135,9 +135,10 @@ declare global{
       subCategory1: string;
       subCategory2: string;
       subCategory3: string;
-      quantity: string;
+      quantity?: number;
       month: string;
-      requestedAmount: string;
+      unitPrice?:number;
+      requestedAmount?: number;
       narration: string;
     }
     type CreatableParticular = Creatable<Particular>;
