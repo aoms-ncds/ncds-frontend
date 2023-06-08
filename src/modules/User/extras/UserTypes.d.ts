@@ -22,6 +22,7 @@ declare global {
 
   }
   interface BasicDetails {
+    imageURL?: string;
     firstName: string;
     lastName: string;
     dateOfBirth: Moment;
@@ -114,6 +115,7 @@ declare global {
     MUTDeduction?: number;
   }
   interface User extends MongooseDocument {
+
     basicDetails: BasicDetails;
     officialDetails: OfficialDetails;
     supportDetails: SupportDetails;

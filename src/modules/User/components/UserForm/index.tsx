@@ -18,6 +18,7 @@ import {
   FormLabel,
   IconButton,
   Stack,
+  Avatar,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import UserBasicDetailsForm from './UserBasicDetailsForm';
@@ -29,7 +30,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import { useParams } from 'react-router-dom';
 import { childSupport } from '../../../Workers/extras/WorkersConfig';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
 import { enqueueSnackbar } from 'notistack';
 
@@ -39,7 +40,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
       kind: UserKind;
-    }
+      profilePic:{
+        userPhoto?:File;
+        setUserPhoto?:(newUserPhoto: File) => void;
+      };
+        }
   >,
 ) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -54,6 +59,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setchildAction] = useState<'add' | 'edit'>('add');
+
+  // const [userPhoto, setUserPhoto] = useState<File>();
+  const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
+
 
   const [open, toggleOpen] = useState(false);
   const handleAddChild = () => {
@@ -134,6 +143,46 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               }}
             >
               <Grid container spacing={3}>
+                {props.options?.profilePic.setUserPhoto &&(
+                  <Grid item xs={12}>
+                    <label htmlFor="imagePicker">
+                      <Avatar
+                        sx={{
+                          height: 150,
+                          width: 150,
+                          marginLeft: 'auto',
+                          marginRight: 'auto',
+                        }}
+                        src={userPhotoBlobURL ?? ''}
+                      >
+                        {!userPhotoBlobURL && <ImageIcon sx={{ fontSize: 100 }} />}
+                      </Avatar>
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="imagePicker"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        e.preventDefault(); // Prevent the default behavior of the file input
+
+                        if (e.target.files) {
+                          console.log('size is', e.target.files[0].size / 1024);
+                          if (e.target.files[0].size > 1e6) {
+                            enqueueSnackbar({
+                              message: 'File size cannot be greater than 1 MB',
+                              variant: 'error',
+                            });
+                          } else {
+                            props.options?.profilePic?.setUserPhoto?.(e.target.files[0]);
+                            setUserPhotoBlobURL(URL.createObjectURL(e.target.files[0]));
+                          }
+                        }
+                      }}
+                    />
+                  </Grid>
+                )}
+
                 <Grid item xs={12} md={6} lg={8}>
                   <TextField
                     label={props.options?.kind == 'worker' ? 'Worker Code' : 'Staff Code'}
@@ -307,7 +356,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Button>
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
-                  {props.options?.kind === 'staff' ? 'Submit' : 'Next'}{' '}
+                  {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '}
                 </Button>
               </div>
             </form>

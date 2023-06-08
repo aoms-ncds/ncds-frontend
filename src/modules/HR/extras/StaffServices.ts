@@ -12,16 +12,20 @@ export default {
   /**
    * Creates a new staff member.
    * @param {CreatableStaff} staff - The staff member to be created.
-   * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the created staff member.
+   * @param {File|undefined} userPhoto - The worker to be created.
+   *  @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the created staff member.
    */
-  create: (staff: CreatableStaff) => getStandardResponse<Staff>(axios.post('/hr/staffs', staff, { headers: { ...getAuthHeader() } })),
+  create: (staff: CreatableStaff, userPhoto: File | undefined) =>
+    getStandardResponse<Staff>(axios.post('/hr/staffs', { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Edits a staff member.
    * @param {CreatableNewUser} staff - The staff member to be edited.
-   * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the edited staff member.
+   * @param {File|undefined} userPhoto - The worker to be created.
+  * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the edited staff member.
    */
-  edit: (staff: CreatableStaff): Promise<StandardResponse<Staff>> => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff, { headers: { ...getAuthHeader() } })),
+  edit: (staff: CreatableStaff, userPhoto: File | undefined): Promise<StandardResponse<Staff>> =>
+    getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Deletes a staff member.
@@ -67,12 +71,12 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
-        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+        dateOfJoining: data.officialDetails.dateOfJoining ? moment(data.officialDetails.dateOfJoining) : undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving ? moment(data.officialDetails.dateOfLeaving) : undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
           ...divHis,
-          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
-          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
         })),
       },
       createdAt: moment(data.createdAt),
