@@ -23,9 +23,32 @@ const App = () => {
           background: {
             default: prefersDarkMode ? '#121212' : '#e1e0e0',
           },
-          // primary: {
-          //   main: '#FF0000',
-          // },
+          primary: {
+            main: '#c4161c',
+          },
+        },
+        components: {
+          MuiDrawer: {
+            styleOverrides: {
+              paper: {
+                backgroundColor: prefersDarkMode ? '#1b253d' : '#FFFFFF',
+              },
+            },
+          },
+          MuiCard: {
+            styleOverrides: {
+              root: {
+                backgroundColor: prefersDarkMode ? '#1b253d' : '#FFFFFF',
+              },
+            },
+          },
+          MuiAppBar: {
+            styleOverrides: {
+              root: {
+                backgroundColor: '#c4161c',
+              },
+            },
+          },
         },
       }),
     [prefersDarkMode],

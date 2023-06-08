@@ -1,7 +1,6 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { rejects } from 'assert';
 
 export default {
   getCount: () =>
@@ -12,12 +11,12 @@ export default {
         message: 'Successfully fetched array of Application count',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
-  getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application',{ params: conditions })),
-  getById: (applicationID: string) => getStandardResponse<Application>(axios.get('/application/' + applicationID)),
-  approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`)),
-  reject:(applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`)),
+  getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application', { params: conditions, headers: { ...getAuthHeader() } })),
+  getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
+  approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`, null, { headers: { ...getAuthHeader() } })),
+  reject: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, null, { headers: { ...getAuthHeader() } })),
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (application: CreatableApplication) => {
@@ -32,7 +31,7 @@ export default {
               reason: application.reason,
               status: application.status,
             },
-          })
+          }, { headers: { ...getAuthHeader() } })
 
           .then(async (application) => {
             try {
@@ -41,7 +40,7 @@ export default {
               rejects(error);
             }
           });
-      })
+      }),
     );
   },
 
@@ -56,7 +55,7 @@ export default {
               reason: application.reason,
               status: application.status,
             },
-          })
+          }, { headers: { ...getAuthHeader() } })
 
           .then(async (updatedApplication) => {
             try {
@@ -65,7 +64,7 @@ export default {
               rejects(error);
             }
           });
-      })
+      }),
     );
   },
 
@@ -76,6 +75,6 @@ export default {
         message: 'Network Error',
         result: 'success',
         timeout: 500,
-      })
+      }),
     ),
 };

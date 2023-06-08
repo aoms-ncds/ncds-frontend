@@ -54,9 +54,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       field: 'Missionary',
       martialStatus: 'Married',
       highestQualification: 'Ph.D.',
-      motherTongue: 'English',
-      communicationLanguage: 'English',
-      knownLanguages: ['English', 'Malayalam - മലയാളം'],
+      // motherTongue: 'English',
+      // communicationLanguage: 'English',
+      // knownLanguages: ['English', 'Malayalam - മലയാളം'],
       email: 'abcd@gmail.com',
       phone: '1234567890',
       alternativePhone: '9876543210',
@@ -92,13 +92,8 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
       remarks: 'Lorem ipsum dolor sit amet.',
       selfSupport: true,
       status: 'Ministering',
-      dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-      dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+      divisionHistory: [],
       noOfChurches: 5,
-      subdivision: {
-        _id: 'skjdfj',
-        name: 'ksdfj',
-      },
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,
@@ -227,7 +222,6 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     //   });
   }, [props.value.Particulars]);
   const addParticulars = () => {
-    console.log('here');
     const snackbarId = enqueueSnackbar({
       message: 'Adding Particulars',
       variant: 'info',
@@ -847,6 +841,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                         remark: '',
                                       }));
                                       toggleOpenRemarks(false);
+                                      enqueueSnackbar(res.message, { variant: 'success' });
                                     })
                                     .catch((error) => {
                                       enqueueSnackbar({

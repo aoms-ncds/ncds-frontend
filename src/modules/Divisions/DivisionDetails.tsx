@@ -86,6 +86,13 @@ const DivisionDetailsPage = () => {
       IFSCCode: '',
       beneficiary: '',
     },
+    otherBankDetails: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
     createdAt: moment(),
     updatedAt: moment(),
   });
@@ -208,7 +215,6 @@ const DivisionDetailsPage = () => {
                   action={'add'}
                   options={{ title: 'FCRA Bank Details' }}
                 />
-
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
                   onChange={(newbankDetails) => {
@@ -216,6 +222,14 @@ const DivisionDetailsPage = () => {
                   }}
                   action={'add'}
                   options={{ title: 'Local Bank Details' }}
+                />
+                <BankDetailsForm
+                  value={divisionDetails?.otherBankDetails}
+                  onChange={(newbankDetails) => {
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails: newbankDetails as BankDetails }));
+                  }}
+                  action={'add'}
+                  options={{ title: 'Other Bank Details' }}
                 />
                 <Grid item xs={12}>
                   {action !== 'view' && (

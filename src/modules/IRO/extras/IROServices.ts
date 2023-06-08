@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
 export default {
-  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions })),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAll: (conditions?: { status?: number }) =>
     getStandardResponse<IROrder[]>(
@@ -47,9 +47,9 @@ export default {
                     field: 'Missionary',
                     martialStatus: 'Married',
                     highestQualification: 'Ph.D.',
-                    motherTongue: 'English',
-                    communicationLanguage: 'English',
-                    knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                    // motherTongue: 'English',
+                    // communicationLanguage: 'English',
+                    // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                     email: 'abcd@gmail.com',
                     phone: '1234567890',
                     alternativePhone: '9876543210',
@@ -85,13 +85,8 @@ export default {
                     remarks: 'Lorem ipsum dolor sit amet.',
                     selfSupport: true,
                     status: 'Ministering',
-                    dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                    divisionHistory: [],
                     noOfChurches: 5,
-                    subdivision: {
-                      _id: 'skjdfj',
-                      name: 'ksdfj',
-                    },
                   },
                   supportDetails: {
                     totalNoOfYearsInMinistry: 10,
@@ -128,9 +123,9 @@ export default {
                     field: 'Missionary',
                     martialStatus: 'Married',
                     highestQualification: 'Ph.D.',
-                    motherTongue: 'English',
-                    communicationLanguage: 'English',
-                    knownLanguages: ['English', 'Malayalam - മലയാളം'],
+
+                    // communicationLanguage: 'English',
+                    // knownLanguages: ['English', 'Malayalam - മലയാളം'], motherTongue: 'English',
                     email: 'abcd@gmail.com',
                     phone: '1234567890',
                     alternativePhone: '9876543210',
@@ -166,13 +161,8 @@ export default {
                     remarks: 'Lorem ipsum dolor sit amet.',
                     selfSupport: true,
                     status: 'Ministering',
-                    dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                    divisionHistory: [],
                     noOfChurches: 5,
-                    subdivision: {
-                      _id: 'skjdfj',
-                      name: 'ksdfj',
-                    },
                   },
                   supportDetails: {
                     totalNoOfYearsInMinistry: 10,
@@ -209,9 +199,9 @@ export default {
                     field: 'Missionary',
                     martialStatus: 'Married',
                     highestQualification: 'Ph.D.',
-                    motherTongue: 'English',
-                    communicationLanguage: 'English',
-                    knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                    // motherTongue: 'English',
+                    // communicationLanguage: 'English',
+                    // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                     email: 'abcd@gmail.com',
                     phone: '1234567890',
                     alternativePhone: '9876543210',
@@ -247,13 +237,8 @@ export default {
                     remarks: 'Lorem ipsum dolor sit amet.',
                     selfSupport: true,
                     status: 'Ministering',
-                    dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                    dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                    divisionHistory: [],
                     noOfChurches: 5,
-                    subdivision: {
-                      _id: 'skjdfj',
-                      name: 'ksdfj',
-                    },
                   },
                   supportDetails: {
                     totalNoOfYearsInMinistry: 10,
@@ -289,12 +274,19 @@ export default {
                 IFSCCode: 'ksdfjdskfj',
                 beneficiary: 'ksdfjdskfj',
               },
+              otherBankDetails: {
+                accountNumber: 'ksdfjdskfj',
+                bankName: 'ksdfjdskfj',
+                branchName: 'ksdfjdskfj',
+                IFSCCode: 'ksdfjdskfj',
+                beneficiary: 'ksdfjdskfj',
+              },
               createdAt: moment(),
               updatedAt: moment(),
             },
             subDivision: {
               _id: '1',
-              name: 'subdivision 1',
+              name: 'subDivision 1',
             },
             mainCategory: 'Fr request',
             sanction: '50000',

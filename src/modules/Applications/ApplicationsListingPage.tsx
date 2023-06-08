@@ -207,7 +207,7 @@ const ApplicationsListingPage = () => {
       <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
-          <DialogTitle>{action === 'add' ? 'Add Request' : `Edit Request:`}</DialogTitle>
+          <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
           <DialogContent>
             <Container>
               <Grid container spacing={2}>

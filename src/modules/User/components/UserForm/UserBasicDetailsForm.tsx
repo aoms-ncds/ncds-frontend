@@ -1,11 +1,11 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import React, { useState, useEffect } from 'react';
-import { languages } from '../../../../extras/CommonConfig';
 import NewAddressForm from './NewAddressForm';
 import UsersDropdown from '../UsersDropdown';
 import UserServices from '../../extras/UserServices';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
+import LanguagesService from '../../../Settings/extras/LanguagesService';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<
@@ -21,8 +21,15 @@ const UserBasicDetailsForm = (
   >,
 ) => {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
-
   const [spouseList, setSpouseList] = useState<User[]>([]);
+
+  const [languages, setLanguages] = useState<ILanguage[]>([]);
+  useEffect(() => {
+    LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE })
+  .then((res) =>
+    setLanguages(res.data));
+  }, []);
+
 
   useEffect(() => {
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
@@ -123,7 +130,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="Gender"
-            value={props.value.gender }
+            value={props.value.gender ?? null}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -131,7 +138,6 @@ const UserBasicDetailsForm = (
               })
             }
             name="Gender"
-            // defaultValue={'Male'}
             row
           >
             <FormControlLabel value="Male" control={<Radio />} label="Male" />
@@ -146,7 +152,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="martialStatus">Martial Status</FormLabel>
           <RadioGroup
             aria-labelledby="martialStatus"
-            value={props.value.martialStatus}
+            value={props.value.martialStatus ?? null}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -177,6 +183,19 @@ const UserBasicDetailsForm = (
         </Grid>
       )}
       <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete<Religion>
+          options={['Hindu', 'Muslim', 'Christian', 'Sikh']}
+          value={props.value.religion??null}
+          onChange={(e, selectedReligion) =>
+            props.onChange({
+              ...props.value,
+              religion: selectedReligion ?? undefined,
+            })
+          }
+          renderInput={(params) => <TextField {...params} label="Religion" variant={props.options?.textField?.variant} />}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Highest Qualification"
           value={props.value.highestQualification}
@@ -190,8 +209,8 @@ const UserBasicDetailsForm = (
         <Autocomplete
           id="mlanguges"
           options={languages}
-          getOptionLabel={(option) => option}
-          value={props.value.motherTongue}
+          getOptionLabel={(option) => option.name}
+          value={props.value.motherTongue ?? null}
           onChange={(e, newvalue) => props.onChange({ ...props.value, motherTongue: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Mother Tongue" variant={props.options?.textField?.variant} />}
         />
@@ -201,8 +220,8 @@ const UserBasicDetailsForm = (
         <Autocomplete
           id="Clanguges"
           options={languages}
-          getOptionLabel={(option) => option}
-          value={props.value.communicationLanguage}
+          getOptionLabel={(option) => option.name}
+          value={props.value.communicationLanguage ?? null}
           onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Communication Language" variant={props.options?.textField?.variant} />}
         />
@@ -213,8 +232,8 @@ const UserBasicDetailsForm = (
           multiple
           id="knownLanguages"
           options={languages}
-          getOptionLabel={(option) => option}
-          value={props.value.knownLanguages}
+          getOptionLabel={(option) => option.name}
+          value={props.value.knownLanguages??[]}
           onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField?.variant} />}
         />
@@ -230,6 +249,16 @@ const UserBasicDetailsForm = (
           fullWidth
           InputProps={{ required: true }}
           required
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Alternate Email"
+          type="email"
+          value={props.value.email2}
+          onChange={(e) => props.onChange({ ...props.value, email2: e.target.value })}
+          variant={props.options?.textField?.variant}
+          fullWidth
         />
       </Grid>
 

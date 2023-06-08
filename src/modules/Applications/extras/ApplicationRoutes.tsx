@@ -22,7 +22,7 @@ const applicationRoutes: ModuleRoute = {
     {
       title: 'Add Request',
       path: '/list',
-      element: <ApplicationsListingPage   />,
+      element: <ApplicationsListingPage />,
       private: true,
       requiredAccessRights: ['string'],
     },
@@ -47,7 +47,7 @@ const applicationRoutes: ModuleRoute = {
     //   private: true,
     //   requiredAccessRights: ['string'],
     // },
-    
+
   ],
 };
 

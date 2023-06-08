@@ -12,12 +12,12 @@ const AddNewApplication = () => {
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',
-    reason: '', 
+    reason: '',
     status: '',
     createdAt: moment(),
     updatedAt: moment(),
   });
-  
+
   const snackbarId = enqueueSnackbar({
     message: action === 'add' ? 'Creating Request' : 'Updating Request',
     variant: 'info',
@@ -29,14 +29,14 @@ const AddNewApplication = () => {
       name: event.target.value,
     }));
   };
-  
+
   const handleReasonChange = (event:any) => {
     setRequest((prevRequest) => ({
       ...prevRequest,
       reason: event.target.value,
     }));
   };
-  
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
@@ -54,7 +54,7 @@ const AddNewApplication = () => {
     });
     ApplicationServices.create(Request)
       .then((res:any) => {
-        console.log(res,"resssssssssssss");
+        console.log(res, 'resssssssssssss');
         // handleClose();
         // closeSnackbar(snackbarId);
         enqueueSnackbar({

@@ -20,6 +20,8 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
     firstName: '',
     lastName: '',
   });
+  const [childSupport, setChildSupport] = useState<ChildSupport[]>([]);
+
 
   useEffect(() => {
     WorkerServices.getAll()
@@ -39,6 +41,15 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
         .catch((res) => {
           console.log(res);
         });
+
+      ChildrenServices.getAllChildSupport()
+    .then((res)=>setChildSupport(res.data))
+    .catch((error) =>
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      }),
+    );
     }
   }, []);
 
@@ -75,6 +86,7 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
         });
       });
   };
+
 
   return (
     <CommonPageLayout title={props.action === 'add' ? 'Add Child' : 'Edit Child'}>
@@ -222,14 +234,14 @@ const AddNewChildPage = (props: ChildFormPagerops) => {
 
           <Grid item xs={12} md={6}>
             <Autocomplete
-              value={newChild?.childSupport}
+              value={newChild?.childSupport??null}
               options={childSupport ?? []}
-              getOptionLabel={(childSupport) => childSupport}
+              getOptionLabel={(childSupport) => childSupport.name}
               onChange={(_e, childSupport) => {
-                if (workers) {
+                if (workers&&childSupport) {
                   setNewChild((newChild) => ({
                     ...newChild,
-                    childSupport: childSupport ?? '',
+                    childSupport: childSupport,
                   }));
                 }
               }}

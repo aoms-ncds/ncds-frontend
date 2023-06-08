@@ -4,8 +4,8 @@ declare global {
   name: string;
   reason: string;
   status: string;
- 
-   
+
+
   }
   type CreatableApplication = Creatable<Application>;
 }

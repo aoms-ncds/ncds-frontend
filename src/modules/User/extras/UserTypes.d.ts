@@ -5,7 +5,22 @@ export default {};
 
 declare global {
   type UserKind = 'staff' | 'worker';
+  interface IUserPermissions extends MongooseDocument {
+    ADMIN_ACCESS: boolean;
+    READ_WORKERS: boolean;
+    WRITE_WORKERS: boolean;
+    READ_STAFFS: boolean;
+    WRITE_STAFFS: boolean;
+    READ_DIVISIONS: boolean;
+    WRITE_DIVISIONS: boolean;
+    READ_FR: boolean;
+    WRITE_FR: boolean;
+    READ_IRO: boolean;
+    WRITE_IRO: boolean;
+    READ_XYZ: boolean;
+    WRITE_XYZ: boolean;
 
+  }
   interface BasicDetails {
     firstName: string;
     lastName: string;
@@ -13,11 +28,13 @@ declare global {
     gender?: Gender;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
+    religion?:Religion;
     highestQualification?: string;
-    motherTongue?: Language;
-    communicationLanguage?: Language;
-    knownLanguages?: Language[];
+    motherTongue?: Types.ObjectId;
+    communicationLanguage?: Types.ObjectId;
+    knownLanguages?: Types.ObjectId[];
     email: string;
+    email2?: string;
     phone?: string;
     alternativePhone?: string;
     PANNo?: string;
@@ -49,23 +66,32 @@ declare global {
   }
   interface OfficialDetails {
     dateOfJoining?: Moment;
-    dateOfLeaving?: Moment;
+    dateOfLeaving?: Moment|null;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
-    division?: Division;
-    subdivision?: SubDivision;
+    divisionHistory:DivisionHistory[];
     selfSupport: boolean;
     status: OfficialDetailsStatus;
-    dateOfCurrentDivisionJoining?: Moment;
-    dateOfPreviousDivisionLeaving?: Moment;
     noOfChurches: number;
   }
+  type DivisionHistory ={
+    _id:string;
+    division: Division;
+    subDivision: SubDivision;
+    dateOfDivisionJoining?: Moment|null;
+    dateOfDivisionLeaving?: Moment|null;
+  };
+  type CreatableDivisionHistory ={
+    division?: Division|null;
+    subDivision?: SubDivision|null;
+    dateOfDivisionJoining?: Moment|null;
+    dateOfDivisionLeaving?: Moment|null;
+  };
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
-  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave';
+  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|null;
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
-    division?: Division;
-    subdivision?: SubDivision;
+    divisionHistory:CreatableDivisionHistory[];
     selfSupport?: boolean;
     status?: OfficialDetailsStatus;
     noOfChurches?: number;
@@ -93,6 +119,7 @@ declare global {
     supportDetails: SupportDetails;
     supportStructure: SupportStructure;
     status?: UserLifeCycleStates;
+    permissions?: IUserPermissions;
   }
   interface CreatableUser extends Creatable<User> {
     basicDetails: CreatableBasicDetails;
@@ -104,7 +131,7 @@ declare global {
   type Gender = 'Male' | 'Female' | 'Other';
   type MaritalStatus = 'Married' | 'Unmarried';
   type WorkerField = 'Missionary' | 'Non-Missionary';
-
+type Religion='Hindu'| 'Muslim'| 'Christian'|'Sikh';
   interface LoginCredentials {
     email: string;
     password: string;

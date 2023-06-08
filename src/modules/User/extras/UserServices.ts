@@ -1,109 +1,18 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 import { FilterQuery } from 'mongoose';
+import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  login: (cred: LoginCredentials) =>
-    getStandardResponse<LoginResponse>(
-      dummyRequest<LoginResponse>({
-        data: {
-          token: 'skdfksj',
-          user: {
-            _id: '646703c19e433f67d27019b2',
-            basicDetails: {
-              aadhaar: {
-                aadhaarNo: '123456789012',
-              },
-              voterId: {
-                voterIdNo: 'V12345678',
-              },
-              firstName: 'John',
-              lastName: 'Doe',
-              dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
-              gender: 'Male',
-              field: 'Missionary',
-              martialStatus: 'Married',
-              highestQualification: 'Ph.D.',
-              motherTongue: 'English',
-              communicationLanguage: 'English',
-              knownLanguages: ['English', 'Malayalam - മലയാളം'],
-              email: 'abcd@gmail.com',
-              phone: '1234567890',
-              alternativePhone: '9876543210',
-              PANNo: 'ABCD1234',
-              licenseNumber: 'L12345678',
-              permanentAddress: {
-                buildingName: 'Puliyulla parambath',
-                street: '123 Main Street',
-                city: 'Example City',
-                state: 'Example State',
-                country: 'India',
-                pincode: '12345',
-              },
-              currentOfficialAddress: {
-                buildingName: 'Puliyulla parambath',
-                street: '456 Elm Street',
-                city: 'Current City',
-                state: 'Current State',
-                country: 'India',
-                pincode: '54321',
-              },
-              residingAddress: {
-                buildingName: 'Puliyulla parambath',
-                street: '456 Elm Street',
-                city: 'Current City',
-                state: 'Current State',
-                country: 'India',
-                pincode: '54321',
-              },
-            },
-            officialDetails: {
-              dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
-              remarks: 'Lorem ipsum dolor sit amet.',
-              selfSupport: true,
-              status: 'Ministering',
-              dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-              dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
-              noOfChurches: 5,
-              subdivision: {
-                _id: 'skjdfj',
-                name: 'ksdfj',
-              },
-            },
-            supportDetails: {
-              totalNoOfYearsInMinistry: 10,
-              withChurch: true,
-            },
-            supportStructure: {
-              basic: 5000,
-              HRA: 2000,
-              spouseAllowance: 1000,
-              positionalAllowance: 500,
-              specialAllowance: 800,
-              impactDeduction: 200,
-              telAllowance: 400,
-              PIONMissionaryFund: 300,
-              MUTDeduction: 100,
-            },
-            createdAt: moment('2023-05-19T05:06:09.292Z'),
-            updatedAt: moment('2023-05-19T05:06:09.292Z'),
-          },
-        },
-        message: 'Successfully logged in!',
-        result: 'success',
-        timeout: 500,
-      }),
-      // axios.post('/users/login'),
-    ),
+  login: (loginCred: LoginCredentials) => getStandardResponse<LoginResponse>(axios.post('/users/login', loginCred, { headers: { ...getAuthHeader() } })),
+  requestForgottenPasswordReset: (email: string) => getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password', email, { headers: { ...getAuthHeader() } })),
 
   getAll: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[]>(
       axios.get('/users', {
-        params: {
-          filterQuery: JSON.stringify(conditions),
-        },
+        params: { filterQuery: JSON.stringify(conditions) },
+        headers: { ...getAuthHeader() },
       }),
       (users) =>
         users.map((user: any) => ({
@@ -119,5 +28,52 @@ export default {
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),
         })),
+    ),
+  getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
+    getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
+      ...data,
+      basicDetails: {
+        ...data.basicDetails,
+        dateOfBirth: moment(data.basicDetails.dateOfBirth),
+      },
+      officialDetails: {
+        ...data.officialDetails,
+        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+          ...divHis,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+        })),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
+
+  getMe: (conditions?: FilterQuery<User>): Promise<StandardResponse<IWorker|Staff>> =>
+    getStandardResponse<IWorker|Staff>(
+      axios.get('/users/me', {
+        params: {
+          filterQuery: JSON.stringify(conditions),
+        },
+        headers: { ...getAuthHeader() },
+      }),
+      (me) =>({
+        ...me,
+        basicDetails: {
+          ...me.basicDetails,
+          dateOfBirth: moment(me.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...me.officialDetails,
+          dateOfJoining: moment(me.basicDetails.dateOfJoining),
+        },
+        createdAt: moment(me.createdAt),
+        updatedAt: moment(me.updatedAt),
+      }),
+    ),
+  editPermission: (userID: string, permission: {name: string; value: boolean}) =>
+    getStandardResponse<void>(
+      axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } }),
     ),
 };

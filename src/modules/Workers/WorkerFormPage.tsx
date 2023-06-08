@@ -22,9 +22,10 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       residingAddress: {},
     },
     officialDetails: {
+      divisionHistory: [],
       remarks: '',
       selfSupport: true,
-      status: 'Ministering',
+      // status: '',
     },
     supportDetails: {
       totalNoOfYearsInMinistry: 10,

@@ -8,7 +8,7 @@ declare global {
     lastName: string;
     dateOfBirth: Moment;
     childOf: IWorker | null;
-    childSupport: string;
+    childSupport: ChildSupport;
     studying: boolean;
     classOfStudy: string;
     working: boolean;
@@ -18,11 +18,17 @@ declare global {
   interface CreatableChild extends Creatable<Child> {
     dateOfBirth?: Moment;
     childOf?: IWorker | null;
-    childSupport?: string;
+    childSupport?: ChildSupport;
     studying?: boolean;
     classOfStudy?: string;
     working?: boolean;
     occupation?: string;
     qualification?: string;
+  }
+
+  interface ChildSupport extends MongooseDocument{
+    name: string;
+    status: number;
+    amount: number;
   }
 }

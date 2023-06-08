@@ -12,6 +12,8 @@ import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes'
 import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import { useAuth } from '../hooks/Authentication';
 import LoadingPage from '../modules/Common/LoadingPage';
+import settingsRoutes from '../modules/Settings/extras/SettingsRouter';
+import UserServices from '../modules/User/extras/UserServices';
 
 export const allModuleRoutes = [
   homePageRoutes,
@@ -21,19 +23,23 @@ export const allModuleRoutes = [
   usersPageRoutes,
   frPageRoutes,
   iroPageRoutes,
+  settingsRoutes,
   testPageRoutes,
   samplesPageRoutes,
   applicationRoutes,
+
 ];
 const Router = () => {
   const { user, setUser } = useAuth();
 
   useEffect(() => {
-    setTimeout(() => {
-      localStorage.getItem('userData') ?
-        setUser(JSON.parse(localStorage.getItem('userData') as string)) :
-        setUser(false);
-    }, 500);
+    UserServices.getMe()
+    .then((res) => {
+      setUser(res.data);
+    })
+    .catch((error) => {
+      setUser(false);
+    });
   }, []);
 
   const router = createBrowserRouter(

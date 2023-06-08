@@ -4,6 +4,7 @@ import {
   CssBaseline,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   LinearProgress,
   List,
@@ -60,7 +61,13 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const drawer = (
     <div>
       {/* <Toolbar /> */}
-      <img src="/iet_logo.png" alt="" style={{ width: '100%' }} />
+      <Grid sx={{ height: 155 }}>
+        <center>
+          <img src="/iet_logo.png" alt="" style={{ height: 80, marginTop: 20 }} />
+          <br/>
+          <b>IET</b>
+        </center>
+      </Grid>
       <Divider />
       <List>
         {allModuleRoutes

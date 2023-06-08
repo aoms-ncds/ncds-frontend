@@ -1,15 +1,13 @@
 import moment from 'moment';
-import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import { categories, purposes, sanctionedAsPers } from './FRConfig';
 import axios from 'axios';
 export default {
 
-  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions })),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
-  getAll: () => getStandardResponse<Frrequest[]>(
-    axios.get('/fr/'),
-  ),
-  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete('/fr/particulars/' + particularid)),
+  getAll: () => getStandardResponse<Frrequest[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
+  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete(`/fr/particulars/${particularid}`, { headers: { ...getAuthHeader() } })),
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
       data: purposes,
@@ -39,11 +37,11 @@ export default {
     }),
   ),
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
-    axios.post('/fr/particulars', particularData),
+    axios.post('/fr/particulars', particularData, { headers: { ...getAuthHeader() } }),
   ),
   getById: (fRId: string) =>
     getStandardResponse<FR>(
-      axios.get('/fr/' + fRId),
+      axios.get(`/fr/${fRId}`, { headers: { ...getAuthHeader() } }),
       (data) => ({
         ...data,
         FRdate: moment(data.FRdate),
@@ -68,7 +66,7 @@ export default {
               if (frRequest.Particulars) {
                 for (let i = 0; i < frRequest.Particulars.length; i++) {
                   const partculars = frRequest.Particulars[i];
-                  await axios.patch('/fr/particulars/' + partculars._id, {
+                  await axios.patch(`/fr/particulars/${partculars._id}`, {
                     FR: createdFR.data.data._id,
                     mainCategory: partculars.mainCategory,
                     subCategory1: partculars.subCategory1,
@@ -78,7 +76,7 @@ export default {
                     month: partculars.month,
                     requestedAmount: partculars.requestedAmount,
                     narration: partculars.narration,
-                  });
+                  }, { headers: { ...getAuthHeader() } });
                 }
               }
               resolve(createdFR);
@@ -485,9 +483,9 @@ export default {
                 field: 'Missionary',
                 martialStatus: 'Married',
                 highestQualification: 'Ph.D.',
-                motherTongue: 'English',
-                communicationLanguage: 'English',
-                knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                // motherTongue: 'English',
+                // communicationLanguage: 'English',
+                // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                 email: 'abcd@gmail.com',
                 phone: '1234567890',
                 alternativePhone: '9876543210',
@@ -523,13 +521,8 @@ export default {
                 remarks: 'Lorem ipsum dolor sit amet.',
                 selfSupport: true,
                 status: 'Ministering',
-                dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                divisionHistory: [],
                 noOfChurches: 5,
-                subdivision: {
-                  _id: 'skjdfj',
-                  name: 'ksdfj',
-                },
               },
               supportDetails: {
                 totalNoOfYearsInMinistry: 10,
@@ -575,9 +568,9 @@ export default {
                 field: 'Missionary',
                 martialStatus: 'Married',
                 highestQualification: 'Ph.D.',
-                motherTongue: 'English',
-                communicationLanguage: 'English',
-                knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                // motherTongue: 'English',
+                // communicationLanguage: 'English',
+                // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                 email: 'abcd@gmail.com',
                 phone: '1234567890',
                 alternativePhone: '9876543210',
@@ -613,13 +606,8 @@ export default {
                 remarks: 'Lorem ipsum dolor sit amet.',
                 selfSupport: true,
                 status: 'Ministering',
-                dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                divisionHistory: [],
                 noOfChurches: 5,
-                subdivision: {
-                  _id: 'skjdfj',
-                  name: 'ksdfj',
-                },
               },
               supportDetails: {
                 totalNoOfYearsInMinistry: 10,
@@ -663,9 +651,9 @@ export default {
                 field: 'Missionary',
                 martialStatus: 'Married',
                 highestQualification: 'Ph.D.',
-                motherTongue: 'English',
-                communicationLanguage: 'English',
-                knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                // motherTongue: 'English',
+                // communicationLanguage: 'English',
+                // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                 email: 'abcd@gmail.com',
                 phone: '1234567890',
                 alternativePhone: '9876543210',
@@ -701,13 +689,8 @@ export default {
                 remarks: 'Lorem ipsum dolor sit amet.',
                 selfSupport: true,
                 status: 'Ministering',
-                dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                divisionHistory: [],
                 noOfChurches: 5,
-                subdivision: {
-                  _id: 'skjdfj',
-                  name: 'ksdfj',
-                },
               },
               supportDetails: {
                 totalNoOfYearsInMinistry: 10,
@@ -751,9 +734,9 @@ export default {
                 field: 'Missionary',
                 martialStatus: 'Married',
                 highestQualification: 'Ph.D.',
-                motherTongue: 'English',
-                communicationLanguage: 'English',
-                knownLanguages: ['English', 'Malayalam - മലയാളം'],
+                // motherTongue: 'English',
+                // communicationLanguage: 'English',
+                // knownLanguages: ['English', 'Malayalam - മലയാളം'],
                 email: 'abcd@gmail.com',
                 phone: '1234567890',
                 alternativePhone: '9876543210',
@@ -789,13 +772,8 @@ export default {
                 remarks: 'Lorem ipsum dolor sit amet.',
                 selfSupport: true,
                 status: 'Ministering',
-                dateOfCurrentDivisionJoining: moment('2023-05-19T04:32:00.077Z'),
-                dateOfPreviousDivisionLeaving: moment('2023-05-19T04:32:00.077Z'),
+                divisionHistory: [],
                 noOfChurches: 5,
-                subdivision: {
-                  _id: 'skjdfj',
-                  name: 'ksdfj',
-                },
               },
               supportDetails: {
                 totalNoOfYearsInMinistry: 10,
@@ -828,44 +806,12 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(
-      dummyRequest({
-        data: {
-          _id: '1',
-          remark: remark.remark,
-          createdBy: {
-            _id: '32490245',
-            firstName: 'Jishnu',
-            lastName: 'Raj',
-            dob: moment(),
-            doj: moment(),
-            designation: {
-              _id: 'jr20j0f',
-              name: 'Tech Lead',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            department: {
-              _id: '0tj30rftko',
-              name: 'IT',
-              createdAt: moment(),
-              updatedAt: moment(),
-            },
-            phone: '',
-            email: '',
-
-            idFormat: '',
-            createdAt: moment(),
-            updatedAt: moment(),
-          },
-          createdAt: moment(),
-          updatedAt: moment(),
-        },
-        message: 'Remarks Updated',
-        result: 'success',
-        timeout: 500,
-      },
-      ),
+      axios.post('/fr/remarks', {
+        ...remark,
+        createdBy: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null,
+      }),
     ),
+
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
     return getStandardResponse<CreatableFR>(
       new Promise((resolve, reject) => {
@@ -880,7 +826,7 @@ export default {
               if (frRequest.Particulars) {
                 for (let i = 0; i < frRequest.Particulars.length; i++) {
                   const partculars = frRequest.Particulars[i];
-                  await axios.patch('/fr/particulars/' + partculars._id, {
+                  await axios.patch(`/fr/particulars/${partculars._id}`, {
                     FR: updatedFR.data.data._id,
                     mainCategory: partculars.mainCategory,
                     subCategory1: partculars.subCategory1,
@@ -890,7 +836,7 @@ export default {
                     month: partculars.month,
                     requestedAmount: partculars.requestedAmount,
                     narration: partculars.narration,
-                  });
+                  }, { headers: { ...getAuthHeader() } });
                 }
               }
               resolve(updatedFR); // Resolve with the updated division

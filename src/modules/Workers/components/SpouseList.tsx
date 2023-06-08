@@ -24,7 +24,7 @@ const SpouseListPage = () => {
     {
       field: '_manage',
       headerName: 'Action',
-      minWidth: 50,
+      width: 60,
       type: 'string',
       renderCell: (props: any) => (
         <DropdownButton
@@ -60,15 +60,15 @@ const SpouseListPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'firstName', headerName: 'First Name', width: 70 },
-    { field: 'lastName', headerName: 'Last Name:', width: 130 },
-    { field: 'email', headerName: 'Email', width: 170 },
-    { field: 'mobileNo', headerName: 'Mobile No', width: 130 },
-    { field: 'dob', headerName: 'Date of Birth', width: 130 },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 130 },
-    { field: 'qualification', headerName: 'Qualification', width: 130 },
-    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => <p> {props.row.spouseOf?.firstName}</p>, width: 130 },
+    { field: '_id', headerName: 'SI No', width: 55, AlignHeader: 'center' },
+    { field: 'firstName', headerName: 'First Name', width: 100, AlignHeader: 'center' },
+    { field: 'lastName', headerName: 'Last Name', width: 100, AlignHeader: 'center' },
+    { field: 'mobileNo', headerName: 'Mobile No', width: 100, AlignHeader: 'center' },
+    { field: 'dob', headerName: 'DOB', width: 70, AlignHeader: 'center' },
+    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 70, AlignHeader: 'center' },
+    { field: 'qualification', headerName: 'Qualification', width: 100, AlignHeader: 'center' },
+    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => <p> {props.row.spouseOf?.firstName}</p>, width: 90, AlignHeader: 'center' },
+    { field: 'email', headerName: 'Email', width: 170, AlignHeader: 'center' },
   ];
   return (
     <>
