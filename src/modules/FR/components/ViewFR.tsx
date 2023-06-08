@@ -38,7 +38,7 @@ import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
 
-const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
+const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
@@ -879,4 +879,4 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   );
 };
 
-export default AddFRRequests;
+export default ViewFRRequests;
