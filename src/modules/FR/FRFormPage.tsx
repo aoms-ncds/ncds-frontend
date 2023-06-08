@@ -6,13 +6,16 @@ import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
 import { useParams } from 'react-router-dom';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import moment from 'moment';
 
 interface FRFormPagerops {
   action: 'add' | 'edit' | 'view';
 }
 const FRFormPage = (props: FRFormPagerops) => {
   const { frID } = useParams();
-  const [requisition, setRequisition] = useState<CreatableFR>({});
+  const [requisition, setRequisition] = useState<CreatableFR>({
+    FRdate: moment(),
+  });
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
       throw new Error('FR ID Missing in URL');
