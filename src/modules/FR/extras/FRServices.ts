@@ -809,7 +809,9 @@ export default {
       axios.post('/fr/remarks', {
         ...remark,
         createdBy: localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')!) : null,
-      }),
+      },
+      { headers: { ...getAuthHeader() } },
+      ),
     ),
 
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
