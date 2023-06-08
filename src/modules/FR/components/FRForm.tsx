@@ -303,7 +303,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  value={props.value.FRdate || moment()}
+                  value={props.value.FRdate }
                   onChange={(newDate) =>
                     props.onChange({
                       ...props.value,

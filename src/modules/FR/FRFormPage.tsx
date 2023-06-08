@@ -8,10 +8,10 @@ import { useParams } from 'react-router-dom';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 
-interface FRFormPagerops {
+interface FRFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
-const FRFormPage = (props: FRFormPagerops) => {
+const FRFormPage = (props: FRFormPageProps) => {
   const { frID } = useParams();
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
