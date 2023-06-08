@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';

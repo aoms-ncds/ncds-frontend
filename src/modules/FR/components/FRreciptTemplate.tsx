@@ -1,7 +1,5 @@
-import { BorderTop, Pages } from '@mui/icons-material';
-import React from 'react';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
-import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
+import { Page, Text, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
 Font.register({
   family: 'Oswald',

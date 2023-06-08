@@ -1,4 +1,3 @@
-import React from 'react';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import DivisionsPage from '..';
 import DivisionDetailsPage from '../DivisionDetails';

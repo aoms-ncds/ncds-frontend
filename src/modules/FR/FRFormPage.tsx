@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card } from '@mui/material';
 import FRForm from './components/FRForm';
 import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
 import { useParams } from 'react-router-dom';
-import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 
 interface FRFormPageProps {

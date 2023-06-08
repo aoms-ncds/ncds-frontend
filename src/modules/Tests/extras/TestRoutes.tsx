@@ -1,6 +1,5 @@
-import React from 'react';
 import TestModule from '..';
-import { Extension as ExtensionIcon, Login } from '@mui/icons-material';
+import { Extension as ExtensionIcon } from '@mui/icons-material';
 import LoginPage from '../../User/Login';
 import Pdfview from '../pdfview';
 import ForgotPasswordFormPage from '../../User/ForgotPasswordForm';

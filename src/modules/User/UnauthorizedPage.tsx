@@ -1,10 +1,12 @@
 import { Typography } from '@mui/material';
-import React from 'react';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import CommonPageLayout from '../../components/CommonPageLayout';
 
-const UnauthorizedPage = () => {
+interface UnauthorizedPageProps{
+  missingPermissions: Permission[];
+}
+const UnauthorizedPage = (props: UnauthorizedPageProps) => {
   return (
     <CommonPageLayout>
       <div style={{ height: '20vh' }}></div>
@@ -29,6 +31,14 @@ const UnauthorizedPage = () => {
       >
         You don&apos;t have permission to access this page!
       </Typography>
+      <center>
+        <Typography
+          variant="caption"
+          sx={{ textAlign: 'center', color: 'red' }}
+        >
+          <b>Missing permissions:</b> &quot;{props.missingPermissions.join('", "').replaceAll('_', ' ')}
+        </Typography>
+      </center>
     </CommonPageLayout>
   );
 };

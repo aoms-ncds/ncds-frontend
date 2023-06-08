@@ -1,6 +1,5 @@
-import React from 'react';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PDFTable';
-import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
 Font.register({
   family: 'Oswald',

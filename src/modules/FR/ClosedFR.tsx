@@ -1,4 +1,3 @@
-import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import ClosedFRsTable from './components/ClosedFRsTable';
 import { Card } from '@mui/material';

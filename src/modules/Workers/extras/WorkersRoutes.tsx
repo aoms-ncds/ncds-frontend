@@ -1,10 +1,8 @@
-import React from 'react';
 import WorkersDashboard from '..';
 import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
-import Profile from '../../User/Profile';
 import AddNewChildPage from '../AddNewChild';
 
 const workersPageRoutes: ModuleRoute = {

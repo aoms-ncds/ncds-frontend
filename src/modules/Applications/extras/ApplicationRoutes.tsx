@@ -1,10 +1,8 @@
-import React from 'react';
 // import ApplicationsDashboard from '..';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import APPDashboard from '..';
 import ApplicationsListingPage from '../ApplicationsListingPage';
 import ApplicationApprovalPage from '../ApplicationApprovalPage';
-import ApplicationManagePages from '../ManagePages';
 import AddNewApplication from '../AddNewApplication';
 
 const applicationRoutes: ModuleRoute = {

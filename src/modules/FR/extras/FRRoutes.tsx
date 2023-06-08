@@ -1,4 +1,3 @@
-import React from 'react';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import FRDashboard from '..';
 import FRFormPage from '../FRFormPage';

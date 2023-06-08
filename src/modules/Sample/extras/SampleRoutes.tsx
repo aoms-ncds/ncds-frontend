@@ -1,4 +1,3 @@
-import React from 'react';
 import SampleModule from '..';
 import { Extension as ExtensionIcon } from '@mui/icons-material';
 

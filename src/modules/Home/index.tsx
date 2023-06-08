@@ -1,4 +1,3 @@
-import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Alert, Grid } from '@mui/material';
 import MinimalModuleDataAnalytics from './components/MinimalModuleDataAnalytics';

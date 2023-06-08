@@ -1,4 +1,3 @@
-import React from 'react';
 import HRDashboard from '..';
 import { Diversity3 as Diversity3Icon } from '@mui/icons-material';
 import HRManagePage from '../ManagePage';

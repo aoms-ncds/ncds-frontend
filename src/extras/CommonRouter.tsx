@@ -61,7 +61,7 @@ const Router = () => {
                       <PermissionChecks
                         permissions={page.requiredAccessRights}
                         granted={page.element}
-                        denied={(missmissingPermissionsing) => <UnauthorizedPage />}
+                        denied={(missingPermissions) => <UnauthorizedPage {...{ missingPermissions }} />}
                       /> :
                       page.element
                 )

@@ -1,4 +1,3 @@
-import React from 'react';
 import SettingsDashboard from '..';
 import { Settings as SettingsIcon, Language as Lang } from '@mui/icons-material';
 import Languages from '../Languages';
