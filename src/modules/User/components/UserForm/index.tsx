@@ -61,7 +61,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [childAction, setchildAction] = useState<'add' | 'edit'>('add');
 
   // const [userPhoto, setUserPhoto] = useState<File>();
-  const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
+  // const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
 
 
   const [open, toggleOpen] = useState(false);
@@ -83,6 +83,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [childSupport, setChildSupport] = useState<ChildSupport[]>([]);
 
   useEffect(() => {
+    // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
     ChildrenServices.getAllChildSupport()
     .then((res)=>setChildSupport(res.data))
     .catch((error) =>
@@ -153,9 +154,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                           marginLeft: 'auto',
                           marginRight: 'auto',
                         }}
-                        src={userPhotoBlobURL ?? ''}
+                        src={props.value.imageURL ?? ''}
                       >
-                        {!userPhotoBlobURL && <ImageIcon sx={{ fontSize: 100 }} />}
+                        {!props.value.imageURL && <ImageIcon sx={{ fontSize: 100 }} />}
                       </Avatar>
                     </label>
                     <input
@@ -175,7 +176,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                             });
                           } else {
                             props.options?.profilePic?.setUserPhoto?.(e.target.files[0]);
-                            setUserPhotoBlobURL(URL.createObjectURL(e.target.files[0]));
+                            // setUserPhotoBlobURL(URL.createObjectURL(e.target.files[0]));
+                            props.onChange({
+                              ...props.value,
+                              imageURL: URL.createObjectURL(e.target.files[0]),
+                            });
                           }
                         }
                       }}
