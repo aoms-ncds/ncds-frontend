@@ -51,10 +51,17 @@ const ManageFrPage = () => {
           items={[
             {
               id: 'View',
-              text: 'View and Manage',
+              text: 'View And Manage',
               component: Link,
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
+            },
+            {
+              id: 'edit',
+              text: 'Edit',
+              component: Link,
+              to: `/fr/${props.row._id}/edit`,
+              icon: EditIcon,
             },
             {
               id: 'sendbackDivision',
@@ -99,20 +106,7 @@ const ManageFrPage = () => {
               to: '/view' + props.row._id,
               icon: MessageIcon,
             },
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              to: `/fr/${props.row._id}/edit`,
-              icon: EditIcon,
-            },
-            {
-              id: 'View',
-              text: 'View Details ',
-              component: Link,
-              to: `/fr/${props.row._id}/view`,
-              icon: PreviewIcon,
-            },
+
           ]}
         />
       ),

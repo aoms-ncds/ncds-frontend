@@ -96,9 +96,10 @@ export default {
         subCategory1: 'sub',
         subCategory2: 'sub2',
         subCategory3: 'sub3',
-        quantity: '12',
+        quantity: 12,
         month: 'January',
-        requestedAmount: '300',
+        requestedAmount: 300,
+        unitPrice: 300,
         narration: 'paticularss',
       },
       {
@@ -107,9 +108,10 @@ export default {
         subCategory1: 'sub',
         subCategory2: 'sub2',
         subCategory3: 'sub3',
-        quantity: '12',
+        quantity: 12,
         month: 'January',
-        requestedAmount: '300',
+        requestedAmount: 300,
+        unitPrice: 300,
         narration: 'paticularss',
       },
       ],
@@ -858,7 +860,7 @@ export default {
         axios
           .patch('/fr/' + frID+'/'+operation, {
             ...frRequest,
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
             resolve(updatedFR);
           })

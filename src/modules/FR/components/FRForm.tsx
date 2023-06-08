@@ -22,6 +22,8 @@ import {
   IconButton,
   InputAdornment,
   FormControl,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -36,8 +38,9 @@ import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
+import { MB } from '../../../extras/CommonConfig';
 
-const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
+const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
@@ -129,9 +132,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     subCategory1: '',
     subCategory2: '',
     subCategory3: '',
-    quantity: '',
     month: '',
-    requestedAmount: '',
     narration: '',
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -242,9 +243,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
           subCategory1: '',
           subCategory2: '',
           subCategory3: '',
-          quantity: '',
           month: '',
-          requestedAmount: '',
           narration: '',
         }));
         props.onChange({
@@ -302,7 +301,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  value={props.value.FRdate}
+                  value={props.value.FRdate }
                   onChange={(newDate) =>
                     props.onChange({
                       ...props.value,
@@ -310,6 +309,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     })
                   }
                   format="DD/MM/YYYY"
+                  slotProps={{ textField: { fullWidth: true } }}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -753,10 +753,61 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onChange={(e) =>
                             setNewParticular((particularDetails) => ({
                               ...particularDetails,
-                              quantity: e.target.value,
+                              quantity: Number(e.target.value),
                             }))
                           }
                           fullWidth
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <TextField
+                          label="Requested Amount"
+                          type="number"
+                          value={newParticular?.unitPrice}
+                          onChange={(e) =>
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              unitPrice: Number(e.target.value),
+                              requestedAmount: Number(e.target.value),
+                            }))
+                          }
+                          fullWidth
+                          required
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <FormControlLabel
+                          label="Multiply By Quantity"
+                          control={
+                            <Checkbox
+                              onChange={(e) =>
+                                setNewParticular((particularDetails) => ({
+                                  ...particularDetails,
+                                  requestedAmount:
+                                  e.target.checked ?
+                                    (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) :
+                                    particularDetails?.unitPrice ?? 0,
+                                }))
+                              }
+                            />
+
+                          }
+                        />
+                      </Grid>
+                      <Grid item md={12}>
+                        <TextField
+                          label="Total Amount"
+                          type="number"
+                          value={newParticular?.requestedAmount}
+                          onChange={(e) =>
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              requestedAmount: Number(e.target.value),
+                            }))
+                          }
+                          fullWidth
+                          required
+                          InputLabelProps={{ shrink: true }}
                         />
                       </Grid>
                       <Grid item md={12}>
@@ -776,21 +827,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           fullWidth
                         />
                       </Grid>
-                      <Grid item md={12}>
-                        <TextField
-                          label="Requested Amount"
-                          type="number"
-                          value={newParticular?.requestedAmount}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              requestedAmount: e.target.value,
-                            }))
-                          }
-                          fullWidth
-                          required
-                        />
-                      </Grid>
+
                       <Grid item md={12}>
                         <TextField
                           label="Narration"
@@ -882,9 +919,9 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
         title="Upload bills"
         types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
         limits={{
-          maxItemSize: 2048,
+          maxItemSize: 6*MB,
           maxItemCount: 3,
-          maxTotalSize: 8000,
+          maxTotalSize: 18*MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
@@ -900,4 +937,4 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
   );
 };
 
-export default AddFRRequests;
+export default FRForm;

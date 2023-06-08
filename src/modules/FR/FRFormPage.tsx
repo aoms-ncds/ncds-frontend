@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card } from '@mui/material';
 import FRForm from './components/FRForm';
+import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
 import { useParams } from 'react-router-dom';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import moment from 'moment';
 
-interface FRFormPagerops {
+interface FRFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
-const FRFormPage = (props: FRFormPagerops) => {
+const FRFormPage = (props: FRFormPageProps) => {
   const { frID } = useParams();
-  const [requisition, setRequisition] = useState<CreatableFR>({});
+  const [requisition, setRequisition] = useState<CreatableFR>({
+    FRdate: moment(),
+  });
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
       throw new Error('FR ID Missing in URL');
@@ -105,14 +109,33 @@ const FRFormPage = (props: FRFormPagerops) => {
   // const { frID }=useParams();
 
   return (
-    <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View Details'}>
+    <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
       <Card style={{ width: '100%' }}>
-        <FRForm
-          value={requisition}
-          onChange={(newReq) => setRequisition(newReq)}
-          action={props.action}
-          onSubmit={props.action === 'add' ? addFR :props.action === 'edit'? editFR:manageFR} // Pass the addFR function to the onSubmit prop
-        />
+
+        {props.action === 'add' ? (
+          <FRForm
+            value={requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={props.action}
+            onSubmit={addFR } // Pass the addFR function to the onSubmit prop
+          />
+        ) : props.action === 'edit' ? (
+          <FRForm
+            value={requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={props.action}
+            onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+          />
+        ) : (
+          <ViewFR
+            value={requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={props.action}
+            onSubmit={manageFR}
+          />
+        )}
+
+
       </Card>
     </CommonPageLayout>
   );
