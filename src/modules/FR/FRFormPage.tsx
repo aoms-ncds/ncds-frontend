@@ -33,7 +33,8 @@ const FRFormPage = (props: FRFormPageProps) => {
   }, []);
   const addFR = async (requisition: CreatableFR) => {
     try {
-      const snackbarId = enqueueSnackbar({
+      // const snackbarId =
+      enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
       });
@@ -56,7 +57,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
-      const snackbarId = enqueueSnackbar({
+      enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
       });
@@ -83,7 +84,7 @@ const FRFormPage = (props: FRFormPageProps) => {
       const operation=requisition.status;
 
 
-      const snackbarId = enqueueSnackbar({
+      enqueueSnackbar({
         message: operation === 'approve' ? 'Approving' :operation === 'reject'? 'Rejecting':'Sending To President'+'FR Request',
         variant: 'info',
       });

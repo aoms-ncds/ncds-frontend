@@ -91,6 +91,7 @@ declare global {
   };
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
   type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|null;
+  type TypeOfFamily='Single Missionary'|'Family Missionary';
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
     divisionHistory:CreatableDivisionHistory[];
@@ -101,6 +102,7 @@ declare global {
   interface SupportDetails {
     designation?: Designation;
     totalNoOfYearsInMinistry?: number;
+    typeOfFamily?: TypeOfFamily;
     withChurch?: boolean;
   }
 

@@ -129,7 +129,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field??'---------------'} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Martial Status: </Typography> {user?.basicDetails.martialStatus} </Grid>
@@ -175,7 +175,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
               {user?.officialDetails.status=='Left'&&(
                 <>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving:</Typography> {user?.officialDetails.dateOfLeaving?.format('dddd, DD/MM/YYYY')} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving:</Typography> {user?.officialDetails.dateOfLeaving?.format('DD/MM/YYYY')} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Reason for Deactivation:</Typography> {user?.officialDetails.reasonForDeactivation} </Grid>
                 </>
               )}
@@ -185,8 +185,8 @@ const Profile = () => {
 
               {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid> */}
               {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Sub Division:</Typography> {user?.officialDetails.subDivision?.name} </Grid> */}
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('dddd DD/MM/YYYY')} </Grid> */}
-              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.divisionHistory.dateOfDivisionJoining?.format('dddd DD/MM/YYYY')} </Grid> */}
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('DD/MM/YYYY')} </Grid> */}
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.divisionHistory.dateOfDivisionJoining?.format('DD/MM/YYYY')} </Grid> */}
             </Grid>
             <Container maxWidth='md' >
               <Card>
@@ -270,7 +270,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {(user as unknown as IWorker)?.spouse?.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {(user as unknown as IWorker)?.spouse?.email} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {(user as unknown as IWorker)?.spouse?.phone} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('dddd DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Working: </Typography> {(user as unknown as IWorker)?.spouse?.working} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {(user as unknown as IWorker)?.spouse?.occupation} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {(user as unknown as IWorker)?.spouse?.qualification} </Grid>
