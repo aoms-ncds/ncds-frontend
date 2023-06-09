@@ -13,4 +13,5 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly PRESIDENT_APPROVED = 203;
   public static readonly ACCOUNTS_APPROVED = 204;
   public static readonly FR_APPROVED = 205;
+  public static readonly FR_CREATED = 200;
 }

@@ -11,7 +11,10 @@ import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import moment from 'moment';
+import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import { enqueueSnackbar } from 'notistack';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FRreciptTemplate from './components/FRreciptTemplate';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
@@ -95,9 +98,10 @@ const ManageFrPage = () => {
             {
               id: 'print',
               text: 'Print FR',
-              component: Link,
-              to: '/view' + props.row._id,
               icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <FRreciptTemplate />,
+              fileName: 'IFRReciept.pdf',
             },
             {
               id: 'notification',
@@ -148,6 +152,17 @@ const ManageFrPage = () => {
     { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
       <p> {props.row.sanctionedAsPer}</p>
     ), width: 150, align: 'center', headerAlign: 'center' },
+    { field: 'status', headerName: 'Status', renderCell: (props: any) => (
+      <p> {
+        props.row.status===FRLifeCycleStates.FR_APPROVED?'FR Approved':
+          props.row.status===FRLifeCycleStates.SUBMITTED_TO_PRESIDENT?'Submitted To President':
+            props.row.status===FRLifeCycleStates.SUBMITTED_TO_ACCOUNTS?'Submitted To Accounts':
+              props.row.status===FRLifeCycleStates.PRESIDENT_APPROVED?'President Approved':
+                props.row.status===FRLifeCycleStates.ACCOUNTS_APPROVED?'Accounts Approved':
+                  props.row.status===FRLifeCycleStates.FR_CREATED?'Created':''
+
+      } </p>
+    ), width: 130 },
   ];
 
   return (
