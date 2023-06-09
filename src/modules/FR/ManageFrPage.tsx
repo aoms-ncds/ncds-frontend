@@ -22,6 +22,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FRreciptTemplate from './components/FRreciptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 
 const ManageFrPage = () => {
@@ -109,8 +111,9 @@ const ManageFrPage = () => {
             {
               id: 'print',
               text: 'Print FR',
-              component: Link,
-              to: '/view' + props.row._id,
+              component: PDFDownloadLink,
+              document: <FRreciptTemplate />,
+              fileName: 'IFRReciept.pdf',
               icon: PrintIcon,
             },
             {

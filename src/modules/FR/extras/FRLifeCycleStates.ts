@@ -8,6 +8,7 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly FR_SEND_BACK = -201;
 
   // Active states
+  public static readonly FR_CREATED = 200;
   public static readonly SUBMITTED_TO_PRESIDENT = 201;
   public static readonly SUBMITTED_TO_ACCOUNTS = 202;
   public static readonly PRESIDENT_APPROVED = 203;
@@ -15,7 +16,8 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly FR_APPROVED = 205;
 
   public static readonly allStatus = ({
-    CLOSED: FRLifeCycleStates.FR_CLOSED,
+    FR_CREATED: FRLifeCycleStates.FR_CREATED,
+    FR_CLOSED: FRLifeCycleStates.FR_CLOSED,
     SEND_BACK: FRLifeCycleStates.FR_SEND_BACK,
     SUBMITTED_TO_PRESIDENT: FRLifeCycleStates.SUBMITTED_TO_PRESIDENT,
     SUBMITTED_TO_ACCOUNTS: FRLifeCycleStates.SUBMITTED_TO_ACCOUNTS,
