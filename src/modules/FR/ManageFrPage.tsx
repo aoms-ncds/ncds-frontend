@@ -22,14 +22,17 @@ import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
+import FRLifeCycleStates from './extras/FRLifeCycleStates';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [selectedFR, setSelectedFR] = useState<string|null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
+    FR: '',
   });
   const [particulars, setParticulars] = useState<Particular[]>([]);
 
@@ -91,8 +94,9 @@ const ManageFrPage = () => {
               // to: '/fr/view_FR/' + props.row._id,
               onClick: () => {
                 toggleOpenRemarks(true);
+                setSelectedFR(props.row._id);
                 FRServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data))
+                  .then((res) => setRemarks(res.data??[]))
                   .catch((error) => {
                     enqueueSnackbar({
                       variant: 'error',
@@ -158,6 +162,17 @@ const ManageFrPage = () => {
     { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
       <p> {props.row.sanctionedAsPer}</p>
     ), width: 150, align: 'center', headerAlign: 'center' },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        return FRLifeCycleStates.getStatusNameByCode(params.value).replaceAll('_', ' ');
+      },
+    },
+
   ];
 
   return (
@@ -183,9 +198,9 @@ const ManageFrPage = () => {
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
-          {remarks.map((remark) => (
+          {remarks.length > 0 ? remarks.map((remark) => (
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          ))}
+          )):'No Data Found '}
         </DialogContent>
         <DialogActions>
           <TextField
@@ -196,6 +211,7 @@ const ManageFrPage = () => {
             onChange={(e) =>
               setRemark((remark) => ({
                 ...remark,
+                FR: selectedFR??'',
                 remark: e.target.value,
               }))
             }
@@ -207,6 +223,9 @@ const ManageFrPage = () => {
                       remark.remark ?
                         FRServices.addRemarks(remark)
                             .then((res) => {
+                              const x= [remarks, res.data];
+                              console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
+
                               setRemarks((remarks) => [...remarks, res.data]);
                               setRemark((remark) => ({
                                 ...remark,
@@ -231,7 +250,10 @@ const ManageFrPage = () => {
           />
           <Button
             variant="contained"
-            onClick={() => toggleOpenRemarks(false)}
+            onClick={() => {
+              toggleOpenRemarks(false);
+              setSelectedFR(null);
+            }}
             // sx={{ ml: 'auto' }}
           >
             close
