@@ -14,6 +14,8 @@ import { useAuth } from '../hooks/Authentication';
 import LoadingPage from '../modules/Common/LoadingPage';
 import settingsRoutes from '../modules/Settings/extras/SettingsRouter';
 import UserServices from '../modules/User/extras/UserServices';
+import PermissionChecks from '../modules/User/components/PermissionChecks';
+import UnauthorizedPage from '../modules/User/UnauthorizedPage';
 
 export const allModuleRoutes = [
   homePageRoutes,
@@ -55,7 +57,13 @@ const Router = () => {
                 (
                   user === false ?
                     <Navigate to={`/login?redirect=${moduleRoute.base}${page.path}`} /> :
-                    page.element
+                    page.requiredAccessRights ?
+                      <PermissionChecks
+                        permissions={page.requiredAccessRights}
+                        granted={page.element}
+                        denied={(missingPermissions) => <UnauthorizedPage {...{ missingPermissions }} />}
+                      /> :
+                      page.element
                 )
             ),
           // element: page.element,

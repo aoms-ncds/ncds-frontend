@@ -6,7 +6,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  Typography,
   Button,
   Dialog,
   Autocomplete,
@@ -23,13 +22,12 @@ import {
   InputAdornment,
   FormControl,
 } from '@mui/material';
-import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { monthNames } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
@@ -44,77 +42,6 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
   const [coordinators, setCoordinators] = useState<Staff[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-  const [worker, setWorker] = useState<IWorker>({
-    _id: '',
-    workerCode: '',
-    basicDetails: {
-      firstName: '',
-      lastName: '',
-      dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
-      gender: 'Male',
-      field: 'Missionary',
-      martialStatus: 'Married',
-      highestQualification: 'Ph.D.',
-      // motherTongue: 'English',
-      // communicationLanguage: 'English',
-      // knownLanguages: ['English', 'Malayalam - മലയാളം'],
-      email: 'abcd@gmail.com',
-      phone: '1234567890',
-      alternativePhone: '9876543210',
-      PANNo: 'ABCD1234',
-      licenseNumber: 'L12345678',
-      permanentAddress: {
-        buildingName: 'Puliyulla parambath',
-        street: '123 Main Street',
-        city: 'Example City',
-        state: 'Example State',
-        country: 'India',
-        pincode: '12345',
-      },
-      currentOfficialAddress: {
-        buildingName: 'Puliyulla parambath',
-        street: '456 Elm Street',
-        city: 'Current City',
-        state: 'Current State',
-        country: 'India',
-        pincode: '54321',
-      },
-      residingAddress: {
-        buildingName: 'Puliyulla parambath',
-        street: '456 Elm Street',
-        city: 'Current City',
-        state: 'Current State',
-        country: 'India',
-        pincode: '54321',
-      },
-    },
-    officialDetails: {
-      dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
-      remarks: 'Lorem ipsum dolor sit amet.',
-      selfSupport: true,
-      status: 'Ministering',
-      divisionHistory: [],
-      noOfChurches: 5,
-    },
-    supportDetails: {
-      totalNoOfYearsInMinistry: 10,
-      withChurch: true,
-    },
-    supportStructure: {
-      basic: 5000,
-      HRA: 2000,
-      spouseAllowance: 1000,
-      positionalAllowance: 500,
-      specialAllowance: 800,
-      impactDeduction: 200,
-      telAllowance: 400,
-      PIONMissionaryFund: 300,
-      MUTDeduction: 100,
-    },
-    children: [],
-    createdAt: moment('2023-05-19T05:06:09.292Z'),
-    updatedAt: moment('2023-05-19T05:06:09.292Z'),
-  });
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();

@@ -1,4 +1,3 @@
-import React from 'react';
 import SettingsDashboard from '..';
 import { Settings as SettingsIcon, Language as Lang } from '@mui/icons-material';
 import Languages from '../Languages';
@@ -12,7 +11,7 @@ const settingsRoutes: ModuleRoute = {
       path: '/',
       element: <SettingsDashboard />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: true,
       icon: <SettingsIcon />,
     },
@@ -21,7 +20,7 @@ const settingsRoutes: ModuleRoute = {
       path: '/languages',
       element: <Languages />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
       icon: <Lang />,
     },

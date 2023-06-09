@@ -25,6 +25,7 @@ import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
 import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
+import PermissionChecks from '../modules/User/components/PermissionChecks';
 
 const drawerWidth = 240;
 
@@ -74,29 +75,59 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           .map((moduleRoute, index) =>
             moduleRoute.pages.map((page, _index) =>
               !page.showInDrawer ? null : (
-                <NavLink
-                  key={page.path + index + _index}
-                  to={moduleRoute.base + page.path}
-                  style={({ isActive }) =>
-                    !isActive ?
-                      {
-                        color: theme.palette.text.secondary,
-                        textDecoration: 'none',
-                      } :
-                      {
-                        color: isDark ? 'black' : 'white',
-                        textDecoration: 'none',
-                        backgroundColor: theme.palette.primary.main,
-                      }
-                  }
-                >
-                  <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
-                    <ListItemButton>
-                      {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
-                      <ListItemText primary={page.title} />
-                    </ListItemButton>
-                  </ListItem>
-                </NavLink>
+                !page.requiredAccessRights ? (
+                  <NavLink
+                    to={moduleRoute.base + page.path}
+                    style={({ isActive }) =>
+                      !isActive ?
+                        {
+                          color: theme.palette.text.secondary,
+                          textDecoration: 'none',
+                        } :
+                        {
+                          color: isDark ? 'black' : 'white',
+                          textDecoration: 'none',
+                          backgroundColor: theme.palette.primary.main,
+                        }
+                    }
+                  >
+                    <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                      <ListItemButton>
+                        {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
+                        <ListItemText primary={page.title} />
+                      </ListItemButton>
+                    </ListItem>
+                  </NavLink>
+                ) : (
+                  <PermissionChecks
+                    key={page.path + index + _index}
+                    permissions={page.requiredAccessRights}
+                    granted={(
+                      <NavLink
+                        to={moduleRoute.base + page.path}
+                        style={({ isActive }) =>
+                          !isActive ?
+                            {
+                              color: theme.palette.text.secondary,
+                              textDecoration: 'none',
+                            } :
+                            {
+                              color: isDark ? 'black' : 'white',
+                              textDecoration: 'none',
+                              backgroundColor: theme.palette.primary.main,
+                            }
+                        }
+                      >
+                        <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                          <ListItemButton>
+                            {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
+                            <ListItemText primary={page.title} />
+                          </ListItemButton>
+                        </ListItem>
+                      </NavLink>
+                    )}
+                  />
+                )
               ),
             ),
           )

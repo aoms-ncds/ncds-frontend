@@ -1,4 +1,3 @@
-import React from 'react';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import FRDashboard from '..';
 import FRFormPage from '../FRFormPage';
@@ -13,7 +12,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/',
       element: <FRDashboard />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: true,
       icon: <RequestPageOutlinedIcon />,
     },
@@ -22,7 +21,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/manage',
       element: <ManageFRPage />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -30,7 +29,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/apply',
       element: <FRFormPage action="add" />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -38,7 +37,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/closed',
       element: <ClosedFR />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -46,7 +45,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/:frID/view',
       element: <FRFormPage action="view" />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -54,7 +53,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/:frID/edit',
       element: <FRFormPage action="edit" />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
   ],

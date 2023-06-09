@@ -21,6 +21,7 @@ declare global {
     WRITE_XYZ: boolean;
 
   }
+  type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {
     firstName: string;
     lastName: string;

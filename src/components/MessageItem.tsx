@@ -1,6 +1,5 @@
 import { Alert, AlertTitle, Typography } from '@mui/material';
 import { Moment } from 'moment';
-import React from 'react';
 interface MessageItemProps {
   key: string;
   isSent: boolean;

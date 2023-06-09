@@ -1,4 +1,3 @@
-import React from 'react';
 import Profile from '../Profile';
 import PermissionManager from '../PermissionManager';
 
@@ -10,7 +9,7 @@ const usersPageRoutes: ModuleRoute = {
     //   path: '/',
     //   element: <WorkersDashboard />,
     //   private: true,
-    //   requiredAccessRights: ['string'],
+    //   requiredAccessRights: ['ADMIN_ACCESS'],
     //   showInDrawer: true,
     //   icon: <Diversity2Icon />,
     // },
@@ -19,14 +18,14 @@ const usersPageRoutes: ModuleRoute = {
       path: '/:userKind/:userId',
       element: <Profile />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
     },
     {
       title: 'Permission Manager',
       path: '/:userId/permission_manager',
       element: <PermissionManager />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
     },
   ],
 };

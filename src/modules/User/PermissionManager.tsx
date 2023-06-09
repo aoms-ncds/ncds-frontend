@@ -1,10 +1,9 @@
-import { Checkbox, Divider, FormControl, FormControlLabel, Grid, Typography } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, Grid } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import UserServices from './extras/UserServices';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
-import { error } from 'console';
 
 const PermissionManager = () => {
   const { userId } = useParams();
@@ -28,7 +27,7 @@ const PermissionManager = () => {
                 label={key.replaceAll('_', ' ')}
                 control={
                   <Checkbox
-                    checked={user?.permissions && user?.permissions[key as keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>]}
+                    checked={user?.permissions && user?.permissions[key as Permission]}
                     onChange={(e) =>{
                       const checked = e.target.checked;
                       setUser((user) => (!user || !user.permissions) ? null : ({

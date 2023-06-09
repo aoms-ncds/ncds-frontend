@@ -6,7 +6,7 @@ import { useParams, Link } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import StaffServices from '../HR/extras/StaffServices';
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 
 interface TabPanelProps {

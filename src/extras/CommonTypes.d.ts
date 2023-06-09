@@ -10,8 +10,8 @@ declare global {
       title: string;
       path: string;
       private: boolean;
-      element: React.ReactNode;
-      requiredAccessRights?: 'string'[];
+      element: JSX.Element;
+      requiredAccessRights?: Permission[];
       showInDrawer?: boolean;
       icon?: React.ReactNode;
     }[];

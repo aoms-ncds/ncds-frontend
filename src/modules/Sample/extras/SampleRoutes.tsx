@@ -1,4 +1,3 @@
-import React from 'react';
 import SampleModule from '..';
 import { Extension as ExtensionIcon } from '@mui/icons-material';
 
@@ -10,7 +9,7 @@ const samplesPageRoutes: ModuleRoute = {
       path: '',
       element: <SampleModule />,
       private: true,
-      requiredAccessRights: ['string'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: true,
       icon: <ExtensionIcon />,
     },
