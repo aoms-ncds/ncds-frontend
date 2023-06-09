@@ -3,12 +3,13 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card } from '@mui/material';
 import { Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import IROReciptTemplate from './components/IROReciptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const ManageIRO = () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();
@@ -22,7 +23,7 @@ const ManageIRO = () => {
         console.log(res);
       });
   }, []);
-  const columns = [
+  const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
       headerName: 'Action',
@@ -98,6 +99,16 @@ const ManageIRO = () => {
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
     { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCode(params.value).replaceAll('_', ' ');
+      },
+    },
   ];
   return (
     <CommonPageLayout title="Internal Release Order">

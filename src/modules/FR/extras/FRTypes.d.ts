@@ -145,8 +145,10 @@ declare global{
     interface Remark extends MongooseDocument {
       remark: string;
       createdBy: IWorker;
+      FR: string;
     }
     interface CreatableRemark extends Creatable<Remark> {
       createdBy?: IWorker;
+      FR: string;
     }
   }

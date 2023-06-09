@@ -141,6 +141,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
+    FR: '',
   });
 
   const handleClose = () => {
