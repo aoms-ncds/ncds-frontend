@@ -29,10 +29,20 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       // status: '',
     },
     supportDetails: {
-      totalNoOfYearsInMinistry: 10,
+      // totalNoOfYearsInMinistry: 10,
       withChurch: true,
     },
-    supportStructure: {},
+    supportStructure: {
+      basic: 0,
+      HRA: 0,
+      spouseAllowance: 0,
+      positionalAllowance: 0,
+      specialAllowance: 0,
+      impactDeduction: 0,
+      telAllowance: 0,
+      PIONMissionaryFund: 0,
+      MUTDeduction: 0,
+    },
     spouse: {
       firstName: '',
       lastName: '',
@@ -40,6 +50,9 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     },
     children: [],
   });
+
+  const [userPhoto, setUserPhoto] = useState<File>();
+
 
   useEffect(() => {
     if (id) {
@@ -68,14 +81,19 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             variant: 'standard',
           },
           kind: 'worker',
+          profilePic: {
+            userPhoto: userPhoto,
+            setUserPhoto: ((newUserPhoto)=>setUserPhoto(newUserPhoto)),
+
+          },
         }}
         onSubmit={async (creatableWorker) => {
           try {
             if (props.action === 'add') {
-              const createWorkerResponse = await WorkersServices.create(creatableWorker);
+              const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto);
               enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
             } else if (props.action === 'edit') {
-              const updateWorkerResponse = await WorkersServices.edit(creatableWorker);
+              const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
           } catch (error: any) {

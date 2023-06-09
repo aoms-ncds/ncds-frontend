@@ -12,7 +12,7 @@ declare global {
     working?: boolean;
     occupation?: string;
     qualification?: string;
-    knownLanguages?: Language[];
+    knownLanguages?: ILanguage[];
   }
   interface CreatableSpouse extends Creatable<Spouse> {
     spouseOf?: IWorker;

@@ -12,16 +12,20 @@ export default {
   /**
    * Creates a new worker.
    * @param {CreatableIWorker} worker - The worker to be created.
+   * @param {File|undefined} userPhoto - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the created worker.
    */
-  create: (worker: CreatableIWorker) => getStandardResponse<IWorker>(axios.post('/workers', worker, { headers: { ...getAuthHeader() } })),
+  create: (worker: CreatableIWorker, userPhoto: File | undefined) =>
+    getStandardResponse<IWorker>(axios.post('/workers', { worker, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Edits a worker.
    * @param {CreatableIWorker} worker - The worker to be edited.
+   * @param {File|undefined} userPhoto - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the edited worker.
    */
-  edit: (worker: CreatableIWorker) => getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`, worker, { headers: { ...getAuthHeader() } })),
+  edit: (worker: CreatableIWorker, userPhoto: File | undefined) =>
+    getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`, { worker, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Deletes a worker.
@@ -46,11 +50,11 @@ export default {
         },
         officialDetails: {
           ...worker.officialDetails,
-          dateOfJoining: worker.officialDetails.dateOfJoining? moment(worker.officialDetails.dateOfJoining):undefined,
+          dateOfJoining: worker.officialDetails.dateOfJoining ? moment(worker.officialDetails.dateOfJoining) : undefined,
           divisionHistory: {
             ...worker.officialDetails.divisionHistory,
-            dateOfDivisionJoining: worker.officialDetails.divisionHistory.dateOfDivisionJoining? moment(worker.officialDetails.divisionHistory.dateOfDivisionJoining):undefined,
-            dateOfDivisionLeaving: worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving?moment(worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving):undefined,
+            dateOfDivisionJoining: worker.officialDetails.divisionHistory.dateOfDivisionJoining ? moment(worker.officialDetails.divisionHistory.dateOfDivisionJoining) : undefined,
+            dateOfDivisionLeaving: worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving ? moment(worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving) : undefined,
           },
         },
         createdAt: moment(worker.createdAt),
@@ -72,31 +76,34 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
-        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+        dateOfJoining: data.officialDetails.dateOfJoining ? moment(data.officialDetails.dateOfJoining) : undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving ? moment(data.officialDetails.dateOfLeaving) : undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
           ...divHis,
-          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
-          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
         })),
       },
-      spouse: !data.spouse ? undefined : {
-        ...data.spouse,
-        dateOfBirth: data.spouse.dateOfBirth?moment(data.spouse.dateOfBirth):undefined,
-        createdAt: moment(data.createdAt),
-        updatedAt: moment(data.updatedAt),
-      },
+      spouse: !data.spouse ?
+        undefined :
+        {
+          ...data.spouse,
+          dateOfBirth: data.spouse.dateOfBirth ? moment(data.spouse.dateOfBirth) : undefined,
+          createdAt: moment(data.createdAt),
+          updatedAt: moment(data.updatedAt),
+        },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      children: !data.children ? undefined : data.children.map((child: any) => ({
-        ...child,
-        dateOfBirth: child.dateOfBirth? moment(child.dateOfBirth):undefined,
-        createdAt: moment(data.createdAt),
-        updatedAt: moment(data.updatedAt),
-      })),
+      children: !data.children ?
+        undefined :
+        data.children.map((child: any) => ({
+          ...child,
+          dateOfBirth: child.dateOfBirth ? moment(child.dateOfBirth) : undefined,
+          createdAt: moment(data.createdAt),
+          updatedAt: moment(data.updatedAt),
+        })),
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
-
 
   /**
    * Approves a worker.
