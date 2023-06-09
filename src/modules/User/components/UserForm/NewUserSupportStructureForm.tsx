@@ -14,7 +14,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Basic"
           type="number"
-          value={props.value.basic}
+          value={props.value.basic === 0 ? '' : props.value.basic}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -30,7 +30,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="HRA"
           type="number"
-          value={props.value.HRA}
+          value={props.value.HRA === 0 ? '' : props.value.HRA}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -46,7 +46,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Spouse Allowance"
           type="number"
-          value={props.value.spouseAllowance}
+          value={props.value.spouseAllowance === 0 ? '' : props.value.spouseAllowance}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -62,7 +62,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Positional Allowance"
           type="number"
-          value={props.value.positionalAllowance}
+          value={props.value.positionalAllowance === 0 ? '' : props.value.positionalAllowance}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -78,7 +78,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Special Allowance"
           type="number"
-          value={props.value.specialAllowance}
+          value={props.value.specialAllowance === 0 ? '' : props.value.specialAllowance}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -94,7 +94,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Miscellaneous Deduction"
           type="number"
-          value={props.value.impactDeduction}
+          value={props.value.impactDeduction === 0 ? '' : props.value.impactDeduction}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -110,7 +110,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="Tel Allowance"
           type="number"
-          value={props.value.telAllowance}
+          value={props.value.telAllowance === 0 ? '' : props.value.telAllowance}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -126,7 +126,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="PISON Missionary Fund"
           type="number"
-          value={props.value.PIONMissionaryFund}
+          value={props.value.PIONMissionaryFund === 0 ? '' : props.value.PIONMissionaryFund}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -142,7 +142,7 @@ const NewUserSupportStructureForm = (
         <TextField
           label="MUT Deduction (Medical Insurance)"
           type="number"
-          value={props.value.MUTDeduction}
+          value={props.value.MUTDeduction === 0 ? '' : props.value.MUTDeduction}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -154,7 +154,7 @@ const NewUserSupportStructureForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Total Amount"
           value={
@@ -171,7 +171,7 @@ const NewUserSupportStructureForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Total Deduction"
           value={(props.value.impactDeduction ?? 0) + (props.value.PIONMissionaryFund ?? 0) + (props.value.MUTDeduction ?? 0)}
@@ -181,7 +181,7 @@ const NewUserSupportStructureForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Net Amount"
           value={

@@ -63,13 +63,30 @@ const NewSupportDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
-          <FormLabel id="Field">Field</FormLabel>
+          <FormLabel id="TypeOfFamily">Type of Family:</FormLabel>
           <RadioGroup
-            aria-labelledby="Field"
+            aria-labelledby="TypeOfFamily"
+            // defaultValue="missionar
+            value={props.value.typeOfFamily??null}
+            onChange={(e) => props.onChange({ ...props.value, typeOfFamily: e.target.value as TypeOfFamily | undefined })}
+            name="TypeOfFamily"
+            row
+          >
+            <FormControlLabel value={'Single Missionary'} control={<Radio />} label="Single Missionary" />
+            <FormControlLabel value={'Family Missionary'} control={<Radio />} label="Family Missionary" />
+          </RadioGroup>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <FormControl>
+          <FormLabel id="withChurch">Type of church:</FormLabel>
+          <RadioGroup
+            aria-labelledby="withChurch"
             // defaultValue="missionar
             value={props.value.withChurch ? 'with church' : 'without church'}
             onChange={(e) => props.onChange({ ...props.value, withChurch: e.target.value === 'with church' ? true : false })}
-            name="Field"
+            name="withChurch"
             row
           >
             <FormControlLabel value={'with church'} control={<Radio />} label="With Church" />
