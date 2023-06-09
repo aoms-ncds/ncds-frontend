@@ -111,6 +111,7 @@ const ManageFrPage = () => {
               component: PDFDownloadLink,
               document: <FRreciptTemplate />,
               fileName: 'IFRReciept.pdf',
+              icon: PrintIcon,
             },
             {
               id: 'notification',
