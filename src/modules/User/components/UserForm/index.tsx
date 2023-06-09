@@ -14,6 +14,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   FormControl,
   FormLabel,
   IconButton,
@@ -117,9 +118,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           <Step>
             <StepLabel>Support Details</StepLabel>
           </Step>
-          <Step>
+          {/* <Step>
             <StepLabel>Support Structure</StepLabel>
-          </Step>
+          </Step> */}
           {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus === 'Married' && (
             <Step>
               <StepLabel>Spouse details</StepLabel>
@@ -282,7 +283,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setActiveStep((step) => step + 1);
+                if (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married') {
+                  setActiveStep((currentStep) => currentStep + 1);
+                } else {
+                  props.onSubmit && props.onSubmit(props.value);
+                }
               }}
             >
               <Grid container spacing={3}>
@@ -297,7 +302,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   }
                   options={props.options}
                 />
-              </Grid>
+                {/* </Grid>
 
               <div
                 style={{
@@ -329,7 +334,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 }
               }}
             >
-              <Grid container spacing={3}>
+              <Grid container spacing={3}> */}
+                <Grid item xs={12}>
+                  <br />
+                  <Divider textAlign="left">Support Structure</Divider>
+                </Grid>
+
                 <NewUserSupportStructureForm
                   action={props.action}
                   value={props.value.supportStructure}
@@ -366,7 +376,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               </div>
             </form>
           )}
-          {activeStep === 4 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -402,7 +412,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               </div>
             </form>
           )}
-          {activeStep === 5 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 4 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
