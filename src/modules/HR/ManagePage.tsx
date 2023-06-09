@@ -23,18 +23,14 @@ const HRManagePage = () => {
       <PermissionChecks
         permissions={['WRITE_STAFFS']}
         granted={(
-          <Button variant="contained" sx={{ float: 'right' }} startIcon={<AddIcon />} component={Link} to="/hr/add">
+          <Button variant="contained" sx={{ float: 'right', marginBottom: 3 }} startIcon={<AddIcon />} component={Link} to="/hr/add">
             Add new
           </Button>
         )}
       />
 
-      <br />
-      <br />
-      <br />
-      <br />
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '70vh', width: '100%' }}>
+        <Card style={{ height: '68vh', width: '100%' }}>
           <UsersList<Staff> value={staffs} onChange={(newStaffs) => setStaffs(newStaffs)} action={'view'} options={{ kind: 'staff' }} />
         </Card>
       </Grid>

@@ -39,6 +39,9 @@ const NewAddressForm = (
               buildingName: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.buildingName),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
         />
@@ -55,6 +58,9 @@ const NewAddressForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: Boolean(props.value?.street),
+          }}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -67,6 +73,9 @@ const NewAddressForm = (
               city: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.city),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
         />
@@ -81,6 +90,9 @@ const NewAddressForm = (
               state: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.state),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
         />
@@ -95,6 +107,9 @@ const NewAddressForm = (
               country: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.country),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
         />
@@ -109,6 +124,9 @@ const NewAddressForm = (
               pincode: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.pincode),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
         />

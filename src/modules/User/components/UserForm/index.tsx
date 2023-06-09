@@ -28,7 +28,7 @@ import NewUserSupportStructureForm from './NewUserSupportStructureForm';
 import SpouseForm from './SpouseForm';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { childSupport } from '../../../Workers/extras/WorkersConfig';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
@@ -59,6 +59,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setchildAction] = useState<'add' | 'edit'>('add');
+
+  const navigateTo = (path: string) => {
+    window.location.href = path;
+  };
+
 
   // const [userPhoto, setUserPhoto] = useState<File>();
   // const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
@@ -326,6 +331,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   props.onSubmit && props.onSubmit(props.value);
+                  navigateTo('/hr/manage');
                 }
               }}
             >
