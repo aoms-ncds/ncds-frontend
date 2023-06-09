@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
+import { Types } from 'mongoose';
 
 export default {};
 
@@ -31,9 +32,9 @@ declare global {
     martialStatus?: MaritalStatus;
     religion?:Religion;
     highestQualification?: string;
-    motherTongue?: Types.ObjectId;
-    communicationLanguage?: Types.ObjectId;
-    knownLanguages?: Types.ObjectId[];
+    motherTongue?: ILanguage;
+    communicationLanguage?: ILanguage;
+    knownLanguages?: ILanguage[];
     email: string;
     email2?: string;
     phone?: string;
@@ -115,6 +116,7 @@ declare global {
     MUTDeduction?: number;
   }
   interface User extends MongooseDocument {
+    imageURL?: string;
     basicDetails: BasicDetails;
     officialDetails: OfficialDetails;
     supportDetails: SupportDetails;
