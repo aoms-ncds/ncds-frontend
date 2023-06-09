@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
-import { languages } from './CommonConfig';
+// import languages from './CommonConfig';
 
-export default {};
+export default { };
 
 declare global {
   interface ModuleRoute {
@@ -75,7 +75,7 @@ declare global {
     [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
   };
 
-  type Language = (typeof languages)[number];
+  // type Language = (typeof languages)[number];
   interface Address {
     buildingName?: string;
     street?: string;

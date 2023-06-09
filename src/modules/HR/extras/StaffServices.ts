@@ -25,7 +25,7 @@ export default {
   * @return {Promise<StandardResponse<Staff>>} A promise that resolves to the response containing the edited staff member.
    */
   edit: (staff: CreatableStaff, userPhoto: File | undefined): Promise<StandardResponse<Staff>> =>
-    getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, staff, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+    getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Deletes a staff member.

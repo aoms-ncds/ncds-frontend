@@ -159,7 +159,7 @@ const SpouseForm = (
           multiple
           id="knownLanguages"
           options={languages}
-          getOptionLabel={(option) => option}
+          getOptionLabel={(option) => option.name}
           value={props.value.knownLanguages}
           onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField.variant} />}

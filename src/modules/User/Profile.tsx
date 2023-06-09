@@ -221,44 +221,44 @@ const Profile = () => {
           </TabPanel>
           <TabPanel value={currentTab} index={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Basic: </Typography> {user?.supportStructure.basic} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>HRA: </Typography> {user?.supportStructure.HRA} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse Allowance: </Typography> {user?.supportStructure.spouseAllowance} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Positional Allowance: </Typography> {user?.supportStructure.positionalAllowance} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special Allowance: </Typography> {user?.supportStructure.specialAllowance} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Miscellaneous Deduction: </Typography> {user?.supportStructure.impactDeduction} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure.telAllowance} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION Missionary Fund: </Typography> {user?.supportStructure.PIONMissionaryFund} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>MUT Deduction: </Typography> {user?.supportStructure.MUTDeduction} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Basic: </Typography> {user?.supportStructure?.basic} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>HRA: </Typography> {user?.supportStructure?.HRA} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse Allowance: </Typography> {user?.supportStructure?.spouseAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Positional Allowance: </Typography> {user?.supportStructure?.positionalAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special Allowance: </Typography> {user?.supportStructure?.specialAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Miscellaneous Deduction: </Typography> {user?.supportStructure?.impactDeduction} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure?.telAllowance} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION Missionary Fund: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>MUT Deduction: </Typography> {user?.supportStructure?.MUTDeduction} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Amount: </Typography>
                 {
-                  (user?.supportStructure.basic ?? 0) +
-                  (user?.supportStructure.HRA ?? 0) +
-                  (user?.supportStructure.spouseAllowance ?? 0) +
-                  (user?.supportStructure.positionalAllowance ?? 0) +
-                  (user?.supportStructure.specialAllowance ?? 0) +
-                  (user?.supportStructure.telAllowance ?? 0)
+                  (user?.supportStructure?.basic ?? 0) +
+                  (user?.supportStructure?.HRA ?? 0) +
+                  (user?.supportStructure?.spouseAllowance ?? 0) +
+                  (user?.supportStructure?.positionalAllowance ?? 0) +
+                  (user?.supportStructure?.specialAllowance ?? 0) +
+                  (user?.supportStructure?.telAllowance ?? 0)
                 }
               </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Deduction: </Typography>
                 {
-                  (user?.supportStructure.impactDeduction ?? 0) +
-                   (user?.supportStructure.PIONMissionaryFund ?? 0) +
-                   (user?.supportStructure.MUTDeduction ?? 0)
+                  (user?.supportStructure?.impactDeduction ?? 0) +
+                   (user?.supportStructure?.PIONMissionaryFund ?? 0) +
+                   (user?.supportStructure?.MUTDeduction ?? 0)
                 }
               </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Net Amount: </Typography>
                 {
-                  (user?.supportStructure.basic ?? 0) +
-                  (user?.supportStructure.HRA ?? 0) +
-                  (user?.supportStructure.spouseAllowance ?? 0) +
-                  (user?.supportStructure.positionalAllowance ?? 0) +
-                  (user?.supportStructure.specialAllowance ?? 0) +
-                  (user?.supportStructure.telAllowance ?? 0) -
+                  (user?.supportStructure?.basic ?? 0) +
+                  (user?.supportStructure?.HRA ?? 0) +
+                  (user?.supportStructure?.spouseAllowance ?? 0) +
+                  (user?.supportStructure?.positionalAllowance ?? 0) +
+                  (user?.supportStructure?.specialAllowance ?? 0) +
+                  (user?.supportStructure?.telAllowance ?? 0) -
                   (
-                    (user?.supportStructure.impactDeduction ?? 0) +
-                    (user?.supportStructure.PIONMissionaryFund ?? 0) +
-                    (user?.supportStructure.MUTDeduction ?? 0)
+                    (user?.supportStructure?.impactDeduction ?? 0) +
+                    (user?.supportStructure?.PIONMissionaryFund ?? 0) +
+                    (user?.supportStructure?.MUTDeduction ?? 0)
                   )
                 }
               </Grid>
