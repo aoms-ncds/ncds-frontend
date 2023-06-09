@@ -20,14 +20,14 @@ const hrPageRoutes: ModuleRoute = {
       path: '/manage',
       element: <HRManagePage />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['ADMIN_ACCESS', 'READ_STAFFS'],
     },
     {
       title: 'Add New Staff',
       path: '/add',
       element: <StaffFormPage action="add" />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['ADMIN_ACCESS', 'WRITE_STAFFS'],
     },
     {
       title: 'Edit Staff',

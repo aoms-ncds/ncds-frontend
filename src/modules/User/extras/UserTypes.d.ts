@@ -115,6 +115,7 @@ declare global {
     MUTDeduction?: number;
   }
   interface User extends MongooseDocument {
+    kind: readonly 'staff'|'worker';
     basicDetails: BasicDetails;
     officialDetails: OfficialDetails;
     supportDetails: SupportDetails;

@@ -1,12 +1,14 @@
 import DropdownButton from '../../../components/DropDownButton';
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Avatar, Card, Grid } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
+import GridLinkAction from '../../../components/GridLinkAction';
+import { hasPermissions } from './PermissionChecks';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
@@ -87,6 +89,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
+  // const x = hasPermissions(['ADMIN_ACCESS']) && [
+  //   <GridLinkAction
+  //     key={5}
+  //     label="Manage Permissions"
+  //     icon={<BallotIcon />}
+  //     showInMenu
+  //     to={`/users/${params.row._id}/permission_manager`}
+  //   />,
+  // ];
   const columns: GridColDef<StaffOrWorker>[] = [
     {
       field: 'image',
@@ -96,69 +107,125 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       renderCell: () => <Avatar />,
     },
     {
-      field: '_manage',
-      headerName: 'Action',
-      width: 65,
-      type: 'string',
-      renderCell: (renderCellParams) => (
-        <DropdownButton
-          useIconButton={true}
-          id="user action"
-          primaryText="Actions"
-          key={'User action'}
-          items={[
-            {
-              id: 'View',
-              text: 'View',
-              component: Link,
-              to: `/users/${props.options?.kind}/${renderCellParams.row._id}`,
-              icon: PreviewIcon,
-            },
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${renderCellParams.row._id}`,
-              icon: EditIcon,
-            },
-            {
-              id: 'delete',
-              text: 'Delete',
-              component: Link,
-              icon: DeleteIcon,
-              onClick: () => {
-                execDelete(renderCellParams.row._id);
-              },
-            },
-            renderCellParams.row.status == UserLifeCycleStates.ACTIVE ?
-              {
-                id: 'deactivate',
-                text: 'Deactivate',
-                component: Link,
-                icon: NoAccountsIcon,
-                onClick: () => {
-                  deactivateWorker(renderCellParams.row._id);
-                },
-              } :
-              {
-                id: 'activate',
-                text: 'Activate',
-                component: Link,
-                icon: PersonIcon,
-                onClick: () => {
-                  activateWorker(renderCellParams.row._id);
-                },
-              },
-            {
-              id: 'permission_manager',
-              text: 'Manage Permissions',
-              component: Link,
-              to: `/users/${renderCellParams.row._id}/permission_manager`,
-              icon: BallotIcon,
-            },
-          ]}
-        />
+      field: 'actions',
+      type: 'actions',
+      // renderCell: (renderCellParams) => (
+      //   <DropdownButton
+      //     useIconButton={true}
+      //     id="user action"
+      //     primaryText="Actions"
+      //     key={'User action'}
+      //     items={[
+      //       {
+      //         id: 'View',
+      //         text: 'View',
+      //         component: Link,
+      //         to: `/users/${props.options?.kind}/${renderCellParams.row._id}`,
+      //         icon: PreviewIcon,
+      //       },
+      //       {
+      //         id: 'edit',
+      //         text: 'Edit',
+      //         component: Link,
+      //         to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${renderCellParams.row._id}`,
+      //         icon: EditIcon,
+      //       },
+      //       {
+      //         id: 'delete',
+      //         text: 'Delete',
+      //         component: Link,
+      //         icon: DeleteIcon,
+      //         onClick: () => {
+      //           execDelete(renderCellParams.row._id);
+      //         },
+      //       },
+      //       renderCellParams.row.status == UserLifeCycleStates.ACTIVE ?
+      //         {
+      //           id: 'deactivate',
+      //           text: 'Deactivate',
+      //           component: Link,
+      //           icon: NoAccountsIcon,
+      //           onClick: () => {
+      //             deactivateWorker(renderCellParams.row._id);
+      //           },
+      //         } :
+      //         {
+      //           id: 'activate',
+      //           text: 'Activate',
+      //           component: Link,
+      //           icon: PersonIcon,
+      //           onClick: () => {
+      //             activateWorker(renderCellParams.row._id);
+      //           },
+      //         },
+      //       {
+      //         id: 'permission_manager',
+      //         text: 'Manage Permissions',
+      //         component: Link,
+      //         to: `/users/${renderCellParams.row._id}/permission_manager`,
+      //         icon: BallotIcon,
+      //       },
+      //     ]}
+      //   />
+      // ),
+      getActions: (params: GridRowParams) => (
+        [
+          <GridLinkAction
+            key={1}
+            label="View"
+            icon={<PreviewIcon />}
+            showInMenu
+            to={`/users/${props.options?.kind}/${params.row._id}`}
+          />,
+          <GridLinkAction
+            key={2}
+            label="Edit"
+            icon={<EditIcon />}
+            showInMenu
+            to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+          />,
+          <GridLinkAction
+            key={3}
+            label="Delete"
+            icon={<DeleteIcon />}
+            showInMenu
+            onClick={() => {
+              execDelete(params.row._id);
+            }}
+          />,
+          (params.row.status == UserLifeCycleStates.ACTIVE ? (
+            <GridLinkAction
+              key={4}
+              label="Deactivate"
+              icon={<NoAccountsIcon />}
+              showInMenu
+              onClick={() => {
+                deactivateWorker(params.row._id);
+              }}
+            />
+          ) : (
+            <GridLinkAction
+              key={4}
+              label="Activate"
+              icon={<PersonIcon />}
+              showInMenu
+              onClick={() => {
+                activateWorker(params.row._id);
+              }}
+            />
+          )),
+          hasPermissions(['ADMIN_ACCESS']) &&
+            <GridLinkAction
+              key={5}
+              label="Manage Permissions"
+              icon={<BallotIcon />}
+              showInMenu
+              to={`/users/${params.row._id}/permission_manager`}
+            />,
+          false,
+        ].filter((action) => action !== false) as JSX.Element[]
       ),
+
     },
     // { field: '_id', headerName: 'SI No', width: 70 },
     { field: `${props.options?.kind}Code`, headerName: 'Worker Code', width: 120 },

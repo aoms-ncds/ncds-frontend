@@ -21,11 +21,12 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
 import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
 import PermissionChecks from '../modules/User/components/PermissionChecks';
+import { useAuth } from '../hooks/Authentication';
 
 const drawerWidth = 240;
 
@@ -33,6 +34,8 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const auth = useAuth();
+  const navigate = useNavigate();
   // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -175,8 +178,16 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem component={Link} to={'/users/me'} onClick={handleCloseUserMenu}>
+            <MenuItem component={Link} to={`/users/${auth.user ? auth.user.kind+'/'+auth.user._id : ''}`} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Profile</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => {
+              handleCloseUserMenu();
+              localStorage.removeItem('userToken');
+              localStorage.removeItem('userData');
+              auth.setUser(false);
+            }}>
+              <Typography textAlign="center">Logout</Typography>
             </MenuItem>
           </Menu>
         </Toolbar>

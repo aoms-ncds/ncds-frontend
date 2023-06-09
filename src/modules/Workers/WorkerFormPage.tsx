@@ -13,6 +13,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
+    kind: 'worker',
     basicDetails: {
       firstName: '',
       lastName: '',

@@ -32,6 +32,7 @@ export default {
                 noOfChurches: 5,
                 coordinator: {
                   _id: '646703c19e433f67d27019b2',
+                  kind: 'staff',
                   staffCode: 'IETWK00003',
                   basicDetails: {
                     aadhaar: {
@@ -107,6 +108,7 @@ export default {
                   updatedAt: moment('2023-05-19T05:06:09.292Z'),
                 },
                 seniorLeader: {
+                  kind: 'staff',
                   staffCode: 'IETWK00001',
                   _id: '646703c19e433f67d27019b2',
                   basicDetails: {
@@ -184,6 +186,7 @@ export default {
                 },
                 juniorLeader: {
                   _id: '646703c19e433f67d27019b2',
+                  kind: 'staff',
                   staffCode: 'IETWK00002',
                   basicDetails: {
                     aadhaar: {

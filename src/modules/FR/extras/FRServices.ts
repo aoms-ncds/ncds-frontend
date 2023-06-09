@@ -470,6 +470,7 @@ export default {
             remark: 'HI Hlo',
             createdBy: {
               _id: '646703c19e433f67d27019b2',
+              kind: 'worker',
               workerCode: '',
               basicDetails: {
                 aadhaar: {
@@ -555,6 +556,7 @@ export default {
               'HI Hlo jhvaj hfgadkhjfga yukhj gfiuak uoahyfuioafuiafuahyfuafhuafhuiaf',
             createdBy: {
               _id: '646703c19e433f67d27019b2',
+              kind: 'worker',
               workerCode: '',
               basicDetails: {
                 aadhaar: {
@@ -637,6 +639,7 @@ export default {
             _id: '3',
             remark: 'HI Hlo',
             createdBy: {
+              kind: 'worker',
               _id: '646703c19e433f67d27019b2',
               workerCode: '',
               basicDetails: {
@@ -720,6 +723,7 @@ export default {
             _id: '4',
             remark: 'HI Hlo',
             createdBy: {
+              kind: 'worker',
               _id: '646703c19e433f67d27019b2',
               workerCode: '',
               basicDetails: {

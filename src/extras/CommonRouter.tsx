@@ -56,7 +56,7 @@ const Router = () => {
                 <LoadingPage /> :
                 (
                   user === false ?
-                    <Navigate to={`/login?redirect=${moduleRoute.base}${page.path}`} /> :
+                    <Navigate to={`/login?redirect=${window.location.pathname}`} /> :
                     page.requiredAccessRights ?
                       <PermissionChecks
                         permissions={page.requiredAccessRights}

@@ -9,6 +9,7 @@ import SpouseListPage from './components/SpouseList';
 import { Link } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import WorkersServices from './extras/WorkersServices';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -60,17 +61,20 @@ const ManageWorkerPage = () => {
             </Tabs>
           </Grid>
           <Grid item xs={12} lg={3}>
-            {currentTab === 0 && (
-              <Button
-                variant="contained"
-                sx={{ float: 'right', mt: 2, mr: 2 }}
-                startIcon={<AddIcon />}
-                component={Link}
-                to={'/workers/add'}
-              >
+            <PermissionChecks
+              permissions={['WRITE_WORKERS']}
+              granted={currentTab === 0 && (
+                <Button
+                  variant="contained"
+                  sx={{ float: 'right', mt: 2, mr: 2 }}
+                  startIcon={<AddIcon />}
+                  component={Link}
+                  to={'/workers/add'}
+                >
                 Add New
-              </Button>
-            )}
+                </Button>
+              )||null}
+            />
           </Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>

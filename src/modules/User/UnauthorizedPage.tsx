@@ -36,7 +36,7 @@ const UnauthorizedPage = (props: UnauthorizedPageProps) => {
           variant="caption"
           sx={{ textAlign: 'center', color: 'red' }}
         >
-          <b>Missing permissions:</b> &quot;{props.missingPermissions.join('", "').replaceAll('_', ' ')}
+          <b>Missing permissions:</b> &quot;{props.missingPermissions.join('", "').replaceAll('_', ' ')}&quot;
         </Typography>
       </center>
     </CommonPageLayout>

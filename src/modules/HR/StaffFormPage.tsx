@@ -13,6 +13,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   const { id } = useParams();
 
   const [staff, setStaff] = useState<CreatableStaff>({
+    kind: 'staff',
     basicDetails: {
       firstName: '',
       lastName: '',

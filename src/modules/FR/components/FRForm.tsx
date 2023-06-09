@@ -49,6 +49,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [worker, setWorker] = useState<IWorker>({
     _id: '',
     workerCode: '',
+    kind: 'worker',
     basicDetails: {
       firstName: '',
       lastName: '',
