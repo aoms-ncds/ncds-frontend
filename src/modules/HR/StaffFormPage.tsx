@@ -58,6 +58,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
                 ...res.data.basicDetails,
                 aadhaar: undefined,
                 voterId: undefined,
+                insurance: undefined,
               },
             });
           }
