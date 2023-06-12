@@ -4,8 +4,7 @@ declare global {
   name: string;
   reason: string;
   status: string;
-
-
+  attachment:FileObject[];
   }
   type CreatableApplication = Creatable<Application>;
 }

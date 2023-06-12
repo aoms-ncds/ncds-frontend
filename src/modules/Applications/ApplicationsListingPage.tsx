@@ -8,6 +8,9 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
 import { useParams } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
+import FileUploader from '../../components/FileUploader';
+import { MB } from '../../extras/CommonConfig';
+import TestServices from '../Tests/extras/TestServices';
 
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);
@@ -64,6 +67,7 @@ const ApplicationsListingPage = () => {
     }
   };
 
+  const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
   const AddApplication = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const snackbarId = enqueueSnackbar({
@@ -213,7 +217,7 @@ const ApplicationsListingPage = () => {
               <Grid container spacing={2}>
                 <Grid item md={12}>
                   <TextField
-                    label="name"
+                    label="Name"
                     value={applicationFormState.name}
                     onChange={(e) => {
                       setApplicationFormState(() => ({
@@ -240,6 +244,11 @@ const ApplicationsListingPage = () => {
                     required
                   />
                 </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                          Attachments
+                  </Button>
+                </Grid>
               </Grid>
             </Container>
           </DialogContent>
@@ -249,6 +258,30 @@ const ApplicationsListingPage = () => {
           </DialogActions>
         </form>
       </Dialog>
+      <FileUploader
+        title="Attachments"
+        types={['application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/pdf',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1*MB,
+          maxItemCount: 3,
+          maxTotalSize: 3*MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        getFiles={TestServices.getBills}
+        uploadFile={ApplicationServices.uploadFile}
+        renameFile={TestServices.renameFile}
+        deleteFile={(fileId: string) => {
+          return TestServices.deleteFile(fileId);
+        }}
+      />
+
       <br />
       <br />
       <Grid item xs={12} md={12}>

@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
+import FileUploader from '../../components/FileUploader';
+import { MB } from '../../extras/CommonConfig';
+import TestServices from '../Tests/extras/TestServices';
 
 const AddNewApplication = () => {
   const [name, setName] = useState<string>('');
@@ -47,6 +50,8 @@ const AddNewApplication = () => {
     { field: 'reason', headerName: 'Reason', flex: 1 },
     { field: 'status', headerName: 'Status', flex: 1 },
   ];
+  const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
+
   const createApplication = () => {
     const snackbarId = enqueueSnackbar({
       message: action === 'add' ? 'Creating Application' : 'Updating Application',
@@ -87,6 +92,31 @@ const AddNewApplication = () => {
                 </Grid>
                 <Grid item md={6}>
                   <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline />
+                </Grid>
+                <Grid item md={6}>
+                  <FileUploader
+                    title="Attachments"
+                    types={['application/vnd.ms-excel',
+                      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                      'application/pdf',
+
+                    ]}
+                    limits={{
+                    // types: [],
+                      maxItemSize: 1*MB,
+                      maxItemCount: 3,
+                      maxTotalSize: 3*MB,
+                    }}
+                    // accept={['video/*']}
+                    open={showFileUploader}
+                    onClose={() => setShowFileUploader(false)}
+                    getFiles={TestServices.getBills}
+                    uploadFile={TestServices.uploadFile}
+                    renameFile={TestServices.renameFile}
+                    deleteFile={(fileId: string) => {
+                      return TestServices.deleteFile(fileId);
+                    }}
+                  />
                 </Grid>
               </Grid>
               <DialogActions>
