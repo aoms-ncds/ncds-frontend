@@ -289,6 +289,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   props.onSubmit && props.onSubmit(props.value);
+                  navigate('/hr/manage');
                 }
               }}
             >
@@ -304,40 +305,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   }
                   options={props.options}
                 />
-                {/* </Grid>
 
-              <div
-                style={{
-                  float: 'right',
-                  marginBottom: 2,
-                  marginTop: 2,
-                  padding: 20,
-                }}
-              >
-                <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
-                  Go back{' '}
-                </Button>
-                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {' '}
-                  Next{' '}
-                </Button>
-              </div>
-            </form>
-          )}
-          {activeStep === 3 && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married') {
-                  setActiveStep((currentStep) => currentStep + 1);
-                } else {
-                  props.onSubmit && props.onSubmit(props.value);
-                  navigate('/hr/manage');
-                }
-              }}
-            >
-              <Grid container spacing={3}> */}
                 <Grid item xs={12}>
                   <br />
                   <Divider textAlign="left">Support Structure</Divider>
@@ -420,6 +388,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               onSubmit={(e) => {
                 e.preventDefault();
                 props.onSubmit && props.onSubmit(props.value);
+                navigate('/hr/manage');
               }}
             >
               <Grid container spacing={3}>
