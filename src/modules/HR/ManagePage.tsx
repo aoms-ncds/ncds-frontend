@@ -30,7 +30,7 @@ const HRManagePage = () => {
       />
 
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '68vh', width: '100%' }}>
+        <Card style={{ height: '69vh', width: '100%' }}>
           <UsersList<Staff> value={staffs} onChange={(newStaffs) => setStaffs(newStaffs)} action={'view'} options={{ kind: 'staff' }} />
         </Card>
       </Grid>

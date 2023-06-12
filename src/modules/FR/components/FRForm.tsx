@@ -640,7 +640,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       &nbsp;
                     </>
                   ) : null}
-                  {props.action === 'view' ? (
+                  {props.action === 'add' || props.action === 'edit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <Button

@@ -356,7 +356,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     <>
       <br />
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '65vh', width: '100%' }}>
+        <Card style={{ height: '66vh', width: '100%' }}>
           <DataGrid
             rows={props.value ?? []}
             columns={columns}

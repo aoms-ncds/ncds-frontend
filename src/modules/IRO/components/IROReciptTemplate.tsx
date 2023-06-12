@@ -153,7 +153,7 @@ const IROReciptTemplate = () => {
                   Requested Amount
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  Sanctioned Amoubt
+                  Sanctioned Amount
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
                   Accountant Remarks
@@ -173,7 +173,7 @@ const IROReciptTemplate = () => {
 
         <div style={{ marginTop: 120 }}>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Santioned Amount in Words :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :</Text>
           </View>
         </div>
 
@@ -196,11 +196,11 @@ const IROReciptTemplate = () => {
           <Text style={{ ...styles.text2, left: 210 }}>Account Manager</Text>
           <Text style={{ ...styles.text2, left: 290 }}>Accountant</Text>
           <Text style={{ ...styles.text2, left: 410, fontSize: 10, marginTop: 144 }}>ADMINISTRATOR</Text>
-          <Text style={{ ...styles.text2, left: 410, marginTop: 158, fontSize: 10 }}>SACTIONING AUTHORITY</Text>
+          <Text style={{ ...styles.text2, left: 410, marginTop: 158, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
         </div>
         <div style={{ marginTop: 210 }}>
           <Text style={{ fontSize: 8, color: 'grey', left: 30 }}>
-            This Document is electronically sigedn by authorised person of the Evangelical Team adding to the accuracy and content of the information submitted
+            This Document is electronically signed by authorized person of the Evangelical Team adding to the accuracy and content of the information submitted
           </Text>
         </div>
       </Page>
