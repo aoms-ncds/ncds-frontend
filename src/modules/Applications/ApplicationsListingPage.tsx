@@ -22,6 +22,7 @@ const ApplicationsListingPage = () => {
     name: '',
     reason: '',
     status: '',
+    attachment: [],
   });
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const ApplicationsListingPage = () => {
             name: '',
             reason: '',
             status: '',
+            attachment: [],
           });
 
           return ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED });
@@ -89,6 +91,7 @@ const ApplicationsListingPage = () => {
           name: '',
           reason: '',
           status: '',
+          attachment: [],
         }));
       })
       .catch((err) => {

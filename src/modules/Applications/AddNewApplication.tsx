@@ -17,6 +17,8 @@ const AddNewApplication = () => {
     name: '',
     reason: '',
     status: '',
+    attachment: [],
+
     createdAt: moment(),
     updatedAt: moment(),
   });
