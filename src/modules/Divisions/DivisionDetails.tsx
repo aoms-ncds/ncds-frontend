@@ -5,7 +5,7 @@ import SubDivisionsPage from './SubDivisions';
 import BankDetailsForm from './components/BankDetails';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
 
@@ -14,6 +14,8 @@ const DivisionDetailsPage = () => {
 
   const [activeStep, setactiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
+  const navigate = useNavigate();
+
 
   const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -205,7 +207,10 @@ const DivisionDetailsPage = () => {
             </form>
           )}
           {activeStep == 2 && (
-            <form onSubmit={action === 'add' ? AddDivision : EditDivision}>
+            <form onSubmit={() => {
+              (action === 'add' ? AddDivision : EditDivision);
+              navigate('/hr/manage');
+            }}>
               <Grid container spacing={2}>
                 <BankDetailsForm
                   value={divisionDetails?.FCRABankDetails}

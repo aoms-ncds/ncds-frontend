@@ -314,7 +314,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     },
     {
       field: 'alternativeMobileNumber',
-      headerName: 'Alernative Mobile Number',
+      headerName: 'Alternative Mobile Number',
       width: 180,
       align: 'center',
       valueGetter: (params) => params.row.basicDetails.alternativePhone,
@@ -356,7 +356,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     <>
       <br />
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '80vh', width: '100%' }}>
+        <Card style={{ height: '66vh', width: '100%' }}>
           <DataGrid
             rows={props.value ?? []}
             columns={columns}

@@ -18,7 +18,7 @@ const PermissionManager = () => {
   }, []);
 
   return (
-    <CommonPageLayout title='PermissionManager'>
+    <CommonPageLayout title='Permission Manager'>
       <Grid container spacing={3}>
         {user?.permissions && Object.keys(user?.permissions).filter((key) => !['_id', '__v', 'createdAt', 'updatedAt'].includes(key)).map((key) => (
           <Grid key={key} item xs={12} md={6} lg={4} xl={3}>

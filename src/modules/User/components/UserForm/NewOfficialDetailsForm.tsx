@@ -52,6 +52,7 @@ const NewOfficialDetailsForm = (
   const [newDiv, setnewDiv] = useState<Division|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleopenDivConfirm] = useState<boolean>(false);
+  const currentDate = moment();
 
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
@@ -94,7 +95,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Joining"
-          value={props.value.dateOfJoining}
+          value={props.value.dateOfJoining || currentDate} // Set the default value to today's date
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
