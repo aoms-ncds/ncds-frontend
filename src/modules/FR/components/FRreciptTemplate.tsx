@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
 import { Page, Text, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
@@ -85,7 +86,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const FRreciptTemplate = () => {
+
+const FRreciptTemplate = (props:any) => {
+  const rowData = props.rowData;
+  const siNo = 1;
+  console.log(rowData);
   return (
     <Document>
       <Page size="A4">
@@ -93,11 +98,11 @@ const FRreciptTemplate = () => {
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>ADDRESS</Text>
-          <Text style={styles.frno}>FRNO:</Text>
+          <Text style={styles.frno}>FRNO:{rowData._id}</Text>
           <Text style={styles.month}>For the Month of______</Text>
           <div>
-            <Text style={styles.division}>Name of the Division:</Text>
-            <Text style={styles.date}>Date:</Text>
+            <Text style={styles.division}>Name of the Division:{rowData?.purposeDivision?.DivisionDetails.name}</Text>
+            <Text style={styles.date}>Date:{moment(rowData.FRdate).format('DD-MM-YY')}</Text>
           </div>
         </div>
         <div style={{ marginTop: 200, width: 500, left: 50 }}>
@@ -106,13 +111,13 @@ const FRreciptTemplate = () => {
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
                 Sl No
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                 Financial Requisition Particulars
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                 Sub Division Name
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                 Quantity
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
@@ -125,14 +130,18 @@ const FRreciptTemplate = () => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            <PDFTableRow>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}></PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
-            </PDFTableRow>
+            {rowData.Particulars.map((item:any, index:any) => (
+              // eslint-disable-next-line react/jsx-key
+              <PDFTableRow>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{item.mainCategory}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>{item.quantity}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{item.narration}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>{item.month}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>{item.requestedAmount}</PDFCell>
+              </PDFTableRow>
+            ))}
           </PDFTable>
         </div>
 

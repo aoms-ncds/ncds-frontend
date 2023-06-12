@@ -112,8 +112,8 @@ const ManageFrPage = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRreciptTemplate />,
-              fileName: 'IFRReciept.pdf',
+              document: <FRreciptTemplate rowData={props.row}/>,
+              fileName: 'FRReciept.pdf',
               icon: PrintIcon,
             },
             {
