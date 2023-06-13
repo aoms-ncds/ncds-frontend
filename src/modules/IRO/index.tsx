@@ -8,14 +8,15 @@ import IROLifeCycleStates from './extras/IROLifeCycleStates';
 const IRODashboard = () => {
   const [IROCount, setIROCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
-
+  console.log(IROCount)
+  console.log(closedIROCount)
   useEffect(() => {
     IROServices.getCount()
       .then((res) => setIROCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
+    IROServices.getCloseCount()
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
         console.log(error);

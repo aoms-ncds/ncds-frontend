@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
+import IROServices from '../extras/IROServices';
+import dayjs from 'dayjs';
+const numberToWords = require('number-to-words');
 
 Font.register({
   family: 'Oswald',
@@ -97,7 +100,38 @@ const styles = StyleSheet.create({
   },
 });
 
-const IROReciptTemplate = () => {
+const IROReciptTemplate = (props: any) => {
+  const [printdetails, setPrintDetails] = useState({ });
+  console.log(props.Id, 'props');
+  const Id = props.Id;
+ 
+  useEffect(() => {
+    IROServices.getPrintDetails(Id)
+      .then((res: any) => {
+        setPrintDetails(res.data);
+        console.log(res);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  }, []);
+  console.log(printdetails.FRdate);
+
+  // const sanctionedAmount = printdetails.sanctionedAmount;
+  // if (typeof sanctionedAmount === 'number' && Number.isFinite(sanctionedAmount)) {
+  //   const amountInWords = numberToWords.toWords(sanctionedAmount);
+  //   console.log(amountInWords);
+  //   console.log(amountInWords,"amountInWords");
+  // } else {
+  //   console.log('Invalid amount.');
+  // }
+  // global.amountInWords = amountInWords;
+
+    const dateString = printdetails.FRdate;
+  const date = new Date(dateString);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
+  const formattedDate = date.toLocaleDateString('en-GB', options);
+
   return (
     <Document>
       <Page size="A4">
@@ -109,8 +143,8 @@ const IROReciptTemplate = () => {
         <div style={{ marginTop: 120 }}>
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No : </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
@@ -119,7 +153,7 @@ const IROReciptTemplate = () => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.h1 }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name : </Text>
             <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :</Text>
           </View>
         </div>
@@ -154,7 +188,7 @@ const IROReciptTemplate = () => {
                   Requested Amount
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  Sanctioned Amoubt
+                  Sanctioned Amount
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
                   Accountant Remarks
@@ -162,10 +196,14 @@ const IROReciptTemplate = () => {
               </PDFTableHeader>
               <PDFTableRow>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}></PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
+                  {printdetails.mainCategory}
+                </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                  {printdetails.sanctionedAmount}
+                </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>
             </PDFTable>

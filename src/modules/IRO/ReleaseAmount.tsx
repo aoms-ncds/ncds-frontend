@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Container, Grid, TextField } from '@mui/material';
+import { Button, Card, CardContent, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import BankDetailsForm from '../Divisions/components/BankDetails';
 
 const ReleaseAmount = () => {
+  
   const navigate = useNavigate();
   const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
+    console.log(IROrelease, 'IROrelease');
     e.preventDefault();
     if (IROrelease) {
       IROServices.saveRelease(IROrelease).then((res) => {
@@ -32,7 +34,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12}>
                   <TextField
                     label="Release Amount"
-                    value={Number(IROrelease?.releaseAmount)}
+                    value={IROrelease?.releaseAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
@@ -48,7 +50,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6}>
                   <TextField
                     label="Amount Transferred"
-                    value={Number(IROrelease?.transferredAmount)}
+                    value={IROrelease?.transferredAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
@@ -76,7 +78,7 @@ const ReleaseAmount = () => {
                   />
                 </Grid>
                 {/* <Grid item xs={12} > */}
-                <BankDetailsForm
+                {/* { <BankDetailsForm
                   value={IROrelease?.transferredBank}
                   onChange={(newbankDetails) => {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -87,7 +89,87 @@ const ReleaseAmount = () => {
                   }}
                   action={'add'}
                   options={{ title: 'Amount Transferred (Bank) Details' }}
-                />
+                /> */}
+
+
+
+                <Grid item xs={12}>
+                  <Typography variant="h4" component="h4">
+                    Amount Transferred (Bank) Details
+                  </Typography>
+                </Grid>
+                <br />
+                {/* <Grid container spacing={3}> */}
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Bank Name"
+                    value={IROrelease?.bankName}
+                    onChange={(e) =>
+                      setIROrelease((IROrelease) => ({
+                        ...IROrelease,
+                        bankName: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Branch Name"
+                    value={IROrelease?.branchName}
+                    onChange={(e) =>
+                      setIROrelease((IROrelease) => ({
+                        ...IROrelease,
+                        branchName: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Account Number"
+                    value={IROrelease?.accountNumber}
+                    onChange={(e) =>
+                      setIROrelease((IROrelease) => ({
+                        ...IROrelease,
+                        accountNumber: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="IFSC Code"
+                    value={IROrelease?.IFSCCode}
+                    onChange={(e) =>
+                      setIROrelease((IROrelease) => ({
+                        ...IROrelease,
+                        IFSCCode: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Beneficiary"
+                    value={IROrelease?.beneficiary}
+                    onChange={(e) =>
+                      setIROrelease((IROrelease) => ({
+                        ...IROrelease,
+                        beneficiary: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
 
                 {/* </Grid> */}
                 <Grid item xs={12} md={6} lg={4}>
