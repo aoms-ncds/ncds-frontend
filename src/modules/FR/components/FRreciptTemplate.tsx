@@ -89,8 +89,9 @@ const styles = StyleSheet.create({
 
 const FRreciptTemplate = (props:any) => {
   const rowData = props.rowData;
-  const siNo = 1;
-  console.log(rowData);
+  const month=moment(rowData.FRdate);
+  const monthName = month.format('MMMM');
+  console.log(monthName);
   return (
     <Document>
       <Page size="A4">
@@ -99,10 +100,10 @@ const FRreciptTemplate = (props:any) => {
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>ADDRESS</Text>
           <Text style={styles.frno}>FRNO:{rowData._id}</Text>
-          <Text style={styles.month}>For the Month of______</Text>
+          <Text style={styles.month}>For the Month of:{monthName}</Text>
           <div>
-            <Text style={styles.division}>Name of the Division:{rowData?.purposeDivision?.DivisionDetails.name}</Text>
-            <Text style={styles.date}>Date:{moment(rowData.FRdate).format('DD-MM-YY')}</Text>
+            <Text style={styles.division}>Name of the Division:{rowData?.createdBy?.officialDetails?.division?.details?.name}</Text>
+            <Text style={styles.date}>Date:{moment(rowData.FRdate).format('DD-MM-yyyy')}</Text>
           </div>
         </div>
         <div style={{ marginTop: 200, width: 500, left: 50 }}>
@@ -130,18 +131,32 @@ const FRreciptTemplate = (props:any) => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {rowData.Particulars.map((item:any, index:any) => (
-              // eslint-disable-next-line react/jsx-key
-              <PDFTableRow>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{item.mainCategory}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>{item.quantity}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{item.narration}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>{item.month}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>{item.requestedAmount}</PDFCell>
+            {rowData.Particulars.map((item: Particular, index: number) => (
+              <PDFTableRow key={index}>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
+                  {String(index + 1)}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                  {item.mainCategory}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+                  {rowData?.purposeSubdivision?.name}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
+                  {String(item.quantity)}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                  {item.narration}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
+                  {item.month}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
+                  {String(item.requestedAmount)}
+                </PDFCell>
               </PDFTableRow>
             ))}
+
           </PDFTable>
         </div>
 
@@ -159,7 +174,7 @@ const FRreciptTemplate = (props:any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ fontSize: 12, paddingLeft: 40, paddingRight: 40 }}>
             * The Original requisition must reach Delhi Office by 15 of the previous month for which money is requested. If it is not received in Delhi Office by that date, it will be presumed that
-            there is no needs of finance in your area for the month of you haw balance of money with you
+            there is no needs of finance in your area for the month of you have balance of money with you
           </Text>
           <Text
             style={{
