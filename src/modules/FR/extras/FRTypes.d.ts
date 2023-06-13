@@ -3,7 +3,7 @@ import { Moment } from 'moment';
 export default {};
 
 declare global{
-  interface Frrequest {
+  interface FRrequest {
     _id: string;
     FRno: string;
     FRdate: Moment;
@@ -74,7 +74,7 @@ declare global{
     coordinatorName: string | undefined;
   }
 
-    interface Frrequest {
+    interface FRrequest {
       _id: string;
       FRno: string;
       FRdate: Moment;

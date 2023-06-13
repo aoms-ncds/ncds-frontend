@@ -7,7 +7,7 @@ import DropdownButton from '../../../components/DropDownButton';
 import { enqueueSnackbar } from 'notistack';
 
 const ClosedFRsTable = () => {
-  const [closedFRs, setClosedFRs] = useState<Frrequest[] | null>(null);
+  const [closedFRs, setClosedFRs] = useState<FRrequest[] | null>(null);
 
   const columns = [
     {

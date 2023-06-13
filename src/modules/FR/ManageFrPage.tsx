@@ -27,7 +27,7 @@ import FRreciptTemplate from './components/FRreciptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 
 const ManageFrPage = () => {
-  const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
+  const [FRRequests, setFRRequests] = useState<FRrequest[] | null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string|null>(null);
@@ -49,7 +49,7 @@ const ManageFrPage = () => {
       });
   }, []);
 
-  const columns: GridColDef<Frrequest>[] = [
+  const columns: GridColDef<FRrequest>[] = [
     {
       field: '_manage',
       headerName: 'Action',
@@ -152,7 +152,7 @@ const ManageFrPage = () => {
       width: 150,
       align: 'center', headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
-        const frRequest = params.row as Frrequest;
+        const frRequest = params.row as FRrequest;
         const particularAmount = frRequest.Particulars.reduce(
           (total, particular) => total + Number(particular.requestedAmount),
           0,

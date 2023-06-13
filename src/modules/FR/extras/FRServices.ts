@@ -6,7 +6,7 @@ export default {
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
-  getAll: () => getStandardResponse<Frrequest[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
+  getAll: () => getStandardResponse<FRrequest[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
 
   getAllRemarksById: (fRId: string) =>
     getStandardResponse<Remark[]>(

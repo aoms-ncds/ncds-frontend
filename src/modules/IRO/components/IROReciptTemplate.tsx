@@ -3,6 +3,7 @@ import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PD
 import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
 import IROServices from '../extras/IROServices';
 import dayjs from 'dayjs';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const numberToWords = require('number-to-words');
 
 Font.register({
@@ -115,7 +116,7 @@ const IROReciptTemplate = (props: any) => {
         console.error(error);
       });
   }, []);
-  console.log(printdetails.FRdate);
+  // console.log(printdetails.FRdate);
 
   // const sanctionedAmount = printdetails.sanctionedAmount;
   // if (typeof sanctionedAmount === 'number' && Number.isFinite(sanctionedAmount)) {
@@ -127,10 +128,10 @@ const IROReciptTemplate = (props: any) => {
   // }
   // global.amountInWords = amountInWords;
 
-  const dateString = printdetails.FRdate;
-  const date = new Date(dateString);
-  const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
-  const formattedDate = date.toLocaleDateString('en-GB', options);
+  // const dateString = printdetails.FRdate;
+  // const date = new Date(dateString);
+  // const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
+  // const formattedDate = date.toLocaleDateString('en-GB', options);
 
   return (
     <Document>
@@ -144,7 +145,7 @@ const IROReciptTemplate = (props: any) => {
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
             <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No : </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{formattedDate}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
@@ -197,12 +198,12 @@ const IROReciptTemplate = (props: any) => {
               <PDFTableRow>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  {printdetails.mainCategory}
+                  {/* {printdetails.mainCategory} */}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {printdetails.sanctionedAmount}
+                  {/* {printdetails.sanctionedAmount} */}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
-import { DataGrid } from '@mui/x-data-grid';
-import { Link, useParams } from 'react-router-dom';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import IROReciptTemplate from './components/IROReciptTemplate';
@@ -12,13 +12,14 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
-import moment from 'moment';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const ManageIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
+    FR: '',
   });
   const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
   const [IROrder, setIROrder] = useState<IROrder[]>();
@@ -120,6 +121,7 @@ const ManageIRO = () => {
                 IROServices.close(props.row._id)
                 .then((res)=>{
                   if (IROrder) {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     const filterIRO = IROrder?.filter((IROrders) => {
                       return IROrders._id !== props.row._id;
                     });
@@ -154,6 +156,7 @@ const ManageIRO = () => {
                 sendBack(props.row._id)
                 .then((res)=>{
                   if (IROrder) {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     const filterIRO = IROrder?.filter((IROrders) => {
                       return IROrders._id !== props.row._id;
                     });
