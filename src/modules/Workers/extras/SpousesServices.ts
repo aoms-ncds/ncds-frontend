@@ -1,13 +1,24 @@
 import axios from 'axios';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
+import moment from 'moment';
 
 export default {
   /**
    * Retrieves all spouse records.
    * @return {Promise<StandardResponse<Spouse[]>>} A promise that resolves to the response containing the list of all spouse records.
    */
-  getAll: () => getStandardResponse<Spouse[]>(axios.get('/workers/spouse/', { headers: { ...getAuthHeader() } })),
+  // getAll: () => getStandardResponse<Spouse[]>(axios.get('/workers/spouse/', { headers: { ...getAuthHeader() } })),
 
+
+  getAll: (conditions?: { status?: number }) =>
+    getStandardResponse<Spouse[]>(axios.get('/workers/spouse/', { params: conditions, headers: { ...getAuthHeader() } }), (spouse) =>
+      spouse.map((spouse: Spouse) => ({
+        ...spouse,
+        dateOfBirth: spouse.dateOfBirth? moment(spouse.dateOfBirth): undefined,
+        createdAt: moment(spouse.createdAt),
+        updatedAt: moment(spouse.updatedAt),
+      })),
+    ),
   /**
    * Creates a new spouse record.
    * @param {Spouse} spouse - The spouse record to be created.

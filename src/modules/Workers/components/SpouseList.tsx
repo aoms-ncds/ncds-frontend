@@ -3,8 +3,10 @@ import { Button, Card, Grid } from '@mui/material';
 import DropdownButton from '../../../components/DropDownButton';
 import { Link } from 'react-router-dom';
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import SpousesServices from '../extras/SpousesServices';
+import moment from 'moment';
+import WorkersServices from '../extras/WorkersServices';
 
 const SpouseListPage = () => {
   const [spouseList, setSpouseList] = useState<Spouse[]>();
@@ -20,11 +22,12 @@ const SpouseListPage = () => {
       });
   }, []);
 
-  const columns = [
+
+  const columns: GridColDef<Spouse>[] = [
     {
       field: '_manage',
       headerName: 'Action',
-      width: 60,
+      width: 90,
       type: 'string',
       renderCell: (props: any) => (
         <DropdownButton
@@ -60,15 +63,16 @@ const SpouseListPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 55, AlignHeader: 'center' },
-    { field: 'firstName', headerName: 'First Name', width: 100, AlignHeader: 'center' },
-    { field: 'lastName', headerName: 'Last Name', width: 100, AlignHeader: 'center' },
-    { field: 'mobileNo', headerName: 'Mobile No', width: 100, AlignHeader: 'center' },
-    { field: 'dob', headerName: 'DOB', width: 70, AlignHeader: 'center' },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 70, AlignHeader: 'center' },
-    { field: 'qualification', headerName: 'Qualification', width: 100, AlignHeader: 'center' },
-    { field: 'spouseOf', headerName: 'Spouse Of', renderCell: (props: any) => <p> {props.row.spouseOf?.firstName}</p>, width: 90, AlignHeader: 'center' },
-    { field: 'email', headerName: 'Email', width: 170, AlignHeader: 'center' },
+    // { field: '_id', headerName: 'SI No', width: 70, AlignHeader: 'center' },
+    { field: 'firstName', headerName: 'First Name', width: 120, headerAlign: 'center', align: 'center' },
+    { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },
+    { field: 'phone', headerName: 'Mobile No', width: 120, headerAlign: 'center', align: 'center' },
+    { field: 'dateOfBirth', headerName: 'DOB', width: 90, headerAlign: 'center', renderCell: (params: any) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>) },
+    { field: 'qualification', headerName: 'Qualification', width: 130, headerAlign: 'center', align: 'center' },
+    { field: 'spouseOf', headerName: 'Spouse', renderCell: (props: any) =>
+      <p> {props.row.spouseOf?.basicDetails.firstName+' '+props.row.spouseOf?.basicDetails.lastName}</p>,
+    width: 170, headerAlign: 'center', align: 'center' },
+    { field: 'email', headerName: 'Email', width: 170, headerAlign: 'center', align: 'center' },
   ];
   return (
     <>
@@ -81,5 +85,6 @@ const SpouseListPage = () => {
     </>
   );
 };
+
 
 export default SpouseListPage;
