@@ -11,7 +11,7 @@ import IROServices from './extras/IROServices';
 const ClosedIRO = () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();
   useEffect(() => {
-    IROServices.getAll()
+    IROServices.getClossed()
       .then((res) => {
         console.log(res);
         setIROrder(res.data);
@@ -33,18 +33,18 @@ const ClosedIRO = () => {
           primaryText="Actions"
           key={'IRO action'}
           items={[
-            {
-              id: 'View',
-              text: 'Release Amount',
-              component: Link,
-              to: '/iro/release_amount/' + props.row._id,
-              icon: PreviewIcon,
-            },
-            {
-              id: 'remarks',
-              text: 'Remarks',
-              icon: EditIcon,
-            },
+            // {
+            //   id: 'View',
+            //   text: 'Release Amount',
+            //   component: Link,
+            //   to: '/iro/release_amount/' + props.row._id,
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'remarks',
+            //   text: 'Remarks',
+            //   icon: EditIcon,
+            // },
             {
               id: 'print',
               text: 'Print IRO',
@@ -57,21 +57,21 @@ const ClosedIRO = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            {
-              id: 'Reconciliation',
-              text: 'Reconciliation',
-              icon: EditIcon,
-            },
-            {
-              id: 'Close IRO',
-              text: 'Close IRO',
-              icon: PreviewIcon,
-            },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: PrintIcon,
-            },
+            // {
+            //   id: 'Reconciliation',
+            //   text: 'Reconciliation',
+            //   icon: EditIcon,
+            // },
+            // {
+            //   id: 'Close IRO',
+            //   text: 'Close IRO',
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'Attachments',
+            //   text: 'Attachments',
+            //   icon: PrintIcon,
+            // },
           ]}
         />
       ),

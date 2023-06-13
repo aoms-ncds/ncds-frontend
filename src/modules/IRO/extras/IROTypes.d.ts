@@ -4,6 +4,7 @@ export default {};
 
 declare global {
   interface IROrder {
+    map(arg0: (order: any) => void): unknown;
     _id: string;
     IROno: string;
     IROdate: Moment;
@@ -19,5 +20,11 @@ declare global {
     transferredBank: BankDetails;
     modeOfPayment: string;
     transactionNumber: string;
+    bankName: string;
+    branchName: string;
+    accountNumber: string;
+    IFSCCode: string;
+    beneficiary: string;
+    remark:string;
   }
 }

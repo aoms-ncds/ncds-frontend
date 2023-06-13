@@ -1,329 +1,72 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import { resolve } from 'path';
+import { rejects } from 'assert';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAll: (conditions?: { status?: number }) =>
-    getStandardResponse<IROrder[]>(
-      dummyRequest<IROrder[]>({
-        data: [
-          {
-            _id: '1',
-            IROno: '1234',
-            IROdate: moment(),
-            division: {
-              details: {
-                name: '',
-                divisionId: '233',
-                contactNumber: '89000333',
-                email: 'division@gmail.com',
-                address: {
-                  buildingName: '',
-                  street: '',
-                  city: '',
-                  state: '',
-                  country: '',
-                  pincode: '',
-                },
-                noofWorkers: 5,
-                noOfSubdivisions: 5,
-                noOfChurches: 5,
-                coordinator: {
-                  _id: '646703c19e433f67d27019b2',
-                  kind: 'staff',
-                  staffCode: 'IETWK00003',
-                  basicDetails: {
-                    aadhaar: {
-                      aadhaarNo: '123456789012',
-                    },
-                    voterId: {
-                      voterIdNo: 'V12345678',
-                    },
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
-                    gender: 'Male',
-                    field: 'Missionary',
-                    martialStatus: 'Married',
-                    highestQualification: 'Ph.D.',
-                    // motherTongue: 'English',
-                    // communicationLanguage: 'English',
-                    // knownLanguages: ['English', 'Malayalam - മലയാളം'],
-                    email: 'abcd@gmail.com',
-                    phone: '1234567890',
-                    alternativePhone: '9876543210',
-                    PANNo: 'ABCD1234',
-                    licenseNumber: 'L12345678',
-                    permanentAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '123 Main Street',
-                      city: 'Example City',
-                      state: 'Example State',
-                      country: 'India',
-                      pincode: '12345',
-                    },
-                    currentOfficialAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                    residingAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                  },
-                  officialDetails: {
-                    dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
-                    remarks: 'Lorem ipsum dolor sit amet.',
-                    selfSupport: true,
-                    status: 'Ministering',
-                    divisionHistory: [],
-                    noOfChurches: 5,
-                  },
-                  supportDetails: {
-                    totalNoOfYearsInMinistry: 10,
-                    withChurch: true,
-                  },
-                  supportStructure: {
-                    basic: 5000,
-                    HRA: 2000,
-                    spouseAllowance: 1000,
-                    positionalAllowance: 500,
-                    specialAllowance: 800,
-                    impactDeduction: 200,
-                    telAllowance: 400,
-                    PIONMissionaryFund: 300,
-                    MUTDeduction: 100,
-                  },
-                  createdAt: moment('2023-05-19T05:06:09.292Z'),
-                  updatedAt: moment('2023-05-19T05:06:09.292Z'),
-                },
-                seniorLeader: {
-                  kind: 'staff',
-                  staffCode: 'IETWK00001',
-                  _id: '646703c19e433f67d27019b2',
-                  basicDetails: {
-                    aadhaar: {
-                      aadhaarNo: '123456789012',
-                    },
-                    voterId: {
-                      voterIdNo: 'V12345678',
-                    },
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
-                    gender: 'Male',
-                    field: 'Missionary',
-                    martialStatus: 'Married',
-                    highestQualification: 'Ph.D.',
+  getAll: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } })),
+  getClossed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
 
-                    // communicationLanguage: 'English',
-                    // knownLanguages: ['English', 'Malayalam - മലയാളം'], motherTongue: 'English',
-                    email: 'abcd@gmail.com',
-                    phone: '1234567890',
-                    alternativePhone: '9876543210',
-                    PANNo: 'ABCD1234',
-                    licenseNumber: 'L12345678',
-                    permanentAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '123 Main Street',
-                      city: 'Example City',
-                      state: 'Example State',
-                      country: 'India',
-                      pincode: '12345',
-                    },
-                    currentOfficialAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                    residingAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                  },
-                  officialDetails: {
-                    dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
-                    remarks: 'Lorem ipsum dolor sit amet.',
-                    selfSupport: true,
-                    status: 'Ministering',
-                    divisionHistory: [],
-                    noOfChurches: 5,
-                  },
-                  supportDetails: {
-                    totalNoOfYearsInMinistry: 10,
-                    withChurch: true,
-                  },
-                  supportStructure: {
-                    basic: 5000,
-                    HRA: 2000,
-                    spouseAllowance: 1000,
-                    positionalAllowance: 500,
-                    specialAllowance: 800,
-                    impactDeduction: 200,
-                    telAllowance: 400,
-                    PIONMissionaryFund: 300,
-                    MUTDeduction: 100,
-                  },
-                  createdAt: moment('2023-05-19T05:06:09.292Z'),
-                  updatedAt: moment('2023-05-19T05:06:09.292Z'),
-                },
-                juniorLeader: {
-                  _id: '646703c19e433f67d27019b2',
-                  kind: 'staff',
-                  staffCode: 'IETWK00002',
-                  basicDetails: {
-                    aadhaar: {
-                      aadhaarNo: '123456789012',
-                    },
-                    voterId: {
-                      voterIdNo: 'V12345678',
-                    },
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    dateOfBirth: moment('2022-12-31T18:30:00.000Z'),
-                    gender: 'Male',
-                    field: 'Missionary',
-                    martialStatus: 'Married',
-                    highestQualification: 'Ph.D.',
-                    // motherTongue: 'English',
-                    // communicationLanguage: 'English',
-                    // knownLanguages: ['English', 'Malayalam - മലയാളം'],
-                    email: 'abcd@gmail.com',
-                    phone: '1234567890',
-                    alternativePhone: '9876543210',
-                    PANNo: 'ABCD1234',
-                    licenseNumber: 'L12345678',
-                    permanentAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '123 Main Street',
-                      city: 'Example City',
-                      state: 'Example State',
-                      country: 'India',
-                      pincode: '12345',
-                    },
-                    currentOfficialAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                    residingAddress: {
-                      buildingName: 'Puliyulla parambath',
-                      street: '456 Elm Street',
-                      city: 'Current City',
-                      state: 'Current State',
-                      country: 'India',
-                      pincode: '54321',
-                    },
-                  },
-                  officialDetails: {
-                    dateOfJoining: moment('2022-12-31T18:30:00.000Z'),
-                    remarks: 'Lorem ipsum dolor sit amet.',
-                    selfSupport: true,
-                    status: 'Ministering',
-                    divisionHistory: [],
-                    noOfChurches: 5,
-                  },
-                  supportDetails: {
-                    totalNoOfYearsInMinistry: 10,
-                    withChurch: true,
-                  },
-                  supportStructure: {
-                    basic: 5000,
-                    HRA: 2000,
-                    spouseAllowance: 1000,
-                    positionalAllowance: 500,
-                    specialAllowance: 800,
-                    impactDeduction: 200,
-                    telAllowance: 400,
-                    PIONMissionaryFund: 300,
-                    MUTDeduction: 100,
-                  },
-                  createdAt: moment('2023-05-19T05:06:09.292Z'),
-                  updatedAt: moment('2023-05-19T05:06:09.292Z'),
-                },
-              },
-              subDivisions: [],
-              localBankDetails: {
-                accountNumber: 'ksdfjdskfj',
-                bankName: 'ksdfjdskfj',
-                branchName: 'ksdfjdskfj',
-                IFSCCode: 'ksdfjdskfj',
-                beneficiary: 'ksdfjdskfj',
-              },
-              FCRABankDetails: {
-                accountNumber: 'ksdfjdskfj',
-                bankName: 'ksdfjdskfj',
-                branchName: 'ksdfjdskfj',
-                IFSCCode: 'ksdfjdskfj',
-                beneficiary: 'ksdfjdskfj',
-              },
-              otherBankDetails: {
-                accountNumber: 'ksdfjdskfj',
-                bankName: 'ksdfjdskfj',
-                branchName: 'ksdfjdskfj',
-                IFSCCode: 'ksdfjdskfj',
-                beneficiary: 'ksdfjdskfj',
-              },
-              createdAt: moment(),
-              updatedAt: moment(),
+  // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
+
+  getAllRemarksById: (iroId: string) =>
+    getStandardResponse<Remark[]>(
+      axios.get(`/iro/remarks/${iroId}`, { headers: { ...getAuthHeader() } }),
+      (remarks) => remarks.map((remark:any) => ({
+        ...remark,
+        createdAt: moment(remark.createdAt),
+        updatedAt: moment(remark.updatedAt),
+      })),
+    ),
+
+  close: (IROId: string) => getStandardResponse<Application>(axios.patch(`/iro/${IROId}/close`, null, { headers: { ...getAuthHeader() } })),
+  sendBack: (IROId: string) => getStandardResponse<Application>(axios.patch(`/iro/${IROId}/sendBack`, null, { headers: { ...getAuthHeader() } })),
+  getPrintDetails: (IROId: string) => getStandardResponse<Application>(axios.get(`/iro/printDetails/${IROId}`)),
+
+
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+
+  saveRelease: (IROrelease: Partial<IROrder>) =>
+    getStandardResponse<IROrder>(
+      new Promise((resolve, reject) => {
+        axios
+          .post('/iro', {
+            ...IROrelease,
+            IROrelease: {
+              modeOfPayment: IROrelease.modeOfPayment,
+              releaseAmount: IROrelease.releaseAmount,
+              transactionNumber: IROrelease.transactionNumber,
+              transferredAmount: IROrelease.transferredAmount,
+              IFSCCode: IROrelease.IFSCCode,
+              accountNumber: IROrelease.accountNumber,
+              bankName: IROrelease.bankName,
+              beneficiary: IROrelease.beneficiary,
+              transferredDate: IROrelease.transferredDate,
+              branchName: IROrelease.branchName,
             },
-            subDivision: {
-              _id: '1',
-              name: 'subDivision 1',
-            },
-            mainCategory: 'Fr request',
-            sanction: '50000',
-            requestAmount: 0,
-            lastUpdateDate: moment(),
-            releaseAmount: 0,
-            transferredAmount: 0,
-            transferredDate: moment(),
-            transferredBank: {
-              bankName: 'Canara',
-              branchName: 'Thodupuzha',
-              accountNumber: '4567799',
-              IFSCCode: '222',
-              beneficiary: '22',
-            },
-            modeOfPayment: '',
-            transactionNumber: '',
-          },
-        ],
-        // error: null,
-        message: 'fetched data',
-        result: 'success',
-        timeout: 500,
+          })
+          .then(async (IROrelease) => {
+            try {
+              resolve(IROrelease);
+            } catch (error) {
+              reject(error);
+            }
+          });
       }),
     ),
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  saveRelease: (IROrelease: Partial<IROrder>) =>
-    getStandardResponse<number>(
-      dummyRequest({
-        data: IROrelease,
-        // error: null,
-        message: 'Network Error',
-        result: 'success',
-        timeout: 500,
+
+
+  addRemarks: (remark: CreatableRemark) =>
+    getStandardResponse<Remark>(
+      axios.post('/iro/remarks', { ...remark }, { headers: { ...getAuthHeader() } } ),
+      (remark) => ({
+        ...remark,
+        createdAt: moment(remark.createdAt),
+        updatedAt: moment(remark.updatedAt),
       }),
     ),
 };
