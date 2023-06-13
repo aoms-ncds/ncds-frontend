@@ -4,7 +4,7 @@ import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react
 import IROServices from '../extras/IROServices';
 import dayjs from 'dayjs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const numberToWords = require('number-to-words');
+// const numberToWords = require('number-to-words');
 
 Font.register({
   family: 'Oswald',
