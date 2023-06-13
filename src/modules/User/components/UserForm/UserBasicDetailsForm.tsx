@@ -1,4 +1,4 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import React, { useState, useEffect } from 'react';
 import NewAddressForm from './NewAddressForm';
@@ -382,6 +382,91 @@ const UserBasicDetailsForm = (
           fullWidth
         />
       </Grid>
+
+      <Grid item xs={12}>
+        <br />
+        <Divider textAlign="left">Insurance Details</Divider>
+      </Grid>
+
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Impact No"
+          value={props.value.insurance?.impactNo}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                impactNo: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <DatePicker
+          label="Date Of Joining Insurance"
+          value={props.value.insurance?.dojInsurance}
+          onChange={(newDate) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                dojInsurance: newDate ?? undefined,
+              },
+            })
+          }
+          format="DD/MM/YYYY"
+          slotProps={{
+            textField: {
+              variant: props.options?.textField?.variant,
+              fullWidth: true,
+            },
+          }}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Nominee"
+          value={props.value.insurance?.nominee}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                nominee: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Relation "
+          value={props.value.insurance?.relation}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                relation: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
+
+
       <NewAddressForm
         action="add"
         value={props.value.currentOfficialAddress}
@@ -451,6 +536,7 @@ const UserBasicDetailsForm = (
           title: 'Residing Address',
         }}
       />
+
     </>
   );
 };

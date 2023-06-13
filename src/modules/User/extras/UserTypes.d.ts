@@ -48,6 +48,12 @@ declare global {
       voterIdNo?: string;
       voterIdFile?: FileObject;
     };
+    insurance?: {
+      impactNo?: string;
+      dojInsurance?: Moment;
+      nominee?: string;
+      relation?: string;
+    };
     licenseNumber?: string;
     permanentAddress: Address;
     currentOfficialAddress: Address;
@@ -65,6 +71,7 @@ declare global {
       voterIdNo?: string;
       voterIdFile?: FileObject;
     };
+
   }
   interface OfficialDetails {
     dateOfJoining?: Moment;

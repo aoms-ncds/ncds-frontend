@@ -203,6 +203,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                   />
                 </Grid>
+
                 <UserBasicDetailsForm
                   action={props.action}
                   value={props.value.basicDetails}
