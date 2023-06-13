@@ -1,12 +1,23 @@
 import axios from 'axios';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
+import moment from 'moment';
 
 export default {
   /**
    * Retrieves all child records.
    * @return {Promise<StandardResponse<Child[]>>} A promise that resolves to the response containing the list of all child records.
    */
-  getAll: (): Promise<StandardResponse<Child[]>> => getStandardResponse<Child[]>(axios.get('/workers/children/', { headers: { ...getAuthHeader() } })),
+  // getAll: (): Promise<StandardResponse<Child[]>> => getStandardResponse<Child[]>(axios.get('/workers/children/', { headers: { ...getAuthHeader() } })),
+
+  getAll: (conditions?: { status?: number }) =>
+    getStandardResponse<Child[]>(axios.get('/workers/children/', { params: conditions, headers: { ...getAuthHeader() } }), (children) =>
+      children.map((children: Child) => ({
+        ...children,
+        dateOfBirth: children.dateOfBirth? moment(children.dateOfBirth): undefined,
+        createdAt: moment(children.createdAt),
+        updatedAt: moment(children.updatedAt),
+      })),
+    ),
 
   /**
    * Creates a new child record.

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import ChildrenServices from '../extras/ChildrenServices';
 
 const ChildListPage = () => {
@@ -19,12 +19,12 @@ const ChildListPage = () => {
         console.log(res);
       });
   }, []);
-  const columns = [
+  const columns: GridColDef<Child>[] = [
     {
       field: '_manage',
       headerName: 'Action',
       width: 50,
-      AlignHeader: 'center',
+      headerAlign: 'center',
       type: 'string',
       renderCell: (props: any) => (
         <DropdownButton
@@ -60,13 +60,14 @@ const ChildListPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 55, AlignHeader: 'center' },
-    { field: 'firstName', headerName: 'First Name', width: 100, AlignHeader: 'center' },
-    { field: 'lastName', headerName: 'Last Name:', width: 100, AlignHeader: 'center' },
-    { field: 'dob', headerName: 'DOB', width: 70, AlignHeader: 'center' },
-    { field: 'age', headerName: 'Age', renderCell: (props: any) => <p> {props.row.dob?.fromNow()}</p>, width: 70, AlignHeader: 'center' },
-    { field: 'childSupport', headerName: 'Child Support', width: 110, AlignHeader: 'center' },
-    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) => <p> {props.row.childOf?.firstName}</p>, width: 80, AlignHeader: 'center' },
+    { field: '_id', headerName: 'SI No', width: 55, headerAlign: 'center' },
+    { field: 'firstName', headerName: 'First Name', width: 100, headerAlign: 'center' },
+    { field: 'lastName', headerName: 'Last Name:', width: 100, headerAlign: 'center' },
+    { field: 'dateOfBirth', headerName: 'DOB', width: 70, headerAlign: 'center' },
+    { field: 'childSupport', headerName: 'Child Support', width: 110, headerAlign: 'center' },
+    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) =>
+      <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
+    width: 170, headerAlign: 'center', align: 'center' },
   ];
   return (
     <>
