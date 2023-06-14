@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import FileUploader from '../../components/FileUploader';
+import FileUploader from '../../components/FileUploader/FileUploader';
 import TestServices from './extras/TestServices';
 import { Button } from '@mui/material';
 import ExcelImporter from '../../components/ExcelImporter';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
 import { MB } from '../../extras/CommonConfig';
+import CommonServices from '../../extras/CommonServices';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 const index = () => {
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -40,11 +42,14 @@ const index = () => {
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={TestServices.getBills}
-        uploadFile={TestServices.uploadFile}
-        renameFile={TestServices.renameFile}
+        getFiles={[]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const res = FileUploaderServices.uploadFile(file, onProgress);
+          return res;
+        }}
+        renameFile={FileUploaderServices.renameFile}
         deleteFile={(fileId: string) => {
-          return TestServices.deleteFile(fileId);
+          return FileUploaderServices.deleteFile(fileId);
         }}
       />
       <Button variant="contained" onClick={() => setShowFileUploader(true)}>

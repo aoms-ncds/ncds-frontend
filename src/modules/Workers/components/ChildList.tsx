@@ -6,6 +6,7 @@ import DropdownButton from '../../../components/DropDownButton';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import ChildrenServices from '../extras/ChildrenServices';
+import moment from 'moment';
 
 const ChildListPage = () => {
   const [childList, setChildList] = useState<Child[]>();
@@ -23,10 +24,10 @@ const ChildListPage = () => {
     {
       field: '_manage',
       headerName: 'Action',
-      width: 50,
+      width: 90,
       headerAlign: 'center',
       type: 'string',
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="child action"
@@ -60,12 +61,13 @@ const ChildListPage = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 55, headerAlign: 'center' },
-    { field: 'firstName', headerName: 'First Name', width: 100, headerAlign: 'center' },
-    { field: 'lastName', headerName: 'Last Name:', width: 100, headerAlign: 'center' },
-    { field: 'dateOfBirth', headerName: 'DOB', width: 70, headerAlign: 'center' },
-    { field: 'childSupport', headerName: 'Child Support', width: 110, headerAlign: 'center' },
-    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) =>
+    { field: 'childCode', headerName: 'Child Code', width: 130, headerAlign: 'center', align: 'center' },
+    { field: 'firstName', headerName: 'First Name', width: 120, headerAlign: 'center', align: 'center' },
+    { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },
+    { field: 'dateOfBirth', headerName: 'DOB', width: 90, headerAlign: 'center', align: 'center', renderCell: (props) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>) },
+    { field: 'childSupport', headerName: 'Child Support', width: 110, headerAlign: 'center', align: 'center', renderCell: (props) =>
+      <p> {props.value.name}</p> },
+    { field: 'childOf', headerName: 'Child Of', renderCell: (props) =>
       <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
     width: 170, headerAlign: 'center', align: 'center' },
   ];

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
@@ -8,9 +8,11 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
 // import { useParams } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
-import FileUploader from '../../components/FileUploader';
+import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import TestServices from '../Tests/extras/TestServices';
+import CommonServices from '../../extras/CommonServices';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);
@@ -118,6 +120,7 @@ const ApplicationsListingPage = () => {
             setEditId(params.id as string);
             setAction('edit');
             setApplicationFormState(params.row);
+            console.log(params.row);
             setShowApplicationFormDialog(true);
           }}
         />,
@@ -277,11 +280,12 @@ const ApplicationsListingPage = () => {
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={TestServices.getBills}
+        // getFiles={TestServices.getBills}
+        getFiles={applicationFormState.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const resp = ApplicationServices.uploadFile(file, onProgress)
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', applicationFormState.name+'_'+(applicationFormState.attachment.length+1))
           .then((res)=>{
-            console.log(res.data._id);
+            // console.log(res.data._id);
             setApplicationFormState(() => ({
               ...applicationFormState,
               attachment: [...applicationFormState.attachment, res.data],
@@ -290,9 +294,13 @@ const ApplicationsListingPage = () => {
           });
           return resp;
         }}
-        renameFile={TestServices.renameFile}
+        renameFile={FileUploaderServices.renameFile}
         deleteFile={(fileId: string) => {
-          return TestServices.deleteFile(fileId);
+          setApplicationFormState(() => ({
+            ...applicationFormState,
+            attachment: applicationFormState.attachment.filter((file)=>file._id!==fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
         }}
       />
 

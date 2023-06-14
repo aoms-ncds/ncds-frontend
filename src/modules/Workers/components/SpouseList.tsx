@@ -63,7 +63,7 @@ const SpouseListPage = () => {
         />
       ),
     },
-    // { field: '_id', headerName: 'SI No', width: 70, AlignHeader: 'center' },
+    { field: 'spouseCode', headerName: 'Spouse Code', width: 130, headerAlign: 'center', align: 'center' },
     { field: 'firstName', headerName: 'First Name', width: 120, headerAlign: 'center', align: 'center' },
     { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },
     { field: 'phone', headerName: 'Mobile No', width: 120, headerAlign: 'center', align: 'center' },
