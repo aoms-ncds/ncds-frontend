@@ -278,7 +278,18 @@ const ApplicationsListingPage = () => {
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         getFiles={TestServices.getBills}
-        uploadFile={ApplicationServices.uploadFile}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = ApplicationServices.uploadFile(file, onProgress)
+          .then((res)=>{
+            console.log(res.data._id);
+            setApplicationFormState(() => ({
+              ...applicationFormState,
+              attachment: [...applicationFormState.attachment, res.data],
+            }));
+            return res;
+          });
+          return resp;
+        }}
         renameFile={TestServices.renameFile}
         deleteFile={(fileId: string) => {
           return TestServices.deleteFile(fileId);
