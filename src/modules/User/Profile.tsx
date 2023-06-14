@@ -131,7 +131,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Martial Status: </Typography> {user?.basicDetails.martialStatus} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Highest Qualification: </Typography> {user?.basicDetails.highestQualification} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Religion: </Typography> {user?.basicDetails.religion} </Grid>
@@ -145,27 +145,32 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
+              <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.basicDetails.insurance?.impactNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.basicDetails.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.basicDetails.insurance?.nominee} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.basicDetails.insurance?.relation} </Grid>
               <Grid item xs={12}> <Divider textAlign='left'>Permanent address</Divider> </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.permanentAddress.buildingName??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress.street??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.permanentAddress.city??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.permanentAddress.state??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.permanentAddress.country??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.permanentAddress.pincode??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.permanentAddress?.buildingName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress?.street} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.permanentAddress?.city} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.permanentAddress?.state} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.permanentAddress?.country} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.permanentAddress?.pincode} </Grid>
               <Grid item xs={12}> <Divider textAlign='left'>Current official address</Divider> </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.currentOfficialAddress.buildingName??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.currentOfficialAddress.street??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.currentOfficialAddress.city??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.currentOfficialAddress.state??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.currentOfficialAddress.country??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.currentOfficialAddress.pincode??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.currentOfficialAddress?.buildingName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.currentOfficialAddress?.street} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.currentOfficialAddress?.city} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.currentOfficialAddress?.state} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.currentOfficialAddress?.country} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.currentOfficialAddress?.pincode} </Grid>
               <Grid item xs={12}> <Divider textAlign='left'>Residing address</Divider> </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.residingAddress.buildingName??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.residingAddress.street??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.residingAddress.city??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.residingAddress.state??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.residingAddress.country??'---------------'} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.residingAddress.pincode??'---------------'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.residingAddress?.buildingName} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.residingAddress?.street} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.residingAddress?.city} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.residingAddress?.state} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.residingAddress?.country} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.residingAddress?.pincode} </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
