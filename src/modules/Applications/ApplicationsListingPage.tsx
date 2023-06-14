@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
@@ -285,7 +285,7 @@ const ApplicationsListingPage = () => {
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', applicationFormState.name+'_'+(applicationFormState.attachment.length+1))
           .then((res)=>{
-            console.log(res.data._id);
+            // console.log(res.data._id);
             setApplicationFormState(() => ({
               ...applicationFormState,
               attachment: [...applicationFormState.attachment, res.data],
@@ -296,6 +296,10 @@ const ApplicationsListingPage = () => {
         }}
         renameFile={FileUploaderServices.renameFile}
         deleteFile={(fileId: string) => {
+          setApplicationFormState(() => ({
+            ...applicationFormState,
+            attachment: applicationFormState.attachment.filter((file)=>file._id!==fileId),
+          }));
           return FileUploaderServices.deleteFile(fileId);
         }}
       />

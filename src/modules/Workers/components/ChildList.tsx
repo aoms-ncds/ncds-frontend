@@ -64,10 +64,10 @@ const ChildListPage = () => {
     { field: 'childCode', headerName: 'Child Code', width: 130, headerAlign: 'center', align: 'center' },
     { field: 'firstName', headerName: 'First Name', width: 120, headerAlign: 'center', align: 'center' },
     { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },
-    { field: 'dateOfBirth', headerName: 'DOB', width: 90, headerAlign: 'center', align: 'center', renderCell: (params: any) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>) },
+    { field: 'dateOfBirth', headerName: 'DOB', width: 90, headerAlign: 'center', align: 'center', renderCell: (props) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>) },
     { field: 'childSupport', headerName: 'Child Support', width: 110, headerAlign: 'center', align: 'center', renderCell: (props) =>
       <p> {props.value.name}</p> },
-    { field: 'childOf', headerName: 'Child Of', renderCell: (props: any) =>
+    { field: 'childOf', headerName: 'Child Of', renderCell: (props) =>
       <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
     width: 170, headerAlign: 'center', align: 'center' },
   ];
