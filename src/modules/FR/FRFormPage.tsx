@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card } from '@mui/material';
+import { Card, Grid, Alert } from '@mui/material';
 import FRForm from './components/FRForm';
 import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
 import { useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
-
+import PermissionChecks from '../User/components/PermissionChecks';
 interface FRFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
@@ -85,7 +85,9 @@ const FRFormPage = (props: FRFormPageProps) => {
 
 
       enqueueSnackbar({
-        message: operation === 'approve' ? 'Approving' :operation === 'reject'? 'Rejecting':'Sending To President'+'FR Request',
+        // eslint-disable-next-line max-len
+        message: operation === 'approve' ? 'Approving' :operation === 'reject'? 'Rejecting':operation === 'sendToAccounts'?
+          'Sending To Accounts':operation === 'sendToPresident'? 'Sending To President':'Send Back'+'FR Request',
         variant: 'info',
       });
       console.log(requisition);
@@ -111,33 +113,50 @@ const FRFormPage = (props: FRFormPageProps) => {
 
   return (
     <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
-      <Card style={{ width: '100%' }}>
+      <PermissionChecks
+        permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+        granted={(
+          <>
 
-        {props.action === 'add' ? (
-          <FRForm
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={props.action}
-            onSubmit={addFR } // Pass the addFR function to the onSubmit prop
-          />
-        ) : props.action === 'edit' ? (
-          <FRForm
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={props.action}
-            onSubmit={editFR} // Pass the addFR function to the onSubmit prop
-          />
-        ) : (
-          <ViewFR
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={props.action}
-            onSubmit={manageFR}
-          />
+            <Card style={{ width: '100%' }}>
+
+              {props.action === 'add' ? (
+                <FRForm
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={addFR } // Pass the addFR function to the onSubmit prop
+                />
+              ) : props.action === 'edit' ? (
+                <FRForm
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+                />
+              ) : (
+                <ViewFR
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={manageFR}
+                />
+              )}
+
+
+            </Card>
+
+          </>
         )}
+        denied={(missingPermissions) => (
+          <Grid item xs={12} lg={6}>
+            <Alert severity='error'>
+                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+            </Alert>
+          </Grid>
+        )}
+      />
 
-
-      </Card>
     </CommonPageLayout>
   );
 };

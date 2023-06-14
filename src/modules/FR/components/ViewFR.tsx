@@ -35,7 +35,10 @@ import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
-
+import PermissionChecks from '../../User/components/PermissionChecks';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FRreciptTemplate from './FRreciptTemplate';
+import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
@@ -215,6 +218,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
     // Implement your delete logic here, such as making an API request
   };
   const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const FRstatus=FRLifeCycleStates.getStatusNameByCode(Number(props.value.status));
   return (
     <div>
       <Container>
@@ -426,7 +430,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  disabled
+
                 />
               </Grid>
 
@@ -443,7 +447,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         sanctionedBank: e.target.value,
                       })
                     }
-                    disabled
+
                   >
                     <MenuItem value={'FCRA'}>FCRA</MenuItem>
                     <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
@@ -467,7 +471,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   }}
                   renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
                   fullWidth
-                  disabled
+
                 />
               </Grid>
               <Grid item xs={12}>
@@ -475,12 +479,22 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 <Button
                   variant="contained"
                   color="warning"
-                  style={{ textAlign: 'left' }}
+                  style={{ textAlign: 'left', textDecoration: 'none',
+                  }}
                   // onClick={() => {
                   //   toggleOpenRemarks(true);
                   // }}
                 >
-                  Print FR
+                  <PDFDownloadLink
+                    document={<FRreciptTemplate rowData={props.value} />}
+                    fileName="FRReciept.pdf"
+                  >
+                    {({ blob, url, loading, error }) =>
+                      loading ? ' Print FR' : ' Print FR'
+                    }
+                  </PDFDownloadLink>
+
+
                 </Button>
                 {/* )} */}
                 &nbsp;
@@ -495,57 +509,71 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     Remark
                   </Button>
                   &nbsp;
-                  {props.action === 'view' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
+                  {
+                    props.action === 'view' && FRstatus=='WAITING_TO_ACCOUNTS'? (
+                      <>
+                        {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
-                      <Button
-                        variant="contained"
-                        color="success"
-                        onClick={() => {
-                          const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'approve' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
-                          setTimeout(() => {
-                            closeSnackbar(approvalSnack);
-                            const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(approvedSnack), 500);
-                          }, 500);
-                        }}
-                      >
+                        <PermissionChecks
+                          permissions={['ACCOUNTS_ACCESS']}
+                          granted={(
+                            <Button
+                              variant="contained"
+                              color="success"
+                              onClick={() => {
+                                const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
+                                if (props.onSubmit) {
+                                  const updatedValue = { ...props.value, status: 'approve' }; // Create a new object with updated status
+                                  props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                }
+                                setTimeout(() => {
+                                  closeSnackbar(approvalSnack);
+                                  const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                                  setTimeout(() => closeSnackbar(approvedSnack), 500);
+                                }, 500);
+                              }}
+                            >
                         Approve
-                      </Button>
+                            </Button>
+                          )}
+                        />
+
+
                       &nbsp;
-                    </>
-                  ) : null}
+                      </>
+                    ) : null}
                   {props.action === 'view' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'reject' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
-                          setTimeout(() => {
-                            closeSnackbar(rejectionSnack);
-                            const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                          }, 500);
-                        }}
-                      >
-                        Reject
-                      </Button>
+                      <PermissionChecks
+                        permissions={['ACCOUNTS_ACCESS', 'PRESIDENT_ACCESS']}
+                        granted={(
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => {
+                              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                              if (props.onSubmit) {
+                                const updatedValue = { ...props.value, status: 'reject' }; // Create a new object with updated status
+                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                              }
+                              setTimeout(() => {
+                                closeSnackbar(rejectionSnack);
+                                const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                              }, 500);
+                            }}
+                          >
+                          Reject
+                          </Button>
+                        )}
+                      />
+
                       &nbsp;
                     </>
                   ) : null}
-                  {props.action === 'view' ? (
+                  {props.action === 'view' && FRstatus!='WAITING_TO_PRESIDENT' &&FRstatus!='WAITING_TO_ACCOUNTS' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <Button
@@ -570,17 +598,59 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     </>
                   ) : null}
                   &nbsp;
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => {
-                      if (props.onSubmit) {
-                        props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
+                  {props.action === 'view' && FRstatus === 'WAITING_TO_PRESIDENT' ? (
+                    <PermissionChecks
+                      permissions={['PRESIDENT_ACCESS']}
+                      granted={
+                        <Button
+                          variant="contained"
+                          color="info"
+                          onClick={() => {
+                            const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
+                            if (props.onSubmit) {
+                              const updatedValue = { ...props.value, status: 'sendToAccounts' };
+                              props.onSubmit(updatedValue);
+                            }
+
+                            setTimeout(() => {
+                              closeSnackbar(processingSnack);
+                              const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                              setTimeout(() => closeSnackbar(processedSnack), 500);
+                            }, 500);
+                          }}
+                        >
+        Submit
+                        </Button>
                       }
-                    }}
-                  >
-                    Submit{' '}
-                  </Button>
+                    />
+                  ) : props.action === 'view' && FRstatus != 'WAITING_TO_ACCOUNTS' ? (
+                    <PermissionChecks
+                      permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                      granted={
+                        <Button
+                          variant="contained"
+                          color="info"
+                          onClick={() => {
+                            const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
+                            if (props.onSubmit) {
+                              const updatedValue = { ...props.value, status: 'sendToAccounts' };
+                              props.onSubmit(updatedValue);
+                            }
+
+                            setTimeout(() => {
+                              closeSnackbar(processingSnack);
+                              const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                              setTimeout(() => closeSnackbar(processedSnack), 500);
+                            }, 500);
+                          }}
+                        >
+        Submit
+                        </Button>
+                      }
+                    />
+                  ) : null}
+
+
                 </div>
               </Grid>
 
@@ -741,6 +811,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     onChange={(e) =>
                       setRemark((remark) => ({
                         ...remark,
+                        FR: props.value._id??'',
                         remark: e.target.value,
                       }))
                     }

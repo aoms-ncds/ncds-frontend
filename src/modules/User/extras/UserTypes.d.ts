@@ -20,6 +20,9 @@ declare global {
     WRITE_IRO: boolean;
     READ_XYZ: boolean;
     WRITE_XYZ: boolean;
+    ACCOUNTS_ACCESS:boolean;
+    PRESIDENT_ACCESS:boolean;
+
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
