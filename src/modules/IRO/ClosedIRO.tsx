@@ -11,7 +11,7 @@ import IROServices from './extras/IROServices';
 const ClosedIRO = () => {
   const [IROrder, setIROrder] = useState<IROrder[]>();
   useEffect(() => {
-    IROServices.getClossed()
+    IROServices.getClosed()
       .then((res) => {
         console.log(res);
         setIROrder(res.data);

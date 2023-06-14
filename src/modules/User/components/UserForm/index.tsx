@@ -517,6 +517,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     <DatePicker
                       label="Date Of Birth"
                       value={newChild?.dateOfBirth}
+                      format="DD/MM/YYYY"
                       onChange={(date: Moment | null) => {
                         if (date) {
                           setNewChild((newChild) => ({

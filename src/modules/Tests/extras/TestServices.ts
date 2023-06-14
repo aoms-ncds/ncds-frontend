@@ -101,7 +101,7 @@ export default {
         '/test/upload',
         { file },
         {
-          onUploadProgress: function(progressEvent) {
+          onUploadProgress: (progressEvent) => {
             if (progressEvent && progressEvent.total) {
               onProgress({
                 loaded: progressEvent.loaded,

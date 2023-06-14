@@ -6,48 +6,46 @@ import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
 
 const AddNewApplication = () => {
-  const [name, setName] = useState<string>('');
-  const [reason, setReason] = useState<string>('qq');
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',
     reason: '',
     status: '',
+    attachment: [],
     createdAt: moment(),
     updatedAt: moment(),
   });
 
-  const snackbarId = enqueueSnackbar({
-    message: action === 'add' ? 'Creating Request' : 'Updating Request',
-    variant: 'info',
-  });
+  // const snackbarId = enqueueSnackbar({
+  //   message: action === 'add' ? 'Creating Request' : 'Updating Request',
+  //   variant: 'info',
+  // });
 
-  const handleNameChange = (event:any) => {
-    setRequest((prevRequest) => ({
-      ...prevRequest,
-      name: event.target.value,
-    }));
-  };
 
-  const handleReasonChange = (event:any) => {
-    setRequest((prevRequest) => ({
-      ...prevRequest,
-      reason: event.target.value,
-    }));
-  };
+  // const  setRequest((prevRequest) => ({
+  //     ...prevRequest,
+  //     reason: event.target.value,
+  //   })); = (event: { target: { value: any } }) => {
+  //   setRequest((prevRequest) => ({
+  //     ...prevRequest,
+  //     reason: event.target.value,
+  //   }));
+  // };
 
-  const handleSubmit = (e: any) => {
+  // const handleSubmit = (e: { preventDefault: () => void }) => {
+  //   e.preventDefault();
+
+  //   console.log(name, reason);
+  // };
+  // const columns = [
+  //   { field: 'name', headerName: 'Name', flex: 1 },
+  //   { field: 'reason', headerName: 'Reason', flex: 1 },
+  //   { field: 'status', headerName: 'Status', flex: 1 },
+  // ];
+  const createApplication = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    console.log(name, reason);
-  };
-  const columns = [
-    { field: 'name', headerName: 'Name', flex: 1 },
-    { field: 'reason', headerName: 'Reason', flex: 1 },
-    { field: 'status', headerName: 'Status', flex: 1 },
-  ];
-  const createApplication = () => {
     const snackbarId = enqueueSnackbar({
       message: action === 'add' ? 'Creating Application' : 'Updating Application',
       variant: 'info',
@@ -80,17 +78,26 @@ const AddNewApplication = () => {
       <Card style={{ width: '100%' }}>
         <DialogContent>
           <Container>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={createApplication}>
               <Grid container spacing={3}>
                 <Grid item md={6}>
-                  <TextField label="Name" value={Request.name} onChange={handleNameChange} fullWidth required />
+                  <TextField label="Name" value={Request.name}
+                    onChange={(e)=>setRequest((prevRequest) => ({
+                      ...prevRequest,
+                      name: e.target.value,
+                    }))}
+                    fullWidth required />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={handleReasonChange} fullWidth required multiline />
+                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={(e)=> setRequest((prevRequest) => ({
+                    ...prevRequest,
+                    reason: e.target.value,
+                  }))}
+                  fullWidth required multiline />
                 </Grid>
               </Grid>
               <DialogActions>
-                <Button variant="outlined" type="submit" onClick={createApplication}>
+                <Button variant="outlined" type="submit" >
                   {action === 'add' ? 'Add' : 'Edit'}
                 </Button>
               </DialogActions>

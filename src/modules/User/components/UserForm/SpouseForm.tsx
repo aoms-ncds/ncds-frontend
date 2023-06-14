@@ -89,6 +89,7 @@ const SpouseForm = (
         <DatePicker
           label="Date Of Birth"
           value={props.value.dateOfBirth}
+          format="DD/MM/YYYY"
           onChange={(date: Moment | null) => {
             if (date) {
               props.onChange({ ...props.value, dateOfBirth: date });
