@@ -218,7 +218,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
     // Implement your delete logic here, such as making an API request
   };
   const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
-  const FRstatus=FRLifeCycleStates.getStatusNameByCode(Number(props.value.status));
+  const FRstatus=FRLifeCycleStates.getStatusNameByCodeFR(Number(props.value.status));
   return (
     <div>
       <Container>

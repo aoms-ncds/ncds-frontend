@@ -4,7 +4,9 @@ declare global {
   name: string;
   reason: string;
   status: string;
+  createdBy?:User;
   attachment:FileObject[];
   }
   type CreatableApplication = Creatable<Application>;
+
 }

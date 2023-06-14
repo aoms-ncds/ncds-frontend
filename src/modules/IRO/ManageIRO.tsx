@@ -200,7 +200,7 @@ const ManageIRO = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCode(params.value).replaceAll('_', ' ');
+        return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
       },
     },
   ];

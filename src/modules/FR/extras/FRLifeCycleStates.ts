@@ -15,7 +15,7 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly ACCOUNTS_APPROVED = 204;
   public static readonly FR_APPROVED = 205;
 
-  public static readonly allStatus = ({
+  public static readonly allFRStatus = ({
     FR_CREATED: FRLifeCycleStates.FR_CREATED,
     FR_CLOSED: FRLifeCycleStates.FR_CLOSED,
     SEND_BACK: FRLifeCycleStates.FR_SEND_BACK,
@@ -26,11 +26,11 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
     FR_APPROVED: FRLifeCycleStates.FR_APPROVED,
   });
 
-  public static readonly getStatusNameByCode = (code: number) =>{
-    const statusKeys = Object.keys(FRLifeCycleStates.allStatus);
+  public static readonly getStatusNameByCodeFR = (code: number) =>{
+    const statusKeys = Object.keys(FRLifeCycleStates.allFRStatus);
     for (let i = 0; i < statusKeys.length; i++) {
-      const statusKey = statusKeys[i] as keyof typeof FRLifeCycleStates.allStatus;
-      if (FRLifeCycleStates.allStatus[statusKey] === code) {
+      const statusKey = statusKeys[i] as keyof typeof FRLifeCycleStates.allFRStatus;
+      if (FRLifeCycleStates.allFRStatus[statusKey] === code) {
         return statusKey;
       }
     }

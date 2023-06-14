@@ -27,13 +27,10 @@ export default {
         },
       ),
     ),
+
+  renameFile: (fileId: string, newName: string) =>
+    getStandardResponse<void>(axios.patch('/file/' + fileId, { newName }, { headers: { ...getAuthHeader() } })),
+
   deleteFile: (fileId:string)=>getStandardResponse<void>(axios.delete('/file/' + fileId, { headers: { ...getAuthHeader() } })),
 
-  renameFile: (fileID: string, newName: string) =>
-    getStandardResponse<void>(
-      dummyRequest<void>({
-        result: 'success',
-        timeout: timeoutValue,
-      }),
-    ),
 };
