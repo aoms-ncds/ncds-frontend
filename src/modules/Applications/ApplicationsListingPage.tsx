@@ -6,15 +6,15 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 
 const ApplicationsListingPage = () => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
-  const [editid, setEditId] = useState<any>();
-  const [statusId, setStatusId] = useState<any>();
+  const [editid, setEditId] = useState<string>();
+  const [statusId, setStatusId] = useState<string>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     name: '',
     reason: '',
@@ -108,7 +108,7 @@ const ApplicationsListingPage = () => {
           icon={<EditIcon />}
           showInMenu
           onClick={() => {
-            setEditId(params.id);
+            setEditId(params.id as string);
             setAction('edit');
             setApplicationFormState(params.row);
             setShowApplicationFormDialog(true);
@@ -121,7 +121,7 @@ const ApplicationsListingPage = () => {
           icon={<ThumbUpIcon />}
           showInMenu
           onClick={() => {
-            setStatusId(params.id);
+            setStatusId(params.id as string);
             const snackbarId = enqueueSnackbar({
               message: 'Approving...',
               variant: 'info',

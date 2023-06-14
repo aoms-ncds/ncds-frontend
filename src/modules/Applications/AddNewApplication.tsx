@@ -8,7 +8,7 @@ import moment from 'moment';
 const AddNewApplication = () => {
   const [name, setName] = useState<string>('');
   const [reason, setReason] = useState<string>('qq');
-  const [action, setaction] = useState<'add' | 'edit'>('add');
+  const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
     _id: '',
     name: '',
@@ -54,7 +54,7 @@ const AddNewApplication = () => {
     });
     ApplicationServices.create(Request)
       .then((res:any) => {
-        console.log(res, 'resssssssssssss');
+        console.log(res, 'res');
         // handleClose();
         // closeSnackbar(snackbarId);
         enqueueSnackbar({

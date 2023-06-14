@@ -3,13 +3,13 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import IROServices from './extras/IROServices';
-import IROLifeCycleStates from './extras/IROLifeCycleStates';
+// import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const IRODashboard = () => {
   const [IROCount, setIROCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
-  console.log(IROCount)
-  console.log(closedIROCount)
+  console.log(IROCount);
+  console.log(closedIROCount);
   useEffect(() => {
     IROServices.getCount()
       .then((res) => setIROCount(res.data))

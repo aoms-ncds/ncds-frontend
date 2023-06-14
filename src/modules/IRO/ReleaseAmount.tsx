@@ -1,14 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Button, Card, CardContent, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
-import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { useNavigate } from 'react-router-dom';
-import BankDetailsForm from '../Divisions/components/BankDetails';
 
 const ReleaseAmount = () => {
-  
   const navigate = useNavigate();
   const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
@@ -90,7 +88,6 @@ const ReleaseAmount = () => {
                   action={'add'}
                   options={{ title: 'Amount Transferred (Bank) Details' }}
                 /> */}
-
 
 
                 <Grid item xs={12}>

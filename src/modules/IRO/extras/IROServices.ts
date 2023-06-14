@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import moment from 'moment';
-import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
+import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import { resolve } from 'path';
-import { rejects } from 'assert';
+// import { resolve } from 'path';
+// import { rejects } from 'assert';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getAll: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } })),
-  getClossed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
+  getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
 
   // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
 
   getAllRemarksById: (iroId: string) =>
     getStandardResponse<Remark[]>(
       axios.get(`/iro/remarks/${iroId}`, { headers: { ...getAuthHeader() } }),
-      (remarks) => remarks.map((remark:any) => ({
+      (remarks) => remarks.map((remark:Remark) => ({
         ...remark,
         createdAt: moment(remark.createdAt),
         updatedAt: moment(remark.updatedAt),
