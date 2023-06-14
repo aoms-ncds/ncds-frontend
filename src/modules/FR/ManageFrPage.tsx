@@ -5,6 +5,7 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add a
 
 import { Link } from 'react-router-dom';
 import {
+  Alert,
   Button,
   Card,
   Dialog,
@@ -25,7 +26,7 @@ import { enqueueSnackbar } from 'notistack';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRreciptTemplate from './components/FRreciptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
-
+import PermissionChecks from '../User/components/PermissionChecks';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<Frrequest[] | null>(null);
 
@@ -64,6 +65,7 @@ const ManageFrPage = () => {
           primaryText="Actions"
           key={'FR action'}
           items={[
+
             {
               id: 'View',
               text: 'View And Manage',
@@ -132,7 +134,7 @@ const ManageFrPage = () => {
       field: 'slno', headerName: 'SI No', width: 70, align: 'center', headerAlign: 'center',
     },
     {
-      field: '_id', headerName: 'FR No', width: 70, align: 'center', headerAlign: 'center',
+      field: 'FRno', headerName: 'FR No', width: 70, align: 'center', headerAlign: 'center',
     },
     { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
       <p> {props.row.date}</p>
@@ -180,51 +182,62 @@ const ManageFrPage = () => {
 
   return (
     <CommonPageLayout title="Manage FR">
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        startIcon={<AddIcon />}
-        component={Link}
-        to="/fr/apply"
-        // onClick={() => {
-        // }}
-      >
+      <PermissionChecks
+        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR']}
+        granted={(
+          <>
+            <Grid item xs={12} lg={6}>
+              <PermissionChecks
+                permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                granted={(
+                  <Button
+                    variant="contained"
+                    sx={{ float: 'right' }}
+                    startIcon={<AddIcon />}
+                    component={Link}
+                    to="/fr/apply"
+                    // onClick={() => {
+                    // }}
+                  >
         Add new
-      </Button>
-      <br />
-      <br />
-      <Grid item xs={12} md={12}>
-        <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
-        </Card>
-      </Grid>
-      <Dialog open={openRemarks} fullWidth maxWidth="md">
-        <DialogTitle>Remarks</DialogTitle>
-        <DialogContent>
-          {remarks.length > 0 ? remarks.map((remark) => (
-            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
-        </DialogContent>
-        <DialogActions>
-          <TextField
-            id="remarkTextfield"
-            placeholder="Remarks"
-            multiline
-            value={remark?.remark}
-            onChange={(e) =>
-              setRemark((remark) => ({
-                ...remark,
-                FR: selectedFR??'',
-                remark: e.target.value,
-              }))
-            }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => {
-                      remark.remark ?
-                        FRServices.addRemarks(remark)
+                  </Button>
+                )}
+              />
+              <br />
+              <br />
+              <Grid item xs={12} md={12}>
+                <Card style={{ height: '80vh', width: '100%' }}>
+                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
+                </Card>
+              </Grid>
+              <Dialog open={openRemarks} fullWidth maxWidth="md">
+                <DialogTitle>Remarks</DialogTitle>
+                <DialogContent>
+                  {remarks.length > 0 ? remarks.map((remark) => (
+                    // eslint-disable-next-line max-len
+                    <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+                  )):'No Data Found '}
+                </DialogContent>
+                <DialogActions>
+                  <TextField
+                    id="remarkTextfield"
+                    placeholder="Remarks"
+                    multiline
+                    value={remark?.remark}
+                    onChange={(e) =>
+                      setRemark((remark) => ({
+                        ...remark,
+                        FR: selectedFR??'',
+                        remark: e.target.value,
+                      }))
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => {
+                              remark.remark ?
+                                FRServices.addRemarks(remark)
                             .then((res) => {
                               const x= [remarks, res.data];
                               console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
@@ -241,28 +254,41 @@ const ManageFrPage = () => {
                                 message: error.message,
                               });
                             }) :
-                        '';
+                                '';
+                            }}
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     }}
+                    fullWidth
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      toggleOpenRemarks(false);
+                      setSelectedFR(null);
+                    }}
+                    // sx={{ ml: 'auto' }}
                   >
-                    <SendIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              toggleOpenRemarks(false);
-              setSelectedFR(null);
-            }}
-            // sx={{ ml: 'auto' }}
-          >
             close
-          </Button>
-        </DialogActions>
-      </Dialog>
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+          </>
+        )}
+        denied={(missingPermissions) => (
+          <Grid item xs={12} lg={6}>
+            <Alert severity='error'>
+                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+            </Alert>
+          </Grid>
+        )}
+      />
+
+
     </CommonPageLayout>
   );
 };

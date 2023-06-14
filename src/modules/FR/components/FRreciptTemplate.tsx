@@ -91,7 +91,7 @@ const FRreciptTemplate = (props:any) => {
   const rowData = props.rowData;
   const month=moment(rowData.FRdate);
   const monthName = month.format('MMMM');
-  console.log(monthName);
+  console.log(rowData);
   return (
     <Document>
       <Page size="A4">
@@ -99,7 +99,7 @@ const FRreciptTemplate = (props:any) => {
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>ADDRESS</Text>
-          <Text style={styles.frno}>FRNO:{rowData._id}</Text>
+          <Text style={styles.frno}>FRNO:{rowData.FRno}</Text>
           <Text style={styles.month}>For the Month of:{monthName}</Text>
           <div>
             <Text style={styles.division}>Name of the Division:{rowData?.createdBy?.officialDetails?.division?.details?.name}</Text>
@@ -131,7 +131,7 @@ const FRreciptTemplate = (props:any) => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {rowData.Particulars.map((item: Particular, index: number) => (
+            {rowData.Particulars && rowData.Particulars.map((item: Particular, index: number) => (
               <PDFTableRow key={index}>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
                   {String(index + 1)}
@@ -156,6 +156,7 @@ const FRreciptTemplate = (props:any) => {
                 </PDFCell>
               </PDFTableRow>
             ))}
+
 
           </PDFTable>
         </div>

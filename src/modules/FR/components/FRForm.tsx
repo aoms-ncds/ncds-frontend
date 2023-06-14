@@ -39,7 +39,9 @@ import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
-
+import PermissionChecks from '../../User/components/PermissionChecks';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FRreciptTemplate from './FRreciptTemplate';
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
@@ -506,6 +508,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
                   // }
                   fullWidth
+                  disabled
                 />
               </Grid>
 
@@ -575,7 +578,16 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   //   toggleOpenRemarks(true);
                   // }}
                 >
-                  Print FR
+                  <PDFDownloadLink
+                    document={<FRreciptTemplate rowData={props.value} />}
+                    fileName="FRReciept.pdf"
+                  >
+                    {({ blob, url, loading, error }) =>
+                      loading ? ' Print FR' : ' Print FR'
+                    }
+                  </PDFDownloadLink>
+
+
                 </Button>
                 {/* )} */}
                 &nbsp;
@@ -665,17 +677,23 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     </>
                   ) : null}
                   &nbsp;
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => {
-                      if (props.onSubmit) {
-                        props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
-                      }
-                    }}
-                  >
+                  <PermissionChecks
+                    permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                    granted={(
+                      <Button
+                        variant="contained"
+                        color="info"
+                        onClick={() => {
+                          if (props.onSubmit) {
+                            props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
+                          }
+                        }}
+                      >
                     Submit{' '}
-                  </Button>
+                      </Button>
+                    )}
+                  />
+
                 </div>
               </Grid>
 
@@ -773,8 +791,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                               requestedAmount: Number(e.target.value),
                             }))
                           }
-                          fullWidth
+
                           required
+                          fullWidth
                         />
                       </Grid>
                       <Grid item md={12}>
@@ -872,6 +891,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     onChange={(e) =>
                       setRemark((remark) => ({
                         ...remark,
+                        FR: props.value._id??'',
                         remark: e.target.value,
                       }))
                     }
