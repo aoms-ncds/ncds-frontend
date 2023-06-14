@@ -1,0 +1,402 @@
+import { Delete as DeleteIcon, InsertDriveFile, PanToolSharp, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Fade,
+  Grid,
+  IconButton,
+  Input,
+  LinearProgress,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+import React, { useEffect, useRef, useState } from 'react';
+
+interface FileUploaderProps {
+  id?: string;
+  title: string;
+  types: FileObjectType[]; // pass the type of file you need to upload
+  // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
+  limits:{
+    maxItemSize?: number;
+   maxItemCount?: number;
+   maxTotalSize?: number;
+  };
+  open: boolean;
+  onClose: () => void;
+  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
+  getFiles: FileObject[];
+  renameFile: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
+  deleteFile: (fileID: string) => Promise<StandardResponse<void>>;
+}
+interface UploadingFile {
+  tempID: string;
+  name: string;
+  size: number;
+  type: FileObjectType;
+  progress: AJAXProgress;
+}
+const FileUploader = (props: FileUploaderProps) => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const inputFileField = useRef<HTMLInputElement>(null);
+
+  const [fileObjects, setFileObjects] = useState<FileObject[] | null>(null);
+  const [filesFetchErrorMessage, setFilesFetchErrorMessage] = useState<string | null>(null);
+
+  const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
+  const [dragged, setDragged] = useState(false);
+
+  const uploadFile = (files: FileList) => {
+    if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
+      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
+
+      enqueueSnackbar({
+        message: 'Maximum files Allowed Exceeded.  ',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: `Maximum files Allowed:${props.limits.maxItemCount}`,
+        variant: 'info',
+      });
+      return;
+    }
+    for (let i = 0; i < files.length; i++) {
+      const droppedFile = files[i];
+      if (validateFile(droppedFile)) {
+        const tempID = new Date().getTime().toString();
+        console.log(droppedFile.size);
+        console.log('Uploading');
+        setUploadingFiles((_files) => [
+          ..._files,
+          {
+            tempID,
+            name: droppedFile.name,
+            size: droppedFile.size,
+            type: droppedFile.type as FileObjectType,
+            progress: {
+              loaded: 0,
+              total: 0,
+              percentage: 0,
+            },
+          },
+        ]);
+        props
+          .uploadFile(droppedFile, (progress) => {
+            setUploadingFiles((_files) => _files.map((_file) => (_file.tempID === tempID ? { ..._file, progress } : _file)));
+            // setUploadingFiles((files) => {
+            //   const newFiles = [...files];
+            //   const currentFileIndex = newFiles.findIndex((item) => item.tempID === tempID);
+            //   newFiles[currentFileIndex].progress = progress;
+            //   // console.log({ progress });
+            //   return newFiles;
+            // });
+          })
+          .then((res) => {
+            setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
+            setFileObjects((_file) => (_file ? [..._file, res.data] : [res.data]));
+            enqueueSnackbar({
+              message: `Successfully Uploaded  ${res.data.name}`,
+              variant: 'success',
+            });
+          })
+          .catch((error) => {
+            console.log('Caught error', error);
+          });
+        // setFile(droppedFile);
+        // setUploadingFiles
+        // readFileContent(droppedFile);
+      }
+    }
+  };
+
+  const validateFile=(file:File)=>{
+    let totalSize=0;
+    fileObjects?.map((_file)=>totalSize+=_file.size);
+
+    if (props.limits.maxItemCount && fileObjects && fileObjects?.length+1>props.limits.maxItemCount) {
+      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
+
+      enqueueSnackbar({
+        message: 'Maximum files Allowed Exceeded.  ',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: `Maximum files Allowed:${convertFileSize(props.limits.maxItemCount).size.toFixed(0)} ${convertFileSize(props.limits.maxItemCount).type}`,
+        variant: 'info',
+      });
+      return false;
+    } else if (props.limits.maxTotalSize && totalSize+file.size>props.limits.maxTotalSize) {
+      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
+
+      enqueueSnackbar({
+        message: ` Maximum Total File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxTotalSize).size.toFixed(0)} ${convertFileSize(props.limits.maxTotalSize).type}`,
+        variant: 'error',
+      });
+      return false;
+    } else if (props.limits.maxItemSize && file.size>props.limits.maxItemSize) {
+      // console.log(file.size+' ----- '+props.limits.maxItemSize);
+
+      enqueueSnackbar({
+        message: ` File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxItemSize).size.toFixed(0)}${convertFileSize(props.limits.maxItemSize).type}`,
+        variant: 'error',
+      });
+      return false;
+    } else if (!props.types.includes(file.type as FileObjectType)) {
+      enqueueSnackbar({
+        message: 'Invalid File Type',
+        variant: 'error',
+      });
+      enqueueSnackbar({
+        message: ` Expected file types ${props.types.join(', ')} `,
+        variant: 'info',
+      });
+      return false;
+    } else {
+      // console.log(fileObjects?fileObjects.length+1:''+' ----- '+props.limits.maxItemCount);
+      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
+      // console.log(file.size+' ----- '+props.limits.maxItemSize);
+      return true;
+    }
+  };
+
+  useEffect(() => {
+    if (props.open) {
+      setFileObjects(props.getFiles);
+    } else {
+      setFileObjects(null);
+    }
+
+    return () => {
+      setFileObjects(null);
+    };
+  }, [props.open]);
+
+  return (
+    <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
+      <Box
+        onDragOver={(event) => {
+          event.preventDefault();
+          setDragged(true);
+        }}
+        onDragLeave={() => setDragged(false)}
+      >
+        <DialogTitle>{props.title}</DialogTitle>
+        <Divider />
+        <br />
+        <DialogContent
+          onDragStart={(event) => event.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault();
+            uploadFile(event.dataTransfer.files);
+            setDragged(false);
+          }}
+        >
+          <Fade in={dragged}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '100%',
+                zIndex: 999,
+                opacity: 0.2,
+                backgroundColor: isDark ? 'grey' : '#1d1c1c',
+                color: isDark ? 'black' : 'white',
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  width: '80%',
+                  height: '80%',
+                  transform: 'translate(-50%, -50%)',
+                  border: '4px dashed white',
+                  borderRadius: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <Typography variant="h4" sx={{ textAlign: 'center' }} color="inherit">
+                    Drag and Drop here
+                  </Typography>
+                  <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                    Supported formats: <br /> {props.types.join(', ')}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Fade>
+          {filesFetchErrorMessage ? (
+            <Alert severity="error">
+              <AlertTitle>
+                <b>Something went wrong!</b>
+              </AlertTitle>
+              {filesFetchErrorMessage}
+            </Alert>
+          ) : !fileObjects ? (
+            <div style={{ textAlign: 'center' }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <Grid container spacing={3}>
+              {fileObjects.map((file, index) => (
+                <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
+                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }}>
+                    <CardContent sx={{ pb: 0 }}>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} lg={3}>
+                          <GetFileIconByType type={file.type} />
+                        </Grid>
+                        <Grid item xs={12} lg={9}>
+                          <Input
+                            value={file.name}
+                            onChange={(e) => {
+                              setFileObjects((_fileObjects) =>
+                                !_fileObjects ?
+                                  null :
+                                  _fileObjects.map((_fileObject) => {
+                                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
+                                    return _fileObject._id === file._id ? { ..._fileObject, name: e.target.value } : _fileObject;
+                                  }),
+                              );
+                              props
+                                .renameFile(file._id, e.target.value)
+                                .then((res) => {
+                                  // Implement
+                                })
+                                .catch((error) => {
+                                  // Implement
+                                });
+                            }}
+                            disableUnderline
+                            fullWidth
+                          />
+                          <Typography variant="caption">{(file?.size / 1000 / 1000).toFixed(2)} MB</Typography>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                    <CardActions sx={{ pt: 0 }}>
+                      <IconButton
+                        sx={{ ml: 'auto' }}
+                        color="error"
+                        onClick={() => {
+                          props
+                            .deleteFile(file._id)
+                            .then(() => {
+                              setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== file._id ?? null)));
+                            })
+                            .catch((error) => {
+                              console.log({ error });
+                            });
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+              {uploadingFiles.map((file, index) => (
+                <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
+                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }}>
+                    <CardContent sx={{ pb: 0 }}>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12} lg={3}>
+                          <GetFileIconByType type={file.type} />
+                        </Grid>
+                        <Grid item xs={12} lg={9}>
+                          <Input value={file.name} disabled disableUnderline fullWidth />
+                          <Typography variant="caption">
+                            {convertFileSize(file.size).size.toFixed(2)} {convertFileSize(file.size).type}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                    {/* <Box height={20}/> */}
+                    {/* {file.progress} */}
+                    <LinearProgress variant="determinate" value={file.progress.percentage} />
+                    <Typography sx={{ padding: '10px' }}>
+                      {(file.progress.loaded / 1000 / (file.progress.total > MB10 ? 1000 : 1)).toFixed(2)}/{(file.progress.total / 1000 / 1000).toFixed(2)} {convertFileSize(file.size).type}
+                    </Typography>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+          {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
+            <>
+              <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
+              Drag and Drop here
+              </Typography>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={props.onClose}>
+            Close
+          </Button>
+          &nbsp;
+          <input
+            type="file"
+            id={props.id ?? 'file-input'}
+            accept={props.types.join(',')}
+            value=""
+            onChange={(event) => {
+              if (event.target.files) {
+                uploadFile(event.target.files);
+              }
+            }}
+            style={{ display: 'none' }}
+            ref={inputFileField}
+            multiple
+          />
+          <label htmlFor={props.id ?? 'file-input'}>
+            <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
+              Choose file
+            </Button>
+          </label>
+        </DialogActions>
+      </Box>
+    </Dialog>
+  );
+};
+
+// eslint-disable-next-line react/no-multi-comp
+export const GetFileIconByType = (props: { type: FileObjectType }) => {
+  if (props.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || props.type === 'application/vnd.ms-excel') {
+    return <TableView fontSize="large" />;
+  } else if (props.type === 'application/pdf') {
+    return <PictureAsPdf fontSize="large" />;
+  } else if (props.type === 'video/quicktime') {
+    return <SmartDisplay fontSize="large" />;
+  } else {
+    return <InsertDriveFile fontSize="large" />;
+  }
+};
+const MB10 = 1000 * 1000;
+const convertFileSize = (size: number) => ({ size: size / 1000 / (size > MB10 ? 1000 : 1), type: size > MB10 ? 'MB' : 'KB' });
+export default FileUploader;

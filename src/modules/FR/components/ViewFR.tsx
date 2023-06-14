@@ -29,7 +29,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import moment from 'moment';
 import { monthNames } from '../extras/FRConfig';
-import FileUploader from '../../../components/FileUploader';
+import FileUploader from '../../../components/FileUploader/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
@@ -797,8 +797,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={TestServices.getBills}
-        uploadFile={TestServices.uploadFile}
+        getFiles={[]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const res = TestServices.uploadFile(file, onProgress);
+          return res;
+        }}
         renameFile={TestServices.renameFile}
         deleteFile={(fileID: string) => {
           return TestServices.deleteFile(fileID);

@@ -33,12 +33,14 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import moment from 'moment';
 import { monthNames } from '../extras/FRConfig';
-import FileUploader from '../../../components/FileUploader';
+import FileUploader from '../../../components/FileUploader/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
+import CommonServices from '../../../extras/CommonServices';
+import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -928,11 +930,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={TestServices.getBills}
-        uploadFile={TestServices.uploadFile}
-        renameFile={TestServices.renameFile}
+        getFiles={[]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress);
+          return resp;
+        }}
+        renameFile={FileUploaderServices.renameFile}
         deleteFile={(fileID: string) => {
-          return TestServices.deleteFile(fileID);
+          return FileUploaderServices.deleteFile(fileID);
         }}
       />
     </div>

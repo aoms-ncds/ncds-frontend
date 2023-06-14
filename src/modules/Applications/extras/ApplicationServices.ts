@@ -67,27 +67,7 @@ export default {
       }),
     );
   },
-  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void) =>
-    getStandardResponse<FileObject>(
-      axios.post(
-        '/application/upload',
-        { file },
-        {
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent && progressEvent.total) {
-              onProgress({
-                loaded: progressEvent.loaded,
-                total: progressEvent.total,
-                percentage: Math.round((progressEvent.loaded * 100) / progressEvent.total),
-              });
-            }
-          },
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      ),
-    ),
+
 
   saveRelease: (applicationID: string) =>
     getStandardResponse<void>(
