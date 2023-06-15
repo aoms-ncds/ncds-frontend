@@ -9,6 +9,7 @@ import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from './PermissionChecks';
+import moment from 'moment';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
@@ -270,7 +271,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 80,
       headerAlign: 'center',
       align: 'center',
-      valueGetter: (params) => params.row.basicDetails.dateOfBirth?.fromNow(true),
+      valueGetter: (params) => moment().diff(params.row.basicDetails.dateOfBirth, 'years'),
     },
     {
       field: 'missionaryOrNonMissionary',

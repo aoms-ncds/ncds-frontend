@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { dummyRequest, getStandardResponse } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 const timeoutValue = 250;
