@@ -8,6 +8,7 @@ import { Link, useParams } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import IROReciptTemplate from './components/IROReciptTemplate';
+import ReleaseAmount from './ReleaseAmount';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
@@ -19,10 +20,11 @@ const ManageIRO = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
+    IRO:'',
   });
   const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
   const [IROrder, setIROrder] = useState<IROrder[]>();
-  const [printdetails,setPrintDetails]=useState<IROrder[]>([])
+ 
   useEffect(() => {
     IROServices.getAll()
       .then((res) => {
@@ -57,8 +59,10 @@ const ManageIRO = () => {
               id: 'View',
               text: 'Release Amount',
               component: Link,
-              to: '/iro/release_amount/' + props.row._id,
+              // document: <ReleaseAmount id={props.row._id} />,
+              to: `/iro/release_amount/${props.row._id}`,
               icon: PreviewIcon,
+              
             },
             {
               id: 'remarks',
