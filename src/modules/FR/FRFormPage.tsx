@@ -38,7 +38,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         message: 'Creating FR Request',
         variant: 'info',
       });
-      console.log(requisition);
+      console.log('fr request iss ', requisition);
       const res = await FRServices.createFRRequests(requisition);
 
       enqueueSnackbar({
@@ -58,7 +58,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   const editFR = async (requisition: CreatableFR) => {
     try {
       enqueueSnackbar({
-        message: 'Creating FR Request',
+        message: 'Updtaing FR Request',
         variant: 'info',
       });
       console.log(requisition);

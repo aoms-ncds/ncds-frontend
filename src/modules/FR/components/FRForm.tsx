@@ -228,53 +228,39 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     //     console.log(res);
     //   });
   }, [props.value.Particulars]);
-  const addParticulars = () => {
-    const snackbarId = enqueueSnackbar({
-      message: 'Adding Particulars',
-      variant: 'info',
+  const addParticulars = (e:any) => {
+    e.preventDefault();
+    handleClose();
+    const newParticulars: Particular[] = [...Particulars, newParticular as Particular];
+    setParticulars(newParticulars);
+    props.onChange({
+      ...props.value,
+      Particulars: newParticulars,
     });
+    // Reset the form fields
+    setNewParticular((particularDetails) => ({
+      ...particularDetails,
+      subCategory1: '',
+      subCategory2: '',
+      subCategory3: '',
+      month: '',
+      narration: '',
+    }));
 
-    FRServices.addParticulars(newParticular)
-      .then((res) => {
-        console.log(res.data);
-        setParticulars((prevParticulars) => [...prevParticulars, res.data]);
-        handleClose();
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-        setNewParticular((particularDetails) => ({
-          ...particularDetails,
-          subCategory1: '',
-          subCategory2: '',
-          subCategory3: '',
-          month: '',
-          narration: '',
-        }));
-        props.onChange({
-          ...props.value,
-          Particulars: [...(props.value.Particulars || []), res.data],
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        // if (err.error === "Duplicate entry") {
-        //   setGroupExists(true);
-        //   setActiveStep(0);
-        // }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
+    // Other logic for API calls, snackbar, etc.
   };
-  const deleteParticular = (particularid: string) => {
+  const deleteParticular = (particularId: string | undefined, index: number) => {
+    if (!particularId) {
+      // Delete by index if the particularId is not available
+      const updatedParticulars = Particulars.filter((_item, i) => i !== index);
+      setParticulars(updatedParticulars);
+      return;
+    }
+
     // Perform delete logic
-    const updatedParticulars = Particulars.filter((item) => item._id !== particularid);
+    const updatedParticulars = Particulars.filter((item) => item._id !== particularId);
     setParticulars(updatedParticulars);
-    FRServices.deleteParticulars(particularid)
+    FRServices.deleteParticulars(particularId)
       .then((res) => {
         enqueueSnackbar({
           message: res.message,
@@ -288,7 +274,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           variant: 'error',
         });
       });
-    // Implement your delete logic here, such as making an API request
   };
   const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
@@ -483,7 +468,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           <TableRow key={item._id}>
                             <TableCell component="th">
                               <IconButton>
-                                <DeleteIcon onClick={() => deleteParticular(item._id || '')} />
+                                <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
                               </IconButton>
                               <IconButton onClick={() => setShowFileUploader(true)}>
                                 <FileIcon />
@@ -583,10 +568,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <PDFDownloadLink
                     document={<FRreciptTemplate rowData={props.value} />}
                     fileName="FRReciept.pdf"
+                    style={{ color: 'White', textDecoration: 'none' }}
                   >
-                    {({ blob, url, loading, error }) =>
-                      loading ? ' Print FR' : ' Print FR'
-                    }
+                   Print FR
                   </PDFDownloadLink>
 
 
@@ -699,188 +683,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </div>
               </Grid>
 
-              <Dialog
-                open={showAddParticulardialog}
-                onClose={handleClose}
-                PaperProps={{
-                  style: {
-                    width: '1000px',
-                  },
-                }}
-              >
-                <DialogTitle>Add Particular</DialogTitle>
-                <DialogContent>
-                  <Container>
-                    <Grid container spacing={3}>
-                      <Grid item md={12}>
-                        <Autocomplete
-                          value={selectedSubCategory1}
-                          options={selectedMainCategory?.subcategory1 ?? []}
-                          getOptionLabel={(subcategory2) => subcategory2.name}
-                          onChange={(_e, selectedSubCategory1) => {
-                            if (selectedSubCategory1) {
-                              setNewParticular((particularDetails) => ({
-                                ...particularDetails,
-                                subCategory1: selectedSubCategory1.name,
-                              }));
-                              setSelectedSubCategory1(selectedSubCategory1);
-                            }
-                          }}
-                          renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <Autocomplete
-                          value={selectedSubCategory2}
-                          options={selectedSubCategory1?.subcategory2 ?? []}
-                          getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
-                          onChange={(_e, selectedSubCategory2) => {
-                            if (selectedSubCategory2) {
-                              setNewParticular((particularDetails) => ({
-                                ...particularDetails,
-                                subCategory2: selectedSubCategory2.name,
-                              }));
-                              setselectedSubCategory2(selectedSubCategory2);
-                            }
-                          }}
-                          renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <Autocomplete
-                          value={selectedSubCategory3}
-                          options={selectedSubCategory2?.subcategory3 ?? []}
-                          getOptionLabel={(subCategory3) => subCategory3.name}
-                          onChange={(e, selectedSubCategory3) => {
-                            if (selectedSubCategory3) {
-                              setNewParticular((particularDetails) => ({
-                                ...particularDetails,
-                                subCategory3: selectedSubCategory3.name,
-                                narration: selectedSubCategory3.narration,
-                              }));
-                              setSelectedSubCategory3(selectedSubCategory3);
-                            }
-                          }}
-                          renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <TextField
-                          label="Quantity"
-                          type="number"
-                          value={newParticular?.quantity}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              quantity: Number(e.target.value),
-                            }))
-                          }
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <TextField
-                          label="Requested Amount"
-                          type="number"
-                          value={newParticular?.unitPrice}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              unitPrice: Number(e.target.value),
-                              requestedAmount: Number(e.target.value),
-                            }))
-                          }
 
-                          required
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <FormControlLabel
-                          label="Multiply By Quantity"
-                          control={
-                            <Checkbox
-                              onChange={(e) =>
-                                setNewParticular((particularDetails) => ({
-                                  ...particularDetails,
-                                  requestedAmount:
-                                  e.target.checked ?
-                                    (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) :
-                                    particularDetails?.unitPrice ?? 0,
-                                }))
-                              }
-                            />
-
-                          }
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <TextField
-                          label="Total Amount"
-                          type="number"
-                          value={newParticular?.requestedAmount}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              requestedAmount: Number(e.target.value),
-                            }))
-                          }
-                          fullWidth
-                          required
-                          InputLabelProps={{ shrink: true }}
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <Autocomplete
-                          value={newParticular.month}
-                          options={monthNames ?? []}
-                          getOptionLabel={(monthName) => monthName}
-                          onChange={(e, selectedMonth) => {
-                            if (selectedMonth) {
-                              setNewParticular((particularDetails) => ({
-                                ...particularDetails,
-                                month: selectedMonth,
-                              }));
-                            }
-                          }}
-                          renderInput={(params) => <TextField {...params} label="For the Month" required />}
-                          fullWidth
-                        />
-                      </Grid>
-
-                      <Grid item md={12}>
-                        <TextField
-                          label="Narration"
-                          value={newParticular.narration}
-                          multiline
-                          maxRows={4}
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              narration: e.target.value,
-                            }))
-                          }
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item md={12}>
-                        <Button variant="contained" onClick={() => setShowFileUploader(true)}>
-                          Attachments
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Container>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <Button type="submit" variant="contained" onClick={addParticulars}>
-                    Save
-                  </Button>
-                </DialogActions>
-              </Dialog>
               <br />
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>
@@ -939,6 +742,194 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           </form>
         </CardContent>
       </Container>
+      <Dialog
+        open={showAddParticulardialog}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            width: '1000px',
+          },
+        }}
+      >
+        <DialogTitle>Add Particular</DialogTitle>
+        <form onSubmit={addParticulars}>
+          <DialogContent>
+            <Container>
+
+              <Grid container spacing={3}>
+
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={selectedSubCategory1}
+                    options={selectedMainCategory?.subcategory1 ?? []}
+                    getOptionLabel={(subcategory2) => subcategory2.name}
+                    onChange={(_e, selectedSubCategory1) => {
+                      if (selectedSubCategory1) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory1: selectedSubCategory1.name,
+                        }));
+                        setSelectedSubCategory1(selectedSubCategory1);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={selectedSubCategory2}
+                    options={selectedSubCategory1?.subcategory2 ?? []}
+                    getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
+                    onChange={(_e, selectedSubCategory2) => {
+                      if (selectedSubCategory2) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory2: selectedSubCategory2.name,
+                        }));
+                        setselectedSubCategory2(selectedSubCategory2);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={selectedSubCategory3}
+                    options={selectedSubCategory2?.subcategory3 ?? []}
+                    getOptionLabel={(subCategory3) => subCategory3.name}
+                    onChange={(e, selectedSubCategory3) => {
+                      if (selectedSubCategory3) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory3: selectedSubCategory3.name,
+                          narration: selectedSubCategory3.narration,
+                        }));
+                        setSelectedSubCategory3(selectedSubCategory3);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Quantity"
+                    type="number"
+                    value={newParticular?.quantity}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        quantity: Number(e.target.value),
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Requested Amount"
+                    type="number"
+                    value={newParticular?.unitPrice}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        unitPrice: Number(e.target.value),
+                        requestedAmount: Number(e.target.value),
+                      }))
+                    }
+
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <FormControlLabel
+                    label="Multiply By Quantity"
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            requestedAmount:
+                                  e.target.checked ?
+                                    (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) :
+                                    particularDetails?.unitPrice ?? 0,
+                          }))
+                        }
+                      />
+
+                    }
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Total Amount"
+                    type="number"
+                    value={newParticular?.requestedAmount}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        requestedAmount: Number(e.target.value),
+                      }))
+                    }
+                    fullWidth
+                    required
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.month}
+                    options={monthNames ?? []}
+                    getOptionLabel={(monthName) => monthName}
+                    onChange={(e, selectedMonth) => {
+                      if (selectedMonth) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          month: selectedMonth,
+                        }));
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="For the Month" required />}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item md={12}>
+                  <TextField
+                    label="Narration"
+                    value={newParticular.narration}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        narration: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                          Attachments
+                  </Button>
+                </Grid>
+
+              </Grid>
+            </Container>
+
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit" variant="contained" >
+                    Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
       <FileUploader
         title="Upload bills"
         types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
