@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment as AttachmentIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
@@ -264,7 +264,7 @@ const ApplicationsListingPage = () => {
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
                           Attachments
                   </Button>
                 </Grid>
@@ -279,9 +279,11 @@ const ApplicationsListingPage = () => {
       </Dialog>
       <FileUploader
         title="Attachments"
-        types={['application/vnd.ms-excel',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        types={[
           'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
 
         ]}
         limits={{

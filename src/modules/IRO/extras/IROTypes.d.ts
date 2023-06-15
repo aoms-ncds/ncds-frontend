@@ -26,5 +26,7 @@ declare global {
     IFSCCode: string;
     beneficiary: string;
     remark:string;
+    attachment:FileObject[];
+
   }
 }

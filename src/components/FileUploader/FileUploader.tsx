@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Delete as DeleteIcon, FileDownload as FileDownloadIcon, InsertDriveFile, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
+import { Delete as DeleteIcon, FileDownload as FileDownloadIcon, InsertDriveFile, Photo, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -411,6 +411,8 @@ export const GetFileIconByType = (props: { type: FileObjectType }) => {
     return <PictureAsPdf fontSize="large" />;
   } else if (props.type === 'video/quicktime') {
     return <SmartDisplay fontSize="large" />;
+  } else if (props.type === 'image/png'||props.type === 'image/jpeg'||props.type === 'image/jpg') {
+    return <Photo fontSize="large" />;
   } else {
     return <InsertDriveFile fontSize="large" />;
   }

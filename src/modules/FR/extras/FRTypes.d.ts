@@ -140,6 +140,8 @@ declare global{
       unitPrice?:number;
       requestedAmount?: number;
       narration: string;
+      attachment:FileObject[];
+
     }
     type CreatableParticular = Creatable<Particular>;
 

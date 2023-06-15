@@ -64,6 +64,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
     month: '',
     // requestedAmount: '',
     narration: '',
+    attachment: [],
+
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [staff, setStaff] = useState<Staff[]>();
