@@ -3,7 +3,6 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
-import AddNewChildPage from '../AddNewChild';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -45,30 +44,24 @@ const workersPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
     },
-    {
-      title: 'add child',
-      path: '/addchild',
-      element: <AddNewChildPage action={'add'} />,
-      private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
-    },
-    {
-      title: 'edit child',
-      path: '/childedit/:childId',
-      element: <AddNewChildPage action={'edit'} />,
-      private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
-    },
+
+    // {
+    //   title: 'edit child',
+    //   path: '/child_edit/:childId',
+    //   element: <AddNewChildPage action={'edit'} />,
+    //   private: true,
+    //   requiredAccessRights: ['ADMIN_ACCESS'],
+    // },
     // {
     //   title: 'add Spouse',
-    //   path: '/addspouse',
+    //   path: '/add_spouse',
     //   element: <AddNewSpousePage action={'add'} />,
     //   private: true,
     //   requiredAccessRights: ['ADMIN_ACCESS'],
     // },
     // {
     //   title: 'edit Spouse',
-    //   path: '/editspouse/:spouseId',
+    //   path: '/edit_spouse/:spouseId',
     //   element: <AddNewSpousePage action={'edit'} />,
     //   private: true,
     //   requiredAccessRights: ['ADMIN_ACCESS'],

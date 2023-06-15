@@ -1,6 +1,7 @@
 import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import moment from 'moment';
 import NewAddressForm from './NewAddressForm';
 import UsersDropdown from '../UsersDropdown';
 import UserServices from '../../extras/UserServices';
@@ -54,7 +55,7 @@ const UserBasicDetailsForm = (
           <FormLabel id="Field">Field</FormLabel>
           <RadioGroup
             aria-labelledby="Field"
-            // defaultValue="missionar
+            // defaultValue="missionary
             value={props.value.field}
             onChange={(e) => props.onChange({ ...props.value, field: e.target.value as WorkerField | undefined })}
             name="Field"
@@ -114,7 +115,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Age"
-          value={props.value.dateOfBirth?.fromNow(true)}
+          value={moment().diff(props.value.dateOfBirth, 'years')}
           InputProps={{
             readOnly: true,
             disabled: true,
@@ -207,22 +208,22 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
-          id="mlanguges"
+          id="mLanguages"
           options={languages}
           getOptionLabel={(option) => option.name}
           value={props.value.motherTongue ?? null}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, motherTongue: newvalue ?? undefined })}
+          onChange={(e, newValue) => props.onChange({ ...props.value, motherTongue: newValue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Mother Tongue" variant={props.options?.textField?.variant} />}
         />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
-          id="Clanguges"
+          id="CLanguages"
           options={languages}
           getOptionLabel={(option) => option.name}
           value={props.value.communicationLanguage ?? null}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, communicationLanguage: newvalue ?? undefined })}
+          onChange={(e, newValue) => props.onChange({ ...props.value, communicationLanguage: newValue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Communication Language" variant={props.options?.textField?.variant} />}
         />
       </Grid>
@@ -234,7 +235,7 @@ const UserBasicDetailsForm = (
           options={languages}
           getOptionLabel={(option) => option.name}
           value={props.value.knownLanguages??[]}
-          onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
+          onChange={(e, newValue) => props.onChange({ ...props.value, knownLanguages: newValue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField?.variant} />}
         />
       </Grid>

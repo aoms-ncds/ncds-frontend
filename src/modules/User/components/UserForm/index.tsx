@@ -21,16 +21,15 @@ import {
   Stack,
   Avatar,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserBasicDetailsForm from './UserBasicDetailsForm';
 import NewOfficialDetailsForm from './NewOfficialDetailsForm';
 import NewSupportDetailsForm from './NewSupportDetailsForm';
 import NewUserSupportStructureForm from './NewUserSupportStructureForm';
 import SpouseForm from './SpouseForm';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Moment } from 'moment';
-import { useNavigate, useParams } from 'react-router-dom';
-import { childSupport } from '../../../Workers/extras/WorkersConfig';
+import moment, { Moment } from 'moment';
+import { useNavigate } from 'react-router-dom';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
 import { enqueueSnackbar } from 'notistack';
@@ -51,7 +50,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
 
-  const { editID } = useParams();
+  // const { editID } = useParams();
   const navigate = useNavigate();
 
   const [newChild, setNewChild] = useState<CreatableChild>({
@@ -60,7 +59,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     lastName: '',
   });
   const [index, setIndex] = useState<number>(0);
-  const [childAction, setchildAction] = useState<'add' | 'edit'>('add');
+  const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
 
 
   // const [userPhoto, setUserPhoto] = useState<File>();
@@ -70,7 +69,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [open, toggleOpen] = useState(false);
   const handleAddChild = () => {
     toggleOpen(true);
-    setchildAction('add');
+    setChildAction('add');
     setNewChild({
       // type: '',
       firstName: '',
@@ -399,11 +398,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       <TextField
                         label={`Child ${i + 1}`}
                         value={`${child.firstName} ${child.lastName}`}
-                        onClick={(e) => {
+                        onClick={() => {
                           toggleOpen(true);
                           setNewChild(child);
                           setIndex(i);
-                          setchildAction('edit');
+                          setChildAction('edit');
                         }}
                         fullWidth
                         required
@@ -539,7 +538,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 <Grid item xs={12} md={6}>
                   <TextField
                     label="Age"
-                    value={newChild?.dateOfBirth?.fromNow()}
+                    value={moment().diff(newChild?.dateOfBirth, 'years')}
                     // onChange={(e) =>
                     //   setNewChild((newchild) => ({
                     //     ...newchild,
