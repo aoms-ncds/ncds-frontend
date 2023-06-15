@@ -124,7 +124,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="PISON Missionary Fund"
+          label="PION Missionary Fund"
           type="number"
           value={props.value.PIONMissionaryFund === 0 ? '' : props.value.PIONMissionaryFund}
           onChange={(e) =>
