@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     padding: 3,
     height: 20,
   },
-  tabletext: {
+  tableText: {
     fontSize: 10,
   },
   box: {
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 });
 
 
-const FRreciptTemplate = (props:any) => {
+const FRReceiptTemplate = (props:any) => {
   const rowData = props.rowData;
   const month=moment(rowData.FRdate);
   const monthName = month.format('MMMM');
@@ -193,4 +193,4 @@ const FRreciptTemplate = (props:any) => {
   );
 };
 
-export default FRreciptTemplate;
+export default FRReceiptTemplate;

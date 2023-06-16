@@ -37,7 +37,7 @@ import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import FRreciptTemplate from './FRreciptTemplate';
+import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
@@ -488,7 +488,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   // }}
                 >
                   <PDFDownloadLink
-                    document={<FRreciptTemplate rowData={props.value} />}
+                    document={<FRReceiptTemplate rowData={props.value} />}
                     fileName="FRReciept.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >

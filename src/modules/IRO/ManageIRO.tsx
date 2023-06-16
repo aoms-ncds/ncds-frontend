@@ -6,13 +6,13 @@ import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
-import IROServices from './extras/IROServices';
-import IROReciptTemplate from './components/IROReceiptTemplate';
+import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
+import IROServices from './extras/IROServices';
 
 const ManageIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -23,7 +23,6 @@ const ManageIRO = () => {
   });
   const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
   const [IROrder, setIROrder] = useState<IROrder[]>();
-  const [printdetails, setPrintDetails]=useState<IROrder[]>([]);
   useEffect(() => {
     IROServices.getAll()
       .then((res) => {
@@ -40,7 +39,7 @@ const ManageIRO = () => {
       headerName: 'Action',
       minWidth: 50,
       type: 'string',
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="IRO action"
@@ -102,8 +101,8 @@ const ManageIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReciptTemplate Id={props.row._id} />,
-              fileName: 'IROReciept.pdf',
+              document: <IROReceiptTemplate Id={props.row._id} />,
+              fileName: 'IROReceipt.pdf',
 
 
             },
@@ -241,9 +240,6 @@ const ManageIRO = () => {
                       remark.remark ?
                         IROServices.addRemarks(remark)
                             .then((res) => {
-                              const x= [remarks, res.data];
-
-
                               setRemarks((remarks) => [...remarks, res.data]);
                               setRemark((remark) => ({
                                 ...remark,

@@ -1,9 +1,9 @@
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
-import ReleaseAmount from '../ReleaseAmount';
 import IRODashboard from '..';
 import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
+import ReleaseAmount from '../ReleaseAmount';
 
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
