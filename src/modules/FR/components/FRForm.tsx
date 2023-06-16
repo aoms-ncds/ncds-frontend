@@ -645,30 +645,35 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   {props.action === 'add' || props.action === 'edit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        onClick={() => {
-                          const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'sendToPresident' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={(
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={() => {
+                              const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
+                              if (props.onSubmit) {
+                                const updatedValue = { ...props.value, status: 'sendToPresident' }; // Create a new object with updated status
+                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                              }
 
-                          setTimeout(() => {
-                            closeSnackbar(processingSnack);
-                            const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(processedSnack), 500);
-                          }, 500);
-                        }}
-                      >
-                        Submit to President
-                      </Button>
+                              setTimeout(() => {
+                                closeSnackbar(processingSnack);
+                                const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
+                                setTimeout(() => closeSnackbar(processedSnack), 500);
+                              }, 500);
+                            }}
+                          >
+                      Submit to President
+                          </Button>
+                        )}
+                      />
                     </>
                   ) : null}
                   &nbsp;
                   <PermissionChecks
-                    permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                    permissions={['WRITE_FR']}
                     granted={(
                       <Button
                         variant="contained"
