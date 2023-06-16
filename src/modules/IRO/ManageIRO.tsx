@@ -7,8 +7,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
-import IROReciptTemplate from './components/IROReciptTemplate';
-import ReleaseAmount from './ReleaseAmount';
+import IROReciptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
@@ -20,7 +19,7 @@ const ManageIRO = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
-    IRO: '',
+    transactionId: '',
   });
   const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
   const [IROrder, setIROrder] = useState<IROrder[]>();

@@ -22,7 +22,7 @@ declare global{
     purpose: FRPurpose;
     purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
-    purposeDivision?: Divisions;
+    purposeDivision?: Division;
     purposeCoordinator?: Staff;
     purposeOthers?: string;
     requestedAmount: number;
@@ -146,10 +146,10 @@ declare global{
     interface Remark extends MongooseDocument {
       remark: string;
       createdBy: IWorker;
-      FR: string;
+      transactionId: string;
     }
     interface CreatableRemark extends Creatable<Remark> {
       createdBy?: IWorker;
-      FR: string;
+      transactionId: string;
     }
   }

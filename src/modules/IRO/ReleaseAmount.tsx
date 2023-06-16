@@ -6,7 +6,6 @@ import { DatePicker } from '@mui/x-date-pickers';
 import IROServices from './extras/IROServices';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import BankDetailsForm from '../Divisions/components/BankDetails';
 
 const ReleaseAmount = () => {
   const navigate = useNavigate();
@@ -18,7 +17,7 @@ const ReleaseAmount = () => {
     console.log(IROrelease, 'IROrelease');
     e.preventDefault();
     if (IROrelease) {
-      IROServices.saveRelease(iroID, IROrelease).then((res) => {
+      IROServices.saveRelease(iroID as string, IROrelease).then((res) => {
         console.log(res.data);
         navigate('/iro/');
       });

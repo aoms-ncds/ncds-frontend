@@ -71,7 +71,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
-    FR: '',
+    transactionId: '',
   });
 
   const handleClose = () => {
@@ -811,7 +811,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     onChange={(e) =>
                       setRemark((remark) => ({
                         ...remark,
-                        FR: props.value._id??'',
+                        transactionId: props.value._id??'',
                         remark: e.target.value,
                       }))
                     }

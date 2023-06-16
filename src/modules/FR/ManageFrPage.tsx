@@ -35,7 +35,7 @@ const ManageFrPage = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
-    FR: '',
+    transactionId: '',
   });
   const [particulars, setParticulars] = useState<Particular[]>([]);
 
@@ -227,7 +227,7 @@ const ManageFrPage = () => {
                     onChange={(e) =>
                       setRemark((remark) => ({
                         ...remark,
-                        FR: selectedFR??'',
+                        transactionId: selectedFR??'',
                         remark: e.target.value,
                       }))
                     }

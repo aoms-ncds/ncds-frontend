@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PDFTable';
+import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
 import IROServices from '../extras/IROServices';
 import dayjs from 'dayjs';
 
-const numberToWords = require('number-to-words');
 
 Font.register({
   family: 'Oswald',
@@ -108,7 +107,7 @@ const IROReceiptTemplate = (props: any) => {
 
   useEffect(() => {
     IROServices.getPrintDetails(Id)
-      .then((res: any) => {
+      .then((res) => {
         setPrintDetails(res.data);
         console.log(res);
       })
