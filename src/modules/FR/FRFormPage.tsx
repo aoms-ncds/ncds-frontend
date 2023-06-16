@@ -38,7 +38,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         message: 'Creating FR Request',
         variant: 'info',
       });
-      console.log(requisition);
+      console.log('fr request iss ', requisition);
       const res = await FRServices.createFRRequests(requisition);
 
       enqueueSnackbar({
@@ -58,7 +58,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   const editFR = async (requisition: CreatableFR) => {
     try {
       enqueueSnackbar({
-        message: 'Creating FR Request',
+        message: 'Updtaing FR Request',
         variant: 'info',
       });
       console.log(requisition);
@@ -86,8 +86,8 @@ const FRFormPage = (props: FRFormPageProps) => {
 
       enqueueSnackbar({
         // eslint-disable-next-line max-len
-        message: operation === 'approve' ? 'Approving' :operation === 'reject'? 'Rejecting':operation === 'sendToAccounts'?
-          'Sending To Accounts':operation === 'sendToPresident'? 'Sending To President':'Send Back'+'FR Request',
+        message: operation === 'Approved' ? 'Approving' :operation === 'Rejected'? 'Rejecting':operation === 'SendToAccounts'?
+          'Sending To Accounts':operation === 'SendToPresident'? 'Sending To President':'Send Back'+'FR Request',
         variant: 'info',
       });
       console.log(requisition);
@@ -114,7 +114,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   return (
     <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
       <PermissionChecks
-        permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR', 'PRESIDENT_ACCESS', 'ACCOUNTS_ACCESS']}
         granted={(
           <>
 
