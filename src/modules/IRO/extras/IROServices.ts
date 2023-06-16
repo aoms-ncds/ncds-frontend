@@ -31,11 +31,11 @@ export default {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  saveRelease: (IROrelease: Partial<IROrder>) =>
+  saveRelease: (iroID: string,IROrelease: Partial<IROrder>) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
-          .post('/iro', {
+          .post(`/iro/releaseAmount/${iroID}`, {
             ...IROrelease,
             IROrelease: {
               modeOfPayment: IROrelease.modeOfPayment,
