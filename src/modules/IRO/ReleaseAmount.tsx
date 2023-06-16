@@ -4,20 +4,16 @@ import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
 import IROServices from './extras/IROServices';
-import { useNavigate, useParams } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 
 const ReleaseAmount = () => {
   const navigate = useNavigate();
   const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
-  const { iroID } = useParams();
-  console.log(iroID, 'iddd');
-  // const IroId=iroID
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
     console.log(IROrelease, 'IROrelease');
     e.preventDefault();
     if (IROrelease) {
-      IROServices.saveRelease(iroID as string, IROrelease).then((res) => {
+      IROServices.saveRelease(IROrelease).then((res) => {
         console.log(res.data);
         navigate('/iro/');
       });
@@ -41,7 +37,7 @@ const ReleaseAmount = () => {
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
-                        releaseAmount: e.target.value,
+                        releaseAmount: Number(e.target.value),
                       }))
                     }
                     variant="outlined"
@@ -57,7 +53,7 @@ const ReleaseAmount = () => {
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
-                        transferredAmount: e.target.value,
+                        transferredAmount: Number(e.target.value),
                       }))
                     }
                     fullWidth
@@ -70,12 +66,13 @@ const ReleaseAmount = () => {
                     value={IROrelease?.transferredDate}
                     format="DD/MM/YYYY"
                     sx={{ width: '100%' }}
-                    onChange={(date) =>
-                      setIROrelease((IROrelease) => ({
-                        ...IROrelease,
-                        transferredDate: date || undefined, // Assign undefined if date is null
-                      }))
-                    }
+                    // onChange={(e) =>
+                    // // eslint-disable-next-line @typescript-eslint/naming-convention
+                    //   setIROrelease((IROrelease: any) => ({
+                    //     ...IROrelease,
+                    //     transferredDate: e.target.value,
+                    //   }))
+                    // }
                   />
                 </Grid>
                 {/* <Grid item xs={12} > */}

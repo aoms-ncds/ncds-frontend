@@ -35,7 +35,7 @@ export default {
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
-          .post(`/iro/releaseAmount/${iroID}`, {
+          .post('/iro', {
             ...IROrelease,
             IROrelease: {
               modeOfPayment: IROrelease.modeOfPayment,
