@@ -183,12 +183,12 @@ const ManageFrPage = () => {
   return (
     <CommonPageLayout title="Manage FR">
       <PermissionChecks
-        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR', 'PRESIDENT_ACCESS', 'ACCOUNTS_ACCESS']}
+        permissions={['READ_FR']}
         granted={(
           <>
             <Grid item xs={12} lg={6}>
               <PermissionChecks
-                permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                permissions={['WRITE_FR']}
                 granted={(
                   <Button
                     variant="contained"

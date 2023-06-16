@@ -26,7 +26,7 @@ const frDashboard = () => {
   return (
     <CommonPageLayout title="FR Dashboard">
       <PermissionChecks
-        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR', 'PRESIDENT_ACCESS', 'ACCOUNTS_ACCESS']}
+        permissions={['READ_FR']}
         granted={(
           <>
 

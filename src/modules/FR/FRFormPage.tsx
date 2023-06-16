@@ -114,7 +114,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   return (
     <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
       <PermissionChecks
-        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR', 'PRESIDENT_ACCESS', 'ACCOUNTS_ACCESS']}
+        permissions={['READ_FR']}
         granted={(
           <>
 

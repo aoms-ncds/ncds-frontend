@@ -514,7 +514,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                         <PermissionChecks
-                          permissions={['ADMIN_ACCESS', 'ACCOUNTS_ACCESS']}
+                          permissions={['ACCOUNTS_ACCESS']}
                           granted={(
                             <Button
                               variant="contained"
@@ -546,7 +546,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <PermissionChecks
-                        permissions={['ADMIN_ACCESS', 'ACCOUNTS_ACCESS', 'PRESIDENT_ACCESS']}
+                        permissions={['ACCOUNTS_ACCESS']}
                         granted={(
                           <Button
                             variant="contained"
@@ -575,25 +575,31 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   {props.action === 'view' && FRstatus!='WAITING_TO_PRESIDENT' &&FRstatus!='WAITING_TO_ACCOUNTS' && FRstatus!='ACCOUNTS_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        onClick={() => {
-                          const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'SendToPresident' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={() => {
+                              const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
+                              if (props.onSubmit) {
+                                const updatedValue = { ...props.value, status: 'SendToPresident' }; // Create a new object with updated status
+                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                              }
 
-                          setTimeout(() => {
-                            closeSnackbar(processingSnack);
-                            const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(processedSnack), 500);
-                          }, 500);
-                        }}
-                      >
+                              setTimeout(() => {
+                                closeSnackbar(processingSnack);
+                                const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
+                                setTimeout(() => closeSnackbar(processedSnack), 500);
+                              }, 500);
+                            }}
+                          >
                         Submit to President
-                      </Button>
+                          </Button>
+                        }
+                      />
+
                     </>
                   ) : null}
                   &nbsp;
@@ -624,7 +630,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     />
                   ) : props.action === 'view' && FRstatus != 'WAITING_TO_ACCOUNTS' && FRstatus!='ACCOUNTS_APPROVED' ? (
                     <PermissionChecks
-                      permissions={['ADMIN_ACCESS', 'WRITE_FR']}
+                      permissions={['WRITE_FR']}
                       granted={
                         <Button
                           variant="contained"
