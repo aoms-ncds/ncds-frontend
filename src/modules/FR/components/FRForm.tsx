@@ -231,6 +231,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const addParticulars = (e:any) => {
     e.preventDefault();
     handleClose();
+
     const newParticulars: Particular[] = [...Particulars, newParticular as Particular];
     setParticulars(newParticulars);
     props.onChange({
@@ -246,6 +247,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       month: '',
       narration: '',
     }));
+
 
     // Other logic for API calls, snackbar, etc.
   };
@@ -684,60 +686,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
 
 
-              <br />
-              <Dialog open={openRemarks} fullWidth maxWidth="md">
-                <DialogTitle>Remarks</DialogTitle>
-                <DialogActions>
-                  <TextField
-                    id="remarkTextfield"
-                    placeholder="Remarks"
-                    multiline
-                    value={remark?.remark}
-                    onChange={(e) =>
-                      setRemark((remark) => ({
-                        ...remark,
-                        FR: props.value._id??'',
-                        remark: e.target.value,
-                      }))
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => {
-                              remark.remark ?
-                                FRServices.addRemarks(remark)
-                                    .then((res) => {
-                                      setRemarks((remarks) => [...remarks, res.data]);
-                                      setRemark((remark) => ({
-                                        ...remark,
-                                        remark: '',
-                                      }));
-                                      toggleOpenRemarks(false);
-                                      enqueueSnackbar(res.message, { variant: 'success' });
-                                    })
-                                    .catch((error) => {
-                                      enqueueSnackbar({
-                                        variant: 'error',
-                                        message: error.message,
-                                      });
-                                    }) :
-                                '';
-                            }}
-                          >
-                            <SendIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    fullWidth
-                  />
-                  <br />
-                  <Button variant="contained" onClick={() => toggleOpenRemarks(false)} sx={{ ml: 'auto' }}>
-                    close
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </Grid>
           </form>
         </CardContent>
@@ -760,7 +708,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
                 <Grid item md={12}>
                   <Autocomplete
-                    value={selectedSubCategory1}
+
                     options={selectedMainCategory?.subcategory1 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name}
                     onChange={(_e, selectedSubCategory1) => {
@@ -778,7 +726,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={selectedSubCategory2}
                     options={selectedSubCategory1?.subcategory2 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
                     onChange={(_e, selectedSubCategory2) => {
@@ -796,7 +743,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
                     getOptionLabel={(subCategory3) => subCategory3.name}
                     onChange={(e, selectedSubCategory3) => {
@@ -926,6 +872,67 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit" variant="contained" >
                     Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <br />
+      <Dialog open={openRemarks} fullWidth maxWidth="md">
+        <DialogTitle>Remarks</DialogTitle>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            if (remark.remark) {
+              FRServices.addRemarks(remark)
+        .then((res) => {
+          setRemarks((remarks) => [...remarks, res.data]);
+          setRemark((remark) => ({
+            ...remark,
+            remark: '',
+          }));
+          toggleOpenRemarks(false);
+          enqueueSnackbar(res.message, { variant: 'success' });
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          });
+        });
+            }
+          }}
+        >
+
+
+          <DialogActions>
+            <TextField
+              id="remarkTextfield"
+              placeholder="Remarks"
+              multiline
+              value={remark?.remark}
+              onChange={(e) =>
+                setRemark((remark) => ({
+                  ...remark,
+                  FR: props.value._id??'',
+                  remark: e.target.value,
+                }))
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton type="submit"
+                    >
+                      <SendIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+            <br />
+            <Button variant="contained" onClick={() => toggleOpenRemarks(false)} sx={{ ml: 'auto' }}>
+                    close
             </Button>
           </DialogActions>
         </form>

@@ -183,7 +183,7 @@ const ManageFrPage = () => {
   return (
     <CommonPageLayout title="Manage FR">
       <PermissionChecks
-        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR']}
+        permissions={['ADMIN_ACCESS', 'READ_FR', 'WRITE_FR', 'PRESIDENT_ACCESS', 'ACCOUNTS_ACCESS']}
         granted={(
           <>
             <Grid item xs={12} lg={6}>
@@ -218,63 +218,68 @@ const ManageFrPage = () => {
                     <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
                   )):'No Data Found '}
                 </DialogContent>
-                <DialogActions>
-                  <TextField
-                    id="remarkTextfield"
-                    placeholder="Remarks"
-                    multiline
-                    value={remark?.remark}
-                    onChange={(e) =>
-                      setRemark((remark) => ({
-                        ...remark,
-                        FR: selectedFR??'',
-                        remark: e.target.value,
-                      }))
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => {
-                              remark.remark ?
-                                FRServices.addRemarks(remark)
-                            .then((res) => {
-                              const x= [remarks, res.data];
-                              console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
 
-                              setRemarks((remarks) => [...remarks, res.data]);
-                              setRemark((remark) => ({
-                                ...remark,
-                                remark: '',
-                              }));
-                            })
-                            .catch((error) => {
-                              enqueueSnackbar({
-                                variant: 'error',
-                                message: error.message,
-                              });
-                            }) :
-                                '';
-                            }}
-                          >
-                            <SendIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    fullWidth
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      toggleOpenRemarks(false);
-                      setSelectedFR(null);
-                    }}
+                    if (remark.remark) {
+                      FRServices.addRemarks(remark)
+        .then((res) => {
+          const x = [...remarks, res.data];
+          console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
+
+          setRemarks((remarks) => [...remarks, res.data]);
+          setRemark((remark) => ({
+            ...remark,
+            remark: '',
+          }));
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          });
+        });
+                    }
+                  }}
+                >
+                  <DialogActions>
+                    <TextField
+                      id="remarkTextfield"
+                      placeholder="Remarks"
+                      multiline
+                      value={remark?.remark}
+                      onChange={(e) =>
+                        setRemark((remark) => ({
+                          ...remark,
+                          FR: selectedFR??'',
+                          remark: e.target.value,
+                        }))
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton type='submit'
+                            >
+                              <SendIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                      fullWidth
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        toggleOpenRemarks(false);
+                        setSelectedFR(null);
+                      }}
                     // sx={{ ml: 'auto' }}
-                  >
+                    >
             close
-                  </Button>
-                </DialogActions>
+                    </Button>
+                  </DialogActions>
+                </form>
               </Dialog>
             </Grid>
           </>
