@@ -25,7 +25,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material';
-import { Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
+import { Attachment as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
@@ -139,6 +139,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     subCategory3: '',
     month: '',
     narration: '',
+    attachment: [],
+
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [staff, setStaff] = useState<Staff[]>();
@@ -859,7 +861,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
                 <Grid item md={12}>
-                  <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
                           Attachments
                   </Button>
                 </Grid>
@@ -938,24 +940,52 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         </form>
       </Dialog>
       <FileUploader
-        title="Upload bills"
-        types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
+        title="Attachments"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
         limits={{
-          maxItemSize: 6*MB,
+          // types: [],
+          maxItemSize: 1*MB,
           maxItemCount: 3,
-          maxTotalSize: 18*MB,
+          maxTotalSize: 3*MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
-        getFiles={[]}
+        // getFiles={TestServices.getBills}
+        getFiles={newParticular.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const resp = FileUploaderServices.uploadFile(file, onProgress);
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+          .then((res)=>{
+            // console.log(res.data._id);
+            setNewParticular((particularDetails) => ({
+              ...particularDetails,
+              attachment: [...particularDetails.attachment, res.data],
+            }));
+            return res;
+          });
           return resp;
         }}
-        renameFile={FileUploaderServices.renameFile}
-        deleteFile={(fileID: string) => {
-          return FileUploaderServices.deleteFile(fileID);
+        renameFile={(fileId: string, newName: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            attachment: particularDetails.attachment.map((file) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            attachment: particularDetails.attachment.filter((file)=>file._id!==fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
         }}
       />
     </div>

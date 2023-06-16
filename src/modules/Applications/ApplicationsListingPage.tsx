@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbUp as ThumbUpIcon, ThumbDown as ThumbDownIcon, Attachment as AttachmentIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
-import { DataGrid, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../components/GridLinkAction';
@@ -11,6 +11,7 @@ import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 
 const ApplicationsListingPage = () => {
@@ -104,43 +105,44 @@ const ApplicationsListingPage = () => {
       });
   };
 
-  const columns = [
+  const columns: GridColDef<Application>[] = [
     {
       field: 'actions',
       type: 'actions',
-      getActions: (params: GridRowParams) => [
-        <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/application/${params.id}/approval`} />,
+      getActions: (props: GridRowParams) => [
+        <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/application/${props.id}/approval`} />,
         <GridLinkAction
-          key={3}
+          key={2}
           label="Edit"
           icon={<EditIcon />}
           showInMenu
           onClick={() => {
-            setEditId(params.id as string);
+            setEditId(props.id as string);
             setAction('edit');
-            setApplicationFormState(params.row);
-            console.log(params.row);
+            ApplicationServices.getById(props.row._id )
+            .then((res)=> setApplicationFormState(res.data));
+            console.log(props.row);
             setShowApplicationFormDialog(true);
           }}
         />,
 
         <GridLinkAction
-          key={2}
+          key={3}
           label="Approve"
           icon={<ThumbUpIcon />}
           showInMenu
           onClick={() => {
-            setStatusId(params.id as string);
+            setStatusId(props.id as string);
             const snackbarId = enqueueSnackbar({
               message: 'Approving...',
               variant: 'info',
             });
 
-            ApplicationServices.approve(params.id as string)
+            ApplicationServices.approve(props.id as string)
               .then((res) => {
                 if (applications) {
                   const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
+                    return application._id !== props.id;
                   });
                   setApplications(filteredApplications);
                 }
@@ -160,7 +162,7 @@ const ApplicationsListingPage = () => {
           }}
         />,
         <GridLinkAction
-          key={3}
+          key={4}
           label="Reject"
           icon={<ThumbDownIcon />}
           showInMenu
@@ -169,11 +171,11 @@ const ApplicationsListingPage = () => {
               message: 'Rejecting...',
               variant: 'info',
             });
-            ApplicationServices.reject(params.id as string)
+            ApplicationServices.reject(props.id as string)
               .then((res) => {
                 if (applications) {
                   const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
+                    return application._id !== props.id;
                   });
                   setApplications(filteredApplications);
                 }
@@ -194,10 +196,22 @@ const ApplicationsListingPage = () => {
         />,
       ],
     },
-    { field: '_id', headerName: 'SI NO', width: 150 },
-    { field: 'name', headerName: 'name', width: 150 },
+    // { field: '_id', headerName: 'SI NO', width: 150 },
+    { field: 'name', headerName: 'Name', width: 150 },
     { field: 'reason', headerName: 'Reason', width: 150 },
-    { field: 'status', headerName: 'Status', width: 150 },
+    { field: 'createdBy', headerName: 'Applied By', renderCell: (props: any) =>
+      <p> {props.row.createdBy?.basicDetails.firstName+' '+props.row.createdBy?.basicDetails.lastName}</p>,
+    width: 170, headerAlign: 'center', align: 'center' },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        return CommonLifeCycleStates.getStatusNameByCode(params.value).replaceAll('_', ' ');
+      },
+    },
   ];
   return (
     <CommonPageLayout title="Application Manages ">
@@ -250,7 +264,7 @@ const ApplicationsListingPage = () => {
                   />
                 </Grid>
                 <Grid item md={6}>
-                  <Button variant="contained" onClick={() => setShowFileUploader(true)}>
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
                           Attachments
                   </Button>
                 </Grid>
@@ -265,9 +279,11 @@ const ApplicationsListingPage = () => {
       </Dialog>
       <FileUploader
         title="Attachments"
-        types={['application/vnd.ms-excel',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        types={[
           'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
 
         ]}
         limits={{
@@ -282,7 +298,7 @@ const ApplicationsListingPage = () => {
         // getFiles={TestServices.getBills}
         getFiles={applicationFormState.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', applicationFormState.name+'_'+(applicationFormState.attachment.length+1))
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
           .then((res)=>{
             // console.log(res.data._id);
             setApplicationFormState(() => ({
@@ -293,7 +309,15 @@ const ApplicationsListingPage = () => {
           });
           return resp;
         }}
-        renameFile={FileUploaderServices.renameFile}
+        renameFile={(fileId: string, newName: string) => {
+          setApplicationFormState(() => ({
+            ...applicationFormState,
+            attachment: applicationFormState.attachment.map((file) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
         deleteFile={(fileId: string) => {
           setApplicationFormState(() => ({
             ...applicationFormState,

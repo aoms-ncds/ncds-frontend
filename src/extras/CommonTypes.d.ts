@@ -34,7 +34,7 @@ declare global {
   }
   type Creatable<T extends MongooseDocument> = Omit<T, keyof MongooseDocument> & Partial<MongooseDocument>;
   interface FileObject extends MongooseDocument {
-    name: string;
+    filename: string;
     size: number;
     type: FileObjectType;
     storage: 'S3' | 'Drive';

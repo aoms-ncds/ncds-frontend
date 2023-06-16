@@ -174,7 +174,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return FRLifeCycleStates.getStatusNameByCode(params.value).replaceAll('_', ' ');
+        return FRLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
       },
     },
 

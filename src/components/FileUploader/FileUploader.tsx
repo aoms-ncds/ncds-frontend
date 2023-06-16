@@ -1,4 +1,5 @@
-import { Delete as DeleteIcon, InsertDriveFile, PanToolSharp, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Delete as DeleteIcon, FileDownload as FileDownloadIcon, InsertDriveFile, Photo, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -55,6 +56,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const inputFileField = useRef<HTMLInputElement>(null);
 
   const [fileObjects, setFileObjects] = useState<FileObject[] | null>(null);
+  // eslint-disable-next-line no-unused-vars
   const [filesFetchErrorMessage, setFilesFetchErrorMessage] = useState<string | null>(null);
 
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
@@ -109,7 +111,7 @@ const FileUploader = (props: FileUploaderProps) => {
             setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
             setFileObjects((_file) => (_file ? [..._file, res.data] : [res.data]));
             enqueueSnackbar({
-              message: `Successfully Uploaded  ${res.data.name}`,
+              message: `Successfully Uploaded  ${res.data.filename}`,
               variant: 'success',
             });
           })
@@ -273,20 +275,19 @@ const FileUploader = (props: FileUploaderProps) => {
                         </Grid>
                         <Grid item xs={12} lg={9}>
                           <Input
-                            value={file.name}
+                            value={file.filename}
                             onChange={(e) => {
                               setFileObjects((_fileObjects) =>
                                 !_fileObjects ?
                                   null :
                                   _fileObjects.map((_fileObject) => {
                                     // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
-                                    return _fileObject._id === file._id ? { ..._fileObject, name: e.target.value } : _fileObject;
+                                    return _fileObject._id === file._id ? { ..._fileObject, filename: e.target.value } : _fileObject;
                                   }),
                               );
                               props
                                 .renameFile(file._id, e.target.value)
                                 .then((res) => {
-                                  // Implement
                                 })
                                 .catch((error) => {
                                   // Implement
@@ -300,6 +301,23 @@ const FileUploader = (props: FileUploaderProps) => {
                       </Grid>
                     </CardContent>
                     <CardActions sx={{ pt: 0 }}>
+                      {file.downloadURL&&(
+                        <IconButton
+                          sx={{ ml: 'auto' }}
+                          color="error"
+                          onClick={() => {
+                            if (file.downloadURL) {
+                              const link = document.createElement('a');
+                              link.href = file.downloadURL;
+                              link.download = ''; // You can specify a custom file name here
+                              link.click();
+                            }
+                          }}
+                        >
+                          <FileDownloadIcon />
+                        </IconButton>
+                      )}
+
                       <IconButton
                         sx={{ ml: 'auto' }}
                         color="error"
@@ -393,6 +411,8 @@ export const GetFileIconByType = (props: { type: FileObjectType }) => {
     return <PictureAsPdf fontSize="large" />;
   } else if (props.type === 'video/quicktime') {
     return <SmartDisplay fontSize="large" />;
+  } else if (props.type === 'image/png'||props.type === 'image/jpeg'||props.type === 'image/jpg') {
+    return <Photo fontSize="large" />;
   } else {
     return <InsertDriveFile fontSize="large" />;
   }

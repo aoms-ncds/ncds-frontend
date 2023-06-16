@@ -114,6 +114,8 @@ export default {
         requestedAmount: 300,
         unitPrice: 300,
         narration: 'paticularss',
+        attachment: [],
+
       },
       {
         _id: '2',
@@ -126,6 +128,8 @@ export default {
         requestedAmount: 300,
         unitPrice: 300,
         narration: 'paticularss',
+        attachment: [],
+
       },
       ],
       // error: null,

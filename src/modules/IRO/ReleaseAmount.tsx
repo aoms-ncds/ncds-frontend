@@ -5,10 +5,16 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
 import IROServices from './extras/IROServices';
 import { useNavigate } from 'react-router-dom';
+import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import { MB } from '../../extras/CommonConfig';
 
 const ReleaseAmount = () => {
   const navigate = useNavigate();
   const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
+  const [showFileUploader, setShowFileUploader] = useState(false);
+
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
     console.log(IROrelease, 'IROrelease');
     e.preventDefault();
@@ -200,11 +206,9 @@ const ReleaseAmount = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField
-                    variant="outlined"
-                    type="file"
-                    // onChange={(e) => handleFileUpload(e.target.files)}
-                  />
+                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                          Attachments
+                  </Button>
                 </Grid>
               </Grid>
               <br />
@@ -215,6 +219,55 @@ const ReleaseAmount = () => {
           </CardContent>
         </Card>
       </Container>
+      {/* <FileUploader
+        title="Attachments"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1*MB,
+          maxItemCount: 3,
+          maxTotalSize: 3*MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={IROrelease.attachment}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+          .then((res)=>{
+            // console.log(res.data._id);
+            setIROrelease((IROrelease) => ({
+              ...IROrelease,
+              attachment: [...IROrelease.attachment, res.data],
+            }));
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setIROrelease((IROrelease) => ({
+            ...IROrelease,
+            attachment: IROrelease.attachment.map((file) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setIROrelease((IROrelease) => ({
+            ...IROrelease,
+            attachment: IROrelease.attachment.filter((file)=>file._id!==fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      /> */}
     </CommonPageLayout>
   );
 };

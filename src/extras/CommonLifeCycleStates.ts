@@ -8,4 +8,23 @@ export default class CommonLifeCycleStates {
   public static readonly CREATED = -104;
   // Active states
   public static readonly ACTIVE = 100;
+
+  public static readonly allStatus = ({
+    FORCE_DELETED: CommonLifeCycleStates.FORCE_DELETED,
+    DELETED: CommonLifeCycleStates. DELETED,
+    REJECTED: CommonLifeCycleStates.REJECTED,
+    INACTIVE: CommonLifeCycleStates.INACTIVE,
+    CREATED: CommonLifeCycleStates.CREATED,
+    APPROVED: CommonLifeCycleStates.ACTIVE,
+  });
+  public static readonly getStatusNameByCode = (code: number) =>{
+    const statusKeys = Object.keys(CommonLifeCycleStates.allStatus);
+    for (let i = 0; i < statusKeys.length; i++) {
+      const statusKey = statusKeys[i] as keyof typeof CommonLifeCycleStates.allStatus;
+      if (CommonLifeCycleStates.allStatus[statusKey] === code) {
+        return statusKey;
+      }
+    }
+    return 'Unknown status';
+  };
 }

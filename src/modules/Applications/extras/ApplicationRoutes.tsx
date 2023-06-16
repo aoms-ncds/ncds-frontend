@@ -1,9 +1,10 @@
 // import ApplicationsDashboard from '..';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+// import { NoteAlt as NoteAltIcon } from '@mui/icons-material/AccessAlarm';
 import APPDashboard from '..';
 import ApplicationsListingPage from '../ApplicationsListingPage';
 import ApplicationApprovalPage from '../ApplicationApprovalPage';
 import AddNewApplication from '../AddNewApplication';
+import { NoteAlt as NoteAltIcon } from '@mui/icons-material';
 
 const applicationRoutes: ModuleRoute = {
   base: '/application',
@@ -15,7 +16,7 @@ const applicationRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: true,
-      icon: <AccessAlarmIcon />,
+      icon: <NoteAltIcon/>,
     },
     {
       title: 'Add Request',
