@@ -58,10 +58,8 @@ const ManageIRO = () => {
               id: 'View',
               text: 'Release Amount',
               component: Link,
-              // document: <ReleaseAmount id={props.row._id} />,
-              to: `/iro/release_amount/${props.row._id}`,
+              to: '/iro/release_amount/' + props.row._id,
               icon: PreviewIcon,
-
             },
             {
               id: 'remarks',

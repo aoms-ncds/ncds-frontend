@@ -11,11 +11,11 @@ declare global {
     division: Division;
     subDivision: SubDivision;
     mainCategory: string;
-    requestAmount: string;
+    requestAmount: number;
     lastUpdateDate: Moment;
     sanction: string;
-    releaseAmount: string;
-    transferredAmount: string;
+    releaseAmount: number;
+    transferredAmount: number;
     transferredDate: Moment;
     transferredBank: BankDetails;
     modeOfPayment: string;
