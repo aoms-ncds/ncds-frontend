@@ -3,8 +3,8 @@ import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PD
 import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
 import IROServices from '../extras/IROServices';
 import dayjs from 'dayjs';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const numberToWords = require('number-to-words');
+
+const numberToWords = require('number-to-words');
 
 Font.register({
   family: 'Oswald',
@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
     padding: 3,
     height: 20,
   },
-  tabletext: {
+  tableText: {
     fontSize: 10,
   },
 });
 
-const IROReciptTemplate = (props: any) => {
-  const [printdetails, setPrintDetails] = useState({ });
+const IROReceiptTemplate = (props: any) => {
+  const [printDetails, setPrintDetails] = useState<IROrder[]>();
   console.log(props.Id, 'props');
   const Id = props.Id;
 
@@ -116,23 +116,19 @@ const IROReciptTemplate = (props: any) => {
         console.error(error);
       });
   }, []);
-  // console.log(printdetails.FRdate);
+  // console.log(printDetails?.FRdate);
 
-  // const sanctionedAmount = printdetails.sanctionedAmount;
-  // if (typeof sanctionedAmount === 'number' && Number.isFinite(sanctionedAmount)) {
-  //   const amountInWords = numberToWords.toWords(sanctionedAmount);
-  //   console.log(amountInWords);
-  //   console.log(amountInWords,"amountInWords");
-  // } else {
-  //   console.log('Invalid amount.');
-  // }
-  // global.amountInWords = amountInWords;
 
-  // const dateString = printdetails.FRdate;
-  // const date = new Date(dateString);
-  // const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
-  // const formattedDate = date.toLocaleDateString('en-GB', options);
+  const dateString = printDetails?.transferredDate;
+  const date = new Date(dateString);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
+  const formattedDate = date.toLocaleDateString('en-GB', options);
 
+  const raiseddateString = printDetails?.IROdate;
+  const raiseddate = new Date(raiseddateString);
+  const option = { day: 'numeric', month: 'long', year: 'numeric' as const };
+  const raisformattedDate = raiseddate.toLocaleDateString('en-GB', option);
+  console.log(raisformattedDate);
   return (
     <Document>
       <Page size="A4">
@@ -144,9 +140,9 @@ const IROReciptTemplate = (props: any) => {
         <div style={{ marginTop: 120 }}>
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No : </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{printDetails?.IROno} </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{raisformattedDate}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
         </div>
@@ -162,12 +158,12 @@ const IROReciptTemplate = (props: any) => {
         <div style={{ marginTop: 60 }}>
           <Text style={{ ...styles.h1 }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{printDetails?.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{printDetails?.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{printDetails?.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{printDetails?.sanctionedBank}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{printDetails?.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{printDetails?.transactionNumber}</Text>
           </View>
         </div>
 
@@ -197,14 +193,10 @@ const IROReciptTemplate = (props: any) => {
               </PDFTableHeader>
               <PDFTableRow>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  {/* {printdetails.mainCategory} */}
-                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>{printDetails?.mainCategory}</PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {/* {printdetails.sanctionedAmount} */}
-                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{printDetails?.requestAmount}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{printDetails?.sanctionedAmount}</PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>
             </PDFTable>
@@ -213,7 +205,7 @@ const IROReciptTemplate = (props: any) => {
 
         <div style={{ marginTop: 120 }}>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :{sanctionedAmountWords}</Text>
           </View>
         </div>
 
@@ -248,4 +240,6 @@ const IROReciptTemplate = (props: any) => {
   );
 };
 
-export default IROReciptTemplate;
+export default IROReceiptTemplate;
+
+
