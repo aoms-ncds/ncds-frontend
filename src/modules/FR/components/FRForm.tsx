@@ -119,7 +119,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     DivisionsServices.getDivisions()
       .then((res) => {
         console.log(res.data);
-        // setDivisions(res.data); TODO: Fix it
+        setDivisions(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -171,12 +171,16 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     });
     // Reset the form fields
     setNewParticular((particularDetails) => ({
-      ...particularDetails,
+      mainCategory: '',
       subCategory1: '',
       subCategory2: '',
       subCategory3: '',
       month: '',
       narration: '',
+      quantity: undefined,
+      unitPrice: undefined,
+      requestedAmount: undefined,
+      attachment: [],
     }));
 
 
@@ -896,7 +900,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
           .then((res)=>{
-            // console.log(res.data._id);
+            console.log(res.data._id);
             setNewParticular((particularDetails) => ({
               ...particularDetails,
               attachment: [...particularDetails.attachment, res.data],
