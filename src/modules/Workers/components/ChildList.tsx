@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Grid } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import DropdownButton from '../../../components/DropDownButton';
-
+import { Card, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import ChildrenServices from '../extras/ChildrenServices';
 import moment from 'moment';
@@ -21,46 +17,46 @@ const ChildListPage = () => {
       });
   }, []);
   const columns: GridColDef<Child>[] = [
-    {
-      field: '_manage',
-      headerName: 'Action',
-      width: 90,
-      headerAlign: 'center',
-      type: 'string',
-      renderCell: (props) => (
-        <DropdownButton
-          useIconButton={true}
-          id="child action"
-          primaryText="Actions"
-          key={'child action'}
-          items={[
-            {
-              id: 'View',
-              text: 'View',
-              component: Link,
-              to: '/workers/childedit/' + props.row._id,
-              icon: PreviewIcon,
-            },
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              to: '/workers/childedit/' + props.row._id,
-              icon: EditIcon,
-            },
-            {
-              id: 'delete',
-              text: 'Delete',
-              component: Link,
-              icon: DeleteIcon,
-              onClick: () => {
-                // removeWorker(props.row._id);
-              },
-            },
-          ]}
-        />
-      ),
-    },
+    // {
+    //   field: '_manage',
+    //   headerName: 'Action',
+    //   width: 90,
+    //   headerAlign: 'center',
+    //   type: 'string',
+    //   renderCell: (props) => (
+    //     <DropdownButton
+    //       useIconButton={true}
+    //       id="child action"
+    //       primaryText="Actions"
+    //       key={'child action'}
+    //       items={[
+    //         {
+    //           id: 'View',
+    //           text: 'View',
+    //           component: Link,
+    //           to: '/workers/child_edit/' + props.row._id,
+    //           icon: PreviewIcon,
+    //         },
+    //         {
+    //           id: 'edit',
+    //           text: 'Edit',
+    //           component: Link,
+    //           to: '/workers/child_edit/' + props.row._id,
+    //           icon: EditIcon,
+    //         },
+    //         {
+    //           id: 'delete',
+    //           text: 'Delete',
+    //           component: Link,
+    //           icon: DeleteIcon,
+    //           onClick: () => {
+    //             // removeWorker(props.row._id);
+    //           },
+    //         },
+    //       ]}
+    //     />
+    //   ),
+    // },
     { field: 'childCode', headerName: 'Child Code', width: 130, headerAlign: 'center', align: 'center' },
     { field: 'firstName', headerName: 'First Name', width: 120, headerAlign: 'center', align: 'center' },
     { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },

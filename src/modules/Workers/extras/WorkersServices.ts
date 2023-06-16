@@ -42,7 +42,7 @@ export default {
    */
   getAll: (conditions?: { status?: number }) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
-      workers.map((worker: any) => ({
+      workers.map((worker: IWorker) => ({
         ...worker,
         basicDetails: {
           ...worker.basicDetails,
@@ -51,11 +51,11 @@ export default {
         officialDetails: {
           ...worker.officialDetails,
           dateOfJoining: worker.officialDetails.dateOfJoining ? moment(worker.officialDetails.dateOfJoining) : undefined,
-          divisionHistory: {
-            ...worker.officialDetails.divisionHistory,
-            dateOfDivisionJoining: worker.officialDetails.divisionHistory.dateOfDivisionJoining ? moment(worker.officialDetails.divisionHistory.dateOfDivisionJoining) : undefined,
-            dateOfDivisionLeaving: worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving ? moment(worker.officialDetails.divisionHistory.dateOfPreviousDivisionLeaving) : undefined,
-          },
+          divisionHistory: worker.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+            ...divHis,
+            dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+            dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+          })),
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
@@ -95,7 +95,7 @@ export default {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       children: !data.children ?
         undefined :
-        data.children.map((child: any) => ({
+        data.children.map((child: Child) => ({
           ...child,
           dateOfBirth: child.dateOfBirth ? moment(child.dateOfBirth) : undefined,
           createdAt: moment(data.createdAt),

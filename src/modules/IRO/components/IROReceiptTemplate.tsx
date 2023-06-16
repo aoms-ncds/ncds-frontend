@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
-import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import IROServices from '../extras/IROServices';
-import dayjs from 'dayjs';
 
 Font.register({
   family: 'Oswald',
@@ -94,29 +93,30 @@ const styles = StyleSheet.create({
     padding: 3,
     height: 20,
   },
-  tabletext: {
+  tableText: {
     fontSize: 10,
   },
 });
 
-const IROReciptTemplate = (props: any) => {
-  const [printdetails, setPrintDetails] = useState({ });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const IROReceiptTemplate = (props: any) => {
+  // const [printDetails, setPrintDetails] = useState({ });
   console.log(props.Id, 'props');
   const Id = props.Id;
 
   useEffect(() => {
     IROServices.getPrintDetails(Id)
       .then((res) => {
-        setPrintDetails(res.data);
+        // setPrintDetails(res.data);
         console.log(res);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         console.error(error);
       });
   }, []);
-  // console.log(printdetails.FRdate);
+  // console.log(printDetails.FRdate);
 
-  // const sanctionedAmount = printdetails.sanctionedAmount;
+  // const sanctionedAmount = printDetails.sanctionedAmount;
   // if (typeof sanctionedAmount === 'number' && Number.isFinite(sanctionedAmount)) {
   //   const amountInWords = numberToWords.toWords(sanctionedAmount);
   //   console.log(amountInWords);
@@ -126,7 +126,7 @@ const IROReciptTemplate = (props: any) => {
   // }
   // global.amountInWords = amountInWords;
 
-  // const dateString = printdetails.FRdate;
+  // const dateString = printDetails.FRdate;
   // const date = new Date(dateString);
   // const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
   // const formattedDate = date.toLocaleDateString('en-GB', options);
@@ -196,12 +196,12 @@ const IROReciptTemplate = (props: any) => {
               <PDFTableRow>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  {/* {printdetails.mainCategory} */}
+                  {/* {printDetails.mainCategory} */}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}></PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {/* {printdetails.sanctionedAmount} */}
+                  {/* {printDetails.sanctionedAmount} */}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>
@@ -246,4 +246,4 @@ const IROReciptTemplate = (props: any) => {
   );
 };
 
-export default IROReciptTemplate;
+export default IROReceiptTemplate;
