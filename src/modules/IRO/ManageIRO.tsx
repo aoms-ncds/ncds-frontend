@@ -20,7 +20,7 @@ const ManageIRO = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
-    IRO:'',
+    // transactionId: '',
   });
   const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
   const [IROrder, setIROrder] = useState<IROrder[]>();
@@ -105,7 +105,7 @@ const ManageIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReciptTemplate Id={props.row._id} />,
+              document: <IROReciptTemplate RowData={props.row} />,
               fileName: 'IROReciept.pdf',
 
              

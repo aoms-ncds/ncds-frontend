@@ -181,7 +181,7 @@ const AddFRRequests = (props: FormComponentProps<CreatableFR>) => {
     DivisionsServices.getDivisions()
       .then((res) => {
         console.log(res.data);
-        // setDivisions(res.data); TODO: Fix it
+        setDivisions(res.data); 
       })
       .catch((res) => {
         console.log(res);

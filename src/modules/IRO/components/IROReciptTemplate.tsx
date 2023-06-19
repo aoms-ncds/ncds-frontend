@@ -3,8 +3,9 @@ import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../components/PD
 import { Page, Text, View, Document, StyleSheet, Font, Svg, Image } from '@react-pdf/renderer';
 import IROServices from '../extras/IROServices';
 import dayjs from 'dayjs';
+import moment from 'moment';
 
-const numberToWords = require("number-to-words");
+const numberToWords = require('number-to-words');
 
 Font.register({
   family: 'Oswald',
@@ -16,11 +17,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 140,
     height: 60,
-    width: 300,
+    width: 70,
     marginTop: 30,
   },
   title: {
-    marginTop: 80,
+    marginTop: 83,
     fontSize: 15,
     position: 'absolute',
     left: 190,
@@ -102,45 +103,25 @@ const styles = StyleSheet.create({
 });
 
 const IROReciptTemplate = (props: any) => {
-  const [printdetails, setPrintDetails] =  useState<IROrder[]>();
-  console.log(props.Id, 'props');
-  const Id = props.Id;
- 
-  useEffect(() => {
-    IROServices.getPrintDetails(Id)
-      .then((res: any) => {
-        setPrintDetails(res.data);
-        console.log(res);
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
-  }, []);
+  console.log(props.RowData, 'props');
 
+  const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
+  let sanctionedAmountWords = '';
 
+  if (typeof sanctionedAmount !== 'undefined') {
+    sanctionedAmountWords = numberToWords.toWords(sanctionedAmount);
+  } else {
+    sanctionedAmountWords = 'N/A';
+  }
 
+  const dateString = props.RowData?.transferredDate;
+  const formattedDate = moment(dateString).format('DD MMMM YYYY');
 
-  const sanctionedAmount = printdetails && printdetails.sanctionedAmount;
-let sanctionedAmountWords = "";
+  // const raiseddateString = printdetails?.IROdate;
+  // const raiseddate = new Date(raiseddateString);
+  // const option = { day: 'numeric', month: 'long', year: 'numeric' as const };
+  // const raisformattedDate = raiseddate.toLocaleDateString('en-GB', option);
 
-if (typeof sanctionedAmount !== "undefined") {
-  sanctionedAmountWords = numberToWords.toWords(sanctionedAmount);
-} else {
-  // Handle the case when the sanctioned amount is undefined
-  sanctionedAmountWords = "N/A"; // Or any appropriate default value
-}
-
-
-    const dateString = printdetails?.transferredDate;
-  const date = new Date(dateString);
-  const options = { day: 'numeric', month: 'long', year: 'numeric' as const };
-  const formattedDate = date.toLocaleDateString('en-GB', options);
-
-    const raiseddateString = printdetails?.IROdate;
-  const raiseddate = new Date(raiseddateString);
-  const option = { day: 'numeric', month: 'long', year: 'numeric' as const };
-  const raisformattedDate = raiseddate.toLocaleDateString('en-GB', option);
-console.log(raisformattedDate)
   return (
     <Document>
       <Page size="A4">
@@ -152,8 +133,8 @@ console.log(raisformattedDate)
         <div style={{ marginTop: 120 }}>
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{printdetails?.IROno} </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{raisformattedDate}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.RowData?.IROno} </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.RowData?.IROdate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
@@ -162,7 +143,7 @@ console.log(raisformattedDate)
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.h1 }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name : </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.RowData?.divisionName}</Text>
             <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :</Text>
           </View>
         </div>
@@ -170,12 +151,12 @@ console.log(raisformattedDate)
         <div style={{ marginTop: 60 }}>
           <Text style={{ ...styles.h1 }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{printdetails?.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{printdetails?.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{printdetails?.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{printdetails?.sanctionedBank}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{printdetails?.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{printdetails?.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.RowData?.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.RowData?.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.RowData?.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.RowData?.sanctionedBank}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.RowData?.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.RowData?.transactionNumber}</Text>
           </View>
         </div>
 
@@ -204,11 +185,21 @@ console.log(raisformattedDate)
                 </PDFCell>
               </PDFTableHeader>
               <PDFTableRow>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>{printdetails?.mainCategory}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}></PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{printdetails?.requestAmount}</PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>{printdetails?.sanctionedAmount}</PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
+                  1
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
+                  {props.RowData?.mainCategory}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+                  {props.RowData?.narration}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                  {props.RowData?.requestAmount}
+                </PDFCell>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                  {props.RowData?.sanctionedAmount}
+                </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>
             </PDFTable>
@@ -253,5 +244,3 @@ console.log(raisformattedDate)
 };
 
 export default IROReciptTemplate;
-
-
