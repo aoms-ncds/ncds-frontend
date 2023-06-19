@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import moment from 'moment';
-import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
+import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-// import { resolve } from 'path';
-// import { rejects } from 'assert';
+import { resolve } from 'path';
+import { rejects } from 'assert';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
@@ -31,11 +31,11 @@ export default {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  saveRelease: (IROrelease: Partial<IROrder>) =>
+  saveRelease: (iroID: string, IROrelease: Partial<IROrder>) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
-          .post('/iro', {
+          .post(`/iro/releaseAmount/${iroID}`, {
             ...IROrelease,
             IROrelease: {
               modeOfPayment: IROrelease.modeOfPayment,
