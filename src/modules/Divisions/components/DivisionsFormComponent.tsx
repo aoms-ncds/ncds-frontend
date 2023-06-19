@@ -19,7 +19,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label=" Division Id" value={props.value.divisionId} onChange={(e) => props.onChange({ ...props.value, divisionId: e.target.value })} fullWidth />
+          <TextField label=" Division Id" value={props.value.divisionId}fullWidth />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
