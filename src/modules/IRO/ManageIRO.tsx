@@ -14,6 +14,7 @@ import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import IROServices from './extras/IROServices';
 
+
 const ManageIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -101,8 +102,8 @@ const ManageIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReciptTemplate RowData={props.row} />,
-              fileName: 'IROReciept.pdf',
+              document: <IROReceiptTemplate RowData={props.row} />,
+              fileName: 'IROReceipt.pdf',
 
 
             },

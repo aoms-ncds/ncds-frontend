@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
-import IROServices from '../extras/IROServices';
-import dayjs from 'dayjs';
 import moment from 'moment';
 
-const numberToWords = require('number-to-words');
+import * as numberToWords from 'number-to-words';
 
 Font.register({
   family: 'Oswald',
@@ -102,7 +99,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const IROReciptTemplate = (props: any) => {
+const IROReceiptTemplate = (props: any) => {
   console.log(props.RowData, 'props');
 
   const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
@@ -243,4 +240,4 @@ const IROReciptTemplate = (props: any) => {
   );
 };
 
-export default IROReciptTemplate;
+export default IROReceiptTemplate;
