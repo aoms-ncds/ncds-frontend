@@ -8,6 +8,7 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
+import e from 'express';
 
 const DivisionDetailsPage = () => {
   const { divisionIDs, editID } = useParams();
@@ -15,13 +16,15 @@ const DivisionDetailsPage = () => {
   const [activeStep, setactiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
   const navigate = useNavigate();
-
-
-  const AddDivision = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  
+  
+  const AddDivision = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("ADDFUNCITON")
+    // e.preventDefault();
+    // event.preventDefault();
     DivisionsServices.create(divisionDetails)
       .then((res) => {
-        console.log(res);
+        console.log(res, 'ress');
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -34,6 +37,7 @@ const DivisionDetailsPage = () => {
         });
       });
   };
+  console.log("Dd");
   const EditDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (editID) {
@@ -98,6 +102,7 @@ const DivisionDetailsPage = () => {
     createdAt: moment(),
     updatedAt: moment(),
   });
+  console.log(divisionDetails, 'divisionDetails');
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
@@ -207,10 +212,13 @@ const DivisionDetailsPage = () => {
             </form>
           )}
           {activeStep == 2 && (
-            <form onSubmit={() => {
-              (action === 'add' ? AddDivision : EditDivision);
-              navigate('/hr/manage');
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                action === 'add' ? AddDivision(e): EditDivision(e);
+                navigate('/hr/manage');
+              }}
+            >
               <Grid container spacing={2}>
                 <BankDetailsForm
                   value={divisionDetails?.FCRABankDetails}

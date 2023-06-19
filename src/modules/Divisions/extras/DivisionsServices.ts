@@ -17,6 +17,7 @@ export default {
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
   getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { divisionId }, headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
+    console.log("Calll")
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         axios
