@@ -11,10 +11,10 @@ Font.register({
 const styles = StyleSheet.create({
   image: {
     position: 'absolute',
-    left: 140,
+    left: 270,
     height: 60,
-    width: 300,
-    marginTop: 30,
+    width: 40,
+    marginTop: 20,
   },
   title: {
     marginTop: 80,
