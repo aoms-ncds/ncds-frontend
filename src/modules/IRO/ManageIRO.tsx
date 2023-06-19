@@ -101,8 +101,8 @@ const ManageIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReceiptTemplate Id={props.row._id} />,
-              fileName: 'IROReceipt.pdf',
+              document: <IROReciptTemplate RowData={props.row} />,
+              fileName: 'IROReciept.pdf',
 
 
             },

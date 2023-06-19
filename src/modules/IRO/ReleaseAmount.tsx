@@ -19,8 +19,8 @@ const ReleaseAmount = () => {
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
     console.log(IROrelease, 'IROrelease');
     e.preventDefault();
-    if (IROrelease) {
-      IROServices.saveRelease(IROrelease).then((res) => {
+    if (iroID && IROrelease) {
+      IROServices.saveRelease(iroID, IROrelease).then((res) => {
         console.log(res.data);
         navigate('/iro/');
       });

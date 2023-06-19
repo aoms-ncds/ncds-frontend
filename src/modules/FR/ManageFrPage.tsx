@@ -140,7 +140,7 @@ const ManageFrPage = () => {
       <p> {props.row.date}</p>
     ), width: 80, align: 'center', headerAlign: 'center' },
     { field: 'divisionName', headerName: 'Division Name', renderCell: (props: any) => (
-      <p> {props.row.purposeDivision?.DivisionDetails.name}</p>
+      <p> {props.row.purposeDivision?.details.name}</p>
     ), width: 130, align: 'center', headerAlign: 'center' },
     { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
       <p> {props.row.purposeSubdivision?.name}</p>

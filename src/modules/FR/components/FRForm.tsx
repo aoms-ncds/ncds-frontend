@@ -53,10 +53,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
-  const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
+  const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1>();
-  const [selectedSubCategory2, setselectedSubCategory2] = useState<SubCategory2>();
+  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2>();
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
@@ -84,7 +84,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     setShowAddParticulardialog(false);
   };
   useEffect(() => {
-    const selectedMainCategoryObj = mainCategorys?.find((category) => category.name === props.value.mainCategory);
+    const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
     FRServices.getPurposes()
       .then((res) => {
@@ -133,7 +133,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       });
     FRServices.getMainCategory()
       .then((res) => {
-        setMainCategorys(res.data);
+        setMainCategories(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -362,7 +362,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <Autocomplete
                   value={selectedMainCategory}
-                  options={mainCategorys ?? []}
+                  options={mainCategories ?? []}
                   getOptionLabel={(mainCategory) => mainCategory.name}
                   onChange={(e, selectedMainCategory) => {
                     if (selectedMainCategory) {
@@ -504,7 +504,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 >
                   <PDFDownloadLink
                     document={<FRReceiptTemplate rowData={props.value} />}
-                    fileName="FRReciept.pdf"
+                    fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >
                    Print FR
@@ -674,7 +674,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           ...particularDetails,
                           subCategory2: selectedSubCategory2.name,
                         }));
-                        setselectedSubCategory2(selectedSubCategory2);
+                        setSelectedSubCategory2(selectedSubCategory2);
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}

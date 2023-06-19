@@ -4,6 +4,7 @@ export default {};
 
 declare global {
   interface IROrder {
+    sanctionedAmount: IROrder | undefined;
     map(arg0: (order: any) => void): unknown;
     _id: string;
     IROno: string;
