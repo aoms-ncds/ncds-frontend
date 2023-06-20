@@ -16,7 +16,7 @@ const HomePage = () => {
           granted={(
             <>
               <Grid item xs={12} lg={6}>
-                Success!
+              
               </Grid>
             </>
           )}

@@ -1,11 +1,14 @@
-import { Alert, AlertTitle, Card, CardContent, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { Alert, AlertTitle, Card, CardContent, Grid, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import FRServices from '../../FR/extras/FRServices';
 import IROServices from '../../IRO/extras/IROServices';
 import StaffServices from '../../HR/extras/StaffServices';
-
+import FRCountCard from '../../FR/components/FRCountCard';
+import CommonPageLayout from '../../../components/CommonPageLayout';
+import DashboardCardButton from '../../../components/DashboardCardButton';
+import Badge from '@mui/material/Badge';
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [divisionsCount, setDivisionsCount] = useState<string | null>(null);
@@ -70,49 +73,25 @@ const MinimalModuleDataAnalytics = () => {
         setIroCount('Unable to load!');
       });
   }, []);
-  return errors?.length > 5 ? (
-    <Alert color="error">
-      <AlertTitle>
-        <b>Something went wrong!</b>
-      </AlertTitle>
-      Unable to show analytics. <br />
-      {Array.from(new Set(errors)).join(',')}
-    </Alert>
-  ) : (
-    <Card>
-      {errors.length > 0 && (
-        <CardContent>
-          <Alert color="error">
-            <AlertTitle>
-              <b>Something went wrong!</b>
-            </AlertTitle>
-            {Array.from(new Set(errors)).join(',')}
-          </Alert>
-        </CardContent>
-      )}
-      <List>
-        <ListItemButton>
-          <ListItemText primary="No. of Divisions:" />
-          <Typography variant="body1">{divisionsCount}</Typography>
-        </ListItemButton>
-        <ListItemButton>
-          <ListItemText primary="No. of Staffs:" />
-          <Typography variant="body1">{staffsCount}</Typography>
-        </ListItemButton>
-        <ListItemButton>
-          <ListItemText primary="No. of Workers:" />
-          <Typography variant="body1">{workersCount}</Typography>
-        </ListItemButton>
-        <ListItemButton>
-          <ListItemText primary="FR:" />
-          <Typography variant="body1">{frCount}</Typography>
-        </ListItemButton>
-        <ListItemButton>
-          <ListItemText primary="IRO:" />
-          <Typography variant="body1">{iroCount}</Typography>
-        </ListItemButton>
-      </List>
-    </Card>
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={6} md={3} xl={4}>
+        <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()}   color="#003049" />
+      </Grid>
+      <Grid item xs={6} md={3} xl={4}>
+        <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#de2828" />
+      </Grid>
+      <Grid item xs={6} md={3} xl={4}>
+        <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#f77f00" />
+      </Grid>
+      <Grid item xs={6} md={3} xl={4}>
+        <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#fcbf49" />
+      </Grid>
+      <Grid item xs={6} md={3} xl={4}>
+        <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#3cb043" />
+      </Grid>
+    </Grid>
   );
 };
 
