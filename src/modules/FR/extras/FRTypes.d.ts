@@ -13,7 +13,7 @@ declare global{
     requestAmount: string;
     lastUpdateDate: Moment;
     sanction: string;
-    Particulars:Particular[];
+    particulars:Particular[];
   }
   interface FR extends MongooseDocument {
     _id: string;
@@ -28,7 +28,7 @@ declare global{
     requestedAmount: number;
     mainCategory:string;
     sanctionedAmount: number;
-    Particulars?:Particular[];
+    particulars?:Particular[];
     sanctionedAsPer?:string;
     sanctionedBank?:string;
     status?:string;
@@ -38,7 +38,7 @@ declare global{
     FRno?: FR['FRno'];
     purpose?: FR['purpose'];
     sanctionedAmount?: FR['sanctionedAmount'];
-    Particulars?: FR['Particulars'];
+    particulars?: FR['particulars'];
     requestedAmount?: FR['requestedAmount'];
     mainCategory?:FR['mainCategory'];
     purposeWorker?: FR['purposeWorker'];

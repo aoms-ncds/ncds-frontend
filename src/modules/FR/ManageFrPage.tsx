@@ -81,11 +81,11 @@ const ManageFrPage = () => {
               icon: EditIcon,
             },
             {
-              id: 'sendbackDivision',
+              id: 'sendBackDivision',
               text: 'Send Back to Division',
               onClick: () => {
                 enqueueSnackbar({
-                  message: 'Sent back to divison',
+                  message: 'Sent back to division',
                   variant: 'success',
                 });
               },
@@ -115,7 +115,7 @@ const ManageFrPage = () => {
               text: 'Print FR',
               component: PDFDownloadLink,
               document: <FRReceiptTemplate rowData={props.row}/>,
-              fileName: 'FRReciept.pdf',
+              fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
             {
@@ -155,7 +155,7 @@ const ManageFrPage = () => {
       align: 'center', headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as FRrequest;
-        const particularAmount = frRequest.Particulars.reduce(
+        const particularAmount = frRequest.particulars?.reduce(
           (total, particular) => total + Number(particular.requestedAmount),
           0,
         );

@@ -28,6 +28,7 @@ import React, { useEffect, useRef, useState } from 'react';
 interface FileUploaderProps {
   id?: string;
   title: string;
+  action?: 'add'|'view';
   types: FileObjectType[]; // pass the type of file you need to upload
   // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
   limits:{
@@ -62,6 +63,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [dragged, setDragged] = useState(false);
 
+  const [action, setAction] = useState<'add'|'view'>('add');
   const uploadFile = (files: FileList) => {
     if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
       // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
@@ -176,6 +178,14 @@ const FileUploader = (props: FileUploaderProps) => {
   };
 
   useEffect(() => {
+    if (props.action) {
+      setAction(props.action);
+    } else {
+      setAction('add');
+    }
+  }, []);
+
+  useEffect(() => {
     if (props.open) {
       setFileObjects(props.getFiles);
     } else {
@@ -192,9 +202,13 @@ const FileUploader = (props: FileUploaderProps) => {
       <Box
         onDragOver={(event) => {
           event.preventDefault();
-          setDragged(true);
+          if (action=='add') {
+            setDragged(true);
+          }
         }}
-        onDragLeave={() => setDragged(false)}
+        onDragLeave={() => {
+          if (action=='add') setDragged(false);
+        }}
       >
         <DialogTitle>{props.title}</DialogTitle>
         <Divider />
@@ -203,8 +217,10 @@ const FileUploader = (props: FileUploaderProps) => {
           onDragStart={(event) => event.preventDefault()}
           onDrop={(event) => {
             event.preventDefault();
-            uploadFile(event.dataTransfer.files);
-            setDragged(false);
+            if (action=='add') {
+              uploadFile(event.dataTransfer.files);
+              setDragged(false);
+            }
           }}
         >
           <Fade in={dragged}>
@@ -368,7 +384,7 @@ const FileUploader = (props: FileUploaderProps) => {
           {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
             <>
               <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-              Drag and Drop here
+                {action=='add'? 'Drag and Drop here':'No files Found'}
               </Typography>
             </>
           )}
@@ -378,25 +394,29 @@ const FileUploader = (props: FileUploaderProps) => {
             Close
           </Button>
           &nbsp;
-          <input
-            type="file"
-            id={props.id ?? 'file-input'}
-            accept={props.types.join(',')}
-            value=""
-            onChange={(event) => {
-              if (event.target.files) {
-                uploadFile(event.target.files);
-              }
-            }}
-            style={{ display: 'none' }}
-            ref={inputFileField}
-            multiple
-          />
-          <label htmlFor={props.id ?? 'file-input'}>
-            <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
+          {action=='add'&&(
+            <>
+              <input
+                type="file"
+                id={props.id ?? 'file-input'}
+                accept={props.types.join(',')}
+                value=""
+                onChange={(event) => {
+                  if (event.target.files) {
+                    uploadFile(event.target.files);
+                  }
+                }}
+                style={{ display: 'none' }}
+                ref={inputFileField}
+                multiple
+              />
+              <label htmlFor={props.id ?? 'file-input'}>
+                <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
               Choose file
-            </Button>
-          </label>
+                </Button>
+              </label>
+            </>
+          ) }
         </DialogActions>
       </Box>
     </Dialog>

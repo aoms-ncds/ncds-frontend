@@ -113,7 +113,7 @@ const FRReceiptTemplate = (props:any) => {
                 Sl No
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                Financial Requisition Particulars
+                Financial Requisition particulars
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                 Sub Division Name
@@ -131,7 +131,7 @@ const FRReceiptTemplate = (props:any) => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {rowData.Particulars && rowData.Particulars.map((item: Particular, index: number) => (
+            {rowData.particulars && rowData.particulars.map((item: Particular, index: number) => (
               <PDFTableRow key={index}>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
                   {String(index + 1)}

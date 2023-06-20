@@ -4,7 +4,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 
 const FRParticularList = () => {
-  const [Particulars, setParticulars] = useState<Particular[]>();
+  const [particulars, setParticulars] = useState<Particular[]>();
   useEffect(() => {
     FRServices.getParticulars()
       .then((res) => {
@@ -23,15 +23,15 @@ const FRParticularList = () => {
             <TableRow>
               <TableCell></TableCell>
               <TableCell align="center">SI NO</TableCell>
-              <TableCell align="center">Particulars</TableCell>
+              <TableCell align="center">particulars</TableCell>
               <TableCell align="center">Quantity</TableCell>
               <TableCell align="center">Month</TableCell>
               <TableCell align="center">Required Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Particulars &&
-              Particulars.map((item) => (
+            {particulars &&
+              particulars.map((item) => (
                 <TableRow key={item._id}>
                   <TableCell component="th">
                     <DeleteIcon />
