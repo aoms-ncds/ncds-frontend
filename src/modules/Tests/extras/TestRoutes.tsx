@@ -33,7 +33,7 @@ const testsPageRoutes: ModuleRoute = {
       showInDrawer: false,
     },
     {
-      title: 'FR Report',
+      title: 'IRO Report',
       path: '/pdfview',
       element: <Pdfview />,
       private: true,
