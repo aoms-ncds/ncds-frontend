@@ -16,10 +16,10 @@ const DivisionDetailsPage = () => {
   const [activeStep, setactiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
   const navigate = useNavigate();
-  
-  
-  const AddDivision = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("ADDFUNCITON")
+
+
+  const addDivision = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('ADDFUNCITON');
     // e.preventDefault();
     // event.preventDefault();
     DivisionsServices.create(divisionDetails)
@@ -37,8 +37,8 @@ const DivisionDetailsPage = () => {
         });
       });
   };
-  console.log("Dd");
-  const EditDivision = (event: React.FormEvent<HTMLFormElement>) => {
+  console.log('Dd');
+  const editDivision = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (editID) {
       DivisionsServices.editDivision(editID, divisionDetails)
@@ -215,7 +215,7 @@ const DivisionDetailsPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                action === 'add' ? AddDivision(e): EditDivision(e);
+                action === 'add' ? addDivision(e): editDivision(e);
                 navigate('/hr/manage');
               }}
             >
