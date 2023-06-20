@@ -60,7 +60,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [Particulars, setParticulars] = useState<Particular[]>([]);
+  const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
     subCategory1: '',
@@ -72,7 +72,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
-  const [staff, setStaff] = useState<Staff[]>();
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -83,6 +84,44 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const handleClose = () => {
     setShowAddParticulardialog(false);
   };
+
+  useEffect(() => {
+    if (props.value.purpose === 'Coordinator') {
+      StaffServices.getAll()
+      .then((res) => {
+        setCoordinators(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    } else if ( props.value.purpose === 'Worker') {
+      WorkersServices.getAll()
+      .then((res) => {
+        setWorkers(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    } else if (props.value.purpose === 'Division') {
+      DivisionsServices.getDivisions()
+      .then((res) => {
+        console.log(res.data);
+        setDivisions(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    } else if (props.value.purpose === 'Subdivision') {
+      DivisionsServices.getSubDivisions()
+      .then((res) => {
+        setSubDivisions(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    }
+  }, [props.value.purpose]);
+
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
@@ -102,35 +141,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    StaffServices.getAll()
-      .then((res) => {
-        setCoordinators(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    WorkersServices.getAll()
-      .then((res) => {
-        setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    DivisionsServices.getDivisions()
-      .then((res) => {
-        console.log(res.data);
-        setDivisions(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    DivisionsServices.getSubDivisions()
-      .then((res) => {
-        setSubDivisions(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
     FRServices.getMainCategory()
       .then((res) => {
         setMainCategories(res.data);
@@ -138,17 +148,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    StaffServices.getAll()
-      .then((res) => {
-        // console.log(res);
-        setStaff(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    if (props.value.Particulars) {
-      setParticulars(props.value.Particulars);
-      console.log(Particulars);
+
+    if (props.value.particulars) {
+      setParticulars(props.value.particulars);
+      console.log(particulars);
     }
     // FRServices.getParticulars()
     //   .then((res) => {
@@ -158,20 +161,20 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [props.value.Particulars]);
+  }, [props.value.particulars]);
   const addParticulars = (e:any) => {
     e.preventDefault();
     handleClose();
-
-    const newParticulars: Particular[] = [...Particulars, newParticular as Particular];
+    const newParticulars: Particular[] = [...particulars, newParticular as Particular];
     setParticulars(newParticulars);
+    console.log(particulars, '+++');
     props.onChange({
       ...props.value,
-      Particulars: newParticulars,
+      particulars: newParticulars,
     });
     // Reset the form fields
     setNewParticular((particularDetails) => ({
-      mainCategory: '',
+      ...particularDetails,
       subCategory1: '',
       subCategory2: '',
       subCategory3: '',
@@ -189,13 +192,13 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const deleteParticular = (particularId: string | undefined, index: number) => {
     if (!particularId) {
       // Delete by index if the particularId is not available
-      const updatedParticulars = Particulars.filter((_item, i) => i !== index);
+      const updatedParticulars = particulars.filter((_item, i) => i !== index);
       setParticulars(updatedParticulars);
       return;
     }
 
     // Perform delete logic
-    const updatedParticulars = Particulars.filter((item) => item._id !== particularId);
+    const updatedParticulars = particulars.filter((item) => item._id !== particularId);
     setParticulars(updatedParticulars);
     FRServices.deleteParticulars(particularId)
       .then((res) => {
@@ -212,7 +215,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         });
       });
   };
-  const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
     <div>
       <Container>
@@ -242,7 +245,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
-                  value={props.value.purpose || ''}
+                  value={props.value.purpose?? null}
                   options={purposes ?? []}
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedPurpose) => {
@@ -357,7 +360,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <Typography>Particulars</Typography> <br />
+                <Typography>particulars</Typography> <br />
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
@@ -382,8 +385,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
-                <Button variant="contained" onClick={() => setShowAddParticulardialog(true)}>
-                  Add Particulars
+                <Button variant="contained" onClick={() =>setShowAddParticulardialog(true)}
+                  disabled={!selectedMainCategory}>
+                                    Add particulars
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -393,21 +397,24 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       <TableRow>
                         <TableCell></TableCell>
                         <TableCell align="center">SI NO</TableCell>
-                        <TableCell align="center">Particulars</TableCell>
+                        <TableCell align="center">particulars</TableCell>
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {Particulars &&
-                        Particulars.map((item, index) => (
+                      {particulars &&
+                        particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th">
                               <IconButton>
                                 <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
                               </IconButton>
-                              <IconButton onClick={() => setShowFileUploader(true)}>
+                              <IconButton onClick={() => {
+                                setViewFileUploader(true);
+                                setAttachments(item.attachment);
+                              }}>
                                 <FileIcon />
                               </IconButton>
                             </TableCell>
@@ -710,6 +717,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         quantity: Number(e.target.value),
                       }))
                     }
+                    required
                     fullWidth
                   />
                 </Grid>
@@ -898,7 +906,57 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         // getFiles={TestServices.getBills}
         getFiles={newParticular.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name)
+          .then( (res)=>{
+            console.log(res.data._id);
+
+            setNewParticular(() => ({
+              ...newParticular,
+              attachment: [...newParticular.attachment, res.data],
+            }));
+            return res;
+          });
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            attachment: particularDetails.attachment.map((file) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            attachment: particularDetails.attachment.filter((file)=>file._id!==fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1*MB,
+          maxItemCount: 3,
+          maxTotalSize: 3*MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action='view'
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachments}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name)
           .then((res)=>{
             console.log(res.data._id);
             setNewParticular((particularDetails) => ({
@@ -926,6 +984,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
+
     </div>
   );
 };

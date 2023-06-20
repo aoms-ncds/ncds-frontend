@@ -50,7 +50,7 @@ export default {
     }),
   ),
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
-    axios.post('/fr/particulars', particularData, { headers: { ...getAuthHeader() } }),
+    axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
   getById: (fRId: string) =>
     getStandardResponse<FR>(
@@ -71,24 +71,25 @@ export default {
         axios
           .post('/fr/', {
             ...frRequest,
-            Particulars: [],
+            particulars: [],
           }, { headers: { ...getAuthHeader() } })
           .then(async (createdFR) => {
             // Create partcularsisions
             try {
-              if (frRequest.Particulars) {
-                for (let i = 0; i < frRequest.Particulars.length; i++) {
-                  const partculars = frRequest.Particulars[i];
+              if (frRequest.particulars) {
+                for (let i = 0; i < frRequest.particulars.length; i++) {
+                  const particulars = frRequest.particulars[i];
                   await axios.post('/fr/particulars/', {
                     FR: createdFR.data.data._id,
-                    mainCategory: partculars.mainCategory,
-                    subCategory1: partculars.subCategory1,
-                    subCategory2: partculars.subCategory2,
-                    subCategory3: partculars.subCategory3,
-                    quantity: partculars.quantity,
-                    month: partculars.month,
-                    requestedAmount: partculars.requestedAmount,
-                    narration: partculars.narration,
+                    mainCategory: particulars.mainCategory,
+                    subCategory1: particulars.subCategory1,
+                    subCategory2: particulars.subCategory2,
+                    subCategory3: particulars.subCategory3,
+                    quantity: particulars.quantity,
+                    month: particulars.month,
+                    requestedAmount: particulars.requestedAmount,
+                    narration: particulars.narration,
+                    attachment: particulars.attachment,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }
@@ -156,13 +157,13 @@ export default {
         axios
           .patch('/fr/' + frID, {
             ...frRequest,
-            Particulars: [],
+            particulars: [],
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
             try {
-              if (frRequest.Particulars) {
-                for (let i = 0; i < frRequest.Particulars.length; i++) {
-                  const partculars = frRequest.Particulars[i];
+              if (frRequest.particulars) {
+                for (let i = 0; i < frRequest.particulars.length; i++) {
+                  const partculars = frRequest.particulars[i];
                   if (partculars._id) {
                     await axios.patch(`/fr/particulars/${partculars._id}`, {
                       FR: updatedFR.data.data._id,

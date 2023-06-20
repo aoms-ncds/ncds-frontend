@@ -54,7 +54,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [Particulars, setParticulars] = useState<Particular[]>([]);
+  const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
     subCategory1: '',
@@ -142,9 +142,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
       .catch((res) => {
         console.log(res);
       });
-    if (props.value.Particulars) {
-      setParticulars(props.value.Particulars);
-      console.log(Particulars);
+    if (props.value.particulars) {
+      setParticulars(props.value.particulars);
+      console.log(particulars);
     }
     // FRServices.getParticulars()
     //   .then((res) => {
@@ -154,10 +154,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [props.value.Particulars]);
+  }, [props.value.particulars]);
   const addParticulars = () => {
     const snackbarId = enqueueSnackbar({
-      message: 'Adding Particulars',
+      message: 'Adding particulars',
       variant: 'info',
     });
 
@@ -183,7 +183,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
         }));
         props.onChange({
           ...props.value,
-          Particulars: [...(props.value.Particulars || []), res.data],
+          particulars: [...(props.value.particulars || []), res.data],
         });
       })
       .catch((err) => {
@@ -201,7 +201,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   };
   const deleteParticular = (particularid: string) => {
     // Perform delete logic
-    const updatedParticulars = Particulars.filter((item) => item._id !== particularid);
+    const updatedParticulars = particulars.filter((item) => item._id !== particularid);
     setParticulars(updatedParticulars);
     FRServices.deleteParticulars(particularid)
       .then((res) => {
@@ -219,7 +219,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
       });
     // Implement your delete logic here, such as making an API request
   };
-  const totalRequestedAmount = Particulars && Particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus=FRLifeCycleStates.getStatusNameByCodeFR(Number(props.value.status));
   return (
     <div>
@@ -381,15 +381,15 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         <TableCell></TableCell>
                         <TableCell align="center">SI NO</TableCell>
                         <TableCell align="center">Main Category</TableCell>
-                        <TableCell align="center">Particulars</TableCell>
+                        <TableCell align="center">particulars</TableCell>
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {Particulars &&
-                        Particulars.map((item, index) => (
+                      {particulars &&
+                        particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell align="center"></TableCell>
                             <TableCell align="center">{index+1}</TableCell>
