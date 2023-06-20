@@ -17,11 +17,11 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           <TextField label="Division Name" value={props.value.name} onChange={(e) => props.onChange({ ...props.value, name: e.target.value })} fullWidth required />
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label=" Division Id" value={props.value.divisionId} fullWidth />
+          <TextField label=" Division Id" value={props.value.divisionId}fullWidth />
         </FormControl>
-      </Grid>
+      </Grid> */}
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <TextField label=" Contact Number" value={props.value.contactNumber} onChange={(e) => props.onChange({ ...props.value, contactNumber: e.target.value })} fullWidth />
