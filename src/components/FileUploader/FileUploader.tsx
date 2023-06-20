@@ -38,10 +38,10 @@ interface FileUploaderProps {
   };
   open: boolean;
   onClose: () => void;
-  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
+  uploadFile?: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
   getFiles: FileObject[];
-  renameFile: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
-  deleteFile: (fileID: string) => Promise<StandardResponse<void>>;
+  renameFile?: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
+  deleteFile?: (fileID: string) => Promise<StandardResponse<void>>;
 }
 interface UploadingFile {
   tempID: string;
@@ -99,6 +99,7 @@ const FileUploader = (props: FileUploaderProps) => {
           },
         ]);
         props
+        .uploadFile && props
           .uploadFile(droppedFile, (progress) => {
             setUploadingFiles((_files) => _files.map((_file) => (_file.tempID === tempID ? { ..._file, progress } : _file)));
             // setUploadingFiles((files) => {
@@ -302,6 +303,7 @@ const FileUploader = (props: FileUploaderProps) => {
                                   }),
                               );
                               props
+                                .renameFile && props
                                 .renameFile(file._id, e.target.value)
                                 .then((res) => {
                                 })
@@ -333,12 +335,12 @@ const FileUploader = (props: FileUploaderProps) => {
                           <FileDownloadIcon />
                         </IconButton>
                       )}
-
-                      <IconButton
-                        sx={{ ml: 'auto' }}
-                        color="error"
-                        onClick={() => {
-                          props
+                      { props.deleteFile &&(
+                        <IconButton
+                          sx={{ ml: 'auto' }}
+                          color="error"
+                          onClick={() => {
+                            props.deleteFile && props
                             .deleteFile(file._id)
                             .then(() => {
                               setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== file._id ?? null)));
@@ -346,10 +348,10 @@ const FileUploader = (props: FileUploaderProps) => {
                             .catch((error) => {
                               console.log({ error });
                             });
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>)}
                     </CardActions>
                   </Card>
                 </Grid>
