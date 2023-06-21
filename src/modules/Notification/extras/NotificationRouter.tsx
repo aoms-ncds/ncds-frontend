@@ -12,6 +12,12 @@ const notificationPageRoutes: ModuleRoute = {
       showInDrawer: true,
 
     },
+    // {
+    //   title: 'Message',
+    //   path: '/:_id',
+    //   private: true,
+    //   element: <MessageContent />,
+    // },
 
   ],
 };

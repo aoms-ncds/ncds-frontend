@@ -44,6 +44,7 @@ export default {
     getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
       workers.map((worker: IWorker) => ({
         ...worker,
+        tokens: [],
         basicDetails: {
           ...worker.basicDetails,
           dateOfBirth: moment(worker.basicDetails.dateOfBirth),
@@ -70,6 +71,7 @@ export default {
   getById: (workerId: string) =>
     getStandardResponse<IWorker | null>(axios.get(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
+      tokens: [],
       basicDetails: {
         ...data.basicDetails,
         dateOfBirth: moment(data.basicDetails.dateOfBirth),

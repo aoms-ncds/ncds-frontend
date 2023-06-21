@@ -14,6 +14,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
     kind: 'worker',
+    tokens: [],
     basicDetails: {
       firstName: '',
       lastName: '',

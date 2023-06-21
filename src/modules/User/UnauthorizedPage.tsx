@@ -31,14 +31,15 @@ const UnauthorizedPage = (props: UnauthorizedPageProps) => {
       >
         You don&apos;t have permission to access this page!
       </Typography>
-      <center>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
         <Typography
           variant="caption"
           sx={{ textAlign: 'center', color: 'red' }}
         >
           <b>Missing permissions:</b> &quot;{props.missingPermissions.join('", "').replaceAll('_', ' ')}&quot;
         </Typography>
-      </center>
+      </div>
+
     </CommonPageLayout>
   );
 };

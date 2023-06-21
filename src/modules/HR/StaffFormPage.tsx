@@ -14,6 +14,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
 
   const [staff, setStaff] = useState<CreatableStaff>({
     kind: 'staff',
+    tokens: [],
     basicDetails: {
       firstName: '',
       lastName: '',
@@ -54,6 +55,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
           if (res.data) {
             setStaff({
               ...res.data,
+              tokens: [],
               basicDetails: {
                 ...res.data.basicDetails,
                 aadhaar: undefined,
