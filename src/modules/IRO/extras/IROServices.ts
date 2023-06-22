@@ -38,16 +38,16 @@ export default {
           .post(`/iro/releaseAmount/${iroID}`, {
             ...IROrelease,
             IROrelease: {
-              modeOfPayment: IROrelease.modeOfPayment,
-              releaseAmount: IROrelease.releaseAmount,
-              transactionNumber: IROrelease.transactionNumber,
-              transferredAmount: IROrelease.transferredAmount,
-              IFSCCode: IROrelease.IFSCCode,
-              accountNumber: IROrelease.accountNumber,
-              bankName: IROrelease.bankName,
-              beneficiary: IROrelease.beneficiary,
-              transferredDate: IROrelease.transferredDate,
-              branchName: IROrelease.branchName,
+              modeOfPayment: IROrelease.ReleaseAmount?.modeOfPayment,
+              releaseAmount: IROrelease.ReleaseAmount?.releaseAmount,
+              transactionNumber: IROrelease.ReleaseAmount?.transactionNumber,
+              transferredAmount: IROrelease.ReleaseAmount?.transferredAmount,
+              IFSCCode: IROrelease.ReleaseAmount?.transferredBank.IFSCCode,
+              accountNumber: IROrelease.ReleaseAmount?.transferredBank.accountNumber,
+              bankName: IROrelease.ReleaseAmount?.transferredBank.bankName,
+              beneficiary: IROrelease.ReleaseAmount?.beneficiary,
+              transferredDate: IROrelease.ReleaseAmount?.transferredDate,
+              branchName: IROrelease.ReleaseAmount?.branchName,
             },
           })
           .then(async (IROrelease) => {

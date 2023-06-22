@@ -28,7 +28,7 @@ import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import PermissionChecks from '../User/components/PermissionChecks';
 const ManageFrPage = () => {
-  const [FRRequests, setFRRequests] = useState<FRrequest[] | null>(null);
+  const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string|null>(null);
@@ -42,7 +42,7 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        console.log(res);
+        console.log(res,'rr');
         setFRRequests(res.data);
       })
       .catch((res) => {
@@ -50,7 +50,7 @@ const ManageFrPage = () => {
       });
   }, []);
 
-  const columns: GridColDef<FRrequest>[] = [
+  const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
       headerName: 'Action',
@@ -154,11 +154,13 @@ const ManageFrPage = () => {
       width: 150,
       align: 'center', headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
-        const frRequest = params.row as FRrequest;
-        const particularAmount = frRequest.Particulars.reduce(
+        const frRequest = params.row as FR;
+        const particularAmount = frRequest.Particulars?.reduce(
           (total, particular) => total + Number(particular.requestedAmount),
           0,
         );
+        console.log(particularAmount,'particularAmount');
+        
         return <p>{particularAmount}</p>;
       },
     },

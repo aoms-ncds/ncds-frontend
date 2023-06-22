@@ -15,6 +15,9 @@ const FRFormPage = (props: FRFormPageProps) => {
   const { frID } = useParams();
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
+    kind: 'FRs',
+    Particulars: [],
+    lastUpdateDate: moment(),
   });
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
@@ -22,13 +25,20 @@ const FRFormPage = (props: FRFormPageProps) => {
     }
     if (props.action === 'edit' || props.action === 'view') {
       FRServices.getById(frID as string)
-        .then((res) => setRequisition(res.data))
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+  .then((res) => {
+    const convertedData: CreatableFR = {
+      ...res.data,
+      requestAmount: ['requestedAmount'],
+      status: res.data.status.toString(),
+    };
+    setRequisition(convertedData);
+  })
+  .catch((error) => {
+    enqueueSnackbar({
+      variant: 'error',
+      message: error.message,
+    });
+  });
     }
   }, []);
   const addFR = async (requisition: CreatableFR) => {
@@ -63,7 +73,7 @@ const FRFormPage = (props: FRFormPageProps) => {
       });
       console.log(requisition);
       if (frID) {
-        const res = await FRServices.updateFRRequests( frID, requisition);
+        const res = await FRServices.updateFRRequests(frID, requisition);
         enqueueSnackbar({
           message: res.message,
           variant: 'success',
@@ -81,13 +91,20 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const manageFR = async (requisition: CreatableFR) => {
     try {
-      const operation=requisition.status;
-
+      const operation = requisition.status;
 
       enqueueSnackbar({
         // eslint-disable-next-line max-len
-        message: operation === 'Approved' ? 'Approving' :operation === 'Rejected'? 'Rejecting':operation === 'SendToAccounts'?
-          'Sending To Accounts':operation === 'SendToPresident'? 'Sending To President':'Send Back'+'FR Request',
+        message:
+          operation === 'Approved'
+            ? 'Approving'
+            : operation === 'Rejected'
+            ? 'Rejecting'
+            : operation === 'SendToAccounts'
+            ? 'Sending To Accounts'
+            : operation === 'SendToPresident'
+            ? 'Sending To President'
+            : 'Send Back' + 'FR Request',
         variant: 'info',
       });
       console.log(requisition);
@@ -115,17 +132,15 @@ const FRFormPage = (props: FRFormPageProps) => {
     <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
       <PermissionChecks
         permissions={['READ_FR']}
-        granted={(
+        granted={
           <>
-
             <Card style={{ width: '100%' }}>
-
               {props.action === 'add' ? (
                 <FRForm
                   value={requisition}
                   onChange={(newReq) => setRequisition(newReq)}
                   action={props.action}
-                  onSubmit={addFR } // Pass the addFR function to the onSubmit prop
+                  onSubmit={addFR} // Pass the addFR function to the onSubmit prop
                 />
               ) : props.action === 'edit' ? (
                 <FRForm
@@ -135,28 +150,19 @@ const FRFormPage = (props: FRFormPageProps) => {
                   onSubmit={editFR} // Pass the addFR function to the onSubmit prop
                 />
               ) : (
-                <ViewFR
-                  value={requisition}
-                  onChange={(newReq) => setRequisition(newReq)}
-                  action={props.action}
-                  onSubmit={manageFR}
-                />
+                <ViewFR value={requisition} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />
               )}
-
-
             </Card>
-
           </>
-        )}
+        }
         denied={(missingPermissions) => (
           <Grid item xs={12} lg={6}>
-            <Alert severity='error'>
-                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+            <Alert severity="error">
+              Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
         )}
       />
-
     </CommonPageLayout>
   );
 };
