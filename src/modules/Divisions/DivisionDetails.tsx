@@ -8,7 +8,6 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
-import e from 'express';
 
 const DivisionDetailsPage = () => {
   const { divisionIDs, editID } = useParams();

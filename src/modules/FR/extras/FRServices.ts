@@ -6,7 +6,7 @@ export default {
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
-  getAll: () => getStandardResponse<FRrequest[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
+  getAll: () => getStandardResponse<FR[]>(axios.get('/fr/', { headers: { ...getAuthHeader() } })),
 
   getAllRemarksById: (fRId: string) =>
     getStandardResponse<Remark[]>(
@@ -66,7 +66,7 @@ export default {
   //   axios.post('/fr/', frRequest),
   // ),
   createFRRequests: (frRequest: CreatableFR) => {
-    return getStandardResponse<CreatableFR>(
+    return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
         axios
           .post('/fr/', {
@@ -151,7 +151,7 @@ export default {
     ),
 
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
-    return getStandardResponse<CreatableFR>(
+    return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
         console.log(frRequest);
         axios

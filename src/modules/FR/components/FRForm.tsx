@@ -48,7 +48,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
   const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
-  const [coordinators, setCoordinators] = useState<Staff[]>();
+  const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
 
   const [divisions, setDivisions] = useState<Division[]>();
@@ -87,7 +87,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
   useEffect(() => {
     if (props.value.purpose === 'Coordinator') {
-      StaffServices.getAll()
+      WorkersServices.getAll()
       .then((res) => {
         setCoordinators(res.data);
       })
@@ -125,14 +125,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
-    FRServices.getPurposes()
-      .then((res) => {
-        console.log(res);
-        setPurposes(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+    // FRServices.getPurposes()
+    //   .then((res) => {
+    //     console.log(res);
+    //     setPurposes(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
     FRServices.getSanctionedAsPer()
       .then((res) => {
         console.log(res);

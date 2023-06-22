@@ -10,7 +10,7 @@ declare global {
     otherBankDetails: BankDetails;
     _id?: string;
   }
-  interface DivisionDetails {
+  interface DivisionDetails { 
     name: string;
     // _id?: string;
     divisionId: string;

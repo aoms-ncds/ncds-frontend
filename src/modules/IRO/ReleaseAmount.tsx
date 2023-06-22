@@ -40,7 +40,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12}>
                   <TextField
                     label="Release Amount"
-                    value={IROrelease?.releaseAmount}
+                    value={IROrelease?.ReleaseAmount?.releaseAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
@@ -56,7 +56,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6}>
                   <TextField
                     label="Amount Transferred"
-                    value={IROrelease?.transferredAmount}
+                    value={IROrelease?.ReleaseAmount?.transferredAmount}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
@@ -71,7 +71,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6}>
                   <DatePicker
                     label="Date"
-                    value={IROrelease?.transferredDate}
+                    value={IROrelease?.ReleaseAmount?.transferredDate}
                     format="DD/MM/YYYY"
                     sx={{ width: '100%' }}
                     // onChange={(e) =>
@@ -108,7 +108,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Bank Name"
-                    value={IROrelease?.bankName}
+                    value={IROrelease?.ReleaseAmount?.transferredBank.bankName}
                     onChange={(e) =>
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
@@ -122,7 +122,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Branch Name"
-                    value={IROrelease?.branchName}
+                    value={IROrelease?.ReleaseAmount?.branchName}
                     onChange={(e) =>
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
@@ -136,7 +136,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Account Number"
-                    value={IROrelease?.accountNumber}
+                    value={IROrelease?.ReleaseAmount?.transferredBank.accountNumber}
                     onChange={(e) =>
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
@@ -150,7 +150,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="IFSC Code"
-                    value={IROrelease?.IFSCCode}
+                    value={IROrelease?.ReleaseAmount?.transferredBank.IFSCCode}
                     onChange={(e) =>
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
@@ -164,7 +164,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Beneficiary"
-                    value={IROrelease?.beneficiary}
+                    value={IROrelease?.ReleaseAmount?.beneficiary}
                     onChange={(e) =>
                       setIROrelease((IROrelease) => ({
                         ...IROrelease,
@@ -180,7 +180,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Mode of payment"
-                    value={IROrelease?.modeOfPayment}
+                    value={IROrelease?.ReleaseAmount?.modeOfPayment}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({
@@ -195,7 +195,7 @@ const ReleaseAmount = () => {
                 <Grid item xs={12} md={6}>
                   <TextField
                     label="Transaction No:"
-                    value={IROrelease?.transactionNumber}
+                    value={IROrelease?.ReleaseAmount?.transactionNumber}
                     onChange={(e) =>
                       // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIROrelease((IROrelease) => ({

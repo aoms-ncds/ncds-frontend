@@ -28,11 +28,10 @@ import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import moment from 'moment';
-import { monthNames } from '../extras/FRConfig';
+import { monthNames, purposes } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
-import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks from '../../User/components/PermissionChecks';
@@ -41,9 +40,8 @@ import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
-  const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
-  const [coordinators, setCoordinators] = useState<Staff[]>();
+  const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
@@ -68,7 +66,6 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
 
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
-  const [staff, setStaff] = useState<Staff[]>();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -79,69 +76,47 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const handleClose = () => {
     setShowAddParticulardialog(false);
   };
+
   useEffect(() => {
-    const selectedMainCategoryObj = mainCategorys?.find((category) => category.name === props.value.mainCategory);
-    setSelectedMainCategory(selectedMainCategoryObj);
-    FRServices.getPurposes()
-      .then((res) => {
-        console.log(res);
-        setPurposes(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    FRServices.getSanctionedAsPer()
-      .then((res) => {
-        console.log(res);
-        setSanctionedAsPer(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    StaffServices.getAll()
+    if (props.value.purpose === 'Coordinator') {
+      WorkersServices.getAll()
       .then((res) => {
         setCoordinators(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-    WorkersServices.getAll()
+    } else if ( props.value.purpose === 'Worker') {
+      WorkersServices.getAll()
       .then((res) => {
         setWorkers(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-    DivisionsServices.getDivisions()
+    } else if (props.value.purpose === 'Division') {
+      DivisionsServices.getDivisions()
       .then((res) => {
         console.log(res.data);
-        // setDivisions(res.data); TODO: Fix it
+        setDivisions(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-    DivisionsServices.getSubDivisions()
+    } else if (props.value.purpose === 'Subdivision') {
+      DivisionsServices.getSubDivisions()
       .then((res) => {
         setSubDivisions(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-    FRServices.getMainCategory()
-      .then((res) => {
-        setMainCategorys(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    StaffServices.getAll()
-      .then((res) => {
-        // console.log(res);
-        setStaff(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+    }
+  }, [props.value.purpose]);
+
+  useEffect(() => {
+    const selectedMainCategoryObj = mainCategorys?.find((category) => category.name === props.value.mainCategory);
+    setSelectedMainCategory(selectedMainCategoryObj);
     if (props.value.particulars) {
       setParticulars(props.value.particulars);
       console.log(particulars);
