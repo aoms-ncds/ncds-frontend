@@ -32,7 +32,7 @@ import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import moment from 'moment';
-import { monthNames } from '../extras/FRConfig';
+import { monthNames, purposes, sanctionedAsPers } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import SendIcon from '@mui/icons-material/Send';
 import StaffServices from '../../HR/extras/StaffServices';
@@ -46,8 +46,7 @@ import FileUploaderServices from '../../../components/FileUploader/extras/FileUp
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
-  const [purposes, setPurposes] = useState<FRPurpose[]>();
-  const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
+  // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
 
@@ -133,14 +132,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-    FRServices.getSanctionedAsPer()
-      .then((res) => {
-        console.log(res);
-        setSanctionedAsPer(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+
     FRServices.getMainCategory()
       .then((res) => {
         setMainCategories(res.data);
@@ -360,7 +352,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <Typography>particulars</Typography> <br />
+                <Typography>Particulars</Typography> <br />
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
@@ -415,7 +407,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
                               }}>
-                                <FileIcon />
+                                <AttachmentIcon />
                               </IconButton>
                             </TableCell>
                             <TableCell align="center">{index+1}</TableCell>
@@ -484,8 +476,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
-                  value={props.value.sanctionedAsPer || ''}
-                  options={sanctionedAsPer ?? []}
+                  value={props.value.sanctionedAsPer??null}
+                  options={sanctionedAsPers ?? []}
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedSanction) => {
                     if (selectedSanction && props.action !== 'view') {
@@ -532,56 +524,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     Remark
                   </Button>
                   &nbsp;
-                  {props.action === 'view' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
-                      &nbsp;
-                      <Button
-                        variant="contained"
-                        color="success"
-                        onClick={() => {
-                          const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'approve' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
-                          setTimeout(() => {
-                            closeSnackbar(approvalSnack);
-                            const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(approvedSnack), 500);
-                          }, 500);
-                        }}
-                      >
-                        Approve
-                      </Button>
-                      &nbsp;
-                    </>
-                  ) : null}
-                  {props.action === 'view' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
-                      &nbsp;
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => {
-                          const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                          if (props.onSubmit) {
-                            const updatedValue = { ...props.value, status: 'reject' }; // Create a new object with updated status
-                            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                          }
-                          setTimeout(() => {
-                            closeSnackbar(rejectionSnack);
-                            const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
-                            setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                          }, 500);
-                        }}
-                      >
-                        Reject
-                      </Button>
-                      &nbsp;
-                    </>
-                  ) : null}
                   {props.action === 'add' || props.action === 'edit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}

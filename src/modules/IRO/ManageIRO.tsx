@@ -37,8 +37,10 @@ const ManageIRO = () => {
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerName: 'Action',
-      minWidth: 50,
+      headerName: '',
+      width: 50,
+      align: 'center',
+      headerAlign: 'center',
       type: 'string',
       renderCell: (props) => (
         <DropdownButton
@@ -181,14 +183,16 @@ const ManageIRO = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'IROno', headerName: 'IRO No', width: 70 },
+    { field: 'IROno', headerName: 'IRO No', width: 100 },
     { field: 'IROdate', headerName: 'IRO Date', width: 130 },
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
     { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
     { field: 'mainCategory', headerName: 'Main Category', width: 150 },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
+    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+
+    },
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
@@ -196,7 +200,7 @@ const ManageIRO = () => {
     {
       field: 'status',
       headerName: 'Status',
-      width: 130,
+      width: 200,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {

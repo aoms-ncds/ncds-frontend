@@ -9,8 +9,15 @@ export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getAll: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } })),
-  getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
+  getAll: (conditions?: { status?: number }):Promise<StandardResponse<IROrder[]>> =>
+    getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders:IROrder[])=>IROrders.map((IRO)=>({
+      ...IRO,
+      IRODate: moment(IRO.IRODate),
+      lastUpdateDate: moment(IRO.lastUpdateDate),
+    }))),
+
+  getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } }),
+  ),
 
   // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
 

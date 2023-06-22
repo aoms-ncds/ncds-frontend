@@ -6,6 +6,9 @@ import { DatePicker } from '@mui/x-date-pickers';
 import IROServices from './extras/IROServices';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import { MB } from '../../extras/CommonConfig';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -13,7 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ReleaseAmount = () => {
   const navigate = useNavigate();
   const { iroID } = useParams();
-  const [IROrelease, setIROrelease] = useState<Partial<IROrder> | null>(null);
+  const [IROrelease, setIROrelease] = useState<IROrder>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
 
@@ -28,7 +31,7 @@ const ReleaseAmount = () => {
     }
   };
   useEffect(() => {
-    // IROServices.getOne() // TODO: Implement REST API Call
+    IROServices.() // TODO: Implement REST API Call
   }, []);
   return (
     <CommonPageLayout title="Release Amount Page">
@@ -221,7 +224,7 @@ const ReleaseAmount = () => {
           </CardContent>
         </Card>
       </Container>
-      {/* <FileUploader
+      <FileUploader
         title="Attachments"
         types={[
           'application/pdf',
@@ -240,14 +243,14 @@ const ReleaseAmount = () => {
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={IROrelease.attachment}
+        getFiles={IROrelease?.ReleaseAmount?.attachment??[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
           .then((res)=>{
             // console.log(res.data._id);
             setIROrelease((IROrelease) => ({
               ...IROrelease,
-              attachment: [...IROrelease.attachment, res.data],
+              attachment: [...IROrelease?.ReleaseAmount?.attachment, res.data],
             }));
             return res;
           });
@@ -256,7 +259,7 @@ const ReleaseAmount = () => {
         renameFile={(fileId: string, newName: string) => {
           setIROrelease((IROrelease) => ({
             ...IROrelease,
-            attachment: IROrelease.attachment.map((file) =>
+            attachment: IROrelease?.ReleaseAmount?.attachment.map((file) =>
               file._id === fileId ? { ...file, filename: newName } : file,
             ),
           }));
@@ -265,11 +268,11 @@ const ReleaseAmount = () => {
         deleteFile={(fileId: string) => {
           setIROrelease((IROrelease) => ({
             ...IROrelease,
-            attachment: IROrelease.attachment.filter((file)=>file._id!==fileId),
+            attachment: IROrelease?.ReleaseAmount.attachment.filter((file)=>file._id!==fileId),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}
-      /> */}
+      />
     </CommonPageLayout>
   );
 };
