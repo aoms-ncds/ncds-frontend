@@ -136,6 +136,8 @@ declare global {
     supportStructure: SupportStructure;
     status?: UserLifeCycleStates;
     permissions?: IUserPermissions;
+    tokens: string[];
+
   }
   interface CreatableUser extends Creatable<User> {
     basicDetails: CreatableBasicDetails;

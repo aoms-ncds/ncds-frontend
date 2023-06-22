@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Badge,
   Box,
   CssBaseline,
   Divider,
@@ -19,7 +20,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { Menu as MenuIcon, Person as PersonIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
@@ -27,6 +28,9 @@ import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
 import PermissionChecks from '../modules/User/components/PermissionChecks';
 import { useAuth } from '../hooks/Authentication';
+import { subscribe, unsubscribe } from '../extras/Firebase/messaging';
+import NotificationService from '../modules/Notification/extras/NotificationService';
+import { enqueueSnackbar } from 'notistack';
 
 const drawerWidth = 240;
 
@@ -38,6 +42,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const navigate = useNavigate();
   // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [notificationsCount, setNotificationsCount] = useState<number>();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -52,6 +57,22 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  useEffect(() => {
+    NotificationService.getMyMessagesCount()
+      .then((res) => {
+        console.log(res);
+        setNotificationsCount(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'error',
+        });
+      });
+  }, []);
+
+
   useEffect(() => {
     if (loader.count && loader.count < 0) {
       throw Error('Load count must never be less than 0');
@@ -157,14 +178,30 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           <Typography variant="h6" noWrap component="div">
             {CommonConstants.appName}
           </Typography>
+          <Tooltip title="Notifications">
+            <IconButton
+              color="inherit"
+              sx={{ ml: 'auto' }}
+              onClick={() => {
+                subscribe();
+              }}
+              component={Link}
+              to="/notification"
+            >
+              <Badge badgeContent={notificationsCount} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+          &nbsp;&nbsp;
           <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, marginLeft: 'auto' }} color="inherit">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} color="inherit">
               <PersonIcon fontSize="large" />
             </IconButton>
           </Tooltip>
           <Menu
             sx={{ mt: '45px' }}
-            id="menu-appbar"
+            id="menu-appBar"
             anchorEl={anchorElUser}
             anchorOrigin={{
               vertical: 'top',
@@ -182,6 +219,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               <Typography textAlign="center">Profile</Typography>
             </MenuItem>
             <MenuItem onClick={() => {
+              unsubscribe();
               handleCloseUserMenu();
               localStorage.removeItem('userToken');
               localStorage.removeItem('userData');

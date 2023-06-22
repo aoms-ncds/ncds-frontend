@@ -17,6 +17,7 @@ export default {
       (users) =>
         users.map((user: any) => ({
           ...user,
+          token: [],
           basicDetails: {
             ...user.basicDetails,
             dateOfBirth: moment(user.basicDetails.dateOfBirth),
@@ -32,6 +33,7 @@ export default {
   getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
+      token: [],
       basicDetails: {
         ...data.basicDetails,
         dateOfBirth: moment(data.basicDetails.dateOfBirth),
@@ -60,6 +62,7 @@ export default {
       }),
       (me) =>({
         ...me,
+        token: [],
         basicDetails: {
           ...me.basicDetails,
           dateOfBirth: moment(me.basicDetails.dateOfBirth),
@@ -75,5 +78,25 @@ export default {
   editPermission: (userID: string, permission: {name: string; value: boolean}) =>
     getStandardResponse<void>(
       axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } }),
+    ),
+
+  saveFCMToken: (token: string): Promise<StandardResponse<User | null>> =>
+    getStandardResponse(
+      axios.post(
+        '/users/fcm_token',
+        { token },
+        {
+          headers: {
+            ...getAuthHeader(),
+          },
+        },
+      ),
+    ),
+
+  deleteFCMToken: (token: string): Promise<StandardResponse<User | null>> =>
+    getStandardResponse(
+      axios.delete(`/users/fcm_token/${token}`, {
+        headers: { ...getAuthHeader() },
+      }),
     ),
 };

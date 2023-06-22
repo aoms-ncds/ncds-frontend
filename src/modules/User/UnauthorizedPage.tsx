@@ -39,6 +39,7 @@ const UnauthorizedPage = (props: UnauthorizedPageProps) => {
           <b>Missing permissions:</b> &quot;{props.missingPermissions.join('", "').replaceAll('_', ' ')}&quot;
         </Typography>
       </div>
+
     </CommonPageLayout>
   );
 };

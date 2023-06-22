@@ -42,6 +42,7 @@ export default {
     getStandardResponse<Staff[]>(axios.get('/hr/staffs', { headers: { ...getAuthHeader() } }), (staffs) =>
       staffs.map((staff: any) => ({
         ...staff,
+        token: [],
         basicDetails: {
           ...staff.basicDetails,
           dateOfBirth: moment(staff.basicDetails.dateOfBirth),

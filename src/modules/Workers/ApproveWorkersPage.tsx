@@ -12,7 +12,7 @@ const ApproveWorkerPage = () => {
 
   const approveWorker = (id: string) => {
     WorkerServices.approve(id)
-      .then((res) => {
+      .then(() => {
         if (workers) {
           const newWorkers = workers.filter((workerRequests) => {
             return workerRequests._id !== id;
@@ -34,7 +34,7 @@ const ApproveWorkerPage = () => {
 
   const rejectWorker = (id: string) => {
     WorkerServices.reject(id)
-      .then((res) => {
+      .then(() => {
         if (workers) {
           const newWorkers = workers.filter((workerRequests) => {
             return workerRequests._id !== id;
@@ -82,7 +82,7 @@ const ApproveWorkerPage = () => {
       field: 'view',
       headerName: 'View',
       width: 130,
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <Button component={Link} to={`/users/worker/${props.row._id}`} variant="contained">
           View
         </Button>
@@ -92,7 +92,7 @@ const ApproveWorkerPage = () => {
       field: 'Approve',
       headerName: 'Approve',
       width: 130,
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <Button
           variant="contained"
           color="success"
@@ -109,7 +109,7 @@ const ApproveWorkerPage = () => {
       field: 'Reject',
       headerName: 'Reject',
       width: 130,
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <Button
           variant="contained"
           color="error"

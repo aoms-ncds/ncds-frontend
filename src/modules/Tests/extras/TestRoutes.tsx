@@ -22,7 +22,7 @@ const testsPageRoutes: ModuleRoute = {
       element: <LoginPage />,
       private: false,
       requiredAccessRights: ['ADMIN_ACCESS'],
-      showInDrawer: true,
+      showInDrawer: false,
     },
     {
       title: 'Forgot Password Page',
@@ -38,7 +38,7 @@ const testsPageRoutes: ModuleRoute = {
       element: <Pdfview />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
-      showInDrawer: true,
+      showInDrawer: false,
     },
   ],
 };
