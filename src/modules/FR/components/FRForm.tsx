@@ -397,7 +397,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       <TableRow>
                         <TableCell></TableCell>
                         <TableCell align="center">SI NO</TableCell>
-                        <TableCell align="center">particulars</TableCell>
+                        <TableCell align="center">Particulars</TableCell>
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
