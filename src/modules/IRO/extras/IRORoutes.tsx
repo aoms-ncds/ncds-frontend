@@ -4,6 +4,7 @@ import IRODashboard from '..';
 import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
 import ReleaseAmount from '../ReleaseAmount';
+import ViewIRO from '../ViewIRO';
 
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
@@ -28,6 +29,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Closed IRO',
       path: '/closed',
       element: <ClosedIRO />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+    },
+    {
+      title: 'View IRO',
+      path: '/:iroID',
+      element: <ViewIRO/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
     },

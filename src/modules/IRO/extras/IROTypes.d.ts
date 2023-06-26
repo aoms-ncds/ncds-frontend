@@ -22,20 +22,19 @@ declare global{
     purpose: string;
     lastUpdateDate: Moment;
     status: number;
-    ReleaseAmount?:IReleaseAmount;
+    releaseAmount:IReleaseAmount;
 
   }
 
-   interface IReleaseAmount {
+  export interface IReleaseAmount {
     _id: string;
-    modeOfPayment: string;
-    releaseAmount: number;
-    transactionNumber: number;
-    transferredAmount: number;
-    transferredDate: Moment|null;
+    modeOfPayment?: string;
+    releaseAmount?: number;
+    transactionNumber?: string;
+    transferredAmount?: number;
+    transferredDate?: Moment|null;
     transferredBank: BankDetails;
-    branchName:string;
-    beneficiary:string;
+    IRO?:string;
     attachment:FileObject[];
 
   }

@@ -53,7 +53,7 @@ const ManageIRO = () => {
               id: 'View',
               text: 'View Details ',
               component: Link,
-              to: `/fr/${props.row._id}/view`,
+              to: `/iro/${props.row._id}`,
               icon: PreviewIcon,
             },
             {
@@ -184,7 +184,8 @@ const ManageIRO = () => {
       ),
     },
     { field: 'IROno', headerName: 'IRO No', width: 100 },
-    { field: 'IROdate', headerName: 'IRO Date', width: 130 },
+    { field: 'IRODate', headerName: 'IRO Date', width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY') },
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
     { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
     { field: 'mainCategory', headerName: 'Main Category', width: 150 },

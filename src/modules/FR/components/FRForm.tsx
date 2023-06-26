@@ -848,9 +848,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         // getFiles={TestServices.getBills}
         getFiles={newParticular.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name)
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name)
           .then( (res)=>{
-            console.log(res.data._id);
+            // console.log(res.data._id);
 
             setNewParticular(() => ({
               ...newParticular,

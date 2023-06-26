@@ -9,12 +9,71 @@ export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   getAll: (conditions?: { status?: number }):Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders:IROrder[])=>IROrders.map((IRO)=>({
       ...IRO,
       IRODate: moment(IRO.IRODate),
       lastUpdateDate: moment(IRO.lastUpdateDate),
     }))),
+
+  getById: (IROId: string) =>
+    getStandardResponse<IROrder>(
+      axios.get(`/iro/${IROId}`, { headers: { ...getAuthHeader() } }),
+      (data) => ({
+        ...data,
+        IRODate: moment(data.IRODate),
+        lastUpdateDate: moment(data.lastUpdateDate),
+        releaseAmount: {
+          ...data.releaseAmount,
+          transferredDate: data.releaseAmount?.transferredDate?moment(data.transferredDate):null,
+        },
+        purposeWorker: {
+          ...data.createdBy,
+          basicDetails: {
+            ...data.createdBy.basicDetails,
+            // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+            // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+            dateOfBirth: moment(data.createdBy.basicDetails.dateOfBirth),
+          },
+          officialDetails: {
+            ...data.createdBy.officialDetails,
+            dateOfJoining: data.createdBy.officialDetails.dateOfJoining ? moment(data.createdBy.officialDetails.dateOfJoining) : undefined,
+            dateOfLeaving: data.createdBy.officialDetails.dateOfLeaving ? moment(data.createdBy.officialDetails.dateOfLeaving) : undefined,
+            divisionHistory: data.createdBy.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+              ...divHis,
+              dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+              dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+            })),
+          },
+          createdAt: moment(data.createdBy.createdAt),
+          updatedAt: moment(data.createdBy.updatedAt),
+        },
+        createdBy: {
+          ...data.createdBy,
+          basicDetails: {
+            ...data.createdBy.basicDetails,
+            // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+            // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+            dateOfBirth: moment(data.createdBy.basicDetails.dateOfBirth),
+          },
+          officialDetails: {
+            ...data.createdBy.officialDetails,
+            dateOfJoining: data.createdBy.officialDetails.dateOfJoining ? moment(data.createdBy.officialDetails.dateOfJoining) : undefined,
+            dateOfLeaving: data.createdBy.officialDetails.dateOfLeaving ? moment(data.createdBy.officialDetails.dateOfLeaving) : undefined,
+            divisionHistory: data.createdBy.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+              ...divHis,
+              dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+              dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+            })),
+          },
+          createdAt: moment(data.createdBy.createdAt),
+          updatedAt: moment(data.createdBy.updatedAt),
+        },
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+      }),
+    ),
 
   getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } }),
   ),
@@ -38,24 +97,12 @@ export default {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  saveRelease: (iroID: string, IROrelease: Partial<IROrder>) =>
+  saveRelease: (iroID: string, IROrelease: IROrder) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
           .post(`/iro/releaseAmount/${iroID}`, {
             ...IROrelease,
-            IROrelease: {
-              modeOfPayment: IROrelease.ReleaseAmount?.modeOfPayment,
-              releaseAmount: IROrelease.ReleaseAmount?.releaseAmount,
-              transactionNumber: IROrelease.ReleaseAmount?.transactionNumber,
-              transferredAmount: IROrelease.ReleaseAmount?.transferredAmount,
-              IFSCCode: IROrelease.ReleaseAmount?.transferredBank.IFSCCode,
-              accountNumber: IROrelease.ReleaseAmount?.transferredBank.accountNumber,
-              bankName: IROrelease.ReleaseAmount?.transferredBank.bankName,
-              beneficiary: IROrelease.ReleaseAmount?.beneficiary,
-              transferredDate: IROrelease.ReleaseAmount?.transferredDate,
-              branchName: IROrelease.ReleaseAmount?.branchName,
-            },
           })
           .then(async (IROrelease) => {
             try {

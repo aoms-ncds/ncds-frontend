@@ -36,6 +36,7 @@ import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { purposes, sanctionedAsPers } from '../extras/FRConfig';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
+
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
