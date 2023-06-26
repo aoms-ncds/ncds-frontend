@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export default { };
 
 declare global{
@@ -16,24 +18,24 @@ declare global{
   export interface IROrder extends ITransactions {
     _id: string;
     IROno: string;
-    IRODate: Date;
+    IRODate: Moment;
     purpose: string;
-    lastUpdateDate: Date;
+    lastUpdateDate: Moment;
     status: number;
-    ReleaseAmount?:IReleaseAmount;
+    releaseAmount:IReleaseAmount;
 
   }
 
-   interface IReleaseAmount {
+  export interface IReleaseAmount {
     _id: string;
-    modeOfPayment: string;
-    releaseAmount: number;
-    transactionNumber: number;
-    transferredAmount: number;
-    transferredDate: Date;
+    modeOfPayment?: string;
+    releaseAmount?: number;
+    transactionNumber?: string;
+    transferredAmount?: number;
+    transferredDate?: Moment|null;
     transferredBank: BankDetails;
-    branchName:string;
-    beneficiary:string;
+    IRO?:string;
+    attachment:FileObject[];
 
   }
 }

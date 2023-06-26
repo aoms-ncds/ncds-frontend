@@ -53,7 +53,7 @@ const ManageFrPage = () => {
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
-      headerName: 'Action',
+      headerName: '',
       width: 50,
       align: 'center',
       headerAlign: 'center',
@@ -130,11 +130,9 @@ const ManageFrPage = () => {
         />
       ),
     },
+
     {
-      field: 'slno', headerName: 'SI No', width: 70, align: 'center', headerAlign: 'center',
-    },
-    {
-      field: 'FRno', headerName: 'FR No', width: 70, align: 'center', headerAlign: 'center',
+      field: 'FRno', headerName: 'FR No', width: 100, align: 'center', headerAlign: 'center',
     },
     { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
       <p> {props.row.date}</p>
@@ -147,7 +145,7 @@ const ManageFrPage = () => {
     ), width: 160, align: 'center', headerAlign: 'center' },
     { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
       <p> {props.row.mainCategory}</p>
-    ), width: 130, align: 'center', headerAlign: 'center' },
+    ), width: 240, align: 'center', headerAlign: 'center' },
     {
       field: 'requestedAmount',
       headerName: 'Requested Amount',
@@ -166,11 +164,11 @@ const ManageFrPage = () => {
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
       <p> {props.row.sanctionedAsPer}</p>
-    ), width: 150, align: 'center', headerAlign: 'center' },
+    ), width: 200, align: 'center', headerAlign: 'center' },
     {
       field: 'status',
       headerName: 'Status',
-      width: 130,
+      width: 205,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {

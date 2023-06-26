@@ -16,6 +16,7 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly FR_APPROVED = 205;
 
   public static readonly allFRStatus = ({
+
     FR_CREATED: FRLifeCycleStates.FR_CREATED,
     FR_CLOSED: FRLifeCycleStates.FR_CLOSED,
     SEND_BACK: FRLifeCycleStates.FR_SEND_BACK,
@@ -24,6 +25,7 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
     PRESIDENT_APPROVED: FRLifeCycleStates.PRESIDENT_APPROVED,
     ACCOUNTS_APPROVED: FRLifeCycleStates.ACCOUNTS_APPROVED,
     FR_APPROVED: FRLifeCycleStates.FR_APPROVED,
+    FR_REJECTED: FRLifeCycleStates.REJECTED,
   });
 
   public static readonly getStatusNameByCodeFR = (code: number) =>{

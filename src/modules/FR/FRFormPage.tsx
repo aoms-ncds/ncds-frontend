@@ -96,13 +96,13 @@ const FRFormPage = (props: FRFormPageProps) => {
       enqueueSnackbar({
         // eslint-disable-next-line max-len
         message:
-          operation === 'Approved' ?
+          operation === 'approve' ?
             'Approving' :
-            operation === 'Rejected' ?
+            operation === 'reject' ?
               'Rejecting' :
-              operation === 'SendToAccounts' ?
+              operation === 'sendToAccounts' ?
                 'Sending To Accounts' :
-                operation === 'SendToPresident' ?
+                operation === 'sendToPresident' ?
                   'Sending To President' :
                   'Send Back' + 'FR Request',
         variant: 'info',
@@ -115,6 +115,12 @@ const FRFormPage = (props: FRFormPageProps) => {
           message: res.message,
           variant: 'success',
         });
+        if (operation=='approve') {
+          enqueueSnackbar({
+            message: 'IRO  CREATED',
+            variant: 'success',
+          });
+        }
       }
     } catch (err) {
       console.log(err);

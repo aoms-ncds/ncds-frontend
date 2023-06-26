@@ -10,7 +10,6 @@ import {
   Dialog,
   Autocomplete,
   DialogActions,
-  DialogContent,
   Table,
   TableHead,
   TableRow,
@@ -26,175 +25,34 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import moment from 'moment';
-import { monthNames, purposes } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import TestServices from '../../Tests/extras/TestServices';
 import SendIcon from '@mui/icons-material/Send';
-import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
+import { purposes, sanctionedAsPers } from '../extras/FRConfig';
+import { Attachment as AttachmentIcon } from '@mui/icons-material';
+
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
-  const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
-  const [sanctionedAsPer, setSanctionedAsPer] = useState<SanctionedAsPer[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
-  const [mainCategorys, setMainCategorys] = useState<MainCategory[]>();
-  const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1>();
-  const [selectedSubCategory2, setselectedSubCategory2] = useState<SubCategory2>();
-  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-  const [action, setAction] = useState<'add' | 'edit'>('add');
-  const [particulars, setParticulars] = useState<Particular[]>([]);
-  const [newParticular, setNewParticular] = useState<CreatableParticular>({
-    mainCategory: '',
-    subCategory1: '',
-    subCategory2: '',
-    subCategory3: '',
-    // quantity: 0,
-    month: '',
-    // requestedAmount: '',
-    narration: '',
-    attachment: [],
-
-  });
-  const [showFileUploader, setShowFileUploader] = useState(false);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
 
-  const handleClose = () => {
-    setShowAddParticulardialog(false);
-  };
 
-  useEffect(() => {
-    if (props.value.purpose === 'Coordinator') {
-      WorkersServices.getAll()
-      .then((res) => {
-        setCoordinators(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if ( props.value.purpose === 'Worker') {
-      WorkersServices.getAll()
-      .then((res) => {
-        setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if (props.value.purpose === 'Division') {
-      DivisionsServices.getDivisions()
-      .then((res) => {
-        console.log(res.data);
-        setDivisions(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if (props.value.purpose === 'Subdivision') {
-      DivisionsServices.getSubDivisions()
-      .then((res) => {
-        setSubDivisions(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    }
-  }, [props.value.purpose]);
-
-  useEffect(() => {
-    const selectedMainCategoryObj = mainCategorys?.find((category) => category.name === props.value.mainCategory);
-    setSelectedMainCategory(selectedMainCategoryObj);
-    if (props.value.particulars) {
-      setParticulars(props.value.particulars);
-      console.log(particulars);
-    }
-    // FRServices.getParticulars()
-    //   .then((res) => {
-    //     console.log(res);
-    //     setParticulars(res.data);
-    //   })
-    //   .catch((res) => {
-    //     console.log(res);
-    //   });
-  }, [props.value.particulars]);
-  const addParticulars = () => {
-    const snackbarId = enqueueSnackbar({
-      message: 'Adding particulars',
-      variant: 'info',
-    });
-
-    FRServices.addParticulars(newParticular)
-      .then((res) => {
-        console.log(res.data);
-        setParticulars((prevParticulars) => [...prevParticulars, res.data]);
-        handleClose();
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-        setNewParticular((particularDetails) => ({
-          ...particularDetails,
-          subCategory1: '',
-          subCategory2: '',
-          subCategory3: '',
-          // quantity: '',
-          month: '',
-          // requestedAmount: '',
-          narration: '',
-        }));
-        props.onChange({
-          ...props.value,
-          particulars: [...(props.value.particulars || []), res.data],
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        // if (err.error === "Duplicate entry") {
-        //   setGroupExists(true);
-        //   setActiveStep(0);
-        // }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
-  const deleteParticular = (particularid: string) => {
-    // Perform delete logic
-    const updatedParticulars = particulars.filter((item) => item._id !== particularid);
-    setParticulars(updatedParticulars);
-    FRServices.deleteParticulars(particularid)
-      .then((res) => {
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-    // Implement your delete logic here, such as making an API request
-  };
-  const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus=FRLifeCycleStates.getStatusNameByCodeFR(Number(props.value.status));
   return (
     <div>
@@ -353,7 +211,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell></TableCell>
+
+                        <TableCell ></TableCell>
                         <TableCell align="center">SI NO</TableCell>
                         <TableCell align="center">Main Category</TableCell>
                         <TableCell align="center">Particulars</TableCell>
@@ -363,10 +222,17 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {particulars &&
-                        particulars.map((item, index) => (
+                      {props.value.particulars &&
+                        props.value.particulars.map((item, index) => (
                           <TableRow key={item._id}>
-                            <TableCell align="center"></TableCell>
+                            <TableCell component="th">
+                              <IconButton onClick={() => {
+                                setViewFileUploader(true);
+                                setAttachments(item.attachment);
+                              }}>
+                                <AttachmentIcon />
+                              </IconButton>
+                            </TableCell>
                             <TableCell align="center">{index+1}</TableCell>
                             <TableCell align="center">{item.mainCategory}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
@@ -435,8 +301,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
-                  value={props.value.sanctionedAsPer || ''}
-                  options={sanctionedAsPer ?? []}
+                  value={props.value.sanctionedAsPer ??null}
+                  options={sanctionedAsPers ?? []}
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedSanction) => {
                     if (selectedSanction && props.action !== 'view') {
@@ -464,7 +330,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 >
                   <PDFDownloadLink
                     document={<FRReceiptTemplate rowData={props.value} />}
-                    fileName="FRReciept.pdf"
+                    fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >
                    Print FR
@@ -485,13 +351,75 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     Remark
                   </Button>
                   &nbsp;
+                  {props.action === 'view' && FRstatus!='ACCOUNTS_APPROVED' ? (
+                    <>
+                      {/* Only display buttons if props.action is 'view' */}
+                      &nbsp;
+                      <PermissionChecks
+                        permissions={['WRITE_IRO']}
+                        granted={(
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={() => {
+                              const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
+                              if (props.onSubmit) {
+                                const updatedValue = { ...props.value, status: 'sendBack' }; // Create a new object with updated status
+                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                              }
+                              setTimeout(() => {
+                                closeSnackbar(rejectionSnack);
+                                const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });
+                                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                              }, 500);
+                            }}
+                          >
+                          Send Back
+                          </Button>
+                        )}
+                      />
+
+                      &nbsp;
+                    </>
+                  ) : null}
+                  {props.action === 'view' && FRstatus!='ACCOUNTS_APPROVED' ? (
+                    <>
+                      {/* Only display buttons if props.action is 'view' */}
+                      &nbsp;
+                      <PermissionChecks
+                        permissions={['WRITE_IRO']}
+                        granted={(
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => {
+                              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                              if (props.onSubmit) {
+                                const updatedValue = { ...props.value, status: 'reject' }; // Create a new object with updated status
+                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                              }
+                              setTimeout(() => {
+                                closeSnackbar(rejectionSnack);
+                                const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                              }, 500);
+                            }}
+                          >
+                          Reject
+                          </Button>
+                        )}
+                      />
+
+                      &nbsp;
+                    </>
+                  ) : null}
                   {
                     props.action === 'view' && FRstatus=='WAITING_TO_ACCOUNTS'? (
                       <>
                         {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                         <PermissionChecks
-                          permissions={['ACCOUNTS_ACCESS']}
+                          permissions={['WRITE_IRO']}
                           granted={(
                             <Button
                               variant="contained"
@@ -499,7 +427,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               onClick={() => {
                                 const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
                                 if (props.onSubmit) {
-                                  const updatedValue = { ...props.value, status: 'Approved' }; // Create a new object with updated status
+                                  const updatedValue = { ...props.value, status: 'approve' }; // Create a new object with updated status
                                   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                                 }
                                 setTimeout(() => {
@@ -518,37 +446,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       &nbsp;
                       </>
                     ) : null}
-                  {props.action === 'view' && FRstatus!='ACCOUNTS_APPROVED' ? (
-                    <>
-                      {/* Only display buttons if props.action is 'view' */}
-                      &nbsp;
-                      <PermissionChecks
-                        permissions={['ACCOUNTS_ACCESS']}
-                        granted={(
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() => {
-                              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                              if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: 'Rejected' }; // Create a new object with updated status
-                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                              }
-                              setTimeout(() => {
-                                closeSnackbar(rejectionSnack);
-                                const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
-                                setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                              }, 500);
-                            }}
-                          >
-                          Reject
-                          </Button>
-                        )}
-                      />
 
-                      &nbsp;
-                    </>
-                  ) : null}
                   {props.action === 'view' && FRstatus!='WAITING_TO_PRESIDENT' &&FRstatus!='WAITING_TO_ACCOUNTS' && FRstatus!='ACCOUNTS_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
@@ -561,7 +459,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             onClick={() => {
                               const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                               if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: 'SendToPresident' }; // Create a new object with updated status
+                                const updatedValue = { ...props.value, status: 'sendToPresident' }; // Create a new object with updated status
                                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                               }
 
@@ -590,7 +488,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onClick={() => {
                             const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
                             if (props.onSubmit) {
-                              const updatedValue = { ...props.value, status: 'SendToAccounts' };
+                              const updatedValue = { ...props.value, status: 'sendToAccounts' };
                               props.onSubmit(updatedValue);
                             }
 
@@ -615,7 +513,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onClick={() => {
                             const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
                             if (props.onSubmit) {
-                              const updatedValue = { ...props.value, status: 'SendToAccounts' };
+                              const updatedValue = { ...props.value, status: 'sendToAccounts' };
                               props.onSubmit(updatedValue);
                             }
 
@@ -701,178 +599,27 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
           </DialogActions>
         </form>
       </Dialog>
-      <Dialog
-        open={showAddParticulardialog}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            width: '1000px',
-          },
-        }}
-      >
-        <DialogTitle>Add Particular</DialogTitle>
-        <DialogContent>
-          <Container>
-            <Grid container spacing={3}>
-              <Grid item md={12}>
-                <Autocomplete
-                  value={selectedSubCategory1}
-                  options={selectedMainCategory?.subcategory1 ?? []}
-                  getOptionLabel={(subcategory2) => subcategory2.name}
-                  onChange={(_e, selectedSubCategory1) => {
-                    if (selectedSubCategory1) {
-                      setNewParticular((particularDetails) => ({
-                        ...particularDetails,
-                        subCategory1: selectedSubCategory1.name,
-                      }));
-                      setSelectedSubCategory1(selectedSubCategory1);
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Sub Category 1" />}
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <Autocomplete
-                  value={selectedSubCategory2}
-                  options={selectedSubCategory1?.subcategory2 ?? []}
-                  getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
-                  onChange={(_e, selectedSubCategory2) => {
-                    if (selectedSubCategory2) {
-                      setNewParticular((particularDetails) => ({
-                        ...particularDetails,
-                        subCategory2: selectedSubCategory2.name,
-                      }));
-                      setselectedSubCategory2(selectedSubCategory2);
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Sub Category 2" />}
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <Autocomplete
-                  value={selectedSubCategory3}
-                  options={selectedSubCategory2?.subcategory3 ?? []}
-                  getOptionLabel={(subCategory3) => subCategory3.name}
-                  onChange={(e, selectedSubCategory3) => {
-                    if (selectedSubCategory3) {
-                      setNewParticular((particularDetails) => ({
-                        ...particularDetails,
-                        subCategory3: selectedSubCategory3.name,
-                        narration: selectedSubCategory3.narration,
-                      }));
-                      setSelectedSubCategory3(selectedSubCategory3);
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  label="Quantity"
-                  type="number"
-                  value={newParticular?.quantity}
-                  onChange={(e) =>
-                    setNewParticular((particularDetails) => ({
-                      ...particularDetails,
-                      quantity: Number(e.target.value),
-
-                    }))
-                  }
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <Autocomplete
-                  value={newParticular.month}
-                  options={monthNames ?? []}
-                  getOptionLabel={(monthName) => monthName}
-                  onChange={(e, selectedMonth) => {
-                    if (selectedMonth) {
-                      setNewParticular((particularDetails) => ({
-                        ...particularDetails,
-                        month: selectedMonth,
-                      }));
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="For the Month" />}
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  label="Requested Amount"
-                  type="number"
-                  value={newParticular?.requestedAmount}
-                  onChange={(e) =>
-                    setNewParticular((particularDetails) => ({
-                      ...particularDetails,
-                      requestedAmount: Number( e.target.value),
-                    }))
-                  }
-                  fullWidth
-                  disabled
-
-                />
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  label="Narration"
-                  value={newParticular.narration}
-                  multiline
-                  maxRows={4}
-                  onChange={(e) =>
-                    setNewParticular((particularDetails) => ({
-                      ...particularDetails,
-                      narration: e.target.value,
-                    }))
-                  }
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item md={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader(true)}>
-                          Attachments
-                </Button>
-              </Grid>
-            </Grid>
-          </Container>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" variant="contained" onClick={addParticulars}>
-                    Save
-          </Button>
-        </DialogActions>
-      </Dialog>
       <FileUploader
-        title="Upload bills"
-        types={['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'video/quicktime', 'image/png']}
+        title="Attachments"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
         limits={{
-          maxItemSize: 6*MB,
+          // types: [],
+          maxItemSize: 1*MB,
           maxItemCount: 3,
-          maxTotalSize: 18*MB,
+          maxTotalSize: 3*MB,
         }}
         // accept={['video/*']}
-        open={showFileUploader}
-        onClose={() => setShowFileUploader(false)}
-        getFiles={[]}
-        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const res = TestServices.uploadFile(file, onProgress);
-          return res;
-        }}
-        renameFile={TestServices.renameFile}
-        deleteFile={(fileID: string) => {
-          return TestServices.deleteFile(fileID);
-        }}
+        open={viewFileUploader}
+        action='view'
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachments}
       />
     </div>
   );
