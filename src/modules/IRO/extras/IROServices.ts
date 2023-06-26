@@ -94,7 +94,22 @@ export default {
   sendBack: (IROId: string) => getStandardResponse<Application>(axios.patch(`/iro/${IROId}/sendBack`, null, { headers: { ...getAuthHeader() } })),
   getPrintDetails: (IROId: string) => getStandardResponse<Application>(axios.get(`/iro/printDetails/${IROId}`)),
 
-
+  updateIRO: (IROId:string, IRORequest: IROrder)=>{
+    console.log('🚀 ~ file: IROServices.ts:142 ~ IROId:', IROId);
+    return getStandardResponse<IROrder>(
+      new Promise((resolve, reject) => {
+        console.log(IRORequest);
+        axios
+        .patch('/iro/' + IROId, {
+          ...IRORequest,
+        }, { headers: { ...getAuthHeader() } })
+        .then(async (updatedIRO) => {
+          resolve(updatedIRO);
+        })
+        .catch(reject);
+      }),
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
   saveRelease: (iroID: string, IROrelease: IROrder) =>

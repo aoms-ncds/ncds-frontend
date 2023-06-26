@@ -8,6 +8,7 @@ export default class CommonLifeCycleStates {
   public static readonly CREATED = -104;
   // Active states
   public static readonly ACTIVE = 100;
+  public static readonly APPROVED = 101;
 
   public static readonly allStatus = ({
     FORCE_DELETED: CommonLifeCycleStates.FORCE_DELETED,
@@ -15,7 +16,8 @@ export default class CommonLifeCycleStates {
     REJECTED: CommonLifeCycleStates.REJECTED,
     INACTIVE: CommonLifeCycleStates.INACTIVE,
     CREATED: CommonLifeCycleStates.CREATED,
-    APPROVED: CommonLifeCycleStates.ACTIVE,
+    ACTIVE: CommonLifeCycleStates.ACTIVE,
+    APPROVED: CommonLifeCycleStates.APPROVED,
   });
   public static readonly getStatusNameByCode = (code: number) =>{
     const statusKeys = Object.keys(CommonLifeCycleStates.allStatus);

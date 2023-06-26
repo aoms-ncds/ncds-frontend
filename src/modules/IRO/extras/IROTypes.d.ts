@@ -23,7 +23,7 @@ declare global{
     lastUpdateDate: Moment;
     status: number;
     releaseAmount:IReleaseAmount;
-
+    billAttachment:FileObject[];
   }
 
   export interface IReleaseAmount {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Delete as DeleteIcon, FileDownload as FileDownloadIcon, InsertDriveFile, Photo, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
+import { Check as CheckIcon, Clear as ClearIcon, Delete as DeleteIcon, FileDownload as FileDownloadIcon, InsertDriveFile, Photo, PictureAsPdf, SmartDisplay, TableView } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -8,6 +8,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -24,11 +25,14 @@ import {
 } from '@mui/material';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import FileUploaderServices from './extras/FileUploaderServices';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 interface FileUploaderProps {
   id?: string;
   title: string;
-  action?: 'add'|'view';
+  action?: 'add'|'view'|'manage';
   types: FileObjectType[]; // pass the type of file you need to upload
   // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
   limits:{
@@ -63,7 +67,7 @@ const FileUploader = (props: FileUploaderProps) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [dragged, setDragged] = useState(false);
 
-  const [action, setAction] = useState<'add'|'view'>('add');
+  const [action, setAction] = useState<'add'|'view'|'manage'>('add');
   const uploadFile = (files: FileList) => {
     if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
       // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
@@ -284,7 +288,9 @@ const FileUploader = (props: FileUploaderProps) => {
             <Grid container spacing={3}>
               {fileObjects.map((file, index) => (
                 <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
-                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }}>
+                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }} onClick={()=>{
+                    // file.downloadURL? window.open(file.downloadURL, '_blank'):null;
+                  }}>
                     <CardContent sx={{ pb: 0 }}>
                       <Grid container spacing={3}>
                         <Grid item xs={12} lg={3}>
@@ -319,6 +325,48 @@ const FileUploader = (props: FileUploaderProps) => {
                       </Grid>
                     </CardContent>
                     <CardActions sx={{ pt: 0 }}>
+                      {file.status==CommonLifeCycleStates.APPROVED?
+                        <Chip variant="outlined" label="Accepted" color="success" size="small" icon={<CheckIcon />} />:
+                        file.status==CommonLifeCycleStates.REJECTED?
+                          <Chip variant="outlined" label="Rejected" color="error" size="small" icon={<ClearIcon />} />:
+                          props.action=='manage'?
+                            <>
+                              <IconButton
+                                sx={{ ml: 'auto' }}
+                                color="error"
+                                onClick={() => {
+                                  FileUploaderServices.manageFile(file._id, 'approve');
+                                  setFileObjects((_fileObjects) =>
+                                    !_fileObjects ?
+                                      null :
+                                      _fileObjects.map((_fileObject) => {
+                                      // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
+                                        return _fileObject._id === file._id ? { ..._fileObject, status: CommonLifeCycleStates.APPROVED } : _fileObject;
+                                      }),
+                                  );
+                                }}
+                              >
+                                <CheckIcon />
+                              </IconButton>
+                              <IconButton
+                                sx={{ ml: 'auto' }}
+                                color="error"
+                                onClick={() => {
+                                  FileUploaderServices.manageFile(file._id, 'reject');
+                                  setFileObjects((_fileObjects) =>
+                                    !_fileObjects ?
+                                      null :
+                                      _fileObjects.map((_fileObject) => {
+                                      // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
+                                        return _fileObject._id === file._id ? { ..._fileObject, status: CommonLifeCycleStates.REJECTED } : _fileObject;
+                                      }),
+                                  );
+                                }}
+                              >
+                                <ClearIcon />
+                              </IconButton>
+                            </>:null
+                      }
                       {file.downloadURL&&(
                         <IconButton
                           sx={{ ml: 'auto' }}
@@ -335,7 +383,7 @@ const FileUploader = (props: FileUploaderProps) => {
                           <FileDownloadIcon />
                         </IconButton>
                       )}
-                      { props.deleteFile &&(
+                      { props.deleteFile && props.action!='manage' &&(
                         <IconButton
                           sx={{ ml: 'auto' }}
                           color="error"

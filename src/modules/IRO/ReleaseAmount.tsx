@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
 import IROServices from './extras/IROServices';
-import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
@@ -88,6 +88,8 @@ const ReleaseAmount = () => {
     },
     createdAt: moment(),
     updatedAt: moment(),
+    billAttachment: [],
+
   });
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
