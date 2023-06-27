@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
-import { Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
-import PrintIcon from '@mui/icons-material/Print';
+import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -13,6 +12,11 @@ import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import IROServices from './extras/IROServices';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import { MB } from '../../extras/CommonConfig';
+import moment from 'moment';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 
 const ManageIRO = () => {
@@ -22,7 +26,82 @@ const ManageIRO = () => {
     remark: '',
     transactionId: '',
   });
-  const [selectedIRO, setSelectedIRO] = useState<string|null>(null);
+  const [fileUploaderAction, setFileUploaderAction] = useState<'add'|'manage'>('add');
+  const [attachment, setAttachment] = useState<boolean>(false);
+  const [selectedIRO, setSelectedIRO] = useState<IROrder>({
+    _id: '',
+    IROno: '',
+    IRODate: moment(),
+    purpose: '',
+    lastUpdateDate: moment(),
+    status: CommonLifeCycleStates.ACTIVE,
+    kind: 'IRO',
+    sanctionedAmount: 0,
+    sanctionedAsPer: '',
+    sanctionedBank: '',
+    mainCategory: '',
+    particulars: [],
+    releaseAmount: {
+      _id: '',
+      modeOfPayment: '',
+      releaseAmount: 0,
+      transactionNumber: '',
+      transferredAmount: 0,
+      transferredDate: null,
+      transferredBank: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+      },
+      attachment: [],
+    },
+    createdBy: {
+      workerCode: '',
+      kind: 'worker',
+      tokens: [],
+      basicDetails: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        permanentAddress: {},
+        currentOfficialAddress: {},
+        residingAddress: {},
+        dateOfBirth: moment(),
+      },
+      officialDetails: {
+        divisionHistory: [],
+        remarks: '',
+        selfSupport: true,
+        status: null,
+        noOfChurches: 0,
+      },
+      supportDetails: {
+        // totalNoOfYearsInMinistry: 10,
+        withChurch: true,
+      },
+      supportStructure: {
+        basic: 0,
+        HRA: 0,
+        spouseAllowance: 0,
+        positionalAllowance: 0,
+        specialAllowance: 0,
+        impactDeduction: 0,
+        telAllowance: 0,
+        PIONMissionaryFund: 0,
+        MUTDeduction: 0,
+      },
+      children: [],
+      _id: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+    createdAt: moment(),
+    updatedAt: moment(),
+    billAttachment: [],
+  });
+  const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
+
   const [IROrder, setIROrder] = useState<IROrder[]>();
   useEffect(() => {
     IROServices.getAll()
@@ -34,6 +113,13 @@ const ManageIRO = () => {
         console.log(res);
       });
   }, []);
+
+  useEffect(() => {
+    if (selectedIRO._id!='') {
+      IROServices.updateIRO(selectedIRO._id, selectedIRO);
+    }
+  }, [selectedIRO.billAttachment]);
+
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
@@ -70,7 +156,7 @@ const ManageIRO = () => {
 
               onClick: () => {
                 toggleOpenRemarks(true);
-                setSelectedIRO(props.row._id);
+                setSelectedIROId(props.row._id);
                 IROServices.getAllRemarksById(props.row._id)
                   .then((res) => setRemarks(res.data??[]))
                   .catch((error) => {
@@ -114,6 +200,11 @@ const ManageIRO = () => {
               id: 'Reconciliation',
               text: 'Reconciliation',
               icon: EditIcon,
+              onClick: ()=>{
+                setFileUploaderAction('manage');
+                setAttachment(true);
+                setSelectedIRO(props.row);
+              },
             },
             {
               id: 'Close IRO',
@@ -147,7 +238,12 @@ const ManageIRO = () => {
             {
               id: 'Attachments',
               text: 'Attachments',
-              icon: PrintIcon,
+              icon: AttachmentIcon,
+              onClick: ()=>{
+                setAttachment(true);
+                setFileUploaderAction('add');
+                setSelectedIRO(props.row);
+              },
             },
             {
               id: 'Send Back',
@@ -234,7 +330,7 @@ const ManageIRO = () => {
             onChange={(e) =>
               setRemark((remark) => ({
                 ...remark,
-                IRO: selectedIRO??'',
+                IRO: selectedIROId??'',
                 remark: e.target.value,
               }))
             }
@@ -272,7 +368,7 @@ const ManageIRO = () => {
             variant="contained"
             onClick={() => {
               toggleOpenRemarks(false);
-              setSelectedIRO(null);
+              setSelectedIROId(null);
             }}
             // sx={{ ml: 'auto' }}
           >
@@ -280,6 +376,52 @@ const ManageIRO = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FileUploader
+        title=" Bill Upload"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1*MB,
+          maxItemCount: 3,
+          maxTotalSize: 3*MB,
+        }}
+        // accept={['video/*']}
+        open={attachment}
+        action={fileUploaderAction}
+        onClose={() => setAttachment(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={selectedIRO?.billAttachment??[]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name)
+          .then((res)=>{
+            console.log(res.data._id);
+            setSelectedIRO(()=>({ ...selectedIRO,
+              billAttachment: selectedIRO?.billAttachment.length>0? [...selectedIRO.billAttachment, res.data]:[res.data],
+            } ));
+
+            return res;
+          });
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setSelectedIRO(()=>({ ...selectedIRO,
+            billAttachment: selectedIRO?.billAttachment.map((file) =>
+              file._id === fileId ? { ...file, filename: newName } : file,
+            ) } ));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setSelectedIRO(()=>({ ...selectedIRO,
+            billAttachment: selectedIRO?.billAttachment.filter((file)=>file._id!==fileId),
+          } ));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
     </CommonPageLayout>
   );
 };

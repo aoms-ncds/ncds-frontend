@@ -28,7 +28,7 @@ import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import SendIcon from '@mui/icons-material/Send';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useState, useEffect } from 'react';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -108,6 +108,7 @@ const ViewIRO = () => {
         },
         attachment: [],
       },
+      billAttachment: [],
     },
   );
 

@@ -23,6 +23,7 @@ const index = () => {
       {/* File uploader starts */}
       <FileUploader
         title="Upload bills"
+        action='add'
         types={['application/vnd.ms-excel',
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           'application/pdf',

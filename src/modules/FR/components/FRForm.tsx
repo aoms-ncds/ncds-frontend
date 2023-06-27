@@ -25,7 +25,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material';
-import { Attachment as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
@@ -829,6 +829,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       </Dialog>
       <FileUploader
         title="Attachments"
+        action='add'
         types={[
           'application/pdf',
           'image/png',
