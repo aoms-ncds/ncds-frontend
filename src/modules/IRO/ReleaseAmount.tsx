@@ -376,6 +376,7 @@ const ReleaseAmount = () => {
       /> */}
       <FileUploader
         title="Attachments"
+        action='add'
         types={[
           'application/pdf',
           'image/png',

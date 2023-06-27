@@ -26,7 +26,7 @@ const ManageIRO = () => {
     remark: '',
     transactionId: '',
   });
-  const [reconciliation, setReconciliation] = useState(false);
+  const [fileUploaderAction, setFileUploaderAction] = useState<'add'|'manage'>('add');
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -201,8 +201,9 @@ const ManageIRO = () => {
               text: 'Reconciliation',
               icon: EditIcon,
               onClick: ()=>{
-                setReconciliation(true);
+                setFileUploaderAction('manage');
                 setAttachment(true);
+                setSelectedIRO(props.row);
               },
             },
             {
@@ -240,7 +241,7 @@ const ManageIRO = () => {
               icon: AttachmentIcon,
               onClick: ()=>{
                 setAttachment(true);
-                setReconciliation(false);
+                setFileUploaderAction('add');
                 setSelectedIRO(props.row);
               },
             },
@@ -392,7 +393,7 @@ const ManageIRO = () => {
         }}
         // accept={['video/*']}
         open={attachment}
-        action={reconciliation?'manage':'add'}
+        action={fileUploaderAction}
         onClose={() => setAttachment(false)}
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment??[]}

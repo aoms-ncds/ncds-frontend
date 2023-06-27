@@ -10,6 +10,7 @@ import {
   CardContent,
   Chip,
   CircularProgress,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -32,7 +33,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 interface FileUploaderProps {
   id?: string;
   title: string;
-  action?: 'add'|'view'|'manage';
+  action: 'add'|'view'|'manage';
   types: FileObjectType[]; // pass the type of file you need to upload
   // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
   limits:{
@@ -67,7 +68,10 @@ const FileUploader = (props: FileUploaderProps) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [dragged, setDragged] = useState(false);
 
-  const [action, setAction] = useState<'add'|'view'|'manage'>('add');
+
+  const [deleteFileId, setDeleteFileId] = useState<string|null>(null);
+  const [approveFileId, setApproveFileId] = useState<string|null>(null);
+  const [rejectFileId, setRejectFileId] = useState<string|null>(null);
   const uploadFile = (files: FileList) => {
     if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
       // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
@@ -183,14 +187,6 @@ const FileUploader = (props: FileUploaderProps) => {
   };
 
   useEffect(() => {
-    if (props.action) {
-      setAction(props.action);
-    } else {
-      setAction('add');
-    }
-  }, []);
-
-  useEffect(() => {
     if (props.open) {
       setFileObjects(props.getFiles);
     } else {
@@ -203,56 +199,45 @@ const FileUploader = (props: FileUploaderProps) => {
   }, [props.open]);
 
   return (
-    <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
-      <Box
-        onDragOver={(event) => {
-          event.preventDefault();
-          if (action=='add') {
-            setDragged(true);
-          }
-        }}
-        onDragLeave={() => {
-          if (action=='add') setDragged(false);
-        }}
-      >
-        <DialogTitle>{props.title}</DialogTitle>
-        <Divider />
-        <br />
-        <DialogContent
-          onDragStart={(event) => event.preventDefault()}
-          onDrop={(event) => {
+    <>
+      <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
+        <Box
+          onDragOver={(event) => {
             event.preventDefault();
-            if (action=='add') {
-              uploadFile(event.dataTransfer.files);
-              setDragged(false);
+            if (props.action=='add') {
+              setDragged(true);
             }
           }}
+          onDragLeave={() => {
+            if (props.action=='add') setDragged(false);
+          }}
         >
-          <Fade in={dragged}>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: '100%',
-                zIndex: 999,
-                opacity: 0.2,
-                backgroundColor: isDark ? 'grey' : '#1d1c1c',
-                color: isDark ? 'black' : 'white',
-              }}
-            >
+          <DialogTitle>{props.title}</DialogTitle>
+          <Divider />
+          <br />
+          <DialogContent
+            onDragStart={(event) => event.preventDefault()}
+            onDrop={(event) => {
+              event.preventDefault();
+              if (props.action=='add') {
+                uploadFile(event.dataTransfer.files);
+                setDragged(false);
+              }
+            }}
+          >
+            <Fade in={dragged}>
               <Box
                 sx={{
                   position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  width: '80%',
-                  height: '80%',
-                  transform: 'translate(-50%, -50%)',
-                  border: '4px dashed white',
-                  borderRadius: 2,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: '100%',
+                  zIndex: 999,
+                  opacity: 0.2,
+                  backgroundColor: isDark ? 'grey' : '#1d1c1c',
+                  color: isDark ? 'black' : 'white',
                 }}
               >
                 <Box
@@ -260,55 +245,67 @@ const FileUploader = (props: FileUploaderProps) => {
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
+                    width: '80%',
+                    height: '80%',
                     transform: 'translate(-50%, -50%)',
+                    border: '4px dashed white',
+                    borderRadius: 2,
                   }}
                 >
-                  <Typography variant="h4" sx={{ textAlign: 'center' }} color="inherit">
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <Typography variant="h4" sx={{ textAlign: 'center' }} color="inherit">
                     Drag and Drop here
-                  </Typography>
-                  <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                    </Typography>
+                    <Typography variant="body1" sx={{ textAlign: 'center' }}>
                     Supported formats: <br /> {props.types.join(', ')}
-                  </Typography>
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </Fade>
-          {filesFetchErrorMessage ? (
-            <Alert severity="error">
-              <AlertTitle>
-                <b>Something went wrong!</b>
-              </AlertTitle>
-              {filesFetchErrorMessage}
-            </Alert>
-          ) : !fileObjects ? (
-            <div style={{ textAlign: 'center' }}>
-              <CircularProgress />
-            </div>
-          ) : (
-            <Grid container spacing={3}>
-              {fileObjects.map((file, index) => (
-                <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
-                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }} onClick={()=>{
+            </Fade>
+            {filesFetchErrorMessage ? (
+              <Alert severity="error">
+                <AlertTitle>
+                  <b>Something went wrong!</b>
+                </AlertTitle>
+                {filesFetchErrorMessage}
+              </Alert>
+            ) : !fileObjects ? (
+              <div style={{ textAlign: 'center' }}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <Grid container spacing={3}>
+                {fileObjects.map((file, index) => (
+                  <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
+                    <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }} onClick={()=>{
                     // file.downloadURL? window.open(file.downloadURL, '_blank'):null;
-                  }}>
-                    <CardContent sx={{ pb: 0 }}>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} lg={3}>
-                          <GetFileIconByType type={file.type} />
-                        </Grid>
-                        <Grid item xs={12} lg={9}>
-                          <Input
-                            value={file.filename}
-                            onChange={(e) => {
-                              setFileObjects((_fileObjects) =>
-                                !_fileObjects ?
-                                  null :
-                                  _fileObjects.map((_fileObject) => {
+                    }}>
+                      <CardContent sx={{ pb: 0 }}>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} lg={3}>
+                            <GetFileIconByType type={file.type} />
+                          </Grid>
+                          <Grid item xs={12} lg={9}>
+                            <Input
+                              value={file.filename}
+                              onChange={(e) => {
+                                setFileObjects((_fileObjects) =>
+                                  !_fileObjects ?
+                                    null :
+                                    _fileObjects.map((_fileObject) => {
                                     // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
-                                    return _fileObject._id === file._id ? { ..._fileObject, filename: e.target.value } : _fileObject;
-                                  }),
-                              );
-                              props
+                                      return _fileObject._id === file._id ? { ..._fileObject, filename: e.target.value } : _fileObject;
+                                    }),
+                                );
+                                props
                                 .renameFile && props
                                 .renameFile(file._id, e.target.value)
                                 .then((res) => {
@@ -316,160 +313,236 @@ const FileUploader = (props: FileUploaderProps) => {
                                 .catch((error) => {
                                   // Implement
                                 });
+                              }}
+                              disableUnderline
+                              fullWidth
+                            />
+                            <Typography variant="caption">{(file?.size / 1000 / 1000).toFixed(2)} MB</Typography>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                      <CardActions sx={{ pt: 0 }}>
+                        {file.status==CommonLifeCycleStates.APPROVED?
+                          <Chip variant="outlined" label="Accepted" color="success" size="small" icon={<CheckIcon />} />:
+                          file.status==CommonLifeCycleStates.REJECTED?
+                            <Chip variant="outlined" label="Rejected" color="error" size="small" icon={<ClearIcon />} />:
+                            props.action=='manage'?
+                              <>
+                                <IconButton
+                                  sx={{ ml: 'auto' }}
+                                  color="error"
+                                  onClick={() => {
+                                    setApproveFileId(file._id);
+                                  }}
+                                >
+                                  <CheckIcon />
+                                </IconButton>
+                                <IconButton
+                                  sx={{ ml: 'auto' }}
+                                  color="error"
+                                  onClick={() => {
+                                    setRejectFileId(file._id);
+                                  }}
+                                >
+                                  <ClearIcon />
+                                </IconButton>
+                              </>:null
+                        }
+                        {file.downloadURL&&(
+                          <IconButton
+                            sx={{ ml: 'auto' }}
+                            color="error"
+                            onClick={() => {
+                              if (file.downloadURL) {
+                                const link = document.createElement('a');
+                                link.href = file.downloadURL;
+                                link.download = ''; // You can specify a custom file name here
+                                link.click();
+                              }
                             }}
-                            disableUnderline
-                            fullWidth
-                          />
-                          <Typography variant="caption">{(file?.size / 1000 / 1000).toFixed(2)} MB</Typography>
+                          >
+                            <FileDownloadIcon />
+                          </IconButton>
+                        )}
+                        { props.deleteFile && props.action!='manage' &&(
+                          <IconButton
+                            sx={{ ml: 'auto' }}
+                            color="error"
+                            onClick={() => {
+                              setDeleteFileId(file._id);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>)}
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+                {uploadingFiles.map((file, index) => (
+                  <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
+                    <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }}>
+                      <CardContent sx={{ pb: 0 }}>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} lg={3}>
+                            <GetFileIconByType type={file.type} />
+                          </Grid>
+                          <Grid item xs={12} lg={9}>
+                            <Input value={file.name} disabled disableUnderline fullWidth />
+                            <Typography variant="caption">
+                              {convertFileSize(file.size).size.toFixed(2)} {convertFileSize(file.size).type}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </CardContent>
-                    <CardActions sx={{ pt: 0 }}>
-                      {file.status==CommonLifeCycleStates.APPROVED?
-                        <Chip variant="outlined" label="Accepted" color="success" size="small" icon={<CheckIcon />} />:
-                        file.status==CommonLifeCycleStates.REJECTED?
-                          <Chip variant="outlined" label="Rejected" color="error" size="small" icon={<ClearIcon />} />:
-                          props.action=='manage'?
-                            <>
-                              <IconButton
-                                sx={{ ml: 'auto' }}
-                                color="error"
-                                onClick={() => {
-                                  FileUploaderServices.manageFile(file._id, 'approve');
-                                  setFileObjects((_fileObjects) =>
-                                    !_fileObjects ?
-                                      null :
-                                      _fileObjects.map((_fileObject) => {
-                                      // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
-                                        return _fileObject._id === file._id ? { ..._fileObject, status: CommonLifeCycleStates.APPROVED } : _fileObject;
-                                      }),
-                                  );
-                                }}
-                              >
-                                <CheckIcon />
-                              </IconButton>
-                              <IconButton
-                                sx={{ ml: 'auto' }}
-                                color="error"
-                                onClick={() => {
-                                  FileUploaderServices.manageFile(file._id, 'reject');
-                                  setFileObjects((_fileObjects) =>
-                                    !_fileObjects ?
-                                      null :
-                                      _fileObjects.map((_fileObject) => {
-                                      // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
-                                        return _fileObject._id === file._id ? { ..._fileObject, status: CommonLifeCycleStates.REJECTED } : _fileObject;
-                                      }),
-                                  );
-                                }}
-                              >
-                                <ClearIcon />
-                              </IconButton>
-                            </>:null
-                      }
-                      {file.downloadURL&&(
-                        <IconButton
-                          sx={{ ml: 'auto' }}
-                          color="error"
-                          onClick={() => {
-                            if (file.downloadURL) {
-                              const link = document.createElement('a');
-                              link.href = file.downloadURL;
-                              link.download = ''; // You can specify a custom file name here
-                              link.click();
-                            }
-                          }}
-                        >
-                          <FileDownloadIcon />
-                        </IconButton>
-                      )}
-                      { props.deleteFile && props.action!='manage' &&(
-                        <IconButton
-                          sx={{ ml: 'auto' }}
-                          color="error"
-                          onClick={() => {
-                            props.deleteFile && props
-                            .deleteFile(file._id)
-                            .then(() => {
-                              setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== file._id ?? null)));
-                            })
-                            .catch((error) => {
-                              console.log({ error });
-                            });
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>)}
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-              {uploadingFiles.map((file, index) => (
-                <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
-                  <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }}>
-                    <CardContent sx={{ pb: 0 }}>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} lg={3}>
-                          <GetFileIconByType type={file.type} />
-                        </Grid>
-                        <Grid item xs={12} lg={9}>
-                          <Input value={file.name} disabled disableUnderline fullWidth />
-                          <Typography variant="caption">
-                            {convertFileSize(file.size).size.toFixed(2)} {convertFileSize(file.size).type}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                    {/* <Box height={20}/> */}
-                    {/* {file.progress} */}
-                    <LinearProgress variant="determinate" value={file.progress.percentage} />
-                    <Typography sx={{ padding: '10px' }}>
-                      {(file.progress.loaded / 1000 / (file.progress.total > MB10 ? 1000 : 1)).toFixed(2)}/{(file.progress.total / 1000 / 1000).toFixed(2)} {convertFileSize(file.size).type}
-                    </Typography>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          )}
-          {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
-            <>
-              <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-                {action=='add'? 'Drag and Drop here':'No files Found'}
-              </Typography>
-            </>
-          )}
+                      </CardContent>
+                      {/* <Box height={20}/> */}
+                      {/* {file.progress} */}
+                      <LinearProgress variant="determinate" value={file.progress.percentage} />
+                      <Typography sx={{ padding: '10px' }}>
+                        {(file.progress.loaded / 1000 / (file.progress.total > MB10 ? 1000 : 1)).toFixed(2)}/{(file.progress.total / 1000 / 1000).toFixed(2)} {convertFileSize(file.size).type}
+                      </Typography>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+            {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
+              <>
+                <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
+                  {props.action=='add'? 'Drag and Drop here':'No files Found'}
+                </Typography>
+              </>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" onClick={props.onClose}>
+            Close
+            </Button>
+          &nbsp;
+            {props.action==='add'&&(
+              <>
+                <input
+                  type="file"
+                  id={props.id ?? 'file-input'}
+                  accept={props.types.join(',')}
+                  value=""
+                  onChange={(event) => {
+                    if (event.target.files) {
+                      uploadFile(event.target.files);
+                    }
+                  }}
+                  style={{ display: 'none' }}
+                  ref={inputFileField}
+                  multiple
+                />
+                <label htmlFor={props.id ?? 'file-input'}>
+                  <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
+              Choose file
+                  </Button>
+                </label>
+              </>
+            ) }
+          </DialogActions>
+        </Box>
+      </Dialog>
+      <Dialog open={deleteFileId != null} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to delete this item?</Container>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={props.onClose}>
-            Close
+          <Button
+            onClick={() => {
+              setDeleteFileId(null);
+            }}
+          >
+         No, Cancel
           </Button>
-          &nbsp;
-          {action=='add'&&(
-            <>
-              <input
-                type="file"
-                id={props.id ?? 'file-input'}
-                accept={props.types.join(',')}
-                value=""
-                onChange={(event) => {
-                  if (event.target.files) {
-                    uploadFile(event.target.files);
-                  }
-                }}
-                style={{ display: 'none' }}
-                ref={inputFileField}
-                multiple
-              />
-              <label htmlFor={props.id ?? 'file-input'}>
-                <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
-              Choose file
-                </Button>
-              </label>
-            </>
-          ) }
+          <Button
+            onClick={() => {
+              props.deleteFile && props
+              .deleteFile(deleteFileId??'')
+              .then(() => {
+                setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== deleteFileId ?? null)));
+              })
+              .catch((error) => {
+                console.log({ error });
+              });
+              setDeleteFileId(null);
+            }}
+            variant="contained"
+            color="error"
+          >
+         Yes, Delete
+          </Button>
         </DialogActions>
-      </Box>
-    </Dialog>
+      </Dialog>
+      <Dialog open={approveFileId != null} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to approve this item?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setApproveFileId(null);
+            }}
+          >
+                  No, Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              FileUploaderServices.manageFile(approveFileId as string, 'approve');
+              setFileObjects((_fileObjects) =>
+                !_fileObjects ?
+                  null :
+                  _fileObjects.map((_fileObject) => {
+                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
+                    return _fileObject._id === approveFileId ? { ..._fileObject, status: CommonLifeCycleStates.APPROVED } : _fileObject;
+                  }),
+              );
+              setApproveFileId(null);
+            }}
+            variant="contained"
+            color="error"
+          >
+                  Yes, Approve
+          </Button>
+        </DialogActions>
+      </Dialog> <Dialog open={rejectFileId != null} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to reject this item?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setRejectFileId(null);
+            }}
+          >
+                  No, Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              FileUploaderServices.manageFile(rejectFileId as string, 'reject');
+              setFileObjects((_fileObjects) =>
+                !_fileObjects ?
+                  null :
+                  _fileObjects.map((_fileObject) => {
+                    // console.log(_fileObject._id, rejectFileId, _fileObject._id === rejectFileId);
+                    return _fileObject._id === rejectFileId ? { ..._fileObject, status: CommonLifeCycleStates.REJECTED } : _fileObject;
+                  }),
+              );
+              setRejectFileId(null);
+            }}
+            variant="contained"
+            color="error"
+          >
+                  Yes, Reject
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+
   );
 };
 
