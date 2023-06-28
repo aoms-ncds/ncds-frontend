@@ -15,7 +15,7 @@ export default {
         headers: { ...getAuthHeader() },
       }),
       (users) =>
-        users.map((user: any) => ({
+        users.map((user:User) => ({
           ...user,
           token: [],
           basicDetails: {
@@ -24,7 +24,7 @@ export default {
           },
           officialDetails: {
             ...user.officialDetails,
-            dateOfJoining: moment(user.basicDetails.dateOfJoining),
+            dateOfJoining: moment(user.officialDetails.dateOfJoining),
           },
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),

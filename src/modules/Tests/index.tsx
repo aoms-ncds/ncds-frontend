@@ -7,7 +7,6 @@ import ExcelImporter from '../../components/ExcelImporter';
 import DateFilter from '../../components/DateFilter';
 import moment from 'moment';
 import { MB } from '../../extras/CommonConfig';
-import CommonServices from '../../extras/CommonServices';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 const index = () => {

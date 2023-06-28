@@ -46,7 +46,7 @@ const Profile = () => {
       field: 'division',
       headerName: 'Division',
       width: 200,
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <Link
           to={`/divisions/details/${props.row.division._id}`}
           style={{
@@ -88,14 +88,14 @@ const Profile = () => {
           console.log(res.data);
           setUser(res.data);
         })
-        .catch((res) => {});
+        .catch(() => {});
     } else if (userId && userKind === 'worker') {
       WorkersServices.getById(userId)
         .then((res) => {
           console.log(res.data);
           setUser(res.data);
         })
-        .catch((res) => {});
+        .catch(() => {});
     }
   }, []);
   return (

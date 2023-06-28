@@ -6,6 +6,7 @@ import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
 
 const AddNewApplication = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
     _id: '',
@@ -51,7 +52,7 @@ const AddNewApplication = () => {
       variant: 'info',
     });
     ApplicationServices.create(Request)
-      .then((res:any) => {
+      .then((res) => {
         console.log(res, 'res');
         // handleClose();
         // closeSnackbar(snackbarId);

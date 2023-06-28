@@ -1,11 +1,10 @@
-import moment from 'moment';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
-const isObjectId = (id: string) => {
-  const objectIdPattern = /^[0-9a-fA-F]{24}$/;
-  return objectIdPattern.test(id);
-};
+// const isObjectId = (id: string) => {
+//   const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+//   return objectIdPattern.test(id);
+// };
 export default {
   // getCount: () => getStandardResponse<number>(axios.get('http://localhost:8080/tests/getCount', {
   //   headers: { ...getAuthHeader() },

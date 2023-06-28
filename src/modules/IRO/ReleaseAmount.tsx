@@ -3,7 +3,6 @@ import { Button, Card, CardContent, Container, Grid, TextField, Typography } fro
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
-import IROServices from './extras/IROServices';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -11,6 +10,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import { MB } from '../../extras/CommonConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import moment from 'moment';
+import IROServices from './extras/IROServices';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';

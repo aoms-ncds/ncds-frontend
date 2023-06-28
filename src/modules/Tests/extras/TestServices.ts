@@ -14,31 +14,31 @@ export default {
           //   type: 'application/vnd.ms-excel',
           //   storage: 'Drive',
           //   fileId: '03v9runt3',
-          //   downloadURL: 'fwe0nvifjr',
+          //   downloadURL: '',
           //   private: false,
           //   createdAt: moment(),
           //   updatedAt: moment(),
           // },
           // {
-          //   _id: 'f02nuvert3r',
+          //   _id: '',
           //   name: 'Sample PDF',
           //   size: 356443000,
           //   type: 'application/pdf',
           //   storage: 'Drive',
           //   fileId: '03v9runt3',
-          //   downloadURL: 'fwe0nvifjr',
+          //   downloadURL: '',
           //   private: false,
           //   createdAt: moment(),
           //   updatedAt: moment(),
           // },
           // {
-          //   _id: 'f02nusddvert3r',
+          //   _id: '',
           //   name: 'Food',
           //   size: 122443000,
           //   type: 'video/quicktime',
           //   storage: 'Drive',
           //   fileId: '03v9runt3',
-          //   downloadURL: 'fwe0nvifjr',
+          //   downloadURL: '',
           //   private: false,
           //   createdAt: moment(),
           //   updatedAt: moment(),
@@ -73,13 +73,13 @@ export default {
   //           getStandardResponse<FileObject>(
   //             dummyRequest<FileObject>({
   //               data: {
-  //                 _id: 'f02nsdfsuv3r',
+  //                 _id: '',
   //                 name: file.name,
   //                 size: file.size,
   //                 type: file.type as FileObjectType,
   //                 storage: 'Drive',
   //                 fileId: '03v9runt3',
-  //                 downloadURL: 'fwe0nvifjr',
+  //                 downloadURL: '',
   //                 private: false,
   //                 createdAt: moment(),
   //                 updatedAt: moment(),
@@ -124,31 +124,31 @@ export default {
   //       size: file.size,
   //       storage: 'Drive',
   //       fileId: '03v9runt3',
-  //       downloadURL: 'fwe0nvifjr',
+  //       downloadURL: '',
   //       private: false,
   //       createdAt: moment(),
   //       updatedAt: moment(),
   //     },
-  //     message: 'Succesfully uploaded file!',
+  //     message: 'Successfully uploaded file!',
   //     result: 'success',
   //     timeout: 1100,
   //   }),
   // ),
   // deleteFile: (fileID: string) => getStandardResponse<void>(axios.delete('http://localhost:8080/'+fileID)),
-  renameFile: (fileID: string, newName: string) =>
-    getStandardResponse<void>(
-      dummyRequest<void>({
-        result: 'success',
-        timeout: timeoutValue,
-      }),
-    ),
-  deleteFile: (fileID: string) =>
-    getStandardResponse<void>(
-      dummyRequest<void>({
-        result: 'success',
-        timeout: timeoutValue,
-      }),
-    ),
+  // renameFile: (fileID: string, newName: string) =>
+  //   getStandardResponse<void>(
+  //     dummyRequest<void>({
+  //       result: 'success',
+  //       timeout: timeoutValue,
+  //     }),
+  //   ),
+  // deleteFile: (fileID: string) =>
+  //   getStandardResponse<void>(
+  //     dummyRequest<void>({
+  //       result: 'success',
+  //       timeout: timeoutValue,
+  //     }),
+  //   ),
   importStaffsExcel: (staff: IWorker, overwriteDuplicates: boolean) =>
     getStandardResponse<void>(
       dummyRequest<void>({

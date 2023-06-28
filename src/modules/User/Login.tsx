@@ -13,10 +13,11 @@ const LoginPage = () => {
     email: '',
     password: '',
   });
-  const [passwordVisible, setPasswordVisiblity] = useState<boolean>(false);
+  const [passwordVisible, setPasswordVisibility] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [unknownError, setUnknownError] = useState<string>();
 
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -130,7 +131,7 @@ const LoginPage = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position="start">
-                        <IconButton onClick={() => setPasswordVisiblity((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
+                        <IconButton onClick={() => setPasswordVisibility((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
                       </InputAdornment>
                     ),
                   }}

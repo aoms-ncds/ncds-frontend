@@ -27,10 +27,10 @@ export const allModuleRoutes = [
   frPageRoutes,
   iroPageRoutes,
   settingsRoutes,
-  testPageRoutes,
-  samplesPageRoutes,
+  // testPageRoutes,
+  // samplesPageRoutes,
   applicationRoutes,
-  notificationPageRoutes,
+  // notificationPageRoutes,
 
 ];
 const Router = () => {

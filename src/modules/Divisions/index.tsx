@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Grid } from '@mui/material';
 import DivisionsList from './components/DivisionsList';

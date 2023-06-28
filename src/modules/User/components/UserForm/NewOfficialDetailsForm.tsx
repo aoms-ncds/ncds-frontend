@@ -3,41 +3,41 @@ import { Autocomplete, Button, Checkbox, Container, Dialog, DialogActions, Dialo
 import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
-const defaultDivisionDetails:Division = {
-  details: {
-    name: '',
-    divisionId: '',
-    contactNumber: '',
-    email: '',
-    address: { },
-  },
-  subDivisions: [],
-  FCRABankDetails: {
-    bankName: '',
-    branchName: '',
-    accountNumber: '',
-    IFSCCode: '',
-    beneficiary: '',
-  },
-  localBankDetails: {
-    bankName: '',
-    branchName: '',
-    accountNumber: '',
-    IFSCCode: '',
-    beneficiary: '',
-  },
-  otherBankDetails: {
-    bankName: '',
-    branchName: '',
-    accountNumber: '',
-    IFSCCode: '',
-    beneficiary: '',
-  },
-  createdAt: moment(),
-  updatedAt: moment(),
-};
+// const defaultDivisionDetails:Division = {
+//   details: {
+//     name: '',
+//     divisionId: '',
+//     contactNumber: '',
+//     email: '',
+//     address: { },
+//   },
+//   subDivisions: [],
+//   FCRABankDetails: {
+//     bankName: '',
+//     branchName: '',
+//     accountNumber: '',
+//     IFSCCode: '',
+//     beneficiary: '',
+//   },
+//   localBankDetails: {
+//     bankName: '',
+//     branchName: '',
+//     accountNumber: '',
+//     IFSCCode: '',
+//     beneficiary: '',
+//   },
+//   otherBankDetails: {
+//     bankName: '',
+//     branchName: '',
+//     accountNumber: '',
+//     IFSCCode: '',
+//     beneficiary: '',
+//   },
+//   createdAt: moment(),
+//   updatedAt: moment(),
+// };
 
 const NewOfficialDetailsForm = (
   props: FormComponentProps<
@@ -49,9 +49,9 @@ const NewOfficialDetailsForm = (
 ) => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [isDivisionChanged, setIsDivisionChanged] = useState<boolean>(false);
-  const [newDiv, setnewDiv] = useState<Division|null>(null);
+  const [newDiv, setNewDiv] = useState<Division|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
-  const [openDivConfirm, toggleopenDivConfirm] = useState<boolean>(false);
+  const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const currentDate = moment();
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const NewOfficialDetailsForm = (
 
   useEffect(() => {
     // if (props.action!='add') {
-    //   setcurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
+    //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
     DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
@@ -136,10 +136,10 @@ const NewOfficialDetailsForm = (
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
-            setnewDiv(newVal);
+            setNewDiv(newVal);
             if (props.action==='edit') {
               if (newVal?._id!=props.value.divisionHistory[props.value.divisionHistory.length-1].division?._id) {
-                toggleopenDivConfirm(true);
+                toggleOpenDivConfirm(true);
               }
             } else if (props.action==='add') {
               props.onChange({ ...props.value, divisionHistory: [
@@ -363,7 +363,7 @@ const NewOfficialDetailsForm = (
         </DialogContent>
         <DialogActions>
           <Button onClick={() =>{
-            toggleopenDivConfirm(false);
+            toggleOpenDivConfirm(false);
           }}>No, Cancel</Button>
           <Button
             variant="contained"
@@ -428,7 +428,7 @@ const NewOfficialDetailsForm = (
               //     }]});
               //   setIsDivisionChanged(true);
               // }
-              toggleopenDivConfirm(false);
+              toggleOpenDivConfirm(false);
             }}
           >
             Yes, Update

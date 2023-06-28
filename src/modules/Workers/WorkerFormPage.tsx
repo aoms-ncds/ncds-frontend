@@ -97,6 +97,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
               const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (error: any) {
             enqueueSnackbar({
               variant: 'error',

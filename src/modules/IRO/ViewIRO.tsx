@@ -39,7 +39,6 @@ import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROServices from './extras/IROServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import { useNavigate, useParams } from 'react-router-dom';
-import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 
 const ViewIRO = () => {
@@ -115,7 +114,6 @@ const ViewIRO = () => {
   // console.log(IRO);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
-  const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -575,7 +573,6 @@ const ViewIRO = () => {
             if (remark.remark) {
               IROServices.addRemarks(remark)
                 .then((res) => {
-                  setRemarks((remarks) => [...remarks, res.data]);
                   setRemark((remark) => ({
                     ...remark,
                     remark: '',
