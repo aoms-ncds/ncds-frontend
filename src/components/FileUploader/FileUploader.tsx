@@ -43,6 +43,8 @@ interface FileUploaderProps {
   };
   open: boolean;
   onClose: () => void;
+  postApprove?:() => Promise<StandardResponse<void>>;
+  postReject?:() => Promise<StandardResponse<void>>;
   uploadFile?: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
   getFiles: FileObject[];
   renameFile?: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
@@ -71,7 +73,9 @@ const FileUploader = (props: FileUploaderProps) => {
 
   const [deleteFileId, setDeleteFileId] = useState<string|null>(null);
   const [approveFileId, setApproveFileId] = useState<string|null>(null);
+  const [allApproved, setAllApproved] = useState(true);
   const [rejectFileId, setRejectFileId] = useState<string|null>(null);
+  const [completedFile, setCompletedFile] = useState(false);
   const uploadFile = (files: FileList) => {
     if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
       // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
@@ -185,8 +189,30 @@ const FileUploader = (props: FileUploaderProps) => {
       return true;
     }
   };
+  useEffect(() => {
+    setAllApproved(true);
+    fileObjects?.forEach((_fileObject) => {
+      if (_fileObject.status!=CommonLifeCycleStates.APPROVED) {
+        setAllApproved(false);
+        return;
+      }
+    });
+    // fileObjects?.filter((_fileObject) => {
+    //   if (_fileObject.status!=CommonLifeCycleStates.APPROVED) {
+    //     setAllApproved(false);
+    //   } else setAllApproved(true);
+    // });
+  }, [fileObjects]);
+
 
   useEffect(() => {
+    fileObjects?.forEach((_fileObject) => {
+      setAllApproved(true);
+      if (_fileObject.status!=CommonLifeCycleStates.APPROVED) {
+        setAllApproved(false);
+        return;
+      }
+    });
     if (props.open) {
       setFileObjects(props.getFiles);
     } else {
@@ -417,6 +443,12 @@ const FileUploader = (props: FileUploaderProps) => {
             <Button variant="outlined" onClick={props.onClose}>
             Close
             </Button>
+            {props.action=='manage'&& props.postApprove &&(
+              <Button variant="contained" onClick={()=>setCompletedFile(true)} disabled={!allApproved }>
+            Reconciliation Done
+              </Button>
+            )}
+
           &nbsp;
             {props.action==='add'&&(
               <>
@@ -508,7 +540,8 @@ const FileUploader = (props: FileUploaderProps) => {
                   Yes, Approve
           </Button>
         </DialogActions>
-      </Dialog> <Dialog open={rejectFileId != null} maxWidth="xs" fullWidth>
+      </Dialog>
+      <Dialog open={rejectFileId != null} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
           <Container>Do you want to reject this item?</Container>
@@ -538,6 +571,31 @@ const FileUploader = (props: FileUploaderProps) => {
             color="error"
           >
                   Yes, Reject
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={completedFile} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to complete Reconciliation?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() =>
+              setCompletedFile(false)
+            }
+          >
+                  No, Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              props.postApprove && props.postApprove();
+              setCompletedFile(false);
+            }}
+            variant="contained"
+            color="error"
+          >
+                  Yes, Reconciliation Completed
           </Button>
         </DialogActions>
       </Dialog>

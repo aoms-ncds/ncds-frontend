@@ -293,6 +293,8 @@ const ReleaseAmount = () => {
                       } }))}
                     fullWidth
                     variant="outlined"
+                    required
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -309,6 +311,7 @@ const ReleaseAmount = () => {
                         } }))}
                     variant="outlined"
                     fullWidth
+                    required
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
