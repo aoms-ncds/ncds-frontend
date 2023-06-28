@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import moment from 'moment';
-import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
+import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
 export default {

@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { dummyRequest, getAuthHeader, getStandardResponse } from '../../../extras/CommonHelpers';
+import { getAuthHeader, getStandardResponse } from '../../../extras/CommonHelpers';
 
-const timeoutValue = 250;
 
 export default {
 
