@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Checkbox, FormControlLabel, Grid, Link, Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { Button, Card, Checkbox, FormControlLabel, Grid } from '@mui/material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 const MyMessagePage = () => {
   const [messages, setMessages] = useState<Message[]>();

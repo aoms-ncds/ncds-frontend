@@ -205,7 +205,7 @@ const IROReceiptTemplate = (props: any) => {
 
         <div style={{ marginTop: 120 }}>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :{sanctionedAmountWords}</Text>
           </View>
         </div>
 

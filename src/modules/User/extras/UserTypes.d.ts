@@ -1,6 +1,5 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
-import { Types } from 'mongoose';
 
 export default {};
 

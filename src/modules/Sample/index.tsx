@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card, Typography } from '@mui/material';
 import SampleComponent from './components/SampleComponent';
