@@ -109,6 +109,7 @@ const ViewIRO = () => {
         },
         attachment: [],
       },
+      billAttachment: [],
     },
   });
   console.log(IRO);
