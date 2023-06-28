@@ -279,6 +279,7 @@ const ApplicationsListingPage = () => {
       </Dialog>
       <FileUploader
         title="Attachments"
+        action='add'
         types={[
           'application/pdf',
           'image/png',

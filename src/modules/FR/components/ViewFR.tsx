@@ -35,7 +35,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { purposes, sanctionedAsPers } from '../extras/FRConfig';
-import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [coordinators, setCoordinators] = useState<IWorker[]>();
@@ -356,7 +356,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <PermissionChecks
-                        permissions={['WRITE_IRO']}
+                        permissions={['READ_FR']}
                         granted={(
                           <Button
                             variant="contained"
