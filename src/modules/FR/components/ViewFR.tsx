@@ -356,7 +356,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <PermissionChecks
-                        permissions={['WRITE_IRO']}
+                        permissions={['READ_FR']}
                         granted={(
                           <Button
                             variant="contained"

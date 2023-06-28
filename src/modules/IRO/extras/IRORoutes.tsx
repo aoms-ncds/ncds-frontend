@@ -35,7 +35,7 @@ const iroPageRoutes: ModuleRoute = {
     {
       title: 'View IRO',
       path: '/:iroID',
-      element: <ViewIRO/>,
+      element: <ViewIRO />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
     },

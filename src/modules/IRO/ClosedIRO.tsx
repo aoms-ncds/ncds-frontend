@@ -13,7 +13,7 @@ const ClosedIRO = () => {
   useEffect(() => {
     IROServices.getClosed()
       .then((res) => {
-        console.log(res);
+        console.log(res, 'CLOSED');
         setIROrder(res.data);
       })
       .catch((res) => {

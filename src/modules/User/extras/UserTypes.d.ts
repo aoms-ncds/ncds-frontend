@@ -22,6 +22,8 @@ declare global {
     WRITE_XYZ: boolean;
     ACCOUNTS_ACCESS:boolean;
     PRESIDENT_ACCESS:boolean;
+    OFFICE_MNGR_APPROVED :boolean;
+    ACCOUNTS_MNGR_APPROVED:boolean;
 
 
   }
