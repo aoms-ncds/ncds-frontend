@@ -143,7 +143,7 @@ const ManageIRO = () => {
               icon: PreviewIcon,
             },
             {
-              id: 'View',
+              id: 'Release',
               text: 'Release Amount',
               component: Link,
               to: '/iro/release_amount/' + props.row._id,
@@ -394,11 +394,12 @@ const ManageIRO = () => {
         // accept={['video/*']}
         open={attachment}
         action={fileUploaderAction}
+        postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
         onClose={() => setAttachment(false)}
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment??[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name)
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/Reconciliation', file.name)
           .then((res)=>{
             console.log(res.data._id);
             setSelectedIRO(()=>({ ...selectedIRO,

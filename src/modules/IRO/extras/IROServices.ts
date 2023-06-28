@@ -90,6 +90,7 @@ export default {
       })),
     ),
 
+  reconciliationCompleted: (IROId: string) => getStandardResponse<void>(axios.patch(`/iro/${IROId}/reconciliation_complete`, null, { headers: { ...getAuthHeader() } })),
   close: (IROId: string) => getStandardResponse<Application>(axios.patch(`/iro/${IROId}/close`, null, { headers: { ...getAuthHeader() } })),
   sendBack: (IROId: string) => getStandardResponse<Application>(axios.patch(`/iro/${IROId}/sendBack`, null, { headers: { ...getAuthHeader() } })),
   getPrintDetails: (IROId: string) => getStandardResponse<Application>(axios.get(`/iro/printDetails/${IROId}`)),

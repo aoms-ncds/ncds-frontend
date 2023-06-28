@@ -42,6 +42,7 @@ declare global {
     downloadURL: string | null;
     private: boolean;
     status:number;
+    refId?:string;
   }
   type FileObjectType =
     | 'application/vnd.ms-excel'
