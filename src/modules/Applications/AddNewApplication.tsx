@@ -1,12 +1,12 @@
 import { DialogContent, Container, Grid, TextField, DialogActions, Button, Card } from '@mui/material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import ApplicationServices from './extras/ApplicationServices';
 import moment from 'moment';
 
 const AddNewApplication = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
     _id: '',

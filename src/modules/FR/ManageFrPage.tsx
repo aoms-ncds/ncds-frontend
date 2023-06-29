@@ -37,7 +37,6 @@ const ManageFrPage = () => {
     remark: '',
     transactionId: '',
   });
-  const [particulars, setParticulars] = useState<Particular[]>([]);
 
   useEffect(() => {
     FRServices.getAll()
@@ -58,7 +57,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       type: 'string',
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="FR action"
@@ -134,16 +133,16 @@ const ManageFrPage = () => {
     {
       field: 'FRno', headerName: 'FR No', width: 100, align: 'center', headerAlign: 'center',
     },
-    { field: 'FRdate', headerName: 'FR Date', renderCell: (props: any) => (
-      <p> {props.row.date}</p>
+    { field: 'FRdate', headerName: 'FR Date', renderCell: (props) => (
+      <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
     ), width: 80, align: 'center', headerAlign: 'center' },
-    { field: 'divisionName', headerName: 'Division Name', renderCell: (props: any) => (
+    { field: 'divisionName', headerName: 'Division Name', renderCell: (props) => (
       <p> {props.row.purposeDivision?.details.name}</p>
     ), width: 130, align: 'center', headerAlign: 'center' },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props: any) => (
+    { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props) => (
       <p> {props.row.purposeSubdivision?.name}</p>
     ), width: 160, align: 'center', headerAlign: 'center' },
-    { field: 'mainCategory', headerName: 'Main Category', renderCell: (props: any) => (
+    { field: 'mainCategory', headerName: 'Main Category', renderCell: (props) => (
       <p> {props.row.mainCategory}</p>
     ), width: 240, align: 'center', headerAlign: 'center' },
     {
@@ -162,7 +161,7 @@ const ManageFrPage = () => {
     },
 
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props: any) => (
+    { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props) => (
       <p> {props.row.sanctionedAsPer}</p>
     ), width: 200, align: 'center', headerAlign: 'center' },
     {

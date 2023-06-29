@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, Notifications as NotificationsIcon, Person as PersonIcon } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
 import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
@@ -39,7 +39,6 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const auth = useAuth();
-  const navigate = useNavigate();
   // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [notificationsCount, setNotificationsCount] = useState<number>();

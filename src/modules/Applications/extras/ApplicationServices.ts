@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 
@@ -44,7 +43,7 @@ export default {
     );
   },
 
-  editApplication: (applicationID: any, application: CreatableApplication) => {
+  editApplication: (applicationID: string, application: CreatableApplication) => {
     return getStandardResponse<Application>(
       new Promise((resolve, rejects) => {
         axios
@@ -69,13 +68,13 @@ export default {
   },
 
 
-  saveRelease: (applicationID: string) =>
-    getStandardResponse<void>(
-      dummyRequest({
-        // error: null,
-        message: 'Network Error',
-        result: 'success',
-        timeout: 500,
-      }),
-    ),
+  // saveRelease: () =>
+  //   getStandardResponse<void>(
+  //     dummyRequest({
+  //       // error: null,
+  //       message: 'Network Error',
+  //       result: 'success',
+  //       timeout: 500,
+  //     }),
+  //   ),
 };

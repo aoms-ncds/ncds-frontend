@@ -6,17 +6,17 @@ import { Button, Card, Grid } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import GridLinkAction from '../../components/GridLinkAction';
-import moment from 'moment';
 
 const ApplicationManagePages = () => {
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [applications, setApplications] = useState<Application[] | null>(null);
 
   useEffect(() => {
     ApplicationServices.getAll()
-      .then((res) => {
+      .then(() => {
         // setApplications(res.data);
       })
-      .catch((res: any) => {
+      .catch((res) => {
         console.log(res);
       });
   }, []);
@@ -49,14 +49,14 @@ const ApplicationManagePages = () => {
     //             id: 'Approve',
     //             text: 'Approve',
     //             component: Link,
-    //             to: '/application/view_applicaton/' + props.row_id,
+    //             to: '/application/view_application/' + props.row_id,
     //             icon: PreviewIcon,
     //           },
     //           {
     //             id: 'Reject',
     //             text: 'Reject',
     //             component: Link,
-    //             to: '/application/view_applicaton/' + props.row_id,
+    //             to: '/application/view_application/' + props.row_id,
     //             icon: PreviewIcon,
     //           },
 

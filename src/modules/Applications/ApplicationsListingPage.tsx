@@ -19,6 +19,7 @@ const ApplicationsListingPage = () => {
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
   const [editid, setEditId] = useState<string>();
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     name: '',
@@ -199,7 +200,7 @@ const ApplicationsListingPage = () => {
     // { field: '_id', headerName: 'SI NO', width: 150 },
     { field: 'name', headerName: 'Name', width: 150 },
     { field: 'reason', headerName: 'Reason', width: 150 },
-    { field: 'createdBy', headerName: 'Applied By', renderCell: (props: any) =>
+    { field: 'createdBy', headerName: 'Applied By', renderCell: (props) =>
       <p> {props.row.createdBy?.basicDetails.firstName+' '+props.row.createdBy?.basicDetails.lastName}</p>,
     width: 170, headerAlign: 'center', align: 'center' },
     {

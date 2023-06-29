@@ -12,18 +12,18 @@ import DivisionsFormComponent from './components/DivisionsFormComponent';
 const DivisionDetailsPage = () => {
   const { divisionIDs, editID } = useParams();
 
-  const [activeStep, setactiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
   const navigate = useNavigate();
 
 
-  const addDivision = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('ADDFUNCITON');
+  const addDivision = () => {
+    console.log('ADD_FUNCTION');
     // e.preventDefault();
     // event.preventDefault();
     DivisionsServices.create(divisionDetails)
       .then((res) => {
-        console.log(res, 'ress');
+        console.log(res, 'res');
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -37,8 +37,8 @@ const DivisionDetailsPage = () => {
       });
   };
   console.log('Dd');
-  const editDivision = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const editDivision = () => {
+    // event.preventDefault();
     if (editID) {
       DivisionsServices.editDivision(editID, divisionDetails)
         .then((res) => {
@@ -105,9 +105,9 @@ const DivisionDetailsPage = () => {
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
-      DivisionsServices.getDivisionbyId(divisionIDs)
+      DivisionsServices.getDivisionById(divisionIDs)
         .then((res) => {
-          console.log('the value areeee', res);
+          console.log('the value are', res);
           setDivisionDetails(res.data);
         })
         .catch((err) => {
@@ -116,9 +116,9 @@ const DivisionDetailsPage = () => {
     }
     if (editID) {
       setAction('edit');
-      DivisionsServices.getDivisionbyId(editID)
+      DivisionsServices.getDivisionById(editID)
         .then((res) => {
-          console.log('the value areeee', res);
+          console.log('the value are', res);
           setDivisionDetails(res.data);
           console.log(divisionDetails);
         })
@@ -150,7 +150,7 @@ const DivisionDetailsPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setactiveStep(1);
+                setActiveStep(1);
               }}
             >
               <Grid container spacing={2}>
@@ -177,7 +177,7 @@ const DivisionDetailsPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setactiveStep(2);
+                setActiveStep(2);
               }}
             >
               <Grid container spacing={2}>
@@ -198,7 +198,7 @@ const DivisionDetailsPage = () => {
                   <Button
                     type="button"
                     onClick={() => {
-                      setactiveStep(0);
+                      setActiveStep(0);
                     }}
                     variant="outlined"
                     sx={{ p: '16px 64px', mr: 2, float: 'right' }}
@@ -214,7 +214,7 @@ const DivisionDetailsPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                action === 'add' ? addDivision(e): editDivision(e);
+                action === 'add' ? addDivision(): editDivision();
                 navigate('/hr/manage');
               }}
             >
@@ -252,7 +252,7 @@ const DivisionDetailsPage = () => {
                   <Button
                     type="button"
                     onClick={() => {
-                      setactiveStep(1);
+                      setActiveStep(1);
                     }}
                     variant="outlined"
                     sx={{ p: '16px 64px', mr: 2, float: 'right' }}

@@ -98,7 +98,7 @@ export default {
   },
   SubDivisionServices: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDivisionbyId: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
+  getDivisionById: (divisionId: string) => getStandardResponse<Division>(axios.get('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
 
   deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId, { headers: { ...getAuthHeader() } })),
   divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
