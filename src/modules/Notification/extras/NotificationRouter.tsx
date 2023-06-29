@@ -1,5 +1,6 @@
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
-import MyMessagePage from '..';
+import NotificationPage from '..';
+import MessageContent from '../components/MessageContent';
 
 const notificationPageRoutes: ModuleRoute = {
   base: '/notification',
@@ -7,18 +8,18 @@ const notificationPageRoutes: ModuleRoute = {
     {
       title: 'Notification',
       path: '',
-      element: <MyMessagePage />,
+      element: <NotificationPage />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
-      showInDrawer: true,
+      showInDrawer: false,
       icon: <NotificationsIcon/>,
     },
-    // {
-    //   title: 'Message',
-    //   path: '/:_id',
-    //   private: true,
-    //   element: <MessageContent />,
-    // },
+    {
+      title: 'Message',
+      path: '/:_id',
+      private: true,
+      element: <MessageContent />,
+    },
 
   ],
 };

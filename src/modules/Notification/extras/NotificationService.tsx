@@ -3,10 +3,10 @@ import { DateRange } from '@mui/icons-material';
 import axios from 'axios';
 import moment from 'moment';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
-const Messaging = {
+const NotificationService = {
   send: (args: Message): Promise<StandardResponse<boolean>> => getStandardResponse(
     axios.post(
-      '/messaging/send',
+      '/notification/send',
       args,
       {
         headers: {
@@ -19,7 +19,7 @@ const Messaging = {
 
   getMessages: (dateRange: DateRange): Promise<StandardResponse<Message[]>> => getStandardResponse(
     axios.get(
-      '/messaging', {
+      '/notification', {
         params: {
           startDate: moment(dateRange.startDate).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
           endDate: moment(dateRange.endDate).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
@@ -31,7 +31,7 @@ const Messaging = {
   ),
   getMyMessages: (read: boolean): Promise<StandardResponse<Message[]>> => getStandardResponse(
     axios.get(
-      '/messaging/my_messages', {
+      '/notification/my_messages', {
         params: {
           read,
         },
@@ -42,7 +42,7 @@ const Messaging = {
   ),
   getMyMessagesCount: (): Promise<StandardResponse<number>> => getStandardResponse(
     axios.get(
-      '/messaging/my_messages/count', {
+      '/notification/my_messages/count', {
         headers: {
           ...getAuthHeader(),
         },
@@ -50,7 +50,7 @@ const Messaging = {
   ),
   getMessageById: (_id: string): Promise<StandardResponse<Message>> => getStandardResponse(
     axios.get(
-      `/messaging/${_id}`, {
+      `/notification/${_id}`, {
         headers: {
           ...getAuthHeader(),
         },
@@ -60,7 +60,7 @@ const Messaging = {
 
   // markAllMessagesAsRead: (): Promise<StandardResponse<Message[]>> => getStandardResponse(
   //     axios.delete(
-  //         "/messaging/my_messages", {
+  //         "/notification/my_messages", {
   //         headers: {
   //             ...getAuthHeader(),
   //         },
@@ -68,7 +68,7 @@ const Messaging = {
   // ),
   markAllAsRead: (): Promise<StandardResponse<void>> => getStandardResponse(
     axios.patch(
-      '/messaging/mark_all_as_read', {}, {
+      '/notification/mark_all_as_read', {}, {
         headers: {
           ...getAuthHeader(),
         },
@@ -77,7 +77,7 @@ const Messaging = {
   ),
   markAsRead: (_id: string): Promise<StandardResponse<void>> => getStandardResponse(
     axios.patch(
-      `/messaging/${_id}/mark_as_read`, {}, {
+      `/notification/${_id}/mark_as_read`, {}, {
         headers: {
           ...getAuthHeader(),
         },
@@ -88,4 +88,4 @@ const Messaging = {
 
 };
 
-export default Messaging;
+export default NotificationService;

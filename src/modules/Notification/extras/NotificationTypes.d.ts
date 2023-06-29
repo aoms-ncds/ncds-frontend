@@ -7,7 +7,7 @@ declare global {
         read: boolean;
     }
     interface Message {
-        _id?: string;
+        _id: string;
         recipients: Recipients[];
         title: string;
         body: string;

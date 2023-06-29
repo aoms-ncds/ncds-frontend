@@ -46,7 +46,15 @@ declare global {
   }
   interface MainCategory {
     name: string;
-    subcategory1: SubCategory1[];
+    subcategory1: {
+      name: string;
+      subcategory2: {
+        name: string;
+        subcategory3: {
+          name: string;
+          narration: string;
+        }[];}[];
+    }[];
   }
   interface SubCategory1 {
     name: string;

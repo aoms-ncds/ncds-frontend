@@ -1,150 +1,164 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Link } from 'react-router-dom';
+import NotificationService from './extras/NotificationService';
+import { enqueueSnackbar } from 'notistack';
+import moment from 'moment';
 
-const MyMessagePage = () => {
-  const [messages, setMessages] = useState<Message[]>();
+const NotificationPage = () => {
+  const [messages, setMessages] = useState<Message[]|null>(null);
   const [showReadMessages, setShowReadMessages] = useState(false);
-  const columns: GridColDef[] = [
+  const [loading, setLoading] = useState(0);
+  const columns: GridColDef<Message>[] = [
     {
       field: 'title',
       headerName: 'Title',
-      minWidth: 180,
+      minWidth: 200,
       type: 'string',
-    //   renderCell: (props: GridRenderCellParams<string>) => {
-    //     return (
-    //       <Link
-    //         to={`/messaging/${props.row._id}`}
-    //         style={{ textDecoration: 'none'}}
-    //       >
-    //         {props.value}
-    //       </Link>
-    //     );
-    //   },
+      renderCell: (props) => {
+        return (
+          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+            {props.value}
+          </Link>
+        );
+      },
     },
 
     {
       field: 'body',
       headerName: 'Body',
-      minWidth: 180,
+      minWidth: 500,
       type: 'string',
-    //   renderCell: (props: GridRenderCellParams<string>) => {
-    //     return (
-    //       <Link
-    //         to={`/messaging/${props.row._id}`}
-    //         style={{ textDecoration: 'none', color: isDark ? '#fff' : '#000' }}
-    //       >
-    //         {props.value}
-    //       </Link>
-    //     );
-    //   },
+      renderCell: (props) => {
+        return (
+          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+            {props.value}
+          </Link>
+        );
+      },
     },
     {
       field: 'type',
       headerName: 'Type',
       minWidth: 180,
       type: 'string',
-    //   renderCell: (props: GridRenderCellParams<string>) => {
+      renderCell: (props) => {
+        return (
+          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+            {props.value}
+          </Link>
+        );
+      },
+    },
+    // {
+    //   field: 'ref_url',
+    //   headerName: 'Reference URL',
+    //   minWidth: 180,
+    //   type: 'string',
+    //   renderCell: (props) => {
     //     return (
-    //       <Link
-    //         to={`/messaging/${props.row._id}`}
-    //         style={{ textDecoration: 'none', color: isDark ? '#fff' : '#000' }}
-    //       >
+    //       <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
     //         {props.value}
     //       </Link>
     //     );
     //   },
-    },
-    {
-      field: 'ref_url',
-      headerName: 'Reference URL',
-      minWidth: 180,
-      type: 'string',
-    //   renderCell: (props: GridRenderCellParams<string>) => {
-    //     return (
-    //       <Link
-    //         to={`/messaging/${props.row._id}`}
-    //         style={{ textDecoration: 'none', color: isDark ? '#fff' : '#000' }}
-    //       >
-    //         {props.value}
-    //       </Link>
-    //     );
-    //   },
-    },
+    // },
 
     {
       field: 'createdAt',
       headerName: 'Created At',
       minWidth: 180,
       type: 'date',
-    //   valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'),
-    //   renderCell: (props: GridRenderCellParams<string>) => {
-    //     return (
-    //       <Link
-    //         to={`/messaging/${props.row._id}`}
-    //         style={{ textDecoration: 'none', color: isDark ? '#fff' : '#000' }}
-    //       >
-    //         {props.value}
-    //       </Link>
-    //     );
-    //   },
+      valueFormatter: (params) => moment(params.value).format('DD/MM/YYYY'),
+      renderCell: (props) => {
+        return (
+          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+            {props.value}
+          </Link>
+        );
+      },
     },
-    // ...(showReadMessages ? [] : [{
-    //   field: 'button',
-    //   headerName: 'Mark as Read',
-    //   minWidth: 180,
-    //   //   renderCell: (props: GridRenderCellParams<string, any, string>) => {
-    //   //     return <Button
-    //   //       variant='contained'
-    //   //       onClick={() => {
-    //   //         RESTClient.Messaging.markAsRead(props.row._id)
-    //   //                         .then((res) => {
-    //   //                           enqueueSnackbar({
-    //   //                             message: 'Done',
-    //   //                             variant: 'success',
-    //   //                           });
-    //   //                           const newMessages = messages?.filter((msg) => {
-    //   //                             return msg._id !== props.row._id;
-    //   //                           });
-    //   //                           setMessages(newMessages);
-    //   //                         })
-    //   //                         .catch((err) => {
-    //   //                           enqueueSnackbar({
-    //   //                             message: err.message,
-    //   //                             variant: 'error',
-    //   //                           });
-    //   //                         });
-    //   //       }}
-
-    //   //     >Mark as Read</Button>;
-    //   //   },
-
-    // }]),
+    // ...(showReadMessages ?
+    //   [] :
+    //   [
+    //     {
+    //       field: 'button',
+    //       headerName: 'Mark as Read',
+    //       minWidth: 180,
+    //       renderCell: (props:<string, any, string>) => {
+    //         return (
+    //           <Button
+    //             variant="contained"
+    //             onClick={() => {
+    //               RESTClient.Messaging.markAsRead(props.row._id)
+    //                   .then((res) => {
+    //                     enqueueSnackbar({
+    //                       message: 'Done',
+    //                       variant: 'success',
+    //                     });
+    //                     const newMessages = messages?.filter((msg) => {
+    //                       return msg._id !== props.row._id;
+    //                     });
+    //                     setMessages(newMessages);
+    //                   })
+    //                   .catch((err) => {
+    //                     enqueueSnackbar({
+    //                       message: err.message,
+    //                       variant: 'error',
+    //                     });
+    //                   });
+    //             }}
+    //           >
+    //               Mark as Read
+    //           </Button>
+    //         );
+    //       },
+    //     },
+    //   ]),
   ];
+
+  useEffect(() => {
+    setLoading((loading) => loading + 1);
+    NotificationService.getMyMessages(showReadMessages)
+        .then((res) => {
+          console.log(res);
+          setMessages(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'error',
+          });
+        });
+  }, [showReadMessages]);
   return (
-    <CommonPageLayout title='Notifications' >
+    <CommonPageLayout title="Notifications">
       <Grid item xs={12} md={12}>
         <Card style={{ height: '69vh', width: '100%' }}>
           <br />
-          <Button sx={{ float: 'right' }} variant="outlined"
-            //  onClick={() => {
-            //                             RESTClient.Messaging.markAllAsRead()
-            //                                 .then((res) => {
-            //                                     setMessages([])
-
-            //                                 })
-            //                                 .catch((res) => {
-            //                                     enqueueSnackbar({
-            //                                         message: res.message,
-            //                                         variant: "error"
-            //                                     });
-            //                                 })
-            //                         }}
+          <Button
+            sx={{ float: 'right' }}
+            variant="outlined"
+            onClick={() => {
+              NotificationService.markAllAsRead()
+                .then(() => {
+                  setMessages([]);
+                })
+                .catch((res) => {
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'error',
+                  });
+                });
+            }}
           >
-                                Mark All as Read
+            Mark All as Read
           </Button>
-          <br /><br />
+          <br />
+          <br />
           <FormControlLabel
             control={
               <Checkbox
@@ -158,8 +172,10 @@ const MyMessagePage = () => {
             sx={{ float: 'right' }}
           />
           <br />
-          <br /><br />
-          <DataGrid style={{ height: '68vh', width: '100%' }}
+          <br />
+          <br />
+          <DataGrid
+            style={{ height: '68vh', width: '100%' }}
             // components={{}}
             rows={messages ?? []}
             loading={!messages}
@@ -172,4 +188,4 @@ const MyMessagePage = () => {
   );
 };
 
-export default MyMessagePage;
+export default NotificationPage;

@@ -6,8 +6,8 @@ import frPageRoutes from '../modules/FR/extras/FRRoutes';
 import hrPageRoutes from '../modules/HR/extras/HRRoutes';
 import iroPageRoutes from '../modules/IRO/extras/IRORoutes';
 import workersPageRoutes from '../modules/Workers/extras/WorkersRoutes';
-import testPageRoutes from '../modules/Tests/extras/TestRoutes';
-import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
+// import testPageRoutes from '../modules/Tests/extras/TestRoutes';
+// import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
 import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes';
 import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import { useAuth } from '../hooks/Authentication';
@@ -30,7 +30,7 @@ export const allModuleRoutes = [
   // testPageRoutes,
   // samplesPageRoutes,
   applicationRoutes,
-  // notificationPageRoutes,
+  notificationPageRoutes,
 
 ];
 const Router = () => {
