@@ -28,7 +28,7 @@ import { allModuleRoutes } from '../extras/CommonRouter';
 import { useLoader } from '../hooks/Loader';
 import PermissionChecks from '../modules/User/components/PermissionChecks';
 import { useAuth } from '../hooks/Authentication';
-import { subscribe, unsubscribe } from '../extras/Firebase/messaging';
+import { unsubscribe } from '../extras/Firebase/messaging';
 import NotificationService from '../modules/Notification/extras/NotificationService';
 import { enqueueSnackbar } from 'notistack';
 
@@ -182,7 +182,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               color="inherit"
               sx={{ ml: 'auto' }}
               onClick={() => {
-                subscribe();
+                // subscribe();
               }}
               component={Link}
               to="/notification"
@@ -217,8 +217,8 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
             <MenuItem component={Link} to={`/users/${auth.user ? auth.user.kind+'/'+auth.user._id : ''}`} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Profile</Typography>
             </MenuItem>
-            <MenuItem onClick={() => {
-              unsubscribe();
+            <MenuItem onClick={async () => {
+              await unsubscribe();
               handleCloseUserMenu();
               localStorage.removeItem('userToken');
               localStorage.removeItem('userData');
