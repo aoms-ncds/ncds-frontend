@@ -48,7 +48,7 @@ const Languages = () => {
   const columns: GridColDef<ILanguage>[] = [
     {
       field: 'Languages',
-      headerName: 'Languages',
+      renderHeader: () => (<b>Languages</b>),
       align: 'left',
       width: 150,
       headerAlign: 'center',
@@ -57,6 +57,7 @@ const Languages = () => {
     {
       field: 'edit',
       headerName: 'Edit',
+      renderHeader: () => (<b>Edit</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -78,6 +79,7 @@ const Languages = () => {
     {
       field: 'delete',
       headerName: 'Delete',
+      renderHeader: () => (<b>Delete</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {

@@ -198,14 +198,14 @@ const ApplicationsListingPage = () => {
       ],
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'reason', headerName: 'Reason', width: 150 },
-    { field: 'createdBy', headerName: 'Applied By', renderCell: (props) =>
+    { field: 'name', renderHeader: () => (<b>Name</b>), width: 150 },
+    { field: 'reason', renderHeader: () => (<b>Reason</b>), width: 150 },
+    { field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
       <p> {props.row.createdBy?.basicDetails.firstName+' '+props.row.createdBy?.basicDetails.lastName}</p>,
     width: 170, headerAlign: 'center', align: 'center' },
     {
       field: 'status',
-      headerName: 'Status',
+      renderHeader: () => (<b>Status</b>),
       width: 130,
       align: 'center',
       headerAlign: 'center',

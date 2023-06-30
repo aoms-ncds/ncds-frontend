@@ -14,7 +14,7 @@ const NotificationPage = () => {
   const columns: GridColDef<Message>[] = [
     {
       field: 'title',
-      headerName: 'Title',
+      renderHeader: () => (<b>Title</b>),
       minWidth: 200,
       type: 'string',
       renderCell: (props) => {
@@ -28,7 +28,7 @@ const NotificationPage = () => {
 
     {
       field: 'body',
-      headerName: 'Body',
+      renderHeader: () => (<b>Body</b>),
       minWidth: 500,
       type: 'string',
       renderCell: (props) => {
@@ -41,7 +41,7 @@ const NotificationPage = () => {
     },
     {
       field: 'type',
-      headerName: 'Type',
+      renderHeader: () => (<b>Type</b>),
       minWidth: 180,
       type: 'string',
       renderCell: (props) => {
@@ -68,7 +68,7 @@ const NotificationPage = () => {
 
     {
       field: 'createdAt',
-      headerName: 'Created At',
+      renderHeader: () => (<b>Created At</b>),
       minWidth: 180,
       type: 'date',
       valueFormatter: (params) => moment(params.value).format('DD/MM/YYYY'),

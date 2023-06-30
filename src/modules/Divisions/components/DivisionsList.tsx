@@ -54,7 +54,7 @@ const DivisionsList = () => {
   const columns: GridColDef<Division>[] = [
     {
       field: '_manage',
-      headerName: 'Action',
+      renderHeader: () => (<b>Action</b>),
       width: 60,
       type: 'string',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,10 +92,12 @@ const DivisionsList = () => {
         />
       ),
     },
-    { field: 'divisionId', headerName: 'Division Id', width: 110, valueGetter: (props) => props.row.details.divisionId },
+    { field: 'divisionId',
+      renderHeader: () => (<b>Division Id</b>),
+      width: 110, valueGetter: (props) => props.row.details.divisionId },
     {
       field: 'divisionName',
-      headerName: 'Division Name',
+      renderHeader: () => (<b>Division Name</b>),
       width: 120,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
@@ -110,12 +112,33 @@ const DivisionsList = () => {
         </Link>
       ),
     },
-    { field: 'coordinator', headerName: 'Coordinator Name', renderCell: (props: any) => <p> {props.row.details.coordinator?.firstName}</p>, width: 130 },
-    { field: 'coordinatorEmail', headerName: 'Coordinator Email', renderCell: (props: any) => <p>{props.row.details.coordinator?.email}</p>, width: 130 },
-    { field: 'coordinatorPhone', headerName: 'Coordinator Phone', renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>, width: 140 },
+    {
+      field: 'coordinator',
+      renderHeader: () => (<b>Coordinator Name</b>),
+      renderCell: (props: any) => <p> {props.row.details.coordinator?.firstName}</p>,
+      width: 140,
+    },
+    {
+      field: 'coordinatorEmail',
+      renderHeader: () => (<b>Coordinator Email</b>),
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.email}</p>,
+      width: 140 },
+    {
+      field: 'coordinatorPhone',
+      renderHeader: () => (<b>Coordinator Phone</b>),
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>,
+      width: 140 },
 
-    { field: 'noofWorkers', headerName: 'No. of Workers', renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>, width: 120 },
-    { field: 'NoOfSubdivisions', headerName: 'No. of Subdivisions', renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>, width: 150 },
+    {
+      field: 'noofWorkers',
+      renderHeader: () => (<b>No. of Workers</b>),
+      renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>,
+      width: 130 },
+    {
+      field: 'NoOfSubdivisions',
+      renderHeader: () => (<b>No. of Subdivisions</b>),
+      renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>,
+      width: 150 },
   ];
   return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} />;
 };
