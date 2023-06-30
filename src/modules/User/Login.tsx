@@ -4,6 +4,7 @@ import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, Visib
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
 import UserServices from './extras/UserServices';
+import { subscribe } from '../../extras/Firebase/messaging';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const LoginPage = () => {
         localStorage.setItem('userData', JSON.stringify(res.data.user));
         setUser(res.data.user as Staff|IWorker);
         const urlParams = new URLSearchParams(window.location.search);
+        subscribe();
         const redirectURL = urlParams.get('redirect');
         navigate(redirectURL ?? '/');
       })

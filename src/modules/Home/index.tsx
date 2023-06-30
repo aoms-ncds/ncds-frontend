@@ -2,13 +2,12 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Alert, Grid } from '@mui/material';
 import MinimalModuleDataAnalytics from './components/MinimalModuleDataAnalytics';
 import PermissionChecks from '../User/components/PermissionChecks';
-import { useEffect } from 'react';
-import { subscribe } from '../../extras/Firebase/messaging';
+
 
 const HomePage = () => {
-  useEffect(() => {
-    subscribe();
-  }, []);
+  // useEffect(() => {
+  //   subscribe();
+  // }, []);
   return (
     <CommonPageLayout title="Home Page">
       {/* <Container> */}
