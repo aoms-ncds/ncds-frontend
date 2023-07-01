@@ -10,7 +10,7 @@ const homePageRoutes: ModuleRoute = {
       path: '/',
       element: <HomePage />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_ACCESS'],
       showInDrawer: true,
       icon: <HomeIcon />,
     },

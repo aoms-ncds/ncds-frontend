@@ -10,6 +10,7 @@ import moment from 'moment';
 const NotificationPage = () => {
   const [messages, setMessages] = useState<Message[]|null>(null);
   const [showReadMessages, setShowReadMessages] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(0);
   const columns: GridColDef<Message>[] = [
     {

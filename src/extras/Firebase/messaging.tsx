@@ -76,52 +76,52 @@ const generateToken = () => {
   }
 };
 
-// export const unsubscribe = () => {
-//   return new Promise((resolve, reject) => {
-//     if (localStorage.getItem('fcm_token') !== null) {
-//       getToken(messaging)
-//       .then((token) => {
-//         UserServices.deleteFCMToken(token)
-//           .then((res) => {
-//             localStorage.removeItem('fcm_token');
-//             enqueueSnackbar({
-//               message: res.message,
-//               variant: 'success',
-//             });
-//             resolve(res);
-//           })
-//           .catch((res) => {
-//             enqueueSnackbar({
-//               message: res.error,
-//               variant: 'error',
-//             });
-//             reject(res);
-//           });
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         reject(err);
-//       });
-//     }
-//   });
-// };
-
-
-export const unsubscribe = async () => {
-  try {
+export const unsubscribe = () => {
+  return new Promise((resolve, reject) => {
     if (localStorage.getItem('fcm_token') !== null) {
-      const token = await getToken(messaging);
-      const res = await UserServices.deleteFCMToken(token);
-      localStorage.removeItem('fcm_token');
-      enqueueSnackbar({
-        message: res.message,
-        variant: 'success',
+      getToken(messaging)
+      .then((token) => {
+        UserServices.deleteFCMToken(token)
+          .then((res) => {
+            localStorage.removeItem('fcm_token');
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+            resolve(res);
+          })
+          .catch((res) => {
+            enqueueSnackbar({
+              message: res.error,
+              variant: 'error',
+            });
+            reject(res);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
       });
-      return null;
-    } else {
-      return null;
     }
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  });
 };
+
+
+// export const unsubscribe = async () => {
+//   try {
+//     if (localStorage.getItem('fcm_token') !== null) {
+//       const token = await getToken(messaging);
+//       const res = await UserServices.deleteFCMToken(token);
+//       localStorage.removeItem('fcm_token');
+//       enqueueSnackbar({
+//         message: res.message,
+//         variant: 'success',
+//       });
+//       return null;
+//     } else {
+//       return null;
+//     }
+//   } catch (error) {
+//     return Promise.reject(error);
+//   }
+// };

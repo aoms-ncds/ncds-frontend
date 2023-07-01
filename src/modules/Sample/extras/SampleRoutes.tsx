@@ -9,7 +9,7 @@ const samplesPageRoutes: ModuleRoute = {
       path: '',
       element: <SampleModule />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_ACCESS'],
       showInDrawer: true,
       icon: <ExtensionIcon />,
     },

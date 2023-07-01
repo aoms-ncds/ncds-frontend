@@ -50,12 +50,13 @@ const NewOfficialDetailsForm = (
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [isDivisionChanged, setIsDivisionChanged] = useState<boolean>(false);
   const [newDiv, setNewDiv] = useState<Division|null>(null);
-  const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[] >([]);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const currentDate = moment();
 
   useEffect(() => {
-    DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
+    if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
+      DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
     .then((res) => setSubDivisions(res.data))
     .catch((error) =>
       enqueueSnackbar({
@@ -63,6 +64,7 @@ const NewOfficialDetailsForm = (
         message: error.message,
       }),
     );
+    }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
 

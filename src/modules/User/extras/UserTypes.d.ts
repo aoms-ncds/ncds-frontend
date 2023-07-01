@@ -6,7 +6,7 @@ export default {};
 declare global {
   type UserKind = 'staff' | 'worker';
   interface IUserPermissions extends MongooseDocument {
-    ADMIN_ACCESS: boolean;
+    READ_ACCESS: boolean;
     READ_WORKERS: boolean;
     WRITE_WORKERS: boolean;
     READ_STAFFS: boolean;
