@@ -1,7 +1,8 @@
 import SettingsDashboard from '..';
 import { Settings as SettingsIcon, Language as Lang } from '@mui/icons-material';
 import Languages from '../Languages';
-
+import Designation from '../Designation';
+import ChildSupport from '../ChildSupport';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -19,6 +20,24 @@ const settingsRoutes: ModuleRoute = {
       title: 'Languages',
       path: '/languages',
       element: <Languages />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Designation',
+      path: '/Designation',
+      element: <Designation/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'ChildSupport',
+      path: '/ChildSupport',
+      element: <ChildSupport />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

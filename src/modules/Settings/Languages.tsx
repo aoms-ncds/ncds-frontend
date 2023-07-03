@@ -47,6 +47,14 @@ const Languages = () => {
 
   const columns: GridColDef<ILanguage>[] = [
     {
+      field: 'SI',
+      headerName: 'SI',
+      align: 'left',
+      width: 150,
+      headerAlign: 'center',
+      valueGetter: (params) => params.rowNode.rowIndex + 1,
+    },
+    {
       field: 'Languages',
       headerName: 'Languages',
       align: 'left',
