@@ -31,21 +31,18 @@ import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import moment from 'moment';
 import { monthNames, purposes, sanctionedAsPers } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import SendIcon from '@mui/icons-material/Send';
-import StaffServices from '../../HR/extras/StaffServices';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
-// import CommonServices from '../../../extras/CommonServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
-  const [showAddParticulardialog, setShowAddParticulardialog] = useState(false);
+  const [showAddParticulardialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
@@ -81,7 +78,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   });
 
   const handleClose = () => {
-    setShowAddParticulardialog(false);
+    setShowAddParticularDialog(false);
   };
 
   useEffect(() => {
@@ -377,7 +374,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
-                <Button variant="contained" onClick={() =>setShowAddParticulardialog(true)}
+                <Button variant="contained" onClick={() =>setShowAddParticularDialog(true)}
                   disabled={!selectedMainCategory}>
                                     Add particulars
                 </Button>
@@ -400,9 +397,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th">
-                              <IconButton>
-                                <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
-                              </IconButton>
+                              <PermissionChecks
+                                permissions={['WRITE_FR']}
+                                granted={(
+                                  <IconButton>
+                                    <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                  </IconButton>
+                                )}
+                              />
+
                               <IconButton onClick={() => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
@@ -435,7 +438,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              {/* <Grid item xs={12} md={6}>
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
@@ -470,7 +473,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     <MenuItem value={'FCRA'}>FCRA</MenuItem>
                     <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
 
-                    {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                   </Select>
                 </FormControl>
               </Grid>
@@ -490,10 +492,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required />}
                   fullWidth
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
-                <Button
+                {/* <Button
                   variant="contained"
                   color="warning"
                   style={{ textAlign: 'left' }}
@@ -510,7 +512,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   </PDFDownloadLink>
 
 
-                </Button>
+                </Button> */}
                 {/* )} */}
                 &nbsp;
                 <div style={{ float: 'right' }}>

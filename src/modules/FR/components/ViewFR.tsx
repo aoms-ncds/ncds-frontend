@@ -20,6 +20,7 @@ import {
   IconButton,
   InputAdornment,
   FormControl,
+  DialogContent,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
@@ -36,6 +37,7 @@ import FRReceiptTemplate from './FRReceiptTemplate';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { purposes, sanctionedAsPers } from '../extras/FRConfig';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
+import MessageItem from '../../../components/MessageItem';
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [coordinators, setCoordinators] = useState<IWorker[]>();
@@ -346,6 +348,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     color="info"
                     onClick={() => {
                       toggleOpenRemarks(true);
+                      FRServices.getAllRemarksById(props.value._id ??'')
+                      .then((res) => setRemarks(res.data??[]))
+                      .catch((error) => {
+                        enqueueSnackbar({
+                          variant: 'error',
+                          message: error.message,
+                        });
+                      });
                     }}
                   >
                     Remark
@@ -356,7 +366,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <PermissionChecks
-                        permissions={['READ_FR']}
+                        permissions={['MANAGE_FR']}
                         granted={(
                           <Button
                             variant="contained"
@@ -387,7 +397,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                       <PermissionChecks
-                        permissions={['WRITE_IRO']}
+                        permissions={['MANAGE_FR']}
                         granted={(
                           <Button
                             variant="contained"
@@ -419,7 +429,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                         {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
                         <PermissionChecks
-                          permissions={['WRITE_IRO']}
+                          permissions={['MANAGE_FR']}
                           granted={(
                             <Button
                               variant="contained"
@@ -541,6 +551,12 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
       </Container>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0 ? remarks.map((remark) => (
+            // eslint-disable-next-line max-len
+            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+          )):'No Data Found '}
+        </DialogContent>
         <form
           onSubmit={(e) => {
             e.preventDefault();

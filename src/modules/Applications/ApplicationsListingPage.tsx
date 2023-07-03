@@ -12,6 +12,7 @@ import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 
 
 const ApplicationsListingPage = () => {
@@ -110,7 +111,7 @@ const ApplicationsListingPage = () => {
     {
       field: 'actions',
       type: 'actions',
-      getActions: (props: GridRowParams) => [
+      getActions: (props: GridRowParams) =>( [
         <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/application/${props.id}/approval`} />,
         <GridLinkAction
           key={2}
@@ -126,7 +127,7 @@ const ApplicationsListingPage = () => {
             setShowApplicationFormDialog(true);
           }}
         />,
-
+        hasPermissions(['MANAGE_APPLICATION'])&&
         <GridLinkAction
           key={3}
           label="Approve"
@@ -162,6 +163,7 @@ const ApplicationsListingPage = () => {
               });
           }}
         />,
+        hasPermissions(['MANAGE_APPLICATION'])&&
         <GridLinkAction
           key={4}
           label="Reject"
@@ -195,7 +197,7 @@ const ApplicationsListingPage = () => {
               });
           }}
         />,
-      ],
+      ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
     { field: 'name', headerName: 'Name', width: 150 },
@@ -216,17 +218,23 @@ const ApplicationsListingPage = () => {
   ];
   return (
     <CommonPageLayout title="Application Manages ">
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        startIcon={<AddIcon />}
-        onClick={() => {
-          setShowApplicationFormDialog(true);
-          setAction('add');
-        }}
-      >
+      <PermissionChecks
+        permissions={['WRITE_APPLICATION']}
+        granted={(
+
+          <Button
+            variant="contained"
+            sx={{ float: 'right' }}
+            startIcon={<AddIcon />}
+            onClick={() => {
+              setShowApplicationFormDialog(true);
+              setAction('add');
+            }}
+          >
         Add new
-      </Button>
+          </Button>
+        )}
+      />
       <br />
       <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>

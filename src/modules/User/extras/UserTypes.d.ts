@@ -6,25 +6,34 @@ export default {};
 declare global {
   type UserKind = 'staff' | 'worker';
   interface IUserPermissions extends MongooseDocument {
-    ADMIN_ACCESS: boolean;
-    READ_WORKERS: boolean;
-    WRITE_WORKERS: boolean;
-    READ_STAFFS: boolean;
-    WRITE_STAFFS: boolean;
-    READ_DIVISIONS: boolean;
-    WRITE_DIVISIONS: boolean;
-    READ_FR: boolean;
-    WRITE_FR: boolean;
-    READ_IRO: boolean;
-    WRITE_IRO: boolean;
-    READ_XYZ: boolean;
-    WRITE_XYZ: boolean;
-    ACCOUNTS_ACCESS:boolean;
-    PRESIDENT_ACCESS:boolean;
-    OFFICE_MNGR_APPROVED :boolean;
-    ACCOUNTS_MNGR_APPROVED:boolean;
 
+    READ_ACCESS: boolean;// Basic access permission
+    ADMIN_ACCESS:boolean;// Admin access
 
+    READ_WORKERS: boolean; // For reading workers
+    WRITE_WORKERS: boolean; // For adding and editing worker details
+    MANAGE_WORKER:boolean;// For approving Workers
+
+    READ_STAFFS: boolean;// For reading staffs
+    WRITE_STAFFS: boolean;// For adding and editing staff details
+
+    READ_DIVISIONS: boolean; // For reading divisions
+    WRITE_DIVISIONS: boolean; // For adding and editing division details
+
+    READ_FR: boolean; // For reading FRs
+    WRITE_FR: boolean; // For adding and editing FR details
+    PRESIDENT_ACCESS:boolean;// President access
+    MANAGE_FR:boolean;// For Approving FR
+
+    READ_IRO: boolean; // For reading IROs
+    WRITE_IRO: boolean; // For editing IRO details
+    OFFICE_MNGR_ACCESS :boolean;// For Office Mngr
+    ACCOUNTS_MNGR_ACCESS:boolean;// For Accounts Mngr access
+    MANAGE_IRO:boolean;//  For approving IRO
+
+    READ_APPLICATION:boolean; // For reading applications
+    WRITE_APPLICATION:boolean; // For adding and editing application details
+    MANAGE_APPLICATION:boolean;// For approving Application
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {

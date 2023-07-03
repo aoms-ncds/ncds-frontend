@@ -10,7 +10,7 @@ const notificationPageRoutes: ModuleRoute = {
       path: '',
       element: <NotificationPage />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_ACCESS'],
       showInDrawer: false,
       icon: <NotificationsIcon/>,
     },

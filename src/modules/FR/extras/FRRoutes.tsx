@@ -12,7 +12,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/',
       element: <FRDashboard />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_FR'],
       showInDrawer: true,
       icon: <RequestPageOutlinedIcon />,
     },
@@ -21,7 +21,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/manage',
       element: <ManageFRPage />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -29,7 +29,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/apply',
       element: <FRFormPage action="add" />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -37,7 +37,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/closed',
       element: <ClosedFR />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -45,7 +45,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/:frID/view',
       element: <FRFormPage action="view" />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -53,7 +53,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/:frID/edit',
       element: <FRFormPage action="edit" />,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
   ],

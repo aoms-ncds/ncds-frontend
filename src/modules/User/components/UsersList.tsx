@@ -88,7 +88,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
-  // const x = hasPermissions(['ADMIN_ACCESS']) && [
+  // const x = hasPermissions(['READ_ACCESS']) && [
   //   <GridLinkAction
   //     key={5}
   //     label="Manage Permissions"

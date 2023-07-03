@@ -450,7 +450,7 @@ const ViewIRO = () => {
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
                               <PermissionChecks
-                                permissions={['WRITE_IRO', 'OFFICE_MNGR_APPROVED']}
+                                permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
                                   <Button
                                     variant="contained"
@@ -486,7 +486,7 @@ const ViewIRO = () => {
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
                               <PermissionChecks
-                                permissions={['WRITE_IRO', 'ACCOUNTS_MNGR_APPROVED']}
+                                permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
                                   <Button
                                     variant="contained"
