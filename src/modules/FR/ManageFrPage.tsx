@@ -18,7 +18,7 @@ import {
   TextField,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
@@ -26,7 +26,8 @@ import { enqueueSnackbar } from 'notistack';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import GridLinkAction from '../../components/GridLinkAction';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 
@@ -57,12 +58,68 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       type: 'string',
+      // getActions: (props: GridRowParams) => (
+      //       [
+
+      //         <GridLinkAction
+      //           key={1}
+      //           label="View And Manage"
+      //           icon={<PreviewIcon />}
+      //           showInMenu
+      //           to={`/fr/${props.row._id}/view`}/>,
+      //         hasPermissions(['WRITE_FR']) &&
+      //         <GridLinkAction
+      //           key={2}
+      //           label="Edit"
+      //           icon={<EditIcon />}
+      //           showInMenu
+      //           to={ `/fr/${props.row._id}/edit`}
+      //         />,
+      //         <GridLinkAction
+      //           key={3}
+      //           label="Send Back to Division"
+      //           icon={<PreviewIcon />}
+      //           showInMenu
+      //           onClick={() => {
+      //             enqueueSnackbar({
+      //               message: 'Sent back to division',
+      //               variant: 'success',
+      //             });
+      //           } } />,
+      //         <GridLinkAction
+      //           key={4}
+      //           label="Remarks"
+      //           icon={<EditIcon />}
+      //           showInMenu
+      //           onClick={() => {
+      //             toggleOpenRemarks(true);
+      //             setSelectedFR(props.row._id);
+      //             FRServices.getAllRemarksById(props.row._id)
+      //                 .then((res) => setRemarks(res.data ?? []))
+      //                 .catch((error) => {
+      //                   enqueueSnackbar({
+      //                     variant: 'error',
+      //                     message: error.message,
+      //                   });
+      //                 });
+      //           } } />,
+      //         <GridLinkAction
+      //           key={5}
+      //           label="Print FR"
+      //           icon={<PrintIcon />}
+      //           component={ PDFDownloadLink,}
+      //           document={ <FRReceiptTemplate rowData={props.row}/>},
+      //           showInMenu />,
+      //         false,
+      //       ].filter((action) => action !== false) as JSX.Element[]
+      // ),
       renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="FR action"
           primaryText="Actions"
           key={'FR action'}
+
           items={[
 
             {
@@ -72,13 +129,15 @@ const ManageFrPage = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              to: `/fr/${props.row._id}/edit`,
-              icon: EditIcon,
-            },
+            ...(hasPermissions(['WRITE_FR']) ? [
+              {
+                id: 'edit',
+                text: 'Edit',
+                component: Link,
+                to: `/fr/${props.row._id}/edit`,
+                icon: EditIcon,
+              },
+            ] : []),
             {
               id: 'sendBackDivision',
               text: 'Send Back to Division',

@@ -41,9 +41,13 @@ const frDashboard = () => {
             <br />
             <br />
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6} xl={3}>
-                <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#003049" targetRoute="/fr/apply" />
-              </Grid>
+              <PermissionChecks
+                permissions={['WRITE_FR']}
+                granted={(
+                  <Grid item xs={12} md={6} xl={3}>
+                    <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#003049" targetRoute="/fr/apply" />
+                  </Grid>
+                )}/>
               <Grid item xs={12} md={6} xl={3}>
                 <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#de2828" targetRoute="/fr/manage" />
               </Grid>

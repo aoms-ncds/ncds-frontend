@@ -215,7 +215,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               }}
             />
           )),
-          hasPermissions(['READ_ACCESS']) &&
+          hasPermissions(['ADMIN_ACCESS']) &&
             <GridLinkAction
               key={5}
               label="Manage Permissions"

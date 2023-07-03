@@ -6,6 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useNavigate, useParams } from 'react-router-dom';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
@@ -68,16 +69,20 @@ const ApplicationApprovalPage = () => {
             </Grid>
           </CardContent>
           <CardActions sx={{ justifyContent: 'center' }}>
-            <Button
-              variant="contained"
-              color="success"
-              // sx={{ ml: 'auto' }}
-              onClick={() => {
-                const snackbarId = enqueueSnackbar({
-                  message: 'Approving...',
-                  variant: 'info',
-                });
-                ApplicationServices.approve(applicationID as string)
+            <PermissionChecks
+              permissions={['MANAGE_APPLICATION']}
+              granted={(
+                <>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    // sx={{ ml: 'auto' }}
+                    onClick={() => {
+                      const snackbarId = enqueueSnackbar({
+                        message: 'Approving...',
+                        variant: 'info',
+                      });
+                      ApplicationServices.approve(applicationID as string)
                 .then((res) => {
                   closeSnackbar(snackbarId);
                   enqueueSnackbar({
@@ -92,19 +97,19 @@ const ApplicationApprovalPage = () => {
                     variant: 'error',
                   });
                 });
-              }}
-            >
+                    }}
+                  >
             Approve
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                const snackbarId = enqueueSnackbar({
-                  message: 'Rejecting...',
-                  variant: 'info',
-                });
-                ApplicationServices.reject(applicationID as string)
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      const snackbarId = enqueueSnackbar({
+                        message: 'Rejecting...',
+                        variant: 'info',
+                      });
+                      ApplicationServices.reject(applicationID as string)
                 .then((res) => {
                   closeSnackbar(snackbarId);
                   enqueueSnackbar({
@@ -119,10 +124,13 @@ const ApplicationApprovalPage = () => {
                     variant: 'error',
                   });
                 });
-              }}
-            >
+                    }}
+                  >
             Reject
-            </Button>
+                  </Button>
+                </>
+              )}
+            />
           </CardActions>
         </Card></Container>
       <FileUploader

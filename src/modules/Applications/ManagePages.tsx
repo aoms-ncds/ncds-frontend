@@ -6,6 +6,7 @@ import { Button, Card, Grid } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import GridLinkAction from '../../components/GridLinkAction';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 const ApplicationManagePages = () => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -73,9 +74,15 @@ const ApplicationManagePages = () => {
 
   return (
     <CommonPageLayout title="Manage Staff">
-      <Button variant="contained" sx={{ float: 'right' }} startIcon={<AddIcon />} component={Link} to="/application/add">
-        Add new
-      </Button>
+      <PermissionChecks
+        permissions={['WRITE_APPLICATION']}
+        granted={(
+          <Button variant="contained" sx={{ float: 'right' }} startIcon={<AddIcon />} component={Link} to="/application/add">
+                  Add new
+          </Button>
+        )}
+      />
+
       <br />
       <br />
 

@@ -11,6 +11,6 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
   public static readonly ACCOUNTS_MNGR_APPROVED = 213;
   public static readonly SUBMITTED_TO_ACCOUNTS_STATE = 214;
   public static readonly AMOUNT_RELEASED = 215;
-  public static readonly WAITING_TO_ACCOUNTS=202;
-  public static readonly RECONCILIATION_DONE=216;
+  public static readonly WAITING_TO_ACCOUNTS = 202;
+  public static readonly RECONCILIATION_DONE = 216;
 }
