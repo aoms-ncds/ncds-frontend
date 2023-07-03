@@ -135,6 +135,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
     FRServices.getMainCategory()
       .then((res) => {
+        console.log(res, 'getMainCategory');
         setMainCategories(res.data);
       })
       .catch((res) => {
