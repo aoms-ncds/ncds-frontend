@@ -73,7 +73,8 @@ export default {
     })),
 
   getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
-
+  getreconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/Reconciliation', { headers: { ...getAuthHeader() } })),
+  getReconciliationCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/reconciliation', { params: conditions, headers: { ...getAuthHeader() } })),
   // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
 
   getAllRemarksById: (iroId: string) =>
