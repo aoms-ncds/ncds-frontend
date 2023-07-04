@@ -4,29 +4,30 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-// import ChaildSupportService from '../Settings/extras/LanguagesService';
-import ChaildSupportService from './extras/ChaildSupportService';
+import ChildSupportService from './extras/ChildSupportService';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
-const ChaildSupport = () => {
-  const [Designation, setDesignation] = useState<IDesignation[] | null>(null);
-  const [newDesignation, setNewDesignation] = useState<MyCreatableDesignation>({
+const ChildSupport = () => {
+  const [childSupport, setChildSupport] = useState<IChildSupport[] | null>(null);
+  const [newChildSupport, setNewChildSupport] = useState<MyCreatableChildSupport>({
     name: '',
+    status: 0,
+    amount: 0,
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
-  const removeDesignation = (id: string) => {
+  const removeChildSupport = (id: string) => {
     const snackbarId = enqueueSnackbar({
-      message: 'Removing Designation',
+      message: 'Removing ChildSupport',
       variant: 'info',
     });
-    ChaildSupportService.delete(id)
+    ChildSupportService.delete(id)
       .then((res) => {
         console.log('process delete', res);
-        if (Designation) {
-          const newDesignation = Designation.filter((designation) => {
-            return designation._id !== id;
+        if (childSupport) {
+          const newChildSupport = childSupport?.filter((childSupport) => {
+            return childSupport._id !== id;
           });
-          setDesignation(newDesignation);
+          setChildSupport(newChildSupport);
         }
         enqueueSnackbar({
           message: res.message,
@@ -43,22 +44,32 @@ const ChaildSupport = () => {
       });
   };
 
-  const columns: GridColDef<IDesignation>[] = [
+  const columns: GridColDef<IChildSupport>[] = [
     {
       field: 'SI',
       headerName: 'SI',
       align: 'left',
       width: 150,
       headerAlign: 'center',
+      renderCell: (index) =>
+        index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
       // valueGetter: (params) => params.row.name,
     },
     {
-      field: 'Designation',
-      headerName: 'Designation',
+      field: 'ChildSupport',
+      headerName: 'ChildSupport',
       align: 'left',
       width: 150,
       headerAlign: 'center',
       valueGetter: (params) => params.row.name,
+    },
+    {
+      field: 'Amount',
+      headerName: 'Amount',
+      align: 'left',
+      width: 150,
+      headerAlign: 'center',
+      valueGetter: (params) => params.row.amount,
     },
     {
       field: 'edit',
@@ -74,7 +85,7 @@ const ChaildSupport = () => {
             onClick={() => {
               setDialogAction('edit');
               console.log(dialogAction);
-              setNewDesignation(params.row);
+              setNewChildSupport(params.row);
             }}
           >
             Edit
@@ -94,7 +105,7 @@ const ChaildSupport = () => {
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => {
-              removeDesignation(params.row._id);
+              removeChildSupport(params.row._id);
             }}
           >
             Delete
@@ -105,9 +116,10 @@ const ChaildSupport = () => {
   ];
 
   useEffect(() => {
-    ChaildSupportService.getAll({ status: CommonLifeCycleStates.ACTIVE })
+    ChildSupportService.getAll()
       .then((res) => {
-        setDesignation(res.data);
+        console.log(res, 'res');
+        setChildSupport(res.data);
         handleClose();
         enqueueSnackbar({
           variant: 'success',
@@ -129,7 +141,7 @@ const ChaildSupport = () => {
   };
 
   return (
-    <CommonPageLayout title="Designation">
+    <CommonPageLayout title="ChildSupport">
       <Button
         variant="contained"
         sx={{ float: 'right', marginBottom: 3 }}
@@ -145,29 +157,46 @@ const ChaildSupport = () => {
           onSubmit={(e) => {
             e.preventDefault();
             if (dialogAction === 'add') {
-              ChaildSupportService.create(newDesignation).then((res) => {
-                setDesignation((desig) => (desig === null ? [res.data] : [...desig, res.data]));
+              ChildSupportService.create(newChildSupport).then((res) => {
+                setChildSupport((prevChildSupport) =>
+                  prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
+                );
               });
             } else {
-              ChaildSupportService.edit(newDesignation).then((res) => {
-                setDesignation((desig) => (desig === null ? null : desig?.map((des) => (des._id === newDesignation._id ? res.data : des))));
+              ChildSupportService.edit(newChildSupport).then((res) => {
+                setChildSupport((prevChildSupport) =>
+                  prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
+                );
               });
             }
+
             handleClose();
           }}
         >
-          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Designation</DialogTitle>
+          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} ChildSupport</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
-              id="Designation"
-              label="Enter Designation to be Added"
+              id="ChildSupport"
+              label="Enter ChildSupport to be Added"
               type="text"
               fullWidth
               variant="outlined"
-              value={newDesignation.name}
-              onChange={(e) => setNewDesignation((desi) => ({ ...desi, name: e.target.value }))}
+              value={newChildSupport.name}
+              onChange={(e) => setNewChildSupport((prev) => ({ ...prev, name: e.target.value }))}
+              required
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="ChildSupport"
+              label="Enter Amount"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={newChildSupport.amount}
+              onChange={(e) => setNewChildSupport((prev) => ({ ...prev, amount: Number(e.target.value) }))}
               required
             />
           </DialogContent>
@@ -180,10 +209,10 @@ const ChaildSupport = () => {
       </Dialog>
 
       <Card style={{ height: '80vh', width: '100%' }}>
-        <DataGrid rows={Designation ?? []} columns={columns} getRowId={(row) => row._id} loading={Designation === null} />
+        <DataGrid rows={childSupport ?? []} columns={columns} getRowId={(row) => row._id} loading={childSupport === null} />
       </Card>
     </CommonPageLayout>
   );
 };
 
-export default ChaildSupport;
+export default ChildSupport;

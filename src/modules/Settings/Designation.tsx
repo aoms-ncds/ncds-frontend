@@ -50,6 +50,8 @@ const Designation = () => {
       align: 'left',
       width: 150,
       headerAlign: 'center',
+      renderCell: (index) =>
+        index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
       // valueGetter: (params) => params.row.name,
     },
     {
@@ -105,7 +107,7 @@ const Designation = () => {
   ];
 
   useEffect(() => {
-    DesignationService.getAll({ status: CommonLifeCycleStates.ACTIVE })
+    DesignationService.getAll()
       .then((res) => {
         setDesignation(res.data);
         handleClose();

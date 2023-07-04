@@ -29,6 +29,7 @@ declare global {
   }
 
   interface ChildSupport extends MongooseDocument{
+    map(arg0: (item: ChildSupport) => { _id: string; name: string; status: number; amount: number; }): unknown;
     name: string;
     status: number;
     amount: number;

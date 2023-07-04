@@ -2,20 +2,20 @@ import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelper
 import axios from 'axios';
 export default {
 
-  getAll: (conditions?: { status?: number }) =>
+  getAll: () =>
     getStandardResponse<IDesignation[]>(
-      axios.get('/settings/designation/', { params: conditions, headers: { ...getAuthHeader() } }),
+      axios.get('/hr/designations', { headers: { ...getAuthHeader() } }),
     ),
   create: (lang: CreatableLanguage) => getStandardResponse<IDesignation>(
-    axios.post('/settings/designation', lang, { headers: { ...getAuthHeader() } }),
+    axios.post('/hr/designations', lang, { headers: { ...getAuthHeader() } }),
   ),
 
   edit: (lang: CreatableLanguage) => getStandardResponse<IDesignation>(
-    axios.patch(`/settings/designation/${lang._id}`, lang, { headers: { ...getAuthHeader() } })),
+    axios.patch(`/hr/designations/${lang._id}`, lang, { headers: { ...getAuthHeader() } })),
 
   delete: (languageId: string) => getStandardResponse<number>(
-    axios.delete(`/settings/designation/${languageId}/force`, { headers: { ...getAuthHeader() } })),
+    axios.delete(`/hr/designations/${languageId}/force`, { headers: { ...getAuthHeader() } })),
 
-  getCount: (conditions?: unknown) => getStandardResponse<number>(
-    axios.get('/settings/designation/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  getCount: () => getStandardResponse<number>(
+    axios.get('/hr/designations/count', { headers: { ...getAuthHeader() } })),
 };
