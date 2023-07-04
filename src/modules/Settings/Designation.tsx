@@ -4,9 +4,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-// import DesignationService from '../Settings/extras/LanguagesService';
 import DesignationService from './extras/DesignationService';
-import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const Designation = () => {
   const [Designation, setDesignation] = useState<IDesignation[] | null>(null);
@@ -57,7 +55,6 @@ const Designation = () => {
       width: 150,
       headerAlign: 'center',
       renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
-      // valueGetter: (params) => params.row.name,
     },
     {
       field: 'Designation',
