@@ -27,7 +27,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
-import GridLinkAction from '../../components/GridLinkAction';
+import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 
@@ -129,7 +129,7 @@ const ManageFrPage = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['WRITE_FR']) ? [
+            ...(hasPermissions(['WRITE_FR'])&& props.row.status==FRLifeCycleStates.FR_SEND_BACK ? [
               {
                 id: 'edit',
                 text: 'Edit',
@@ -230,7 +230,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return FRLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
+        return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
       },
     },
 

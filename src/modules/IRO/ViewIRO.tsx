@@ -39,6 +39,7 @@ import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROServices from './extras/IROServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import { useNavigate, useParams } from 'react-router-dom';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 
 const ViewIRO = () => {
@@ -122,7 +123,7 @@ const ViewIRO = () => {
   const [attachments, setAttachments] = useState<FileObject[]>([]);
 
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
-  const IROstatus = FRLifeCycleStates.getStatusNameByCodeFR(Number(IRO?.status));
+  const IROstatus = IROLifeCycleStates.getStatusNameByCodeFR(Number(IRO?.status));
   // console.log(IROstatus);
 
   useEffect(() => {
@@ -134,7 +135,7 @@ const ViewIRO = () => {
   return (
     <CommonPageLayout title="View And Manage IRO">
       <PermissionChecks
-        permissions={['READ_FR']}
+        permissions={['READ_IRO']}
         granted={
           <>
             <Card style={{ width: '100%' }}>
@@ -307,6 +308,7 @@ const ViewIRO = () => {
                           }}
                           variant="outlined"
                           fullWidth
+                          disabled
                           InputLabelProps={{ shrink: true }}
                         />
                       </Grid>
@@ -318,6 +320,8 @@ const ViewIRO = () => {
                             labelId="sanctioned_bank"
                             label="Sanctioned Bank"
                             value={IRO?.sanctionedBank ?? null}
+                            disabled
+
                             onChange={(e) =>
                               setIRO({
                                 ...IRO,
@@ -326,7 +330,8 @@ const ViewIRO = () => {
                             }
                           >
                             <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                            <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
+                            <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
+                            <MenuItem value={'Personal Bank'}>Personal Bank</MenuItem>
 
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
@@ -345,12 +350,14 @@ const ViewIRO = () => {
                               });
                             }
                           }}
-                          renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
+
+                          renderInput={(params) => <TextField {...params} label="Sanctioned As Per" disabled />}
                           fullWidth
                         />
                       </Grid>
                       <Grid item xs={12}>
                         {/* {props.action === 'edit' && ( */}
+                        {IRO?.status>=IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED}
                         <Button
                           variant="contained"
                           color="warning"
@@ -376,9 +383,8 @@ const ViewIRO = () => {
                             Remarks
                           </Button>
                           &nbsp;
-                          {IROstatus === 'ACCOUNTS_APPROVED' || IROstatus === 'WAITING_TO_ACCOUNTS' ?(
+                          {/* { IRO.status < IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED ?(
                             <>
-                              {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
                               <PermissionChecks
                                 permissions={['WRITE_IRO']}
@@ -409,73 +415,65 @@ const ViewIRO = () => {
                               />
                               &nbsp;
                             </>
-                          ) : null}
-                          {IROstatus === 'ACCOUNTS_APPROVED' || IROstatus === 'WAITING_TO_ACCOUNTS' ?(
-                            <>
-                              {/* Only display buttons if props.action is 'view' */}
-                              &nbsp;
-                              <PermissionChecks
-                                permissions={['WRITE_IRO']}
-                                granted={
-                                  <Button
-                                    variant="contained"
-                                    color="error"
-                                    onClick={() => {
-                                      const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                      IROServices.reject(iroID as string )
-                                      .then((res)=>{
-                                        console.log(res);
-                                      });
+                          ) : null} */}
 
-                                      // if (props.onSubmit) {
-                                      //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
-                                      //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                      // }
-                                      setTimeout(() => {
-                                        closeSnackbar(rejectionSnack);
-                                        const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
-                                        setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                                      }, 500);
-                                    }}
-                                  >
-                                    Reject
-                                  </Button>
-                                }
-                              />
-                              &nbsp;
-                            </>
-                          ) : null}
                           {IROstatus == 'ACCOUNTS_APPROVED' ? (
                             <>
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
                               <PermissionChecks
-                                permissions={['ACCOUNTS_MNGR_ACCESS']}
+                                permissions={['OFFICE_MNGR_ACCESS']}
                                 granted={
-                                  <Button
-                                    variant="contained"
-                                    color="success"
-                                    onClick={() => {
-                                      const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
-                                      IROServices.officeManagerApprove(iroID as string )
+                                  <>
+                                    <Button
+                                      variant="contained"
+                                      color="error"
+                                      onClick={() => {
+                                        const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                        IROServices.reject(iroID as string )
+                                    .then((res)=>{
+                                      console.log(res);
+                                    });
+
+                                        // if (props.onSubmit) {
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // }
+                                        setTimeout(() => {
+                                          closeSnackbar(rejectionSnack);
+                                          const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                          setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                        }, 500);
+                                      }}
+                                    >
+                                  Reject
+                                    </Button>
+                                    &nbsp;
+                                    <Button
+                                      variant="contained"
+                                      color="success"
+                                      onClick={() => {
+                                        const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
+                                        IROServices.officeManagerApprove(iroID as string )
                                       .then((res)=>{
                                         console.log(res);
                                         navigate('/iro/manage');
                                         // window.location.reload();
                                       });
-                                      // if (props.onSubmit) {
-                                      //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
-                                      //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                      // }
-                                      setTimeout(() => {
-                                        closeSnackbar(approvalSnack);
-                                        const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
-                                        setTimeout(() => closeSnackbar(approvedSnack), 500);
-                                      }, 500);
-                                    }}
-                                  >
+                                        // if (props.onSubmit) {
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // }
+                                        setTimeout(() => {
+                                          closeSnackbar(approvalSnack);
+                                          const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                                          setTimeout(() => closeSnackbar(approvedSnack), 500);
+                                        }, 500);
+                                      }}
+                                    >
                                     Approve
-                                  </Button>
+                                    </Button>
+                                  </>
                                 }
                               />
                               &nbsp;
@@ -488,36 +486,63 @@ const ViewIRO = () => {
                               <PermissionChecks
                                 permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
-                                  <Button
-                                    variant="contained"
-                                    color="success"
-                                    onClick={() => {
-                                      const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
-                                      IROServices.accountManagerApprove(iroID as string )
+                                  <>
+                                    <Button
+                                      variant="contained"
+                                      color="error"
+                                      onClick={() => {
+                                        const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                        IROServices.reject(iroID as string )
+                                  .then((res)=>{
+                                    console.log(res);
+                                  });
+
+                                        // if (props.onSubmit) {
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // }
+                                        setTimeout(() => {
+                                          closeSnackbar(rejectionSnack);
+                                          const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                          setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                        }, 500);
+                                      }}
+                                    >
+                                Reject
+                                    </Button>
+                                  &nbsp;
+                                    <Button
+                                      variant="contained"
+                                      color="success"
+                                      type='submit'
+                                      onClick={() => {
+                                        const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
+                                        IROServices.accountManagerApprove(iroID as string )
                                       .then((res)=>{
                                         console.log(res);
                                         navigate('/iro/manage');
                                       });
 
-                                      // if (props.onSubmit) {
-                                      //   // const updatedValue = { ...IRO, status: IROLifeCycleStates.SUBMITTED_TO_ACCOUNTS_STATE }; // Create a new object with updated status
-                                      //   // props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                      // }
-                                      setTimeout(() => {
-                                        closeSnackbar(approvalSnack);
-                                        const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
-                                        setTimeout(() => closeSnackbar(approvedSnack), 500);
-                                      }, 500);
-                                    }}
-                                  >
+                                        // if (props.onSubmit) {
+                                        //   // const updatedValue = { ...IRO, status: IROLifeCycleStates.SUBMITTED_TO_ACCOUNTS_STATE }; // Create a new object with updated status
+                                        //   // props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // }
+                                        setTimeout(() => {
+                                          closeSnackbar(approvalSnack);
+                                          const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                                          setTimeout(() => closeSnackbar(approvedSnack), 500);
+                                        }, 500);
+                                      }}
+                                    >
                                     Approve
-                                  </Button>
+                                    </Button>
+                                  </>
                                 }
                               />
                               &nbsp;
                             </>
                           ) : null}
-                          {IROstatus === 'ACCOUNTS_APPROVED' || IROstatus === 'WAITING_TO_ACCOUNTS' ? (
+                          {/* {IROstatus === 'ACCOUNTS_APPROVED' || IROstatus === 'WAITING_TO_ACCOUNTS' ? (
                             <PermissionChecks
                               permissions={['WRITE_IRO']}
                               granted={
@@ -546,7 +571,7 @@ const ViewIRO = () => {
                                 </Button>
                               }
                             />
-                          ) : null}
+                          ) : null} */}
                         </div>
                       </Grid>
                     </Grid>

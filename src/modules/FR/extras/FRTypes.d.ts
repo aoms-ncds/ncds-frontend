@@ -31,7 +31,7 @@ declare global {
     purposeCoordinator?: FR['purposeCoordinator'];
     sanctionedAsPer?: FR['sanctionedAsPer'];
     sanctionedBank?: FR['sanctionedBank'];
-    status?: string;
+    status?: number;
     purposeOthers?: string; // Added missing property
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
