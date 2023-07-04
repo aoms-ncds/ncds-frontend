@@ -6,9 +6,9 @@ import DesignationServices from '../extras/DesignationServices';
 const filter = createFilterOptions<CreatableDesignation>();
 
 interface DesignationsDropdownProps {
-  designations?: Designation[];
-  selectedDesignation: Designation | CreatableDesignation | null;
-  onSelect: (designation: Designation) => void;
+  designations?: IDesignation[];
+  selectedDesignation: IDesignation | CreatableDesignation | null;
+  onSelect: (designation: IDesignation) => void;
   textFieldProps?: TextFieldProps;
 }
 

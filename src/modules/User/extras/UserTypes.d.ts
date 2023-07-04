@@ -111,7 +111,7 @@ declare global {
     noOfChurches?: number;
   }
   interface SupportDetails {
-    designation?: Designation;
+    designation?: IDesignation;
     totalNoOfYearsInMinistry?: number;
     typeOfFamily?: TypeOfFamily;
     withChurch?: boolean;

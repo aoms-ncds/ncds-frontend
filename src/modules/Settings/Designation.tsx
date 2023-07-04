@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -10,7 +10,9 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const Designation = () => {
   const [Designation, setDesignation] = useState<IDesignation[] | null>(null);
-  const [newDesignation, setNewDesignation] = useState<MyCreatableDesignation>({
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [designationToDelete, setDesignationToDelete] = useState<IDesignation | null>(null);
+  const [newDesignation, setNewDesignation] = useState<CreatableDesignation>({
     name: '',
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
@@ -42,6 +44,10 @@ const Designation = () => {
         });
       });
   };
+  const handleDeleteCancel = () => {
+    setConfirmDelete(false);
+    setDesignationToDelete(null);
+  };
 
   const columns: GridColDef<IDesignation>[] = [
     {
@@ -50,8 +56,7 @@ const Designation = () => {
       align: 'left',
       width: 150,
       headerAlign: 'center',
-      renderCell: (index) =>
-        index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
+      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
       // valueGetter: (params) => params.row.name,
     },
     {
@@ -96,7 +101,8 @@ const Designation = () => {
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => {
-              removeDesignation(params.row._id);
+              setConfirmDelete(true);
+              setDesignationToDelete(params.row);
             }}
           >
             Delete
@@ -142,6 +148,38 @@ const Designation = () => {
       >
         Add new
       </Button>
+
+      <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to delete this Designation?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConfirmDelete(false);
+              setDesignationToDelete(null);
+            }}
+            variant="text"
+          >
+            No, Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              console.log(designationToDelete);
+              if (designationToDelete) {
+                removeDesignation(designationToDelete._id);
+              }
+              setConfirmDelete(false);
+              setDesignationToDelete(null);
+            }}
+            variant="contained"
+            color="error"
+          >
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
@@ -149,10 +187,16 @@ const Designation = () => {
             if (dialogAction === 'add') {
               DesignationService.create(newDesignation).then((res) => {
                 setDesignation((desig) => (desig === null ? [res.data] : [...desig, res.data]));
+                setNewDesignation({
+                  name: '',
+                });
               });
             } else {
               DesignationService.edit(newDesignation).then((res) => {
                 setDesignation((desig) => (desig === null ? null : desig?.map((des) => (des._id === newDesignation._id ? res.data : des))));
+                setNewDesignation({
+                  name: '',
+                });
               });
             }
             handleClose();
@@ -174,6 +218,19 @@ const Designation = () => {
             />
           </DialogContent>
           <DialogActions>
+            <Button
+              onClick={() => {
+                handleClose();
+                setNewDesignation({
+                  name: '',
+                });
+              }}
+              variant="contained"
+              sx={{ right: 20, marginBottom: 2 }}
+              color="error"
+            >
+              Close
+            </Button>
             <Button type="submit" variant="contained" sx={{ right: 20, marginBottom: 2 }} color="success">
               {dialogAction}
             </Button>

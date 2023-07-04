@@ -62,7 +62,7 @@ const ChildListPage = () => {
     { field: 'lastName', headerName: 'Last Name', width: 120, headerAlign: 'center', align: 'center' },
     { field: 'dateOfBirth', headerName: 'DOB', width: 90, headerAlign: 'center', align: 'center', renderCell: (props) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>) },
     { field: 'childSupport', headerName: 'Child Support', width: 110, headerAlign: 'center', align: 'center', renderCell: (props) =>
-      <p> {(props.value as ChildSupport)?.name}</p> },
+      <p> {(props.value as IChildSupport)?.name}</p> },
     { field: 'childOf', headerName: 'Child Of', renderCell: (props) =>
       <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
     width: 170, headerAlign: 'center', align: 'center' },

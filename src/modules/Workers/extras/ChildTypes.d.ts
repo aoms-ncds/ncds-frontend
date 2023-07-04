@@ -9,7 +9,7 @@ declare global {
     lastName: string;
     dateOfBirth: Moment;
     childOf: IWorker | null;
-    childSupport: ChildSupport;
+    childSupport: IChildSupport;
     studying: boolean;
     classOfStudy: string;
     working: boolean;
@@ -20,7 +20,7 @@ declare global {
     childCode?:string;
     dateOfBirth?: Moment;
     childOf?: IWorker | null;
-    childSupport?: ChildSupport;
+    childSupport?: IChildSupport;
     studying?: boolean;
     classOfStudy?: string;
     working?: boolean;
@@ -28,10 +28,9 @@ declare global {
     qualification?: string;
   }
 
-  interface ChildSupport extends MongooseDocument{
-    map(arg0: (item: ChildSupport) => { _id: string; name: string; status: number; amount: number; }): unknown;
-    name: string;
-    status: number;
-    amount: number;
-  }
+  // interface IChildSupport extends MongooseDocument{
+  //   name: string;
+  //   status: number;
+  //   amount: number;
+  // }
 }

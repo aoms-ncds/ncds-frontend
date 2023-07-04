@@ -11,7 +11,7 @@ const NewSupportDetailsForm = (
     }
   >,
 ) => {
-  const [designations, setDesignations] = useState<Designation[] | null>(null);
+  const [designations, setDesignations] = useState<IDesignation[] | null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);
 
   useEffect(() => {

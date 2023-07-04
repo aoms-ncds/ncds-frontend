@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -9,6 +9,8 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const ChildSupport = () => {
   const [childSupport, setChildSupport] = useState<IChildSupport[] | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [childSupportToDelete, setChildSupportToDelete] = useState<ILanguage | null>(null);
   const [newChildSupport, setNewChildSupport] = useState<MyCreatableChildSupport>({
     name: '',
     status: 0,
@@ -43,6 +45,10 @@ const ChildSupport = () => {
         });
       });
   };
+  const handleDeleteCancel = () => {
+    setConfirmDelete(false);
+    setChildSupportToDelete(null);
+  };
 
   const columns: GridColDef<IChildSupport>[] = [
     {
@@ -51,13 +57,12 @@ const ChildSupport = () => {
       align: 'left',
       width: 150,
       headerAlign: 'center',
-      renderCell: (index) =>
-        index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
+      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
       // valueGetter: (params) => params.row.name,
     },
     {
       field: 'ChildSupport',
-      headerName: 'ChildSupport',
+      headerName: 'Child Support',
       align: 'left',
       width: 150,
       headerAlign: 'center',
@@ -105,7 +110,8 @@ const ChildSupport = () => {
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => {
-              removeChildSupport(params.row._id);
+              setConfirmDelete(true);
+              setChildSupportToDelete(params.row);
             }}
           >
             Delete
@@ -141,7 +147,7 @@ const ChildSupport = () => {
   };
 
   return (
-    <CommonPageLayout title="ChildSupport">
+    <CommonPageLayout title="Child Support">
       <Button
         variant="contained"
         sx={{ float: 'right', marginBottom: 3 }}
@@ -152,28 +158,62 @@ const ChildSupport = () => {
       >
         Add new
       </Button>
+
+      <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to delete this Child Support?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{
+            setConfirmDelete(false);
+            setChildSupportToDelete(null);
+          }} variant="text">
+            No, Cancel
+          </Button>
+          <Button onClick={()=>{
+            if (childSupportToDelete) {
+              removeChildSupport(childSupportToDelete._id);
+            }
+            setConfirmDelete(false);
+            setChildSupportToDelete(null);
+          }} variant="contained" color="error">
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (dialogAction === 'add') {
               ChildSupportService.create(newChildSupport).then((res) => {
-                setChildSupport((prevChildSupport) =>
-                  prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
-                );
+                setChildSupport((prevChildSupport) => (prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data]));
+                setNewChildSupport({
+                  name: '',
+                  status: 0,
+                  amount: 0,
+                });
               });
             } else {
               ChildSupportService.edit(newChildSupport).then((res) => {
-                setChildSupport((prevChildSupport) =>
-                  prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
-                );
+                // setChildSupport((prevChildSupport) =>
+                //   prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
+                // );
+                setChildSupport((childSupport) => (childSupport === null ? null : childSupport?.map((childsprt) => (childsprt._id === newChildSupport._id ? res.data : childsprt))));
+                setNewChildSupport({
+                  name: '',
+                  status: 0,
+                  amount: 0,
+                });
               });
             }
 
             handleClose();
           }}
         >
-          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} ChildSupport</DialogTitle>
+          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Child Support</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -201,6 +241,21 @@ const ChildSupport = () => {
             />
           </DialogContent>
           <DialogActions>
+            <Button
+              onClick={() => {
+                handleClose();
+                setNewChildSupport({
+                  name: '',
+                  status: 0,
+                  amount: 0,
+                });
+              }}
+              variant="contained"
+              sx={{ right: 20, marginBottom: 2 }}
+              color="error"
+            >
+              Close
+            </Button>
             <Button type="submit" variant="contained" sx={{ right: 20, marginBottom: 2 }} color="success">
               {dialogAction}
             </Button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -9,6 +9,8 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const Languages = () => {
   const [languages, setLanguages] = useState<ILanguage[] | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
+  const [languageToDelete, setLanguageToDelete] = useState<ILanguage | null>(null);
   const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
     name: '',
   });
@@ -42,7 +44,13 @@ const Languages = () => {
         });
       });
   };
-
+  const handleClose = () => {
+    setDialogAction(false);
+  };
+  const handleDeleteCancel = () => {
+    setConfirmDelete(false);
+    setLanguageToDelete(null);
+  };
   const columns: GridColDef<ILanguage>[] = [
     {
       field: 'SI',
@@ -50,8 +58,7 @@ const Languages = () => {
       align: 'left',
       width: 150,
       headerAlign: 'center',
-      renderCell: (index) =>
-        index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
+      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex),
     },
     {
       field: 'Languages',
@@ -94,7 +101,8 @@ const Languages = () => {
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => {
-              removeLanguage(params.row._id);
+              setConfirmDelete(true);
+              setLanguageToDelete(params.row);
             }}
           >
             Delete
@@ -124,9 +132,6 @@ const Languages = () => {
       });
   }, []);
 
-  const handleClose = () => {
-    setDialogAction(false);
-  };
 
   return (
     <CommonPageLayout title="Languages">
@@ -140,6 +145,32 @@ const Languages = () => {
       >
         Add new
       </Button>
+
+      <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <Container>Do you want to delete this language?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{
+            setConfirmDelete(false);
+            setLanguageToDelete(null);
+          }} variant="text">
+            No, Cancel
+          </Button>
+          <Button onClick={()=>{
+            console.log(languageToDelete);
+            if (languageToDelete) {
+              removeLanguage(languageToDelete._id);
+            }
+            setConfirmDelete(false);
+            setLanguageToDelete(null);
+          }} variant="contained" color="error">
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
@@ -147,10 +178,17 @@ const Languages = () => {
             if (dialogAction === 'add') {
               LanguagesServices.create(newLanguage).then((res) => {
                 setLanguages((langs) => (langs === null ? [res.data] : [...langs, res.data]));
+                setNewLanguage({
+                  name: '',
+                });
               });
             } else {
               LanguagesServices.edit(newLanguage).then((res) => {
                 setLanguages((langs) => (langs === null ? null : langs?.map((lang) => (lang._id === newLanguage._id ? res.data : lang))));
+
+                setNewLanguage({
+                  name: '',
+                });
               });
             }
             handleClose();
@@ -172,8 +210,21 @@ const Languages = () => {
             />
           </DialogContent>
           <DialogActions>
+            <Button
+              onClick={() => {
+                handleClose();
+                setNewLanguage({
+                  name: '',
+                });
+              }}
+              variant="contained"
+              sx={{ right: 20, marginBottom: 2 }}
+              color="error"
+            >
+              Close
+            </Button>
             <Button type="submit" variant="contained" sx={{ right: 20, marginBottom: 2 }} color="success">
-              Add
+              {dialogAction}
             </Button>
           </DialogActions>
         </form>

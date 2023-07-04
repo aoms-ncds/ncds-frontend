@@ -3,14 +3,14 @@ import axios from 'axios';
 export default {
 
   getAll: () =>
-    getStandardResponse<ChildSupport>(
+    getStandardResponse<IChildSupport[]>(
       axios.get('/workers/childSupport', { headers: { ...getAuthHeader() } }),
     ),
-  create: (lang: CreatableLanguage) => getStandardResponse<ChildSupport>(
+  create: (lang: CreatableLanguage) => getStandardResponse<IChildSupport>(
     axios.post('/workers/childSupport', lang, { headers: { ...getAuthHeader() } }),
   ),
 
-  edit: (lang: CreatableLanguage) => getStandardResponse<ChildSupport>(
+  edit: (lang: CreatableLanguage) => getStandardResponse<IChildSupport>(
     axios.patch(`/workers/childSupport/${lang._id}`, lang, { headers: { ...getAuthHeader() } })),
 
   delete: (languageId: string) => getStandardResponse<number>(

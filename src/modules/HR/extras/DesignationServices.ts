@@ -3,5 +3,5 @@ import axios from 'axios';
 
 export default {
   getCount: () => getStandardResponse<number>(axios.get('/hr/designations/count/', { headers: { ...getAuthHeader() } })),
-  getAll: () => getStandardResponse<Designation[]>(axios.get('/hr/designations/', { headers: { ...getAuthHeader() } })),
+  getAll: () => getStandardResponse<IDesignation[]>(axios.get('/hr/designations/', { headers: { ...getAuthHeader() } })),
 };
