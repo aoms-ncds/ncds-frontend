@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import PermissionChecks from '../User/components/PermissionChecks';
+import FRLifeCycleStates from './extras/FRLifeCycleStates';
 interface FRFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
@@ -29,7 +30,6 @@ const FRFormPage = (props: FRFormPageProps) => {
     const convertedData: CreatableFR = {
       ...res.data,
       requestAmount: ['requestedAmount'],
-      status: res.data.status.toString(),
     };
     setRequisition(convertedData);
   })
@@ -91,7 +91,12 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const manageFR = async (requisition: CreatableFR) => {
     try {
-      const operation = requisition.status;
+      const operation =
+      requisition.status==FRLifeCycleStates.ACCOUNTS_APPROVED?'approve':
+        requisition.status==FRLifeCycleStates.REJECTED?'reject':
+          requisition.status==FRLifeCycleStates.WAITING_TO_ACCOUNTS?'sendToAccounts':
+            requisition.status==FRLifeCycleStates.WAITING_TO_PRESIDENT?'sendToPresident':'sendBack'
+      ;
 
       enqueueSnackbar({
         // eslint-disable-next-line max-len

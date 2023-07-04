@@ -47,15 +47,17 @@ export default {
     }),
   ),
 
-  getMainCategory: () => getStandardResponse<MainCategory[]>(
-    dummyRequest<MainCategory[]>({
-      data: categories,
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  // getMainCategory: () => getStandardResponse<MainCategory[]>(
+  //   dummyRequest<MainCategory[]>({
+  //     data: categories,
+  //     // error: null,
+  //     message: 'fetched data',
+  //     result: 'success',
+  //     timeout: 500,
+  //   }),
+  // ),
+
+  getMainCategory: ()=>getStandardResponse<MainCategory[]>(axios.get('/fr/category', { headers: { ...getAuthHeader() } })),
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
@@ -170,30 +172,30 @@ export default {
             try {
               if (frRequest.particulars) {
                 for (let i = 0; i < frRequest.particulars.length; i++) {
-                  const partculars = frRequest.particulars[i];
-                  if (partculars._id) {
-                    await axios.patch(`/fr/particulars/${partculars._id}`, {
+                  const particulars = frRequest.particulars[i];
+                  if (particulars._id) {
+                    await axios.patch(`/fr/particulars/${particulars._id}`, {
                       FR: updatedFR.data.data._id,
-                      mainCategory: partculars.mainCategory,
-                      subCategory1: partculars.subCategory1,
-                      subCategory2: partculars.subCategory2,
-                      subCategory3: partculars.subCategory3,
-                      quantity: partculars.quantity,
-                      month: partculars.month,
-                      requestedAmount: partculars.requestedAmount,
-                      narration: partculars.narration,
+                      mainCategory: particulars.mainCategory,
+                      subCategory1: particulars.subCategory1,
+                      subCategory2: particulars.subCategory2,
+                      subCategory3: particulars.subCategory3,
+                      quantity: particulars.quantity,
+                      month: particulars.month,
+                      requestedAmount: particulars.requestedAmount,
+                      narration: particulars.narration,
                     }, { headers: { ...getAuthHeader() } });
                   } else {
                     await axios.post('/fr/particulars/', {
                       FR: updatedFR.data.data._id,
-                      mainCategory: partculars.mainCategory,
-                      subCategory1: partculars.subCategory1,
-                      subCategory2: partculars.subCategory2,
-                      subCategory3: partculars.subCategory3,
-                      quantity: partculars.quantity,
-                      month: partculars.month,
-                      requestedAmount: partculars.requestedAmount,
-                      narration: partculars.narration,
+                      mainCategory: particulars.mainCategory,
+                      subCategory1: particulars.subCategory1,
+                      subCategory2: particulars.subCategory2,
+                      subCategory3: particulars.subCategory3,
+                      quantity: particulars.quantity,
+                      month: particulars.month,
+                      requestedAmount: particulars.requestedAmount,
+                      narration: particulars.narration,
                     }, { headers: { ...getAuthHeader() } });
                   }
                 }

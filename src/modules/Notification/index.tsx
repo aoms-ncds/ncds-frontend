@@ -3,9 +3,9 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Checkbox, FormControlLabel, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
-import NotificationService from './extras/NotificationService';
 import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
+import NotificationService from './extras/NotificationService';
 
 const NotificationPage = () => {
   const [messages, setMessages] = useState<Message[]|null>(null);

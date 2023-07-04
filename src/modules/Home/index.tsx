@@ -16,7 +16,7 @@ const HomePage = () => {
           <MinimalModuleDataAnalytics />
         </Grid>
         <PermissionChecks
-          permissions={['READ_ACCESS', 'READ_DIVISIONS', 'WRITE_FR']}
+          permissions={['READ_ACCESS']}
           granted={(
             <>
               <Grid item xs={12} lg={6}>

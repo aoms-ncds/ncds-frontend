@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
 import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import { MB } from '../../extras/CommonConfig';
 import moment from 'moment';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 
 
 const ManageIRO = () => {
@@ -142,13 +143,14 @@ const ManageIRO = () => {
               to: `/iro/${props.row._id}`,
               icon: PreviewIcon,
             },
-            {
-              id: 'Release',
-              text: 'Release Amount',
-              component: Link,
-              to: '/iro/release_amount/' + props.row._id,
-              icon: PreviewIcon,
-            },
+            ...(hasPermissions(['MANAGE_IRO']) && props.row.status==IROLifeCycleStates.WAITING_TO_ACCOUNTS_STATE ? [
+              {
+                id: 'Release',
+                text: 'Release Amount',
+                component: Link,
+                to: '/iro/release_amount/' + props.row._id,
+                icon: PreviewIcon,
+              }]:[]),
             {
               id: 'remarks',
               text: 'Remarks',
@@ -184,34 +186,31 @@ const ManageIRO = () => {
               //     });
               // },
             },
-
-            {
-              id: 'print',
-              text: 'Print IRO',
-              icon: PrintIcon,
-              component: PDFDownloadLink,
-              document: <IROReceiptTemplate RowData={props.row} />,
-              fileName: 'IROReceipt.pdf',
-
-
-            },
-
-            {
-              id: 'Reconciliation',
-              text: 'Reconciliation',
-              icon: EditIcon,
-              onClick: ()=>{
-                setFileUploaderAction('manage');
-                setAttachment(true);
-                setSelectedIRO(props.row);
+            ...(hasPermissions(['MANAGE_IRO']) && props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'print',
+                text: 'Print IRO',
+                icon: PrintIcon,
+                component: PDFDownloadLink,
+                document: <IROReceiptTemplate RowData={props.row} />,
+                fileName: 'IROReceipt.pdf',
               },
-            },
-            {
-              id: 'Close IRO',
-              text: 'Close IRO',
-              icon: PreviewIcon,
-              onClick: ()=>{
-                IROServices.close(props.row._id)
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: ()=>{
+                  setFileUploaderAction('manage');
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
+                },
+              },
+              {
+                id: 'Close IRO',
+                text: 'Close IRO',
+                icon: PreviewIcon,
+                onClick: ()=>{
+                  IROServices.close(props.row._id)
                 .then((res)=>{
                   if (IROrder) {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -233,48 +232,49 @@ const ManageIRO = () => {
                     variant: 'error',
                   });
                 });
-              },
-            },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: AttachmentIcon,
-              onClick: ()=>{
-                setAttachment(true);
-                setFileUploaderAction('add');
-                setSelectedIRO(props.row);
-              },
-            },
-            {
-              id: 'Send Back',
-              text: 'Send Back',
-              icon: ReplyIcon,
-              onClick: ()=>{
-                IROServices.
-                sendBack(props.row._id)
-                .then((res)=>{
-                  if (IROrder) {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    const filterIRO = IROrder?.filter((IROrders) => {
-                      return IROrders._id !== props.row._id;
-                    });
-                    setIROrder(filterIRO);
-                  }
-                  console.log(res, 'close');
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                })
+                },
+              }]:[]),
+            ...(hasPermissions(['WRITE_IRO']) && props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'Attachments',
+                text: 'Attachments',
+                icon: AttachmentIcon,
+                onClick: ()=>{
+                  setAttachment(true);
+                  setFileUploaderAction('add');
+                  setSelectedIRO(props.row);
+                },
+              }]:[]),
+            // {
+            //   id: 'Send Back',
+            //   text: 'Send Back',
+            //   icon: ReplyIcon,
+            //   onClick: ()=>{
+            //     IROServices.
+            //     sendBack(props.row._id)
+            //     .then((res)=>{
+            //       if (IROrder) {
+            //         // eslint-disable-next-line @typescript-eslint/naming-convention
+            //         const filterIRO = IROrder?.filter((IROrders) => {
+            //           return IROrders._id !== props.row._id;
+            //         });
+            //         setIROrder(filterIRO);
+            //       }
+            //       console.log(res, 'close');
+            //       enqueueSnackbar({
+            //         message: res.message,
+            //         variant: 'success',
+            //       });
+            //     })
 
-                .catch((err) => {
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
-              },
-            },
+            //     .catch((err) => {
+            //       enqueueSnackbar({
+            //         message: err.message,
+            //         variant: 'error',
+            //       });
+            //     });
+            //   },
+            // },
           ]}
         />
       ),
@@ -307,40 +307,45 @@ const ManageIRO = () => {
   ];
   return (
     <CommonPageLayout title="Internal Release Order">
-      <br />
-      <br />
-      <Grid item xs={12} md={12}>
-        <Card style={{ height: '75vh', width: '100%' }}>
-          <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
-        </Card>
-      </Grid>
-      <Dialog open={openRemarks} fullWidth maxWidth="md">
-        <DialogTitle>Remarks</DialogTitle>
-        <DialogContent>
-          {remarks.length > 0 ? remarks.map((remark) => (
-            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
-        </DialogContent>
-        <DialogActions>
-          <TextField
-            id="remarkTextfield"
-            placeholder="Remarks"
-            multiline
-            value={remark?.remark}
-            onChange={(e) =>
-              setRemark((remark) => ({
-                ...remark,
-                IRO: selectedIROId??'',
-                remark: e.target.value,
-              }))
-            }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => {
-                      remark.remark ?
-                        IROServices.addRemarks(remark)
+      <PermissionChecks
+        permissions={['READ_ACCESS']}
+        granted={(
+          <>
+            <br />
+            <br />
+            <Grid item xs={12} md={12}>
+              <Card style={{ height: '75vh', width: '100%' }}>
+                <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
+              </Card>
+            </Grid>
+            <Dialog open={openRemarks} fullWidth maxWidth="md">
+              <DialogTitle>Remarks</DialogTitle>
+              <DialogContent>
+                {remarks.length > 0 ? remarks.map((remark) => (
+                  <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                    time={remark.updatedAt} body={remark.remark} isSent={true} />
+                )):'No Data Found '}
+              </DialogContent>
+              <DialogActions>
+                <TextField
+                  id="remarkTextfield"
+                  placeholder="Remarks"
+                  multiline
+                  value={remark?.remark}
+                  onChange={(e) =>
+                    setRemark((remark) => ({
+                      ...remark,
+                      IRO: selectedIROId??'',
+                      remark: e.target.value,
+                    }))
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => {
+                            remark.remark ?
+                              IROServices.addRemarks(remark)
                             .then((res) => {
                               setRemarks((remarks) => [...remarks, res.data]);
                               setRemark((remark) => ({
@@ -354,52 +359,52 @@ const ManageIRO = () => {
                                 message: error.message,
                               });
                             }) :
-                        '';
-                    }}
-                  >
-                    <SendIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              toggleOpenRemarks(false);
-              setSelectedIROId(null);
-            }}
-            // sx={{ ml: 'auto' }}
-          >
+                              '';
+                          }}
+                        >
+                          <SendIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    toggleOpenRemarks(false);
+                    setSelectedIROId(null);
+                  }}
+                  // sx={{ ml: 'auto' }}
+                >
             close
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <FileUploader
-        title=" Bill Upload"
-        types={[
-          'application/pdf',
-          'image/png',
-          'image/jpeg',
-          'image/jpg',
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <FileUploader
+              title=" Bill Upload"
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
 
-        ]}
-        limits={{
-          // types: [],
-          maxItemSize: 1*MB,
-          maxItemCount: 3,
-          maxTotalSize: 3*MB,
-        }}
-        // accept={['video/*']}
-        open={attachment}
-        action={fileUploaderAction}
-        postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
-        onClose={() => setAttachment(false)}
-        // getFiles={TestServices.getBills}
-        getFiles={selectedIRO?.billAttachment??[]}
-        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/Reconciliation', file.name)
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1*MB,
+                maxItemCount: 3,
+                maxTotalSize: 3*MB,
+              }}
+              // accept={['video/*']}
+              open={attachment}
+              action={fileUploaderAction}
+              postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
+              onClose={() => setAttachment(false)}
+              // getFiles={TestServices.getBills}
+              getFiles={selectedIRO?.billAttachment??[]}
+              uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/Reconciliation', file.name)
           .then((res)=>{
             console.log(res.data._id);
             setSelectedIRO(()=>({ ...selectedIRO,
@@ -408,20 +413,30 @@ const ManageIRO = () => {
 
             return res;
           });
-        }}
-        renameFile={(fileId: string, newName: string) => {
-          setSelectedIRO(()=>({ ...selectedIRO,
-            billAttachment: selectedIRO?.billAttachment.map((file) =>
-              file._id === fileId ? { ...file, filename: newName } : file,
-            ) } ));
-          return FileUploaderServices.renameFile(fileId, newName);
-        }}
-        deleteFile={(fileId: string) => {
-          setSelectedIRO(()=>({ ...selectedIRO,
-            billAttachment: selectedIRO?.billAttachment.filter((file)=>file._id!==fileId),
-          } ));
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+              }}
+              renameFile={(fileId: string, newName: string) => {
+                setSelectedIRO(()=>({ ...selectedIRO,
+                  billAttachment: selectedIRO?.billAttachment.map((file) =>
+                    file._id === fileId ? { ...file, filename: newName } : file,
+                  ) } ));
+                return FileUploaderServices.renameFile(fileId, newName);
+              }}
+              deleteFile={(fileId: string) => {
+                setSelectedIRO(()=>({ ...selectedIRO,
+                  billAttachment: selectedIRO?.billAttachment.filter((file)=>file._id!==fileId),
+                } ));
+                return FileUploaderServices.deleteFile(fileId);
+              }}
+            />
+          </>
+        )}
+        denied={(missingPermissions) => (
+          <Grid item xs={12} lg={6}>
+            <Alert severity='error'>
+                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+            </Alert>
+          </Grid>
+        )}
       />
     </CommonPageLayout>
   );

@@ -40,8 +40,12 @@ import PermissionChecks from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
+import FRLifeCycleStates from '../extras/FRLifeCycleStates';
+import { useNavigate } from 'react-router-dom';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
+  const navigate = useNavigate();
+
   const [showAddParticulardialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
@@ -213,8 +217,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             onSubmit={(e) => {
               e.preventDefault();
               if (props.onSubmit) {
-                props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
+                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
+              navigate('/fr/');
             }}
           >
             <Grid container spacing={3}>
@@ -538,7 +544,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             onClick={() => {
                               const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                               if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: 'sendToPresident' }; // Create a new object with updated status
+                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_PRESIDENT }; // Create a new object with updated status
                                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                               }
 
@@ -547,6 +553,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                                 const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
                                 setTimeout(() => closeSnackbar(processedSnack), 500);
                               }, 500);
+                              navigate('/fr/');
                             }}
                           >
                       Submit to President
@@ -562,11 +569,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       <Button
                         variant="contained"
                         color="info"
-                        onClick={() => {
-                          if (props.onSubmit) {
-                            props.onSubmit(props.value); // Invoke props.onSubmit with the value as the argument
-                          }
-                        }}
+                        type='submit'
                       >
                     Submit{' '}
                       </Button>
