@@ -8,6 +8,7 @@ import IROServices from './extras/IROServices';
 const IRODashboard = () => {
   const [IROCount, setIROCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
+  const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
   console.log(IROCount);
   console.log(closedIROCount);
   useEffect(() => {
@@ -21,6 +22,11 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    IROServices.getReconciliationCount()
+      .then((res) => setReconciliationCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
   return (
     <CommonPageLayout title="IRO Dashboard">
@@ -31,6 +37,9 @@ const IRODashboard = () => {
 
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" secondaryText={closedIROCount?.toString()} color="#de2828" targetRoute="/iro/closed" />
+        </Grid>
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton primaryText="Reconciliation IRO " secondaryText={reconciliationCount?.toString()} color="#3cb043" targetRoute="/iro/Reconciliation" />
         </Grid>
       </Grid>
     </CommonPageLayout>

@@ -5,6 +5,7 @@ import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
 import ReleaseAmount from '../ReleaseAmount';
 import ViewIRO from '../ViewIRO';
+import ReconciliationIRO from '../ReconciliationIRO';
 
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
@@ -31,6 +32,13 @@ const iroPageRoutes: ModuleRoute = {
       element: <ClosedIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Reconciliation IRO',
+      path: '/Reconciliation',
+      element: <ReconciliationIRO/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
     },
     {
       title: 'View IRO',
