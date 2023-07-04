@@ -279,21 +279,21 @@ const ManageIRO = () => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 100 },
+    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
     { field: 'IRODate', headerName: 'IRO Date', width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY') },
-    { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
+    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
+    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
     {
       field: 'status',
       headerName: 'Status',
@@ -303,6 +303,7 @@ const ManageIRO = () => {
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
       },
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
   ];
   return (

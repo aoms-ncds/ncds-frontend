@@ -58,6 +58,7 @@ export default {
   // ),
 
   getMainCategory: ()=>getStandardResponse<MainCategory[]>(axios.get('/fr/category', { headers: { ...getAuthHeader() } })),
+
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),

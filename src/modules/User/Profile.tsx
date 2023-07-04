@@ -116,9 +116,9 @@ const Profile = () => {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Basic Details" {...a11yProps(0)} />
-              <Tab label="Official Details" {...a11yProps(1)} />
-              <Tab label="Support Details" {...a11yProps(2)} />
+              <Tab sx={{ fontWeight: 'bold' }} label="Basic Details" {...a11yProps(0)} />
+              <Tab sx={{ fontWeight: 'bold' }} label="Official Details" {...a11yProps(1)} />
+              <Tab sx={{ fontWeight: 'bold' }} label="Support Details" {...a11yProps(2)} />
               {/* <Tab label="Support Structure" {...a11yProps(3)} /> */}
               { userKind ==='worker' && (user as unknown as IWorker)?.spouse && <Tab label="Spouse Details" {...a11yProps(3)} />}
               {userKind ==='worker' && (user as unknown as IWorker)?.children.length > 0 && <Tab label="Offsprings Details" {...a11yProps(4)} />}
@@ -126,7 +126,9 @@ const Profile = () => {
           </Box>
           <TabPanel value={currentTab} index={0}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'boder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
+
+
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
