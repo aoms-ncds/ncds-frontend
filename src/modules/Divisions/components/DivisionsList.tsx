@@ -57,10 +57,6 @@ const DivisionsList = () => {
       renderHeader: () => (<b>Action</b>),
       width: 60,
       type: 'string',
-      renderHeader: (params) => (
-        <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>
-      ),
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
         <DropdownButton
@@ -103,9 +99,6 @@ const DivisionsList = () => {
       field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
       width: 120,
-      renderHeader: (params) => (
-        <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>
-      ),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
         <Link

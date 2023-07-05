@@ -249,10 +249,10 @@ const ManageIRO = () => {
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
+    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>) },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>) },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>) },
+    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>) },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
@@ -262,7 +262,6 @@ const ManageIRO = () => {
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
   ];
   return (

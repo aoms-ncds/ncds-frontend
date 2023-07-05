@@ -25,9 +25,9 @@ import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
-import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
+import FRLifeCycleStates from './extras/FRLifeCycleStates';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 

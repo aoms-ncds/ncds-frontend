@@ -86,7 +86,7 @@ const ChildListPage = () => {
       width: 110,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (props) => <p> {(props.value as ChildSupport)?.name}</p>,
+      renderCell: (props) => <p> {(props.value as IChildSupport)?.name}</p>,
       renderHeader: ()=>( <b>Child Support</b>),
     },
     {
