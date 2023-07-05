@@ -1,10 +1,10 @@
 export default {};
 declare global {
-  interface Designation extends MongooseDocument {
+  interface IDesignation extends MongooseDocument {
     name: string;
   }
 
-  interface CreatableDesignation extends Creatable<Designation> {
+  interface CreatableDesignation extends Creatable<IDesignation> {
     inputValue?: string;
   }
 }

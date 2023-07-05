@@ -4,31 +4,31 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import LanguagesServices from '../Settings/extras/LanguagesService';
-import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import ChildSupportService from './extras/ChildSupportService';
 
-const Languages = () => {
-  const [languages, setLanguages] = useState<ILanguage[] | null>(null);
+const ChildSupport = () => {
+  const [childSupport, setChildSupport] = useState<IChildSupport[] | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  const [languageToDelete, setLanguageToDelete] = useState<ILanguage | null>(null);
-  const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
+  const [childSupportToDelete, setChildSupportToDelete] = useState<ILanguage | null>(null);
+  const [newChildSupport, setNewChildSupport] = useState<MyCreatableChildSupport>({
     name: '',
+    status: 0,
+    amount: 0,
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
-
-  const removeLanguage = (id: string) => {
+  const removeChildSupport = (id: string) => {
     const snackbarId = enqueueSnackbar({
-      message: 'Removing Language',
+      message: 'Removing ChildSupport',
       variant: 'info',
     });
-    LanguagesServices.delete(id)
+    ChildSupportService.delete(id)
       .then((res) => {
         console.log('process delete', res);
-        if (languages) {
-          const newLanguage = languages.filter((languages) => {
-            return languages._id !== id;
+        if (childSupport) {
+          const newChildSupport = childSupport?.filter((childSupport) => {
+            return childSupport._id !== id;
           });
-          setLanguages(newLanguage);
+          setChildSupport(newChildSupport);
         }
         enqueueSnackbar({
           message: res.message,
@@ -44,26 +44,31 @@ const Languages = () => {
         });
       });
   };
-  const handleClose = () => {
-    setDialogAction(false);
-  };
   const handleDeleteCancel = () => {
     setConfirmDelete(false);
-    setLanguageToDelete(null);
+    setChildSupportToDelete(null);
   };
-  const columns: GridColDef<ILanguage>[] = [
+
+  const columns: GridColDef<IChildSupport>[] = [
     {
-      field: 'Languages',
-      renderHeader: () => (<b>Languages</b>),
+      field: 'ChildSupport',
+      headerName: 'Child Support',
       align: 'left',
       width: 150,
       headerAlign: 'center',
       valueGetter: (params) => params.row.name,
     },
     {
+      field: 'Amount',
+      headerName: 'Amount',
+      align: 'left',
+      width: 150,
+      headerAlign: 'center',
+      valueGetter: (params) => params.row.amount,
+    },
+    {
       field: 'edit',
       headerName: 'Edit',
-      renderHeader: () => (<b>Edit</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -74,7 +79,8 @@ const Languages = () => {
             startIcon={<EditIcon />}
             onClick={() => {
               setDialogAction('edit');
-              setNewLanguage(params.row);
+              console.log(dialogAction);
+              setNewChildSupport(params.row);
             }}
           >
             Edit
@@ -85,7 +91,6 @@ const Languages = () => {
     {
       field: 'delete',
       headerName: 'Delete',
-      renderHeader: () => (<b>Delete</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -96,7 +101,7 @@ const Languages = () => {
             startIcon={<DeleteIcon />}
             onClick={() => {
               setConfirmDelete(true);
-              setLanguageToDelete(params.row);
+              setChildSupportToDelete(params.row);
             }}
           >
             Delete
@@ -107,9 +112,10 @@ const Languages = () => {
   ];
 
   useEffect(() => {
-    LanguagesServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
+    ChildSupportService.getAll()
       .then((res) => {
-        setLanguages(res.data);
+        console.log(res, 'res');
+        setChildSupport(res.data);
         handleClose();
         enqueueSnackbar({
           variant: 'success',
@@ -126,9 +132,12 @@ const Languages = () => {
       });
   }, []);
 
+  const handleClose = () => {
+    setDialogAction(false);
+  };
 
   return (
-    <CommonPageLayout title="Languages">
+    <CommonPageLayout title="Child Support">
       <Button
         variant="contained"
         sx={{ float: 'right', marginBottom: 3 }}
@@ -143,22 +152,21 @@ const Languages = () => {
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
-          <Container>Do you want to delete this language?</Container>
+          <Container>Do you want to delete this Child Support?</Container>
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>{
             setConfirmDelete(false);
-            setLanguageToDelete(null);
+            setChildSupportToDelete(null);
           }} variant="text">
             No, Cancel
           </Button>
           <Button onClick={()=>{
-            console.log(languageToDelete);
-            if (languageToDelete) {
-              removeLanguage(languageToDelete._id);
+            if (childSupportToDelete) {
+              removeChildSupport(childSupportToDelete._id);
             }
             setConfirmDelete(false);
-            setLanguageToDelete(null);
+            setChildSupportToDelete(null);
           }} variant="contained" color="error">
             Yes, Delete
           </Button>
@@ -170,36 +178,52 @@ const Languages = () => {
           onSubmit={(e) => {
             e.preventDefault();
             if (dialogAction === 'add') {
-              LanguagesServices.create(newLanguage).then((res) => {
-                setLanguages((langs) => (langs === null ? [res.data] : [...langs, res.data]));
-                setNewLanguage({
+              ChildSupportService.create(newChildSupport).then((res) => {
+                setChildSupport((prevChildSupport) => (prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data]));
+                setNewChildSupport({
                   name: '',
+                  status: 0,
+                  amount: 0,
                 });
               });
             } else {
-              LanguagesServices.edit(newLanguage).then((res) => {
-                setLanguages((langs) => (langs === null ? null : langs?.map((lang) => (lang._id === newLanguage._id ? res.data : lang))));
-
-                setNewLanguage({
+              ChildSupportService.edit(newChildSupport).then((res) => {
+                setChildSupport((childSupport) => (childSupport === null ? null : childSupport?.map((childsprt) => (childsprt._id === newChildSupport._id ? res.data : childsprt))));
+                setNewChildSupport({
                   name: '',
+                  status: 0,
+                  amount: 0,
                 });
               });
             }
+
             handleClose();
           }}
         >
-          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Language</DialogTitle>
+          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Child Support</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
-              id="language"
-              label="Enter Language to be Added"
+              id="ChildSupport"
+              label="Enter ChildSupport to be Added"
               type="text"
               fullWidth
               variant="outlined"
-              value={newLanguage.name}
-              onChange={(e) => setNewLanguage((lang) => ({ ...lang, name: e.target.value }))}
+              value={newChildSupport.name}
+              onChange={(e) => setNewChildSupport((prev) => ({ ...prev, name: e.target.value }))}
+              required
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="ChildSupport"
+              label="Enter Amount"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={newChildSupport.amount}
+              onChange={(e) => setNewChildSupport((prev) => ({ ...prev, amount: Number(e.target.value) }))}
               required
             />
           </DialogContent>
@@ -207,8 +231,10 @@ const Languages = () => {
             <Button
               onClick={() => {
                 handleClose();
-                setNewLanguage({
+                setNewChildSupport({
                   name: '',
+                  status: 0,
+                  amount: 0,
                 });
               }}
               variant="contained"
@@ -225,10 +251,10 @@ const Languages = () => {
       </Dialog>
 
       <Card style={{ height: '80vh', width: '100%' }}>
-        <DataGrid rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
+        <DataGrid rows={childSupport ?? []} columns={columns} getRowId={(row) => row._id} loading={childSupport === null} />
       </Card>
     </CommonPageLayout>
   );
 };
 
-export default Languages;
+export default ChildSupport;

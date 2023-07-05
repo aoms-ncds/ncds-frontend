@@ -4,31 +4,29 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
-import LanguagesServices from '../Settings/extras/LanguagesService';
-import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import DesignationService from './extras/DesignationService';
 
-const Languages = () => {
-  const [languages, setLanguages] = useState<ILanguage[] | null>(null);
+const Designation = () => {
+  const [Designation, setDesignation] = useState<IDesignation[] | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
-  const [languageToDelete, setLanguageToDelete] = useState<ILanguage | null>(null);
-  const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
+  const [designationToDelete, setDesignationToDelete] = useState<IDesignation | null>(null);
+  const [newDesignation, setNewDesignation] = useState<CreatableDesignation>({
     name: '',
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
-
-  const removeLanguage = (id: string) => {
+  const removeDesignation = (id: string) => {
     const snackbarId = enqueueSnackbar({
-      message: 'Removing Language',
+      message: 'Removing Designation',
       variant: 'info',
     });
-    LanguagesServices.delete(id)
+    DesignationService.delete(id)
       .then((res) => {
         console.log('process delete', res);
-        if (languages) {
-          const newLanguage = languages.filter((languages) => {
-            return languages._id !== id;
+        if (Designation) {
+          const newDesignation = Designation.filter((designation) => {
+            return designation._id !== id;
           });
-          setLanguages(newLanguage);
+          setDesignation(newDesignation);
         }
         enqueueSnackbar({
           message: res.message,
@@ -44,26 +42,23 @@ const Languages = () => {
         });
       });
   };
-  const handleClose = () => {
-    setDialogAction(false);
-  };
   const handleDeleteCancel = () => {
     setConfirmDelete(false);
-    setLanguageToDelete(null);
+    setDesignationToDelete(null);
   };
-  const columns: GridColDef<ILanguage>[] = [
+
+  const columns: GridColDef<IDesignation>[] = [
     {
-      field: 'Languages',
-      renderHeader: () => (<b>Languages</b>),
+      field: 'SI',
+      headerName: 'SI',
       align: 'left',
       width: 150,
       headerAlign: 'center',
-      valueGetter: (params) => params.row.name,
+      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
     },
     {
       field: 'edit',
       headerName: 'Edit',
-      renderHeader: () => (<b>Edit</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -74,7 +69,8 @@ const Languages = () => {
             startIcon={<EditIcon />}
             onClick={() => {
               setDialogAction('edit');
-              setNewLanguage(params.row);
+              console.log(dialogAction);
+              setNewDesignation(params.row);
             }}
           >
             Edit
@@ -85,7 +81,6 @@ const Languages = () => {
     {
       field: 'delete',
       headerName: 'Delete',
-      renderHeader: () => (<b>Delete</b>),
       width: 100,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -96,7 +91,7 @@ const Languages = () => {
             startIcon={<DeleteIcon />}
             onClick={() => {
               setConfirmDelete(true);
-              setLanguageToDelete(params.row);
+              setDesignationToDelete(params.row);
             }}
           >
             Delete
@@ -107,9 +102,9 @@ const Languages = () => {
   ];
 
   useEffect(() => {
-    LanguagesServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
+    DesignationService.getAll()
       .then((res) => {
-        setLanguages(res.data);
+        setDesignation(res.data);
         handleClose();
         enqueueSnackbar({
           variant: 'success',
@@ -126,9 +121,12 @@ const Languages = () => {
       });
   }, []);
 
+  const handleClose = () => {
+    setDialogAction(false);
+  };
 
   return (
-    <CommonPageLayout title="Languages">
+    <CommonPageLayout title="Designation">
       <Button
         variant="contained"
         sx={{ float: 'right', marginBottom: 3 }}
@@ -143,44 +141,49 @@ const Languages = () => {
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
-          <Container>Do you want to delete this language?</Container>
+          <Container>Do you want to delete this Designation?</Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{
-            setConfirmDelete(false);
-            setLanguageToDelete(null);
-          }} variant="text">
+          <Button
+            onClick={() => {
+              setConfirmDelete(false);
+              setDesignationToDelete(null);
+            }}
+            variant="text"
+          >
             No, Cancel
           </Button>
-          <Button onClick={()=>{
-            console.log(languageToDelete);
-            if (languageToDelete) {
-              removeLanguage(languageToDelete._id);
-            }
-            setConfirmDelete(false);
-            setLanguageToDelete(null);
-          }} variant="contained" color="error">
+          <Button
+            onClick={() => {
+              console.log(designationToDelete);
+              if (designationToDelete) {
+                removeDesignation(designationToDelete._id);
+              }
+              setConfirmDelete(false);
+              setDesignationToDelete(null);
+            }}
+            variant="contained"
+            color="error"
+          >
             Yes, Delete
           </Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (dialogAction === 'add') {
-              LanguagesServices.create(newLanguage).then((res) => {
-                setLanguages((langs) => (langs === null ? [res.data] : [...langs, res.data]));
-                setNewLanguage({
+              DesignationService.create(newDesignation).then((res) => {
+                setDesignation((desig) => (desig === null ? [res.data] : [...desig, res.data]));
+                setNewDesignation({
                   name: '',
                 });
               });
             } else {
-              LanguagesServices.edit(newLanguage).then((res) => {
-                setLanguages((langs) => (langs === null ? null : langs?.map((lang) => (lang._id === newLanguage._id ? res.data : lang))));
-
-                setNewLanguage({
+              DesignationService.edit(newDesignation).then((res) => {
+                setDesignation((desig) => (desig === null ? null : desig?.map((des) => (des._id === newDesignation._id ? res.data : des))));
+                setNewDesignation({
                   name: '',
                 });
               });
@@ -188,18 +191,18 @@ const Languages = () => {
             handleClose();
           }}
         >
-          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Language</DialogTitle>
+          <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Designation</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
-              id="language"
-              label="Enter Language to be Added"
+              id="Designation"
+              label="Enter Designation to be Added"
               type="text"
               fullWidth
               variant="outlined"
-              value={newLanguage.name}
-              onChange={(e) => setNewLanguage((lang) => ({ ...lang, name: e.target.value }))}
+              value={newDesignation.name}
+              onChange={(e) => setNewDesignation((desi) => ({ ...desi, name: e.target.value }))}
               required
             />
           </DialogContent>
@@ -207,7 +210,7 @@ const Languages = () => {
             <Button
               onClick={() => {
                 handleClose();
-                setNewLanguage({
+                setNewDesignation({
                   name: '',
                 });
               }}
@@ -225,10 +228,10 @@ const Languages = () => {
       </Dialog>
 
       <Card style={{ height: '80vh', width: '100%' }}>
-        <DataGrid rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
+        <DataGrid rows={Designation ?? []} columns={columns} getRowId={(row) => row._id} loading={Designation === null} />
       </Card>
     </CommonPageLayout>
   );
 };
 
-export default Languages;
+export default Designation;

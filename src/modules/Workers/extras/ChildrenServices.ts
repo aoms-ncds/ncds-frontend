@@ -42,8 +42,8 @@ export default {
 
   /**
    * Retrieves all child support records.
-   * @return {Promise<StandardResponse<ChildSupport[]>>} A promise that resolves to the response containing the list of all child records.
+   * @return {Promise<StandardResponse<IChildSupport[]>>} A promise that resolves to the response containing the list of all child records.
    */
-  getAllChildSupport: (): Promise<StandardResponse<ChildSupport[]>> => getStandardResponse<ChildSupport[]>(axios.get('/workers/childSupport/', { headers: { ...getAuthHeader() } })),
+  getAllChildSupport: (): Promise<StandardResponse<IChildSupport[]>> => getStandardResponse<IChildSupport[]>(axios.get('/workers/childSupport/', { headers: { ...getAuthHeader() } })),
 
 };

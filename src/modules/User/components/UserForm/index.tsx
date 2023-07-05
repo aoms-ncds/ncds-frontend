@@ -82,7 +82,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       children: (props.value as CreatableIWorker).children.filter((_, i) => i !== _index),
     });
   };
-  const [childSupport, setChildSupport] = useState<ChildSupport[]>([]);
+  const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
   useEffect(() => {
     // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
