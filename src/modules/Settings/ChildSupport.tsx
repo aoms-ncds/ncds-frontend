@@ -5,7 +5,6 @@ import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import ChildSupportService from './extras/ChildSupportService';
-import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const ChildSupport = () => {
   const [childSupport, setChildSupport] = useState<IChildSupport[] | null>(null);
@@ -189,9 +188,6 @@ const ChildSupport = () => {
               });
             } else {
               ChildSupportService.edit(newChildSupport).then((res) => {
-                // setChildSupport((prevChildSupport) =>
-                //   prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data],
-                // );
                 setChildSupport((childSupport) => (childSupport === null ? null : childSupport?.map((childsprt) => (childsprt._id === newChildSupport._id ? res.data : childsprt))));
                 setNewChildSupport({
                   name: '',
