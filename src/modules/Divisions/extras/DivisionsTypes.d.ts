@@ -23,7 +23,9 @@ declare global {
     coordinator?: Staff;
     seniorLeader?: Staff;
     juniorLeader?: Staff;
+    attachment:FileObject[];
   }
+ 
 
   interface BankDetails {
     bankName: string;

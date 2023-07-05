@@ -46,10 +46,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       };
         }
   >,
+
+
 ) => {
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
-
+  console.log(props, ' console.log(props);');
   // const { editID } = useParams();
   const navigate = useNavigate();
 
