@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
-import { Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
 
-  const columns = [
+  const columns:GridColDef<FR>[] = [
     {
       field: '_manage',
       headerName: 'Action',
@@ -39,13 +39,14 @@ const ClosedFRsTable = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'FRno', headerName: 'FR No', width: 70 },
-    { field: 'FRdate', headerName: 'FR Date', width: 130 },
+    { field: 'FRno', headerName: 'FR No', width: 90 },
+    { field: 'FRdate', headerName: 'FR Date', width: 90, renderCell: (props) => (
+      <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+    ) },
     { field: 'divisionName', headerName: 'Division Name', width: 150 },
     { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
+    { field: 'mainCategory', headerName: 'Main Category', width: 250 },
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 140 },
     { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
     { field: 'sanction', headerName: 'Special Sanction', width: 130 },
   ];
