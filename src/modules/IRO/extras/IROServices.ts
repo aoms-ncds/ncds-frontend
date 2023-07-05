@@ -73,7 +73,7 @@ export default {
     })),
 
   getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
-  getreconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/Reconciliation', { headers: { ...getAuthHeader() } })),
+  getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } })),
   getReconciliationCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/reconciliation', { params: conditions, headers: { ...getAuthHeader() } })),
   // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
 
@@ -110,13 +110,13 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  saveRelease: (iroID: string, IROrelease: IROrder) =>
+  releaseAmount: (iroID: string, IROrelease: IROrder) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
           .post(`/iro/releaseAmount/${iroID}`, {
             ...IROrelease,
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (IROrelease) => {
             try {
               resolve(IROrelease);

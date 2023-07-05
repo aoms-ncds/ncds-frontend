@@ -18,7 +18,7 @@ import {
   TextField,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridCellParams, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
@@ -230,7 +230,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
     },
 

@@ -27,7 +27,6 @@ const ManageIRO = () => {
     remark: '',
     transactionId: '',
   });
-  const [fileUploaderAction, setFileUploaderAction] = useState<'add'|'manage'>('add');
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -143,14 +142,15 @@ const ManageIRO = () => {
               to: `/iro/${props.row._id}`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['MANAGE_IRO']) && props.row.status==IROLifeCycleStates.WAITING_TO_ACCOUNTS_STATE ? [
+            ...( props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Release',
-                text: 'Release Amount',
+                text: 'View Release Amount',
                 component: Link,
-                to: '/iro/release_amount/' + props.row._id,
+                to: `/iro/release_amount/${props.row._id}/view`,
                 icon: PreviewIcon,
               }]:[]),
+
             {
               id: 'remarks',
               text: 'Remarks',
@@ -186,54 +186,14 @@ const ManageIRO = () => {
               //     });
               // },
             },
-            ...(hasPermissions(['MANAGE_IRO']) && props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'print',
-                text: 'Print IRO',
-                icon: PrintIcon,
-                component: PDFDownloadLink,
-                document: <IROReceiptTemplate RowData={props.row} />,
-                fileName: 'IROReceipt.pdf',
-              },
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: ()=>{
-                  setFileUploaderAction('manage');
-                  setAttachment(true);
-                  setSelectedIRO(props.row);
-                },
-              },
-              {
-                id: 'Close IRO',
-                text: 'Close IRO',
-                icon: PreviewIcon,
-                onClick: ()=>{
-                  IROServices.close(props.row._id)
-                .then((res)=>{
-                  if (IROrder) {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    const filterIRO = IROrder?.filter((IROrders) => {
-                      return IROrders._id !== props.row._id;
-                    });
-                    setIROrder(filterIRO);
-                  }
-                  console.log(res, 'close');
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                })
-
-                .catch((err) => {
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
-                },
-              }]:[]),
+            {
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <IROReceiptTemplate RowData={props.row} />,
+              fileName: 'IROReceipt.pdf',
+            },
             ...(hasPermissions(['WRITE_IRO']) && props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Attachments',
@@ -241,7 +201,6 @@ const ManageIRO = () => {
                 icon: AttachmentIcon,
                 onClick: ()=>{
                   setAttachment(true);
-                  setFileUploaderAction('add');
                   setSelectedIRO(props.row);
                 },
               }]:[]),
@@ -301,7 +260,7 @@ const ManageIRO = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
@@ -399,13 +358,13 @@ const ManageIRO = () => {
               }}
               // accept={['video/*']}
               open={attachment}
-              action={fileUploaderAction}
+              action='add'
               postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
               onClose={() => setAttachment(false)}
               // getFiles={TestServices.getBills}
               getFiles={selectedIRO?.billAttachment??[]}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/Reconciliation', file.name)
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name)
           .then((res)=>{
             console.log(res.data._id);
             setSelectedIRO(()=>({ ...selectedIRO,

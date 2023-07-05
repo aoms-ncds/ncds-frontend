@@ -92,10 +92,10 @@ const FRFormPage = (props: FRFormPageProps) => {
   const manageFR = async (requisition: CreatableFR) => {
     try {
       const operation =
-      requisition.status==FRLifeCycleStates.ACCOUNTS_APPROVED?'approve':
+      requisition.status==FRLifeCycleStates.FR_APPROVED?'approve':
         requisition.status==FRLifeCycleStates.REJECTED?'reject':
-          requisition.status==FRLifeCycleStates.WAITING_TO_ACCOUNTS?'sendToAccounts':
-            requisition.status==FRLifeCycleStates.WAITING_TO_PRESIDENT?'sendToPresident':'sendBack'
+          requisition.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS?'sendToAccounts':
+            requisition.status==FRLifeCycleStates.WAITING_FOR_PRESIDENT?'sendToPresident':'sendBack'
       ;
 
       enqueueSnackbar({

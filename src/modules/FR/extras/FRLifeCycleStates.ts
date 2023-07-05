@@ -8,11 +8,8 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   public static readonly FR_SEND_BACK = -201;
 
   // Active states
-  public static readonly FR_CREATED = 200;
-  public static readonly WAITING_TO_PRESIDENT = 201;
-  public static readonly WAITING_TO_ACCOUNTS = 202;
-  public static readonly PRESIDENT_APPROVED = 203;
-  public static readonly ACCOUNTS_APPROVED = 204;
-  public static readonly FR_APPROVED = 205;
-  public static readonly SUBMITTED_TO_ACCOUNTS_STATE = 214;
+  public static readonly WAITING_FOR_PRESIDENT = 201;
+  public static readonly WAITING_FOR_ACCOUNTS = 202;
+  public static readonly FR_APPROVED = 203;
+  // public static readonly SUBMITTED_TO_ACCOUNTS_STATE = 214;
 }

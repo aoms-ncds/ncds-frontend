@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
-import { enqueueSnackbar } from 'notistack';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);

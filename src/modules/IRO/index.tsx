@@ -3,17 +3,18 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import IROServices from './extras/IROServices';
+import PermissionChecks from '../User/components/PermissionChecks';
 import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const IRODashboard = () => {
-  const [waitingtoofficemanagerCount, setWaitingtoofficemanagerCount] = useState<number | null>(null);
+  const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<number | null>(null);
   const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
-  const [amountreleasedCount, setAmountreleasedCount] = useState<number | null>(null);
+  const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
 
 
-  console.log( IROLifeCycleStates.WAITING_TO_OFFICE_MNGR );
+  console.log( IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR );
   useEffect(() => {
     // IROServices.getCount()
     //   .then((res) => setIROCount(res.data))
@@ -25,13 +26,13 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.WAITING_TO_OFFICE_MNGR })
-      .then((res) => setWaitingtoofficemanagerCount(res.data))
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
+      .then((res) => setWaitingToOfficeManagerCount(res.data))
       .catch((error) => {
         console.log({ error });
       });
     IROServices.getCount({ status: IROLifeCycleStates.AMOUNT_RELEASED })
-      .then((res) => setAmountreleasedCount(res.data))
+      .then((res) => setAmountReleasedCount(res.data))
       .catch((error) => {
         console.log({ error });
       });
@@ -48,7 +49,7 @@ const IRODashboard = () => {
           <FRCountCard count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#0a1172" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard count={amountreleasedCount?.toString()} secondaryText={'Amount released'} color={'#46458C'} />
+          <FRCountCard count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#46458C'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard count={reconciliationCount?.toString()} secondaryText={'Reconcilation'} color={'#116A7B'} />
@@ -67,9 +68,12 @@ const IRODashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" color="#de2828" targetRoute="/iro/closed" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Reconciliation IRO" color="#3cb043" targetRoute="/iro/Reconciliation" />
-        </Grid>
+        <PermissionChecks
+          permissions={['MANAGE_IRO']}
+          granted={(
+            <Grid item xs={12} md={6} xl={3}>
+              <DashboardCardButton primaryText="Reconciliation IRO " color="#3cb043" targetRoute="/iro/reconciliation" />
+            </Grid>)}/>
       </Grid>
     </CommonPageLayout>
   );

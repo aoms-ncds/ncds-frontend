@@ -7,29 +7,29 @@ import FRServices from './extras/FRServices';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import PermissionChecks from '../User/components/PermissionChecks';
 const frDashboard = () => {
-  const [appliedFrCount, setappliedFrCount] = useState<number | null>(null);
-  const [approvedfrCount, setapprovedfrCount] = useState<number | null>(null);
-  const [waitingtopresidentfrCount, setwaitingtopresidentfrCount] = useState<number | null>(null);
-  const [waitingtoaccountfrCount, setwaitingtoaccountfrCount] = useState<number | null>(null);
+  const [appliedFrCount, setAppliedFrCount] = useState<number | null>(null);
+  const [approvedFrCount, setApprovedFrCount] = useState<number | null>(null);
+  const [waitingForPresidentFrCount, setWaitingForPresidentFrCount] = useState<number | null>(null);
+  const [waitingForAccountFrCount, setWaitingForAccountFrCount] = useState<number | null>(null);
 
   useEffect(() => {
     FRServices.getCount()
-      .then((res) => setappliedFrCount(res.data))
+      .then((res) => setAppliedFrCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCount({ status: FRLifeCycleStates.ACCOUNTS_APPROVED })
-      .then((res) => setapprovedfrCount(res.data))
+    FRServices.getCount({ status: FRLifeCycleStates.FR_APPROVED })
+      .then((res) => setApprovedFrCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCount({ status: FRLifeCycleStates.WAITING_TO_PRESIDENT })
-      .then((res) => setwaitingtopresidentfrCount(res.data))
+    FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT })
+      .then((res) => setWaitingForPresidentFrCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCount({ status: FRLifeCycleStates.WAITING_TO_ACCOUNTS })
-      .then((res) => setwaitingtoaccountfrCount(res.data))
+    FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS })
+      .then((res) => setWaitingForPresidentFrCount(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -47,13 +47,13 @@ const frDashboard = () => {
                 <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#0a1172" />
               </Grid>
               <Grid item xs={6} md={3} xl={2}>
-                <FRCountCard count={approvedfrCount?.toString()} secondaryText={'Approved'} color={'#3cb043'} />
+                <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#3cb043'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard count={waitingtopresidentfrCount?.toString()} secondaryText={'Waiting to President'} color={'#F24C3D'} />
+                <FRCountCard count={waitingForPresidentFrCount?.toString()} secondaryText={'Waiting to President'} color={'#F24C3D'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard count={waitingtoaccountfrCount?.toString()} secondaryText={'Waiting to Account'} color={'#FF8551'} />
+                <FRCountCard count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting to Account'} color={'#FF8551'} />
               </Grid>
             </Grid>
             <br />

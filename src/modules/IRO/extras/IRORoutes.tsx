@@ -35,10 +35,10 @@ const iroPageRoutes: ModuleRoute = {
     },
     {
       title: 'Reconciliation IRO',
-      path: '/Reconciliation',
+      path: '/reconciliation',
       element: <ReconciliationIRO/>,
       private: true,
-      requiredAccessRights: ['ADMIN_ACCESS'],
+      requiredAccessRights: ['MANAGE_IRO'],
     },
     {
       title: 'View IRO',
@@ -49,8 +49,16 @@ const iroPageRoutes: ModuleRoute = {
     },
     {
       title: 'Release Amount',
-      path: '/release_amount/:iroID',
-      element: <ReleaseAmount />,
+      path: '/release_amount/:iroID/add',
+      element: <ReleaseAmount action='add'/>,
+      private: true,
+      requiredAccessRights: ['WRITE_IRO'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Release Amount',
+      path: '/release_amount/:iroID/view',
+      element: <ReleaseAmount action='view'/>,
       private: true,
       requiredAccessRights: ['READ_IRO'],
       icon: <RequestPageOutlinedIcon />,

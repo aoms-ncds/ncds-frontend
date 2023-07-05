@@ -123,7 +123,7 @@ const ViewIRO = () => {
   const [attachments, setAttachments] = useState<FileObject[]>([]);
 
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
-  const IROstatus = IROLifeCycleStates.getStatusNameByCodeFR(Number(IRO?.status));
+  const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   // console.log(IROstatus);
 
   useEffect(() => {
@@ -357,20 +357,21 @@ const ViewIRO = () => {
                       </Grid>
                       <Grid item xs={12}>
                         {/* {props.action === 'edit' && ( */}
-                        {IRO?.status>=IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED}
-                        <Button
-                          variant="contained"
-                          color="warning"
-                          style={{ textAlign: 'left', textDecoration: 'none' }}
+                        {IRO?.status>=IROLifeCycleStates.AMOUNT_RELEASED &&(
+
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            style={{ textAlign: 'left', textDecoration: 'none' }}
                           // onClick={() => {
                           //   toggleOpenRemarks(true);
                           // }}
-                        >
-                          <PDFDownloadLink document={<IROReceiptTemplate rowData={IRO} />} fileName="IROReceipt.pdf" style={{ color: 'White', textDecoration: 'none' }}>
+                          >
+                            <PDFDownloadLink document={<IROReceiptTemplate rowData={IRO} />} fileName="IROReceipt.pdf" style={{ color: 'White', textDecoration: 'none' }}>
                             Print IRO
-                          </PDFDownloadLink>
-                        </Button>
-                        {/* )} */}
+                            </PDFDownloadLink>
+                          </Button>
+                        )}
                         &nbsp;
                         <div style={{ float: 'right' }}>
                           <Button
@@ -417,7 +418,7 @@ const ViewIRO = () => {
                             </>
                           ) : null} */}
 
-                          {IROstatus == 'ACCOUNTS_APPROVED' ? (
+                          {IROstatus == 'WAITING_FOR_OFFICE_MNGR' ? (
                             <>
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
@@ -436,7 +437,7 @@ const ViewIRO = () => {
                                     });
 
                                         // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
                                         //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                                         // }
                                         setTimeout(() => {
@@ -461,7 +462,7 @@ const ViewIRO = () => {
                                         // window.location.reload();
                                       });
                                         // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
                                         //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                                         // }
                                         setTimeout(() => {
@@ -479,7 +480,7 @@ const ViewIRO = () => {
                               &nbsp;
                             </>
                           ) : null}
-                          {IROstatus == 'WAITING_TO_ACCOUNTS' ? (
+                          {IROstatus == 'WAITING_FOR_ACCOUNTS_MNGR' ? (
                             <>
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
@@ -498,7 +499,7 @@ const ViewIRO = () => {
                                   });
 
                                         // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
                                         //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                                         // }
                                         setTimeout(() => {
@@ -542,7 +543,7 @@ const ViewIRO = () => {
                               &nbsp;
                             </>
                           ) : null}
-                          {/* {IROstatus === 'ACCOUNTS_APPROVED' || IROstatus === 'WAITING_TO_ACCOUNTS' ? (
+                          {/* {IROstatus === 'WAITING_FOR_OFFICE_MNGR' || IROstatus === 'WAITING_FOR_ACCOUNTS_MNGR' ? (
                             <PermissionChecks
                               permissions={['WRITE_IRO']}
                               granted={
