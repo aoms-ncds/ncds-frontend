@@ -30,7 +30,6 @@ const ReleaseAmount = (props:ReleasePageProps) => {
     IROno: '',
     IRODate: moment(),
     purpose: '',
-    lastUpdateDate: moment(),
     status: FRLifeCycleStates.FR_APPROVED,
     kind: 'IRO',
     sanctionedAmount: 0,

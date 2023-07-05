@@ -9,7 +9,6 @@ declare global {
     FRno: string;
     FRdate: Moment;
     // requestAmount: string;
-    lastUpdateDate: Moment;
     sanction: string;
     particulars:Particular[];
     purpose: FRPurpose;

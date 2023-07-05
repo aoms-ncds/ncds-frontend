@@ -242,7 +242,7 @@ const ManageFrPage = () => {
     },
 
     {
-      field: 'lastUpdateDate',
+      field: 'updatedAt',
       renderHeader: () => (<b>Last Updated</b>),
       width: 130,
       align: 'center',

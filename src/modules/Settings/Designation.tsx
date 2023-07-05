@@ -48,13 +48,20 @@ const Designation = () => {
   };
 
   const columns: GridColDef<IDesignation>[] = [
+    // {
+    //   field: 'SI',
+    //   headerName: 'SI',
+    //   align: 'left',
+    //   width: 150,
+    //   headerAlign: 'center',
+    //   renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
+    // },
     {
-      field: 'SI',
-      headerName: 'SI',
+      field: 'name',
+      headerName: 'Name',
       align: 'left',
       width: 150,
       headerAlign: 'center',
-      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
     },
     {
       field: 'edit',

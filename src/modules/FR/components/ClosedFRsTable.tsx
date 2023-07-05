@@ -48,7 +48,7 @@ const ClosedFRsTable = () => {
     { field: 'subDivisionName', renderHeader: () => (<b>Sub Division Name</b>), width: 170 },
     { field: 'mainCategory', renderHeader: () => (<b>Main Category</b>), width: 150 },
     { field: 'requestAmount', renderHeader: () => (<b>Requested Amount</b>), width: 130 },
-    { field: 'lastUpdateDate', renderHeader: () => (<b>Last Updated</b>), width: 130 },
+    { field: 'updatedAt', renderHeader: () => (<b>Last Updated</b>), width: 130 },
     { field: 'sanction', renderHeader: () => (<b>Special Sanction</b>), width: 130 },
   ];
 

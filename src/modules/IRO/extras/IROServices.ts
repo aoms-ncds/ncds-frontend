@@ -13,7 +13,8 @@ export default {
       IROrders.map((IRO) => ({
         ...IRO,
         IRODate: moment(IRO.IRODate),
-        lastUpdateDate: moment(IRO.lastUpdateDate),
+        createdAt: moment(IRO.createdAt),
+        updatedAt: moment(IRO.updatedAt),
       })),
     ),
 
@@ -21,7 +22,6 @@ export default {
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       IRODate: moment(data.IRODate),
-      lastUpdateDate: moment(data.lastUpdateDate),
       releaseAmount: {
         ...data.releaseAmount,
         transferredDate: data.releaseAmount?.transferredDate ? moment(data.transferredDate) : null,
@@ -73,7 +73,13 @@ export default {
     })),
 
   getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
-  getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } })),
+  getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+    IROrders.map((IRO) => ({
+      ...IRO,
+      IRODate: moment(IRO.IRODate),
+      createdAt: moment(IRO.createdAt),
+      updatedAt: moment(IRO.updatedAt),
+    }))),
   getReconciliationCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/reconciliation', { params: conditions, headers: { ...getAuthHeader() } })),
   // getAllRemarksById: (iroId: string) =>getStandardResponse<Remark[]>(axios.get(`/iro/${iroId}`)),
 
