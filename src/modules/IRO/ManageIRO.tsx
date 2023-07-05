@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
 import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon } from '@mui/icons-material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
@@ -33,7 +33,6 @@ const ManageIRO = () => {
     IROno: '',
     IRODate: moment(),
     purpose: '',
-    lastUpdateDate: moment(),
     status: CommonLifeCycleStates.ACTIVE,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -244,8 +243,16 @@ const ManageIRO = () => {
     { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
     { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
     { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div> },
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130,
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderCell: (params: GridCellParams) => {
+        const frRequest = params.row.FR as FR;
+        const particularAmount = frRequest.particulars?.reduce(
+          (total, particular) => total + Number(particular.requestedAmount),
+          0,
+        );
+        return <p>{particularAmount}</p>;
+      } },
+    { field: 'updatedAt', headerName: 'Last Updated', width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
