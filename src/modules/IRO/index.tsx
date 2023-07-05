@@ -3,6 +3,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import IROServices from './extras/IROServices';
+import PermissionChecks from '../User/components/PermissionChecks';
 // import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const IRODashboard = () => {
@@ -38,9 +39,12 @@ const IRODashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" secondaryText={closedIROCount?.toString()} color="#de2828" targetRoute="/iro/closed" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Reconciliation IRO " secondaryText={reconciliationCount?.toString()} color="#3cb043" targetRoute="/iro/Reconciliation" />
-        </Grid>
+        <PermissionChecks
+          permissions={['MANAGE_IRO']}
+          granted={(
+            <Grid item xs={12} md={6} xl={3}>
+              <DashboardCardButton primaryText="Reconciliation IRO " secondaryText={reconciliationCount?.toString()} color="#3cb043" targetRoute="/iro/reconciliation" />
+            </Grid>)}/>
       </Grid>
     </CommonPageLayout>
   );

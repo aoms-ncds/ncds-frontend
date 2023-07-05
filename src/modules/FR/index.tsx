@@ -16,7 +16,7 @@ const frDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    FRServices.getCount({ status: FRLifeCycleStates.ACCOUNTS_APPROVED })
+    FRServices.getCount({ status: FRLifeCycleStates.FR_APPROVED })
       .then((res) => setapprovedfrCount(res.data))
       .catch((error) => {
         console.log(error);

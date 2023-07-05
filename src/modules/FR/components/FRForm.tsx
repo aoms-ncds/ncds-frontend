@@ -46,7 +46,7 @@ import { useNavigate } from 'react-router-dom';
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
 
-  const [showAddParticulardialog, setShowAddParticularDialog] = useState(false);
+  const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
@@ -217,8 +217,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              if (particulars.length==0) {
+                enqueueSnackbar({
+                  message: 'Please add particulars',
+                  variant: 'warning',
+                });
+                return;
+              }
               if (props.onSubmit) {
-                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_ACCOUNTS }; // Create a new object with updated status
+                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS }; // Create a new object with updated status
                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
               navigate('/fr/');
@@ -356,7 +363,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
               <Grid item xs={12}>
-                <Typography>Particulars</Typography> <br />
+                <Typography>Particulars</Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
@@ -386,22 +393,23 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                                     Add particulars
                 </Button>
               </Grid>
-              <Grid item xs={12}>
-                <TableContainer>
-                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell></TableCell>
-                        <TableCell align="center">SI NO</TableCell>
-                        <TableCell align="center">Particulars</TableCell>
-                        <TableCell align="center">Quantity</TableCell>
-                        <TableCell align="center">For the Month of</TableCell>
-                        <TableCell align="center">Requested Amount</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {particulars &&
-                        particulars.map((item, index) => (
+              {particulars.length>0&&(
+                <Grid item xs={12}>
+                  <TableContainer>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell></TableCell>
+                          <TableCell align="center">SI NO</TableCell>
+                          <TableCell align="center">Particulars</TableCell>
+                          <TableCell align="center">Quantity</TableCell>
+                          <TableCell align="center">For the Month of</TableCell>
+                          <TableCell align="center">Requested Amount</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+
+                        {particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th">
                               <PermissionChecks
@@ -427,10 +435,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             <TableCell align="center">{item.requestedAmount}</TableCell>
                           </TableRow>
                         ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>)}
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Requested Amount"
@@ -542,10 +550,11 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           <Button
                             variant="contained"
                             color="warning"
+                            // disabled={particulars.length==0}
                             onClick={() => {
                               const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                               if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_PRESIDENT }; // Create a new object with updated status
+                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_PRESIDENT }; // Create a new object with updated status
                                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                               }
 
@@ -571,6 +580,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         variant="contained"
                         color="info"
                         type='submit'
+                        // disabled={particulars.length==0}
+
                       >
                     Submit{' '}
                       </Button>
@@ -586,7 +597,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         </CardContent>
       </Container>
       <Dialog
-        open={showAddParticulardialog}
+        open={showAddParticularDialog}
         onClose={handleClose}
         PaperProps={{
           style: {

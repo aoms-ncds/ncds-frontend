@@ -26,11 +26,11 @@ export const allModuleRoutes = [
   usersPageRoutes,
   frPageRoutes,
   iroPageRoutes,
-  settingsRoutes,
   // testPageRoutes,
   // samplesPageRoutes,
   applicationRoutes,
   notificationPageRoutes,
+  settingsRoutes,
 
 ];
 const Router = () => {

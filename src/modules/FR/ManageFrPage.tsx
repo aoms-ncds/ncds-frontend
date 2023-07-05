@@ -230,7 +230,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeFR(params.value).replaceAll('_', ' ');
+        return IROLifeCycleStates.getStatusNameByCodeTramsaction(params.value).replaceAll('_', ' ');
       },
     },
 

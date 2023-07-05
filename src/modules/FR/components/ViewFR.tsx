@@ -59,7 +59,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
 
 
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
-  const FRstatus=IROLifeCycleStates.getStatusNameByCodeFR(Number(props.value.status));
+  const FRstatus=IROLifeCycleStates.getStatusNameByCodeTramsaction(Number(props.value.status));
   return (
     <div>
       <Container>
@@ -72,7 +72,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                 {
                   const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
                   if (props.onSubmit) {
-                    const updatedValue = { ...props.value, status: FRLifeCycleStates.ACCOUNTS_APPROVED }; // Create a new object with updated status
+                    const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_APPROVED }; // Create a new object with updated status
                     props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                   }
                   setTimeout(() => {
@@ -276,14 +276,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   disabled
                 />
               </Grid>
-              {props.action === 'view' && props.value.status && props.value.status>=FRLifeCycleStates.WAITING_TO_ACCOUNTS? (
+              {props.action === 'view' && props.value.status && (props.value.status>=FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status==FRLifeCycleStates.FR_CLOSED)? (
                 <>
                   <Grid item xs={12} md={6}>
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
                       value={props.value.sanctionedAmount}
-                      required={props.value.status==FRLifeCycleStates.WAITING_TO_ACCOUNTS}
+                      required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       disabled={!hasPermissions(['MANAGE_FR'])}
                       onChange={(e) =>
                         props.onChange({
@@ -299,7 +299,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   </Grid>
 
                   <Grid item xs={12} md={6}>
-                    <FormControl fullWidth required={props.value.status==FRLifeCycleStates.WAITING_TO_ACCOUNTS}>
+                    <FormControl fullWidth required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                       <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
                       <Select
                         labelId="sanctioned_bank"
@@ -338,7 +338,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           });
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required={props.value.status==FRLifeCycleStates.WAITING_TO_ACCOUNTS} />}
+                      renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
                       fullWidth
 
                     />
@@ -387,7 +387,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     Remark
                   </Button>
                   &nbsp;
-                  {props.action === 'view' && FRstatus!='ACCOUNTS_APPROVED' ? (
+                  {props.action === 'view' && FRstatus!='FR_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
@@ -420,7 +420,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     </>
                   ) : null}
                   {
-                    props.action === 'view' && FRstatus=='WAITING_TO_ACCOUNTS'? (
+                    props.action === 'view' && FRstatus=='WAITING_FOR_ACCOUNTS'? (
                       <>
                         {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
@@ -463,7 +463,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       </>
                     ) : null}
 
-                  {props.action === 'view' && FRstatus!='WAITING_TO_PRESIDENT' &&FRstatus!='WAITING_TO_ACCOUNTS' && FRstatus!='ACCOUNTS_APPROVED' ? (
+                  {props.action === 'view' && FRstatus!='WAITING_FOR_PRESIDENT' &&FRstatus!='WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
@@ -475,7 +475,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             onClick={() => {
                               const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
                               if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_PRESIDENT }; // Create a new object with updated status
+                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_PRESIDENT }; // Create a new object with updated status
                                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
                               }
 
@@ -495,7 +495,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     </>
                   ) : null}
                   &nbsp;
-                  {props.action === 'view' && FRstatus === 'WAITING_TO_PRESIDENT' ? (
+                  {props.action === 'view' && FRstatus === 'WAITING_FOR_PRESIDENT' ? (
                     <PermissionChecks
                       permissions={['PRESIDENT_ACCESS']}
                       granted={
@@ -526,7 +526,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                             onClick={() => {
                               const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
                               if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_ACCOUNTS };
+                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
                                 props.onSubmit(updatedValue);
                               }
 
@@ -542,7 +542,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           </Button></>
                       }
                     />
-                  ) : props.action === 'view' && FRstatus != 'WAITING_TO_ACCOUNTS' && FRstatus!='ACCOUNTS_APPROVED' ? (
+                  ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
                     <PermissionChecks
                       permissions={['WRITE_FR']}
                       granted={
@@ -552,7 +552,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           onClick={() => {
                             const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
                             if (props.onSubmit) {
-                              const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_TO_ACCOUNTS };
+                              const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
                               props.onSubmit(updatedValue);
                             }
 

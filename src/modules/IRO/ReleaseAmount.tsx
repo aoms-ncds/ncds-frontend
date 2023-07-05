@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Button, Card, CardContent, Container, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Card, CardContent, Container, Grid, TextField, TextFieldProps, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -11,11 +11,18 @@ import { MB } from '../../extras/CommonConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import moment from 'moment';
 import IROServices from './extras/IROServices';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import { hasPermissions } from '../User/components/PermissionChecks';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
 
-const ReleaseAmount = () => {
+interface ReleasePageProps {
+  action: 'add' | 'view';
+}
+
+const ReleaseAmount = (props:ReleasePageProps) => {
   const navigate = useNavigate();
   const { iroID } = useParams();
   const [IRO, setIRO] = useState<IROrder>({
@@ -97,11 +104,20 @@ const ReleaseAmount = () => {
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
     console.log(IRO, 'IRO');
     e.preventDefault();
+    const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
+
     if (iroID && IRO) {
-      IROServices.saveRelease(iroID, IRO).then((res) => {
+      IROServices.releaseAmount(iroID, IRO).then((res) => {
         console.log(res.data);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
         navigate('/iro/');
       });
+      setTimeout(() => {
+        closeSnackbar(approvalSnack);
+      }, 500);
     }
   };
   useEffect(() => {
@@ -136,6 +152,7 @@ const ReleaseAmount = () => {
                     }
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
                   />
                 </Grid>
 
@@ -152,6 +169,8 @@ const ReleaseAmount = () => {
                       } }))}
                     fullWidth
                     variant="outlined"
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -160,6 +179,8 @@ const ReleaseAmount = () => {
                     value={IRO.releaseAmount?.transferredDate}
                     format="DD/MM/YYYY"
                     sx={{ width: '100%' }}
+                    disabled={props.action=='view'}
+
                     // onChange={(e) =>
                     // // eslint-disable-next-line @typescript-eslint/naming-convention
                     //   setIRO((IRO: any) => ({
@@ -211,6 +232,8 @@ const ReleaseAmount = () => {
                           } } }))}
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
@@ -227,6 +250,8 @@ const ReleaseAmount = () => {
                         } } }))}
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
@@ -242,6 +267,8 @@ const ReleaseAmount = () => {
                       } }))}
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
@@ -259,6 +286,8 @@ const ReleaseAmount = () => {
                         } }))}
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
@@ -276,24 +305,28 @@ const ReleaseAmount = () => {
                         } }))}
                     variant="outlined"
                     fullWidth
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
 
                 {/* </Grid> */}
                 <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="Mode of payment"
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
                     value={IRO.releaseAmount?.modeOfPayment}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
+                    options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card']}
+                    onChange={(_e, newValue) =>
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                       setIRO(()=>({ ...IRO, releaseAmount: {
 
                         ...IRO.releaseAmount,
-                        modeOfPayment: e.target.value,
+                        modeOfPayment: newValue??'',
                       } }))}
-                    fullWidth
-                    variant="outlined"
-                    required
+                    renderInput={(params) => <TextField {...params} label="Mode of payment"
+                      required/>}
+                    disabled={props.action=='view'}
 
                   />
                 </Grid>
@@ -312,6 +345,8 @@ const ReleaseAmount = () => {
                     variant="outlined"
                     fullWidth
                     required
+                    disabled={props.action=='view'}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -321,9 +356,13 @@ const ReleaseAmount = () => {
                 </Grid>
               </Grid>
               <br />
-              <Button variant="contained" style={{ textAlign: 'right' }} type="submit">
+              {IRO.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE?(<>
+                <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit" >
                 Release Amount
-              </Button>
+                </Button>
+                <br />
+              </>
+              ):null}
             </form>
           </CardContent>
         </Card>
@@ -379,7 +418,7 @@ const ReleaseAmount = () => {
       /> */}
       <FileUploader
         title="Attachments"
-        action='add'
+        action={props.action}
         types={[
           'application/pdf',
           'image/png',
@@ -419,13 +458,13 @@ const ReleaseAmount = () => {
           } }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
-        deleteFile={(fileId: string) => {
+        deleteFile={props.action=='add'?(fileId: string) => {
           setIRO(()=>({ ...IRO, releaseAmount: {
             ...IRO.releaseAmount,
             attachment: IRO.releaseAmount.attachment.filter((file)=>file._id!==fileId),
           } }));
           return FileUploaderServices.deleteFile(fileId);
-        }}
+        }:undefined}
       />
     </CommonPageLayout>
   );
