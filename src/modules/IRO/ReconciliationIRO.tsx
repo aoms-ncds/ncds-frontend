@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Send as SendIcon, Print as PrintIcon, Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
@@ -112,6 +112,7 @@ const ReconciliationIRO = () => {
       headerName: '',
       width: 50,
       type: 'string',
+      align: 'center',
       headerAlign: 'center',
       renderCell: (props) => (
         <DropdownButton
@@ -132,13 +133,7 @@ const ReconciliationIRO = () => {
             //   text: 'Remarks',
             //   icon: EditIcon,
             // },
-            {
-              id: 'Release',
-              text: 'Release Amount',
-              component: Link,
-              to: `/iro/release_amount/${props.row._id}/add`,
-              icon: PreviewIcon,
-            },
+
             {
               id: 'remarks',
               text: 'Remarks',
@@ -156,11 +151,6 @@ const ReconciliationIRO = () => {
                     });
                   });
               },
-            },
-            {
-              id: 'print',
-              text: 'Print Reconciliation',
-              icon: PrintIcon,
             },
             {
               id: 'Reconciliation',
@@ -226,17 +216,28 @@ const ReconciliationIRO = () => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>) },
-    { field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>), valueGetter: (params) => params.value?.format('DD/MM/YYYY') },
-    { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: () => (<b>Division Name</b>) },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: () => (<b>Sub Division Name</b>) },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>) },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, renderHeader: () => (<b>Requested Amount</b>) },
-    { field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>), valueGetter: (params) => params.value?.format('DD/MM/YYYY') },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>) },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>) },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>) },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>) },
+    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
+    { field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
+    { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: () => (<b>Division Name</b>), align: 'center', headerAlign: 'center' },
+    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: () => (<b>Sub Division Name</b>), align: 'center', headerAlign: 'center' },
+    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>), align: 'center', headerAlign: 'center' },
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, align: 'center', headerAlign: 'center',
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderCell: (params: GridCellParams) => {
+        const frRequest = params.row as IROrder;
+        const particularAmount = frRequest.particulars?.reduce(
+          (total, particular) => total + Number(particular.requestedAmount),
+          0,
+        );
+        return <p>{particularAmount}</p>;
+      } },
+    { field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
+    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>), align: 'center', headerAlign: 'center' },
   ];
   return (
     <CommonPageLayout title="Internal Release Order">

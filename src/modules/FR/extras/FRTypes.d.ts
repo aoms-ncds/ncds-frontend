@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { Types } from 'mongoose';
 
 export default {};
 
@@ -10,8 +9,8 @@ declare global {
     FRdate: Moment;
     // requestAmount: string;
     sanction: string;
-    particulars:Particular[];
     purpose: FRPurpose;
+    IRO?:string;
   }
 
   interface CreatableFR extends Creatable<FR> {

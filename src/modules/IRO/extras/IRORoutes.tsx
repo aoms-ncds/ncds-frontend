@@ -22,9 +22,16 @@ const iroPageRoutes: ModuleRoute = {
     {
       title: 'Manage IRO',
       path: '/manage',
-      element: <ManageIRO />,
+      element: <ManageIRO action='manage'/>,
       private: true,
       requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Release Amount',
+      path: '/release_amount',
+      element: <ManageIRO action='release'/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_IRO'],
     },
     {
       title: 'Closed IRO',

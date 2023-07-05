@@ -116,16 +116,16 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  releaseAmount: (iroID: string, IROrelease: IROrder) =>
+  releaseAmount: (iroID: string, releaseAmount: IReleaseAmount) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
           .post(`/iro/releaseAmount/${iroID}`, {
-            ...IROrelease,
+            ...releaseAmount,
           }, { headers: { ...getAuthHeader() } })
-          .then(async (IROrelease) => {
+          .then(async (releaseAmount) => {
             try {
-              resolve(IROrelease);
+              resolve(releaseAmount);
             } catch (error) {
               reject(error);
             }
