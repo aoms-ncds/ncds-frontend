@@ -3,6 +3,7 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
+import SendBackWorkersPage from '../SendBackWorkersPage';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -44,7 +45,13 @@ const workersPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['WRITE_WORKERS'],
     },
-
+    {
+      title: 'Send Back Workers',
+      path: '/reject',
+      element: <SendBackWorkersPage/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_WORKER'],
+    },
     // {
     //   title: 'edit child',
     //   path: '/child_edit/:childId',

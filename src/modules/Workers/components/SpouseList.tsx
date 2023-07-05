@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Card, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import SpousesServices from '../extras/SpousesServices';
 import moment from 'moment';
 
-const SpouseListPage = () => {
-  const [spouseList, setSpouseList] = useState<Spouse[]>();
+const SpouseListPage = (props: { data: Spouse[] }) => {
+  // const [spouseList, setSpouseList] = useState<Spouse[]>();
 
-  useEffect(() => {
-    SpousesServices.getAll()
-      .then((res) => {
-        console.log(res);
-        setSpouseList(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+  // useEffect(() => {
+  //   setSpouseList(props.data);
+  // }, [spouseList]);
 
 
   const columns: GridColDef<Spouse>[] = [
@@ -75,7 +67,7 @@ const SpouseListPage = () => {
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={spouseList ?? []} columns={columns} getRowId={(row) => row._id} loading={spouseList === null} />
+          <DataGrid rows={props.data ?? []} columns={columns} getRowId={(row) => row._id} loading={props.data === null} />
         </Card>
       </Grid>
     </>
