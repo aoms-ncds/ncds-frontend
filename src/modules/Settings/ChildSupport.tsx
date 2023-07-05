@@ -52,15 +52,6 @@ const ChildSupport = () => {
 
   const columns: GridColDef<IChildSupport>[] = [
     {
-      field: 'SI',
-      headerName: 'SI',
-      align: 'left',
-      width: 150,
-      headerAlign: 'center',
-      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
-      // valueGetter: (params) => params.row.name,
-    },
-    {
       field: 'ChildSupport',
       headerName: 'Child Support',
       align: 'left',

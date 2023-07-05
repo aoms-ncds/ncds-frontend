@@ -57,14 +57,6 @@ const Designation = () => {
       renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
     },
     {
-      field: 'Designation',
-      headerName: 'Designation',
-      align: 'left',
-      width: 150,
-      headerAlign: 'center',
-      valueGetter: (params) => params.row.name,
-    },
-    {
       field: 'edit',
       headerName: 'Edit',
       width: 100,

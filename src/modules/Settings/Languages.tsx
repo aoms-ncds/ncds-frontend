@@ -53,14 +53,6 @@ const Languages = () => {
   };
   const columns: GridColDef<ILanguage>[] = [
     {
-      field: 'SI',
-      headerName: 'SI',
-      align: 'left',
-      width: 150,
-      headerAlign: 'center',
-      renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex),
-    },
-    {
       field: 'Languages',
       headerName: 'Languages',
       align: 'left',
