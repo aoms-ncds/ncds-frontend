@@ -11,7 +11,7 @@ const ClosedFRsTable = () => {
   const columns:GridColDef<FR>[] = [
     {
       field: '_manage',
-      headerName: 'Action',
+      renderHeader: () => (<b>Action</b>),
       minWidth: 50,
       type: 'string',
       renderCell: (props: any) => (
@@ -39,16 +39,17 @@ const ClosedFRsTable = () => {
         />
       ),
     },
-    { field: 'FRno', headerName: 'FR No', width: 90 },
-    { field: 'FRdate', headerName: 'FR Date', width: 90, renderCell: (props) => (
+    { field: '_id', renderHeader: () => (<b>SI No</b>), width: 70 },
+    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 70 },
+    { field: 'FRdate', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
       <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
     ) },
-    { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 250 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 140 },
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
+    { field: 'divisionName', renderHeader: () => (<b>Division Name</b>), width: 150 },
+    { field: 'subDivisionName', renderHeader: () => (<b>Sub Division Name</b>), width: 170 },
+    { field: 'mainCategory', renderHeader: () => (<b>Main Category</b>), width: 150 },
+    { field: 'requestAmount', renderHeader: () => (<b>Requested Amount</b>), width: 130 },
+    { field: 'lastUpdateDate', renderHeader: () => (<b>Last Updated</b>), width: 130 },
+    { field: 'sanction', renderHeader: () => (<b>Special Sanction</b>), width: 130 },
   ];
 
   useEffect(() => {

@@ -25,7 +25,7 @@ const usersPageRoutes: ModuleRoute = {
       path: '/:userId/permission_manager',
       element: <PermissionManager />,
       private: true,
-      requiredAccessRights: ['READ_ACCESS'],
+      requiredAccessRights: ['ADMIN_ACCESS'],
     },
   ],
 };

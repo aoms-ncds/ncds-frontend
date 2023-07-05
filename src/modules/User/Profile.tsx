@@ -44,7 +44,7 @@ const Profile = () => {
   const columns: GridColDef<DivisionHistory>[] = [
     {
       field: 'division',
-      headerName: 'Division',
+      renderHeader: () => (<b>Division</b>),
       width: 200,
       renderCell: (props) => (
         <Link
@@ -60,19 +60,19 @@ const Profile = () => {
     },
     {
       field: 'subDivision',
-      headerName: 'Sub Division',
+      renderHeader: () => (<b>Sub Division</b>),
       width: 200,
       valueGetter: (params) => params.row.subDivision?.name??null,
     },
     {
       field: 'dateOfDivisionJoining',
-      headerName: 'From',
+      renderHeader: () => (<b>From</b>),
       width: 200,
       valueGetter: (params) => params.row.dateOfDivisionJoining?.format('DD/MM/YYYY'),
     },
     {
       field: 'dateOfDivisionLeaving',
-      headerName: 'To',
+      renderHeader: () => (<b>To</b>),
       width: 200,
       valueGetter: (params) => params.row.dateOfDivisionLeaving?.format('DD/MM/YYYY'),
     },
@@ -106,7 +106,8 @@ const Profile = () => {
       <div style={{ display: 'inline-block', marginRight: 10 }}>
         <Avatar
           sx={{ height: 50, width: 50 }}
-          src='https://mui.com/static/images/avatar/3.jpg'
+          src={`${user?.imageURL}`}
+          alt={`${user?.basicDetails.firstName}`}
         />
       </div> <Typography variant="h4" component='span'>Profile of {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}</Typography>
       <br />
@@ -126,7 +127,7 @@ const Profile = () => {
           </Box>
           <TabPanel value={currentTab} index={0}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'boder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff|null)?.staffCode : (user as IWorker|null)?.workerCode} </Grid>
 
 
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>

@@ -98,18 +98,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //   />,
   // ];
   const columns: GridColDef<StaffOrWorker>[] = [
-    {
-      field: 'imageURL',
-      headerName: '',
-      width: 25,
-      type: 'string',
-      renderCell: (props) => {
-        return <Avatar alt="Remy Sharp" src={props.value} />;
-      },
-    },
+
     {
       field: 'actions',
       type: 'actions',
+      width: 5,
+
       // renderCell: (renderCellParams) => (
       //   <DropdownButton
       //     useIconButton={true}
@@ -228,55 +222,101 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       ),
 
     },
+    {
+      field: 'imageURL',
+      headerName: '',
+      width: 25,
+      minWidth: 65,
+      type: 'string',
+      renderCell: (props) => {
+        return <Avatar src={props.value} />;
+      },
+    },
     // { field: '_id', headerName: 'SI No', width: 70 },
-    { field: `${props.options?.kind}Code`, headerName: 'Worker Code', width: 120 },
+    { field: `${props.options?.kind}Code`,
+      headerName: `${props.options?.kind == 'staff'?'Staff':'Worker'} Code`,
+      width: 120,
+      renderHeader: () => (
+        <b>
+          {`${props.options?.kind == 'staff'?'Staff':'Worker'} Code`}
+        </b>
+      ) },
     {
       field: 'firstName',
-      headerName: 'First Name',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'First Name'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.firstName,
+
     },
     {
       field: 'lastName',
-      headerName: 'Last Name',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Last Name'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'martialStatus',
-      headerName: 'Martial Status',
       align: 'center',
-      // width: 130,
+      width: 130,
+      renderHeader: () => (
+        <b>
+          {'Martial Status'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.martialStatus,
     },
     {
       field: 'dob',
-      headerName: 'DOB',
       headerAlign: 'center',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'DOB'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.dateOfBirth?.format('DD/MM/YYYY'),
     },
     {
       field: 'gender',
-      headerName: 'Gender',
       width: 70,
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Gender'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.gender,
     },
     {
       field: 'age',
-      headerName: 'Age',
       width: 80,
       headerAlign: 'center',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Age'}
+        </b>
+      ),
       valueGetter: (params) => moment().diff(params.row.basicDetails.dateOfBirth, 'years'),
     },
     {
       field: 'missionaryOrNonMissionary',
-      headerName: 'Field',
       width: 100,
       headerAlign: 'center',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Field'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.field,
     },
 
@@ -306,24 +346,36 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     // },
     {
       field: 'phone',
-      headerName: 'Mobile Number',
       width: 130,
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Mobile Number'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.phone,
     },
     {
       field: 'alternativeMobileNumber',
-      headerName: 'Alternative Mobile Number',
-      width: 180,
+      width: 220,
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Alternative Mobile Number'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.alternativePhone,
     },
     {
       field: 'email',
-      headerName: 'Email Id',
       width: 180,
       headerAlign: 'center',
       align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Email Id'}
+        </b>
+      ),
       valueGetter: (params) => params.row.basicDetails.email,
     },
     // {

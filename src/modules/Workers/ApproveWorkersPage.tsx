@@ -65,23 +65,25 @@ const ApproveWorkerPage = () => {
       });
   }, []);
   const columns: GridColDef<IWorker>[] = [
-    { field: 'workerCode', headerName: 'Worker Code', width: 170 },
+    { field: 'workerCode', width: 170, renderHeader: () => (<b>{'Worker Code'}</b>),
+    },
     {
       field: 'firstName',
-      headerName: 'First Name',
-      width: 70,
+      width: 130,
+      renderHeader: () => (<b>First Name</b>),
       valueGetter: (params) => params.row.basicDetails.firstName,
     },
     {
       field: 'lastName',
-      headerName: 'Last Name:',
       width: 130,
+      renderHeader: () => (<b>Last Name</b>
+      ),
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'view',
-      headerName: 'View',
       width: 130,
+      renderHeader: () => (<b>View</b>),
       renderCell: (props) => (
         <Button component={Link} to={`/users/worker/${props.row._id}`} variant="contained">
           View
@@ -90,8 +92,8 @@ const ApproveWorkerPage = () => {
     },
     {
       field: 'Approve',
-      headerName: 'Approve',
       width: 130,
+      renderHeader: () => (<b>Approve</b>),
       renderCell: (props) => (
         <Button
           variant="contained"
@@ -107,8 +109,8 @@ const ApproveWorkerPage = () => {
     },
     {
       field: 'Reject',
-      headerName: 'Reject',
       width: 130,
+      renderHeader: () => (<b>Reject</b>),
       renderCell: (props) => (
         <Button
           variant="contained"
@@ -121,8 +123,9 @@ const ApproveWorkerPage = () => {
         </Button>
       ),
     },
-    { field: 'phone', headerName: 'Phone', width: 130 },
-    { field: 'division', headerName: 'Division', width: 130 },
+    { field: 'phone', width: 130, renderHeader: () => ( <b>Phone</b>),
+    },
+    { field: 'division', width: 130, renderHeader: () => ( <b>Division</b>) },
   ];
   return (
     <CommonPageLayout title="New Workers for Approval">

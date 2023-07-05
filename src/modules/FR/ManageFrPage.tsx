@@ -190,23 +190,45 @@ const ManageFrPage = () => {
     },
 
     {
-      field: 'FRno', headerName: 'FR No', width: 100, align: 'center', headerAlign: 'center',
+      field: 'FRno',
+      renderHeader: () => (<b>FR No</b>),
+      width: 100,
+      align: 'center',
+      headerAlign: 'center',
     },
-    { field: 'FRdate', headerName: 'FR Date', renderCell: (props) => (
-      <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
-    ), width: 80, align: 'center', headerAlign: 'center' },
-    { field: 'divisionName', headerName: 'Division Name', renderCell: (props) => (
-      <p> {props.row.purposeDivision?.details.name}</p>
-    ), width: 130, align: 'center', headerAlign: 'center' },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', renderCell: (props) => (
-      <p> {props.row.purposeSubdivision?.name}</p>
-    ), width: 160, align: 'center', headerAlign: 'center' },
-    { field: 'mainCategory', headerName: 'Main Category', renderCell: (props) => (
-      <p> {props.row.mainCategory}</p>
-    ), width: 240, align: 'center', headerAlign: 'center' },
+    {
+      field: 'FRdate',
+      renderHeader: () => (<b>FR Date</b>),
+      renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+      ), width: 80, align: 'center', headerAlign: 'center',
+    },
+    {
+      field: 'divisionName',
+      renderHeader: () => (<b>Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeDivision?.details.name}</p>),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'subDivisionName',
+      renderHeader: () => (<b>Sub Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
+      ),
+      width: 160,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'mainCategory',
+      renderHeader: () => (<b>Main Category</b>),
+      renderCell: (props) => (<p> {props.row.mainCategory}</p>),
+      width: 240,
+      align: 'center',
+      headerAlign: 'center' },
     {
       field: 'requestedAmount',
-      headerName: 'Requested Amount',
+      renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
       align: 'center', headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
@@ -219,13 +241,26 @@ const ManageFrPage = () => {
       },
     },
 
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAsPer', headerName: 'Special Sanction', renderCell: (props) => (
-      <p> {props.row.sanctionedAsPer}</p>
-    ), width: 200, align: 'center', headerAlign: 'center' },
+    {
+      field: 'lastUpdateDate',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'sanctionedAsPer',
+      renderHeader: () => (<b>Special Sanction</b>),
+      renderCell: (props) => (
+        <p> {props.row.sanctionedAsPer}</p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'status',
-      headerName: 'Status',
+      renderHeader: () => (<b>Status</b>),
       width: 205,
       align: 'center',
       headerAlign: 'center',
