@@ -107,11 +107,12 @@ const ReconciliationIRO = () => {
         console.log(res);
       });
   }, []);
+
   const columns: GridColDef<IROrder>[]= [
     {
       field: '_manage',
-      headerName: 'Action',
-      minWidth: 50,
+      headerName: '',
+      minWidth: 20,
       type: 'string',
       renderCell: (props) => (
         <DropdownButton
@@ -226,18 +227,17 @@ const ReconciliationIRO = () => {
         />
       ),
     },
-    { field: '_id', headerName: 'SI No', width: 70 },
-    { field: 'IROno', headerName: 'IRO No', width: 70 },
-    { field: 'IROdate', headerName: 'IRO Date', width: 130 },
-    { field: 'divisionName', headerName: 'Division Name', width: 150 },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170 },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150 },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130 },
-    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130 },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130 },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130 },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130 },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130 },
+    { field: 'IROno', headerName: 'IRO No', width: 70, renderHeader: () => (<b>IRO No</b>) },
+    { field: 'IROdate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>) },
+    { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: () => (<b>Division Name</b>) },
+    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: () => (<b>Sub Division Name</b>) },
+    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>) },
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, renderHeader: () => (<b>Requested Amount</b>) },
+    { field: 'lastUpdateDate', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>) },
+    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>) },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>) },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>) },
+    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>) },
   ];
   return (
     <CommonPageLayout title="Internal Release Order">
