@@ -62,7 +62,24 @@ export default {
         updatedAt: moment(worker.updatedAt),
       })),
     ),
-
+  getAllRemarksById: (userId: string) =>
+    getStandardResponse<Remark[]>(
+      axios.get(`/workers/remarks/${userId}`, { headers: { ...getAuthHeader() } }),
+      (remarks) => remarks.map((remark:any) => ({
+        ...remark,
+        createdAt: moment(remark.createdAt),
+        updatedAt: moment(remark.updatedAt),
+      })),
+    ),
+  addRemarks: (remark: CreatableRemark) =>
+    getStandardResponse<Remark>(
+      axios.post('/workers/remarks', { ...remark }, { headers: { ...getAuthHeader() } } ),
+      (remark) => ({
+        ...remark,
+        createdAt: moment(remark.createdAt),
+        updatedAt: moment(remark.updatedAt),
+      }),
+    ),
   /**
    * Retrieves a worker by ID.
    * @param {string} workerId - The ID of the worker to retrieve.

@@ -96,7 +96,7 @@ const SendBackWorkersPage = () => {
               setUsers(newUsers);
             }}
             action={'view'}
-            options={{ kind: 'worker' }}
+            options={{ kind: 'worker', status: 'reject' }}
           />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>

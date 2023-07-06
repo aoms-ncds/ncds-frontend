@@ -96,7 +96,7 @@ const NewOfficialDetailsForm = (
       {console.log({ abc: props.value.dateOfJoining })}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Joining"
+          label="Date Of Joining in Organisation"
           value={props.value.dateOfJoining || currentDate} // Set the default value to today's date
           onChange={(newDate) => {
             props.onChange({
@@ -202,7 +202,6 @@ const NewOfficialDetailsForm = (
             label="Sub Division"
             helperText={!divisions ? 'Loading sub divisions...' : 'Select a sub division'}
             variant={props.options?.textField.variant}
-            required
           />}
         />
       </Grid>
@@ -230,7 +229,7 @@ const NewOfficialDetailsForm = (
               // error: dateError,
               // helperText: dateError && 'Please select a date',
               fullWidth: true,
-              required: isDivisionChanged,
+              required: true,
             },
           }}
           // autoFocus
