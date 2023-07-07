@@ -11,7 +11,6 @@ const NotificationPage = () => {
   const [messages, setMessages] = useState<Message[]|null>(null);
   const [showReadMessages, setShowReadMessages] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loading, setLoading] = useState(0);
   const columns: GridColDef<Message>[] = [
     {
       field: 'title',
@@ -121,7 +120,7 @@ const NotificationPage = () => {
   ];
 
   useEffect(() => {
-    setLoading((loading) => loading + 1);
+    // setLoading((loading) => loading + 1);
     NotificationService.getMyMessages(showReadMessages)
         .then((res) => {
           console.log(res);

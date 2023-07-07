@@ -106,6 +106,7 @@ const ViewIRO = () => {
         IFSCCode: '',
       },
       attachment: [],
+      division: '',
     },
     billAttachment: [],
     createdAt: moment(),
@@ -219,7 +220,7 @@ const ViewIRO = () => {
                       {IRO?.purpose === 'Division' ? (
                         <Grid item xs={12} md={6}>
                           <Autocomplete
-                            value={IRO?.purposeDivision}
+                            value={IRO?.division}
                             options={[]}
                             getOptionLabel={(division) => division.details.name}
                             onChange={() => {}}

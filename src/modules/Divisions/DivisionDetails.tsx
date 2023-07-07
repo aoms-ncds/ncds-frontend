@@ -215,7 +215,7 @@ const DivisionDetailsPage = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 action === 'add' ? addDivision(): editDivision();
-                navigate('/hr/manage');
+                navigate('/divisions/');
               }}
             >
               <Grid container spacing={2}>

@@ -32,8 +32,9 @@ declare global{
     transferredAmount?: number;
     transferredDate?: Moment|null;
     transferredBank: BankDetails;
-    IRO?:string;
+    IRO?:IROrder[];
     attachment:FileObject[];
+    division:string;
 
   }
 }

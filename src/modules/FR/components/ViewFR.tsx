@@ -167,14 +167,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               {props.value.purpose === 'Division' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    value={props.value.purposeDivision}
+                    value={props.value.division}
                     options={divisions ?? []}
                     getOptionLabel={(division) => division.details.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
                         props.onChange({
                           ...props.value,
-                          purposeDivision: selectedDivision,
+                          division: selectedDivision,
                         });
                       }
                     }}

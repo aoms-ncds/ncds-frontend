@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import ReleaseAmount from '../ReleaseAmount';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
@@ -116,12 +117,12 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
-  releaseAmount: (iroID: string, releaseAmount: IReleaseAmount) =>
+  releaseAmount: (iros:IROrder[], releaseAmount: IReleaseAmount) =>
     getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
-          .post(`/iro/releaseAmount/${iroID}`, {
-            ...releaseAmount,
+          .post('/iro/release_amount', {
+            releaseAmount, iros,
           }, { headers: { ...getAuthHeader() } })
           .then(async (releaseAmount) => {
             try {
@@ -132,6 +133,17 @@ export default {
           });
       }),
     ),
+
+  getReleaseAmountById: (id: string) =>
+    getStandardResponse<IReleaseAmount>(axios.get(`/iro/release_amount/${id}`, { headers: { ...getAuthHeader() } }), (releaseAmount)=>({
+      ...releaseAmount,
+      IRO: releaseAmount.IRO.map((iro:IROrder) => ({
+        ...iro,
+        IRODate: moment(iro.IRODate),
+        createdAt: moment(iro.createdAt),
+        updatedAt: moment(iro.updatedAt),
+      })),
+    })),
 
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(axios.post('/iro/remarks', { ...remark }, { headers: { ...getAuthHeader() } }), (remark) => ({

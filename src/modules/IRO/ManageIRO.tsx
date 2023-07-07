@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
-import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon } from '@mui/icons-material';
+import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -18,6 +18,7 @@ import { MB } from '../../extras/CommonConfig';
 import moment from 'moment';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import ReleaseAmount from './ReleaseAmount';
 
 
 const ManageIRO = (props:{action:'manage'|'release'}) => {
@@ -28,6 +29,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     transactionId: '',
   });
   const [attachment, setAttachment] = useState<boolean>(false);
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -54,6 +56,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
         IFSCCode: '',
       },
       attachment: [],
+      division: '',
     },
     createdBy: {
       workerCode: '',
@@ -100,8 +103,10 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     billAttachment: [],
   });
   const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
+  const [openRelease, setOpenRelease] = useState(false);
+  const [IROrder, setIROrder] = useState<IROrder[]>([]);
 
-  const [IROrder, setIROrder] = useState<IROrder[]>();
+
   useEffect(() => {
     props.action=='release'?
       IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
@@ -122,6 +127,9 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
       })
     ;
   }, []);
+  useEffect(() => {
+    console.log(releaseAmountIROs);
+  }, [releaseAmountIROs]);
 
   useEffect(() => {
     if (selectedIRO._id!='') {
@@ -156,8 +164,8 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 id: 'Release',
                 text: 'Release Amount',
                 component: Link,
-                to: `/iro/release_amount/${params.row._id}/add`,
-                icon: PreviewIcon,
+                onClick: ()=>[setOpenRelease(true), setReleaseAmountIROs([params.row])],
+                icon: CurrencyRupeeIcon,
               },
               {
                 id: 'Close IRO',
@@ -193,8 +201,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               {
                 id: 'Release',
                 text: 'View Release Amount',
-                component: Link,
-                to: `/iro/release_amount/${params.row._id}/view`,
+                onClick: ()=>[setOpenRelease(true), setReleaseAmountIROs([params.row])],
                 icon: PreviewIcon,
               }]:[]),
 
@@ -289,10 +296,23 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     { field: 'IRODate', headerName: 'IRO Date', width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
-    { field: 'divisionName', headerName: 'Division Name', width: 150,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'divisionName',
+      renderHeader: () => (<b>Division Name</b>),
+      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'subDivisionName',
+      renderHeader: () => (<b>Sub Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
+      ),
+      width: 160,
+      align: 'center',
+      headerAlign: 'center',
+    },
     { field: 'mainCategory', headerName: 'Main Category', width: 150,
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130, align: 'center', headerAlign: 'center',
@@ -312,7 +332,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
@@ -340,7 +360,14 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                         variant="contained"
                         sx={{ float: 'right', mt: 2, mr: 2 }}
                         startIcon={<AttachMoneyIcon />}
-                        onClick={()=>{}}
+                        disabled={releaseAmountIROs.length==0}
+                        onClick={()=>{
+                          if (releaseAmountIROs.every((iro)=>iro.division?._id==releaseAmountIROs[0].division?._id)) {
+                            setOpenRelease(true);
+                          } else {
+                            enqueueSnackbar({ message: 'IRO of Different divisions selected', variant: 'error' });
+                          }
+                        }}
                       >
             Bulk Release
                       </Button>
@@ -350,7 +377,22 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 <br />
                 <br />
                 <Grid item xs={12} >
-                  <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
+                  <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} checkboxSelection={ props.action=='release' } disableRowSelectionOnClick={ props.action=='release' }
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                      // setSelectedIROrelease(newRowSelectionModel);
+                      console.log(newRowSelectionModel);
+                      setReleaseAmountIROs(()=>{
+                        const selectedIROs = IROrder ?
+                          IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) :
+                          [];
+
+                        return selectedIROs;
+                      });
+                    }}
+                    style={{ height: '80vh', width: '100%' }}
+                    // rowSelectionModel={selectedIROrelease}
+                    //
+                  />
                 </Grid>
               </Grid>
             </Card>
@@ -358,7 +400,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
                 {remarks.length > 0 ? remarks.map((remark) => (
-                  <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                  <MessageItem key={remark._id} sender={remark.createdBy?.basicDetails?.firstName + ' ' + remark.createdBy?.basicDetails?.lastName}
                     time={remark.updatedAt} body={remark.remark} isSent={true} />
                 )):'No Data Found '}
               </DialogContent>
@@ -464,6 +506,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            <ReleaseAmount action={props.action=='release'?'add':'view'} onClose={()=>setOpenRelease(false)} open={openRelease} data={releaseAmountIROs}/>
           </>
         )}
         denied={(missingPermissions) => (

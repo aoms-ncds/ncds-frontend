@@ -21,6 +21,7 @@ const LoginPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [unknownError, setUnknownError] = useState<string>();
 
+
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -64,6 +65,9 @@ const LoginPage = () => {
       navigate('/');
     }
   }, [user]);
+  useEffect(() => {
+    console.log('unknownError', unknownError);
+  }, [unknownError]);
   return (
     <>
       <CssBaseline />

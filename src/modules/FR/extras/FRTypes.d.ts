@@ -25,7 +25,7 @@ declare global {
     mainCategory?: FR['mainCategory'];
     purposeWorker?: FR['purposeWorker'];
     purposeSubdivision?: FR['purposeSubdivision'];
-    purposeDivision?: FR['purposeDivision'];
+    division?: FR['division'];
     purposeCoordinator?: FR['purposeCoordinator'];
     sanctionedAsPer?: FR['sanctionedAsPer'];
     sanctionedBank?: FR['sanctionedBank'];
@@ -95,7 +95,7 @@ declare global {
     kind: 'FRs' | 'IRO';
     purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
-    purposeDivision?: Division;
+    division?: Division;
     purposeCoordinator?: IWorker;
     purposeOthers?: string;
     sanctionedAmount: number;

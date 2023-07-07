@@ -50,6 +50,7 @@ const ReconciliationIRO = () => {
         IFSCCode: '',
       },
       attachment: [],
+      division: '',
     },
     createdBy: {
       workerCode: '',
@@ -219,8 +220,23 @@ const ReconciliationIRO = () => {
     { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
     { field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
-    { field: 'divisionName', headerName: 'Division Name', width: 150, renderHeader: () => (<b>Division Name</b>), align: 'center', headerAlign: 'center' },
-    { field: 'subDivisionName', headerName: 'Sub Division Name', width: 170, renderHeader: () => (<b>Sub Division Name</b>), align: 'center', headerAlign: 'center' },
+    {
+      field: 'divisionName',
+      renderHeader: () => (<b>Division Name</b>),
+      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'subDivisionName',
+      renderHeader: () => (<b>Sub Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
+      ),
+      width: 160,
+      align: 'center',
+      headerAlign: 'center',
+    },
     { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>), align: 'center', headerAlign: 'center' },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 130, align: 'center', headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -237,7 +253,8 @@ const ReconciliationIRO = () => {
     { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sourceBank', headerName: 'Source Bank', width: 130, renderHeader: () => (<b>Source Bank</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
+
   ];
   return (
     <CommonPageLayout title="Internal Release Order">
