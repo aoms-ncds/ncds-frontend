@@ -22,9 +22,16 @@ const iroPageRoutes: ModuleRoute = {
     {
       title: 'Manage IRO',
       path: '/manage',
-      element: <ManageIRO />,
+      element: <ManageIRO action='manage'/>,
       private: true,
       requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Release Amount',
+      path: '/release_amount',
+      element: <ManageIRO action='release'/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_IRO'],
     },
     {
       title: 'Closed IRO',
@@ -47,22 +54,22 @@ const iroPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },
-    {
-      title: 'Release Amount',
-      path: '/release_amount/:iroID/add',
-      element: <ReleaseAmount action='add'/>,
-      private: true,
-      requiredAccessRights: ['WRITE_IRO'],
-      icon: <RequestPageOutlinedIcon />,
-    },
-    {
-      title: 'Release Amount',
-      path: '/release_amount/:iroID/view',
-      element: <ReleaseAmount action='view'/>,
-      private: true,
-      requiredAccessRights: ['READ_IRO'],
-      icon: <RequestPageOutlinedIcon />,
-    },
+    // {
+    //   title: 'Release Amount',
+    //   path: '/release_amount/:iroID/add',
+    //   element: <ReleaseAmount action='add'/>,
+    //   private: true,
+    //   requiredAccessRights: ['WRITE_IRO'],
+    //   icon: <RequestPageOutlinedIcon />,
+    // },
+    // {
+    //   title: 'Release Amount',
+    //   path: '/release_amount/:iroID/view',
+    //   element: <ReleaseAmount action='view'/>,
+    //   private: true,
+    //   requiredAccessRights: ['READ_IRO'],
+    //   icon: <RequestPageOutlinedIcon />,
+    // },
   ],
 };
 export default iroPageRoutes;

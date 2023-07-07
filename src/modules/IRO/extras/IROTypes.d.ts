@@ -9,7 +9,6 @@ declare global{
   //   IRPdate:string;
   //   division:DivisionDetails;
   //   mainCategory: string;
-  //   lastUpdateDate: Moment;
   //   Particulars:Particular[];
   //   ReleaseAmount?:IReleaseAmount
   //   sanctionedAmount: number;
@@ -20,7 +19,6 @@ declare global{
     IROno: string;
     IRODate: Moment;
     purpose: string;
-    lastUpdateDate: Moment;
     status: number;
     releaseAmount:IReleaseAmount;
     billAttachment:FileObject[];
@@ -34,8 +32,9 @@ declare global{
     transferredAmount?: number;
     transferredDate?: Moment|null;
     transferredBank: BankDetails;
-    IRO?:string;
+    IRO?:IROrder[];
     attachment:FileObject[];
+    division:string;
 
   }
 }
@@ -51,7 +50,6 @@ declare global{
 //     subDivision: SubDivision;
 //     mainCategory: string;
 //     requestAmount: number;
-//     lastUpdateDate: Moment;
 
 //     sanction: string;
 //     releaseAmount: number;

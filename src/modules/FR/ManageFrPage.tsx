@@ -205,7 +205,7 @@ const ManageFrPage = () => {
     {
       field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
-      renderCell: (props) => (<p> {props.row.purposeDivision?.details.name}</p>),
+      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -242,8 +242,9 @@ const ManageFrPage = () => {
     },
 
     {
-      field: 'lastUpdateDate',
+      field: 'updatedAt',
       renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130,
       align: 'center',
       headerAlign: 'center',

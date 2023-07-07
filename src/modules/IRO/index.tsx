@@ -71,9 +71,16 @@ const IRODashboard = () => {
         <PermissionChecks
           permissions={['MANAGE_IRO']}
           granted={(
-            <Grid item xs={12} md={6} xl={3}>
-              <DashboardCardButton primaryText="Reconciliation IRO " color="#3cb043" targetRoute="/iro/reconciliation" />
-            </Grid>)}/>
+            <>
+              <Grid item xs={12} md={6} xl={3}>
+                <DashboardCardButton primaryText="Release Amount " color="#3cb043" targetRoute="/iro/release_amount" />
+              </Grid>
+              <Grid item xs={12} md={6} xl={3}>
+                <DashboardCardButton primaryText="Reconciliation IRO " color="#a2b533" targetRoute="/iro/reconciliation" />
+              </Grid>
+
+            </>
+          )}/>
       </Grid>
     </CommonPageLayout>
   );

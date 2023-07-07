@@ -29,7 +29,7 @@ const frDashboard = () => {
         console.log(error);
       });
     FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS })
-      .then((res) => setWaitingForPresidentFrCount(res.data))
+      .then((res) => setWaitingForAccountFrCount(res.data))
       .catch((error) => {
         console.log(error);
       });

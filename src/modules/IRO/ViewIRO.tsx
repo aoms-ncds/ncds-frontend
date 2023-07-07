@@ -50,7 +50,6 @@ const ViewIRO = () => {
     IROno: '',
     IRODate: moment(),
     purpose: '',
-    lastUpdateDate: moment(),
     status: FRLifeCycleStates.FR_APPROVED,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -107,6 +106,7 @@ const ViewIRO = () => {
         IFSCCode: '',
       },
       attachment: [],
+      division: '',
     },
     billAttachment: [],
     createdAt: moment(),
@@ -220,7 +220,7 @@ const ViewIRO = () => {
                       {IRO?.purpose === 'Division' ? (
                         <Grid item xs={12} md={6}>
                           <Autocomplete
-                            value={IRO?.purposeDivision}
+                            value={IRO?.division}
                             options={[]}
                             getOptionLabel={(division) => division.details.name}
                             onChange={() => {}}

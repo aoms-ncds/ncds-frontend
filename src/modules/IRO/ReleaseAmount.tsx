@@ -1,207 +1,234 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Card, CardContent, Container, Grid, TextField, TextFieldProps, Typography } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../extras/CommonConfig';
-import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
-import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
 
-interface ReleasePageProps {
+interface ReleaseDialogProps {
   action: 'add' | 'view';
+  data:IROrder[];
+  open:boolean;
+  onClose: () => void;
 }
 
-const ReleaseAmount = (props:ReleasePageProps) => {
+const ReleaseAmount = (props:ReleaseDialogProps) => {
   const navigate = useNavigate();
-  const { iroID } = useParams();
-  const [IRO, setIRO] = useState<IROrder>({
+  const [iroStatus, setIroStatus] = useState(false);
+  const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
     _id: '',
-    IROno: '',
-    IRODate: moment(),
-    purpose: '',
-    lastUpdateDate: moment(),
-    status: FRLifeCycleStates.FR_APPROVED,
-    kind: 'IRO',
-    sanctionedAmount: 0,
-    sanctionedAsPer: '',
-    sanctionedBank: '',
-    mainCategory: '',
-    particulars: [],
-    releaseAmount: {
-      _id: '',
-      modeOfPayment: '',
-      releaseAmount: 0,
-      transactionNumber: '',
-      transferredAmount: 0,
-      transferredDate: null,
-      transferredBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-      },
-      attachment: [],
+    modeOfPayment: '',
+    releaseAmount: 0,
+    transactionNumber: '',
+    transferredAmount: 0,
+    transferredDate: null,
+    transferredBank: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
     },
-    createdBy: {
-      workerCode: '',
-      kind: 'worker',
-      tokens: [],
-      basicDetails: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        permanentAddress: {},
-        currentOfficialAddress: {},
-        residingAddress: {},
-        dateOfBirth: moment(),
-      },
-      officialDetails: {
-        divisionHistory: [],
-        remarks: '',
-        selfSupport: true,
-        status: null,
-        noOfChurches: 0,
-      },
-      supportDetails: {
-        // totalNoOfYearsInMinistry: 10,
-        withChurch: true,
-      },
-      supportStructure: {
-        basic: 0,
-        HRA: 0,
-        spouseAllowance: 0,
-        positionalAllowance: 0,
-        specialAllowance: 0,
-        impactDeduction: 0,
-        telAllowance: 0,
-        PIONMissionaryFund: 0,
-        MUTDeduction: 0,
-      },
-      children: [],
-      _id: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    createdAt: moment(),
-    updatedAt: moment(),
-    billAttachment: [],
-
+    attachment: [],
+    division: '',
   });
+
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
 
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {
-    console.log(IRO, 'IRO');
+    // console.log(IRO, 'IRO');
     e.preventDefault();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
-    if (iroID && IRO) {
-      IROServices.releaseAmount(iroID, IRO).then((res) => {
-        console.log(res.data);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-        navigate('/iro/');
+    IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
+      console.log(res.data);
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'success',
       });
-      setTimeout(() => {
-        closeSnackbar(approvalSnack);
-      }, 500);
-    }
+      props.onClose;
+    });
+    setTimeout(() => {
+      closeSnackbar(approvalSnack);
+    }, 500);
   };
   useEffect(() => {
-    IROServices.getById(iroID??'').then(
-      (res)=>{
-        setIRO(res.data);
-        // if (res.data.releaseAmount) {
-        //   setReleaseAmount(res.data.releaseAmount);
-        // }
-      },
-    );
-  }, []);
+    console.log( props.data.reduce(
+      (tot, iro)=>tot+ iro.particulars?.reduce(
+        (total, particular) => total + Number(particular.requestedAmount),
+        0,
+      ),
+      0,
+    ));
+    console.log(props.data);
+    if (props.action=='add') {
+      console.log('add');
+      setReleaseAmount(()=> ({
+        ...releaseAmount,
+        releaseAmount: props.data.reduce(
+          (tot, iro)=>tot+ iro.sanctionedAmount,
+          0,
+        ),
+        IRO: props.data,
+        division: props.data[0]?.division?._id??'',
+      }));
+    } else {
+      if (props.data[0]?.status>=IROLifeCycleStates.AMOUNT_RELEASED) {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id)
+      .then((res)=>{
+        setReleaseAmount(res.data);
+      });
+      }
+    }
+    setIroStatus(props.data.every((iro)=>iro.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE));
+    // res.data.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE);
+    // },
+    // if (res.data.releaseAmount) {
+    //   setReleaseAmount(res.data.releaseAmount);
+    // }
+    // );
+  }, [props.data]);
+
+
+  const columns: GridColDef<IROrder>[] = [
+
+    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    { field: 'IRODate', headerName: 'IRO Date', width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'divisionName',
+      renderHeader: () => (<b>Division Name</b>),
+      renderCell: (props) => (<p> {props.row.division?.details?.name}</p>),
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'subDivisionName',
+      renderHeader: () => (<b>Sub Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
+      ),
+      width: 160,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    { field: 'mainCategory', headerName: 'Main Category', width: 150,
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, align: 'center', headerAlign: 'center',
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderCell: (params: GridCellParams) => {
+        const frRequest = params.row as IROrder;
+        const particularAmount = frRequest.particulars?.reduce(
+          (total, particular) => total + Number(particular.requestedAmount),
+          0,
+        );
+        return <p>{particularAmount}</p>;
+      } },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => (<b>Status</b>),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+    //   },
+    // },
+  ];
   return (
-    <CommonPageLayout title="Release Amount Page">
-      <Container>
-        <Card style={{ width: '100%' }}>
-          <CardContent>
-            <form onSubmit={saveReleaseAmount}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Release Amount"
-                    type='number'
-                    value={IRO.releaseAmount?.releaseAmount!=0?IRO.releaseAmount?.releaseAmount:''}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIRO(()=>({ ...IRO,
-                        releaseAmount: {
-                          ...IRO.releaseAmount,
-                          releaseAmount: Number(e.target.value),
-                        } }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-                  />
-                </Grid>
+    // <CommonPageLayout title="Release Amount Page">
+    //   <Container>
+    //     <Card style={{ width: '100%' }}>
+    //       <CardContent>
+    <>
+      <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
 
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    label="Amount Transferred"
-                    type='number'
-                    value={IRO.releaseAmount?.transferredAmount!=0?IRO.releaseAmount?.transferredAmount:''}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIRO(()=>({ ...IRO, releaseAmount: {
-                        ...IRO.releaseAmount,
-                        transferredAmount: Number(e.target.value),
-                      } }))}
-                    fullWidth
-                    variant="outlined"
-                    disabled={props.action=='view'}
+        <form onSubmit={saveReleaseAmount}>
+          <DialogContent>
 
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <DatePicker
-                    label="Date"
-                    value={IRO.releaseAmount?.transferredDate}
-                    format="DD/MM/YYYY"
-                    sx={{ width: '100%' }}
-                    disabled={props.action=='view'}
+            <Grid container spacing={3}>
 
-                    // onChange={(e) =>
-                    // // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //   setIRO((IRO: any) => ({
-                    //     ...IRO,
-                    // releaseAmount:{
-                    // ...IRO.releaseAmount,
-                    //     transferredDate: e.target.value,
-                    // }
-                    //   }))
-                    // }
-                  />
-                </Grid>
-                {/* <Grid item xs={12} > */}
-                {/* { <BankDetailsForm
+              <Grid item xs={12}>
+                <DataGrid rows={releaseAmount.IRO?? []} hideFooter columns={columns} getRowId={(row) => row._id} />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Release Amount"
+                  type='number'
+                  value={releaseAmount?.releaseAmount!=0?releaseAmount?.releaseAmount:''}
+                  onChange={(e) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(()=>({
+                      ...releaseAmount,
+                      releaseAmount: Number(e.target.value),
+                    } ))
+                  }
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Amount Transferred"
+                  type='number'
+                  value={releaseAmount?.transferredAmount!=0?releaseAmount?.transferredAmount:''}
+                  onChange={(e) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(()=> ({
+                      ...releaseAmount,
+                      transferredAmount: Number(e.target.value),
+                    } ))}
+                  fullWidth
+                  variant="outlined"
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DatePicker
+                  label="Date"
+                  value={releaseAmount?.transferredDate}
+                  format="DD/MM/YYYY"
+                  sx={{ width: '100%' }}
+                  disabled={props.action=='view'}
+
+                // onChange={(e) =>
+                // // eslint-disable-next-line @typescript-eslint/naming-convention
+                //   setIRO((IRO: any) => ({
+                //     ...IRO,
+                // releaseAmount:{
+                // ...releaseAmount,
+                //     transferredDate: e.target.value,
+                // }
+                //   }))
+                // }
+                />
+              </Grid>
+              {/* <Grid item xs={12} > */}
+              {/* { <BankDetailsForm
                   value={IRO?.transferredBank}
                   onChange={(newbankDetails) => {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     setIRO((IRO) => ({
                       ...IRO,
                       releaseAmount:{
-                        ...IRO.releaseAmount,
+                        ...releaseAmount,
                         transferredBank: newbankDetails,
                       }
                     }));
@@ -211,162 +238,189 @@ const ReleaseAmount = (props:ReleasePageProps) => {
                 /> */}
 
 
-                <Grid item xs={12}>
-                  <Typography variant="h4" component="h4">
+              <Grid item xs={12}>
+                <Typography variant="h4" component="h4">
                     Amount Transferred (Bank) Details
-                  </Typography>
-                </Grid>
-                <br />
-                {/* <Grid container spacing={3}> */}
-                <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="Bank Name"
-                    value={IRO.releaseAmount?.transferredBank?.bankName}
-                    onChange={(e) =>
-                      setIRO(()=>({ ...IRO, releaseAmount:
-                        {
-                          ...IRO.releaseAmount,
-                          transferredBank: {
-                            ...IRO.releaseAmount.transferredBank,
-                            bankName: e.target.value,
-                          } } }))}
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="Branch Name"
-                    value={IRO.releaseAmount?.transferredBank?.branchName}
-                    onChange={(e) =>
-                      setIRO(()=>({ ...IRO, releaseAmount: {
-
-                        ...IRO.releaseAmount,
-                        transferredBank: {
-                          ...IRO.releaseAmount.transferredBank,
-                          branchName: e.target.value,
-                        } } }))}
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="Account Number"
-                    value={IRO.releaseAmount?.transferredBank?.accountNumber}
-                    onChange={(e) =>
-                      setIRO(()=>({ ...IRO, releaseAmount: {
-                        ...IRO.releaseAmount,
-                        transferredBank: {
-                          ...IRO.releaseAmount.transferredBank,
-                          accountNumber: e.target.value },
-                      } }))}
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="IFSC Code"
-                    value={IRO.releaseAmount?.transferredBank?.IFSCCode}
-                    onChange={(e) =>
-                      setIRO(()=>({ ...IRO, releaseAmount:
-                        {
-
-                          ...IRO.releaseAmount,
-                          transferredBank: {
-                            ...IRO.releaseAmount.transferredBank,
-                            IFSCCode: e.target.value },
-                        } }))}
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                  <TextField
-                    label="Beneficiary"
-                    value={IRO.releaseAmount?.transferredBank?.beneficiary}
-                    onChange={(e) =>
-                      setIRO(()=>({ ...IRO, releaseAmount:
-                        {
-                          ...IRO.releaseAmount,
-                          transferredBank: {
-                            ...IRO.releaseAmount.transferredBank,
-                            beneficiary: e.target.value,
-                          },
-                        } }))}
-                    variant="outlined"
-                    fullWidth
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-
-                {/* </Grid> */}
-                <Grid item xs={12} md={6} lg={4}>
-                  <Autocomplete
-                    disablePortal
-                    id="Payment_method"
-                    value={IRO.releaseAmount?.modeOfPayment}
-                    options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card']}
-                    onChange={(_e, newValue) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIRO(()=>({ ...IRO, releaseAmount: {
-
-                        ...IRO.releaseAmount,
-                        modeOfPayment: newValue??'',
-                      } }))}
-                    renderInput={(params) => <TextField {...params} label="Mode of payment"
-                      required/>}
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    label="Transaction No:"
-                    value={IRO.releaseAmount?.transactionNumber}
-                    onChange={(e) =>
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      setIRO(()=>({ ...IRO, releaseAmount:
-                        {
-
-                          ...IRO.releaseAmount,
-                          transactionNumber: e.target.value,
-                        } }))}
-                    variant="outlined"
-                    fullWidth
-                    required
-                    disabled={props.action=='view'}
-
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
-                          Attachments
-                  </Button>
-                </Grid>
+                </Typography>
               </Grid>
               <br />
-              {IRO.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE?(<>
-                <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit" >
-                Release Amount
+              {/* <Grid container spacing={3}> */}
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="Bank Name"
+                  value={releaseAmount?.transferredBank?.bankName}
+                  onChange={(e) =>
+                    setReleaseAmount(()=>(
+                      {
+                        ...releaseAmount,
+                        transferredBank: {
+                          ...releaseAmount.transferredBank,
+                          bankName: e.target.value,
+                        } } ))}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="Branch Name"
+                  value={releaseAmount?.transferredBank?.branchName}
+                  onChange={(e) =>
+                    setReleaseAmount(()=>( {
+
+                      ...releaseAmount,
+                      transferredBank: {
+                        ...releaseAmount.transferredBank,
+                        branchName: e.target.value,
+                      } } ))}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="Account Number"
+                  value={releaseAmount?.transferredBank?.accountNumber}
+                  onChange={(e) =>
+                    setReleaseAmount(()=>( {
+                      ...releaseAmount,
+                      transferredBank: {
+                        ...releaseAmount.transferredBank,
+                        accountNumber: e.target.value },
+                    } ))}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="IFSC Code"
+                  value={releaseAmount?.transferredBank?.IFSCCode}
+                  onChange={(e) =>
+                    setReleaseAmount(()=>(
+                      {
+
+                        ...releaseAmount,
+                        transferredBank: {
+                          ...releaseAmount.transferredBank,
+                          IFSCCode: e.target.value },
+                      } ))}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="Beneficiary"
+                  value={releaseAmount?.transferredBank?.beneficiary}
+                  onChange={(e) =>
+                    setReleaseAmount(()=>(
+                      {
+                        ...releaseAmount,
+                        transferredBank: {
+                          ...releaseAmount.transferredBank,
+                          beneficiary: e.target.value,
+                        },
+                      } ))}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action=='view'}
+                  InputLabelProps={{
+                    shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                  }}
+                />
+              </Grid>
+
+              {/* </Grid> */}
+              <Grid item xs={12} md={6} lg={4}>
+                <Autocomplete
+                  disablePortal
+                  id="Payment_method"
+                  value={releaseAmount?.modeOfPayment??null}
+                  options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card']}
+                  onChange={(_e, newValue) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(()=>( {
+
+                      ...releaseAmount,
+                      modeOfPayment: newValue??'',
+                    } ))}
+                  renderInput={(params) => <TextField {...params} label="Mode of payment"
+                    required/>}
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Transaction No:"
+                  value={releaseAmount?.transactionNumber}
+                  onChange={(e) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(()=>(
+                      {
+
+                        ...releaseAmount,
+                        transactionNumber: e.target.value,
+                      } ))}
+                  variant="outlined"
+                  fullWidth
+                  required
+                  disabled={props.action=='view'}
+
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                          Attachments
                 </Button>
-                <br />
-              </>
-              ):null}
-            </form>
-          </CardContent>
-        </Card>
-      </Container>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+
+            <Button variant="outlined" onClick={()=>{
+              setReleaseAmount({
+                _id: '',
+                modeOfPayment: '',
+                releaseAmount: 0,
+                transactionNumber: '',
+                transferredAmount: 0,
+                transferredDate: null,
+                transferredBank: {
+                  bankName: '',
+                  branchName: '',
+                  accountNumber: '',
+                  IFSCCode: '',
+                },
+                attachment: [],
+                division: '',
+              });
+              props.onClose();
+            }
+            }>
+            Close
+            </Button>
+            {hasPermissions(['MANAGE_IRO'])&& iroStatus?(<>
+              <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit" >
+                Release Amount
+              </Button>
+              <br />
+            </>
+            ):null}
+
+          </DialogActions>
+
+        </form>
+      </Dialog>
       {/* <FileUploader
         title="Attachments"
         types={[
@@ -436,37 +490,38 @@ const ReleaseAmount = (props:ReleasePageProps) => {
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={IRO.releaseAmount.attachment??[]}
+        getFiles={releaseAmount.attachment??[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name)
           .then((res)=>{
             console.log(res.data._id);
-            setIRO(()=>({ ...IRO, releaseAmount: {
-              ...IRO.releaseAmount,
-              attachment: [...(IRO.releaseAmount.attachment||[]), res.data],
-            } }));
+            setReleaseAmount(()=>( {
+              ...releaseAmount,
+              attachment: [...(releaseAmount.attachment||[]), res.data],
+            } ));
             return res;
           });
         }}
         renameFile={(fileId: string, newName: string) => {
-          setIRO(()=>({ ...IRO, releaseAmount: {
+          setReleaseAmount(()=>( {
 
-            ...IRO.releaseAmount,
-            attachment: IRO.releaseAmount.attachment.map((file) =>
+            ...releaseAmount,
+            attachment: releaseAmount.attachment.map((file) =>
               file._id === fileId ? { ...file, filename: newName } : file,
             ),
-          } }));
+          } ));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={props.action=='add'?(fileId: string) => {
-          setIRO(()=>({ ...IRO, releaseAmount: {
-            ...IRO.releaseAmount,
-            attachment: IRO.releaseAmount.attachment.filter((file)=>file._id!==fileId),
-          } }));
+          setReleaseAmount(()=>( {
+            ...releaseAmount,
+            attachment: releaseAmount.attachment.filter((file)=>file._id!==fileId),
+          } ));
           return FileUploaderServices.deleteFile(fileId);
         }:undefined}
       />
-    </CommonPageLayout>
+    </>
+    // </CommonPageLayout>
   );
 };
 

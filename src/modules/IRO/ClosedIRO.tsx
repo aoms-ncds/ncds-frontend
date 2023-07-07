@@ -83,7 +83,7 @@ const ClosedIRO = () => {
     { field: 'subDivisionName', renderHeader: () => (<b>Sub Division Name</b>), width: 170 },
     { field: 'mainCategory', renderHeader: () => (<b>Main Category</b>), width: 150 },
     { field: 'requestAmount', renderHeader: () => (<b>Requested Amount</b>), width: 150 },
-    { field: 'lastUpdateDate', renderHeader: () => (<b>Last Updated</b>), width: 150 },
+    { field: 'updatedAt', renderHeader: () => (<b>Last Updated</b>), width: 150 },
     { field: 'sanction', renderHeader: () => (<b>Special Sanction</b>), width: 130 },
     { field: 'sanctionedAmount', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
     { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), width: 150 },
