@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import WorkerServices from './extras/WorkersServices';
 import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
+import CommonPageLayout from '../../components/CommonPageLayout';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
+  const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
 
   useEffect(() => {
     WorkerServices.getCount()
@@ -17,6 +18,11 @@ const WorkersDashboard = () => {
       });
     WorkerServices.getCount({ status: WorkerLifeCycleStates.CREATED })
       .then((res) => setUnapprovedWorkersCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.REJECTED })
+      .then((res) => setRejectedWorkersCount(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -31,6 +37,9 @@ const WorkersDashboard = () => {
 
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
+        </Grid>
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#46458C" targetRoute="/workers/reject" />
         </Grid>
       </Grid>
     </CommonPageLayout>

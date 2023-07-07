@@ -1,16 +1,29 @@
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Avatar, Card, Grid } from '@mui/material';
+import { Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from './PermissionChecks';
 import moment from 'moment';
+import { useState } from 'react';
+import MessageItem from '../../../components/MessageItem';
+import SendIcon from '@mui/icons-material/Send';
 
-const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind }>) => {
+
+const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind;status?:'reject'|'active' }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
+
+  const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string|null>(null);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [remark, setRemark] = useState<CreatableRemark>({
+    remark: '',
+    transactionId: '',
+  });
+
 
   const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
@@ -88,6 +101,21 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
+  const assignRemark = (id: string) => {
+    console.log('setremark', id);
+    toggleOpenRemarks(true);
+    setSelectedUser(id);
+    console.log({ selectedUser });
+    WorkersServices.getAllRemarksById(id)
+                  .then((res) => setRemarks(res.data??[]))
+                  .catch((error) => {
+                    enqueueSnackbar({
+                      variant: 'error',
+                      message: error.message,
+                    });
+                  });
+  };
+
   // const x = hasPermissions(['READ_ACCESS']) && [
   //   <GridLinkAction
   //     key={5}
@@ -188,30 +216,41 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               execDelete(params.row._id);
             }}
           />,
-          (params.row.status == UserLifeCycleStates.ACTIVE ? (
-            <GridLinkAction
-              key={4}
-              label="Deactivate"
-              icon={<NoAccountsIcon />}
-              showInMenu
-              onClick={() => {
-                deactivateWorker(params.row._id);
-              }}
-            />
-          ) : (
-            <GridLinkAction
-              key={4}
-              label="Activate"
-              icon={<PersonIcon />}
-              showInMenu
-              onClick={() => {
-                activateWorker(params.row._id);
-              }}
-            />
+          <GridLinkAction
+            key={4}
+            label="Remarks"
+            icon={<EditIcon />}
+            showInMenu
+            onClick={() => {
+              assignRemark(params.row._id);
+            }}
+          />,
+          (props.options?.status != 'reject' && (
+            (params.row.status == UserLifeCycleStates.ACTIVE ? (
+              <GridLinkAction
+                key={5}
+                label="Deactivate"
+                icon={<NoAccountsIcon />}
+                showInMenu
+                onClick={() => {
+                  deactivateWorker(params.row._id);
+                }}
+              />
+            ) : (
+              <GridLinkAction
+                key={5}
+                label="Activate"
+                icon={<PersonIcon />}
+                showInMenu
+                onClick={() => {
+                  activateWorker(params.row._id);
+                }}
+              />
+            ))
           )),
           hasPermissions(['ADMIN_ACCESS']) &&
             <GridLinkAction
-              key={5}
+              key={6}
               label="Manage Permissions"
               icon={<BallotIcon />}
               showInMenu
@@ -416,6 +455,76 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           />
         </Card>
       </Grid>
+      <Dialog open={openRemarks} fullWidth maxWidth="md">
+        <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0 ? remarks.map((remark) => (
+            // eslint-disable-next-line max-len
+            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+          )):'No Data Found '}
+        </DialogContent>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (remark.remark) {
+              WorkersServices.addRemarks(remark)
+        .then((res) => {
+          const x = [...remarks, res.data];
+          console.log('user', x);
+
+          setRemarks((remarks) => [...remarks, res.data]);
+          setRemark((remark) => ({
+            ...remark,
+            remark: '',
+          }));
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          });
+        });
+            }
+          }}
+        >
+          <DialogActions>
+            <TextField
+              id="remarkTextfield"
+              placeholder="Remarks"
+              multiline
+              value={remark?.remark}
+              onChange={(e) =>
+                setRemark((remark) => ({
+                  ...remark,
+                  user: selectedUser??'',
+                  remark: e.target.value,
+                }))
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton type='submit'
+                    >
+                      <SendIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              onClick={() => {
+                toggleOpenRemarks(false);
+                setSelectedUser(null);
+              }}
+              sx={{ mx: '1rem', py: 1.7 }}
+            >
+            close
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </>
   );
 };

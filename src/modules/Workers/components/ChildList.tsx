@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Card, Grid } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import ChildrenServices from '../extras/ChildrenServices';
 import moment from 'moment';
 
-const ChildListPage = () => {
+const ChildListPage = (props: { data: Child[] }) => {
   const [childList, setChildList] = useState<Child[]>();
+
   useEffect(() => {
-    ChildrenServices.getAll()
-      .then((res) => {
-        console.log(res);
-        setChildList(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+    setChildList(props.data);
+  }, [childList]);
+
   const columns: GridColDef<Child>[] = [
     // {
     //   field: '_manage',
@@ -103,7 +97,7 @@ const ChildListPage = () => {
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={childList ?? []} columns={columns} getRowId={(row) => row._id} loading={childList === null} />
+          <DataGrid rows={props.data ?? []} columns={columns} getRowId={(row) => row._id} loading={props.data === null} />
         </Card>
       </Grid>
     </>

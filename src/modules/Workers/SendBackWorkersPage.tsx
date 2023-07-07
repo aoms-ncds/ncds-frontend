@@ -13,7 +13,7 @@ import PermissionChecks from '../User/components/PermissionChecks';
 import SpousesServices from './extras/SpousesServices';
 import ChildrenServices from './extras/ChildrenServices';
 
-const ManageWorkerPage = () => {
+const SendBackWorkersPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
@@ -27,7 +27,7 @@ const ManageWorkerPage = () => {
 
   useEffect(() => {
     if (currentTab == 0) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      WorkersServices.getAll({ status: UserLifeCycleStates.REJECTED })
         .then((res) => {
           setUsers(res.data);
         })
@@ -35,16 +35,16 @@ const ManageWorkerPage = () => {
           console.log(res);
         });
     } else if (currentTab == 1) {
-      SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      SpousesServices.getAll({ status: UserLifeCycleStates.REJECTED })
         .then((res) => {
-          setSpouseList(res.data);
           console.log(res);
+          setSpouseList(res.data);
         })
           .catch((res) => {
             console.log(res);
           });
     } else if (currentTab == 2) {
-      ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      ChildrenServices.getAll({ status: UserLifeCycleStates.REJECTED })
         .then((res) => {
           console.log(res);
           setChildList(res.data);
@@ -52,19 +52,10 @@ const ManageWorkerPage = () => {
           .catch((res) => {
             console.log(res);
           });
-    } else if (currentTab == 3) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.INACTIVE })
-      .then((res) => {
-        console.log(res);
-        setUsers(res.data);
-      })
-        .catch((res) => {
-          console.log(res);
-        });
     }
   }, [currentTab]);
   return (
-    <CommonPageLayout title="Manage Workers">
+    <CommonPageLayout title="Sendback Workers">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <br />
@@ -78,8 +69,6 @@ const ManageWorkerPage = () => {
               <Tab label="Workers" {...a11yProps(0)} />
               <Tab label="Spouses" {...a11yProps(1)} />
               <Tab label="Children" {...a11yProps(2)} />
-              <Tab label="Deactivated" {...a11yProps(3)} />
-
               {/* <Tab label="Files" {...a11yProps(4)} /> */}
             </Tabs>
           </Grid>
@@ -107,7 +96,7 @@ const ManageWorkerPage = () => {
               setUsers(newUsers);
             }}
             action={'view'}
-            options={{ kind: 'worker' }}
+            options={{ kind: 'worker', status: 'reject' }}
           />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
@@ -116,18 +105,10 @@ const ManageWorkerPage = () => {
         <TabPanel value={currentTab} index={2}>
           <ChildListPage data={childList??[]}/>
         </TabPanel>
-        <TabPanel value={currentTab} index={3}>
-          <UsersList<IWorker>
-            value={users}
-            onChange={(newUsers) => {
-              setUsers(newUsers);
-            }}
-            action={'view'}
-          />
-        </TabPanel>
+
       </Card>
     </CommonPageLayout>
   );
 };
 
-export default ManageWorkerPage;
+export default SendBackWorkersPage;
