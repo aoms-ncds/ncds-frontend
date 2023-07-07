@@ -107,7 +107,7 @@ const ManageIRO = () => {
   useEffect(() => {
     IROServices.getAll()
       .then((res) => {
-        console.log(res);
+        console.log(res, 'res');
         setIROrder(res.data);
       })
       .catch((res) => {
