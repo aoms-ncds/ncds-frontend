@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export default {};
 
 declare global {
@@ -10,4 +12,5 @@ declare global {
     staffCode?: string;
     spouseOfAnother?: User;
   }
+
 }

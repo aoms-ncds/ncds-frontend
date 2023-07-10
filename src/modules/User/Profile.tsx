@@ -119,7 +119,6 @@ const Profile = () => {
             <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
               <Tab sx={{ fontWeight: 'bold' }} label="Basic Details" {...a11yProps(0)} />
               <Tab sx={{ fontWeight: 'bold' }} label="Official Details" {...a11yProps(1)} />
-              <Tab sx={{ fontWeight: 'bold' }} label="Support Details" {...a11yProps(2)} />
               {/* <Tab label="Support Structure" {...a11yProps(3)} /> */}
               { userKind ==='worker' && (user as unknown as IWorker)?.spouse && <Tab label="Spouse Details" {...a11yProps(3)} />}
               {userKind ==='worker' && (user as unknown as IWorker)?.children.length > 0 && <Tab label="Offsprings Details" {...a11yProps(4)} />}
@@ -148,11 +147,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
-              <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.basicDetails.insurance?.impactNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.basicDetails.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.basicDetails.insurance?.nominee} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.basicDetails.insurance?.relation} </Grid>
+
               <Grid item xs={12}> <Divider textAlign='left'>Permanent address</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.permanentAddress?.buildingName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress?.street} </Grid>
@@ -269,6 +264,11 @@ const Profile = () => {
                   )
                 }
               </Grid>
+              <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.insurance?.impactNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.insurance?.nominee} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.insurance?.relation} </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value={currentTab} index={3}>

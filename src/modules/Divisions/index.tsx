@@ -8,30 +8,37 @@ import PermissionChecks from '../User/components/PermissionChecks';
 const DivisionsDashboardPage = () => {
   return (
     <CommonPageLayout title="Divisions Dashboard">
-      <PermissionChecks
-        permissions={['WRITE_DIVISIONS']}
-        granted={(
+      <br />
+      <br />
+      <Card style={{ height: '70vh', width: '100%' }}>
+        <Grid container spacing={2} >
+          <Grid item xs={12} sx={{ px: 2 }}>
+            <br/>
+            <PermissionChecks
+              permissions={['WRITE_DIVISIONS']}
+              granted={(
 
-          <Button
-            variant="contained"
-            sx={{ float: 'right' }}
-            startIcon={<AddIcon />}
-            component={Link}
-            to="/divisions/add"
-            // onClick={() => {
-            // }}
-          >
+                <Button
+                  variant="contained"
+                  sx={{ float: 'right' }}
+                  startIcon={<AddIcon />}
+                  component={Link}
+                  to="/divisions/add"
+                // onClick={() => {
+                // }}
+                >
         Add new
-          </Button>
-        )}
-      />
-      <br />
-      <br />
-      <Grid item xs={12} md={12}>
-        <Card style={{ height: '70vh', width: '100%' }}>
-          <DivisionsList />
-        </Card>
-      </Grid>
+                </Button>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12}>
+
+            <DivisionsList />
+
+          </Grid>
+        </Grid>
+      </Card>
     </CommonPageLayout>
   );
 };

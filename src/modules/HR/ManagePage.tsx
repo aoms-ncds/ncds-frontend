@@ -20,17 +20,18 @@ const HRManagePage = () => {
 
   return (
     <CommonPageLayout title="Manage Staff">
-      <PermissionChecks
-        permissions={['WRITE_STAFFS']}
-        granted={(
-          <Button variant="contained" sx={{ float: 'right', marginBottom: 3 }} startIcon={<AddIcon />} component={Link} to="/hr/add">
-            Add new
-          </Button>
-        )}
-      />
-
       <Grid item xs={12} md={12}>
         <Card style={{ height: '69vh', width: '100%' }}>
+          <Grid item xs={12} lg={3} sx={{ px: 5, py: 2 }}>
+            <PermissionChecks
+              permissions={['WRITE_STAFFS']}
+              granted={(
+                <Button variant="contained" sx={{ float: 'right', marginBottom: 3 }} startIcon={<AddIcon />} component={Link} to="/hr/add">
+            Add new
+                </Button>
+              )}
+            />
+          </Grid>
           <UsersList<Staff> value={staffs} onChange={(newStaffs) => setStaffs(newStaffs)} action={'view'} options={{ kind: 'staff' }} />
         </Card>
       </Grid>

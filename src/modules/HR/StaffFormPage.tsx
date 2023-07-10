@@ -31,18 +31,18 @@ const StaffFormPage = (props: StaffFormPageProps) => {
     },
     supportDetails: {
       // totalNoOfYearsInMinistry: 10,
-      withChurch: true,
+      // withChurch: true,
     },
     supportStructure: {
-      basic: 0,
-      HRA: 0,
-      spouseAllowance: 0,
-      positionalAllowance: 0,
-      specialAllowance: 0,
-      impactDeduction: 0,
-      telAllowance: 0,
-      PIONMissionaryFund: 0,
-      MUTDeduction: 0,
+      // basic: 0,
+      // HRA: 0,
+      // spouseAllowance: 0,
+      // positionalAllowance: 0,
+      // specialAllowance: 0,
+      // impactDeduction: 0,
+      // telAllowance: 0,
+      // PIONMissionaryFund: 0,
+      // MUTDeduction: 0,
     },
   });
 
@@ -60,7 +60,6 @@ const StaffFormPage = (props: StaffFormPageProps) => {
                 ...res.data.basicDetails,
                 aadhaar: undefined,
                 voterId: undefined,
-                insurance: undefined,
               },
             });
           }

@@ -61,12 +61,7 @@ declare global {
       voterIdNo?: string;
       voterIdFile?: FileObject;
     };
-    insurance?: {
-      impactNo?: string;
-      dojInsurance?: Moment;
-      nominee?: string;
-      relation?: string;
-    };
+
     licenseNumber?: string;
     permanentAddress: Address;
     currentOfficialAddress: Address;
@@ -126,6 +121,13 @@ declare global {
     withChurch?: boolean;
   }
 
+  interface Insurance {
+    impactNo?: string;
+    dojInsurance?: Moment;
+    nominee?: string;
+    relation?: string;
+  }
+
   interface SupportStructure {
     basic?: number;
     HRA?: number;
@@ -147,6 +149,7 @@ declare global {
     status?: UserLifeCycleStates;
     permissions?: IUserPermissions;
     tokens: string[];
+    insurance?: Insurance;
 
   }
   interface CreatableUser extends Creatable<User> {
@@ -154,6 +157,7 @@ declare global {
     officialDetails: CreatableOfficialDetails;
     supportDetails: SupportDetails;
     supportStructure: SupportStructure;
+    insurance?: Insurance;
   }
 
   type Gender = 'Male' | 'Female' | 'Other';

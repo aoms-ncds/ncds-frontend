@@ -34,7 +34,7 @@ import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
 import { enqueueSnackbar } from 'notistack';
 
-const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
+const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   props: FormComponentProps<
     UserType,
     {
@@ -116,9 +116,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           <Step>
             <StepLabel>Official Details</StepLabel>
           </Step>
-          <Step>
-            <StepLabel>Support Details</StepLabel>
-          </Step>
+
           {/* <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step> */}
@@ -130,6 +128,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <Step>
               <StepLabel>Offsprings details</StepLabel>
+            </Step>
+          )}
+          {props.options?.kind != 'worker' && (
+            <Step>
+              <StepLabel>Support Details</StepLabel>
             </Step>
           )}
         </Stepper>
@@ -156,6 +159,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                           marginLeft: 'auto',
                           marginRight: 'auto',
                         }}
+                        variant='rounded'
                         src={props.value.imageURL ?? ''}
                       >
                         {!props.value.imageURL && <ImageIcon sx={{ fontSize: 100 }} />}
@@ -245,7 +249,16 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                setActiveStep((step) => step + 1);
+                if (props.options?.kind == 'worker' && props.value.basicDetails.martialStatus == 'Married') {
+                  setActiveStep((currentStep) => currentStep + 1);
+                } else {
+                  if (props.options?.kind == 'staff') {
+                    setActiveStep((currentStep) => currentStep + 1);
+                  } else {
+                    props.onSubmit && props.onSubmit(props.value);
+                    navigate('/hr/manage');
+                  }
+                }
               }}
             >
               <Grid container spacing={3}>
@@ -270,84 +283,38 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   padding: 20,
                 }}
               >
-                <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
-                  Go back{' '}
-                </Button>
-                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {' '}
-                  Next{' '}
-                </Button>
+
+                {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married'?(
+                  <>
+                    <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                      {' '}
+                    Review from first step{' '}
+                    </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                      {' '}
+                      Go back{' '}
+                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                      {' '}
+                      {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                      {' '}
+                      Submit{' '}
+                    </Button>
+                  </>
+                ):(
+                  <>
+                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                      {' '}
+                      Go back{' '}
+                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                      {' '}
+                        Next{' '}
+                    </Button>
+                  </>
+                )}
               </div>
             </form>
           )}
-          {activeStep === 2 && (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married') {
-                  setActiveStep((currentStep) => currentStep + 1);
-                } else {
-                  props.onSubmit && props.onSubmit(props.value);
-                  navigate('/hr/manage');
-                }
-              }}
-            >
-              <Grid container spacing={3}>
-                <NewSupportDetailsForm
-                  action={props.action}
-                  value={props.value.supportDetails}
-                  onChange={(newSupportDetails) =>
-                    props.onChange({
-                      ...props.value,
-                      supportDetails: newSupportDetails,
-                    })
-                  }
-                  options={props.options}
-                />
 
-                <Grid item xs={12}>
-                  <br />
-                  <Divider textAlign="left">Support Structure</Divider>
-                </Grid>
-
-                <NewUserSupportStructureForm
-                  action={props.action}
-                  value={props.value.supportStructure}
-                  onChange={(newSupportStructure) =>
-                    props.onChange({
-                      ...props.value,
-                      supportStructure: newSupportStructure,
-                    })
-                  }
-                  options={props.options}
-                />
-              </Grid>
-
-              <div
-                style={{
-                  float: 'right',
-                  marginBottom: 2,
-                  marginTop: 2,
-                  padding: 20,
-                }}
-              >
-                <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
-                  Review from first step{' '}
-                </Button>
-                <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
-                  Go back{' '}
-                </Button>
-                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {' '}
-                  {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '}
-                </Button>
-              </div>
-            </form>
-          )}
-          {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 2 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -383,12 +350,15 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               </div>
             </form>
           )}
-          {activeStep === 4 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                props.onSubmit && props.onSubmit(props.value);
-                navigate('/hr/manage');
+              onSubmit={() => {
+                if (props.options?.kind == 'worker' && props.value.basicDetails.martialStatus == 'Married') {
+                  props.onSubmit && props.onSubmit(props.value);
+                  navigate('/hr/manage');
+                } else {
+                  setActiveStep((currentStep) => currentStep + 1);
+                }
               }}
             >
               <Grid container spacing={3}>
@@ -425,25 +395,183 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     Add New Child
                   </Button>
                 </Grid>
+
+
               </Grid>
-              {/* <Grid item xs={12} sx={{ justifyContent: 'flex-end' }}> */}
-              <div style={{ float: 'right', marginBottom: 2, marginTop: 2, padding: 20 }}>
-                <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
-                  Review from first step{' '}
-                </Button>
+              {/* <Grid sx={{ my: 2 }}>
                 <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                   {' '}
                   Go back{' '}
                 </Button>
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
-                  Submit{' '}
+                  Next{' '}
                 </Button>
-              </div>
+              </Grid> */}
+              <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                {' '}
+                    Review from first step{' '}
+              </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                {' '}
+                      Go back{' '}
+              </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                {' '}
+                {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                {' '}
+                      Submit{' '}
+              </Button>
+              {/* <Grid item xs={12} sx={{ justifyContent: 'flex-end' }}> */}
 
               {/* </Grid> */}
               {/* </Grid> */}
+            </form>
+          )}
+          {activeStep === (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married'?4:2) && (
+            <form
+              onSubmit={() => {
+                props.onSubmit && props.onSubmit(props.value);
+                navigate('/hr/manage');
+              }
+              }
+            >
+              <Grid container spacing={3}>
+                <NewSupportDetailsForm
+                  action={props.action}
+                  value={props.value.supportDetails}
+                  onChange={(newSupportDetails) =>
+                    props.onChange({
+                      ...props.value,
+                      supportDetails: newSupportDetails,
+                    })
+                  }
+                  options={props.options}
+                />
+
+                <Grid item xs={12}>
+                  <br />
+                  <Divider textAlign="left">Support Structure</Divider>
+                </Grid>
+
+                <NewUserSupportStructureForm
+                  action={props.action}
+                  value={props.value.supportStructure}
+                  onChange={(newSupportStructure) =>
+                    props.onChange({
+                      ...props.value,
+                      supportStructure: newSupportStructure,
+                    })
+                  }
+                  options={props.options}
+                />
+
+                <Grid item xs={12}>
+                  <br />
+                  <Divider textAlign="left">Insurance Details</Divider>
+                </Grid>
+
+
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Impact No"
+                    value={props.value.insurance?.impactNo}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        insurance: {
+                          ...props.value.insurance,
+                          impactNo: e.target.value,
+                        },
+                      })
+                    }
+                    variant={props.options?.textField?.variant}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                  <DatePicker
+                    label="Date Of Joining Insurance"
+                    value={props.value.insurance?.dojInsurance}
+                    onChange={(newDate) =>
+                      props.onChange({
+                        ...props.value,
+                        insurance: {
+                          ...props.value.insurance,
+                          dojInsurance: newDate ?? undefined,
+                        },
+                      })
+                    }
+                    format="DD/MM/YYYY"
+                    slotProps={{
+                      textField: {
+                        variant: props.options?.textField?.variant,
+                        fullWidth: true,
+                      },
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Nominee"
+                    value={props.value.insurance?.nominee}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        insurance: {
+                          ...props.value.insurance,
+                          nominee: e.target.value,
+                        },
+                      })
+                    }
+                    variant={props.options?.textField?.variant}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Relation "
+                    value={props.value.insurance?.relation}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        insurance: {
+                          ...props.value.insurance,
+                          relation: e.target.value,
+                        },
+                      })
+                    }
+                    variant={props.options?.textField?.variant}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+
+
+              <div
+                style={{
+                  float: 'right',
+                  marginBottom: 2,
+                  marginTop: 2,
+                  padding: 20,
+                }}
+              >
+                <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                  {' '}
+                  Review from first step{' '}
+                </Button>
+                <Button onClick={() => setActiveStep((step) => step-1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                  {' '}
+                  Go back{' '}
+                </Button>
+                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                  {' '}
+                  {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                  {' '}
+                  Submit{' '}
+                </Button>
+              </div>
             </form>
           )}
         </CardContent>
