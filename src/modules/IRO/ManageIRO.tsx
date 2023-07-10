@@ -58,6 +58,51 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
       attachment: [],
       division: '',
     },
+    division: {
+      details: {
+        name: '',
+        divisionId: '',
+        contactNumber: '',
+        email: '',
+        address: {
+          buildingName: '',
+          street: '',
+          city: '',
+          state: '',
+          country: '',
+          pincode: '',
+        },
+      },
+      subDivisions: [
+        {
+          _id: '',
+          name: '',
+        },
+      ],
+      FCRABankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      localBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     createdBy: {
       workerCode: '',
       kind: 'worker',

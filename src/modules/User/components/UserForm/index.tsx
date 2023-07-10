@@ -106,6 +106,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   //   //   })
   //   // }
   // }, [children]);
+  const gobacktomanage = props.options?.kind == 'worker'?'/workers/manage':'/hr/manage';
+
   return (
     <>
       <Container maxWidth="md">
@@ -256,7 +258,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
                     props.onSubmit && props.onSubmit(props.value);
-                    navigate('/hr/manage');
+                    navigate(gobacktomanage);
                   }
                 }
               }}
@@ -355,7 +357,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               onSubmit={() => {
                 if (props.options?.kind == 'worker' && props.value.basicDetails.martialStatus == 'Married') {
                   props.onSubmit && props.onSubmit(props.value);
-                  navigate('/hr/manage');
+                  navigate(gobacktomanage);
                 } else {
                   setActiveStep((currentStep) => currentStep + 1);
                 }
@@ -430,7 +432,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
             <form
               onSubmit={() => {
                 props.onSubmit && props.onSubmit(props.value);
-                navigate('/hr/manage');
+                navigate(gobacktomanage);
               }
               }
             >
