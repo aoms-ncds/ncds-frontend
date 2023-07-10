@@ -50,7 +50,7 @@ const NewOfficialDetailsForm = (
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [isDivisionChanged, setIsDivisionChanged] = useState<boolean>(false);
   const [newDiv, setNewDiv] = useState<Division|null>(null);
-  const [subDivisions, setSubDivisions] = useState<SubDivision[] >([]);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const currentDate = moment();
 

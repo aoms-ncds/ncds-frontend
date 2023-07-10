@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export default {};
 declare global {
   interface IWorker extends User {
@@ -10,4 +12,5 @@ declare global {
     children: Child[];
     workerCode?: string;
   }
+
 }

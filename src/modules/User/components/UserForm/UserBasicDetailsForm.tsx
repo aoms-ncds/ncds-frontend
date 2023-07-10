@@ -384,7 +384,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <br />
         <Divider textAlign="left">Insurance Details</Divider>
       </Grid>
@@ -465,7 +465,7 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField?.variant}
           fullWidth
         />
-      </Grid>
+      </Grid> */}
 
 
       <NewAddressForm
