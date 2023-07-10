@@ -150,6 +150,7 @@ declare global {
     permissions?: IUserPermissions;
     tokens: string[];
     insurance?: Insurance;
+    division?:Division;
 
   }
   interface CreatableUser extends Creatable<User> {

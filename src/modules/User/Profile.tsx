@@ -217,9 +217,9 @@ const Profile = () => {
           </TabPanel>
           <TabPanel value={currentTab} index={2}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Designation: </Typography> {user?.supportDetails.designation?.name} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails.totalNoOfYearsInMinistry} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails.withChurch ? 'Yes': (user?.supportDetails.withChurch === false ? 'No' : 'Not specified')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Designation: </Typography> {user?.supportDetails?.designation?.name} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails?.totalNoOfYearsInMinistry} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails?.withChurch ? 'Yes': (user?.supportDetails?.withChurch === false ? 'No' : 'Not specified')} </Grid>
 
               <Grid item xs={12}><br /><Divider textAlign="left">Support Structure</Divider></Grid>
 

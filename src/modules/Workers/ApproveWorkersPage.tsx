@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Link } from 'react-router-dom';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import WorkersServices from './extras/WorkersServices';
+import GridLinkAction from '../../components/GridLinkAction';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
+import DoneIcon from '@mui/icons-material/Done';
+import ClearIcon from '@mui/icons-material/Clear';
+import { hasPermissions } from '../User/components/PermissionChecks';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 
 const ApproveWorkerPage = () => {
@@ -15,10 +21,21 @@ const ApproveWorkerPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string|null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
+  // useEffect(() => {
+  //   DivisionsServices.getDivisions()
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setDivisions(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log({ err });
+  //     });
+  // }, []);
 
   const approveWorker = (id: string) => {
     WorkersServices.approve(id)
@@ -89,11 +106,56 @@ const ApproveWorkerPage = () => {
       });
   }, []);
   const columns: GridColDef<IWorker>[] = [
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 5,
+      getActions: (params: GridRowParams) => (
+        [
+          <GridLinkAction
+            key={1}
+            label="View"
+            icon={<PreviewIcon />}
+            showInMenu
+            to={`/users/worker/${params.row._id}`}
+          />,
+          <GridLinkAction
+            key={2}
+            label="Remark"
+            icon={<EditIcon />}
+            showInMenu
+            onClick={() => {
+              assignRemark(params.row._id);
+            }}
+          />,
+          <GridLinkAction
+            key={3}
+            label="Approve"
+            icon={<DoneIcon />}
+            showInMenu
+            onClick={() => {
+              approveWorker(params.row._id);
+            }}
+          />,
+          <GridLinkAction
+            key={4}
+            label="Reject"
+            icon={<ClearIcon />}
+            showInMenu
+            onClick={() => {
+              rejectWorker(params.row._id);
+            }}
+          />,
+          false,
+        ].filter((action) => action !== false) as JSX.Element[]
+      ),
+    },
     { field: 'workerCode', width: 170, renderHeader: () => (<b>{'Worker Code'}</b>),
     },
     {
       field: 'firstName',
       width: 130,
+
       renderHeader: () => (<b>First Name</b>),
       valueGetter: (params) => params.row.basicDetails.firstName,
     },
@@ -104,69 +166,15 @@ const ApproveWorkerPage = () => {
       ),
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
-    {
-      field: 'view',
-      width: 130,
-      renderHeader: () => (<b>View</b>),
-      renderCell: (props) => (
-        <Button component={Link} to={`/users/worker/${props.row._id}`} variant="contained">
-          View
-        </Button>
-      ),
+    { field: 'phone', width: 130,
+      renderHeader: () => ( <b>Phone</b>),
+      valueGetter: (params) => params.row.basicDetails.phone,
+
     },
-    {
-      field: 'remark',
-      headerName: 'Remark',
-      width: 130,
-      renderCell: (props) => (
-        <Button
-          variant="contained"
-          color="info"
-          type="submit"
-          onClick={() => {
-            assignRemark(props.row._id);
-          }}
-        >
-          Remark
-        </Button>
-      ),
+    { field: 'division', width: 130,
+      renderHeader: () => ( <b>Division</b>),
+      valueGetter: (params) => params.row.division?.details.name,
     },
-    {
-      field: 'Approve',
-      width: 130,
-      renderHeader: () => (<b>Approve</b>),
-      renderCell: (props) => (
-        <Button
-          variant="contained"
-          color="success"
-          type="submit"
-          onClick={() => {
-            approveWorker(props.row._id);
-          }}
-        >
-          Approve
-        </Button>
-      ),
-    },
-    {
-      field: 'Reject',
-      width: 130,
-      renderHeader: () => (<b>Reject</b>),
-      renderCell: (props) => (
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => {
-            rejectWorker(props.row._id);
-          }}
-        >
-          Reject
-        </Button>
-      ),
-    },
-    { field: 'phone', width: 130, renderHeader: () => ( <b>Phone</b>),
-    },
-    { field: 'division', width: 130, renderHeader: () => ( <b>Division</b>) },
   ];
   return (
     <CommonPageLayout title="New Workers for Approval">
