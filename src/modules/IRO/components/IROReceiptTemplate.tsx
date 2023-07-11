@@ -1,8 +1,8 @@
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import moment from 'moment';
-
 import * as numberToWords from 'number-to-words';
+import { useState, useEffect } from 'react';
 
 Font.register({
   family: 'Oswald',
@@ -100,7 +100,32 @@ const styles = StyleSheet.create({
 });
 
 const IROReceiptTemplate = (props: any) => {
-  console.log(props.RowData, 'props');
+  const [coordinatorImage, setCoordinatorImage] = useState<string | null>(null);
+  console.log(props.RowData.purposeDivision.details.coordinator.sign.downloadURL, 'props');
+  console.log(props.img, 'coordinatorImage');
+
+
+  // useEffect(() => {
+  //   if (props.RowData && props.RowData.purposeDivision.details.coordinator.sign.downloadURL) {
+  //     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  //     const url = props.RowData.purposeDivision.details.coordinator.sign.downloadURL;
+
+
+  //     fetch(url)
+  //       .then((response) => response.blob())
+  //       .then((blob) => {
+  //         const reader = new FileReader();
+  //         reader.onload = () => {
+  //           setCoordinatorImage(reader.result as string);
+  //         };
+  //         reader.readAsDataURL(blob);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error downloading images:', error);
+  //       });
+  //   }
+  // }, [props.RowData]);
+
 
   const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
   let sanctionedAmountWords = '';
@@ -212,8 +237,8 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>E Signature</Text>
           <Text style={{ ...styles.text, marginTop: 1, left: 410 }}>E Signature are protected</Text>
-          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}></View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>{props.RowData?.purposeDivision?.details?.coordinator?.name}</View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}>{props.im}</View>
           <View style={{ ...styles.box5, marginTop: 15, left: 210 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 290 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 410, width: 130 }}></View>
@@ -239,5 +264,4 @@ const IROReceiptTemplate = (props: any) => {
     </Document>
   );
 };
-
 export default IROReceiptTemplate;

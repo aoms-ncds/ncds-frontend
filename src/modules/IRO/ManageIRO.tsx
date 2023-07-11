@@ -21,6 +21,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 
 
 const ManageIRO = () => {
+  const [coordinatorImage, setCoordinatorImage] = useState<string | null>(null);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -120,8 +121,15 @@ const ManageIRO = () => {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
   }, [selectedIRO.billAttachment]);
-
+  // const handleDownload = () => {
+  //   const fileUrl = 'https://drive.google.com/uc?id=1Hil5H609dibNJm5jH20Xb1fWvykNWEnh&export=download';
+  //   fileDownload(fileUrl, 'file.jpg');
+  // };
+  // <button onClick={handleDownload}>Download</button>;
+  <img src="/iet_logo.png" alt="drive image" width='200' height='19'/>;
   const columns: GridColDef<IROrder>[] = [
+
+
     {
       field: '_manage',
       headerName: '',
@@ -168,23 +176,6 @@ const ManageIRO = () => {
                     });
                   });
               },
-              // onClick: () => {
-              //   toggleOpenRemarks(true);
-              //   IROServices.getAllRemarksById(props.row._id)
-              //     .then((res: any) => {
-              //       if (Array.isArray(res.data)) {
-              //         setRemarks(res.data);
-              //       } else {
-              //         console.error('Invalid remarks data:', res.data);
-              //       }
-              //     })
-              //     .catch((error: { message: any }) => {
-              //       enqueueSnackbar({
-              //         variant: 'error',
-              //         message: error.message,
-              //       });
-              //     });
-              // },
             },
             ...(hasPermissions(['MANAGE_IRO']) && props.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
@@ -192,9 +183,23 @@ const ManageIRO = () => {
                 text: 'Print IRO',
                 icon: PrintIcon,
                 component: PDFDownloadLink,
-                document: <IROReceiptTemplate RowData={props.row} />,
+                document: <IROReceiptTemplate RowData={props.row}/>,
                 fileName: 'IROReceipt.pdf',
+                onClick: () => {
+                  setTimeout(()=>{
+                    const url = props?.row?.purposeDivision?.details?.coordinator?.sign?.downloadURL;
+                    if (url) {
+                      const link = document.createElement('a');
+                      link.href =url;
+                      link.download = 'E-Sign'; // You can specify a custom file name here
+                      link.click();
+                    }
+                  }, 2000);
+                },
+
               },
+
+
               {
                 id: 'Reconciliation',
                 text: 'Reconciliation',
@@ -306,6 +311,7 @@ const ManageIRO = () => {
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
     },
   ];
+
   return (
     <CommonPageLayout title="Internal Release Order">
       <PermissionChecks
@@ -444,3 +450,5 @@ const ManageIRO = () => {
 };
 
 export default ManageIRO;
+
+
