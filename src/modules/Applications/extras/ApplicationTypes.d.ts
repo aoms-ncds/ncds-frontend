@@ -4,6 +4,7 @@ declare global {
   name: string;
   reason: string;
   status: string;
+  division?:Division;
   createdBy?:User;
   attachment:FileObject[];
   }
