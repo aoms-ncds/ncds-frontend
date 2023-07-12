@@ -73,7 +73,7 @@ export default {
       updatedAt: moment(data.updatedAt),
     })),
 
-  getClosed: (conditions?: { status?: number }) => getStandardResponse<IROrder[]>(axios.get('/iro/close', { params: conditions, headers: { ...getAuthHeader() } })),
+
   getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,

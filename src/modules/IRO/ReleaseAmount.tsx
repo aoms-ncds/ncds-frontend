@@ -12,6 +12,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import moment from 'moment';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -197,7 +198,7 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   fullWidth
                   variant="outlined"
                   disabled={props.action=='view'}
-
+                  required
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -207,17 +208,19 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   format="DD/MM/YYYY"
                   sx={{ width: '100%' }}
                   disabled={props.action=='view'}
+                  slotProps={{
+                    textField: {
+                      required: true,
+                    },
+                  }}
+                  onChange={(value) =>
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(()=> ({
+                      ...releaseAmount,
+                      transferredDate: value,
+                    }))}
 
-                // onChange={(e) =>
-                // // eslint-disable-next-line @typescript-eslint/naming-convention
-                //   setIRO((IRO: any) => ({
-                //     ...IRO,
-                // releaseAmount:{
-                // ...releaseAmount,
-                //     transferredDate: e.target.value,
-                // }
-                //   }))
-                // }
+
                 />
               </Grid>
               {/* <Grid item xs={12} > */}

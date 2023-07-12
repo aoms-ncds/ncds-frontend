@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card } from '@mui/material';
-import { Preview as PreviewIcon } from '@mui/icons-material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Preview as PreviewIcon, Edit as EditIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
+import SendIcon from '@mui/icons-material/Send';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
+import { enqueueSnackbar } from 'notistack';
+import MessageItem from '../../components/MessageItem';
 
 const ClosedIRO = () => {
+  const [openRemarks, toggleOpenRemarks] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>();
-  useEffect(() => {
-    IROServices.getClosed()
-      .then((res) => {
-        console.log(res, 'CLOSED');
-        setIROrder(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, []);
+  const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [remark, setRemark] = useState<CreatableRemark>({
+    remark: '',
+    transactionId: '',
+  });
+
   const columns: GridColDef<IROrder>[]= [
     {
       field: '_manage',
@@ -40,11 +42,22 @@ const ClosedIRO = () => {
             //   to: '/iro/release_amount/' + props.row._id,
             //   icon: PreviewIcon,
             // },
-            // {
-            //   id: 'remarks',
-            //   text: 'Remarks',
-            //   icon: EditIcon,
-            // },
+            {
+              id: 'remarks',
+              text: 'Remarks',
+              icon: EditIcon,
+              onClick: () => {
+                toggleOpenRemarks(true);
+                setSelectedIROId(props.row._id);
+                IROServices.getAllRemarksById(props.row._id)
+                  .then((res) => setRemarks(res.data??[]))
+                  .catch((error) => {
+                    enqueueSnackbar({
+                      variant: 'error',
+                      message: error.message,
+                    });
+                  });
+              } },
             {
               id: 'print',
               text: 'Print IRO',
@@ -76,19 +89,56 @@ const ClosedIRO = () => {
         />
       ),
     },
-    { field: '_id', renderHeader: () => (<b>SI No</b>), width: 70 },
-    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 70 },
-    { field: 'IROdate', renderHeader: () => (<b>IRO Date</b>), width: 130 },
-    { field: 'divisionName', renderHeader: () => (<b>Division Name</b>), width: 150 },
-    { field: 'subDivisionName', renderHeader: () => (<b>Sub Division Name</b>), width: 170 },
-    { field: 'mainCategory', renderHeader: () => (<b>Main Category</b>), width: 150 },
-    { field: 'requestAmount', renderHeader: () => (<b>Requested Amount</b>), width: 150 },
-    { field: 'updatedAt', renderHeader: () => (<b>Last Updated</b>), width: 150 },
-    { field: 'sanction', renderHeader: () => (<b>Special Sanction</b>), width: 130 },
+    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100 },
+    {
+      field: 'IRODate',
+      renderHeader: () => (<b>IRO Date</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130 },
+    {
+      field: 'divisionName',
+      renderHeader: () => (<b>Division Name</b>),
+      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      width: 150,
+    },
+    {
+      field: 'subDivisions',
+      renderHeader: () => (<b>Sub Division Name</b>),
+      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
+      width: 170 },
+    { field: 'mainCategory', align: 'center', headerAlign: 'center', renderHeader: () => (<b>Main Category</b>), width: 245 },
+    {
+      field: 'requestAmount',
+      renderHeader: () => (<b>Requested Amount</b>),
+      width: 150,
+      renderCell: (params: GridCellParams) => {
+        const frRequest = params.row as IROrder;
+        const particularAmount = frRequest.particulars?.reduce(
+          (total, particular) => total + Number(particular.requestedAmount),
+          0,
+        );
+        return <p>{particularAmount}</p>;
+      } },
+    { field: 'updatedAt',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 150,
+      renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ) },
     { field: 'sanctionedAmount', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
     { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), width: 150 },
-    { field: 'sourceBank', renderHeader: () => (<b>Source Bank</b>), width: 130 },
+    { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), width: 130 },
   ];
+  useEffect(() => {
+    IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })
+      .then((res) => {
+        console.log(res, 'CLOSED');
+        setIROrder(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   return (
     <CommonPageLayout title="Internal Release Order">
       <br />
@@ -98,6 +148,69 @@ const ClosedIRO = () => {
           <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
         </Card>
       </Grid>
+      <Dialog open={openRemarks} fullWidth maxWidth="md">
+        <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0 ? remarks.map((remark) => (
+            <MessageItem key={remark._id} sender={remark.createdBy?.basicDetails?.firstName + ' ' + remark.createdBy?.basicDetails?.lastName}
+              time={remark.updatedAt} body={remark.remark} isSent={true} />
+          )):'No Data Found '}
+        </DialogContent>
+        <DialogActions>
+          <TextField
+            id="remarkTextfield"
+            placeholder="Remarks"
+            multiline
+            value={remark?.remark}
+            onChange={(e) =>
+              setRemark((remark) => ({
+                ...remark,
+                IRO: selectedIROId??'',
+                remark: e.target.value,
+              }))
+            }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      remark.remark ?
+                        IROServices.addRemarks(remark)
+                            .then((res) => {
+                              setRemarks((remarks) => [...remarks, res.data]);
+                              setRemark((remark) => ({
+                                ...remark,
+                                remark: '',
+                              }));
+                            })
+                            .catch((error) => {
+                              enqueueSnackbar({
+                                variant: 'error',
+                                message: error.message,
+                              });
+                            }) :
+                        '';
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              toggleOpenRemarks(false);
+              setSelectedIROId(null);
+            }}
+            // sx={{ ml: 'auto' }}
+          >
+            close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };
