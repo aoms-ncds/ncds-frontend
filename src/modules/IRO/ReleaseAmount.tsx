@@ -19,12 +19,12 @@ import moment from 'moment';
 
 interface ReleaseDialogProps {
   action: 'add' | 'view';
-  data:IROrder[];
-  open:boolean;
+  data: IROrder[];
+  open: boolean;
   onClose: () => void;
 }
 
-const ReleaseAmount = (props:ReleaseDialogProps) => {
+const ReleaseAmount = (props: ReleaseDialogProps) => {
   const navigate = useNavigate();
   const [iroStatus, setIroStatus] = useState(false);
   const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
@@ -47,7 +47,7 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
 
-  const saveReleaseAmount = (e: { preventDefault: () => void }) => {
+  const saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     // console.log(IRO, 'IRO');
     e.preventDefault();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
@@ -58,41 +58,31 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
         message: res.message,
         variant: 'success',
       });
-      props.onClose;
+      props.onClose();
     });
     setTimeout(() => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
   useEffect(() => {
-    console.log( props.data.reduce(
-      (tot, iro)=>tot+ iro.particulars?.reduce(
-        (total, particular) => total + Number(particular.requestedAmount),
-        0,
-      ),
-      0,
-    ));
+    console.log(props.data.reduce((tot, iro) => tot + iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0), 0));
     console.log(props.data);
-    if (props.action=='add') {
+    if (props.action == 'add') {
       console.log('add');
-      setReleaseAmount(()=> ({
+      setReleaseAmount(() => ({
         ...releaseAmount,
-        releaseAmount: props.data.reduce(
-          (tot, iro)=>tot+ iro.sanctionedAmount,
-          0,
-        ),
+        releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
         IRO: props.data,
-        division: props.data[0]?.division?._id??'',
+        division: props.data[0]?.division?._id ?? '',
       }));
     } else {
-      if (props.data[0]?.status>=IROLifeCycleStates.AMOUNT_RELEASED) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id)
-      .then((res)=>{
-        setReleaseAmount(res.data);
-      });
+      if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED) {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id).then((res) => {
+          setReleaseAmount(res.data);
+        });
       }
     }
-    setIroStatus(props.data.every((iro)=>iro.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE));
+    setIroStatus(props.data.every((iro) => iro.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE));
     // res.data.status==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE);
     // },
     // if (res.data.releaseAmount) {
@@ -101,44 +91,56 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
     // );
   }, [props.data]);
 
-
   const columns: GridColDef<IROrder>[] = [
-
     { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
-    { field: 'IRODate', headerName: 'IRO Date', width: 130,
+    {
+      field: 'IRODate',
+      headerName: 'IRO Date',
+      width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'divisionName',
-      renderHeader: () => (<b>Division Name</b>),
-      renderCell: (props) => (<p> {props.row.division?.details?.name}</p>),
+      renderHeader: () => <b>Division Name</b>,
+      renderCell: (props) => <p> {props.row.division?.details?.name}</p>,
       width: 130,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'subDivisionName',
-      renderHeader: () => (<b>Sub Division Name</b>),
-      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
-      ),
+      renderHeader: () => <b>Sub Division Name</b>,
+      renderCell: (props) => <p> {props.row.purposeSubdivision?.name}</p>,
       width: 160,
       align: 'center',
       headerAlign: 'center',
     },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 130, align: 'center', headerAlign: 'center',
+    {
+      field: 'mainCategory',
+      headerName: 'Main Category',
+      width: 150,
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'requestAmount',
+      headerName: 'Requested Amount',
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as IROrder;
-        const particularAmount = frRequest.particulars?.reduce(
-          (total, particular) => total + Number(particular.requestedAmount),
-          0,
-        );
+        const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
         return <p>{particularAmount}</p>;
-      } },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
+      },
+    },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'status',
     //   renderHeader: () => (<b>Status</b>),
@@ -157,26 +159,23 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
     //       <CardContent>
     <>
       <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
-
         <form onSubmit={saveReleaseAmount}>
           <DialogContent>
-
             <Grid container spacing={3}>
-
               <Grid item xs={12}>
-                <DataGrid rows={releaseAmount.IRO?? []} hideFooter columns={columns} getRowId={(row) => row._id} />
+                <DataGrid rows={releaseAmount.IRO ?? []} hideFooter columns={columns} getRowId={(row) => row._id} />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   label="Release Amount"
-                  type='number'
-                  value={releaseAmount?.releaseAmount!=0?releaseAmount?.releaseAmount:''}
+                  type="number"
+                  value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount : ''}
                   onChange={(e) =>
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(()=>({
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
                       releaseAmount: Number(e.target.value),
-                    } ))
+                    }))
                   }
                   variant="outlined"
                   fullWidth
@@ -187,17 +186,18 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Amount Transferred"
-                  type='number'
-                  value={releaseAmount?.transferredAmount!=0?releaseAmount?.transferredAmount:''}
+                  type="number"
+                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
                   onChange={(e) =>
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(()=> ({
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
-                    } ))}
+                    }))
+                  }
                   fullWidth
                   variant="outlined"
-                  disabled={props.action=='view'}
+                  disabled={props.action == 'view'}
                   required
                 />
               </Grid>
@@ -207,20 +207,19 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   value={releaseAmount?.transferredDate}
                   format="DD/MM/YYYY"
                   sx={{ width: '100%' }}
-                  disabled={props.action=='view'}
+                  disabled={props.action == 'view'}
                   slotProps={{
                     textField: {
                       required: true,
                     },
                   }}
                   onChange={(value) =>
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(()=> ({
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredDate: value,
-                    }))}
-
-
+                    }))
+                  }
                 />
               </Grid>
               {/* <Grid item xs={12} > */}
@@ -240,10 +239,9 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   options={{ title: 'Amount Transferred (Bank) Details' }}
                 /> */}
 
-
               <Grid item xs={12}>
                 <Typography variant="h4" component="h4">
-                    Amount Transferred (Bank) Details
+                  Amount Transferred (Bank) Details
                 </Typography>
               </Grid>
               <br />
@@ -253,17 +251,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="Bank Name"
                   value={releaseAmount?.transferredBank?.bankName}
                   onChange={(e) =>
-                    setReleaseAmount(()=>(
-                      {
-                        ...releaseAmount,
-                        transferredBank: {
-                          ...releaseAmount.transferredBank,
-                          bankName: e.target.value,
-                        } } ))}
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      transferredBank: {
+                        ...releaseAmount.transferredBank,
+                        bankName: e.target.value,
+                      },
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action=='view'}
-
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -271,17 +269,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="Branch Name"
                   value={releaseAmount?.transferredBank?.branchName}
                   onChange={(e) =>
-                    setReleaseAmount(()=>( {
-
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredBank: {
                         ...releaseAmount.transferredBank,
                         branchName: e.target.value,
-                      } } ))}
+                      },
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action=='view'}
-
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -289,16 +287,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="Account Number"
                   value={releaseAmount?.transferredBank?.accountNumber}
                   onChange={(e) =>
-                    setReleaseAmount(()=>( {
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredBank: {
                         ...releaseAmount.transferredBank,
-                        accountNumber: e.target.value },
-                    } ))}
+                        accountNumber: e.target.value,
+                      },
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action=='view'}
-
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -306,18 +305,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="IFSC Code"
                   value={releaseAmount?.transferredBank?.IFSCCode}
                   onChange={(e) =>
-                    setReleaseAmount(()=>(
-                      {
-
-                        ...releaseAmount,
-                        transferredBank: {
-                          ...releaseAmount.transferredBank,
-                          IFSCCode: e.target.value },
-                      } ))}
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      transferredBank: {
+                        ...releaseAmount.transferredBank,
+                        IFSCCode: e.target.value,
+                      },
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action=='view'}
-
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -325,17 +323,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="Beneficiary"
                   value={releaseAmount?.transferredBank?.beneficiary}
                   onChange={(e) =>
-                    setReleaseAmount(()=>(
-                      {
-                        ...releaseAmount,
-                        transferredBank: {
-                          ...releaseAmount.transferredBank,
-                          beneficiary: e.target.value,
-                        },
-                      } ))}
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      transferredBank: {
+                        ...releaseAmount.transferredBank,
+                        beneficiary: e.target.value,
+                      },
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action=='view'}
+                  disabled={props.action == 'view'}
                   InputLabelProps={{
                     shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
                   }}
@@ -347,19 +345,17 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                 <Autocomplete
                   disablePortal
                   id="Payment_method"
-                  value={releaseAmount?.modeOfPayment??null}
+                  value={releaseAmount?.modeOfPayment ?? null}
                   options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card']}
                   onChange={(_e, newValue) =>
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(()=>( {
-
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(() => ({
                       ...releaseAmount,
-                      modeOfPayment: newValue??'',
-                    } ))}
-                  renderInput={(params) => <TextField {...params} label="Mode of payment"
-                    required/>}
-                  disabled={props.action=='view'}
-
+                      modeOfPayment: newValue ?? '',
+                    }))
+                  }
+                  renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -367,61 +363,59 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
                   label="Transaction No:"
                   value={releaseAmount?.transactionNumber}
                   onChange={(e) =>
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(()=>(
-                      {
-
-                        ...releaseAmount,
-                        transactionNumber: e.target.value,
-                      } ))}
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    setReleaseAmount(() => ({
+                      ...releaseAmount,
+                      transactionNumber: e.target.value,
+                    }))
+                  }
                   variant="outlined"
                   fullWidth
                   required
-                  disabled={props.action=='view'}
-
+                  disabled={props.action == 'view'}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
-                          Attachments
+                  Attachments
                 </Button>
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-
-            <Button variant="outlined" onClick={()=>{
-              setReleaseAmount({
-                _id: '',
-                modeOfPayment: '',
-                releaseAmount: 0,
-                transactionNumber: '',
-                transferredAmount: 0,
-                transferredDate: null,
-                transferredBank: {
-                  bankName: '',
-                  branchName: '',
-                  accountNumber: '',
-                  IFSCCode: '',
-                },
-                attachment: [],
-                division: '',
-              });
-              props.onClose();
-            }
-            }>
-            Close
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setReleaseAmount({
+                  _id: '',
+                  modeOfPayment: '',
+                  releaseAmount: 0,
+                  transactionNumber: '',
+                  transferredAmount: 0,
+                  transferredDate: null,
+                  transferredBank: {
+                    bankName: '',
+                    branchName: '',
+                    accountNumber: '',
+                    IFSCCode: '',
+                  },
+                  attachment: [],
+                  division: '',
+                });
+                props.onClose();
+              }}
+            >
+              Close
             </Button>
-            {hasPermissions(['MANAGE_IRO'])&& iroStatus?(<>
-              <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit" >
-                Release Amount
-              </Button>
-              <br />
-            </>
-            ):null}
-
+            {hasPermissions(['MANAGE_IRO']) && iroStatus ? (
+              <>
+                <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
+                  Release Amount
+                </Button>
+                <br />
+              </>
+            ) : null}
           </DialogActions>
-
         </form>
       </Dialog>
       {/* <FileUploader
@@ -476,52 +470,46 @@ const ReleaseAmount = (props:ReleaseDialogProps) => {
       <FileUploader
         title="Attachments"
         action={props.action}
-        types={[
-          'application/pdf',
-          'image/png',
-          'image/jpeg',
-          'image/jpg',
-
-        ]}
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 3,
-          maxTotalSize: 3*MB,
+          maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={releaseAmount.attachment??[]}
+        getFiles={releaseAmount.attachment ?? []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name)
-          .then((res)=>{
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name).then((res) => {
             console.log(res.data._id);
-            setReleaseAmount(()=>( {
+            setReleaseAmount(() => ({
               ...releaseAmount,
-              attachment: [...(releaseAmount.attachment||[]), res.data],
-            } ));
+              attachment: [...(releaseAmount.attachment || []), res.data],
+            }));
             return res;
           });
         }}
         renameFile={(fileId: string, newName: string) => {
-          setReleaseAmount(()=>( {
-
+          setReleaseAmount(() => ({
             ...releaseAmount,
-            attachment: releaseAmount.attachment.map((file) =>
-              file._id === fileId ? { ...file, filename: newName } : file,
-            ),
-          } ));
+            attachment: releaseAmount.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+          }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
-        deleteFile={props.action=='add'?(fileId: string) => {
-          setReleaseAmount(()=>( {
-            ...releaseAmount,
-            attachment: releaseAmount.attachment.filter((file)=>file._id!==fileId),
-          } ));
-          return FileUploaderServices.deleteFile(fileId);
-        }:undefined}
+        deleteFile={
+          props.action == 'add' ?
+            (fileId: string) => {
+              setReleaseAmount(() => ({
+                ...releaseAmount,
+                attachment: releaseAmount.attachment.filter((file) => file._id !== fileId),
+              }));
+              return FileUploaderServices.deleteFile(fileId);
+            } :
+            undefined
+        }
       />
     </>
     // </CommonPageLayout>
