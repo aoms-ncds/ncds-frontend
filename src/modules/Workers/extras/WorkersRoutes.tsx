@@ -4,6 +4,7 @@ import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
 import SendBackWorkersPage from '../SendBackWorkersPage';
+import DeactivatedWorkersPage from '../DeactivatedWorkersPage';
 
 const workersPageRoutes: ModuleRoute = {
   base: '/workers',
@@ -49,6 +50,13 @@ const workersPageRoutes: ModuleRoute = {
       title: 'Send Back Workers',
       path: '/reject',
       element: <SendBackWorkersPage/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_WORKER'],
+    },
+    {
+      title: 'Deactivated Workers',
+      path: '/deactivated',
+      element: <DeactivatedWorkersPage/>,
       private: true,
       requiredAccessRights: ['MANAGE_WORKER'],
     },

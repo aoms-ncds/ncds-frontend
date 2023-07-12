@@ -13,7 +13,7 @@ import PermissionChecks from '../User/components/PermissionChecks';
 import SpousesServices from './extras/SpousesServices';
 import ChildrenServices from './extras/ChildrenServices';
 
-const ManageWorkerPage = () => {
+const DeactivatedWorkersPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
@@ -27,7 +27,7 @@ const ManageWorkerPage = () => {
 
   useEffect(() => {
     if (currentTab == 0) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      WorkersServices.getAll({ status: UserLifeCycleStates.INACTIVE })
         .then((res) => {
           setUsers(res.data);
         })
@@ -35,7 +35,7 @@ const ManageWorkerPage = () => {
           console.log(res);
         });
     } else if (currentTab == 1) {
-      SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      SpousesServices.getAll({ status: UserLifeCycleStates.INACTIVE })
         .then((res) => {
           setSpouseList(res.data);
           console.log(res);
@@ -44,7 +44,7 @@ const ManageWorkerPage = () => {
             console.log(res);
           });
     } else if (currentTab == 2) {
-      ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      ChildrenServices.getAll({ status: UserLifeCycleStates.INACTIVE })
         .then((res) => {
           console.log(res);
           setChildList(res.data);
@@ -55,7 +55,7 @@ const ManageWorkerPage = () => {
     }
   }, [currentTab]);
   return (
-    <CommonPageLayout title="Manage Workers">
+    <CommonPageLayout title="Deactivated Workers">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <br />
@@ -71,22 +71,6 @@ const ManageWorkerPage = () => {
               <Tab label="Children" {...a11yProps(2)} />
               {/* <Tab label="Files" {...a11yProps(4)} /> */}
             </Tabs>
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <PermissionChecks
-              permissions={['WRITE_WORKERS']}
-              granted={currentTab === 0 && (
-                <Button
-                  variant="contained"
-                  sx={{ float: 'right', mt: 2, mr: 2 }}
-                  startIcon={<AddIcon />}
-                  component={Link}
-                  to={'/workers/add'}
-                >
-                Add New
-                </Button>
-              )||null}
-            />
           </Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>
@@ -123,4 +107,4 @@ const ManageWorkerPage = () => {
   );
 };
 
-export default ManageWorkerPage;
+export default DeactivatedWorkersPage;

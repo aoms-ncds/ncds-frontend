@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Grid } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -134,16 +134,7 @@ const Designation = () => {
 
   return (
     <CommonPageLayout title="Designation">
-      <Button
-        variant="contained"
-        sx={{ float: 'right', marginBottom: 3 }}
-        startIcon={<AddIcon />}
-        onClick={() => {
-          setDialogAction('add');
-        }}
-      >
-        Add new
-      </Button>
+
 
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
@@ -235,6 +226,21 @@ const Designation = () => {
       </Dialog>
 
       <Card style={{ height: '80vh', width: '100%' }}>
+        <Grid container spacing={2} >
+          <Grid item xs={12} sx={{ px: 2 }}>
+            <br />
+            <Button
+              variant="contained"
+              sx={{ float: 'right', marginBottom: 3 }}
+              startIcon={<AddIcon />}
+              onClick={() => {
+                setDialogAction('add');
+              }}
+            >
+        Add new
+            </Button>
+          </Grid>
+        </Grid>
         <DataGrid rows={Designation ?? []} columns={columns} getRowId={(row) => row._id} loading={Designation === null} />
       </Card>
     </CommonPageLayout>

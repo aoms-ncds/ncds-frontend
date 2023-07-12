@@ -105,7 +105,14 @@ const SpouseForm = (
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField label="Age" value={props.value.dateOfBirth?.fromNow()} variant={props.options?.textField.variant} fullWidth disabled />
+        <TextField
+          label="Age"
+          value={props.value.dateOfBirth?.fromNow()}
+          variant={props.options?.textField.variant}
+          InputLabelProps={{
+            shrink: Boolean(props.value.dateOfBirth?.fromNow()),
+          }}
+          fullWidth disabled />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>

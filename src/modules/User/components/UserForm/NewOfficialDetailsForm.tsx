@@ -328,13 +328,16 @@ const NewOfficialDetailsForm = (
         <TextField
           label="Churches Planted"
           type={'number'}
-          value={props.value.noOfChurches}
+          value={props.value.noOfChurches == 0?'':props.value.noOfChurches}
           onChange={(e) =>
             props.onChange({
               ...props.value,
               noOfChurches: Number(e.target.value),
             })
           }
+          InputLabelProps={{
+            shrink: Boolean(props.value?.noOfChurches),
+          }}
           variant={props.options?.textField.variant}
           fullWidth
           required

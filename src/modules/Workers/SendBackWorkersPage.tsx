@@ -21,8 +21,8 @@ const SendBackWorkersPage = () => {
   };
 
   const [users, setUsers] = useState<IWorker[]>([]);
-  const [spouseList, setSpouseList] = useState<Spouse[]>();
-  const [childList, setChildList] = useState<Child[]>();
+  const [spouseList, setSpouseList] = useState<Spouse[]>([]);
+  const [childList, setChildList] = useState<Child[]>([]);
 
 
   useEffect(() => {
@@ -100,10 +100,25 @@ const SendBackWorkersPage = () => {
           />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          <SpouseListPage data={spouseList??[]}/>
+          <SpouseListPage
+            value={spouseList}
+            action={'view'}
+            onChange={(newUsers) => {
+              setSpouseList(newUsers);
+            }}
+            options={{ status: 'reject' }}
+
+          />
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
-          <ChildListPage data={childList??[]}/>
+          <ChildListPage
+            value={childList}
+            onChange={(newUsers) => {
+              setChildList(newUsers);
+            }}
+            action={'view'}
+            options={{ status: 'reject' }}
+          />
         </TabPanel>
 
       </Card>

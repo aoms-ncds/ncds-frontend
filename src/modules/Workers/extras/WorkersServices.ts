@@ -139,4 +139,11 @@ export default {
   reject: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/reject`, null, { headers: { ...getAuthHeader() } })),
   activate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
   deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
+
+  deactivatespouse: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
+  activatespouse: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
+
+  deactivatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
+  activatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
+
 };

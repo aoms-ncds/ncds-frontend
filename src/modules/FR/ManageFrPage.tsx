@@ -279,26 +279,38 @@ const ManageFrPage = () => {
         granted={(
           <>
             <Grid item xs={12} lg={6}>
-              <PermissionChecks
-                permissions={['WRITE_FR']}
-                granted={(
-                  <Button
-                    variant="contained"
-                    sx={{ float: 'right' }}
-                    startIcon={<AddIcon />}
-                    component={Link}
-                    to="/fr/apply"
-                    // onClick={() => {
-                    // }}
-                  >
-        Add new
-                  </Button>
-                )}
-              />
+
               <br />
               <br />
               <Grid item xs={12} md={12}>
                 <Card style={{ height: '80vh', width: '100%' }}>
+                  <Grid container spacing={2} >
+
+                    <Grid item xs={12} sx={{ px: 2 }}>
+                      <br />
+
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={(
+                          <Button
+                            variant="contained"
+                            sx={{ float: 'right' }}
+                            startIcon={<AddIcon />}
+                            component={Link}
+                            to="/fr/apply"
+                            // onClick={() => {
+                            // }}
+                          >
+                     Add new
+                          </Button>
+                        )}
+                      />
+                      <br />
+                      <br />
+
+
+                    </Grid>
+                  </Grid>
                   <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
                 </Card>
               </Grid>

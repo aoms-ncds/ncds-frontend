@@ -74,10 +74,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     remark: '',
     transactionId: '',
   });
+  const [submit, setSubmit]= useState(0);
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
   };
+
+  useEffect(()=>{
+    console.log({ submit });
+  }, [submit]);
 
   useEffect(() => {
     if (props.value.purpose === 'Coordinator') {
@@ -92,15 +97,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       WorkersServices.getAll()
       .then((res) => {
         setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if (props.value.purpose === 'Division') {
-      DivisionsServices.getDivisions()
-      .then((res) => {
-        console.log(res.data);
-        setDivisions(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -218,8 +214,17 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 });
                 return;
               }
+              // const SubmitStatus = null;
+              // if (submit == 1) {
+              //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_ACCOUNTS;
+              // } else if (submit == 2) {
+              //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
+              // }
               if (props.onSubmit) {
-                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS }; // Create a new object with updated status
+                const updatedValue = { ...props.value,
+                  status: submit == 1?FRLifeCycleStates.WAITING_FOR_ACCOUNTS:
+                    submit == 2?FRLifeCycleStates.WAITING_FOR_PRESIDENT:undefined,
+                }; // Create a new object with updated status
                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
               navigate('/fr/');
@@ -302,25 +307,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.value.purpose === 'Division' ? (
-                <Grid item xs={12} md={6}>
-                  <Autocomplete
-                    value={props.value.division}
-                    options={divisions ?? []}
-                    getOptionLabel={(division) => division.details.name}
-                    onChange={(e, selectedDivision) => {
-                      if (selectedDivision && props.action !== 'view') {
-                        props.onChange({
-                          ...props.value,
-                          division: selectedDivision,
-                        });
-                      }
-                    }}
-                    renderInput={(params) => <TextField {...params} label="Choose Division" required />}
-                    fullWidth
-                  />
-                </Grid>
-              ) : null}
+
               {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
@@ -377,7 +364,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       setSelectedMainCategory(selectedMainCategory);
                     }
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
+                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required/>}
                   fullWidth
                 />
               </Grid>
@@ -544,20 +531,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           <Button
                             variant="contained"
                             color="warning"
+                            type="submit"
                             // disabled={particulars.length==0}
                             onClick={() => {
-                              const processingSnack = enqueueSnackbar({ message: 'Submitting FR to president', variant: 'info' });
-                              if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_PRESIDENT }; // Create a new object with updated status
-                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                              }
-
-                              setTimeout(() => {
-                                closeSnackbar(processingSnack);
-                                const processedSnack = enqueueSnackbar({ message: 'Submitted FR to president!', variant: 'success' });
-                                setTimeout(() => closeSnackbar(processedSnack), 500);
-                              }, 500);
-                              navigate('/fr/');
+                              setSubmit(2);
                             }}
                           >
                       Submit to President
@@ -574,8 +551,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         variant="contained"
                         color="info"
                         type='submit'
+                        onClick={() => setSubmit(1)}
                         // disabled={particulars.length==0}
-
                       >
                     Submit{' '}
                       </Button>
@@ -783,7 +760,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-
             if (remark.remark) {
               FRServices.addRemarks(remark)
         .then((res) => {

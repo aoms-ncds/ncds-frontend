@@ -46,16 +46,16 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#0a1172" />
+          <FRCountCard targetRoute='#' count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#0a1172" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#46458C'} />
+          <FRCountCard targetRoute='#' count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#46458C'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={reconciliationCount?.toString()} secondaryText={'Reconcilation'} color={'#116A7B'} />
+          <FRCountCard targetRoute='#' count={reconciliationCount?.toString()} secondaryText={'Reconcilation'} color={'#116A7B'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#F24C3D'} />
+          <FRCountCard targetRoute='#' count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#F24C3D'} />
         </Grid>
       </Grid>
       <br />
