@@ -20,8 +20,8 @@ const applicationRoutes: ModuleRoute = {
     },
     {
       title: 'Add Request',
-      path: '/list',
-      element: <ApplicationsListingPage />,
+      path: '/manage',
+      element: <ApplicationsListingPage action={'manage'} />,
       private: true,
       requiredAccessRights: ['READ_APPLICATION'],
     },
@@ -39,13 +39,20 @@ const applicationRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['WRITE_APPLICATION'],
     },
-    // {
-    //   title: 'Add New Application',
-    //   path: '/:applicationID/edit',
-    //   element: <AddNewApplication />,
-    //   private: true,
-    //   requiredAccessRights: ['READ_ACCESS'],
-    // },
+    {
+      title: 'Approve Request',
+      path: '/hr_approve',
+      element: <ApplicationsListingPage action={'hr'} />,
+      private: true,
+      requiredAccessRights: ['MANAGE_APPLICATION'],
+    },
+    {
+      title: 'Approve Request',
+      path: '/president_approve',
+      element: <ApplicationsListingPage action={'president'} />,
+      private: true,
+      requiredAccessRights: ['PRESIDENT_ACCESS'],
+    },
 
   ],
 };
