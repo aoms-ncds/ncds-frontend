@@ -30,9 +30,9 @@ export default {
   /**
    * Deletes a worker.
    * @param {string} workerId - The ID of the worker to be deleted.
-   * @return {Promise<StandardResponse<number>>} A promise that resolves to the response containing the result of the deletion.
+   * @return {Promise<StandardResponse<void>>} A promise that resolves to the response containing the result of the deletion.
    */
-  delete: (workerId: string) => getStandardResponse<number>(axios.delete('/workers/' + workerId)),
+  delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }) ),
 
   /**
    * Retrieves all workers based on optional conditions.

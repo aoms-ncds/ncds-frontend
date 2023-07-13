@@ -243,6 +243,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   }
                   format="DD/MM/YYYY"
                   slotProps={{ textField: { fullWidth: true } }}
+                  disabled
                 />
               </Grid>
               <Grid item xs={12} md={6}>

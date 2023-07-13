@@ -19,6 +19,7 @@ import moment from 'moment';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import ReleaseAmount from './ReleaseAmount';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
 const ManageIRO = (props:{action:'manage'|'release'}) => {
@@ -253,7 +254,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
             {
               id: 'remarks',
               text: 'Remarks',
-              icon: EditIcon,
+              icon: EditNoteIcon,
 
               onClick: () => {
                 toggleOpenRemarks(true);
