@@ -68,6 +68,8 @@ const NotificationPage = () => {
 
     {
       field: 'createdAt',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Created At</b>),
       minWidth: 180,
       type: 'date',

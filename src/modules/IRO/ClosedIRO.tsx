@@ -29,6 +29,8 @@ const ClosedIRO = () => {
       renderHeader: () => (<b>Action</b>),
       minWidth: 50,
       type: 'string',
+      align: 'center',
+      headerAlign: 'center',
       renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
@@ -90,26 +92,35 @@ const ClosedIRO = () => {
         />
       ),
     },
-    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100 },
+    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100, align: 'center',
+      headerAlign: 'center' },
     {
       field: 'IRODate',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>IRO Date</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130 },
     {
       field: 'divisionName',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Division Name</b>),
       renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
       width: 150,
     },
     {
       field: 'subDivisions',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Sub Division Name</b>),
       renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
       width: 170 },
     { field: 'mainCategory', align: 'center', headerAlign: 'center', renderHeader: () => (<b>Main Category</b>), width: 245 },
     {
       field: 'requestAmount',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
       renderCell: (params: GridCellParams) => {
@@ -121,14 +132,19 @@ const ClosedIRO = () => {
         return <p>{particularAmount}</p>;
       } },
     { field: 'updatedAt',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Last Updated</b>),
       width: 150,
       renderCell: (props) => (
         <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
       ) },
-    { field: 'sanctionedAmount', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
-    { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), width: 150 },
-    { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), width: 130 },
+    { field: 'sanctionedAmount', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
+    { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center',
+      headerAlign: 'center', width: 150 },
+    { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
+      headerAlign: 'center', width: 130 },
   ];
   useEffect(() => {
     IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })

@@ -309,9 +309,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
-    { field: 'applicationNo', renderHeader: () => (<b>Application No</b>), width: 150 },
-    { field: 'name', renderHeader: () => (<b>Name</b>), width: 150 },
-    { field: 'reason', renderHeader: () => (<b>Reason</b>), width: 150 },
+    { field: 'applicationNo', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150 },
+    { field: 'name', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150 },
+    { field: 'reason', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Reason</b>), width: 150 },
     {
       field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,

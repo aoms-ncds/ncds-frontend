@@ -276,6 +276,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     { field: `${props.options?.kind}Code`,
       headerName: `${props.options?.kind == 'staff'?'Staff':'Worker'} Code`,
       width: 120,
+      headerAlign: 'center',
       renderHeader: () => (
         <b>
           {`${props.options?.kind == 'staff'?'Staff':'Worker'} Code`}
@@ -284,6 +285,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'firstName',
       align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (
         <b>
           {'First Name'}
@@ -295,6 +297,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'lastName',
       align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (
         <b>
           {'Last Name'}
@@ -303,64 +306,29 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
-      field: 'martialStatus',
+      field: 'division',
       align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => (
+        <b>
+          {'Division'}
+        </b>
+      ),
+      valueGetter: (params) => params.row.division?.details.name,
+    },
+    {
+      field: 'sub_division',
       width: 130,
-      renderHeader: () => (
-        <b>
-          {'Martial Status'}
-        </b>
-      ),
-      valueGetter: (params) => params.row.basicDetails.martialStatus,
-    },
-    {
-      field: 'dob',
+      align: 'center',
       headerAlign: 'center',
-      align: 'center',
       renderHeader: () => (
         <b>
-          {'DOB'}
+          {'Sub-Division'}
         </b>
       ),
-      valueGetter: (params) => params.row.basicDetails.dateOfBirth?.format('DD/MM/YYYY'),
+      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails.divisionHistory.length-1].subDivision?.name,
     },
-    {
-      field: 'gender',
-      width: 70,
-      align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Gender'}
-        </b>
-      ),
-      valueGetter: (params) => params.row.basicDetails.gender,
-    },
-    {
-      field: 'age',
-      width: 80,
-      headerAlign: 'center',
-      align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Age'}
-        </b>
-      ),
-      valueGetter: (params) => moment().diff(params.row.basicDetails.dateOfBirth, 'years'),
-    },
-    {
-      field: 'missionaryOrNonMissionary',
-      width: 100,
-      headerAlign: 'center',
-      align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Field'}
-        </b>
-      ),
-      valueGetter: (params) => params.row.basicDetails.field,
-    },
-
-    // {
+    //
     //   field: 'highestQualification',
     //   headerName: 'Highest Qualification',
     //   width: 160,
@@ -385,9 +353,22 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     //   valueGetter: (params) => params.row.basicDetails.knownLanguages?.join(', '),
     // },
     {
+      field: 'designation',
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => (
+        <b>
+          {'Designation'}
+        </b>
+      ),
+      valueGetter: (params) => params.row.supportDetails.designation?.name,
+    },
+    {
       field: 'phone',
       width: 130,
       align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (
         <b>
           {'Mobile Number'}
@@ -395,17 +376,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       ),
       valueGetter: (params) => params.row.basicDetails.phone,
     },
-    {
-      field: 'alternativeMobileNumber',
-      width: 220,
-      align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Alternative Mobile Number'}
-        </b>
-      ),
-      valueGetter: (params) => params.row.basicDetails.alternativePhone,
-    },
+    // {
+    //   field: 'alternativeMobileNumber',
+    //   width: 220,
+    //   align: 'center',
+    //   renderHeader: () => (
+    //     <b>
+    //       {'Alternative Mobile Number'}
+    //     </b>
+    //   ),
+    //   valueGetter: (params) => params.row.basicDetails.alternativePhone,
+    // },
     {
       field: 'email',
       width: 180,

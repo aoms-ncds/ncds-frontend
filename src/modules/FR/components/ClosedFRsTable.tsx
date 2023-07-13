@@ -40,10 +40,12 @@ const ClosedFRsTable = () => {
         />
       ),
     },
-    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 100 },
-    { field: 'FRdate', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
-      <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
-    ) },
+    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 100, align: 'center',
+      headerAlign: 'center' },
+    { field: 'FRdate', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
+        <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+      ) },
     { field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
       align: 'center', headerAlign: 'center',
@@ -72,9 +74,10 @@ const ClosedFRsTable = () => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'updatedAt', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
-      <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
-    ) },
+    { field: 'updatedAt', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ) },
   ];
 
   useEffect(() => {

@@ -159,15 +159,19 @@ const ApproveWorkerPage = () => {
       ),
     },
     { field: 'workerCode', width: 170, renderHeader: () => (<b>{'Worker Code'}</b>),
-    },
+      align: 'center',
+      headerAlign: 'center' },
     {
       field: 'firstName',
       width: 130,
-
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>First Name</b>),
       valueGetter: (params) => params.row.basicDetails.firstName,
     },
     {
+      align: 'center',
+      headerAlign: 'center',
       field: 'lastName',
       width: 130,
       renderHeader: () => (<b>Last Name</b>
@@ -175,11 +179,15 @@ const ApproveWorkerPage = () => {
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     { field: 'phone', width: 130,
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => ( <b>Phone</b>),
       valueGetter: (params) => params.row.basicDetails.phone,
 
     },
     { field: 'division', width: 130,
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => ( <b>Division</b>),
       valueGetter: (params) => params.row.division?.details.name,
     },
