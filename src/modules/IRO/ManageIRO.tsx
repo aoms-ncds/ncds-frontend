@@ -171,7 +171,8 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
         console.log(res);
       })
     ;
-  }, []);
+  }, [openRelease]);
+
   useEffect(() => {
     console.log(releaseAmountIROs);
   }, [releaseAmountIROs]);
