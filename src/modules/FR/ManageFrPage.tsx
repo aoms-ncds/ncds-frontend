@@ -28,6 +28,9 @@ import FRReceiptTemplate from './components/FRReceiptTemplate';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+
+
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 
@@ -166,7 +169,7 @@ const ManageFrPage = () => {
                     });
                   });
               },
-              icon: EditIcon,
+              icon: EditNoteIcon,
             },
             {
               id: 'print',
@@ -175,13 +178,6 @@ const ManageFrPage = () => {
               document: <FRReceiptTemplate rowData={props.row}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
-            },
-            {
-              id: 'notification',
-              text: 'Send notification',
-              component: Link,
-              to: '/view' + props.row._id,
-              icon: MessageIcon,
             },
 
           ]}

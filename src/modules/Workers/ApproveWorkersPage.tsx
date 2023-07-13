@@ -10,6 +10,7 @@ import SendIcon from '@mui/icons-material/Send';
 import WorkersServices from './extras/WorkersServices';
 import GridLinkAction from '../../components/GridLinkAction';
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
 import { hasPermissions } from '../User/components/PermissionChecks';
@@ -121,15 +122,22 @@ const ApproveWorkerPage = () => {
           />,
           <GridLinkAction
             key={2}
-            label="Remark"
+            label="Edit"
             icon={<EditIcon />}
+            showInMenu
+            to={`/workers/edit/${params.row._id}`}
+          />,
+          <GridLinkAction
+            key={3}
+            label="Remark"
+            icon={<EditNoteIcon />}
             showInMenu
             onClick={() => {
               assignRemark(params.row._id);
             }}
           />,
           <GridLinkAction
-            key={3}
+            key={4}
             label="Approve"
             icon={<DoneIcon />}
             showInMenu
@@ -138,7 +146,7 @@ const ApproveWorkerPage = () => {
             }}
           />,
           <GridLinkAction
-            key={4}
+            key={5}
             label="Reject"
             icon={<ClearIcon />}
             showInMenu

@@ -13,6 +13,8 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import MessageItem from '../../components/MessageItem';
 import { MB } from '../../extras/CommonConfig';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -138,8 +140,8 @@ const ReconciliationIRO = () => {
 
             {
               id: 'remarks',
-              text: 'Remarks',
-              icon: EditIcon,
+              text: 'Remark',
+              icon: EditNoteIcon,
 
               onClick: () => {
                 toggleOpenRemarks(true);

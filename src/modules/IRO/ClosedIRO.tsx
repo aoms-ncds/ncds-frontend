@@ -11,6 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -45,7 +46,7 @@ const ClosedIRO = () => {
             {
               id: 'remarks',
               text: 'Remarks',
-              icon: EditIcon,
+              icon: EditNoteIcon,
               onClick: () => {
                 toggleOpenRemarks(true);
                 setSelectedIROId(props.row._id);

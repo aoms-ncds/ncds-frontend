@@ -11,6 +11,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind;status?:'reject'|'active' }>) => {
@@ -219,7 +220,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           <GridLinkAction
             key={4}
             label="Remarks"
-            icon={<EditIcon />}
+            icon={<EditNoteIcon />}
             showInMenu
             onClick={() => {
               assignRemark(params.row._id);
