@@ -16,6 +16,7 @@ import { MB } from '../../extras/CommonConfig';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import moment from 'moment';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -29,6 +30,51 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     name: '',
     reason: '',
     status: '',
+    division: {
+      details: {
+        name: '',
+        divisionId: '',
+        contactNumber: '',
+        email: '',
+        address: {
+          buildingName: '',
+          street: '',
+          city: '',
+          state: '',
+          country: '',
+          pincode: '',
+        },
+      },
+      subDivisions: [
+        {
+          _id: '',
+          name: '',
+        },
+      ],
+      FCRABankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      localBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     attachment: [],
   });
   const showLinkAction=props.action === 'manage';
@@ -265,6 +311,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
+    },
+    {
+      field: 'division', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
+        <p> {props.row.division?.details.name }</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
