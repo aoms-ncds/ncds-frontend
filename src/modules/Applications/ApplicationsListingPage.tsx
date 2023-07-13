@@ -27,6 +27,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
+    applicationNo: '',
     name: '',
     reason: '',
     status: '',
@@ -125,6 +126,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             variant: 'success',
           });
           setApplicationFormState({
+            applicationNo: '',
             name: '',
             reason: '',
             status: '',
@@ -164,6 +166,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
         setApplications((prevApps) => (!prevApps ? [res.data] : [...prevApps, res.data]));
         setApplicationFormState(() => ({
+          applicationNo: '',
           name: '',
           reason: '',
           status: '',
@@ -306,6 +309,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
+    { field: 'applicationNo', renderHeader: () => (<b>Application No</b>), width: 150 },
     { field: 'name', renderHeader: () => (<b>Name</b>), width: 150 },
     { field: 'reason', renderHeader: () => (<b>Reason</b>), width: 150 },
     {
@@ -315,7 +319,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     {
       field: 'division', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
-        <p> {props.row.division?.details.name }</p>,
+        <p> {props.row.division?.details?.name }</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
