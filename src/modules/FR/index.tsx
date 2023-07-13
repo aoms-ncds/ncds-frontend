@@ -44,16 +44,16 @@ const frDashboard = () => {
 
             <Grid container spacing={3}>
               <Grid item xs={6} md={3} xl={2}>
-                <FRCountCard targetRoute='#' count={appliedFrCount?.toString()} secondaryText="Applied" color="#0a1172" />
+                <FRCountCard targetRoute="/fr/manage" count={appliedFrCount?.toString()} secondaryText="Applied" color="#0a1172" />
               </Grid>
               <Grid item xs={6} md={3} xl={2}>
-                <FRCountCard targetRoute='#' count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#3cb043'} />
+                <FRCountCard targetRoute="/fr/manage" count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#3cb043'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard targetRoute='#' count={waitingForPresidentFrCount?.toString()} secondaryText={'Waiting to President'} color={'#F24C3D'} />
+                <FRCountCard targetRoute="/fr/manage" count={waitingForPresidentFrCount?.toString()} secondaryText={'Waiting to President'} color={'#F24C3D'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard targetRoute='#' count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting to Account'} color={'#FF8551'} />
+                <FRCountCard targetRoute="/fr/manage" count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting to Account'} color={'#FF8551'} />
               </Grid>
             </Grid>
             <br />
