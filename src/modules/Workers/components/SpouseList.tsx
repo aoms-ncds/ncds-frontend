@@ -1,11 +1,12 @@
 import { Card, Grid } from '@mui/material';
-import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
+import { hasPermissions } from '../../User/components/PermissionChecks';
 
 const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'active'}>) => {
   const deactivateSpouse = (id: string) => {
@@ -70,6 +71,7 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
 
 
   const columns: GridColDef<Spouse>[] = [
+    hasPermissions(['MANAGE_WORKER']) &&
     {
       field: 'actions',
       type: 'actions',
@@ -136,7 +138,7 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       field: 'dateOfBirth',
       width: 90,
       headerAlign: 'center',
-      renderCell: (params) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>),
+      renderCell: (params: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b>DOB</b>),
     },
     { field: 'qualification',
@@ -146,7 +148,7 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       renderHeader: () => (<b>Qualification</b>),
     },
     { field: 'spouseOf',
-      renderCell: (props) => <p> {props.row.spouseOf?.basicDetails.firstName+' '+props.row.spouseOf?.basicDetails.lastName}</p>,
+      renderCell: (props: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => <p> {props.row.spouseOf?.basicDetails.firstName+' '+props.row.spouseOf?.basicDetails.lastName}</p>,
       width: 170,
       headerAlign: 'center',
       align: 'center',
@@ -158,7 +160,7 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       align: 'center',
       renderHeader: () => (<b>Spouse</b>),
     },
-  ];
+  ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (
     <>
       <br />

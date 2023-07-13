@@ -1,12 +1,13 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import { Card, Grid } from '@mui/material';
-import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
+import { hasPermissions } from '../../User/components/PermissionChecks';
 
 const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'active'}>) => {
   // const [childList, setChildList] = useState<Child[]>();
@@ -71,6 +72,7 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
 
 
   const columns: GridColDef<Child>[] = [
+    hasPermissions(['MANAGE_WORKER']) &&
     {
       field: 'actions',
       type: 'actions',
@@ -129,25 +131,26 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
       width: 90,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (props) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
       renderHeader: ()=>( <b>DOB</b>),
     },
     { field: 'childSupport',
       width: 110,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (props) => <p> {(props.value as IChildSupport)?.name}</p>,
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {(props.value as IChildSupport)?.name}</p>,
       renderHeader: ()=>( <b>Child Support</b>),
     },
     {
       field: 'childOf',
-      renderCell: (props) => <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
       width: 170,
       headerAlign: 'center',
       align: 'center',
       renderHeader: ()=>( <b>Child Of</b>),
     },
-  ];
+  ].filter((action) => action !== false) as GridColDef<Child>[];
+
   return (
     <>
       <br />

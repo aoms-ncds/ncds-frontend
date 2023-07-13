@@ -34,9 +34,9 @@ const WorkersDashboard = () => {
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#003049" targetRoute="/workers/manage" />
         </Grid>
-        {/* <Grid item xs={12} md={6} xl={3}>
+        <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
-        </Grid> */}
+        </Grid>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#46458C" targetRoute="/workers/reject" />
         </Grid>
