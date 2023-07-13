@@ -16,6 +16,7 @@ import { MB } from '../../extras/CommonConfig';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import moment from 'moment';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -26,9 +27,55 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
+    applicationNo: '',
     name: '',
     reason: '',
     status: '',
+    division: {
+      details: {
+        name: '',
+        divisionId: '',
+        contactNumber: '',
+        email: '',
+        address: {
+          buildingName: '',
+          street: '',
+          city: '',
+          state: '',
+          country: '',
+          pincode: '',
+        },
+      },
+      subDivisions: [
+        {
+          _id: '',
+          name: '',
+        },
+      ],
+      FCRABankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      localBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
     attachment: [],
   });
   const showLinkAction=props.action === 'manage';
@@ -79,6 +126,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             variant: 'success',
           });
           setApplicationFormState({
+            applicationNo: '',
             name: '',
             reason: '',
             status: '',
@@ -118,6 +166,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
         setApplications((prevApps) => (!prevApps ? [res.data] : [...prevApps, res.data]));
         setApplicationFormState(() => ({
+          applicationNo: '',
           name: '',
           reason: '',
           status: '',
@@ -260,11 +309,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
+    { field: 'applicationNo', renderHeader: () => (<b>Application No</b>), width: 150 },
     { field: 'name', renderHeader: () => (<b>Name</b>), width: 150 },
     { field: 'reason', renderHeader: () => (<b>Reason</b>), width: 150 },
     {
       field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
+    },
+    {
+      field: 'division', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
+        <p> {props.row.division?.details?.name }</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {

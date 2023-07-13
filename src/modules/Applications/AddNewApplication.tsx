@@ -9,6 +9,7 @@ const AddNewApplication = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [Request, setRequest] = useState<Application>({
+    applicationNo: '',
     _id: '',
     name: '',
     reason: '',
