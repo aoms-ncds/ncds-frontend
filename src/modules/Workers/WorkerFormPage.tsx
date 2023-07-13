@@ -4,11 +4,14 @@ import { enqueueSnackbar } from 'notistack';
 import UserForm from '../User/components/UserForm';
 import { useParams } from 'react-router-dom';
 import WorkersServices from './extras/WorkersServices';
+import { useAuth } from '../../hooks/Authentication';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 interface WorkerFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
 const WorkerFormPage = (props: WorkerFormPageProps) => {
+  const auth = useAuth();
   const { id } = useParams();
 
   const [worker, setWorker] = useState<CreatableIWorker>({
@@ -67,6 +70,26 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           console.log(res);
         });
     }
+    console.log((auth.user as IWorker).division, 'vbhfvh');
+    const divid=(auth.user as IWorker).division as unknown as string;
+    DivisionsServices.getDivisionById(divid)
+    .then((res)=> {
+      console.log(res.data);
+      setWorker(()=>(
+        { ...worker,
+          officialDetails: {
+            ...worker.officialDetails,
+            divisionHistory: [
+              {
+                division: res.data,
+                subDivision: undefined,
+                dateOfDivisionJoining: null,
+                dateOfDivisionLeaving: null,
+              }],
+          } }),
+      );
+    },
+    );
   }, []);
 
   return (

@@ -44,8 +44,10 @@ const NewOfficialDetailsForm = (
     CreatableOfficialDetails,
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
+      kind?: UserKind | undefined;
     }
-  >,
+  >
+  ,
 ) => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [isDivisionChanged, setIsDivisionChanged] = useState<boolean>(false);
@@ -72,6 +74,7 @@ const NewOfficialDetailsForm = (
     // if (props.action!='add') {
     //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
+    console.log(props.value);
     DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
@@ -174,7 +177,8 @@ const NewOfficialDetailsForm = (
             }
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant} required />
+            <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant}
+              disabled={props.options?.kind=='worker'} required />
           )}
         />
       </Grid>
@@ -325,7 +329,7 @@ const NewOfficialDetailsForm = (
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        <TextField
+        {props.options?.kind==='worker' && <TextField
           label="Churches Planted"
           type={'number'}
           value={props.value.noOfChurches == 0?'':props.value.noOfChurches}
@@ -341,10 +345,10 @@ const NewOfficialDetailsForm = (
           variant={props.options?.textField.variant}
           fullWidth
           required
-        />
+        />}
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        <FormControlLabel
+        {props.options?.kind==='worker' && <FormControlLabel
           label="Self Support"
           control={
             <Checkbox
@@ -356,7 +360,7 @@ const NewOfficialDetailsForm = (
               }
             />
           }
-        />
+        />}
       </Grid>
       <Dialog open={ openDivConfirm} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>

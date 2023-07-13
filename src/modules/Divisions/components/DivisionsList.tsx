@@ -93,10 +93,14 @@ const DivisionsList = () => {
       ),
     },
     { field: 'divisionId',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Division Id</b>),
       width: 110, valueGetter: (props) => props.row.details.divisionId },
     {
       field: 'divisionName',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Division Name</b>),
       width: 120,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,28 +118,38 @@ const DivisionsList = () => {
     },
     {
       field: 'coordinator',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
       renderCell: (props: any) => <p> {props.row.details.coordinator?.firstName}</p>,
       width: 140,
     },
     {
       field: 'coordinatorEmail',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
       renderCell: (props: any) => <p>{props.row.details.coordinator?.email}</p>,
       width: 140 },
     {
       field: 'coordinatorPhone',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
       renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>,
       width: 140 },
 
     {
       field: 'noofWorkers',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
       renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>,
       width: 130 },
     {
       field: 'NoOfSubdivisions',
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
       renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>,
       width: 150 },
