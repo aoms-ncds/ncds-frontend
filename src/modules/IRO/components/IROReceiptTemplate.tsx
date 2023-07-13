@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -100,9 +101,9 @@ const styles = StyleSheet.create({
 });
 
 const IROReceiptTemplate = (props: any) => {
-  const [coordinatorImage, setCoordinatorImage] = useState<string | null>(null);
-  console.log(props.RowData.purposeDivision.details.coordinator.sign.downloadURL, 'props');
-  console.log(props.img, 'coordinatorImage');
+  const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
+  console.log(props);
+  // console.log(props.RowData.purposeDivision.details.coordinator, 'coordinatorImage');
 
 
   // useEffect(() => {
@@ -149,6 +150,7 @@ const IROReceiptTemplate = (props: any) => {
       <Page size="A4">
         <div>
           <Image src="/iet_logo.png" style={styles.image} />
+          {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
         </div>
 

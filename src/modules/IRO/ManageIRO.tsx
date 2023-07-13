@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Avatar } from '@mui/material';
 import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -183,11 +183,12 @@ const ManageIRO = () => {
                 text: 'Print IRO',
                 icon: PrintIcon,
                 component: PDFDownloadLink,
-                document: <IROReceiptTemplate RowData={props.row}/>,
+                document: <IROReceiptTemplate RowData={props.row} URL={props?.row?.purposeDivision?.details?.coordinator?.sign?.downloadURL}/>,
                 fileName: 'IROReceipt.pdf',
                 onClick: () => {
                   setTimeout(()=>{
                     const url = props?.row?.purposeDivision?.details?.coordinator?.sign?.downloadURL;
+                    // setCoordinatorImage(url);
                     if (url) {
                       const link = document.createElement('a');
                       link.href =url;
@@ -314,6 +315,11 @@ const ManageIRO = () => {
 
   return (
     <CommonPageLayout title="Internal Release Order">
+      <Avatar
+        sx={{ height: 50, width: 50 }}
+        src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&&export=download'}`}
+        // alt={`${user?.basicDetails.firstName}`}
+      />
       <PermissionChecks
         permissions={['READ_ACCESS']}
         granted={(

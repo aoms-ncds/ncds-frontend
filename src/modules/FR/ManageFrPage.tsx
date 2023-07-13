@@ -175,6 +175,11 @@ const ManageFrPage = () => {
               document: <FRReceiptTemplate rowData={props.row}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
+              onClick: (()=>{
+                FRServices.imageget().then((res)=>{
+                  console.log(res, 'resP');
+                });
+              }),
             },
             {
               id: 'notification',

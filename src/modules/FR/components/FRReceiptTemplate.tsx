@@ -1,6 +1,8 @@
 import moment from 'moment';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
 import { Page, Text, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
+import axios from 'axios';
+import React from 'react';
 
 Font.register({
   family: 'Oswald',
@@ -91,11 +93,14 @@ const FRReceiptTemplate = (props:any) => {
   const rowData = props.rowData;
   const month=moment(rowData.FRdate);
   const monthName = month.format('MMMM');
+  const [imageData, setImageData] = React.useState('');
+
   console.log(rowData);
   return (
     <Document>
       <Page size="A4">
         <Image src="/iet_logo.png" style={styles.image} />
+        <Image src={imageData}/>
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>ADDRESS</Text>
@@ -162,8 +167,8 @@ const FRReceiptTemplate = (props:any) => {
         </div>
 
         <div style={{ marginTop: 290 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Senior Leader Sign</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>coordinator Leader Sign</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Senior Leader Sign</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text>
         </div>
         <div style={{ marginTop: 10, fontSize: 10 }}>

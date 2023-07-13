@@ -4,39 +4,21 @@ import { AttachFile as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIco
 import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
 import FileUploader from '../../../components/FileUploader/FileUploader';
-import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
+import LocalFileUploaderServices from '../../../components/LocalFileUploader/LocalFileUploader';
 import { useState } from 'react';
 import { MB } from '../../../extras/CommonConfig';
+import LocalFileUploadServices from '../../../components/LocalFileUploader/extras/LocalFileUploadServices';
+import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
-  const [eSign, seteSign] = useState<DivisionDetails>({
-    email: '',
-    contactNumber: '',
-    divisionId: '',
+  const [eSign, seteSign] = useState<CreatableApplication>({
     name: '',
-    coordinator: {
-      name: undefined,
-      sign: undefined,
-    },
-    seniorLeader: {
-      name: undefined,
-      sign: undefined,
-    },
-    juniorLeader: {
-      name: undefined,
-      sign: undefined,
-    },
-    address: {
-      buildingName: '',
-      street: '',
-      city: '',
-      state: '',
-      country: '',
-      pincode: '',
-    },
+    reason: '',
+    status: '',
+    attachment: [],
   });
   // console.log(eSign.attachment, 'eSign');
   return (
@@ -202,7 +184,50 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
 
       <Grid item md={12}>
-        <FileUploader
+
+        <LocalFileUploaderServices
+          title="Attachments"
+          action='add'
+          types={[
+            'application/pdf',
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+          ]}
+          limits={{
+            // types: [],
+            maxItemSize: 1 * MB,
+            maxItemCount: 3,
+            maxTotalSize: 3 * MB,
+          }}
+          // accept={['video/*']}
+          open={showFileUploader}
+          onClose={() => setShowFileUploader(false)}
+          getFiles={eSign.attachment}
+          uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
+            const resp=LocalFileUploadServices.uploadFile(file, onProgress, 'Division/e-sign', file.name)
+              .then((res)=>{
+                console.log(res, 'resPOnse');
+                seteSign(() => ({
+                  ...eSign,
+                  attachment: [...eSign.attachment, res.data],
+                }));
+                return res;
+              });
+            return resp;
+          }}
+          deleteFile={(fileId: string) => {
+            seteSign(() => ({
+              ...eSign,
+              attachment: eSign.attachment.filter((file)=>file._id!==fileId),
+            }));
+            return LocalFileUploadServices.deleteFile(fileId);
+          }}
+        />
+
+
+        {/* ======================================== */}
+        {/* <FileUploader
           title="Attachments"
           action="add"
           types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
@@ -308,46 +333,8 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             return FileUploaderServices.deleteFile(fileId);
           }}
           getFiles={[]}
-        />
-
-        {/* <FileUploader
-          title="Attachments"
-          types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
-          limits={{
-            maxItemSize: 1 * MB,
-            maxItemCount: 3,
-            maxTotalSize: 3 * MB,
-          }}
-          open={viewFileUploader}
-          action="view"
-          onClose={() => setViewFileUploader(false)}
-          getFiles={attachments}
-          uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-            const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division', file.name).then((res) => {
-              console.log(res.data._id);
-              seteSign(() => ({
-                ...eSign,
-                attachment: [...eSign.attachment, res.data],
-              }));
-              return res;
-            });
-            return resp;
-          }}
-          renameFile={(fileId: string, newName: string) => {
-            seteSign(() => ({
-              ...eSign,
-              attachment: eSign.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
-            }));
-            return FileUploaderServices.renameFile(fileId, newName);
-          }}
-          deleteFile={(fileId: string) => {
-            seteSign(() => ({
-              ...eSign,
-              attachment: eSign.attachment.filter((file) => file._id !== fileId),
-            }));
-            return FileUploaderServices.deleteFile(fileId);
-          }}
         /> */}
+
       </Grid>
     </>
   );
