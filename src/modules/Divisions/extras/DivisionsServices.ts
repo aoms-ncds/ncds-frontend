@@ -16,7 +16,7 @@ export default {
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
   getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { divisionId }, headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
-    console.log('Calll');
+    console.log(division, 'dd');
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         axios
@@ -24,9 +24,22 @@ export default {
             ...division,
             division: {
               ...division.details,
-              coordinator: division.details.coordinator?._id,
-              juniorLeader: division.details.juniorLeader?._id,
-              seniorLeader: division.details.seniorLeader?._id,
+              // coordinator: division.details.coordinator?._id,
+              // juniorLeader: division.details.juniorLeader?._id,
+              // juniorLeader: division.details.seniorLeader?._id,
+              coordinator: {
+                name: division?.details?.coordinator?.name,
+                sign: division?.details?.coordinator?.sign,
+              },
+              juniorLeader: {
+                name: division?.details?.juniorLeader?.name,
+                sign: division?.details?.juniorLeader?.sign,
+              },
+              seniorLeader: {
+                name: division?.details?.seniorLeader?.name,
+                sign: division?.details?.seniorLeader?.sign,
+              },
+
             },
             subDivisions: [],
           }, { headers: { ...getAuthHeader() } })
@@ -60,9 +73,22 @@ export default {
             ...division,
             division: {
               ...division.details,
-              coordinator: division.details.coordinator?._id,
-              juniorLeader: division.details.juniorLeader?._id,
-              seniorLeader: division.details.seniorLeader?._id,
+              // coordinator: division.details.coordinator?._id,
+              // juniorLeader: division.details.juniorLeader?._id,
+              // seniorLeader: division.details.seniorLeader?._id,
+              coordinator: {
+                name: division?.details?.coordinator?.name,
+                sign: division?.details?.coordinator?.sign,
+              },
+              juniorLeader: {
+                name: division?.details?.juniorLeader?.name,
+                sign: division?.details?.juniorLeader?.sign,
+              },
+              seniorLeader: {
+                name: division?.details?.seniorLeader?.name,
+                sign: division?.details?.seniorLeader?.sign,
+              },
+
             },
             subDivisions: [],
           })

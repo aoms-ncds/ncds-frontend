@@ -62,6 +62,7 @@ const DivisionDetailsPage = () => {
       divisionId: '',
       contactNumber: '',
       email: '',
+      // attachment: [],
       address: {
         buildingName: '',
         street: '',

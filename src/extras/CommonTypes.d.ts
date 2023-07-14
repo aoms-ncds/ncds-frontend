@@ -34,6 +34,8 @@ declare global {
   }
   type Creatable<T extends MongooseDocument> = Omit<T, keyof MongooseDocument> & Partial<MongooseDocument>;
   interface FileObject extends MongooseDocument {
+    map(arg0: (file: any) => any): FileObject | undefined;
+    filter(arg0: (file: any) => boolean): FileObject | undefined;
     filename: string;
     size: number;
     type: FileObjectType;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Avatar } from '@mui/material';
 import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -23,6 +23,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
 const ManageIRO = (props:{action:'manage'|'release'}) => {
+  const [coordinatorImage, setCoordinatorImage] = useState<string | null>(null);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -151,40 +152,42 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
   const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
-
+  const [fileUploaderAction, setFileUploaderAction] = useState<'add'|'manage'>('add');
 
   useEffect(() => {
     props.action=='release'?
       IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
-      .then((res) => {
-        console.log(res);
-        setIROrder(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      }):
+        .then((res) => {
+          console.log(res);
+          setIROrder(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        }):
       IROServices.getAll()
       .then((res) => {
-        console.log(res);
+        console.log(res, 'res');
         setIROrder(res.data);
       })
       .catch((res) => {
         console.log(res);
-      })
-    ;
+      });
   }, [openRelease]);
-
-  useEffect(() => {
-    console.log(releaseAmountIROs);
-  }, [releaseAmountIROs]);
 
   useEffect(() => {
     if (selectedIRO._id!='') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
   }, [selectedIRO.billAttachment]);
-
+  // const handleDownload = () => {
+  //   const fileUrl = 'https://drive.google.com/uc?id=1Hil5H609dibNJm5jH20Xb1fWvykNWEnh&export=download';
+  //   fileDownload(fileUrl, 'file.jpg');
+  // };
+  // <button onClick={handleDownload}>Download</button>;
+  // <img src="/iet_logo.png" alt="drive image" width='200' height='19'/>;
   const columns: GridColDef<IROrder>[] = [
+
+
     {
       field: '_manage',
       headerName: '',
@@ -287,21 +290,77 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               //     });
               // },
             },
-            {
-              id: 'print',
-              text: 'Print IRO',
-              icon: PrintIcon,
-              component: PDFDownloadLink,
-              document: <IROReceiptTemplate RowData={params.row} />,
-              fileName: 'IROReceipt.pdf',
-            },
-            ...(hasPermissions(['WRITE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
+            ...(hasPermissions(['MANAGE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'print',
+                text: 'Print IRO',
+                icon: PrintIcon,
+                component: PDFDownloadLink,
+                document: <IROReceiptTemplate RowData={params.row} URL={params?.row?.division?.details?.coordinator?.sign?.downloadURL}/>,
+                fileName: 'IROReceipt.pdf',
+                onClick: () => {
+                  setTimeout(()=>{
+                    const url = params?.row?.division?.details?.coordinator?.sign?.downloadURL;
+                    // setCoordinatorImage(url);
+                    if (url) {
+                      const link = document.createElement('a');
+                      link.href =url;
+                      link.download = 'E-Sign'; // You can specify a custom file name here
+                      link.click();
+                    }
+                  }, 2000);
+                },
+
+              },
+
+
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: ()=>{
+                  setFileUploaderAction('manage');
+                  setAttachment(true);
+                  setSelectedIRO(params.row);
+                },
+              },
+              {
+                id: 'Close IRO',
+                text: 'Close IRO',
+                icon: PreviewIcon,
+                onClick: ()=>{
+                  IROServices.close(params.row._id)
+                .then((res)=>{
+                  if (IROrder) {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                    const filterIRO = IROrder?.filter((IROrders) => {
+                      return IROrders._id !== params.row._id;
+                    });
+                    setIROrder(filterIRO);
+                  }
+                  console.log(res, 'close');
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+
+                .catch((err) => {
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+                },
+              }]:[]),
+            ...(hasPermissions(['WRITE_IRO']) && params.row.status==IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Attachments',
                 text: 'Attachments',
                 icon: AttachmentIcon,
                 onClick: ()=>{
                   setAttachment(true);
+                  setFileUploaderAction('add');
                   setSelectedIRO(params.row);
                 },
               }]:[]),
@@ -392,8 +451,14 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
       },
     },
   ];
+
   return (
     <CommonPageLayout title="Internal Release Order">
+      <Avatar
+        sx={{ height: 50, width: 50 }}
+        src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&&export=download'}`}
+        // alt={`${user?.basicDetails.firstName}`}
+      />
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={(
@@ -524,7 +589,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               }}
               // accept={['video/*']}
               open={attachment}
-              action='add'
+              action={fileUploaderAction}
               postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
               onClose={() => setAttachment(false)}
               // getFiles={TestServices.getBills}
@@ -570,3 +635,5 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
 };
 
 export default ManageIRO;
+
+

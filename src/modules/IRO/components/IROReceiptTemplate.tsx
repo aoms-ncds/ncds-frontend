@@ -1,8 +1,9 @@
+import { Avatar } from '@mui/material';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import moment from 'moment';
-
 import * as numberToWords from 'number-to-words';
+import { useState, useEffect } from 'react';
 
 Font.register({
   family: 'Oswald',
@@ -100,9 +101,34 @@ const styles = StyleSheet.create({
 });
 
 const IROReceiptTemplate = (props: any) => {
-  console.log(props.rowData, 'props');
+  const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
+  console.log(props);
+  // console.log(props.RowData.purposeDivision.details.coordinator, 'coordinatorImage');
 
-  const sanctionedAmount = props.rowData && props.rowData?.sanctionedAmount;
+
+  // useEffect(() => {
+  //   if (props.RowData && props.RowData.purposeDivision.details.coordinator.sign.downloadURL) {
+  //     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  //     const url = props.RowData.purposeDivision.details.coordinator.sign.downloadURL;
+
+
+  //     fetch(url)
+  //       .then((response) => response.blob())
+  //       .then((blob) => {
+  //         const reader = new FileReader();
+  //         reader.onload = () => {
+  //           setCoordinatorImage(reader.result as string);
+  //         };
+  //         reader.readAsDataURL(blob);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error downloading images:', error);
+  //       });
+  //   }
+  // }, [props.RowData]);
+
+
+  const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
   let sanctionedAmountWords = '';
 
   if (typeof sanctionedAmount !== 'undefined') {
@@ -111,7 +137,7 @@ const IROReceiptTemplate = (props: any) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.rowData?.transferredDate;
+  const dateString = props.RowData?.transferredDate;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
 
   // const raiseddateString = printdetails?.IROdate;
@@ -124,14 +150,15 @@ const IROReceiptTemplate = (props: any) => {
       <Page size="A4">
         <div>
           <Image src="/iet_logo.png" style={styles.image} />
+          {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
         </div>
 
         <div style={{ marginTop: 120 }}>
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.rowData?.IROno} </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.rowData?.IROdate}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.RowData?.IROno} </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.RowData?.IROdate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
@@ -140,7 +167,7 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.h1 }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.divisionName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.RowData?.divisionName}</Text>
             <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :</Text>
           </View>
         </div>
@@ -148,12 +175,12 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 60 }}>
           <Text style={{ ...styles.h1 }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData?.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData?.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData?.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.rowData?.sanctionedBank}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.RowData?.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.RowData?.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.RowData?.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.RowData?.sanctionedBank}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.RowData?.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.RowData?.transactionNumber}</Text>
           </View>
         </div>
 
@@ -186,16 +213,16 @@ const IROReceiptTemplate = (props: any) => {
                   1
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  {props.rowData?.mainCategory}
+                  {props.RowData?.mainCategory}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
-                  {props.rowData?.narration}
+                  {props.RowData?.narration}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {props.rowData?.requestAmount}
+                  {props.RowData?.requestAmount}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {props.rowData?.sanctionedAmount}
+                  {props.RowData?.sanctionedAmount}
                 </PDFCell>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
               </PDFTableRow>
@@ -212,8 +239,8 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>E Signature</Text>
           <Text style={{ ...styles.text, marginTop: 1, left: 410 }}>E Signature are protected</Text>
-          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}></View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>{props.RowData?.purposeDivision?.details?.coordinator?.name}</View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}>{props.im}</View>
           <View style={{ ...styles.box5, marginTop: 15, left: 210 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 290 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 410, width: 130 }}></View>
@@ -239,5 +266,4 @@ const IROReceiptTemplate = (props: any) => {
     </Document>
   );
 };
-
 export default IROReceiptTemplate;

@@ -4,7 +4,10 @@ import { categories, purposes, sanctionedAsPers } from './FRConfig';
 import axios from 'axios';
 export default {
 
+
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
+
+  imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
 
   getAll: (conditions?: { status?: number }) => getStandardResponse<FR[]>(axios.get('/fr/',
     { params: conditions, headers: { ...getAuthHeader() } }),
