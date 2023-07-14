@@ -71,6 +71,9 @@ const DivisionDetailsPage = () => {
         country: '',
         pincode: '',
       },
+      coordinator: {},
+      seniorLeader: {},
+      juniorLeader: {},
     },
     subDivisions: [
       {

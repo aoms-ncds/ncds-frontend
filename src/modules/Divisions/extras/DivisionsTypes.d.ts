@@ -24,17 +24,17 @@ declare global {
     // seniorLeader?: Staff;
     // juniorLeader?: Staff;
     // attachment:FileObject[];
-    coordinator?:{
+    coordinator:{
 
       name?:Staff;
       sign?:FileObject;
     };
-    seniorLeader?:{
+    seniorLeader:{
 
       name?:Staff;
       sign?:FileObject;
     };
-    juniorLeader?:{
+    juniorLeader:{
 
       name?:Staff;
       sign?:FileObject;

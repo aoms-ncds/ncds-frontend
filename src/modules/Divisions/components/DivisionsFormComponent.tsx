@@ -14,12 +14,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
-  const [eSign, seteSign] = useState<CreatableApplication>({
-    name: '',
-    reason: '',
-    status: '',
-    attachment: [],
-  });
+
   // console.log(eSign.attachment, 'eSign');
   return (
     <>
@@ -104,7 +99,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         ...props.value,
                         coordinator: {
                           name: newValue,
-                          sign: props.value.coordinator?.sign,
                         },
                       });
                     }
@@ -189,7 +183,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           title="Attachments"
           action='add'
           types={[
-            'application/pdf',
             'image/png',
             'image/jpeg',
             'image/jpg',
@@ -197,30 +190,34 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           limits={{
             // types: [],
             maxItemSize: 1 * MB,
-            maxItemCount: 3,
-            maxTotalSize: 3 * MB,
+            maxItemCount: 1,
+            maxTotalSize: 1* MB,
           }}
           // accept={['video/*']}
           open={showFileUploader}
           onClose={() => setShowFileUploader(false)}
-          getFiles={eSign.attachment}
+          getFiles={props.value.coordinator?.sign?[props.value.coordinator?.sign]:[]}
           uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
             const resp=LocalFileUploadServices.uploadFile(file, onProgress, 'Division/e-sign', file.name)
               .then((res)=>{
                 console.log(res, 'resPOnse');
-                seteSign(() => ({
-                  ...eSign,
-                  attachment: [...eSign.attachment, res.data],
-                }));
+                props.onChange({
+                  ...props.value,
+                  coordinator: {
+                    sign: props.value.coordinator?.sign,
+                  },
+                });
                 return res;
               });
             return resp;
           }}
           deleteFile={(fileId: string) => {
-            seteSign(() => ({
-              ...eSign,
-              attachment: eSign.attachment.filter((file)=>file._id!==fileId),
-            }));
+            props.onChange({
+              ...props.value,
+              coordinator: {
+                sign: undefined,
+              },
+            });
             return LocalFileUploadServices.deleteFile(fileId);
           }}
         />

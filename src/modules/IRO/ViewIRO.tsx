@@ -122,6 +122,9 @@ const ViewIRO = () => {
           country: '',
           pincode: '',
         },
+        coordinator: {},
+        seniorLeader: {},
+        juniorLeader: {},
       },
       subDivisions: [
         {

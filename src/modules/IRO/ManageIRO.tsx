@@ -74,6 +74,9 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
           country: '',
           pincode: '',
         },
+        coordinator: {},
+        seniorLeader: {},
+        juniorLeader: {},
       },
       subDivisions: [
         {

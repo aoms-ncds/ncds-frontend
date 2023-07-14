@@ -45,6 +45,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           country: '',
           pincode: '',
         },
+        coordinator: {},
+        seniorLeader: {},
+        juniorLeader: {},
       },
       subDivisions: [
         {

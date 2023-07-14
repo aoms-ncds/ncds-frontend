@@ -6,7 +6,7 @@ export default {
 
   uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void, module?:string, filename?:string) =>
     getStandardResponse<FileObject>(
-      axios.post('/localfile', { file, module, filename },
+      axios.post('/local_file', { file, module, filename },
         {
           onUploadProgress: (progressEvent) => {
             if (progressEvent && progressEvent.total) {

@@ -62,16 +62,14 @@ const IRODashboard = () => {
       <br />
       <Grid container spacing={3}>
 
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton primaryText="Manage IRO" color="#003049" targetRoute="/iro/manage" />
+        </Grid>
+
         <PermissionChecks
           permissions={['MANAGE_IRO']}
           granted={(
             <>
-              <Grid item xs={12} md={6} xl={3}>
-                <DashboardCardButton primaryText="Manage IRO" color="#003049" targetRoute="/iro/manage" />
-              </Grid>
-              <Grid item xs={12} md={6} xl={3}>
-                <DashboardCardButton primaryText="Closed IRO" color="#de2828" targetRoute="/iro/closed" />
-              </Grid>
               <Grid item xs={12} md={6} xl={3}>
                 <DashboardCardButton primaryText="Release Amount " color="#3cb043" targetRoute="/iro/release_amount" />
               </Grid>
@@ -81,6 +79,10 @@ const IRODashboard = () => {
 
             </>
           )}/>
+
+        <Grid item xs={12} md={6} xl={3}>
+          <DashboardCardButton primaryText="Closed IRO" color="#de2828" targetRoute="/iro/closed" />
+        </Grid>
       </Grid>
     </CommonPageLayout>
   );
