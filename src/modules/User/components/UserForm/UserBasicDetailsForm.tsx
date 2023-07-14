@@ -1,12 +1,16 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider, IconButton } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import moment from 'moment';
 import NewAddressForm from './NewAddressForm';
 import UsersDropdown from '../UsersDropdown';
 import UserServices from '../../extras/UserServices';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
+import FileUploaderServices from '../../../../components/FileUploader/extras/FileUploaderServices';
+import FileUploader from '../../../../components/FileUploader/FileUploader';
+import { MB } from '../../../../extras/CommonConfig';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<
@@ -21,8 +25,22 @@ const UserBasicDetailsForm = (
     }
   >,
 ) => {
+  console.log(props, 'data');
+
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
   const [spouseList, setSpouseList] = useState<User[]>([]);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [showFileUploader, setShowFileUploader] = useState(false);
+  const [documents, setDocuments]=useState({
+    aadhaar: {
+      aadhaarNo: 0,
+      aadhaarFile: {},
+    },
+    voterId: {
+      voterIdNo: 0,
+      voterIdFile: {},
+    },
+  });
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   useEffect(() => {
@@ -39,7 +57,7 @@ const UserBasicDetailsForm = (
         $and: [{ status: CommonLifeCycleStates.ACTIVE }, { 'basicDetails.gender': props.value.gender == 'Male' ? 'Female' : props.value.gender == 'Female' ? 'Male' : 'Other' }],
       })
         .then((res) => {
-          console.log(res);
+          console.log(res, 'base');
           setSpouseList(res.data);
         })
         .catch((res) => {
@@ -47,6 +65,7 @@ const UserBasicDetailsForm = (
         });
     }
   }, [props.value.gender, props.value.martialStatus]);
+
 
   return (
     <>
@@ -285,11 +304,11 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} md={6} lg={4} sx={{ marginTop: '6px' }}>
         <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Aadhaar No"
           value={props.value.aadhaar?.aadhaarNo}
@@ -304,32 +323,49 @@ const UserBasicDetailsForm = (
           }
           variant={props.options?.textField?.variant}
           fullWidth
+
         />
-      </Grid>
+        <IconButton onClick={() => {
+          // setViewFileUploader(true);
+          // setAttachments(item.attachment);
+        }}>
+          <AttachmentIcon />
+        </IconButton>
+      </Grid> */}
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Aadhaar File"
-          type="file"
+          label="Aadhaar No"
+          value={props.value.aadhaar?.aadhaarNo}
           onChange={(e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) {
-              props.onChange({
-                ...props.value,
-                aadhaar: {
-                  aadhaarNo: props.value.aadhaar?.aadhaarNo ?? '',
-                  // aadhaarFile: { file },
-                },
-              });
-            }
+            // const file = (e.target as HTMLInputElement).files?.[0];
+            props.onChange({
+              ...props.value,
+              aadhaar: {
+                aadhaarNo: e.target.value,
+                aadhaarFile: props.value.aadhaar?.aadhaarFile,
+              },
+            });
           }}
           variant={props.options?.textField?.variant}
-          InputLabelProps={{ shrink: true }}
+          // InputLabelProps={{ shrink: true }}
           fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => {
+                  setShowFileUploader(true);
+                // setAttachments(item.attachment);
+                }}
+              >
+                <AttachmentIcon />
+              </IconButton>
+            ),
+          }}
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Voter ID"
           value={props.value.voterId?.voterIdNo}
@@ -345,27 +381,38 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField?.variant}
           fullWidth
         />
-      </Grid>
+      </Grid> */}
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Voter ID File"
-          type="file"
+          label="Voter ID"
+          value={props.value.voterId?.voterIdNo}
           onChange={(e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) {
-              props.onChange({
-                ...props.value,
-                voterId: {
-                  voterIdNo: props.value.voterId?.voterIdNo ?? '',
-                  // voterIdFile: { file },
-                },
-              });
-            }
+            // const file = (e.target as HTMLInputElement).files?.[0];
+
+            props.onChange({
+              ...props.value,
+              voterId: {
+                voterIdNo: e.target.value,
+                voterIdFile: props?.value.voterId?.voterIdFile,
+              },
+            });
           }}
           variant={props.options?.textField?.variant}
-          InputLabelProps={{ shrink: true }}
+          // InputLabelProps={{ shrink: true }}
           fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => {
+                  setShowFileUploader(true);
+                // setAttachments(item.attachment);
+                }}
+              >
+                <AttachmentIcon />
+              </IconButton>
+            ),
+          }}
         />
       </Grid>
 
@@ -535,6 +582,70 @@ const UserBasicDetailsForm = (
             variant: props.options?.textField?.variant ?? 'outlined',
           },
           title: 'Residing Address',
+        }}
+      />
+
+      <FileUploader
+        title="Attachments"
+        action='add'
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={[]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR/Staff', file.name)
+    .then((res) => {
+      console.log(res.data);
+      if (props.value.aadhaar?.aadhaarNo && !props.value.aadhaar.aadhaarFile) {
+        props.onChange({
+          ...props.value,
+          aadhaar: {
+            ...props.value.aadhaar,
+            aadhaarFile: res.data,
+          },
+        });
+      } else if (props.value.voterId?.voterIdNo && !props.value.voterId.voterIdFile) {
+        props.onChange({
+          ...props.value,
+          voterId: {
+            ...props.value.voterId,
+            voterIdFile: res.data,
+          },
+        });
+      }
+
+      return res;
+    });
+          return resp;
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setApplicationFormState(() => ({
+        //     ...applicationFormState,
+        //     attachment: applicationFormState.attachment.map((file) =>
+        //       file._id === fileId ? { ...file, filename: newName } : file,
+        //     ),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          // setApplicationFormState(() => ({
+          //   ...applicationFormState,
+          //   attachment: applicationFormState.attachment.filter((file) => file._id !== fileId),
+          // }));
+          return FileUploaderServices.deleteFile(fileId);
         }}
       />
 
