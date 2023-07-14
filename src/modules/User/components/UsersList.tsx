@@ -362,7 +362,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           {'Designation'}
         </b>
       ),
-      valueGetter: (params) => params.row.supportDetails.designation?.name,
+      valueGetter: (params) => params.row.supportDetails?.designation?.name,
     },
     {
       field: 'phone',
