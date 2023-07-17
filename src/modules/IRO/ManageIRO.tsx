@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Avatar } from '@mui/material';
-import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon } from '@mui/icons-material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Avatar } from '@mui/material';
+// eslint-disable-next-line max-len
+import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon, Close as CloseIcon, Message as MessageIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -30,7 +32,12 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     remark: '',
     transactionId: '',
   });
+  const [showHRFileUploader, setShowHRFileUploader] = useState(false);
+  const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
+  const [showAccountmanagerFileUploader, setShowAccountmanagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
+  const [sendNotification, toggleSendNotification] = useState(false);
+  const [addSignature, toggleAddSignature] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -293,70 +300,33 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               //     });
               // },
             },
-            ...(hasPermissions(['MANAGE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'print',
-                text: 'Print IRO',
-                icon: PrintIcon,
-                component: PDFDownloadLink,
-                document: <IROReceiptTemplate RowData={params.row} URL={params?.row?.division?.details?.coordinator?.sign?.downloadURL}/>,
-                fileName: 'IROReceipt.pdf',
-                onClick: () => {
-                  setTimeout(()=>{
-                    const url = params?.row?.division?.details?.coordinator?.sign?.downloadURL;
-                    // setCoordinatorImage(url);
-                    if (url) {
-                      const link = document.createElement('a');
-                      link.href =url;
-                      link.download = 'E-Sign'; // You can specify a custom file name here
-                      link.click();
-                    }
-                  }, 2000);
-                },
-
+            {
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <IROReceiptTemplate RowData={params.row} />,
+              fileName: 'IROReceipt.pdf',
+            },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              onClick: () => {
+                setSelectedIROId(params.row._id );
+                toggleSendNotification(true);
               },
-
-
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: ()=>{
-                  setFileUploaderAction('manage');
-                  setAttachment(true);
-                  setSelectedIRO(params.row);
-                },
+              icon: MessageIcon,
+            },
+            {
+              id: 'signature',
+              text: 'Add signature',
+              onClick: () => {
+                setSelectedIROId(params.row._id );
+                toggleAddSignature(true);
               },
-              {
-                id: 'Close IRO',
-                text: 'Close IRO',
-                icon: PreviewIcon,
-                onClick: ()=>{
-                  IROServices.close(params.row._id)
-                .then((res)=>{
-                  if (IROrder) {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                    const filterIRO = IROrder?.filter((IROrders) => {
-                      return IROrders._id !== params.row._id;
-                    });
-                    setIROrder(filterIRO);
-                  }
-                  console.log(res, 'close');
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                })
-
-                .catch((err) => {
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
-                },
-              }]:[]),
-            ...(hasPermissions(['WRITE_IRO']) && params.row.status==IROLifeCycleStates.AMOUNT_RELEASED ? [
+              icon: FingerprintIcon,
+            },
+            ...(hasPermissions(['WRITE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Attachments',
                 text: 'Attachments',
@@ -512,6 +482,200 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 </Grid>
               </Grid>
             </Card>
+            <Grid>
+              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+
+                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+
+
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+
+                    <Grid item>
+                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
+                      <Divider/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='success'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('president', selectedIROId??'')
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      > Send to President</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='info'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('accounts', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to accounts</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='warning'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('office_manager', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to office manager</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='inherit'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('division_head', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to division head</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='secondary'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('account_manager', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to account manager</Button>
+                      <br/><br/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleSendNotification(false);
+                          setSelectedIROId('');
+                        }}
+                        sx={{ marginBottom: 3, width: 260 }}
+                        endIcon={<CloseIcon/>}
+                      >
+      close
+                      </Button>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+      </Grid> */}
+
+                  </Grid>
+                </DialogContent>
+
+              </Dialog>
+              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
+
+                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+
+
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+
+                    <Grid item>
+                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Add Signatures</Typography>
+                      <Divider/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='success'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountmanagerFileUploader(false);
+                          setShowAccountFileUploader(false);
+                          setShowHRFileUploader(true);
+                          toggleAddSignature(false);
+                        }
+                        }
+                      > HR signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='info'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountFileUploader(false);
+                          setShowHRFileUploader(false);
+                          toggleAddSignature(false);
+                          setShowAccountmanagerFileUploader(true);
+                        }
+                        }
+                      >  Account Manager Signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='warning'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountmanagerFileUploader(false);
+                          setShowHRFileUploader(false);
+                          setShowAccountFileUploader(true);
+                          toggleAddSignature(false);
+                        }
+                        }
+                      >  Accountant Signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleAddSignature(false);
+                          setSelectedIROId('');
+                        }}
+                        sx={{ marginBottom: 3, width: 260 }}
+                        endIcon={<CloseIcon/>}
+                      >
+      close
+                      </Button>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+      </Grid> */}
+
+                  </Grid>
+                </DialogContent>
+
+              </Dialog>
+            </Grid>
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
@@ -575,6 +739,60 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 </Button>
               </DialogActions>
             </Dialog>
+            <FileUploader
+              title="HR Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showHRFileUploader}
+              onClose={() => setShowHRFileUploader(false)} getFiles={[]}/>
+            <FileUploader
+              title="Accountant Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showAccountFileUploader}
+              onClose={() => setShowAccountFileUploader(false)} getFiles={[]}/>
+            <FileUploader
+              title="Account manager Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showAccountmanagerFileUploader}
+              onClose={() => setShowAccountmanagerFileUploader(false)} getFiles={[]}/>
             <FileUploader
               title=" Bill Upload"
               types={[
