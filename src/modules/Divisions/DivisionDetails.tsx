@@ -57,6 +57,8 @@ const DivisionDetailsPage = () => {
     }
   };
   const [divisionDetails, setDivisionDetails] = useState<Division>({
+
+    _id: '',
     details: {
       name: '',
       divisionId: '',
@@ -167,6 +169,7 @@ const DivisionDetailsPage = () => {
                   options={{ title: 'Division Details' }}
                 />
 
+                <br />
                 <br />
                 <Grid item xs={12}>
                   <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>

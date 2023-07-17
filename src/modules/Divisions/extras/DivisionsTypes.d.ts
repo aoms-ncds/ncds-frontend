@@ -8,7 +8,7 @@ declare global {
     FCRABankDetails: BankDetails;
     localBankDetails: BankDetails;
     otherBankDetails: BankDetails;
-    _id?: string;
+    _id: string;
   }
   interface DivisionDetails {
     name: string;
@@ -17,7 +17,7 @@ declare global {
     contactNumber: string;
     email: string;
     address: Address;
-    noofWorkers?: number;
+    noOfWorkers?: number;
     noOfSubdivisions?: number;
     noOfChurches?: number;
     // coordinator?: Staff;

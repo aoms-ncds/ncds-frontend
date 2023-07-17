@@ -41,7 +41,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      getOptionLabel={(option) => option.basicDetails.firstName + ' ' + option.basicDetails.lastName}
+      getOptionLabel={(option) => option.basicDetails?.firstName + ' ' + option.basicDetails?.lastName}
       onChange={props.onChange}
       renderInput={(params) => (
         <TextField

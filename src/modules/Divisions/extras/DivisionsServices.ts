@@ -91,7 +91,7 @@ export default {
 
             },
             subDivisions: [],
-          })
+          }, { headers: { ...getAuthHeader() } })
           .then(async (updatedDivision) => {
             try {
               for (let i = 0; i < division.subDivisions.length; i++) {
