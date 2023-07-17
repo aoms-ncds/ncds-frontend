@@ -3,17 +3,13 @@ import { Button, Divider, FormControl, Grid, IconButton, TextField, Typography }
 import { AttachFile as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
 import StaffDropdown from '../../HR/components/StaffDropdown';
 import AddressForm from '../../../components/AddressForm';
-import FileUploader from '../../../components/FileUploader/FileUploader';
 import LocalFileUploaderServices from '../../../components/LocalFileUploader/LocalFileUploader';
 import { useState } from 'react';
 import { MB } from '../../../extras/CommonConfig';
 import LocalFileUploadServices from '../../../components/LocalFileUploader/extras/LocalFileUploadServices';
-import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader, setShowFileUploader] = useState(false);
-  const [viewFileUploader, setViewFileUploader] = useState(false);
-  const [attachments, setAttachments] = useState<FileObject[]>([]);
 
   // console.log(eSign.attachment, 'eSign');
   return (
