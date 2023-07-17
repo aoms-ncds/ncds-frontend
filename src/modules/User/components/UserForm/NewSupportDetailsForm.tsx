@@ -28,7 +28,7 @@ const NewSupportDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={designations ?? []}
-          value={props.value.designation}
+          value={props.value?.designation}
           onChange={(e, newValue) => props.onChange({ ...props.value, designation: newValue ?? undefined })}
           getOptionLabel={(option) => option.name}
           renderInput={(params) => (
@@ -49,7 +49,7 @@ const NewSupportDetailsForm = (
         <TextField
           label="Total Number Of Years In Ministry"
           type="number"
-          value={props.value.totalNoOfYearsInMinistry}
+          value={props.value?.totalNoOfYearsInMinistry}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -67,7 +67,7 @@ const NewSupportDetailsForm = (
           <RadioGroup
             aria-labelledby="TypeOfFamily"
             // defaultValue="missionar
-            value={props.value.typeOfFamily??null}
+            value={props.value?.typeOfFamily??null}
             onChange={(e) => props.onChange({ ...props.value, typeOfFamily: e.target.value as TypeOfFamily | undefined })}
             name="TypeOfFamily"
             row
@@ -84,7 +84,7 @@ const NewSupportDetailsForm = (
           <RadioGroup
             aria-labelledby="withChurch"
             // defaultValue="missionar
-            value={props.value.withChurch ? 'with church' : 'without church'}
+            value={props.value?.withChurch ? 'with church' : 'without church'}
             onChange={(e) => props.onChange({ ...props.value, withChurch: e.target.value === 'with church' ? true : false })}
             name="withChurch"
             row

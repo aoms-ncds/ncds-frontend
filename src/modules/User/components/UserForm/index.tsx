@@ -33,6 +33,10 @@ import { useNavigate } from 'react-router-dom';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
 import { enqueueSnackbar } from 'notistack';
+import PermissionChecks, { hasPermissions } from '../PermissionChecks';
+import UserLifeCycleStates from '../../extras/UserLifeCycleStates';
+import { Console } from 'console';
+
 
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   props: FormComponentProps<
@@ -134,7 +138,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               <StepLabel>Offsprings details</StepLabel>
             </Step>
           )}
-          {props.options?.kind != 'worker' && (
+          { ((props.options?.kind === 'worker' && props.value.status === UserLifeCycleStates.CREATED)||(props.options?.kind === 'staff')) && (
             <Step>
               <StepLabel>Support Details</StepLabel>
             </Step>
@@ -253,17 +257,22 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (props.options?.kind == 'worker' && props.value.basicDetails.martialStatus == 'Married') {
-                  setActiveStep((currentStep) => currentStep + 1);
-                } else {
-                  if (props.options?.kind == 'staff') {
+                if (props.options?.kind == 'worker' ) {
+                  if (props.value.basicDetails.martialStatus == 'Married') {
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
-                    props.onSubmit && props.onSubmit(props.value);
-                    navigate(gobacktomanage);
+                    if (props.value.status===UserLifeCycleStates.CREATED) {
+                      setActiveStep((currentStep) => currentStep + 3);
+                    } else {
+                      props.onSubmit && props.onSubmit(props.value);
+                      navigate(gobacktomanage);
+                    }
                   }
+                } else {
+                  setActiveStep((currentStep) => currentStep + 3);
                 }
-              }}
+              }
+              }
             >
               <Grid container spacing={3}>
                 <NewOfficialDetailsForm
@@ -288,7 +297,17 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 }}
               >
 
-                {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married'?(
+                {((props.options?.kind === 'worker' && props.value.status === UserLifeCycleStates.CREATED)||(props.options?.kind === 'staff'))?(
+                  <>
+                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                      {' '}
+                      Go back{' '}
+                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                      {' '}
+                        Next{' '}
+                    </Button>
+                  </>
+                ):(
                   <>
                     <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
                       {' '}
@@ -301,16 +320,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                       {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
                       {' '}
                       Submit{' '}
-                    </Button>
-                  </>
-                ):(
-                  <>
-                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                      {' '}
-                      Go back{' '}
-                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                      {' '}
-                        Next{' '}
                     </Button>
                   </>
                 )}
@@ -357,11 +366,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
           {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
               onSubmit={() => {
-                if (props.options?.kind == 'worker' && props.value.basicDetails.martialStatus == 'Married') {
+                if (props.value.status===UserLifeCycleStates.CREATED) {
+                  setActiveStep((currentStep) => currentStep + 1);
+                } else {
                   props.onSubmit && props.onSubmit(props.value);
                   navigate(gobacktomanage);
-                } else {
-                  setActiveStep((currentStep) => currentStep + 1);
                 }
               }}
             >
@@ -412,25 +421,39 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   Next{' '}
                 </Button>
               </Grid> */}
-              <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
-                {' '}
-                    Review from first step{' '}
-              </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                {' '}
-                      Go back{' '}
-              </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                {' '}
-                {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
-                {' '}
-                      Submit{' '}
-              </Button>
+              {props.value.status === UserLifeCycleStates.CREATED?(
+                <>
+                  <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                    {' '}
+           Go back{' '}
+                  </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                    {' '}
+             Next{' '}
+                  </Button>
+                </>
+              ):(
+                <><Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                  {' '}
+                Review from first step{' '}
+                </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                  {' '}
+                  Go back{' '}
+                </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                  {' '}
+                  {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                  {' '}
+                  Submit{' '}
+                </Button></>
+
+              )
+              }
               {/* <Grid item xs={12} sx={{ justifyContent: 'flex-end' }}> */}
 
               {/* </Grid> */}
               {/* </Grid> */}
             </form>
           )}
-          {activeStep === (props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married'?4:2) && (
+          {activeStep===4 && (
             <form
               onSubmit={() => {
                 props.onSubmit && props.onSubmit(props.value);
@@ -565,7 +588,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   {' '}
                   Review from first step{' '}
                 </Button>
-                <Button onClick={() => setActiveStep((step) => step-1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                <Button onClick={() => setActiveStep((props.value.basicDetails.martialStatus !== 'Married')?((step) => step-3):((step) => step-1))}
+                  variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                   {' '}
                   Go back{' '}
                 </Button>
