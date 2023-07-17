@@ -23,14 +23,13 @@ const UserBasicDetailsForm = (
 ) => {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
   const [spouseList, setSpouseList] = useState<User[]>([]);
+  const [showAadhaarUploader, setShowAadhaarUploader] = useState(false);
+  const [showVoterIdUploader, setShowVoterIdUploader] = useState(false);
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   useEffect(() => {
-    LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE })
-  .then((res) =>
-    setLanguages(res.data));
+    LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE }).then((res) => setLanguages(res.data));
   }, []);
-
 
   useEffect(() => {
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
@@ -47,6 +46,7 @@ const UserBasicDetailsForm = (
         });
     }
   }, [props.value.gender, props.value.martialStatus]);
+
 
   return (
     <>
@@ -163,8 +163,8 @@ const UserBasicDetailsForm = (
             name="martialStatus"
             row
           >
-            <FormControlLabel value='Married' control={<Radio />} label="Married" />
-            <FormControlLabel value='Unmarried' control={<Radio />} label="Unmarried" />
+            <FormControlLabel value="Married" control={<Radio />} label="Married" />
+            <FormControlLabel value="Unmarried" control={<Radio />} label="Unmarried" />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -177,7 +177,8 @@ const UserBasicDetailsForm = (
               if (newValue) {
                 props.options?.spouse.onChange(newValue);
               }
-            }} label={'Spouse Of Another User'}
+            }}
+            label={'Spouse Of Another User'}
             required={false}
             textFieldProps={{ variant: props.options?.textField?.variant }}
           />
@@ -186,7 +187,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<Religion>
           options={['Hindu', 'Muslim', 'Christian', 'Sikh']}
-          value={props.value.religion??null}
+          value={props.value.religion ?? null}
           onChange={(e, selectedReligion) =>
             props.onChange({
               ...props.value,
@@ -234,7 +235,7 @@ const UserBasicDetailsForm = (
           id="knownLanguages"
           options={languages}
           getOptionLabel={(option) => option.name}
-          value={props.value.knownLanguages??[]}
+          value={props.value.knownLanguages ?? []}
           onChange={(e, newValue) => props.onChange({ ...props.value, knownLanguages: newValue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField?.variant} />}
         />
@@ -326,6 +327,18 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField?.variant}
           InputLabelProps={{ shrink: true }}
           fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => {
+                  setShowAadhaarUploader(true);
+                  // setAttachments(item.attachment);
+                }}
+              >
+                <AttachmentIcon />
+              </IconButton>
+            ),
+          }}
         />
       </Grid>
 
@@ -366,6 +379,18 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField?.variant}
           InputLabelProps={{ shrink: true }}
           fullWidth
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => {
+                  setShowVoterIdUploader(true);
+                  // setAttachments(item.attachment);
+                }}
+              >
+                <AttachmentIcon />
+              </IconButton>
+            ),
+          }}
         />
       </Grid>
 
@@ -467,7 +492,6 @@ const UserBasicDetailsForm = (
         />
       </Grid> */}
 
-
       <NewAddressForm
         action="add"
         value={props.value.currentOfficialAddress}
@@ -538,6 +562,84 @@ const UserBasicDetailsForm = (
         }}
       />
 
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 3 * MB,
+        }}
+        open={showAadhaarUploader}
+        onClose={() => setShowAadhaarUploader(false)}
+        getFiles={props.value.aadhaar?.aadhaarFile ? [props.value.aadhaar?.aadhaarFile] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR/Staff', file.name).then((res) => {
+            console.log(res.data);
+
+            props.onChange({
+              ...props.value,
+              aadhaar: {
+                ...props.value.aadhaar,
+                aadhaarFile: res.data,
+              },
+            });
+
+            return res;
+          });
+          return resp;
+        }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            aadhaar: {
+              ...props.value.aadhaar,
+              aadhaarFile: undefined,
+            },
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 3 * MB,
+        }}
+        open={showVoterIdUploader}
+        onClose={() => setShowVoterIdUploader(false)}
+        getFiles={props.value.voterId?.voterIdFile ? [props.value.voterId?.voterIdFile] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR/Staff', file.name).then((res) => {
+            console.log(res.data);
+            props.onChange({
+              ...props.value,
+              voterId: {
+                ...props.value.voterId,
+                voterIdFile: res.data,
+              },
+            });
+
+            return res;
+          });
+          return resp;
+        }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            voterId: {
+              ...props.value.voterId,
+              voterIdFile: undefined,
+            },
+          });
+
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
     </>
   );
 };
