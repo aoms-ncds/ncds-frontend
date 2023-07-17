@@ -36,7 +36,7 @@ interface FileUploaderProps {
   action: 'add'|'view'|'manage';
   types: FileObjectType[]; // pass the type of file you need to upload
   // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
-  limits:{deleteFilee;
+  limits:{
     maxItemSize?: number;
    maxItemCount?: number;
    maxTotalSize?: number;
