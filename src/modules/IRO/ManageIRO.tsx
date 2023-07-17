@@ -9,6 +9,7 @@ import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -29,8 +30,12 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     remark: '',
     transactionId: '',
   });
+  const [showHRFileUploader, setShowHRFileUploader] = useState(false);
+  const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
+  const [showAccountmanagerFileUploader, setShowAccountmanagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState(false);
+  const [addSignature, toggleAddSignature] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -303,6 +308,15 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'signature',
+              text: 'Add signature',
+              onClick: () => {
+                setSelectedIROId(params.row._id );
+                toggleAddSignature(true);
+              },
+              icon: FingerprintIcon,
             },
             ...(hasPermissions(['WRITE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
@@ -577,6 +591,75 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 </DialogContent>
 
               </Dialog>
+              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
+
+                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+
+
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+
+                    <Grid item>
+                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Add Signatures</Typography>
+                      <Divider/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='success'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountmanagerFileUploader(false);
+                          setShowAccountFileUploader(false);
+                          setShowHRFileUploader(true);
+                          toggleAddSignature(false);
+                        }
+                        }
+                      > HR signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='info'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountFileUploader(false);
+                          setShowHRFileUploader(false);
+                          toggleAddSignature(false);
+                          setShowAccountmanagerFileUploader(true);
+                        }
+                        }
+                      >  Account Manager Signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='warning'
+                        sx={{ width: 260 }}
+                        onClick={() => {
+                          setShowAccountmanagerFileUploader(false);
+                          setShowHRFileUploader(false);
+                          setShowAccountFileUploader(true);
+                          toggleAddSignature(false);
+                        }
+                        }
+                      >  Accountant Signature</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleAddSignature(false);
+                          setSelectedIROId('');
+                        }}
+                        sx={{ marginBottom: 3, width: 260 }}
+                        endIcon={<CloseIcon/>}
+                      >
+      close
+                      </Button>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+      </Grid> */}
+
+                  </Grid>
+                </DialogContent>
+
+              </Dialog>
             </Grid>
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
@@ -641,6 +724,60 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 </Button>
               </DialogActions>
             </Dialog>
+            <FileUploader
+              title="HR Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showHRFileUploader}
+              onClose={() => setShowHRFileUploader(false)} getFiles={[]}/>
+            <FileUploader
+              title="Accountant Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showAccountFileUploader}
+              onClose={() => setShowAccountFileUploader(false)} getFiles={[]}/>
+            <FileUploader
+              title="Account manager Signature"
+              action='add'
+              types={[
+                'application/pdf',
+                'image/png',
+                'image/jpeg',
+                'image/jpg',
+              ]}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showAccountmanagerFileUploader}
+              onClose={() => setShowAccountmanagerFileUploader(false)} getFiles={[]}/>
             <FileUploader
               title=" Bill Upload"
               types={[
