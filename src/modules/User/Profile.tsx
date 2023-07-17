@@ -1,12 +1,16 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-multi-comp */
-import { Avatar, Box, Card, CardContent, Container, Divider, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Container, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import StaffServices from '../HR/extras/StaffServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import AttachmentIcon from '@mui/icons-material/Attachment';
+import { MB } from '../../extras/CommonConfig';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import FileUploader from '../../components/FileUploader/FileUploader';
 
 
 interface TabPanelProps {
@@ -40,7 +44,9 @@ const a11yProps = (index: number) => ({ 'id': `simple-tab-${index}`, 'aria-contr
 const Profile = () => {
   const [user, setUser] = useState<IWorker | Staff|null>(null);
   const { userId, userKind } = useParams();
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
   const columns: GridColDef<DivisionHistory>[] = [
     {
       field: 'division',
@@ -150,10 +156,39 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {user?.basicDetails.phone} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Alternative Phone: </Typography> {user?.basicDetails.alternativePhone} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PAN No: </Typography> {user?.basicDetails.PANNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
+              {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid> */}
+              <Grid item xs={12} lg={4}>
+                <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography>
+                {user?.basicDetails.aadhaar?.aadhaarNo}
+                <IconButton
+                  onClick={() => {
+                    console.log(viewFileUploader);
+                    setViewFileUploader(true);
+                    if (user?.basicDetails?.aadhaar?.aadhaarFile) {
+                      setAttachments([user.basicDetails.aadhaar.aadhaarFile]);
+                    } else {
+                      setAttachments([]);
+                    }
+                  }}
 
+                >
+                  <AttachmentIcon sx={{ fontWeight: 'bold' }} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo}  <IconButton
+                onClick={() => {
+                  setViewFileUploader(true);
+                  if (user?.basicDetails?.voterId?.voterIdFile) {
+                    setAttachments([user?.basicDetails?.voterId?.voterIdFile]);
+                  } else {
+                    setAttachments([]);
+                  }
+                }}
+
+              >
+                <AttachmentIcon sx={{ fontWeight: 'bold' }} />
+              </IconButton> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
               <Grid item xs={12}> <Divider textAlign='left'>Permanent address</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.permanentAddress?.buildingName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress?.street} </Grid>
@@ -197,6 +232,8 @@ const Profile = () => {
               {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of leaving previous Division: </Typography> {user?.officialDetails.dateOfPreviousDivisionLeaving?.format('DD/MM/YYYY')} </Grid> */}
               {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of joining current Division:</Typography> {user?.officialDetails.divisionHistory.dateOfDivisionJoining?.format('DD/MM/YYYY')} </Grid> */}
             </Grid>
+
+
             <Container maxWidth='md' >
               <Card>
                 <CardContent>
@@ -318,6 +355,56 @@ const Profile = () => {
         </Box>
         <br />
       </Card>
+      <FileUploader
+        title="Attachments"
+        types={[
+          'application/pdf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg',
+
+        ]}
+        limits={{
+          // types: [],
+          maxItemSize: 1*MB,
+          maxItemCount: 3,
+          maxTotalSize: 3*MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action='view'
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachments}
+        // uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+        //   const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR', file.name)
+        //   .then((res)=>{
+        //     console.log(res, 'er');
+        //     // setNewParticular((particularDetails) => ({
+        //     //   ...particularDetails,
+        //     //   attachment: [...particularDetails.attachment, res.data],
+        //     // }));
+        //     return res;
+        //   });
+        //   return resp;
+        // }}
+        renameFile={(fileId: string, newName: string) => {
+          // setNewParticular((particularDetails) => ({
+          //   ...particularDetails,
+          //   attachment: particularDetails.attachment.map((file) =>
+          //     file._id === fileId ? { ...file, filename: newName } : file,
+          //   ),
+          // }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          // setNewParticular((particularDetails) => ({
+          //   ...particularDetails,
+          //   attachment: particularDetails.attachment.filter((file)=>file._id!==fileId),
+          // }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
     </CommonPageLayout>
   );
 };
