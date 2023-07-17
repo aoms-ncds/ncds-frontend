@@ -462,9 +462,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       </>
                     ) : null}
 
-                  {props.action === 'view' && FRstatus!='WAITING_FOR_PRESIDENT' &&FRstatus!='WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
+                  {/* {props.action === 'view' && FRstatus!='WAITING_FOR_PRESIDENT' &&FRstatus!='WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
                     <>
-                      {/* Only display buttons if props.action is 'view' */}
+                      {/* Only display buttons if props.action is 'view' *
                       <PermissionChecks
                         permissions={['WRITE_FR']}
                         granted={
@@ -492,7 +492,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       />
 
                     </>
-                  ) : null}
+                  ) : null} */}
                   &nbsp;
                   {props.action === 'view' && FRstatus === 'WAITING_FOR_PRESIDENT' ? (
                     <PermissionChecks
@@ -541,32 +541,32 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           </Button></>
                       }
                     />
-                  ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
-                    <PermissionChecks
-                      permissions={['WRITE_FR']}
-                      granted={
-                        <Button
-                          variant="contained"
-                          color="info"
-                          onClick={() => {
-                            const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
-                            if (props.onSubmit) {
-                              const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
-                              props.onSubmit(updatedValue);
-                            }
+                  //           ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
+                  //             <PermissionChecks
+                  //               permissions={['WRITE_FR']}
+                  //               granted={
+                  //                 <Button
+                  //                   variant="contained"
+                  //                   color="info"
+                  //                   onClick={() => {
+                  //                     const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
+                  //                     if (props.onSubmit) {
+                  //                       const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
+                  //                       props.onSubmit(updatedValue);
+                  //                     }
 
-                            setTimeout(() => {
-                              closeSnackbar(processingSnack);
-                              const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                              setTimeout(() => closeSnackbar(processedSnack), 500);
-                            }, 500);
-                            navigate('/fr/manage');
-                          }}
-                        >
-        Submit
-                        </Button>
-                      }
-                    />
+                  //                     setTimeout(() => {
+                  //                       closeSnackbar(processingSnack);
+                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                  //                     }, 500);
+                  //                     navigate('/fr/manage');
+                  //                   }}
+                  //                 >
+                  // Submit
+                  //                 </Button>
+                  //               }
+                  //             />
                   ) : null}
 
 

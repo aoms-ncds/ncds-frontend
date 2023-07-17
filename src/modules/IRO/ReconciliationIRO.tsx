@@ -14,6 +14,7 @@ import MessageItem from '../../components/MessageItem';
 import { MB } from '../../extras/CommonConfig';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 
 const ReconciliationIRO = () => {
@@ -99,6 +100,7 @@ const ReconciliationIRO = () => {
     billAttachment: [],
   });
   const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
+
   useEffect(() => {
     IROServices.getReconciliation()
       .then((res) => {
@@ -108,7 +110,7 @@ const ReconciliationIRO = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [attachment]);
 
   const columns: GridColDef<IROrder>[]= [
     {
@@ -156,15 +158,16 @@ const ReconciliationIRO = () => {
                   });
               },
             },
-            {
-              id: 'Reconciliation',
-              text: 'Reconciliation',
-              icon: EditIcon,
-              onClick: ()=>{
-                setAttachment(true);
-                setSelectedIRO(props.row);
-              },
-            },
+            ...(props.row.status==IROLifeCycleStates.AMOUNT_RELEASED?[
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: ()=>{
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
+                },
+              }]:[]),
             {
               id: 'Close IRO',
               text: 'Close IRO',
@@ -257,7 +260,16 @@ const ReconciliationIRO = () => {
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
-
+    {
+      field: 'status',
+      renderHeader: () => (<b>Status</b>),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      },
+    },
   ];
   return (
     <CommonPageLayout title="Internal Release Order">

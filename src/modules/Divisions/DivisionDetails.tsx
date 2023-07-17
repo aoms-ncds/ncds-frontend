@@ -62,6 +62,7 @@ const DivisionDetailsPage = () => {
       divisionId: '',
       contactNumber: '',
       email: '',
+      // attachment: [],
       address: {
         buildingName: '',
         street: '',
@@ -70,6 +71,9 @@ const DivisionDetailsPage = () => {
         country: '',
         pincode: '',
       },
+      coordinator: {},
+      seniorLeader: {},
+      juniorLeader: {},
     },
     subDivisions: [
       {

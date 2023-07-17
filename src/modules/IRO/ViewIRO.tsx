@@ -122,6 +122,9 @@ const ViewIRO = () => {
           country: '',
           pincode: '',
         },
+        coordinator: {},
+        seniorLeader: {},
+        juniorLeader: {},
       },
       subDivisions: [
         {
@@ -157,7 +160,7 @@ const ViewIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
   });
-  // console.log(IRO);
+  console.log(IRO, 'IRO');
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remark, setRemark] = useState<CreatableRemark>({

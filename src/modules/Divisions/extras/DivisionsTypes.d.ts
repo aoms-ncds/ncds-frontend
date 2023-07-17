@@ -20,10 +20,27 @@ declare global {
     noofWorkers?: number;
     noOfSubdivisions?: number;
     noOfChurches?: number;
-    coordinator?: Staff;
-    seniorLeader?: Staff;
-    juniorLeader?: Staff;
+    // coordinator?: Staff;
+    // seniorLeader?: Staff;
+    // juniorLeader?: Staff;
+    // attachment:FileObject[];
+    coordinator:{
+
+      name?:Staff;
+      sign?:FileObject;
+    };
+    seniorLeader:{
+
+      name?:Staff;
+      sign?:FileObject;
+    };
+    juniorLeader:{
+
+      name?:Staff;
+      sign?:FileObject;
+    };
   }
+
 
   interface BankDetails {
     bankName: string;
