@@ -591,6 +591,7 @@ const FileUploader = (props: FileUploaderProps) => {
             onClick={() => {
               props.postApprove && props.postApprove();
               setCompletedFile(false);
+              props.onClose();
             }}
             variant="contained"
             color="error"
