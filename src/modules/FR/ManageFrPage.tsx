@@ -1,26 +1,29 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import {
   Alert,
+  Autocomplete,
   Button,
   Card,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   Grid,
   IconButton,
   InputAdornment,
   TextField,
+  Typography,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
-import SendIcon from '@mui/icons-material/Send';
+// import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -28,11 +31,14 @@ import FRReceiptTemplate from './components/FRReceiptTemplate';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
+import { send } from 'process';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string|null>(null);
+
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -179,8 +185,10 @@ const ManageFrPage = () => {
             {
               id: 'notification',
               text: 'Send notification',
-              component: Link,
-              to: '/view' + props.row._id,
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                toggleSendNotification(true);
+              },
               icon: MessageIcon,
             },
 
@@ -314,6 +322,94 @@ const ManageFrPage = () => {
                   <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
                 </Card>
               </Grid>
+              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+
+                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+
+
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+
+                    <Grid item>
+                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
+                      <Divider/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='success'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            FRServices.sendNotifications('president', selectedFR??'')
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      > Send to President</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='info'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            FRServices.sendNotifications('accounts', selectedFR??'')
+                          .then((res) => {
+                            console.log(res);
+                          })
+                          .catch((res) => {
+                            console.log(res);
+                          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to accounts</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='inherit'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            FRServices.sendNotifications('division_head', selectedFR??'')
+                          .then((res) => {
+                            console.log(res);
+                          })
+                          .catch((res) => {
+                            console.log(res);
+                          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to division head</Button>
+                      <br/><br/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleSendNotification(false);
+                          setSelectedFR(null);
+                        }}
+                        sx={{ marginBottom: 3, width: 260 }}
+                        endIcon={<CloseIcon/>}
+                      >
+                      close
+                      </Button>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+                        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+                      </Grid> */}
+
+                  </Grid>
+                </DialogContent>
+
+              </Dialog>
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>
                 <DialogContent>

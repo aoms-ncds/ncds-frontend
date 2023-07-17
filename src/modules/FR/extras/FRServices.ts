@@ -36,6 +36,7 @@ export default {
       timeout: 0,
     }),
   ),
+  sendNotifications: (name: string, id: string) => getStandardResponse<FR>(axios.post(`/fr/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
   getSanctionedAsPer: () => getStandardResponse<SanctionedAsPer[]>(
     dummyRequest<SanctionedAsPer[]>({

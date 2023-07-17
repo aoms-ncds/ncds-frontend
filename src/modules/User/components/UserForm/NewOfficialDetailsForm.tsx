@@ -136,6 +136,7 @@ const NewOfficialDetailsForm = (
       {/* {props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?.details.name} */}
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
+          disabled={props.options?.kind=='worker'}
           options={divisions ?? []}
           value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}

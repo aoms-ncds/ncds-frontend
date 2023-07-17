@@ -21,7 +21,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material';
-import { AttachFile as AttachmentIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
@@ -36,6 +36,7 @@ import PermissionChecks from '../../User/components/PermissionChecks';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
+import index from '../../Tests';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
@@ -44,14 +45,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number|null>(null);
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1>();
-  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2>();
-  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3>();
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1|null>(null);
+  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2|null>(null);
+  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3|null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [particulars, setParticulars] = useState<Particular[]>([]);
@@ -75,6 +76,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     transactionId: '',
   });
   const [submit, setSubmit]= useState(0);
+  const [particularDialog, setparticularDialog] = useState<'add'|'edit'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
@@ -146,16 +148,28 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     //     console.log(res);
     //   });
   }, [props.value.particulars]);
-  const addParticulars = (e:any) => {
-    e.preventDefault();
+
+  const addParticulars = () => {
     handleClose();
-    const newParticulars: Particular[] = [...particulars, newParticular as Particular];
-    setParticulars(newParticulars);
-    console.log(particulars, '+++');
-    props.onChange({
-      ...props.value,
-      particulars: newParticulars,
-    });
+    let newParticulars: Particular[];
+    if (particularDialog==='edit') {
+      setParticulars((particulars)=>
+        (
+          particulars.map((part, _ind)=>_ind===selectedParticularIndex?newParticular as Particular:part)
+        ));
+      props.onChange({
+        ...props.value,
+        particulars: particulars.map((part, _ind)=>_ind===selectedParticularIndex?newParticular as Particular:part),
+      });
+    } else {
+      newParticulars = [...particulars, newParticular as Particular];
+      setParticulars(newParticulars);
+      // console.log(particulars, '+++');
+      props.onChange({
+        ...props.value,
+        particulars: newParticulars,
+      });
+    }
     // Reset the form fields
     setNewParticular((particularDetails) => ({
       ...particularDetails,
@@ -172,6 +186,33 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
 
     // Other logic for API calls, snackbar, etc.
+  };
+  const editParticular = (particular: Particular, index: number) => {
+    setparticularDialog('edit');
+    // setParticulars((particulars)=>
+    //   (
+    //     particulars.map((part, _ind)=>_ind===index?particular:part)
+    //   ));
+    setSelectedParticularIndex(index);
+    setShowAddParticularDialog(true);
+    setNewParticular(particular);
+    // Perform delete logic
+    // const updatedParticulars = particulars.filter((item) => item._id !== particularId);
+    // setParticulars(updatedParticulars);
+    // FRServices.editParticulars(particularId)
+    //   .then((res) => {
+    //     enqueueSnackbar({
+    //       message: res.message,
+    //       variant: 'success',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar({
+    //       message: err.message,
+    //       variant: 'error',
+    //     });
+    //   });
   };
   const deleteParticular = (particularId: string | undefined, index: number) => {
     if (!particularId) {
@@ -199,6 +240,25 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         });
       });
   };
+  useEffect(() => {
+    setSelectedMainCategory(()=> mainCategories?.find((item)=> item.name==newParticular.mainCategory));
+    console.log(newParticular.mainCategory, 'newParticular.mainCategory');
+  }, [newParticular]);
+  useEffect(() => {
+    setSelectedSubCategory1(()=> selectedMainCategory?.subcategory1.find((item)=> item.name==newParticular.subCategory1)??null);
+    console.log(newParticular.subCategory1, 'newParticular.subcategory1');
+  }, [selectedMainCategory]);
+  useEffect(() => {
+    setSelectedSubCategory2(()=> selectedSubCategory1?.subcategory2.find((item)=> item.name==newParticular.subCategory2)??null);
+    console.log(newParticular.subCategory2, 'newParticular.subcategory2');
+  }, [selectedSubCategory1]);
+  useEffect(() => {
+    setSelectedSubCategory3(()=> selectedSubCategory2?.subcategory3.find((item)=> item.name==newParticular.subCategory3)??null);
+    console.log(newParticular.subCategory3, 'newParticular.subcategory3');
+    // setShowAddParticularDialog(true);
+  }, [selectedSubCategory2]);
+
+
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
     <div>
@@ -362,6 +422,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         mainCategory: selectedMainCategory.name,
                       });
                       setSelectedMainCategory(selectedMainCategory);
+                      setSelectedSubCategory1(null);
+                      setSelectedSubCategory1(null);
+                      setSelectedSubCategory1(null);
                     }
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Main Category" required/>}
@@ -396,12 +459,19 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                               <PermissionChecks
                                 permissions={['WRITE_FR']}
                                 granted={(
+
+
                                   <IconButton>
                                     <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
                                   </IconButton>
+
                                 )}
                               />
-
+                              <IconButton>
+                                <EditIcon onClick={() =>
+                                  editParticular(item, index)
+                                }/>
+                              </IconButton>
                               <IconButton onClick={() => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
@@ -577,7 +647,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         }}
       >
         <DialogTitle>Add Particular</DialogTitle>
-        <form onSubmit={addParticulars}>
+        <form onSubmit={(e)=>{
+          e.preventDefault();
+          addParticulars();
+        }}>
           <DialogContent>
             <Container>
 
@@ -585,7 +658,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
                 <Grid item md={12}>
                   <Autocomplete
-
+                    value={selectedSubCategory1}
                     options={selectedMainCategory?.subcategory1 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name}
                     onChange={(_e, selectedSubCategory1) => {
@@ -603,6 +676,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    value={selectedSubCategory2}
                     options={selectedSubCategory1?.subcategory2 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
                     onChange={(_e, selectedSubCategory2) => {
@@ -620,6 +694,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
                     getOptionLabel={(subCategory3) => subCategory3.name}
                     onChange={(e, selectedSubCategory3) => {

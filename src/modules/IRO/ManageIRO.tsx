@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert } from '@mui/material';
-import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon } from '@mui/icons-material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
+// eslint-disable-next-line max-len
+import { Print as PrintIcon, AttachFile as AttachmentIcon, Edit as EditIcon, Preview as PreviewIcon, AttachMoney as AttachMoneyIcon, CurrencyRupee as CurrencyRupeeIcon, Close as CloseIcon, Message as MessageIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -29,6 +30,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
     transactionId: '',
   });
   const [attachment, setAttachment] = useState<boolean>(false);
+  const [sendNotification, toggleSendNotification] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -293,6 +295,15 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
               document: <IROReceiptTemplate RowData={params.row} />,
               fileName: 'IROReceipt.pdf',
             },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              onClick: () => {
+                setSelectedIROId(params.row._id );
+                toggleSendNotification(true);
+              },
+              icon: MessageIcon,
+            },
             ...(hasPermissions(['WRITE_IRO']) && params.row.status>=IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Attachments',
@@ -442,6 +453,131 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                 </Grid>
               </Grid>
             </Card>
+            <Grid>
+              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+
+                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+
+
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+
+                    <Grid item>
+                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
+                      <Divider/>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='success'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('president', selectedIROId??'')
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      > Send to President</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='info'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('accounts', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to accounts</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='warning'
+                        sx={{ width: 260 }}
+
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('office_manager', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to office manager</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='inherit'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('division_head', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to division head</Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='secondary'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('account_manager', selectedIROId??'')
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to account manager</Button>
+                      <br/><br/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          toggleSendNotification(false);
+                          setSelectedIROId('');
+                        }}
+                        sx={{ marginBottom: 3, width: 260 }}
+                        endIcon={<CloseIcon/>}
+                      >
+      close
+                      </Button>
+                    </Grid>
+                    {/* <Grid item xs={12}>
+        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+      </Grid> */}
+
+                  </Grid>
+                </DialogContent>
+
+              </Dialog>
+            </Grid>
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
