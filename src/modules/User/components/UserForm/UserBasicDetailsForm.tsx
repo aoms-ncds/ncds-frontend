@@ -1,4 +1,4 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider, IconButton } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -7,6 +7,10 @@ import UsersDropdown from '../UsersDropdown';
 import UserServices from '../../extras/UserServices';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
+import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import FileUploader from '../../../../components/FileUploader/FileUploader';
+import FileUploaderServices from '../../../../components/FileUploader/extras/FileUploaderServices';
+import { MB } from '../../../../extras/CommonConfig';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<
