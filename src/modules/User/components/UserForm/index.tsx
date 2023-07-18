@@ -36,6 +36,7 @@ import { enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../PermissionChecks';
 import UserLifeCycleStates from '../../extras/UserLifeCycleStates';
 import { Console } from 'console';
+import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 
 
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
@@ -112,7 +113,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   //   //   })
   //   // }
   // }, [children]);
-  const gobacktomanage = props.options?.kind == 'worker'?'/workers/':'/hr/manage';
+  const goBackToManage = props.options?.kind == 'worker'?'/workers/':'/hr/manage';
 
   return (
     <>
@@ -265,7 +266,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                       setActiveStep((currentStep) => currentStep + 3);
                     } else {
                       props.onSubmit && props.onSubmit(props.value);
-                      navigate(gobacktomanage);
+                      navigate(goBackToManage);
                     }
                   }
                 } else {
@@ -297,7 +298,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 }}
               >
 
-                {(props.options?.kind === 'worker' && props.value.status !== UserLifeCycleStates.CREATED && props.value.basicDetails.martialStatus !== 'Married')?(
+                {(props.options?.kind === 'worker' && (props.value.status && props.value.status!==CommonLifeCycleStates.CREATED && props.value.basicDetails.martialStatus !== 'Married'))?(
                   <>
                     <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
                       {' '}
@@ -370,7 +371,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   props.onSubmit && props.onSubmit(props.value);
-                  navigate(gobacktomanage);
+                  navigate(goBackToManage);
                 }
               }}
             >
@@ -421,8 +422,16 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   Next{' '}
                 </Button>
               </Grid> */}
+
               {props.value.status === UserLifeCycleStates.CREATED?(
-                <>
+                <div
+                  style={{
+                    float: 'right',
+                    marginBottom: 2,
+                    marginTop: 2,
+                    padding: 20,
+                  }}
+                >
                   <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
            Go back{' '}
@@ -430,20 +439,27 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                     {' '}
              Next{' '}
                   </Button>
-                </>
+                </div>
               ):(
-                <><Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
+                <div
+                  style={{
+                    float: 'right',
+                    marginBottom: 2,
+                    marginTop: 2,
+                    padding: 20,
+                  }}
+                ><Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                    {' '}
                 Review from first step{' '}
-                </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                  {' '}
+                  </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                    {' '}
                   Go back{' '}
-                </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {' '}
-                  {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
-                  {' '}
+                  </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                    {' '}
+                    {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                    {' '}
                   Submit{' '}
-                </Button></>
+                  </Button></div>
 
               )
               }
@@ -457,7 +473,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
             <form
               onSubmit={() => {
                 props.onSubmit && props.onSubmit(props.value);
-                navigate(gobacktomanage);
+                navigate(goBackToManage);
               }
               }
             >

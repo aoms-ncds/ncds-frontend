@@ -109,24 +109,28 @@ const Profile = () => {
       title={`Profile of ${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
       hidePageHeader={true}
     >
-      <div style={{ display: 'inline-block', marginRight: 10 }}>
-        <Avatar
-          sx={{ height: 50, width: 50 }}
-          src={`${user?.imageURL}`}
-          alt={`${user?.basicDetails.firstName}`}
-        />
-      </div>
-      <Typography variant="h4" component='span'>{`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
-        <br/><Link
-          to={`/divisions/details/${user?.division?._id}`}
-          style={{
-            textDecoration: 'none',
-            color: 'inherit',
-          }}
-        ><Typography variant="body1" sx={{ ml: 10 }} >{`${user?.division?.details.name}`}
+      <Grid container >
+        <Grid item xs={12} md={1}>
+          <Avatar
+            sx={{ width: 60, height: 60, p: 1 }}
+            src={`${user?.imageURL}`}
+            alt={`${user?.basicDetails.firstName}`}
+          />
+        </Grid>
+        <Grid item xs={12} md={10}>
+          <Typography variant="h4" component='span'>{`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
+            <br/><Link
+              to={`/divisions/details/${user?.division?._id}`}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            ><Typography variant="body1" >{`${user?.division?.details.name}`}
 
-          </Typography></Link>
-      </Typography>
+              </Typography></Link>
+          </Typography>
+        </Grid>
+      </Grid>
       {/* <br /> */}
       <Divider />
       <br />
