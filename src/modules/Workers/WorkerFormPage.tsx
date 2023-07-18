@@ -70,9 +70,11 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           console.log(res);
         });
     }
-    console.log((auth.user as IWorker).division, 'vbhfvh');
-    const divid=(auth.user as IWorker).division as unknown as string;
-    DivisionsServices.getDivisionById(divid)
+
+    if (props.action == 'add') {
+    // console.log((auth.user as IWorker).division, 'vbhfvh');
+      const divid=(auth.user as IWorker).division as unknown as string;
+      DivisionsServices.getDivisionById(divid)
     .then((res)=> {
       console.log(res.data);
       setWorker(()=>(
@@ -90,6 +92,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       );
     },
     );
+    }
   }, []);
 
   return (
