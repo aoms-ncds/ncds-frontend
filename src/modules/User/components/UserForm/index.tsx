@@ -112,7 +112,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   //   //   })
   //   // }
   // }, [children]);
-  const gobacktomanage = props.options?.kind == 'worker'?'/workers/manage':'/hr/manage';
+  const gobacktomanage = props.options?.kind == 'worker'?'/workers/':'/hr/manage';
 
   return (
     <>
@@ -297,29 +297,29 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 }}
               >
 
-                {((props.options?.kind === 'worker' && props.value.status === UserLifeCycleStates.CREATED)||(props.options?.kind === 'staff'))?(
-                  <>
-                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                      {' '}
-                      Go back{' '}
-                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                      {' '}
-                        Next{' '}
-                    </Button>
-                  </>
-                ):(
+                {(props.options?.kind === 'worker' && props.value.status !== UserLifeCycleStates.CREATED && props.value.basicDetails.martialStatus !== 'Married')?(
                   <>
                     <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
                       {' '}
-                    Review from first step{' '}
+                      Review from first step{' '}
                     </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                       {' '}
-                      Go back{' '}
+                    Go back{' '}
                     </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                       {' '}
                       {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
                       {' '}
-                      Submit{' '}
+                  Submit{' '}
+                    </Button>
+                  </>
+                ):(
+                  <>
+                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                      {' '}
+                    Go back{' '}
+                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                      {' '}
+                      Next{' '}
                     </Button>
                   </>
                 )}
