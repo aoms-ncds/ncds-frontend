@@ -14,7 +14,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label="Division Name" value={props.value.name} onChange={(e) => props.onChange({ ...props.value, name: e.target.value })} fullWidth required />
+          <TextField label="Division Name" value={props.value.name} onChange={(e) => props.onChange({ ...props.value, name: e.target.value })} fullWidth required disabled={props.action=='view'} />
         </FormControl>
       </Grid>
       {/* <Grid item xs={12} md={6} lg={4}>
@@ -24,12 +24,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid> */}
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label=" Contact Number" value={props.value.contactNumber} onChange={(e) => props.onChange({ ...props.value, contactNumber: e.target.value })} fullWidth />
+          <TextField label=" Contact Number" value={props.value.contactNumber}
+            onChange={(e) => props.onChange({ ...props.value, contactNumber: e.target.value })} fullWidth disabled={props.action=='view'} />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label=" Email ID" value={props.value.email} onChange={(e) => props.onChange({ ...props.value, email: e.target.value })} fullWidth />
+          <TextField label=" Email ID" value={props.value.email} onChange={(e) => props.onChange({ ...props.value, email: e.target.value })} fullWidth disabled={props.action=='view'} />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -41,6 +42,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noofWorkers: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
+            disabled={props.action=='view'}
           />
         </FormControl>
       </Grid>
@@ -53,6 +55,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfSubdivisions: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
+            disabled={props.action=='view'}
           />
         </FormControl>
       </Grid>
@@ -64,10 +67,11 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfChurches: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
+            disabled={props.action=='view'}
           />
         </FormControl>
       </Grid>
-      <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={'add'} />
+      <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
 
       <Grid item xs={12}>
         <br />
@@ -83,6 +87,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 props.onChange({ ...props.value, coordinator: newValue });
               }
             }}
+            disabled={props.action=='view'}
             label={' Co-ordinator Name'}
             required={false}
           />
@@ -97,6 +102,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 props.onChange({ ...props.value, seniorLeader: newValue });
               }
             }}
+            disabled={props.action=='view'}
             label={'Senior Leader Name'}
             required={false}
           />
@@ -105,6 +111,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <StaffDropdown
+            disabled={props.action=='view'}
             value={props.value.juniorLeader}
             onChange={(e, newValue) => {
               if (newValue) {

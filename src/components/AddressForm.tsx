@@ -39,6 +39,7 @@ const AddressForm = (
                         props.onChange(props.options?.sameAsAddress?.address ?? props.value);
                       }
                     }}
+                    disabled={props.action=='view'}
                   />
                 }
                 label={`Same as ${props.options?.sameAsAddress?.addressTitle}`}
@@ -67,6 +68,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>
@@ -89,6 +91,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>
@@ -111,6 +114,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>
@@ -133,6 +137,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>
@@ -155,6 +160,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>
@@ -177,6 +183,7 @@ const AddressForm = (
             )
           }
           fullWidth
+          disabled={props.action=='view'}
           // multiline
         />
       </Grid>

@@ -10,6 +10,7 @@ interface StaffDropdownProps {
   textFieldProps?: TextFieldProps;
   label: string;
   required?: boolean;
+  disabled?:boolean;
 }
 
 const StaffDropdown = (props: StaffDropdownProps) => {
@@ -42,6 +43,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
       clearOnBlur
       handleHomeEndKeys
       getOptionLabel={(option) => option.basicDetails.firstName + ' ' + option.basicDetails.lastName}
+      disabled={props.disabled === undefined ? false : props.disabled}
       onChange={props.onChange}
       renderInput={(params) => (
         <TextField
@@ -52,6 +54,7 @@ const StaffDropdown = (props: StaffDropdownProps) => {
             ...params.inputProps,
           }}
           {...props.textFieldProps}
+          disabled={props.disabled === undefined ? false : props.disabled}
         />
       )}
     />

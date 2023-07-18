@@ -8,9 +8,10 @@ import { useParams } from 'react-router-dom';
 import StaffDropdown from '../HR/components/StaffDropdown';
 interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
+  action:'add'|'edit'|'view';
   onChange: (newSubDivisions: SubDivision[]) => void;
 }
-const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer = [], onChange }) => {
+const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer = [], onChange, action }) => {
   const { editID } = useParams();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', name: '' }]);
 
@@ -94,12 +95,13 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             }}
             InputProps={{
               endAdornment: (
+                action!=='view'&&
                 <IconButton
                   onClick={() => {
                     deleteSubDivision(index);
                   }}
                 >
-                  <DeleteIcon />
+                  <DeleteIcon/>
                 </IconButton>
               ),
             }}
@@ -107,6 +109,8 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             fullWidth
             required
             autoComplete="off"
+            disabled={action=='view'}
+            // disabled={action=='view'}
           />
           <Grid>
             <br/>
@@ -125,6 +129,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             }}
             label={'Sub Division Leader Name'}
             required={false}
+            disabled={action=='view'}
           />
         </Grid>
       ))}
