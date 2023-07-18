@@ -26,17 +26,17 @@ declare global {
     // attachment:FileObject[];
     coordinator:{
 
-      name?:Staff;
+      name?:User;
       sign?:FileObject;
     };
     seniorLeader:{
 
-      name?:Staff;
+      name?:User;
       sign?:FileObject;
     };
     juniorLeader:{
 
-      name?:Staff;
+      name?:User;
       sign?:FileObject;
     };
   }
@@ -54,6 +54,6 @@ declare global {
     _id?: string;
     division?: Division;
     name: string;
-    leader?: Staff;
+    leader?: User;
   }
 }

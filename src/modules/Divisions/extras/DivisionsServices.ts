@@ -27,18 +27,6 @@ export default {
               // coordinator: division.details.coordinator?._id,
               // juniorLeader: division.details.juniorLeader?._id,
               // juniorLeader: division.details.seniorLeader?._id,
-              coordinator: {
-                name: division?.details?.coordinator?.name,
-                sign: division?.details?.coordinator?.sign,
-              },
-              juniorLeader: {
-                name: division?.details?.juniorLeader?.name,
-                sign: division?.details?.juniorLeader?.sign,
-              },
-              seniorLeader: {
-                name: division?.details?.seniorLeader?.name,
-                sign: division?.details?.seniorLeader?.sign,
-              },
 
             },
             subDivisions: [],
@@ -49,9 +37,8 @@ export default {
               for (let i = 0; i < division.subDivisions.length; i++) {
                 const subDiv = division.subDivisions[i];
                 await axios.post('/divisions/sub_divisions/', {
+                  ...subDiv,
                   division: createdDivision.data.data._id,
-                  name: subDiv.name,
-                  leader: subDiv.leader?._id,
                 }, { headers: { ...getAuthHeader() } });
               }
               resolve(createdDivision);
@@ -102,13 +89,12 @@ export default {
                 if (subDiv._id) {
                   if (objectIdPattern.test(subDiv._id)) {
                     await axios.patch(`/divisions/sub_divisions/${subDiv._id}`, {
-                      division: updatedDivision.data.data._id,
-                      name: subDiv.name,
+                      ...subDiv,
                     }, { headers: { ...getAuthHeader() } });
                   } else {
                     await axios.post('/divisions/sub_divisions', {
+                      ...subDiv,
                       division: updatedDivision.data.data._id,
-                      name: subDiv.name,
                     }, { headers: { ...getAuthHeader() } });
                   }
                 }

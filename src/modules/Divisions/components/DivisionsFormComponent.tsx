@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-undef */
-import { Button, Divider, FormControl, Grid, IconButton, TextField, Typography } from '@mui/material';
-import { AttachFile as AttachmentIcon, Delete as DeleteIcon, FileCopy as FileIcon } from '@mui/icons-material';
+import { Button, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import AddressForm from '../../../components/AddressForm';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import { useState } from 'react';
 import { MB } from '../../../extras/CommonConfig';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
-import StaffDropdown from '../../HR/components/StaffDropdown';
+import UsersDropdown from '../../User/components/UsersDropdown';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
@@ -96,7 +96,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={4}>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <StaffDropdown
+            <UsersDropdown
               value={props.value.coordinator?.name??null}
               onChange={(_e, newValue) => {
                 if (newValue) {
@@ -131,7 +131,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <StaffDropdown
+            <UsersDropdown
               value={props.value.seniorLeader?.name??null}
               onChange={(e, newValue) => {
                 if (newValue) {
@@ -164,7 +164,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={4}>
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
-            <StaffDropdown
+            <UsersDropdown
               disabled={props.action=='view'}
               value={props.value.juniorLeader?.name??null}
               onChange={(e, newValue) => {
