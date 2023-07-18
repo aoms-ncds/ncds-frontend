@@ -24,11 +24,11 @@ import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import FRReceiptTemplate from './components/FRReceiptTemplate';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import FRReceiptTemplate from './components/FRReceiptTemplate';
 
 
 const ManageFrPage = () => {
@@ -175,7 +175,7 @@ const ManageFrPage = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row}/>,
+              document: <FRReceiptTemplate rowData={props.row as FR}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
               // onClick: (()=>{
