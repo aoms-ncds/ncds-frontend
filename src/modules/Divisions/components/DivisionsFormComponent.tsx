@@ -117,7 +117,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+          <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
           </Button>
         </Grid>
@@ -151,7 +151,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+          <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
           </Button>
         </Grid>
@@ -201,7 +201,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           'image/jpg',
 
         ]}
-        action='add'
         limits={{
           // types: [],
           maxItemSize: 1*MB,
@@ -211,6 +210,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         // accept={['video/*']}
         open={showFileUploader1}
         onClose={() => setShowFileUploader1(false)}
+        action={props.action=='view'?'view':'add'}
         getFiles={props.value.coordinator?.sign?[props.value.coordinator?.sign]:[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
@@ -259,7 +259,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           'image/jpg',
 
         ]}
-        action='add'
         limits={{
           // types: [],
           maxItemSize: 1*MB,
@@ -268,6 +267,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         }}
         open={showFileUploader2}
         onClose={() => setShowFileUploader2(false)}
+        action={props.action=='view'?'view':'add'}
         getFiles={props.value.seniorLeader?.sign?[props.value.seniorLeader?.sign]:[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
@@ -316,7 +316,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           'image/jpg',
 
         ]}
-        action='add'
         limits={{
           // types: [],
           maxItemSize: 1*MB,
@@ -326,6 +325,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         // accept={['video/*']}
         open={showFileUploader3}
         onClose={() => setShowFileUploader3(false)}
+        action={props.action=='view'?'view':'add'}
         getFiles={props.value.juniorLeader?.sign?[props.value.juniorLeader?.sign]:[]}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
