@@ -428,11 +428,6 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
 
   return (
     <CommonPageLayout title="Internal Release Order">
-      <Avatar
-        sx={{ height: 50, width: 50 }}
-        src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&&export=download'}`}
-        // alt={`${user?.basicDetails.firstName}`}
-      />
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={(
