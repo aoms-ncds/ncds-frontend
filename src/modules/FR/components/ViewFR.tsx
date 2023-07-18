@@ -356,7 +356,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   // }}
                 >
                   <PDFDownloadLink
-                    document={<FRReceiptTemplate rowData={props.value} />}
+                    document={<FRReceiptTemplate rowData={props.value as FR} />}
                     fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >
