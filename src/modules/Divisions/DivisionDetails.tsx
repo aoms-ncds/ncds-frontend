@@ -8,8 +8,10 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
-
-const DivisionDetailsPage = () => {
+interface DivisionFormPageProps {
+  action: 'add' | 'edit' | 'view';
+}
+const DivisionDetailsPage = (props:DivisionFormPageProps) => {
   const { divisionIDs, editID } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -18,10 +20,10 @@ const DivisionDetailsPage = () => {
 
 
   const addDivision = () => {
-    console.log('ADD_FUNCTION');
     // e.preventDefault();
     // event.preventDefault();
-    DivisionsServices.create(divisionDetails)
+    if (props.action=='add') {
+      DivisionsServices.create(divisionDetails)
       .then((res) => {
         console.log(res, 'res');
         enqueueSnackbar({
@@ -35,11 +37,12 @@ const DivisionDetailsPage = () => {
           variant: 'error',
         });
       });
+    }
   };
   console.log('Dd');
   const editDivision = () => {
     // event.preventDefault();
-    if (editID) {
+    if (editID && props.action=='edit') {
       DivisionsServices.editDivision(editID, divisionDetails)
         .then((res) => {
           console.log(res);
@@ -103,6 +106,7 @@ const DivisionDetailsPage = () => {
   });
   console.log(divisionDetails, 'divisionDetails');
   useEffect(() => {
+    console.log(props.action);
     if (divisionIDs) {
       setAction('view');
       DivisionsServices.getDivisionById(divisionIDs)
@@ -159,7 +163,7 @@ const DivisionDetailsPage = () => {
                   onChange={(newDivision: DivisionDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, details: newDivision }));
                   }}
-                  action={'add'}
+                  action={props.action}
                   options={{ title: 'Division Details' }}
                 />
 
@@ -189,6 +193,7 @@ const DivisionDetailsPage = () => {
                       subDivisions: newSubDivisions,
                     }));
                   }}
+                  action={props.action}
                 />
 
                 <Grid item xs={12}>
@@ -224,7 +229,7 @@ const DivisionDetailsPage = () => {
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
                   }}
-                  action={'add'}
+                  action={props.action}
                   options={{ title: 'FCRA Bank Details' }}
                 />
                 <BankDetailsForm
@@ -232,7 +237,7 @@ const DivisionDetailsPage = () => {
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails as BankDetails }));
                   }}
-                  action={'add'}
+                  action={props.action}
                   options={{ title: 'Local Bank Details' }}
                 />
                 <BankDetailsForm
@@ -240,7 +245,7 @@ const DivisionDetailsPage = () => {
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails: newbankDetails as BankDetails }));
                   }}
-                  action={'add'}
+                  action={props.action}
                   options={{ title: 'Other Bank Details' }}
                 />
                 <Grid item xs={12}>
