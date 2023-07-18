@@ -128,14 +128,14 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <StaffDropdown
-              value={props.value.seniorLeader?.name}
+              value={props.value.seniorLeader?.name??null}
               onChange={(e, newValue) => {
                 if (newValue) {
                   props.onChange({
                     ...props.value,
                     seniorLeader: {
+                      ...props.value.seniorLeader,
                       name: newValue,
-                      sign: props.value.seniorLeader?.sign,
                     },
                   });
                 }
@@ -160,14 +160,14 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth>
             <StaffDropdown
-              value={props.value.juniorLeader?.name}
+              value={props.value.juniorLeader?.name??null}
               onChange={(e, newValue) => {
                 if (newValue) {
                   props.onChange({
                     ...props.value,
                     juniorLeader: {
+                      ...props.value.juniorLeader,
                       name: newValue,
-                      sign: props.value.juniorLeader?.sign,
                     },
                   });
                 }
@@ -214,7 +214,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   ...props.value,
                   coordinator: {
                     ...props.value.coordinator,
-                    sign: props.value.coordinator?.sign,
+                    sign: res.data,
                   },
                 });
                 return res;
@@ -271,7 +271,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   ...props.value,
                   seniorLeader: {
                     ...props.value.seniorLeader,
-                    sign: props.value.seniorLeader?.sign,
+                    sign: res.data,
                   },
                 });
                 return res;
@@ -329,7 +329,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   ...props.value,
                   juniorLeader: {
                     ...props.value.juniorLeader,
-                    sign: props.value.juniorLeader?.sign,
+                    sign: res.data,
                   },
                 });
                 return res;

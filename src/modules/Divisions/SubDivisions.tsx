@@ -113,7 +113,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
           </Grid>
 
           <StaffDropdown
-            value={subDivision.leader}
+            value={subDivision.leader??null}
             onChange={(_e, newValue) => {
               if (newValue) {
                 const newSubDivisions = [...subDivisions];

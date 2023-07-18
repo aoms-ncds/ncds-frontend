@@ -154,7 +154,7 @@ const DivisionsList = () => {
       renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>,
       width: 150 },
   ];
-  return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} />;
+  return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
 };
 
 export default DivisionsList;
