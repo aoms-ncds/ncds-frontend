@@ -103,13 +103,13 @@ const styles = StyleSheet.create({
 const IROReceiptTemplate = (props: any) => {
   const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
   console.log(props);
-  // console.log(props.RowData.purposeDivision.details.coordinator, 'coordinatorImage');
+  // console.log(props.RowData.division.details.coordinator, 'coordinatorImage');
 
 
   // useEffect(() => {
-  //   if (props.RowData && props.RowData.purposeDivision.details.coordinator.sign.downloadURL) {
+  //   if (props.RowData && props.RowData.division.details.coordinator.sign.downloadURL) {
   //     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  //     const url = props.RowData.purposeDivision.details.coordinator.sign.downloadURL;
+  //     const url = props.RowData.division.details.coordinator.sign.downloadURL;
 
 
   //     fetch(url)
@@ -239,7 +239,7 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>E Signature</Text>
           <Text style={{ ...styles.text, marginTop: 1, left: 410 }}>E Signature are protected</Text>
-          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>{props.RowData?.purposeDivision?.details?.coordinator?.name}</View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>{props.RowData?.division?.details?.coordinator?.name}</View>
           <View style={{ ...styles.box5, marginTop: 15, left: 130 }}>{props.im}</View>
           <View style={{ ...styles.box5, marginTop: 15, left: 210 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 290 }}></View>

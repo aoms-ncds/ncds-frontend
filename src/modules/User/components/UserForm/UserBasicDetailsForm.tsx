@@ -307,30 +307,6 @@ const UserBasicDetailsForm = (
               },
             })
           }
-          variant={props.options?.textField?.variant}
-          fullWidth
-        />
-      </Grid>
-
-      <Grid item xs={12} md={6} lg={4}>
-        <TextField
-          label="Aadhaar File"
-          type="file"
-          onChange={(e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) {
-              props.onChange({
-                ...props.value,
-                aadhaar: {
-                  aadhaarNo: props.value.aadhaar?.aadhaarNo ?? '',
-                  // aadhaarFile: { file },
-                },
-              });
-            }
-          }}
-          variant={props.options?.textField?.variant}
-          InputLabelProps={{ shrink: true }}
-          fullWidth
           InputProps={{
             endAdornment: (
               <IconButton
@@ -343,8 +319,11 @@ const UserBasicDetailsForm = (
               </IconButton>
             ),
           }}
+          variant={props.options?.textField?.variant}
+          fullWidth
         />
       </Grid>
+
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
@@ -359,30 +338,6 @@ const UserBasicDetailsForm = (
               },
             })
           }
-          variant={props.options?.textField?.variant}
-          fullWidth
-        />
-      </Grid>
-
-      <Grid item xs={12} md={6} lg={4}>
-        <TextField
-          label="Voter ID File"
-          type="file"
-          onChange={(e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) {
-              props.onChange({
-                ...props.value,
-                voterId: {
-                  voterIdNo: props.value.voterId?.voterIdNo ?? '',
-                  // voterIdFile: { file },
-                },
-              });
-            }
-          }}
-          variant={props.options?.textField?.variant}
-          InputLabelProps={{ shrink: true }}
-          fullWidth
           InputProps={{
             endAdornment: (
               <IconButton
@@ -395,8 +350,11 @@ const UserBasicDetailsForm = (
               </IconButton>
             ),
           }}
+          variant={props.options?.textField?.variant}
+          fullWidth
         />
       </Grid>
+
 
       <Grid item xs={12} md={6}>
         <TextField
