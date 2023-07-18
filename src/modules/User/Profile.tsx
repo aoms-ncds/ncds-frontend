@@ -115,8 +115,19 @@ const Profile = () => {
           src={`${user?.imageURL}`}
           alt={`${user?.basicDetails.firstName}`}
         />
-      </div> <Typography variant="h4" component='span'>Profile of {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}</Typography>
-      <br />
+      </div>
+      <Typography variant="h4" component='span'>{`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
+        <br/><Link
+          to={`/divisions/details/${user?.division?._id}`}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+          }}
+        ><Typography variant="body1" sx={{ ml: 10 }} >{`${user?.division?.details.name}`}
+
+          </Typography></Link>
+      </Typography>
+      {/* <br /> */}
       <Divider />
       <br />
       <Card>

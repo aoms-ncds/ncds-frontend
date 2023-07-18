@@ -37,10 +37,12 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails | undefined, { ti
           }
           variant="outlined"
           fullWidth
+          disabled={props.action=='view'}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
+          disabled={props.action=='view'}
           label="Branch Name"
           value={newBankDetails.branchName}
           onChange={(e) =>
@@ -73,6 +75,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails | undefined, { ti
           }
           variant="outlined"
           fullWidth
+          disabled={props.action=='view'}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -91,6 +94,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails | undefined, { ti
           }
           variant="outlined"
           fullWidth
+          disabled={props.action=='view'}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -109,6 +113,7 @@ const BankDetailsForm = (props: FormComponentProps<BankDetails | undefined, { ti
           }
           variant="outlined"
           fullWidth
+          disabled={props.action=='view'}
         />
       </Grid>
     </>
