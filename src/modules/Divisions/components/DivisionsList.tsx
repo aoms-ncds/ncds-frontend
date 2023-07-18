@@ -140,11 +140,11 @@ const DivisionsList = () => {
       width: 140 },
 
     {
-      field: 'noofWorkers',
+      field: 'noOfWorkers',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
-      renderCell: (props: any) => <p> {props.row.details.noofWorkers}</p>,
+      renderCell: (props: any) => <p> {props.row.details.noOfWorkers}</p>,
       width: 130 },
     {
       field: 'NoOfSubdivisions',
