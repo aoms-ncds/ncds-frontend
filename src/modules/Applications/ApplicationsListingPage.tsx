@@ -32,6 +32,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     reason: '',
     status: '',
     division: {
+      _id: '',
       details: {
         name: '',
         divisionId: '',

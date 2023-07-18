@@ -68,6 +68,7 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
       division: '',
     },
     division: {
+      _id: '',
       details: {
         name: '',
         divisionId: '',

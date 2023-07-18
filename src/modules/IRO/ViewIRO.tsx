@@ -109,6 +109,7 @@ const ViewIRO = () => {
       division: '',
     },
     division: {
+      _id: '',
       details: {
         name: '',
         divisionId: '',
