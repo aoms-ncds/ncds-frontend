@@ -10,6 +10,7 @@ interface UserDropdownProps {
   textFieldProps?: TextFieldProps;
   label: string;
   required?: boolean;
+  disabled?:boolean;
 }
 
 const UsersDropdown = (props: UserDropdownProps) => {
@@ -42,12 +43,14 @@ const UsersDropdown = (props: UserDropdownProps) => {
       clearOnBlur
       handleHomeEndKeys
       getOptionLabel={(option) => option.basicDetails.firstName + ' ' + option.basicDetails.lastName}
+      disabled={props.disabled === undefined ? false : props.disabled}
       onChange={props.onChange}
       renderInput={(params) => (
         <TextField
           {...params}
           label={props.label}
           required={props.required === undefined ? true : props.required}
+          disabled={props.disabled === undefined ? false : props.disabled}
           inputProps={{
             ...params.inputProps,
           }}

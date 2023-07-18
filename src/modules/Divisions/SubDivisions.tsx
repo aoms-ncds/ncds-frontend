@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
-import StaffDropdown from '../HR/components/StaffDropdown';
+import UsersDropdown from '../User/components/UsersDropdown';
 interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
   action:'add'|'edit'|'view';
@@ -76,9 +76,9 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
   return (
     <>
       <Grid item xs={12}>
-        <Button variant="outlined" onClick={handleAddSubDivision} sx={{ float: 'right' }}>
+        { action!=='view' && <Button variant="outlined" onClick={handleAddSubDivision} sx={{ float: 'right' }}>
           Add new Sub Division
-        </Button>
+        </Button>}
       </Grid>
       {/* <Grid item xs={12} > */}
       {subDivisions.map((subDivision, index) => (
@@ -87,12 +87,23 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             label={`Sub Division ${index + 1}`}
             value={subDivision.name}
             onChange={(e) => {
-              const newSubDivisions = [...subDivisions];
-              newSubDivisions[index].name = e.target.value;
-              setSubDivisions(newSubDivisions);
+              setSubDivisions(subDivisions.map((subDiv, _index)=>index==_index?
+                {
+                  ...subDivision,
+                  name: e.target.value,
+                }:subDiv));
+              onChange(subDivisions.map((subDiv, _index)=>index==_index?
+                {
+                  ...subDivision,
+                  name: e.target.value,
+                }:subDiv));
+              // const newSubDivisions = [...subDivisions];
+              // newSubDivisions[index].name = e.target.value;
+              // setSubDivisions(newSubDivisions);
 
-              onChange(newSubDivisions); // Call the onChange prop with the updated division details
+              // onChange(newSubDivisions); // Call the onChange prop with the updated division details
             }}
+
             InputProps={{
               endAdornment: (
                 action!=='view'&&
@@ -115,16 +126,25 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
           <Grid>
             <br/>
           </Grid>
-
-          <StaffDropdown
+          <UsersDropdown
             value={subDivision.leader??null}
             onChange={(_e, newValue) => {
               if (newValue) {
-                const newSubDivisions = [...subDivisions];
-                newSubDivisions[index].leader = newValue;
-                setSubDivisions(newSubDivisions);
+                setSubDivisions(subDivisions.map((subDiv, _index)=>index==_index?
+                  {
+                    ...subDivision,
+                    leader: newValue,
+                  }:subDiv));
+                onChange(subDivisions.map((subDiv, _index)=>index==_index?
+                  {
+                    ...subDivision,
+                    leader: newValue,
+                  }:subDiv));
+                // const newSubDivisions = [...subDivisions];
+                // newSubDivisions[index].leader = newValue;
+                // setSubDivisions(newSubDivisions);
 
-                onChange(newSubDivisions); // Call the onChange prop with the updated division details
+                // onChange(newSubDivisions); // Call the onChange prop with the updated division details
               }
             }}
             label={'Sub Division Leader Name'}

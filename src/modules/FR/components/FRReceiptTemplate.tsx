@@ -175,17 +175,17 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData.division?.details.coordinator.sign?.type};base64, ${props.rowData.division?.details.coordinator.sign?.base64} `}/>
+          src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
           <Image style={{ left: 260,
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData.division?.details.seniorLeader.sign?.type};base64, ${props.rowData.division?.details.seniorLeader.sign?.base64} `}/>
+          src={`data:${props.rowData.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData.division?.details.seniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
             position: 'absolute',
             width: 50 }}
-          src={`data:${props.rowData.division?.details.juniorLeader.sign?.type};base64, ${props.rowData.division?.details.juniorLeader.sign?.base64} `}/>
+          src={`data:${props.rowData.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData.division?.details.juniorLeader?.sign?.base64} `}/>
         </div>
 
         {/* <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
