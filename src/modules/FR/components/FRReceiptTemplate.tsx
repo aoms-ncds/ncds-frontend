@@ -3,12 +3,17 @@ import moment from 'moment';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
 import { Page, Text, Document, StyleSheet, Font, Image, View } from '@react-pdf/renderer';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 
-Font.register({
-  family: 'Oswald',
-  src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf',
-});
+Font.register({ family: 'Oswald', fonts: [
+  { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf' },
+  { src: 'https://fonts.googleapis.com/css2?family=Oswald:wght@200;700&display=swap' },
+]});
+// Font.register({
+//   family: 'Oswald',
+//   src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf',
+//   family:'Oswald:wght@700',
+// });
 
 const styles = StyleSheet.create({
   image: {
@@ -26,39 +31,59 @@ const styles = StyleSheet.create({
     color: 'darkblue',
   },
   address: {
-    marginTop: 114,
+    marginTop: 105,
     fontSize: 10,
     position: 'absolute',
-    left: 260,
+    left: 185,
     color: 'black',
   },
   frno: {
-    marginTop: 126,
+    marginTop: 120,
     fontSize: 10,
     position: 'absolute',
-    left: 270,
+    left: 275,
     color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   month: {
-    marginTop: 140,
+    marginTop: 135,
     fontSize: 10,
     position: 'absolute',
-    left: 230,
+    left: 240,
     color: 'black',
   },
   division: {
+    marginTop: 173,
+    fontSize: 10,
+    position: 'absolute',
+    left: 180,
+    color: 'black',
+  },
+  divisiontitle: {
     marginTop: 170,
     fontSize: 10,
     position: 'absolute',
     left: 100,
     color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   date: {
+    marginTop: 173,
+    fontSize: 10,
+    position: 'absolute',
+    left: 420,
+    color: 'black',
+  },
+  datetitle: {
     marginTop: 170,
     fontSize: 10,
     position: 'absolute',
     left: 400,
     color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   table: {
     width: '700',
@@ -96,6 +121,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
   // const [imageData, setImageData] = React.useState('');
 
   // console.log(props);
+  let totalAmount=0;
   return (
     <Document>
       <Page size="A4">
@@ -108,66 +134,89 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
         <Image src={imageData}/> */}
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
-          <Text style={styles.address}>ADDRESS</Text>
-          <Text style={styles.frno}>FRNO:{props.rowData.FRno}</Text>
-          <Text style={styles.month}>For the Month of:{props.rowData.particulars[0]?.month}</Text>
+          <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
+          <Text style={styles.frno}>{props.rowData.FRno}</Text>
+
+          <Text style={styles.month}>For the Month of {props.rowData.particulars[0]?.month}</Text>
           <div>
-            <Text style={styles.division}>Name of the Division:{props?.rowData.division?.details?.name}</Text>
-            <Text style={styles.date}>Date:{moment(props.rowData.FRdate).format('DD-MM-yyyy')}</Text>
+            <Text style={styles.divisiontitle }>Name of the Division:</Text>
+            <Text style={styles.division }>{props?.rowData.division?.details?.name}</Text>
+            <Text style={styles.datetitle}>Date:  </Text>
+            <Text style={styles.date}> {moment(props.rowData.FRdate).format('DD-MM-yyyy')}</Text>
           </div>
         </div>
-        <div style={{ marginTop: 200, width: 500, left: 50 }}>
+        <div style={{ marginTop: 200, width: 560, left: 20, right: 20 }}>
           <PDFTable>
             <PDFTableHeader>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60'}>
                 Sl No
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                Financial Requisition particulars
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
+                FR particulars
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
                 Sub Division Name
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'20%'}>
                 Quantity
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'80%'}>
                 Description
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
-                Need Of Month
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
+                 Month
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => (
-              <PDFTableRow key={index}>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
+            {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
+              totalAmount += item.requestedAmount??0;
+              return <PDFTableRow key={index} height='50'>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                   {String(index + 1)}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 9 }} width={'30%'}>
                   {item.mainCategory}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
                   {props?.rowData.purposeSubdivision?.name}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
                   {String(item.quantity)}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 9 }} width={'80%'}>
                   {item.narration}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'} >
                   {item?.month}
                 </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'25%'}>
                   {String(item.requestedAmount)}
                 </PDFCell>
-              </PDFTableRow>
-            ))}
-
-
+              </PDFTableRow>;
+            })}
+            <PDFTableRow key={props.rowData.particulars.length}>
+              <PDFCell width={'60'} ></PDFCell>
+              <PDFCell width={'30%'} ></PDFCell>
+              <PDFCell width={'30%'}></PDFCell>
+              <PDFCell width={'20%'}></PDFCell>
+              <PDFCell width={'80%'}></PDFCell>
+              <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
+              Total amount :
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
+                {totalAmount.toString()}
+              </PDFCell>
+            </PDFTableRow>
           </PDFTable>
         </div>
         <div style={{ marginTop: 20, fontSize: 10 }}>
@@ -193,9 +242,9 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text> */}
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Senior Leader Sign</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator Leader Sign</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Senior Leader Sign</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader Sign</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text>
@@ -204,7 +253,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
         </div> */}
 
         <div style={{ marginTop: 80 }}>
-          <Text style={{ fontSize: 12, paddingLeft: 40, paddingRight: 40 }}>
+          <Text style={{ fontSize: 12, paddingLeft: 25, paddingRight: 70, marginLeft: 55 }}>
             * The Original requisition must reach Delhi Office by 15 of the previous month for which money is requested. If it is not received in Delhi Office by that date, it will be presumed that
             there is no needs of finance in your area for the month of you have balance of money with you
           </Text>
@@ -212,8 +261,9 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
             style={{
               fontSize: 12,
               marginTop: 20,
-              paddingLeft: 40,
-              paddingRight: 40,
+              paddingLeft: 25,
+              paddingRight: 70,
+              marginLeft: 55,
             }}
           >
             * All Disputes are subjected to Delhi jurisdiction

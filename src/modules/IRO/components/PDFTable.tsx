@@ -28,7 +28,7 @@ export const PDFTableHeader = (props: { children: JSX.Element | JSX.Element[]; s
       alignItems: 'center',
       height: 24,
       textAlign: 'center',
-      fontStyle: 'bold',
+      fontWeight: 'bold',
       flexGrow: 1,
       ...props.style,
     }}
@@ -37,15 +37,16 @@ export const PDFTableHeader = (props: { children: JSX.Element | JSX.Element[]; s
   </View>
 );
 
-export const PDFTableRow = (props: { children: JSX.Element | JSX.Element[]; style?: Style }) => (
+export const PDFTableRow = (props: { children: JSX.Element | JSX.Element[]; height?:string; style?: Style }) => (
   <View
     style={{
       flexDirection: 'row',
       borderBottomColor: '#bff0fd',
       borderBottomWidth: 1,
       alignItems: 'center',
-      height: 24,
-      fontStyle: 'bold',
+      height: props.height??24,
+      // maxHeight:'100%',?
+      fontWeight: 'bold',
       ...props.style,
     }}
   >
@@ -54,15 +55,24 @@ export const PDFTableRow = (props: { children: JSX.Element | JSX.Element[]; styl
 );
 
 export const PDFCell = (props: { children?: JSX.Element | JSX.Element[] | string; width: string; style?: Style }) => (
-  <Text
-    style={{
-      width: props.width,
-      borderRightColor: '#90e5fc',
-      borderRightWidth: 1,
-      textAlign: 'right',
-      ...props.style,
-    }}
-  >
-    {props.children}
-  </Text>
+  <>
+    <Text
+      style={{
+        width: props.width,
+        // borderRightColor: '#90e5fc',
+        // borderRightStyle: 'solid',
+        // borderRightWidth: 1,
+        // borderRight: 1,
+        // borderLeft: 1,
+        // borderLeftColor: '#90e5fc',
+        // borderLeftStyle: 'solid',
+        // borderLeftWidth: 1,
+        // borderRightWidth: 1,
+        textAlign: 'right',
+        ...props.style,
+      }}
+    >
+      {props.children}
+    </Text>
+  </>
 );
