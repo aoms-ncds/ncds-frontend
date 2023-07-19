@@ -208,7 +208,7 @@ const IROReceiptTemplate = (props: any) => {
                   Accountant Remarks
                 </PDFCell>
               </PDFTableHeader>
-              <PDFTableRow>
+              <PDFTableRow >
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
                   1
                 </PDFCell>
