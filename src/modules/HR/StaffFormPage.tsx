@@ -53,15 +53,9 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       StaffServices.getById(id)
         .then((res) => {
           if (res.data) {
-            setStaff({
-              ...res.data,
-              tokens: [],
-              basicDetails: {
-                ...res.data.basicDetails,
-                aadhaar: undefined,
-                voterId: undefined,
-              },
-            });
+            setStaff(
+              res.data,
+            );
           }
         })
         .catch((res) => {

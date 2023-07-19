@@ -33,10 +33,9 @@ import { useNavigate } from 'react-router-dom';
 import { Delete as DeleteIcon, Image as ImageIcon } from '@mui/icons-material';
 import ChildrenServices from '../../../Workers/extras/ChildrenServices';
 import { enqueueSnackbar } from 'notistack';
-import PermissionChecks, { hasPermissions } from '../PermissionChecks';
 import UserLifeCycleStates from '../../extras/UserLifeCycleStates';
-import { Console } from 'console';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
+import UserServices from '../../extras/UserServices';
 
 
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
@@ -56,7 +55,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
 ) => {
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
-  console.log(props, ' console.log(props);');
+  // console.log(props, ' console?s.log(props);');
   // const { editID } = useParams();
   const navigate = useNavigate();
 
@@ -91,6 +90,19 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   };
   const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
+  const submitForm = (data: UserType) =>{
+    console.log(data);
+    UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
+    .then((res)=>{
+      console.log(res.data);
+      props.onSubmit && props.onSubmit(props.value);
+      navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
+    })
+    .catch((error) =>{
+      console.log('error', error);
+    });
+  };
+
   useEffect(() => {
     // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
     ChildrenServices.getAllChildSupport()
@@ -103,6 +115,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
     );
   }, []);
 
+
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {
   //   lastProgramNameField.current?.focus();
@@ -113,7 +126,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   //   //   })
   //   // }
   // }, [children]);
-  const goBackToManage = props.options?.kind == 'worker'?'/workers/':'/hr/manage';
 
   return (
     <>
@@ -265,8 +277,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                     if (props.value.status===UserLifeCycleStates.CREATED) {
                       setActiveStep((currentStep) => currentStep + 3);
                     } else {
-                      props.onSubmit && props.onSubmit(props.value);
-                      navigate(goBackToManage);
+                      submitForm(props.value);
                     }
                   }
                 } else {
@@ -370,8 +381,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 if (props.value.status===UserLifeCycleStates.CREATED) {
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
-                  props.onSubmit && props.onSubmit(props.value);
-                  navigate(goBackToManage);
+                  submitForm(props.value);
                 }
               }}
             >
@@ -471,9 +481,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
           )}
           {activeStep===4 && (
             <form
-              onSubmit={() => {
-                props.onSubmit && props.onSubmit(props.value);
-                navigate(goBackToManage);
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitForm(props.value);
               }
               }
             >
