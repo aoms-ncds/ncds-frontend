@@ -4,6 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
+import { useAuth } from '../../../../hooks/Authentication';
 
 // const defaultDivisionDetails:Division = {
 //   details: {
@@ -45,6 +46,7 @@ const NewOfficialDetailsForm = (
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
       kind?: UserKind | undefined;
+      // userKind:UserKind;
     }
   >
   ,
@@ -55,7 +57,7 @@ const NewOfficialDetailsForm = (
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const currentDate = moment();
-
+  const user=useAuth();
   useEffect(() => {
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
       DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
@@ -75,7 +77,8 @@ const NewOfficialDetailsForm = (
     //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
     console.log(props.value);
-    DivisionsServices.getDivisions()
+    if (user.user && (user.user as User).kind=='staff') {
+      DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
         enqueueSnackbar({
@@ -83,6 +86,7 @@ const NewOfficialDetailsForm = (
           message: error.message,
         }),
       );
+    }
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
       .then((res) => setSubDivisions(res.data))
@@ -136,7 +140,7 @@ const NewOfficialDetailsForm = (
       {/* {props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?.details.name} */}
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
-          disabled={props.options?.kind=='worker'}
+          // disabled={props.kind=='worker'}
           options={divisions ?? []}
           value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
@@ -179,8 +183,9 @@ const NewOfficialDetailsForm = (
           }}
           renderInput={(params) => (
             <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant}
-              disabled={props.options?.kind=='worker'} required />
+              required />
           )}
+          disabled={Boolean(user.user && (user.user as User).kind=='worker')}
         />
       </Grid>
 
