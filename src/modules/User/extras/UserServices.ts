@@ -99,4 +99,9 @@ export default {
         headers: { ...getAuthHeader() },
       }),
     ),
+
+  checkduplicationofmail: (userId: string) =>
+    getStandardResponse(
+      axios.get(`/users/mailduplicate/${userId}`, { headers: { ...getAuthHeader() } }),
+    ),
 };
