@@ -99,10 +99,10 @@ export default {
         headers: { ...getAuthHeader() },
       }),
     ),
-  getDivisionUser: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
-    getStandardResponse<User[]>(
-      axios.get('/users/userdivision/', {
-        params: { filterQuery: JSON.stringify(conditions) },
+  getDivisionUser: (divisionID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[] >(
+      axios.get(`/users/user_division/${divisionID}`, {
+        params: { ...params },
         headers: { ...getAuthHeader() },
       }),
       (users) =>
@@ -121,6 +121,7 @@ export default {
           updatedAt: moment(user.updatedAt),
         })),
     ),
+
 
   checkDuplicationOfMail: (userId: string) =>
     getStandardResponse(

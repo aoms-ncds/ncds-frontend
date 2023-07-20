@@ -9,16 +9,20 @@ import FileUploaderServices from '../../../components/FileUploader/extras/FileUp
 import UsersDropdown from '../../User/components/UsersDropdown';
 import UserServices from '../../User/extras/UserServices';
 import { enqueueSnackbar } from 'notistack';
+import { useParams } from 'react-router-dom';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
   const [showFileUploader2, setShowFileUploader2] = useState(false);
   const [showFileUploader3, setShowFileUploader3] = useState(false);
   const [users, setUsers] = useState<User[] | null>(null);
+  const { editID } = useParams();
 
 
   useEffect(()=>{
-    UserServices.getDivisionUser()
+    console.log({ editID });
+    if (editID) {
+      UserServices.getDivisionUser(editID)
   .then((res) => {
     setUsers(res.data);
   })
@@ -28,7 +32,9 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       message: error.message,
     });
   });
-  }, []);
+    }
+  }
+  , []);
 
   // console.log(eSign.attachment, 'eSign');
   return (

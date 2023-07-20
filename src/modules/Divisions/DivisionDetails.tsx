@@ -113,6 +113,8 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
   console.log(divisionDetails, 'divisionDetails');
   useEffect(() => {
     console.log(props.action);
+    // console.log( { editID } );
+
     if (divisionIDs) {
       setAction('view');
       DivisionsServices.getDivisionById(divisionIDs)
