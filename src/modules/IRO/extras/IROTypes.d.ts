@@ -22,6 +22,13 @@ declare global{
     status: number;
     releaseAmount:IReleaseAmount;
     billAttachment:FileObject[];
+    signature:{
+      hrSignature?:FileObject;
+      accountManagerSignature?:FileObject;
+      accountantSignature?:FileObject;
+      divisionCoordinatorSignature?:FileObject;
+
+    };
   }
 
   export interface IReleaseAmount {
