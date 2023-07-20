@@ -101,7 +101,7 @@ export default {
     ),
   getDivisionUser: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[]>(
-      axios.get('/users/userdivision/', {
+      axios.get('/users/user_division/', {
         params: { filterQuery: JSON.stringify(conditions) },
         headers: { ...getAuthHeader() },
       }),
