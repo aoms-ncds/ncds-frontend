@@ -147,7 +147,7 @@ const ManageFrPage = () => {
               },
             ] : []),
             {
-              id: 'sendBackDivision',
+              id: 'sendBackDivision1',
               text: 'Send Back to Division',
               onClick: () => {
                 enqueueSnackbar({
