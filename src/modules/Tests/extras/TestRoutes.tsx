@@ -1,7 +1,6 @@
 import TestModule from '..';
 import { Extension as ExtensionIcon } from '@mui/icons-material';
 import LoginPage from '../../User/Login';
-import Pdfview from '../pdfview';
 import ForgotPasswordFormPage from '../../User/ForgotPasswordForm';
 
 const testsPageRoutes: ModuleRoute = {
@@ -29,14 +28,6 @@ const testsPageRoutes: ModuleRoute = {
       path: '/ForgotPasswordForm',
       element: <ForgotPasswordFormPage />,
       private: false,
-      requiredAccessRights: ['READ_ACCESS'],
-      showInDrawer: false,
-    },
-    {
-      title: 'IRO Report',
-      path: '/pdfview',
-      element: <Pdfview />,
-      private: true,
       requiredAccessRights: ['READ_ACCESS'],
       showInDrawer: false,
     },
