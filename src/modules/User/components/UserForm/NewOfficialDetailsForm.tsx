@@ -77,8 +77,8 @@ const NewOfficialDetailsForm = (
     //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
     console.log(props.value);
-    if (user.user && (user.user as User).kind=='staff') {
-      DivisionsServices.getDivisions()
+    // if (user.user && (user.user as User).kind=='staff') {
+    DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
         enqueueSnackbar({
@@ -86,7 +86,7 @@ const NewOfficialDetailsForm = (
           message: error.message,
         }),
       );
-    }
+    // }
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
       .then((res) => setSubDivisions(res.data))
