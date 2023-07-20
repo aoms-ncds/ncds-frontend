@@ -497,12 +497,12 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                         onClick={
                           ()=> {
                             IROServices.sendNotifications('president', selectedIROId??'')
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((res) => {
-              console.log(res);
-            });
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
                           }
                         }
                         endIcon={<SendIcon/>}
@@ -515,12 +515,12 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                         onClick={
                           ()=> {
                             IROServices.sendNotifications('accounts', selectedIROId??'')
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
                           }
                         }
                         endIcon={<SendIcon/>}
@@ -533,33 +533,16 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                         onClick={
                           ()=> {
                             IROServices.sendNotifications('office_manager', selectedIROId??'')
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
                           }
                         }
                         endIcon={<SendIcon/>}
                       >  Send to office manager</Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button variant="contained" color='inherit'
-                        sx={{ width: 260 }}
-                        onClick={
-                          ()=> {
-                            IROServices.sendNotifications('division_head', selectedIROId??'')
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
-                          }
-                        }
-                        endIcon={<SendIcon/>}
-                      >  Send to division head</Button>
                     </Grid>
                     <Grid item xs={12}>
                       <Button variant="contained" color='secondary'
@@ -567,19 +550,35 @@ const ManageIRO = (props:{action:'manage'|'release'}) => {
                         onClick={
                           ()=> {
                             IROServices.sendNotifications('account_manager', selectedIROId??'')
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
                           }
                         }
                         endIcon={<SendIcon/>}
                       >  Send to account manager</Button>
                       <br/><br/>
                     </Grid>
-
+                    <Grid item xs={12}>
+                      <Button variant="contained" color='inherit'
+                        sx={{ width: 260 }}
+                        onClick={
+                          ()=> {
+                            IROServices.sendNotifications('division_head', selectedIROId??'')
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                          }
+                        }
+                        endIcon={<SendIcon/>}
+                      >  Send to division head</Button>
+                    </Grid>
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
