@@ -42,7 +42,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   });
   const [showHRFileUploader, setShowHRFileUploader] = useState(false);
   const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
-  const [showAccountmanagerFileUploader, setShowAccountmanagerFileUploader] = useState(false);
+  const [showAccountmanagerFileUploader, setShowAccountManagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [addSignature, toggleAddSignature] = useState(false);
@@ -208,7 +208,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     if (selectedIRO._id != '') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
-    console.log(selectedIRO);
+    console.log(selectedIRO, 'AA');
   }, [selectedIRO.signature]);
 
   const columns: GridColDef<IROrder>[] = [
@@ -667,10 +667,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="success"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          setShowAccountmanagerFileUploader(false);
-                          setShowAccountFileUploader(false);
+                          // setShowAccountManagerFileUploader(false);
+                          // setShowAccountFileUploader(false);
                           setShowHRFileUploader(true);
-                          toggleAddSignature(false);
+                          // toggleAddSignature(false);
                         }}
                       >
                         {' '}
@@ -683,10 +683,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="info"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          setShowAccountFileUploader(false);
-                          setShowHRFileUploader(false);
-                          toggleAddSignature(false);
-                          setShowAccountmanagerFileUploader(true);
+                          // setShowAccountFileUploader(false);
+                          // setShowHRFileUploader(false);
+                          // toggleAddSignature(false);
+                          setShowAccountManagerFileUploader(true);
                         }}
                       >
                         {' '}
@@ -699,10 +699,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="warning"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          setShowAccountmanagerFileUploader(false);
-                          setShowHRFileUploader(false);
                           setShowAccountFileUploader(true);
-                          toggleAddSignature(false);
+                          // setShowAccountmanagerFileUploader(false);
+                          // setShowHRFileUploader(false);
+                          // toggleAddSignature(false);
                         }}
                       >
                         {' '}
@@ -843,7 +843,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               }}
               // accept={['video/*']}
               open={showAccountmanagerFileUploader}
-              onClose={() => setShowAccountmanagerFileUploader(false)}
+              onClose={() => setShowAccountManagerFileUploader(false)}
               getFiles={selectedIRO?.signature?.accountManagerSignature ? [selectedIRO.signature.accountManagerSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
