@@ -31,11 +31,11 @@ const HRDashboard = () => {
   return (
     <CommonPageLayout title="HR Dashboard">
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage Staff" secondaryText={staffCount ? staffCount?.toString() : undefined} color="#003049" targetRoute="/hr/manage" />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Manage Staff" secondaryText={staffCount ? staffCount?.toString() : undefined} color="#002366" targetRoute="/hr/manage" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#de2828" targetRoute="/workers" />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#6d579a" targetRoute="/workers" />
         </Grid>
         {/* <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Worker" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />

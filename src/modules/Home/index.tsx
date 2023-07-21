@@ -12,7 +12,7 @@ const HomePage = () => {
     <CommonPageLayout title="Home Page">
       {/* <Container> */}
       <Grid container spacing={3}>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} lg={12}>
           <MinimalModuleDataAnalytics />
         </Grid>
         <PermissionChecks

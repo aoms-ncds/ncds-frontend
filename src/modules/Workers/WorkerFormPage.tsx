@@ -64,6 +64,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         .then((res) => {
           if (res.data) {
             setWorker(res.data);
+            console.log(worker);
           }
         })
         .catch((res) => {

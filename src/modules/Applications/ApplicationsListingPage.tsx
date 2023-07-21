@@ -27,7 +27,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
-    applicationNo: '',
+    applicationCode: '',
     name: '',
     reason: '',
     status: '',
@@ -130,7 +130,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             variant: 'success',
           });
           setApplicationFormState({
-            applicationNo: '',
+            applicationCode: '',
             name: '',
             reason: '',
             status: '',
@@ -170,7 +170,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
         setApplications((prevApps) => (!prevApps ? [res.data] : [...prevApps, res.data]));
         setApplicationFormState(() => ({
-          applicationNo: '',
+          applicationCode: '',
           name: '',
           reason: '',
           status: '',
@@ -313,7 +313,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
-    { field: 'applicationNo', align: 'center',
+    { field: 'applicationCode', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150 },
     { field: 'name', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150 },
