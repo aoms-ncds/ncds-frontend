@@ -26,9 +26,19 @@ declare global{
       hrSignature?:FileObject;
       accountManagerSignature?:FileObject;
       accountantSignature?:FileObject;
-      divisionCoordinatorSignature?:FileObject;
-
     };
+    // signature?: {
+    //   hrSignature?: {
+    //     sign: FileObject;
+    //   };
+    //   accountManagerSignature: {
+    //     sign: FileObject;
+    //   };
+    //   accountantSignature: {
+    //     sign: FileObject;
+    //   };
+    // };
+
   }
 
   export interface IReleaseAmount {

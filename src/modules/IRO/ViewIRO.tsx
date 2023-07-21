@@ -161,12 +161,7 @@ const ViewIRO = () => {
     billAttachment: [],
     createdAt: moment(),
     updatedAt: moment(),
-    signature: {
-      hrSignature: undefined,
-      accountManagerSignature: undefined,
-      accountantSignature: undefined,
-      divisionCoordinatorSignature: undefined,
-    },
+    signature: {},
   });
   console.log(IRO, 'IRO');
 

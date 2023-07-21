@@ -167,7 +167,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     createdAt: moment(),
     updatedAt: moment(),
     billAttachment: [],
-    signature: {},
+    signature: {
+      hrSignature: undefined,
+      accountManagerSignature: undefined,
+      accountantSignature: undefined,
+    },
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -206,12 +210,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
     console.log(selectedIRO);
   }, [selectedIRO.signature]);
-  // const handleDownload = () => {
-  //   const fileUrl = 'https://drive.google.com/uc?id=1Hil5H609dibNJm5jH20Xb1fWvykNWEnh&export=download';
-  //   fileDownload(fileUrl, 'file.jpg');
-  // };
-  // <button onClick={handleDownload}>Download</button>;
-  // <img src="/iet_logo.png" alt="drive image" width='200' height='19'/>;
+
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
@@ -343,6 +342,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               onClick: () => {
                 setSelectedIROId(params.row._id);
                 toggleAddSignature(true);
+                setSelectedIRO(params.row);
               },
               icon: FingerprintIcon,
             },
@@ -667,8 +667,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="success"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          // setShowAccountmanagerFileUploader(false);
-                          // setShowAccountFileUploader(false);
+                          setShowAccountmanagerFileUploader(false);
+                          setShowAccountFileUploader(false);
                           setShowHRFileUploader(true);
                           toggleAddSignature(false);
                         }}
@@ -683,8 +683,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="info"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          // setShowAccountFileUploader(false);
-                          // setShowHRFileUploader(false);
+                          setShowAccountFileUploader(false);
+                          setShowHRFileUploader(false);
                           toggleAddSignature(false);
                           setShowAccountmanagerFileUploader(true);
                         }}
@@ -699,8 +699,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="warning"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          // setShowAccountmanagerFileUploader(false);
-                          // setShowHRFileUploader(false);
+                          setShowAccountmanagerFileUploader(false);
+                          setShowHRFileUploader(false);
                           setShowAccountFileUploader(true);
                           toggleAddSignature(false);
                         }}
@@ -813,7 +813,38 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               // accept={['video/*']}
               open={showHRFileUploader}
               onClose={() => setShowHRFileUploader(false)}
-              getFiles={[]}
+              // getFiles={selectedIRO?.signature?.hrSignature}
+              getFiles={selectedIRO?.signature?.hrSignature ? [selectedIRO.signature.hrSignature] : []}
+              uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name)
+                .then((res) => {
+                  console.log(res.data, 'FFF');
+                  setSelectedIRO(() => ({
+                    ...selectedIRO,
+                    signature: {
+                      ...selectedIRO.signature,
+                      hrSignature: res.data,
+                    },
+                  }));
+
+                  return res;
+                });
+              }}
+            />
+            <FileUploader
+              title="Account manager Signature"
+              action="add"
+              types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+              limits={{
+                // types: [],
+                maxItemSize: 1 * MB,
+                maxItemCount: 3,
+                maxTotalSize: 3 * MB,
+              }}
+              // accept={['video/*']}
+              open={showAccountmanagerFileUploader}
+              onClose={() => setShowAccountmanagerFileUploader(false)}
+              getFiles={selectedIRO?.signature?.accountManagerSignature ? [selectedIRO.signature.accountManagerSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
                   console.log(res.data, 'FFF');
@@ -821,7 +852,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     ...selectedIRO,
                     signature: {
                       ...selectedIRO?.signature,
-                      hrSignature: res.data,
+                      accountManagerSignature: res.data,
                     },
                   }));
 
@@ -842,53 +873,24 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               // accept={['video/*']}
               open={showAccountFileUploader}
               onClose={() => setShowAccountFileUploader(false)}
-              getFiles={[]}
+              getFiles={selectedIRO?.signature?.accountantSignature ? [selectedIRO.signature.accountantSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
                   console.log(res.data, 'FFF');
-                  setSelectedIRO(() => ({
-                    ...selectedIRO,
+                  setSelectedIRO((prevSelectedIRO) => ({
+                    ...prevSelectedIRO,
                     signature: {
-                      ...selectedIRO?.signature,
+                      ...prevSelectedIRO.signature,
                       accountantSignature: res.data,
                     },
                   }));
-                  console.log(selectedIRO, 'jk');
+
 
                   return res;
                 });
               }}
             />
-            <FileUploader
-              title="Account manager Signature"
-              action="add"
-              types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
-              limits={{
-                // types: [],
-                maxItemSize: 1 * MB,
-                maxItemCount: 3,
-                maxTotalSize: 3 * MB,
-              }}
-              // accept={['video/*']}
-              open={showAccountmanagerFileUploader}
-              onClose={() => setShowAccountmanagerFileUploader(false)}
-              getFiles={[]}
-              uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
-                  console.log(res.data, 'FFF');
-                  setSelectedIRO(() => ({
-                    ...selectedIRO,
-                    signature: {
-                      ...selectedIRO?.signature,
-                      accountManagerSignature: res.data,
-                    },
-                  }));
-                  console.log(selectedIRO, 'jk');
 
-                  return res;
-                });
-              }}
-            />
             <FileUploader
               title=" Bill Upload"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
