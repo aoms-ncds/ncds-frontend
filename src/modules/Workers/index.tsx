@@ -31,17 +31,17 @@ const WorkersDashboard = () => {
   return (
     <CommonPageLayout title="Workers Dashboard">
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} xl={3}>
+        <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#003049" targetRoute="/workers/manage" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="green" targetRoute="/workers/approve" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#46458C" targetRoute="/workers/reject" />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/reject" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={rejectedWorkersCount?.toString()} color="#F86F03" targetRoute="/workers/deactivated" />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={rejectedWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
         </Grid>
       </Grid>
     </CommonPageLayout>

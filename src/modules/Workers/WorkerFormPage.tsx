@@ -64,6 +64,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         .then((res) => {
           if (res.data) {
             setWorker(res.data);
+            console.log(worker);
           }
         })
         .catch((res) => {
@@ -90,7 +91,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       );
     },
     );
-  }, []);
+  }, [id]);
 
   return (
     <CommonPageLayout title={props.action == 'add' ? 'Add' : props.action == 'edit' ? 'Edit' : 'View' + ' worker'}>
