@@ -104,7 +104,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Joining in Organisation"
-          value={props.value.dateOfJoining || currentDate} // Set the default value to today's date
+          value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
