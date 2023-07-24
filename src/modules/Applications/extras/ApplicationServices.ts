@@ -2,16 +2,17 @@ import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extra
 import axios from 'axios';
 
 export default {
-  getCount: () =>
-    getStandardResponse<number>(
-      dummyRequest({
-        data: 5,
-        // error: null,
-        message: 'Successfully fetched array of Application count',
-        result: 'success',
-        timeout: 500,
-      }),
-    ),
+  // getCount: () =>
+  //   getStandardResponse<number>(
+  //     dummyRequest({
+  //       data: 5,
+  //       // error: null,
+  //       message: 'Successfully fetched array of Application count',
+  //       result: 'success',
+  //       timeout: 500,
+  //     }),
+  //   ),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/application/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application', { params: conditions, headers: { ...getAuthHeader() } })),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),
