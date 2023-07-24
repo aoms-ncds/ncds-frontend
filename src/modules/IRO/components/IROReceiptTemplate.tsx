@@ -101,31 +101,8 @@ const styles = StyleSheet.create({
 });
 
 const IROReceiptTemplate = (props: any) => {
-  const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
   console.log(props);
   // console.log(props.RowData.division.details.coordinator, 'coordinatorImage');
-
-
-  // useEffect(() => {
-  //   if (props.RowData && props.RowData.division.details.coordinator.sign.downloadURL) {
-  //     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  //     const url = props.RowData.division.details.coordinator.sign.downloadURL;
-
-
-  //     fetch(url)
-  //       .then((response) => response.blob())
-  //       .then((blob) => {
-  //         const reader = new FileReader();
-  //         reader.onload = () => {
-  //           setCoordinatorImage(reader.result as string);
-  //         };
-  //         reader.readAsDataURL(blob);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error downloading images:', error);
-  //       });
-  //   }
-  // }, [props.RowData]);
 
 
   const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
@@ -249,12 +226,41 @@ const IROReceiptTemplate = (props: any) => {
           <Text style={{ ...styles.text1, left: 210 }}>Name</Text>
           <Text style={{ ...styles.text1, left: 290 }}>Name</Text>
           <Text style={{ ...styles.text1, left: 410, fontSize: 10, marginTop: 130 }}>NAME</Text>
-
           <Text style={{ ...styles.text2, left: 50 }}>Division Leader</Text>
           <Text style={{ ...styles.text2, left: 130 }}>Workers Dept</Text>
+          <div style={{ marginTop: 20, fontSize: 10 }}>
+            <Image style={{ left: 60,
+              position: 'absolute',
+              height: 50,
+              top: 15,
+              width: 50 }}
+            src={`data:${props.RowData.division?.details.coordinator?.sign?.type};base64, ${props.RowData.division?.details.coordinator?.sign?.base64} `}/>
+            <Image style={{ left: 140,
+              position: 'absolute',
+              height: 50,
+              top: 10,
+              width: 50 }}
+            src={`data:${props.RowData?.signature?.hrSignature?.type};base64, ${props.RowData?.signature?.hrSignature?.base64} `}/>
+            <Image style={{ left: 220,
+              position: 'absolute',
+              height: 50,
+              top: 10,
+              width: 50 }}
+            src={`data:${props.RowData?.signature?.accountManagerSignature?.type};base64, ${props.RowData?.signature?.accountManagerSignature?.base64} `}/>
+            <Image style={{ left: 300,
+              position: 'absolute',
+              top: 10,
+              height: 50,
+              width: 50 }}
+            src={`data:${props.RowData?.signature?.accountantSignature?.type};base64, ${props.RowData?.signature?.accountantSignature?.base64} `}/>
+
+
+          </div>
+
           <Text style={{ ...styles.text2, left: 210 }}>Account Manager</Text>
           <Text style={{ ...styles.text2, left: 290 }}>Accountant</Text>
           <Text style={{ ...styles.text2, left: 410, fontSize: 10, marginTop: 144 }}>ADMINISTRATOR</Text>
+
           <Text style={{ ...styles.text2, left: 410, marginTop: 158, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
         </div>
         <div style={{ marginTop: 210 }}>

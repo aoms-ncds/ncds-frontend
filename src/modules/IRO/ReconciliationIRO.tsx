@@ -98,6 +98,7 @@ const ReconciliationIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
     billAttachment: [],
+    signature: {},
   });
   const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
 
