@@ -11,6 +11,7 @@ import PermissionChecks from '../../User/components/PermissionChecks';
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [divisionsCount, setDivisionsCount] = useState<string | null>(null);
+  const [subDivisionsCount, setSubDivisionsCount] = useState<string | null>(null);
   const [staffsCount, setStaffsCount] = useState<string | null>(null);
   const [workersCount, setWorkersCount] = useState<string | null>(null);
   const [frCount, setFrCount] = useState<string | null>(null);
@@ -26,6 +27,17 @@ const MinimalModuleDataAnalytics = () => {
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
         setDivisionsCount('Unable to load!');
+      });
+
+    // Get Sub-divisions count
+    DivisionsServices.getSubDivisionsCount()
+      .then((res) => {
+        setSubDivisionsCount(res.data.toString());
+        console.log(res);
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setSubDivisionsCount('Unable to load!');
       });
 
     // Get staffs count
@@ -76,25 +88,32 @@ const MinimalModuleDataAnalytics = () => {
   return (
     <Grid container spacing={3}>
       <PermissionChecks permissions={['READ_DIVISIONS']} granted={
-        <Grid item xs={6} md={3} xl={4}>
+        <>
+          <Grid item xs={6} md={3} xl={4}>
 
-          <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#003049" targetRoute="/divisions/"/>
-        </Grid>}/>
+            <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/"/>
+          </Grid>
+          <Grid item xs={6} md={3} xl={2}>
+            <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f"/>
+          </Grid>
+        </>
+      }
+      />
       <PermissionChecks permissions={['READ_STAFFS']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#de2828" targetRoute="/hr/"/>
+          <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/"/>
         </Grid>}/>
       <Grid item xs={6} md={3} xl={4}>
-        <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#f77f00" targetRoute="/workers/"/>
+        <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/"/>
       </Grid>
       <PermissionChecks permissions={['READ_FR']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#fcbf49" targetRoute="/fr/"/>
+          <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#4cbb17" targetRoute="/fr/"/>
         </Grid>
       }/>
       <PermissionChecks permissions={['READ_IRO']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#3cb043" targetRoute="/iro/"/>
+          <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#003152" targetRoute="/iro/"/>
         </Grid>
       }/>
     </Grid>

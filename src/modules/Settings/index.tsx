@@ -35,14 +35,14 @@ const SettingsDashboard = () => {
   return (
     <CommonPageLayout title="Settings">
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} xl={3} width={350}>
-          <DashboardCardButton primaryText="Manage Languages" secondaryText={LanguageCount?.toString()} color="#003049" targetRoute="/settings/Languages" />
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="Manage Languages" secondaryText={LanguageCount?.toString()} color="#ca3433" targetRoute="/settings/Languages" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3} width={350}>
-          <DashboardCardButton primaryText="Manage Designation" secondaryText={DesignationCount?.toString()} color="#de2828" targetRoute="/settings/Designation" />
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="Manage Designation" secondaryText={DesignationCount?.toString()} color="#6d597a" targetRoute="/settings/Designation" />
         </Grid>
-        <Grid item xs={12} md={6} xl={3} width={350}>
-          <DashboardCardButton primaryText="Child support" secondaryText={ChildSupportCount?.toString()} color="#3cb043" targetRoute="/settings/ChildSupport" />
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="Child support" secondaryText={ChildSupportCount?.toString()} color="#dd571c" targetRoute="/settings/ChildSupport" />
         </Grid>
       </Grid>
     </CommonPageLayout>

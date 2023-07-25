@@ -77,8 +77,8 @@ const NewOfficialDetailsForm = (
     //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
     console.log(props.value);
-    if (user.user && (user.user as User).kind=='staff') {
-      DivisionsServices.getDivisions()
+    // if (user.user && (user.user as User).kind=='staff') {
+    DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
         enqueueSnackbar({
@@ -86,7 +86,7 @@ const NewOfficialDetailsForm = (
           message: error.message,
         }),
       );
-    }
+    // }
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
       .then((res) => setSubDivisions(res.data))
@@ -104,7 +104,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Joining in Organisation"
-          value={props.value.dateOfJoining || currentDate} // Set the default value to today's date
+          value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,

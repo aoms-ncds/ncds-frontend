@@ -20,7 +20,7 @@ const DivisionsDashboardPage = () => {
 
                 <Button
                   variant="contained"
-                  sx={{ float: 'right' }}
+                  sx={{ float: 'right', background: 'green' }}
                   startIcon={<AddIcon />}
                   component={Link}
                   to="/divisions/add"

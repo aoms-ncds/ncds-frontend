@@ -99,6 +99,29 @@ export default {
         headers: { ...getAuthHeader() },
       }),
     ),
+  getDivisionUser: (divisionID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[] >(
+      axios.get(`/users/user__division/${divisionID}`, {
+        params: { ...params },
+        headers: { ...getAuthHeader() },
+      }),
+      (users) =>
+        users.map((user:User) => ({
+          ...user,
+          token: [],
+          basicDetails: {
+            ...user.basicDetails,
+            dateOfBirth: moment(user.basicDetails.dateOfBirth),
+          },
+          officialDetails: {
+            ...user.officialDetails,
+            dateOfJoining: moment(user.officialDetails.dateOfJoining),
+          },
+          createdAt: moment(user.createdAt),
+          updatedAt: moment(user.updatedAt),
+        })),
+    ),
+
 
   checkDuplicationOfMail: (userId: string) =>
     getStandardResponse(

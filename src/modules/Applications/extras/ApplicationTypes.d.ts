@@ -1,7 +1,7 @@
 export default {};
 declare global {
   interface Application extends MongooseDocument {
-  applicationNo: string;
+  applicationCode: string;
   name: string;
   reason: string;
   status: string;

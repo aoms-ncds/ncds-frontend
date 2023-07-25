@@ -146,17 +146,17 @@ const ManageFrPage = () => {
                 icon: EditIcon,
               },
             ] : []),
-            {
-              id: 'sendBackDivision',
-              text: 'Send Back to Division',
-              onClick: () => {
-                enqueueSnackbar({
-                  message: 'Sent back to division',
-                  variant: 'success',
-                });
-              },
-              icon: PreviewIcon,
-            },
+            // {
+            //   id: 'sendBackDivision1',
+            //   text: 'Send Back to Division',
+            //   onClick: () => {
+            //     enqueueSnackbar({
+            //       message: 'Sent back to division',
+            //       variant: 'success',
+            //     });
+            //   },
+            //   icon: PreviewIcon,
+            // },
             {
               id: 'remarks',
               text: 'Remarks',
@@ -232,10 +232,21 @@ const ManageFrPage = () => {
     {
       field: 'mainCategory',
       renderHeader: () => (<b>Main Category</b>),
-      renderCell: (props) => (<p> {props.row.mainCategory}</p>),
-      width: 240,
-      align: 'center',
-      headerAlign: 'center' },
+      width: 250,
+      // align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 250,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+          }}
+        >
+          {props.row.mainCategory}
+        </p>
+      ),
+    },
     {
       field: 'requestedAmount',
       renderHeader: () => (<b>Requested Amount</b>),

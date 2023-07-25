@@ -40,6 +40,7 @@ import IROServices from './extras/IROServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import { useNavigate, useParams } from 'react-router-dom';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
+import { uncapitalizeObjectKeys } from '@mui/x-date-pickers/internals';
 
 
 const ViewIRO = () => {
@@ -160,6 +161,7 @@ const ViewIRO = () => {
     billAttachment: [],
     createdAt: moment(),
     updatedAt: moment(),
+    signature: {},
   });
   console.log(IRO, 'IRO');
 

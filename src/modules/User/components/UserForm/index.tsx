@@ -92,18 +92,25 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
 
   const submitForm = (data: UserType) =>{
     console.log(data);
-    UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
-    .then((res)=>{
-      console.log(res.data);
+    if (props.action == 'add') {
+      UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
+      .then((res)=>{
+        console.log(res.data);
+        props.onSubmit && props.onSubmit(props.value);
+        navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
+      })
+      .catch((error) =>{
+        console.log('error', error);
+      });
+    } else {
       props.onSubmit && props.onSubmit(props.value);
       navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
-    })
-    .catch((error) =>{
-      console.log('error', error);
-    });
+    }
   };
 
   useEffect(() => {
+    const checkprops = props.action;
+    console.log({ checkprops });
     // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
     ChildrenServices.getAllChildSupport()
     .then((res)=>setChildSupport(res.data))

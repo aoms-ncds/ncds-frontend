@@ -66,6 +66,14 @@ export default {
             dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
           })),
         },
+        signature: {
+          ...data.signature,
+          hrSignature: data.signature.hrSignature ? data.signature.hrSignature: undefined,
+          accountManagerSignature: data.signature.accountManagerSignature ? data.signature.accountManagerSignature : undefined,
+          accountantSignature: data.signature.accountantSignature ? data.signature.accountantSignature : undefined,
+
+
+        },
         createdAt: moment(data.createdBy.createdAt),
         updatedAt: moment(data.createdBy.updatedAt),
       },

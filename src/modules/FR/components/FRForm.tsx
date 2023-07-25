@@ -456,7 +456,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
                         {particulars.map((item, index) => (
                           <TableRow key={item._id}>
-                            <TableCell component="th">
+                            <TableCell component="th" sx={{ display: 'flex' }}>
                               <PermissionChecks
                                 permissions={['WRITE_FR']}
                                 granted={(
@@ -473,10 +473,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                                   editParticular(item, index)
                                 }/>
                               </IconButton>
-                              <IconButton onClick={() => {
-                                setViewFileUploader(true);
-                                setAttachments(item.attachment);
-                              }}>
+                              <IconButton
+                                // sx={{ px: 10 }}
+                                onClick={() => {
+                                  setViewFileUploader(true);
+                                  setAttachments(item.attachment);
+                                }}>
                                 <AttachmentIcon />
                               </IconButton>
                             </TableCell>

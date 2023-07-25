@@ -12,6 +12,8 @@ import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import IROReceiptTemplate from './components/IROReceiptTemplate';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -65,6 +67,9 @@ const ClosedIRO = () => {
               id: 'print',
               text: 'Print IRO',
               icon: PrintIcon,
+              component: PDFDownloadLink,
+              document: <IROReceiptTemplate rowData={props.row} />,
+              fileName: 'IROReceipt.pdf',
             },
             {
               id: 'View',
