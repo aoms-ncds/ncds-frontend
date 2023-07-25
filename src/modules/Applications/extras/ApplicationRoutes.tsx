@@ -30,7 +30,7 @@ const applicationRoutes: ModuleRoute = {
       path: '/:applicationID/approval',
       element: <ApplicationApprovalPage />,
       private: true,
-      requiredAccessRights: ['MANAGE_APPLICATION'],
+      requiredAccessRights: ['READ_APPLICATION'],
     },
     {
       title: 'Add New Application',
