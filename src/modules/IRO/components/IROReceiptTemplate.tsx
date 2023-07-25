@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
 });
 const IROReceiptTemplate = (props:{rowData:IROrder}) => {
   let totalAmount=0;
-  const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
+  // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
   console.log(props);
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
 
@@ -279,25 +279,25 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
               height: 50,
               top: 15,
               width: 50 }}
-            src={`data:${props.RowData.division?.details.coordinator?.sign?.type};base64, ${props.RowData.division?.details.coordinator?.sign?.base64} `}/>
+            src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
             <Image style={{ left: 140,
               position: 'absolute',
               height: 50,
               top: 10,
               width: 50 }}
-            src={`data:${props.RowData?.signature?.hrSignature?.type};base64, ${props.RowData?.signature?.hrSignature?.base64} `}/>
+            src={`data:${props.rowData?.signature?.hrSignature?.type};base64, ${props.rowData?.signature?.hrSignature?.base64} `}/>
             <Image style={{ left: 220,
               position: 'absolute',
               height: 50,
               top: 10,
               width: 50 }}
-            src={`data:${props.RowData?.signature?.accountManagerSignature?.type};base64, ${props.RowData?.signature?.accountManagerSignature?.base64} `}/>
+            src={`data:${props.rowData?.signature?.accountManagerSignature?.type};base64, ${props.rowData?.signature?.accountManagerSignature?.base64} `}/>
             <Image style={{ left: 300,
               position: 'absolute',
               top: 10,
               height: 50,
               width: 50 }}
-            src={`data:${props.RowData?.signature?.accountantSignature?.type};base64, ${props.RowData?.signature?.accountantSignature?.base64} `}/>
+            src={`data:${props.rowData?.signature?.accountantSignature?.type};base64, ${props.rowData?.signature?.accountantSignature?.base64} `}/>
 
 
           </div>
