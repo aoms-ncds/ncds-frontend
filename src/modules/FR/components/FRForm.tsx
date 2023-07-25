@@ -80,6 +80,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
+    setAction('add');
   };
 
   useEffect(()=>{
@@ -327,7 +328,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 <>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
-                      value={props.value.purposeWorker}
+                      value={props.value.purposeWorker??null}
                       options={workers ?? []}
                       getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
@@ -361,7 +362,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     options={subDivisions ?? []}
-                    value={props.value.purposeSubdivision}
+                    value={props.value.purposeSubdivision??null}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined, division: newVal?.division })}
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
@@ -372,7 +373,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    value={props.value.purposeCoordinator}
+                    value={props.value.purposeCoordinator??null}
                     options={coordinators ?? []}
                     getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                     onChange={(e, selectedCoordinator) => {
@@ -409,7 +410,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
-                  value={selectedMainCategory}
+                  value={selectedMainCategory ?? null}
                   options={mainCategories ?? []}
                   getOptionLabel={(mainCategory) => mainCategory.name}
                   onChange={(e, selectedMainCategory) => {
