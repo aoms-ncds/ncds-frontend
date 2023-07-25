@@ -44,9 +44,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
   const [showAccountManagerFileUploader, setShowAccountManagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
-  const [sendNotification, toggleSendNotification] = useState(false);
-  const [addSignature, toggleAddSignature] = useState(false);
+  const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
+  const [eSignToggle, setEsignToggle] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -341,8 +341,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               text: 'Add signature',
               onClick: () => {
                 setSelectedIROId(params.row._id);
-                toggleAddSignature(true);
                 setSelectedIRO(params.row);
+                setEsignToggle(true);
               },
               icon: FingerprintIcon,
             },
@@ -520,7 +520,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               </Grid>
             </Card>
             <Grid>
-              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }} >
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
@@ -646,7 +646,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   </Grid>
                 </DialogContent>
               </Dialog>
-              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
+              <Dialog open={eSignToggle} sx={{ width: 400, margin: '0 auto' }} >
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
@@ -707,8 +707,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       <Button
                         variant="contained"
                         onClick={() => {
-                          toggleAddSignature(false);
                           setSelectedIROId('');
+                          setEsignToggle(false);
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}
