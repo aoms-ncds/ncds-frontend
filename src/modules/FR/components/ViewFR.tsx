@@ -241,8 +241,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     <TableBody>
                       {props.value.particulars &&
                         props.value.particulars.map((item, index) => (
-                          <TableRow key={item._id}>
-                            <TableCell component="th">
+                          <TableRow key={item._id} >
+                            <TableCell component="th" sx={{ display: 'flex' }}>
                               <IconButton onClick={() => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
