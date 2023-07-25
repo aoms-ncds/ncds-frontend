@@ -13,16 +13,25 @@ Font.register({
 const styles = StyleSheet.create({
   image: {
     position: 'absolute',
-    left: 270,
+    left: 120,
     height: 60,
     width: 40,
     marginTop: 20,
   },
+  heading: {
+    position: 'absolute',
+    left: 170,
+    fontSize: 20,
+    marginTop: 35,
+    color: 'red',
+    textDecoration: 'underline',
+
+  },
   title: {
-    marginTop: 83,
+    marginTop: 70,
     fontSize: 15,
     position: 'absolute',
-    left: 190,
+    left: 210,
     color: 'red',
   },
   text: {
@@ -51,35 +60,35 @@ const styles = StyleSheet.create({
   box: {
     width: 490,
     height: 50,
-    border: '1pt solid black',
+    border: '1px solid #333',
     position: 'absolute',
     left: 50,
   },
   box2: {
     width: 490,
     height: 30,
-    border: '1pt solid black',
+    border: '1px solid #333',
     position: 'absolute',
     left: 50,
   },
   box3: {
     width: 490,
     height: 100,
-    border: '1pt solid black',
+    border: '1px solid #333',
     position: 'absolute',
     left: 50,
   },
   box4: {
     width: 490,
     height: 80,
-    border: '1pt solid black',
+    border: '1px solid #333',
     position: 'absolute',
     left: 50,
   },
   box5: {
     width: 80,
     height: 80,
-    border: '1pt solid black',
+    border: '1px solid #333',
     position: 'absolute',
   },
   table: {
@@ -99,13 +108,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-
-const IROReceiptTemplate = (props: any) => {
+const IROReceiptTemplate = (props:{rowData:IROrder}) => {
+  let totalAmount=0;
+  const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
   console.log(props);
-  // console.log(props.RowData.division.details.coordinator, 'coordinatorImage');
+  // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
 
 
-  const sanctionedAmount = props.RowData && props.RowData?.sanctionedAmount;
+  const sanctionedAmount = props.rowData && props.rowData?.sanctionedAmount;
   let sanctionedAmountWords = '';
 
   if (typeof sanctionedAmount !== 'undefined') {
@@ -114,8 +124,11 @@ const IROReceiptTemplate = (props: any) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.RowData?.transferredDate;
+  const dateString = props.rowData?.releaseAmount?.transferredDate;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
+  useEffect(() => {
+    console.log(totalAmount, 'xcdfv');
+  }, [totalAmount]);
 
   // const raiseddateString = printdetails?.IROdate;
   // const raiseddate = new Date(raiseddateString);
@@ -126,98 +139,130 @@ const IROReceiptTemplate = (props: any) => {
     <Document>
       <Page size="A4">
         <div>
-          <Image src="/iet_logo.png" style={styles.image} />
+          <>
+            <Image src="/iet_logo.png" style={styles.image} />
+            <Text style={styles.heading}> INDIAN EVANGELICAL TEAM </Text></>
           {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
         </div>
 
         <div style={{ marginTop: 120 }}>
-          <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
+          <Text style={{ ...styles.h1, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.RowData?.IROno} </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.RowData?.IROdate}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.rowData?.IROno} </Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
+
           </View>
+
         </div>
 
         <div style={{ marginTop: 80 }}>
-          <Text style={{ ...styles.h1 }}>Division Details</Text>
+          <Text style={{ ...styles.h1, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.RowData?.divisionName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :{props.rowData?.division?.details.coordinator.name?.basicDetails?.firstName +
+            ' '+ props.rowData?.division?.details.coordinator.name?.basicDetails?.lastName}</Text>
           </View>
         </div>
 
         <div style={{ marginTop: 60 }}>
-          <Text style={{ ...styles.h1 }}>Deposit Bank Details</Text>
+          <Text style={{ ...styles.h1, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.RowData?.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.RowData?.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.RowData?.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.RowData?.sanctionedBank}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.RowData?.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.RowData?.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData?.releaseAmount?.transferredBank.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData?.releaseAmount?.transferredBank.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData?.releaseAmount?.transferredBank.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.rowData?.releaseAmount?.transferredBank.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber}</Text>
           </View>
         </div>
 
         <div style={{ marginTop: 110 }}>
-          <Text style={{ ...styles.h1 }}>Expense Details</Text>
-          <View style={{ ...styles.box3, marginTop: 15 }}>
-            <PDFTable>
-              <PDFTableHeader>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
-                  S No
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  Man Category
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
+          <Text style={{ ...styles.h1, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>Expense Details</Text>
+          <PDFTable style={{ marginTop: 15, width: 500, left: 45, right: 15 }}>
+            <PDFTableHeader>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                fontFamily: 'Oswald' }} width={'50%'}>
+                  Sl No
+              </PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                fontFamily: 'Oswald' }} width={'100%'}>
+                  Main Category
+              </PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                fontFamily: 'Oswald' }} width={'100%'}>
                   Narration
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+              </PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                fontFamily: 'Oswald' }} width={'40%'}>
                   Requested Amount
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  Sanctioned Amount
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}>
-                  Accountant Remarks
-                </PDFCell>
-              </PDFTableHeader>
-              <PDFTableRow >
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40'}>
-                  1
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80'}>
-                  {props.RowData?.mainCategory}
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
-                  {props.RowData?.narration}
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {props.RowData?.requestAmount}
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
-                  {props.RowData?.sanctionedAmount}
-                </PDFCell>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'110'}></PDFCell>
-              </PDFTableRow>
-            </PDFTable>
-          </View>
+              </PDFCell>
+            </PDFTableHeader>
+
+            {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
+              totalAmount += item.requestedAmount??0;
+              return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'50%'}>
+                {String(index + 1)}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.mainCategory}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.narration}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                {String(item.requestedAmount)}
+              </PDFCell>
+              {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                    {item.sanctionedAmount?.toString()}
+                  </PDFCell> */}
+              </PDFTableRow>);
+            })}
+            <PDFTableRow key={props.rowData.particulars.length}>
+              <PDFCell width={'50%'} ></PDFCell>
+              <PDFCell width={'100%'} ></PDFCell>
+              <PDFCell width={'100%'}></PDFCell>
+              <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+              Total amount :
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+                {totalAmount.toString()+'/-'}
+              </PDFCell>
+            </PDFTableRow>
+          </PDFTable>
+
+
         </div>
 
-        <div style={{ marginTop: 120 }}>
+        <div style={{ marginTop: 30 }}>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Sanctioned Amount in Words :{sanctionedAmountWords}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20, fontWeight: 'bold',
+              fontFamily: 'Oswald' }}>Sanctioned Amount in Words : </Text>
+            <Text style={{ ...styles.text, marginTop: 13, left: 130 }} >{sanctionedAmountWords.charAt(0).toUpperCase()+sanctionedAmountWords.slice(1, sanctionedAmountWords.length)} only</Text>
           </View>
         </div>
 
         <div style={{ marginTop: 80 }}>
-          <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>E Signature</Text>
-          <Text style={{ ...styles.text, marginTop: 1, left: 410 }}>E Signature are protected</Text>
-          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>{props.RowData?.division?.details?.coordinator?.name}</View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}>{props.im}</View>
+          <Text style={{ ...styles.text, marginTop: 1, left: 50, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>E Signature</Text>
+          <Text style={{ ...styles.text, marginTop: 1, left: 410, fontWeight: 'bold',
+            fontFamily: 'Oswald' }}>E Signature are protected</Text>
+          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}></View>
+          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 210 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 290 }}></View>
           <View style={{ ...styles.box5, marginTop: 15, left: 410, width: 130 }}></View>
@@ -263,7 +308,7 @@ const IROReceiptTemplate = (props: any) => {
 
           <Text style={{ ...styles.text2, left: 410, marginTop: 158, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
         </div>
-        <div style={{ marginTop: 210 }}>
+        <div style={{ marginTop: 180 }}>
           <Text style={{ fontSize: 8, color: 'grey', left: 30 }}>
             This Document is electronically signed by authorized person of the Evangelical Team adding to the accuracy and content of the information submitted
           </Text>
