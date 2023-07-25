@@ -57,7 +57,15 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, []);
-
+  useEffect(() => {
+    FRServices.getAll()
+      .then((res) => {
+        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
@@ -199,6 +207,13 @@ const ManageFrPage = () => {
       ),
     },
 
+    {
+      field: 'serialNumber',
+      renderHeader: () => (<b>SL No</b>),
+      width: 100,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'FRno',
       renderHeader: () => (<b>FR No</b>),
