@@ -146,17 +146,17 @@ const ManageFrPage = () => {
                 icon: EditIcon,
               },
             ] : []),
-            {
-              id: 'sendBackDivision',
-              text: 'Send Back to Division',
-              onClick: () => {
-                enqueueSnackbar({
-                  message: 'Sent back to division',
-                  variant: 'success',
-                });
-              },
-              icon: PreviewIcon,
-            },
+            // {
+            //   id: 'sendBackDivision1',
+            //   text: 'Send Back to Division',
+            //   onClick: () => {
+            //     enqueueSnackbar({
+            //       message: 'Sent back to division',
+            //       variant: 'success',
+            //     });
+            //   },
+            //   icon: PreviewIcon,
+            // },
             {
               id: 'remarks',
               text: 'Remarks',
