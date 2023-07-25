@@ -12,7 +12,7 @@ export default {
   //       timeout: 500,
   //     }),
   //   ),
-  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/application/count', { params: conditions, headers: { ...getAuthHeader() } })),
+  getCount: (conditions?: { status?: number }) => getStandardResponse<number>(axios.get('/application/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application', { params: conditions, headers: { ...getAuthHeader() } })),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),

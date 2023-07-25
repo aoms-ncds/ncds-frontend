@@ -339,6 +339,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               onClick: () => {
                 setSelectedIROId(params.row._id);
                 setSelectedIRO(params.row);
+                toggleAddSignature(true);
               },
               icon: FingerprintIcon,
             },
