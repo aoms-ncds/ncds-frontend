@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const IROReceiptTemplate = (props: any) => {
+const IROReceiptTemplate = (props: {RowData:IROrder}) => {
   console.log(props);
   // console.log(props.RowData.division.details.coordinator, 'coordinatorImage');
 
@@ -114,7 +114,7 @@ const IROReceiptTemplate = (props: any) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.RowData?.transferredDate;
+  const dateString = props.RowData?.releaseAmount?.transferredDate;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
 
   // const raiseddateString = printdetails?.IROdate;
@@ -135,7 +135,7 @@ const IROReceiptTemplate = (props: any) => {
           <Text style={{ ...styles.h1 }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
             <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.RowData?.IROno} </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.RowData?.IROdate}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.RowData.IRODate.format('DD/MM/YYYY')}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
           </View>
@@ -144,7 +144,7 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 80 }}>
           <Text style={{ ...styles.h1 }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.RowData?.divisionName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.RowData.divisionName}</Text>
             <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :</Text>
           </View>
         </div>
@@ -152,12 +152,12 @@ const IROReceiptTemplate = (props: any) => {
         <div style={{ marginTop: 60 }}>
           <Text style={{ ...styles.h1 }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.RowData?.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.RowData?.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.RowData?.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.RowData?.sanctionedBank}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.RowData?.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.RowData?.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.RowData.releaseAmount.transferredBank.bankName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.RowData.createdBy.division?.otherBankDetails.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.RowData.createdBy.division?.otherBankDetails.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.RowData.sanctionedBank}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.RowData.releaseAmount.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.RowData.releaseAmount.transactionNumber}</Text>
           </View>
         </div>
 
