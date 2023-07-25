@@ -101,7 +101,7 @@ export default {
     ),
   getDivisionUser: (divisionID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[] >(
-      axios.get(`/users/user__division/${divisionID}`, {
+      axios.get(`/users/user_division/${divisionID}`, {
         params: { ...params },
         headers: { ...getAuthHeader() },
       }),
