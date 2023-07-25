@@ -316,8 +316,8 @@ const ViewIRO = () => {
                             <TableBody>
                               {IRO?.particulars &&
                                 IRO?.particulars.map((item, index) => (
-                                  <TableRow key={item._id}>
-                                    <TableCell component="th">
+                                  <TableRow key={item._id} >
+                                    <TableCell component="th" sx={{ display: 'flex' }}>
                                       <IconButton
                                         onClick={() => {
                                           setViewFileUploader(true);
