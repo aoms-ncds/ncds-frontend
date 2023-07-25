@@ -433,8 +433,27 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
-                <Button variant="contained" onClick={() =>setShowAddParticularDialog(true)}
-                  disabled={!selectedMainCategory}>
+                <Button variant="contained" onClick={() => {
+                  setNewParticular((particularDetails) => ({
+                    ...particularDetails,
+                    subCategory1: '',
+                    subCategory2: '',
+                    subCategory3: '',
+                    month: '',
+                    narration: '',
+                    quantity: undefined,
+                    unitPrice: undefined,
+                    requestedAmount: undefined,
+                    attachment: [],
+                  }));
+                  setShowAddParticularDialog(true);
+                  setSelectedSubCategory1(null);
+                  setSelectedSubCategory2(null);
+                  setSelectedSubCategory3(null);
+                  setAction('add');
+                }
+                }
+                disabled={!selectedMainCategory}>
                                     Add particulars
                 </Button>
               </Grid>
