@@ -68,7 +68,7 @@ const ClosedIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReceiptTemplate RowData={props.row} />,
+              document: <IROReceiptTemplate rowData={props.row} />,
               fileName: 'IROReceipt.pdf',
             },
             {
