@@ -33,7 +33,6 @@ import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
-  const [coordinatorImage, setCoordinatorImage] = useState<string | null>(null);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -46,7 +45,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [attachment, setAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
-  const [eSignToggle, setEsignToggle] = useState<boolean>(false);
+  const [addSignature, toggleAddSignature] = useState(false);
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -167,11 +167,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     createdAt: moment(),
     updatedAt: moment(),
     billAttachment: [],
-    signature: {
-      hrSignature: undefined,
-      accountManagerSignature: undefined,
-      accountantSignature: undefined,
-    },
+    signature: {},
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -210,6 +206,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
     console.log(selectedIRO, 'AA');
   }, [selectedIRO.signature]);
+
 
   const columns: GridColDef<IROrder>[] = [
     {
@@ -342,7 +339,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               onClick: () => {
                 setSelectedIROId(params.row._id);
                 setSelectedIRO(params.row);
-                setEsignToggle(true);
               },
               icon: FingerprintIcon,
             },
@@ -646,7 +642,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   </Grid>
                 </DialogContent>
               </Dialog>
-              <Dialog open={eSignToggle} sx={{ width: 400, margin: '0 auto' }} >
+              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }} >
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
@@ -708,7 +704,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         variant="contained"
                         onClick={() => {
                           setSelectedIROId('');
-                          setEsignToggle(false);
+                          toggleAddSignature(false);
+                          IROServices.getAll()
+                          .then((res)=>{
+                            setIROrder(res.data);
+                          });
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}
@@ -824,6 +824,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   return res;
                 });
               }}
+              deleteFile={(fileId: string) => {
+                setSelectedIRO(() => ({
+                  ...selectedIRO,
+                  signature: {
+                    ...selectedIRO.signature,
+                    hrSignature: undefined,
+                  },
+                }));
+                return FileUploaderServices.deleteFile(fileId);
+              }}
             />
             <FileUploader
               title="Account manager Signature"
@@ -853,6 +863,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   return res;
                 });
               }}
+              deleteFile={(fileId: string) => {
+                setSelectedIRO(() => ({
+                  ...selectedIRO,
+                  signature: {
+                    ...selectedIRO.signature,
+                    accountManagerSignature: undefined,
+                  },
+                }));
+                return FileUploaderServices.deleteFile(fileId);
+              }}
+
             />
             <FileUploader
               title="Accountant Signature"
@@ -883,6 +904,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   return res;
                 });
               }}
+              deleteFile={(fileId: string) => {
+                setSelectedIRO(() => ({
+                  ...selectedIRO,
+                  signature: {
+                    ...selectedIRO.signature,
+                    accountantSignature: undefined,
+                  },
+                }));
+                return FileUploaderServices.deleteFile(fileId);
+              }}
+
+
             />
 
             <FileUploader
