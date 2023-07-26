@@ -33,7 +33,11 @@ const NotificationPage = () => {
       type: 'string',
       renderCell: (props) => {
         return (
-          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none',
+            maxWidth: 500,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+          }}>
             {props.value}
           </Link>
         );
@@ -72,12 +76,10 @@ const NotificationPage = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Created At</b>),
       minWidth: 180,
-      type: 'date',
-      valueFormatter: (params) => moment(params.value).format('DD/MM/YYYY'),
       renderCell: (props) => {
         return (
           <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
-            {props.value}
+            {props.value?.format('DD/MM/YYYY hh:mm A')}
           </Link>
         );
       },

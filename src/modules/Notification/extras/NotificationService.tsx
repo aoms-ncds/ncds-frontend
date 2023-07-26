@@ -38,7 +38,12 @@ const NotificationService = {
         headers: {
           ...getAuthHeader(),
         },
+
       }),
+    (data) =>data.map((message:Message)=>({
+      ...message,
+      createdAt: moment(message.createdAt),
+    })),
   ),
   getMyMessagesCount: (): Promise<StandardResponse<number>> => getStandardResponse(
     axios.get(
