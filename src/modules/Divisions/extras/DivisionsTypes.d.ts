@@ -24,7 +24,7 @@ declare global {
     // seniorLeader?: Staff;
     // juniorLeader?: Staff;
     // attachment:FileObject[];
-    coordinator:{
+    coordinator?:{
 
       name?:User;
       sign?:FileObject;

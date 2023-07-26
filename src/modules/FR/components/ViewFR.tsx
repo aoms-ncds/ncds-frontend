@@ -285,7 +285,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       disabled={!hasPermissions(['MANAGE_FR'])}
                       onChange={(e) =>
-                        props.onChange({
+                        Number(e.target.value) <= (1234) && props.onChange({
                           ...props.value,
                           sanctionedAmount: Number(e.target.value),
                         })
@@ -293,7 +293,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
-
+                      inputProps={{ max: 1234 }}
                     />
                   </Grid>
 

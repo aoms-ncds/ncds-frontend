@@ -169,13 +169,13 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
           <View style={{ ...styles.box2, marginTop: 15 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name??''}
                 </Text>
               </View>
               <View>
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>
-            Leader Name :{props.rowData?.division?.details.coordinator.name?.basicDetails?.firstName +
-            ' '+ props.rowData?.division?.details.coordinator.name?.basicDetails?.lastName}</Text>
+            Leader Name :{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName +
+            ' '+ props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
               </View></View>
           </View>
         </div>
