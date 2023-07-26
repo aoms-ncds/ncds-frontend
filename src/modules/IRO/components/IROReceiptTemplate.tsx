@@ -37,59 +37,50 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     color: 'black',
-    position: 'absolute',
   },
   text1: {
     fontSize: 10,
     color: 'black',
-    position: 'absolute',
-    marginTop: 100,
+
   },
   text2: {
     fontSize: 8,
     color: 'black',
-    position: 'absolute',
-    marginTop: 114,
+
   },
   h1: {
     fontSize: 10,
-    position: 'absolute',
     left: 50,
     color: 'black',
   },
   box: {
     width: 490,
-    height: 50,
     border: '1px solid #333',
-    position: 'absolute',
     left: 50,
   },
   box2: {
     width: 490,
     height: 30,
     border: '1px solid #333',
-    position: 'absolute',
     left: 50,
   },
   box3: {
     width: 490,
     height: 100,
     border: '1px solid #333',
-    position: 'absolute',
     left: 50,
   },
   box4: {
     width: 490,
     height: 80,
     border: '1px solid #333',
-    position: 'absolute',
     left: 50,
   },
   box5: {
     width: 80,
     height: 80,
     border: '1px solid #333',
-    position: 'absolute',
+    display: 'flex',
   },
   table: {
     position: 'absolute',
@@ -137,7 +128,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
 
   return (
     <Document>
-      <Page size="A4">
+      <Page size="A4" >
         <div>
           <>
             <Image src="/iet_logo.png" style={styles.image} />
@@ -146,43 +137,77 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
         </div>
 
-        <div style={{ marginTop: 120 }}>
+        <div style={{ marginTop: 100 }}>
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.rowData?.IROno} </Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Request Raised Date :{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Fund Release date:{formattedDate}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>FR Reconciled Date:</Text>
-
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO No :{props.rowData?.IROno}</Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Request Raised Date :{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 15, left: 20, marginBottom: 10 }}>Fund Release date:{formattedDate}
+                </Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.text, marginTop: 15, left: 20, marginBottom: 10 }}>FR Reconciled Date:
+                </Text>
+              </View>
+            </View>
           </View>
 
         </div>
 
-        <div style={{ marginTop: 80 }}>
+        <div style={{ marginTop: 20 }}>
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :{props.rowData?.division?.details.coordinator.name?.basicDetails?.firstName +
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name}
+                </Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>
+            Leader Name :{props.rowData?.division?.details.coordinator.name?.basicDetails?.firstName +
             ' '+ props.rowData?.division?.details.coordinator.name?.basicDetails?.lastName}</Text>
+              </View></View>
           </View>
         </div>
 
-        <div style={{ marginTop: 60 }}>
+        <div style={{ marginTop: 30 }}>
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount?.transferredBank.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber}</Text>
-          </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount?.transferredBank.branchName}
+                </Text></View>
+              <View></View>
+              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName}
+                </Text></View>
+              <View><Text style={{ ...styles.text, marginTop: 15 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
+              </View></View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 180 }}>
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment}
+                </Text></View>
+              <View>
+                <Text style={{ ...styles.text, marginTop: 15 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber}</Text>
+              </View>
+            </View></View>
         </div>
 
-        <div style={{ marginTop: 110 }}>
+        <div style={{ marginTop: 25 }}>
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Expense Details</Text>
           <PDFTable style={{ marginTop: 15, width: 500, left: 45, right: 15 }}>
@@ -248,68 +273,81 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
 
         </div>
 
-        <div style={{ marginTop: 30 }}>
+        <div style={{ marginTop: 20 }}>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20, fontWeight: 'bold',
-              fontFamily: 'Oswald' }}>Sanctioned Amount in Words : </Text>
-            <Text style={{ ...styles.text, marginTop: 13, left: 130 }} >{sanctionedAmountWords.charAt(0).toUpperCase()+sanctionedAmountWords.slice(1, sanctionedAmountWords.length)} only</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ width: 130 }}>
+                <Text style={{ ...styles.text, marginTop: 10, left: 15, fontWeight: 'bold',
+                  fontFamily: 'Oswald' }} >Sanctioned Amount in Words : </Text></View>
+              <View>
+                <Text style={{ ...styles.text, marginTop: 12 }} >{sanctionedAmountWords.charAt(0).toUpperCase()+
+            sanctionedAmountWords.slice(1, sanctionedAmountWords.length)} only</Text>
+              </View>
+            </View>
           </View>
         </div>
 
-        <div style={{ marginTop: 80 }}>
-          <Text style={{ ...styles.text, marginTop: 1, left: 50, fontWeight: 'bold',
-            fontFamily: 'Oswald' }}>E Signature</Text>
-          <Text style={{ ...styles.text, marginTop: 1, left: 410, fontWeight: 'bold',
-            fontFamily: 'Oswald' }}>E Signature are protected</Text>
-          <View style={{ ...styles.box5, marginTop: 15, left: 50 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 130 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 210 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 290 }}></View>
-          <View style={{ ...styles.box5, marginTop: 15, left: 410, width: 130 }}></View>
-          <Text style={{ ...styles.text1, left: 50 }}>Name</Text>
-          <Text style={{ ...styles.text1, left: 130 }}>Name</Text>
-          <Text style={{ ...styles.text1, left: 210 }}>Name</Text>
-          <Text style={{ ...styles.text1, left: 290 }}>Name</Text>
-          <Text style={{ ...styles.text1, left: 410, fontSize: 10, marginTop: 130 }}>NAME</Text>
-          <Text style={{ ...styles.text2, left: 50 }}>Division Leader</Text>
-          <Text style={{ ...styles.text2, left: 130 }}>Workers Dept</Text>
-          <div style={{ marginTop: 20, fontSize: 10 }}>
-            <Image style={{ left: 60,
-              position: 'absolute',
-              height: 50,
-              top: 15,
-              width: 50 }}
-            src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
-            <Image style={{ left: 140,
-              position: 'absolute',
-              height: 50,
-              top: 10,
-              width: 50 }}
-            src={`data:${props.rowData?.signature?.hrSignature?.type};base64, ${props.rowData?.signature?.hrSignature?.base64} `}/>
-            <Image style={{ left: 220,
-              position: 'absolute',
-              height: 50,
-              top: 10,
-              width: 50 }}
-            src={`data:${props.rowData?.signature?.accountManagerSignature?.type};base64, ${props.rowData?.signature?.accountManagerSignature?.base64} `}/>
-            <Image style={{ left: 300,
-              position: 'absolute',
-              top: 10,
-              height: 50,
-              width: 50 }}
-            src={`data:${props.rowData?.signature?.accountantSignature?.type};base64, ${props.rowData?.signature?.accountantSignature?.base64} `}/>
+        <div style={{ marginTop: 25 }}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 400 }}>
+              <Text style={{ ...styles.text, fontWeight: 'bold',
+                fontFamily: 'Oswald', left: 50 }} >E Signature</Text></View>
+            <View>
+              <Text style={{ ...styles.text, fontWeight: 'bold',
+                fontFamily: 'Oswald' }} >E Signature are protected</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
 
+            <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>
+              <Image style={{
+                height: 78,
+                width: 78 }}
+              src={`data:${props.rowData?.signature?.hrSignature?.type};base64, ${props.rowData?.signature?.hrSignature?.base64} `}
+              />
+            </View>
+            <View style={{ ...styles.box5, marginTop: 15, left: 52 }}>
+              <Image style={{
+                height: 78,
+                width: 78 }}
+              src={`data:${props.rowData?.signature?.accountManagerSignature?.type};base64, ${props.rowData?.signature?.accountManagerSignature?.base64} `}
+              />
+            </View>
+            <View style={{ ...styles.box5, marginTop: 15, left: 54 }}>
+              <Image style={{
+                height: 78,
+                width: 78 }}
+              src={`data:${props.rowData?.signature?.accountantSignature?.type};base64, ${props.rowData?.signature?.accountantSignature?.base64} `}/>
+            </View>
+            <View style={{ ...styles.box5, marginTop: 15, left: 150, width: 130 }}></View>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 400, flexDirection: 'row' }} >
+              <View>
+                <Text style={{ ...styles.text2, left: 52, marginTop: 5 }}>Workers Dept</Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.text2, left: 85, marginTop: 5 }}>Account Manager</Text>
+              </View>
+              <View>
+                <Text style={{ ...styles.text2, left: 118, marginTop: 5 }}>Accountant</Text>
+              </View>
 
-          </div>
+            </View>
+            <View>
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>NAME</Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
+            <Text style={{ ...styles.text2, left: 400, fontSize: 10, marginTop: 5 }}>ADMINISTRATOR</Text>
+          </View>
+          <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
 
-          <Text style={{ ...styles.text2, left: 210 }}>Account Manager</Text>
-          <Text style={{ ...styles.text2, left: 290 }}>Accountant</Text>
-          <Text style={{ ...styles.text2, left: 410, fontSize: 10, marginTop: 144 }}>ADMINISTRATOR</Text>
-
-          <Text style={{ ...styles.text2, left: 410, marginTop: 158, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
+            <Text style={{ ...styles.text2, left: 400, marginTop: 5, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
+          </View>
         </div>
-        <div style={{ marginTop: 180 }}>
-          <Text style={{ fontSize: 8, color: 'grey', left: 30 }}>
+        <div style={{ marginTop: '15', marginBottom: '20' }}>
+          <Text style={{ fontSize: 8, color: 'grey', left: 30 }} >
             This Document is electronically signed by authorized person of the Evangelical Team adding to the accuracy and content of the information submitted
           </Text>
         </div>
