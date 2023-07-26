@@ -39,44 +39,89 @@ const ApplicationApprovalPage = () => {
       <Container maxWidth="sm">
         <Card variant="outlined">
           <CardContent>
-            <Box sx={{ justifyContent: 'center' }}>
+            <Grid>
+              <Grid container>
+                <Grid item>
 
-              <Typography variant="h5" component="h2" align='left'>
+                  <Typography variant="h5" component="h2" align='left'>
+                    {applications?.name}
+                  </Typography>
+                </Grid>
+                <Grid item sx={{ ml: 'auto' }}>
+                  <div style={{ display: 'flex' }}>
 
-                Requested By: {applications?.createdBy?.basicDetails?.firstName +' '+ applications?.createdBy?.basicDetails?.lastName}
-              </Typography>
-              <Divider/>
-              <br/>
+                    <Typography variant="body2" sx={{ ml: 'auto' }} >
+                      {applications?.createdBy?.basicDetails?.firstName +' '+ applications?.createdBy?.basicDetails?.lastName}
+                    </Typography>
+                  </div>
+                  {/* <br/> */}
 
-              <Typography variant="h5" component="h2" align='left'>
 
-                Name: {applications?.name}
-              </Typography>
-              <br/>
+                  <div style={{ display: 'flex' }}>
+                    <Typography variant='caption' sx={{ ml: 'auto' }}>
+                      { moment(applications?.createdAt).format('DD/MM/YYYY hh:mm A')}
+                    </Typography>
+                  </div>
+                </Grid>
 
-              <Typography variant="h5" component="h2" align='left'>
 
-                Reason: {applications?.reason}
-              </Typography>
-              <br/>
-              <Typography variant="h5" component="h2" align='left'>
+              </Grid>
+            </Grid>
+            <Divider/>
+            <br/>
+            <Typography variant="body1" component="h2" align='left'>
+
+              {applications?.reason}
+            </Typography>
+
+            <br/>
+            <Typography variant="h5" component="h2" align='left'>
                  &nbsp;
-                <Button component="span" variant="outlined" onClick={()=>setOpen(true)}>
+              <Button component="span" variant="outlined" onClick={()=>setOpen(true)}>
 
                   View File
-                </Button>
-              </Typography>
-            </Box>
+              </Button>
+            </Typography>
+
           </CardContent>
-          <CardActions sx={{ justifyContent: 'left' }}>
+          <CardActions>
             <PermissionChecks
               permissions={['MANAGE_APPLICATION'] || ['PRESIDENT_ACCESS']}
               granted={(
                 <>
+
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ ml: 'auto' }}
+                    onClick={() => {
+                      const snackbarId = enqueueSnackbar({
+                        message: 'Rejecting...',
+                        variant: 'info',
+                      });
+
+                      ApplicationServices.reject(applicationID as string)
+                .then((res) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+                .catch((err) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+                    }}
+                  >
+            Reject
+                  </Button>
                   <Button
                     variant="contained"
                     color="success"
-                    // sx={{ ml: 'auto' }}
                     onClick={() => {
                       const snackbarId = enqueueSnackbar({
                         message: 'Approving...',
@@ -101,39 +146,10 @@ const ApplicationApprovalPage = () => {
                   >
             Approve
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => {
-                      const snackbarId = enqueueSnackbar({
-                        message: 'Rejecting...',
-                        variant: 'info',
-                      });
-                      ApplicationServices.reject(applicationID as string)
-                .then((res) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                })
-                .catch((err) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
-                    }}
-                  >
-            Reject
-                  </Button>
                 </>
               )}
             />
-            <Typography variant='body1' ml='auto'>
-              { moment(applications?.createdAt).format('DD/MM/YYYY hh:mm A')}
-            </Typography>
+
           </CardActions>
         </Card></Container>
       <FileUploader

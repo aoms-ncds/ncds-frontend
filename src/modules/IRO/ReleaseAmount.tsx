@@ -76,7 +76,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         division: props.data[0]?.division?._id ?? '',
       }));
     } else {
-      if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED) {
+      if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED && props.data[0]?.releaseAmount) {
         IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id).then((res) => {
           setReleaseAmount(res.data);
         });

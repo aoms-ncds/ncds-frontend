@@ -20,7 +20,7 @@ declare global{
     IRODate: Moment;
     purpose: string;
     status: number;
-    releaseAmount:IReleaseAmount;
+    releaseAmount?:IReleaseAmount;
     billAttachment:FileObject[];
     signature:{
       hrSignature?:FileObject;

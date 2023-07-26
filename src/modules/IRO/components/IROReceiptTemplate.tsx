@@ -173,12 +173,12 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount.transferredBank.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount?.transferredBank.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber}</Text>
           </View>
         </div>
 
