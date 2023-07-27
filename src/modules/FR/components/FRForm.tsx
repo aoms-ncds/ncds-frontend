@@ -738,7 +738,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Quantity"
                     type="number"
-                    value={newParticular?.quantity}
+                    value={newParticular?.quantity == 0?'':newParticular?.quantity}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -753,7 +753,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice}
+                    value={newParticular?.unitPrice == 0?'':newParticular?.unitPrice}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -798,6 +798,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     }
                     fullWidth
                     required
+                    disabled
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
