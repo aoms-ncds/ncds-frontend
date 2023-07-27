@@ -199,6 +199,10 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
                   onChange={(newSubDivisions: SubDivision[]) => {
                     setDivisionDetails((divisionDetails) => ({
                       ...divisionDetails,
+                      details: {
+                        ...divisionDetails.details,
+                        noOfSubdivisions: newSubDivisions.length,
+                      },
                       subDivisions: newSubDivisions,
                     }));
                   }}
