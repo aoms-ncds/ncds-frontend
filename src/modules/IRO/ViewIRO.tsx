@@ -408,7 +408,7 @@ const ViewIRO = () => {
                       </Grid>
                       <Grid item xs={12}>
                         {/* {props.action === 'edit' && ( */}
-                        {IRO?.status>=IROLifeCycleStates.AMOUNT_RELEASED &&(
+                        {IRO?.status>=IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status==IROLifeCycleStates.IRO_CLOSED &&(
 
                           <Button
                             variant="contained"

@@ -184,14 +184,15 @@ const ManageFrPage = () => {
               },
               icon: EditNoteIcon,
             },
-            {
-              id: 'print',
-              text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row as FR}/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
-            },
+            ...(props.row.status == FRLifeCycleStates.FR_CLOSED?[
+              {
+                id: 'print',
+                text: 'Print FR',
+                component: PDFDownloadLink,
+                document: <FRReceiptTemplate rowData={props.row as FR}/>,
+                fileName: 'FRReceipt.pdf',
+                icon: PrintIcon,
+              }]:[]),
             {
               id: 'notification',
               text: 'Send notification',
@@ -267,13 +268,13 @@ const ManageFrPage = () => {
       renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
       align: 'center', headerAlign: 'center',
-      renderCell: (params: GridCellParams) => {
+      valueGetter(params) {
         const frRequest = params.row as FR;
         const particularAmount = frRequest.particulars?.reduce(
           (total, particular) => total + Number(particular.requestedAmount),
           0,
         );
-        return <p>{particularAmount}</p>;
+        return particularAmount;
       },
     },
 

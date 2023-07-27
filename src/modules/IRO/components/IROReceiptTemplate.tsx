@@ -124,7 +124,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.rowData?.releaseAmount?.transferredDate;
+  const dateString = props.rowData?.releaseAmount?.transferredDate??null;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
   useEffect(() => {
     console.log(totalAmount, 'xcdfv');
@@ -163,9 +163,9 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
           <Text style={{ ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald' }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
-            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :{props.rowData?.division?.details.coordinator.name?.basicDetails?.firstName +
-            ' '+ props.rowData?.division?.details.coordinator.name?.basicDetails?.lastName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData.division?.details?.name??''}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Leader Name :{props.rowData.division?.details?.coordinator?.name?.basicDetails?.firstName +
+            ' '+ props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName??''}</Text>
           </View>
         </div>
 
@@ -174,11 +174,11 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
             fontFamily: 'Oswald' }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
             <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount.transferredBank.branchName}</Text>
-            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails.accountNumber}</Text>
-            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails.branchName}</Text>
+            <Text style={{ ...styles.text, marginTop: 10, left: 200 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber??''}</Text>
+            <Text style={{ ...styles.text, marginTop: 30, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName??''}</Text>
             <Text style={{ ...styles.text, marginTop: 30, left: 200 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount.modeOfPayment}</Text>
-            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount.transactionNumber}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount.modeOfPayment??''}</Text>
+            <Text style={{ ...styles.text, marginTop: 50, left: 200 }}>Transaction Id :{props.rowData?.releaseAmount.transactionNumber??0}</Text>
           </View>
         </div>
 
@@ -279,7 +279,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
               height: 50,
               top: 15,
               width: 50 }}
-            src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
+            src={`data:${props.rowData.division?.details?.coordinator?.sign?.type};base64, ${props.rowData.division?.details?.coordinator?.sign?.base64} `}/>
             <Image style={{ left: 140,
               position: 'absolute',
               height: 50,

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
@@ -46,6 +46,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
+  const [isFocused, setFocused] = useState(false);
 
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     // console.log(IRO, 'IRO');
@@ -184,22 +185,34 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <TextField
-                  label="Amount Transferred"
-                  type="number"
-                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
-                  onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                <Tooltip
+                  open={isFocused}
+                  onClose={() => setFocused(false)}
+                  onOpen={() => setFocused(true)}
+                  title={`Transfered amount should not be greater than ${releaseAmount.releaseAmount}`} // Include the variable value in the title
+                  followCursor arrow
+                >
+                  <TextField
+                    label="Amount Transferred"
+                    type="number"
+                    value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
+                    onChange={(e) =>
+                      Number(e.target.value)<= (releaseAmount.releaseAmount??0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
                     }))
-                  }
-                  fullWidth
-                  variant="outlined"
-                  disabled={props.action == 'view'}
-                  required
-                />
+                    }
+                    fullWidth
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(true)}
+                    variant="outlined"
+                    inputProps={{ max: releaseAmount.releaseAmount }}
+                    disabled={props.action == 'view'}
+                    autoComplete='off'
+                    required
+                  />
+                </Tooltip>
               </Grid>
               <Grid item xs={12} md={6}>
                 <DatePicker
