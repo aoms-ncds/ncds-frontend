@@ -37,10 +37,10 @@ const APPDashboard = () => {
   return (
     <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
-        <Grid item xs={6} md={3} xl={2}>
+        <Grid item xs={6} md={3} xl={3}>
           <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#0a1172" />
         </Grid>
-        <Grid item xs={6} md={3} xl={3}>
+        <Grid item xs={6} md={3} xl={2}>
           <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#46458C'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
@@ -50,6 +50,7 @@ const APPDashboard = () => {
           <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#F24C3D'} />
         </Grid>
       </Grid>
+      <br/>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#29cc39" targetRoute="/application/manage" />

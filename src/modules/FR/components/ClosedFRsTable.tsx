@@ -5,6 +5,8 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Print
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FRReceiptTemplate from './FRReceiptTemplate';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -22,11 +24,19 @@ const ClosedFRsTable = () => {
           primaryText="Actions"
           key={'FR action'}
           items={[
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: Link,
+            //   to: '/view' + props.row._id,
+            //   icon: PrintIcon,
+            // },
             {
               id: 'print',
               text: 'Print FR',
-              component: Link,
-              to: '/view' + props.row._id,
+              component: PDFDownloadLink,
+              document: <FRReceiptTemplate rowData={props.row as FR}/>,
+              fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
             {
