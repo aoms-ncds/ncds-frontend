@@ -464,7 +464,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title="Internal Release Order">
+    <CommonPageLayout title={props.action == 'manage'?'Manage IRO':'Release Amount'}>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
