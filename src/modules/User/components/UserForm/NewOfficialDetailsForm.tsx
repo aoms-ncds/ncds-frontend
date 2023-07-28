@@ -61,6 +61,7 @@ const NewOfficialDetailsForm = (
   useEffect(() => {
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
       DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
+    // .then((res) => console.log(res.data, 'data'))
     .then((res) => setSubDivisions(res.data))
     .catch((error) =>
       enqueueSnackbar({
@@ -71,6 +72,7 @@ const NewOfficialDetailsForm = (
     }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
+  console.log(newDiv?._id, 'newDiv');
 
   useEffect(() => {
     // if (props.action!='add') {
@@ -87,9 +89,12 @@ const NewOfficialDetailsForm = (
         }),
       );
     // }
+    console.log(props.value);
+
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
-      .then((res) => setSubDivisions(res.data))
+      // .then((res) => setSubDivisions(res.data))
+      .then((res) => console.log(res.data, 'sec'))
       .catch((error) =>
         enqueueSnackbar({
           variant: 'error',
@@ -100,7 +105,7 @@ const NewOfficialDetailsForm = (
   }, []);
   return (
     <>
-      {console.log({ abc: props.value.dateOfJoining })}
+      {/* {console.log({ abc: props.value.dateOfJoining })} */}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date Of Joining in Organisation"
@@ -141,7 +146,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           // disabled={props.kind=='worker'}
-          options={divisions ?? []}
+          options={divisions??[]}
           value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
           getOptionLabel={(div) => div.details.name}
@@ -154,7 +159,7 @@ const NewOfficialDetailsForm = (
             } else if (props.action==='add') {
               props.onChange({ ...props.value, divisionHistory: [
                 {
-                  division: newVal,
+                  division: newVal ?? undefined,
                   subDivision: undefined,
                   dateOfDivisionJoining: null,
                   dateOfDivisionLeaving: null,
@@ -182,7 +187,7 @@ const NewOfficialDetailsForm = (
             }
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField.variant}
+            <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField?.variant}
               required />
           )}
           disabled={Boolean(user.user && (user.user as User).kind=='worker')}

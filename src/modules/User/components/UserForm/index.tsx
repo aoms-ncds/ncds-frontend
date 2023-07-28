@@ -268,6 +268,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               >
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
+                  {' '}
                   Next{' '}
                 </Button>
               </div>
