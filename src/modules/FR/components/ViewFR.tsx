@@ -21,6 +21,7 @@ import {
   InputAdornment,
   FormControl,
   DialogContent,
+  Tooltip,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
@@ -55,8 +56,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   });
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
-
-
+  const [open, setOpen] = useState(false);
+  const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus=IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
   return (
@@ -278,23 +279,34 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               {props.action === 'view' && props.value.status && (props.value.status>=FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status==FRLifeCycleStates.FR_CLOSED)? (
                 <>
                   <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Sanctioned Amount"
-                      type={'number'}
-                      value={props.value.sanctionedAmount}
-                      required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
-                      disabled={!hasPermissions(['MANAGE_FR'])}
-                      onChange={(e) =>
-                        props.onChange({
-                          ...props.value,
-                          sanctionedAmount: Number(e.target.value),
-                        })
-                      }
-                      variant="outlined"
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-
-                    />
+                    <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow >
+                      <TextField
+                        label="Sanctioned Amount"
+                        type={'number'}
+                        value={props.value.sanctionedAmount}
+                        required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                        disabled={!hasPermissions(['MANAGE_FR'])}
+                        onChange={(e) =>{
+                          if (totalRequestedAmount) {
+                            Number(e.target.value) <= (totalRequestedAmount) && props.onChange({
+                              ...props.value,
+                              sanctionedAmount: Number(e.target.value),
+                            });
+                          }
+                        }
+                        }
+                        onFocus={() => setFocused(true)}
+                        onBlur={() => setFocused(false)}
+                        variant="outlined"
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        inputProps={{ max: totalRequestedAmount, min: 0 }}
+                        // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                      />
+                    </Tooltip>
                   </Grid>
 
                   <Grid item xs={12} md={6}>

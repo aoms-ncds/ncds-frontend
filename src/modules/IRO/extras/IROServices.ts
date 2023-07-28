@@ -68,9 +68,9 @@ export default {
         },
         signature: {
           ...data.signature,
-          hrSignature: data.signature.hrSignature ? data.signature.hrSignature: undefined,
-          accountManagerSignature: data.signature.accountManagerSignature ? data.signature.accountManagerSignature : undefined,
-          accountantSignature: data.signature.accountantSignature ? data.signature.accountantSignature : undefined,
+          hrSignature: data.signature?.hrSignature ? data.signature.hrSignature: undefined,
+          accountManagerSignature: data.signature?.accountManagerSignature ? data.signature.accountManagerSignature : undefined,
+          accountantSignature: data.signature?.accountantSignature ? data.signature.accountantSignature : undefined,
 
 
         },
