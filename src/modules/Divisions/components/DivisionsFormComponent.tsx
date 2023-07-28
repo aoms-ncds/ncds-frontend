@@ -88,7 +88,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfSubdivisions: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
-            disabled={props.action=='view'}
+            disabled={true}
           />
         </FormControl>
       </Grid>
