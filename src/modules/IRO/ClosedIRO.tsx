@@ -147,7 +147,7 @@ const ClosedIRO = () => {
     { field: 'sanctionedAmount', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
     { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center',
-      headerAlign: 'center', width: 150 },
+      headerAlign: 'center', width: 180 },
     { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
       headerAlign: 'center', width: 130 },
   ];
