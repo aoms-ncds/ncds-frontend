@@ -105,115 +105,110 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         </FormControl>
       </Grid>
       <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
-
-      <Grid item xs={12}>
-        <br />
-        <Divider textAlign="left">Leaders Details</Divider>
-      </Grid>
+      {users && users.length > 0 && (
+        <Grid item xs={12}>
+          <br />
+          <Divider textAlign="left">Leaders Details</Divider>
+        </Grid>
+      )}
       {/*
       <Grid container spacing={2}>
         <Grid item xs={12} md={6} lg={4}> */}
       {/* <Grid container spacing={1} alignItems="center"> */}
 
-      <Grid item xs={12} md={4}>
-        <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <UsersDropdown
-              users={users??[]}
-              value={props.value.coordinator?.name??null}
-              onChange={(_e, newValue) => {
-                if (newValue) {
-                  props.onChange({
-                    ...props.value,
-                    coordinator: {
-                      ...props.value.coordinator,
-                      name: newValue,
-                    },
-                  });
-                }
-              }
-              }
-              disabled={props.action=='view'}
-              label={'Co-ordinator Name'}
-              required={false}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
+      {users && users.length > 0 && (
+        <Grid item xs={12} md={4}>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" fullWidth>
+              <UsersDropdown
+                users={users}
+                value={props.value.coordinator?.name ?? null}
+                onChange={(_e, newValue) => {
+                  if (newValue) {
+                    props.onChange({
+                      ...props.value,
+                      coordinator: {
+                        ...props.value.coordinator,
+                        name: newValue,
+                      },
+                    });
+                  }
+                }}
+                disabled={props.action === 'view'}
+                label={'Co-ordinator Name'}
+                required={false}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
-          </Button>
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-      {/* </Grid> */}
-      {/* </Grid> */}
-
-      {/* <Grid item xs={12} md={6} lg={4}>
-          <Grid container spacing={1} alignItems="center"> */}
-      <Grid item xs={12} md={4}>
-
-        <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <UsersDropdown
-              users={users??[]}
-              value={props.value.seniorLeader?.name??null}
-              onChange={(e, newValue) => {
-                if (newValue) {
-                  props.onChange({
-                    ...props.value,
-                    seniorLeader: {
-                      ...props.value.seniorLeader,
-                      name: newValue,
-                    },
-                  });
-                }
-              }}
-              disabled={props.action=='view'}
-              label={'Senior Leader Name'}
-              required={false}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
+      )}
+      {users && users.length > 0 && (
+        <Grid item xs={12} md={4}>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" fullWidth>
+              <UsersDropdown
+                users={users}
+                value={props.value.seniorLeader?.name??null}
+                onChange={(e, newValue) => {
+                  if (newValue) {
+                    props.onChange({
+                      ...props.value,
+                      seniorLeader: {
+                        ...props.value.seniorLeader,
+                        name: newValue,
+                      },
+                    });
+                  }
+                }}
+                disabled={props.action=='view'}
+                label={'Senior Leader Name'}
+                required={false}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
-          </Button>
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-      {/* </Grid>
-        </Grid> */}
-
-      {/* <Grid item xs={12} md={6} lg={4}>
-          <Grid container spacing={1} alignItems="center"> */}
-      <Grid item xs={12} md={4}>
-        <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth>
-            <UsersDropdown
-              users={users??[]}
-              disabled={props.action=='view'}
-              value={props.value.juniorLeader?.name??null}
-              onChange={(e, newValue) => {
-                if (newValue) {
-                  props.onChange({
-                    ...props.value,
-                    juniorLeader: {
-                      ...props.value.juniorLeader,
-                      name: newValue,
-                    },
-                  });
-                }
-              }}
-              label={'Junior Leader Name'}
-              required={false}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+      )}
+      {users && users.length > 0 && (
+        <Grid item xs={12} md={4}>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" fullWidth>
+              <UsersDropdown
+                users={users}
+                disabled={props.action=='view'}
+                value={props.value.juniorLeader?.name??null}
+                onChange={(e, newValue) => {
+                  if (newValue) {
+                    props.onChange({
+                      ...props.value,
+                      juniorLeader: {
+                        ...props.value.juniorLeader,
+                        name: newValue,
+                      },
+                    });
+                  }
+                }}
+                label={'Junior Leader Name'}
+                required={false}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                 E-signature
-          </Button>
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
       {/* </Grid>
         </Grid>
       </Grid> */}
