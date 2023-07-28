@@ -196,6 +196,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     }))
                   }
                   fullWidth
+                  inputProps={{ max: releaseAmount.releaseAmount??0, min: 0 }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required
