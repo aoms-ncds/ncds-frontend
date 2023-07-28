@@ -150,6 +150,9 @@ const ClosedIRO = () => {
       headerAlign: 'center', width: 150 },
     { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
       headerAlign: 'center', width: 130 },
+    { field: 'released amount ', headerName: 'Realesed Amount', width: 150, renderHeader: () => <b>Realesed Amount</b>, align: 'center', headerAlign: 'center',
+      valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+    },
   ];
   useEffect(() => {
     IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })

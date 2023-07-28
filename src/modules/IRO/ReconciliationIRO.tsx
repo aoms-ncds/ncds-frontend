@@ -261,6 +261,9 @@ const ReconciliationIRO = () => {
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 130, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
+    { field: 'released amount ', headerName: 'Realesed Amount', width: 150, renderHeader: () => <b>Realesed Amount</b>, align: 'center', headerAlign: 'center',
+      valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+    },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
