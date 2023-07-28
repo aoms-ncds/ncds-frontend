@@ -158,7 +158,7 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Spouse</b>),
+      renderHeader: () => (<b>Email Id</b>),
     },
   ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (
