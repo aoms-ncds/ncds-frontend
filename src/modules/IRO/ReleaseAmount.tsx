@@ -185,19 +185,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               </Grid>
 
               <Grid item xs={12} md={6}>
-                <Tooltip
-                  open={isFocused}
-                  onClose={() => setFocused(false)}
-                  onOpen={() => setFocused(true)}
-                  title={`Transfered amount should not be greater than ${releaseAmount.releaseAmount}`} // Include the variable value in the title
-                  followCursor arrow
-                >
-                  <TextField
-                    label="Amount Transferred"
-                    type="number"
-                    value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
-                    onChange={(e) =>
-                      Number(e.target.value)<= (releaseAmount.releaseAmount??0) &&
+                <TextField
+                  label="Amount Transferred"
+                  type="number"
+                  value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
+                  onChange={(e) =>
+                    Number(e.target.value)<= (releaseAmount.releaseAmount??0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
