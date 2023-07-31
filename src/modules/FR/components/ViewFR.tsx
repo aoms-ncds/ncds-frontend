@@ -22,6 +22,7 @@ import {
   FormControl,
   DialogContent,
   Tooltip,
+  FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
@@ -84,6 +85,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               } // Invoke props.onSubmit with the value as the argument
             }}
           >
+
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <DatePicker
@@ -279,34 +281,36 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               {props.action === 'view' && props.value.status && (props.value.status>=FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status==FRLifeCycleStates.FR_CLOSED)? (
                 <>
                   <Grid item xs={12} md={6}>
-                    <Tooltip open={isFocused?true:false}
+                    {/* <Tooltip open={isFocused?true:false}
                       onClose={() => setOpen(false)}
                       onOpen={() => setOpen(true)}
-                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow >
-                      <TextField
-                        label="Sanctioned Amount"
-                        type={'number'}
-                        value={props.value.sanctionedAmount}
-                        required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
-                        disabled={!hasPermissions(['MANAGE_FR'])}
-                        onChange={(e) =>{
-                          if (totalRequestedAmount) {
-                            Number(e.target.value) <= (totalRequestedAmount) && props.onChange({
-                              ...props.value,
-                              sanctionedAmount: Number(e.target.value),
-                            });
-                          }
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label="Sanctioned Amount"
+                      type={'number'}
+                      value={props.value.sanctionedAmount}
+                      required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                      autoComplete='off'
+                      disabled={!hasPermissions(['MANAGE_FR'])}
+                      onChange={(e) =>{
+                        if (totalRequestedAmount) {
+                          props.onChange({
+                            ...props.value,
+                            sanctionedAmount: Number(e.target.value),
+                          });
                         }
-                        }
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        variant="outlined"
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
-                        inputProps={{ max: totalRequestedAmount, min: 0 }}
-                        // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
-                      />
-                    </Tooltip>
+                      }
+                      }
+                      onFocus={() => setFocused(true)}
+                      onBlur={() => setFocused(false)}
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ max: totalRequestedAmount, min: 0 }}
+                      // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                    />
+                    {/* </Tooltip> */}
                   </Grid>
 
                   <Grid item xs={12} md={6}>
@@ -552,19 +556,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           </Button></>
                       }
                     />
-                  //           ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
-                  //             <PermissionChecks
-                  //               permissions={['WRITE_FR']}
-                  //               granted={
-                  //                 <Button
-                  //                   variant="contained"
-                  //                   color="info"
-                  //                   onClick={() => {
-                  //                     const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
-                  //                     if (props.onSubmit) {
-                  //                       const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
-                  //                       props.onSubmit(updatedValue);
-                  //                     }
+                    //           ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
+                    //             <PermissionChecks
+                    //               permissions={['WRITE_FR']}
+                    //               granted={
+                    //                 <Button
+                    //                   variant="contained"
+                    //                   color="info"
+                    //                   onClick={() => {
+                    //                     const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
+                    //                     if (props.onSubmit) {
+                    //                       const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
+                    //                       props.onSubmit(updatedValue);
+                    //                     }
 
                   //                     setTimeout(() => {
                   //                       closeSnackbar(processingSnack);
@@ -586,6 +590,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
 
 
             </Grid>
+
           </form>
         </CardContent>
       </Container>

@@ -202,17 +202,13 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
                     }))
-                    }
-                    fullWidth
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(true)}
-                    variant="outlined"
-                    inputProps={{ max: releaseAmount.releaseAmount }}
-                    disabled={props.action == 'view'}
-                    autoComplete='off'
-                    required
-                  />
-                </Tooltip>
+                  }
+                  fullWidth
+                  inputProps={{ max: releaseAmount.releaseAmount??0, min: 0 }}
+                  variant="outlined"
+                  disabled={props.action == 'view'}
+                  required
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <DatePicker
