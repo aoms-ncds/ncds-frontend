@@ -162,7 +162,7 @@ const ClosedIRO = () => {
       });
   }, []);
   return (
-    <CommonPageLayout title="Internal Release Order">
+    <CommonPageLayout title="Closed IRO">
       <br />
       <br />
       <Grid item xs={12} md={12}>

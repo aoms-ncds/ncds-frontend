@@ -273,7 +273,7 @@ const ReconciliationIRO = () => {
     },
   ];
   return (
-    <CommonPageLayout title="Internal Release Order">
+    <CommonPageLayout title="Reconciliation IRO">
       <br />
       <br />
       <Card style={{ height: '75vh', width: '100%' }}>
