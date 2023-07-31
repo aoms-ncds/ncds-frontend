@@ -59,16 +59,18 @@ const NewOfficialDetailsForm = (
   const currentDate = moment();
   const user=useAuth();
   useEffect(() => {
-    if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
-      DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
-    // .then((res) => console.log(res.data, 'data'))
-    .then((res) => setSubDivisions(res.data))
-    .catch((error) =>
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      }),
-    );
+    if (newDiv) {
+      if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
+        DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
+      // .then((res) => console.log(res.data, 'data'))
+      .then((res) => setSubDivisions(res.data))
+      .catch((error) =>
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        }),
+      );
+      }
     }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
@@ -123,6 +125,7 @@ const NewOfficialDetailsForm = (
               // error: dateError,
               // helperText: dateError && 'Please select a date',
               fullWidth: true,
+              required: true,
             },
           }}
           autoFocus
@@ -149,6 +152,11 @@ const NewOfficialDetailsForm = (
           options={divisions??[]}
           value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
           // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
+          // value={
+          //   props.value.divisionHistory?.length > 0 ?
+          //     null :
+          //     newDiv
+          // }
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
             setNewDiv(newVal);

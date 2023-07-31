@@ -317,32 +317,35 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 }}
               >
 
-                {(props.options?.kind === 'worker' && (props.value.status && props.value.status!==CommonLifeCycleStates.CREATED && props.value.basicDetails.martialStatus !== 'Married'))?(
-                  <>
-                    <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
-                      {' '}
+                {(props.options?.kind === 'worker' || props.options?.kind === 'staff' &&
+                (props.value.status && props.value.status!==CommonLifeCycleStates.CREATED &&
+                  props.value.basicDetails.martialStatus !== 'Married'))?(
+                    <>
+                      {/* <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                        {' '}
                       Review from first step{' '}
-                    </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                      {' '}
+                      </Button> */}
+                      <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                        {' '}
                     Go back{' '}
-                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                      {' '}
-                      {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
-                      {' '}
+                      </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                        {' '}
+                        {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
+                        {' '}
                   Submit{' '}
-                    </Button>
-                  </>
-                ):(
-                  <>
-                    <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                      {' '}
+                      </Button>
+                    </>
+                  ):(
+                    <>
+                      <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                        {' '}
                     Go back{' '}
-                    </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                      {' '}
+                      </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                        {' '}
                       Next{' '}
-                    </Button>
-                  </>
-                )}
+                      </Button>
+                    </>
+                  )}
               </div>
             </form>
           )}
@@ -618,7 +621,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   padding: 20,
                 }}
               >
-                <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                <Button onClick={() => setActiveStep(0)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                   {' '}
                   Review from first step{' '}
                 </Button>
