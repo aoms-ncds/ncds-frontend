@@ -124,13 +124,25 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       headerName: 'Main Category',
       width: 150,
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderCell: (params) => (
+        <p
+          style={{
+            maxWidth: 180,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+          }}
+        >
+          {params.value}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'requestAmount',
       headerName: 'Requested Amount',
-      width: 130,
+      width: 150,
       align: 'center',
       headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -140,8 +152,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 200, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 200, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 180, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'status',
     //   renderHeader: () => (<b>Status</b>),
