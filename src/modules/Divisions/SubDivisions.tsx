@@ -6,6 +6,7 @@ import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from './extras/DivisionsServices';
 import { useParams } from 'react-router-dom';
 import UsersDropdown from '../User/components/UsersDropdown';
+import UserServices from '../User/extras/UserServices';
 interface SubDivisionsPageProps {
   withCardContainer?: SubDivision[];
   action:'add'|'edit'|'view';
@@ -14,7 +15,25 @@ interface SubDivisionsPageProps {
 const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer = [], onChange, action }) => {
   const { editID } = useParams();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>(withCardContainer.length > 0 ? withCardContainer : [{ _id: '1', name: '' }]);
+  const [users, setUsers] = useState<User[] | null>(null);
 
+
+  useEffect(()=>{
+    console.log({ editID });
+    if (editID) {
+      UserServices.getDivisionUser(editID)
+  .then((res) => {
+    setUsers(res.data);
+  })
+  .catch((error) => {
+    enqueueSnackbar({
+      variant: 'error',
+      message: error.message,
+    });
+  });
+    }
+  }
+  , []);
 
   const handleAddSubDivision = () => {
     setSubDivisions([
@@ -126,31 +145,35 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
           <Grid>
             <br/>
           </Grid>
-          <UsersDropdown
-            value={subDivision.leader??null}
-            onChange={(_e, newValue) => {
-              if (newValue) {
-                setSubDivisions(subDivisions.map((subDiv, _index)=>index==_index?
-                  {
-                    ...subDivision,
-                    leader: newValue,
-                  }:subDiv));
-                onChange(subDivisions.map((subDiv, _index)=>index==_index?
-                  {
-                    ...subDivision,
-                    leader: newValue,
-                  }:subDiv));
-                // const newSubDivisions = [...subDivisions];
-                // newSubDivisions[index].leader = newValue;
-                // setSubDivisions(newSubDivisions);
+          {users && users.length > 0 && (
+            <UsersDropdown
+              users={users??[]}
+              value={subDivision.leader??null}
+              onChange={(_e, newValue) => {
+                if (newValue) {
+                  setSubDivisions(subDivisions.map((subDiv, _index)=>index==_index?
+                    {
+                      ...subDivision,
+                      leader: newValue,
+                    }:subDiv));
+                  onChange(subDivisions.map((subDiv, _index)=>index==_index?
+                    {
+                      ...subDivision,
+                      leader: newValue,
+                    }:subDiv));
+                  // const newSubDivisions = [...subDivisions];
+                  // newSubDivisions[index].leader = newValue;
+                  // setSubDivisions(newSubDivisions);
 
-                // onChange(newSubDivisions); // Call the onChange prop with the updated division details
-              }
-            }}
-            label={'Sub Division Leader Name'}
-            required={false}
-            disabled={action=='view'}
-          />
+                  // onChange(newSubDivisions); // Call the onChange prop with the updated division details
+                }
+              }}
+              label={'Sub Division Leader Name'}
+              required={false}
+              disabled={action=='view'}
+            />
+
+          )}
         </Grid>
       ))}
 
