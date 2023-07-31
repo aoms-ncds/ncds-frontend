@@ -316,14 +316,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               //     });
               // },
             },
-            {
-              id: 'print',
-              text: 'Print IRO',
-              icon: PrintIcon,
-              component: PDFDownloadLink,
-              document: <IROReceiptTemplate rowData={params.row} />,
-              fileName: 'IROReceipt.pdf',
-            },
+            ...(params.row.status == IROLifeCycleStates.IRO_CLOSED?[
+              {
+                id: 'print',
+                text: 'Print IRO',
+                icon: PrintIcon,
+                component: PDFDownloadLink,
+                document: <IROReceiptTemplate rowData={params.row} />,
+                fileName: 'IROReceipt.pdf',
+              }]:[]),
             {
               id: 'notification',
               text: 'Send notification',

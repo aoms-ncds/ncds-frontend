@@ -115,7 +115,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.rowData?.releaseAmount?.transferredDate;
+  const dateString = props.rowData?.releaseAmount?.transferredDate??null;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
   useEffect(() => {
     console.log(totalAmount, 'xcdfv');
@@ -169,13 +169,13 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
           <View style={{ ...styles.box2, marginTop: 15 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData?.division?.details.name??''}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Division Name :{props.rowData.division?.details?.name??''??''}
                 </Text>
               </View>
               <View>
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>
-            Leader Name :{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName +
-            ' '+ props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
+            Leader Name :{props.rowData.division?.details?.coordinator?.name?.basicDetails?.firstName +
+            ' '+ props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName??''}</Text>
               </View></View>
           </View>
         </div>
@@ -189,20 +189,20 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount?.transferredBank.branchName}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber??''}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName??''}
                 </Text></View>
               <View><Text style={{ ...styles.text, marginTop: 15 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
               </View></View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transfer Type :{props.rowData?.releaseAmount?.modeOfPayment??''}
                 </Text></View>
               <View>
-                <Text style={{ ...styles.text, marginTop: 15 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber}</Text>
+                <Text style={{ ...styles.text, marginTop: 15 }}>Transaction Id :{props.rowData?.releaseAmount?.transactionNumber??0}</Text>
               </View>
             </View></View>
         </div>
