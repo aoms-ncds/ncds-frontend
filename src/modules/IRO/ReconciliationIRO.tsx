@@ -244,7 +244,17 @@ const ReconciliationIRO = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>), align: 'center', headerAlign: 'center' },
+    { field: 'mainCategory', headerName: 'Main Category', width: 150, renderHeader: () => (<b>Main Category</b>), align: 'center', headerAlign: 'center', renderCell: (props) => (
+      <p
+        style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+        }}
+      >
+        {props.row.mainCategory}
+      </p>
+    ) },
     { field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       renderCell: (params: GridCellParams) => {
@@ -259,7 +269,19 @@ const ReconciliationIRO = () => {
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
     { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center',
+      renderCell: (params) => (
+        <p
+          style={{
+            maxWidth: 180,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+          }}
+        >
+          {params.row.sanctionedAsPer}
+        </p>
+      ) },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'status',
