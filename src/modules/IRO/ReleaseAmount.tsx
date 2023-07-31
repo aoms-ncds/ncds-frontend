@@ -140,8 +140,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 2000, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 2000, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 200, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 200, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'status',
     //   renderHeader: () => (<b>Status</b>),
