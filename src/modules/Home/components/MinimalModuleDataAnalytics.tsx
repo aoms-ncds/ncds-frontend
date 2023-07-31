@@ -97,7 +97,7 @@ const MinimalModuleDataAnalytics = () => {
             <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/"/>
           </Grid>
           <Grid item xs={6} md={3} xl={4}>
-            <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f"/>
+            <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute="/divisions/"/>
           </Grid>
         </>
       }
