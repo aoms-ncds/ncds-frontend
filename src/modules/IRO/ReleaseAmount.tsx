@@ -140,8 +140,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 130, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 2000, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 2000, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'status',
     //   renderHeader: () => (<b>Status</b>),
@@ -163,7 +163,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         <form onSubmit={saveReleaseAmount}>
           <DialogContent>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid item xs={15}>
                 <DataGrid rows={releaseAmount.IRO ?? []} hideFooter columns={columns} getRowId={(row) => row._id} />
               </Grid>
               <Grid item xs={12}>
