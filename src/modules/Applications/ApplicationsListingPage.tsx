@@ -324,7 +324,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           wordBreak: 'break-word',
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3# }}>
+          WebkitLineClamp: 3 }}>
           {params.value}
         </p>),
       width: 250,
