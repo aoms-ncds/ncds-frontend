@@ -79,7 +79,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     transactionId: '',
   });
   const [submit, setSubmit]= useState(0);
-  const [particularDialog, setparticularDialog] = useState<'add'|'edit'>('add');
+  const [particularDialog, setParticularDialog] = useState<'add'|'edit'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
@@ -101,7 +101,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         console.log(res);
       });
     } else if ( props.value.purpose === 'Worker') {
-      WorkersServices.getDivision()
+      WorkersServices.getWorkersByDivision()
       .then((res) => {
         console.log(res.data, 'WORKER');
         setWorkers(res.data);
@@ -193,7 +193,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     // Other logic for API calls, snackbar, etc.
   };
   const editParticular = (particular: Particular, index: number) => {
-    setparticularDialog('edit');
+    setParticularDialog('edit');
     // setParticulars((particulars)=>
     //   (
     //     particulars.map((part, _ind)=>_ind===index?particular:part)
