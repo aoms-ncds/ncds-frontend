@@ -271,7 +271,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Phone"
-          type="tel"
+          type="number"
           value={props.value.phone}
           onChange={(e) => props.onChange({ ...props.value, phone: e.target.value })}
           variant={props.options?.textField?.variant}
@@ -282,7 +282,7 @@ const UserBasicDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Alternative Phone"
-          type="tel"
+          type="number"
           value={props.value.alternativePhone}
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
           variant={props.options?.textField?.variant}

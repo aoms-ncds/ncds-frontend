@@ -72,7 +72,7 @@ const SpouseForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Phone Number"
-          type="tel"
+          type="number"
           value={props.value.phone}
           onChange={(e) =>
             props.onChange({
