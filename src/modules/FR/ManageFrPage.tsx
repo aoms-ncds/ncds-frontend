@@ -208,13 +208,13 @@ const ManageFrPage = () => {
       ),
     },
 
-    {
-      field: 'serialNumber',
-      renderHeader: () => (<b>SL No</b>),
-      width: 100,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'serialNumber',
+    //   renderHeader: () => (<b>SL No</b>),
+    //   width: 100,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'FRno',
       renderHeader: () => (<b>FR No</b>),
