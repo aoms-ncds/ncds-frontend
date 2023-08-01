@@ -15,7 +15,7 @@ export default {
 
   getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/', { headers: { ...getAuthHeader() } })),
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
-  getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { params: { divisionId }, headers: { ...getAuthHeader() } })),
+  getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions/'+ divisionId, { headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
     console.log(division, 'dd');
     return getStandardResponse<Division>(
