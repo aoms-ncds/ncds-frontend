@@ -105,7 +105,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         console.log(res);
       });
     } else if (props.value.purpose === 'Subdivision') {
-      DivisionsServices.getSubDivisions()
+      WorkersServices.getSubDivisionsByDivisionId()
       .then((res) => {
         setSubDivisions(res.data);
       })
@@ -370,7 +370,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
               ) : null}
 
-              {props.value.purpose === 'Coordinator' ? (
+              {/* {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeCoordinator??null}
@@ -388,7 +388,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     fullWidth
                   />
                 </Grid>
-              ) : null}
+              ) : null} */}
               {props.value.purpose === 'Others' ? (
                 <Grid item xs={12} md={6}>
                   <TextField

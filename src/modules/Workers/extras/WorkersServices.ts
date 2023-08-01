@@ -34,6 +34,8 @@ export default {
    */
   delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }) ),
 
+  getSubDivisionsByDivisionId: () => getStandardResponse<SubDivision[]>(axios.get('/workers/sub_divisions/', { headers: { ...getAuthHeader() } })),
+
   /**
    * Retrieves all workers based on optional conditions.
    * @param {Object} conditions - Optional conditions to filter the workers (e.g., status).
