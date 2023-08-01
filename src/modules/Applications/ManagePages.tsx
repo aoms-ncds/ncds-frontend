@@ -69,7 +69,7 @@ const ApplicationManagePages = () => {
     { field: '_id', headerName: 'SI NO', width: 250 },
     { field: 'name', headerName: 'name', width: 250 },
     { field: 'reason', headerName: 'Reason', width: 250 },
-    { field: 'status', headerName: 'Status', width: 250 },
+    { field: 'status', headerName: 'Status', width: 300 },
   ];
 
   return (
