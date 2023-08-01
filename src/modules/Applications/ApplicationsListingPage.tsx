@@ -319,9 +319,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     { field: 'reason', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Reason</b>),
       renderCell: (params) => (
-        <p style={{ maxWidth: 'auto',
+        <p style={{ maxWidth: 250,
           whiteSpace: 'normal',
-          wordBreak: 'break-word' }}>
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3# }}>
           {params.value}
         </p>),
       width: 250,
