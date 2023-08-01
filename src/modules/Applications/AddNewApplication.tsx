@@ -91,11 +91,18 @@ const AddNewApplication = () => {
                     fullWidth required />
                 </Grid>
                 <Grid item md={6}>
-                  <TextField id="outlined-textarea" label="Reason" value={Request.reason} onChange={(e)=> setRequest((prevRequest) => ({
-                    ...prevRequest,
-                    reason: e.target.value,
-                  }))}
-                  fullWidth required multiline />
+                  <TextField
+                    id="outlined-textarea"
+                    label="Reason"
+                    value={Request.reason}
+                    onChange={(e)=> setRequest((prevRequest) => ({
+                      ...prevRequest,
+                      reason: e.target.value,
+                    }))}
+                    fullWidth
+                    required
+                    multiline
+                  />
                 </Grid>
               </Grid>
               <DialogActions>
