@@ -34,7 +34,7 @@ export default {
    */
   delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }) ),
 
-  getDivision: (userId: string) => getStandardResponse<Worker>(axios.get(`/workers/division/${userId}`, { headers: { ...getAuthHeader() } })),
+  getDivision: () => getStandardResponse<Worker>(axios.get('/workers/division', { headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all workers based on optional conditions.

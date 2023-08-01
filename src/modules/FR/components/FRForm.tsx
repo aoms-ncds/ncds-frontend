@@ -86,7 +86,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     setAction('add');
   };
   // console.log(user?.officialDetails?.divisionHistory[0].division, 'user');
-  const userId=user?.officialDetails?.divisionHistory[0].division;
+  // const userId=user?.officialDetails?.divisionHistory[0].division;
   useEffect(()=>{
     console.log({ submit });
   }, [submit]);
@@ -101,10 +101,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         console.log(res);
       });
     } else if ( props.value.purpose === 'Worker') {
-      WorkersServices.getAll()
+      WorkersServices.getDivision()
       .then((res) => {
         console.log(res.data, 'WORKER');
-
         setWorkers(res.data);
       })
       .catch((res) => {
@@ -119,12 +118,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         console.log(res);
       });
     }
-  }, [props.value.purpose]);
-  useEffect(()=>{
-    WorkersServices.getDivision(userId).
-    then((res)=>{
-      setNewWorkers(res.data?.basicDetails);
-    });
   }, [props.value.purpose]);
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
@@ -340,8 +333,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={props.value.purposeWorker??null}
-                      options={newWorkers ?? []}
-                      getOptionLabel={(newWorkers) => `${newWorkers?.firstName} ${newWorkers?.lastName}`}
+                      options={workers ?? []}
+                      getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({
