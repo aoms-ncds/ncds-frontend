@@ -34,6 +34,8 @@ export default {
    */
   delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }) ),
 
+  getDivision: (userId: string) => getStandardResponse<Worker>(axios.get(`/workers/division/${userId}`, { headers: { ...getAuthHeader() } })),
+
   /**
    * Retrieves all workers based on optional conditions.
    * @param {Object} conditions - Optional conditions to filter the workers (e.g., status).
@@ -130,6 +132,7 @@ export default {
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the approved worker.
    */
   approve: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`, null, { headers: { ...getAuthHeader() } })),
+
 
   /**
    * Rejects a worker.

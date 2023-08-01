@@ -37,6 +37,7 @@ import FileUploaderServices from '../../../components/FileUploader/extras/FileUp
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
 import index from '../../Tests';
+import { useAuth } from '../../../hooks/Authentication';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
+  const [newWorkers, setNewWorkers] = useState<IWorker[] | undefined>(undefined);
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number|null>(null);
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
@@ -54,6 +56,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2|null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3|null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { user } = useAuth();
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
@@ -82,7 +85,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     setShowAddParticularDialog(false);
     setAction('add');
   };
-
+  // console.log(user?.officialDetails?.divisionHistory[0].division, 'user');
+  const userId=user?.officialDetails?.divisionHistory[0].division;
   useEffect(()=>{
     console.log({ submit });
   }, [submit]);
@@ -99,6 +103,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     } else if ( props.value.purpose === 'Worker') {
       WorkersServices.getAll()
       .then((res) => {
+        console.log(res.data, 'WORKER');
+
         setWorkers(res.data);
       })
       .catch((res) => {
@@ -114,7 +120,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       });
     }
   }, [props.value.purpose]);
-
+  useEffect(()=>{
+    WorkersServices.getDivision(userId).
+    then((res)=>{
+      setNewWorkers(res.data?.basicDetails);
+    });
+  }, [props.value.purpose]);
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
@@ -329,8 +340,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={props.value.purposeWorker??null}
-                      options={workers ?? []}
-                      getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
+                      options={newWorkers ?? []}
+                      getOptionLabel={(newWorkers) => `${newWorkers?.firstName} ${newWorkers?.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({
