@@ -44,8 +44,8 @@ const NotificationPage = () => {
       },
     },
     {
-      field: 'type',
-      renderHeader: () => (<b>Type</b>),
+      field: 'division',
+      renderHeader: () => (<b>Division</b>),
       minWidth: 180,
       type: 'string',
       renderCell: (props) => {
