@@ -44,7 +44,7 @@ import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
-
+  console.log(props, 'Porp');
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
   const [divisions, setDivisions] = useState<Division[]>();
