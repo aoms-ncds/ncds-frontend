@@ -96,7 +96,7 @@ declare global {
     purposeWorker?: IWorker;
     purposeSubdivision?: SubDivision;
     division?: Division;
-    purposeCoordinator?: IWorker;
+    purposeCoordinator?: User;
     purposeOthers?: string;
     sanctionedAmount: number;
     status: number;
