@@ -387,61 +387,67 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              <Grid item xs={12}>
-                <Typography>Particulars</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Autocomplete
-                  value={selectedMainCategory ?? null}
-                  options={mainCategories ?? []}
-                  getOptionLabel={(mainCategory) => mainCategory.name}
-                  onChange={(e, selectedMainCategory) => {
-                    if (selectedMainCategory) {
+              {props.action=== 'add' &&(
+                <>
+                  <Grid item xs={12}>
+                    <Typography>Particulars</Typography>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Autocomplete
+                      value={selectedMainCategory ?? null}
+                      options={mainCategories ?? []}
+                      getOptionLabel={(mainCategory) => mainCategory.name}
+                      onChange={(e, selectedMainCategory) => {
+                        if (selectedMainCategory) {
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            mainCategory: selectedMainCategory.name,
+                          }));
+                          props.onChange({
+                            ...props.value,
+                            mainCategory: selectedMainCategory.name,
+                          });
+                          setSelectedMainCategory(selectedMainCategory);
+                          setSelectedSubCategory1(null);
+                          setSelectedSubCategory1(null);
+                          setSelectedSubCategory1(null);
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
+                      fullWidth
+                    />
+                  </Grid>
+                </>
+              )}
+              {props.action === 'add' && (
+                <Grid item xs={12} md={4} lg={4}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
-                        mainCategory: selectedMainCategory.name,
+                        subCategory1: '',
+                        subCategory2: '',
+                        subCategory3: '',
+                        month: '',
+                        narration: '',
+                        quantity: undefined,
+                        unitPrice: undefined,
+                        requestedAmount: undefined,
+                        attachment: [],
                       }));
-                      props.onChange({
-                        ...props.value,
-                        mainCategory: selectedMainCategory.name,
-                      });
-                      setSelectedMainCategory(selectedMainCategory);
+                      setShowAddParticularDialog(true);
                       setSelectedSubCategory1(null);
-                      setSelectedSubCategory1(null);
-                      setSelectedSubCategory1(null);
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={4} lg={4}>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setNewParticular((particularDetails) => ({
-                      ...particularDetails,
-                      subCategory1: '',
-                      subCategory2: '',
-                      subCategory3: '',
-                      month: '',
-                      narration: '',
-                      quantity: undefined,
-                      unitPrice: undefined,
-                      requestedAmount: undefined,
-                      attachment: [],
-                    }));
-                    setShowAddParticularDialog(true);
-                    setSelectedSubCategory1(null);
-                    setSelectedSubCategory2(null);
-                    setSelectedSubCategory3(null);
-                    setAction('add');
-                  }}
-                  disabled={!selectedMainCategory}
-                >
-                  Add particulars
-                </Button>
-              </Grid>
+                      setSelectedSubCategory2(null);
+                      setSelectedSubCategory3(null);
+                      setAction('add');
+                    }}
+                    disabled={!selectedMainCategory}
+                  >
+      Add particulars
+                  </Button>
+                </Grid>
+              )}
               {particulars.length > 0 && (
                 <Grid item xs={12}>
                   <TableContainer>
