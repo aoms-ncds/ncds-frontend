@@ -45,14 +45,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number|null>(null);
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [divisions, setDivisions] = useState<Division[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
-  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1|null>(null);
-  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2|null>(null);
-  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3|null>(null);
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
+  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
+  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [particulars, setParticulars] = useState<Particular[]>([]);
@@ -64,7 +64,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     month: '',
     narration: '',
     attachment: [],
-
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -75,43 +74,43 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     remark: '',
     transactionId: '',
   });
-  const [submit, setSubmit]= useState(0);
-  const [particularDialog, setparticularDialog] = useState<'add'|'edit'>('add');
+  const [submit, setSubmit] = useState(0);
+  const [particularDialog, setparticularDialog] = useState<'add' | 'edit'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
     setAction('add');
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log({ submit });
   }, [submit]);
 
   useEffect(() => {
     if (props.value.purpose === 'Coordinator') {
       WorkersServices.getAll()
-      .then((res) => {
-        setCoordinators(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if ( props.value.purpose === 'Worker') {
+        .then((res) => {
+          setCoordinators(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (props.value.purpose === 'Worker') {
       WorkersServices.getAll()
-      .then((res) => {
-        setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+        .then((res) => {
+          setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
-      .then((res) => {
-        setSubDivisions(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+        .then((res) => {
+          setSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     }
   }, [props.value.purpose]);
 
@@ -153,14 +152,11 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const addParticulars = () => {
     handleClose();
     let newParticulars: Particular[];
-    if (particularDialog==='edit') {
-      setParticulars((particulars)=>
-        (
-          particulars.map((part, _ind)=>_ind===selectedParticularIndex?newParticular as Particular:part)
-        ));
+    if (particularDialog === 'edit') {
+      setParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)));
       props.onChange({
         ...props.value,
-        particulars: particulars.map((part, _ind)=>_ind===selectedParticularIndex?newParticular as Particular:part),
+        particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
       });
     } else {
       newParticulars = [...particulars, newParticular as Particular];
@@ -184,7 +180,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       requestedAmount: undefined,
       attachment: [],
     }));
-
 
     // Other logic for API calls, snackbar, etc.
   };
@@ -242,23 +237,22 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       });
   };
   useEffect(() => {
-    setSelectedMainCategory(()=> mainCategories?.find((item)=> item.name==newParticular.mainCategory));
+    setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular.mainCategory));
     console.log(newParticular.mainCategory, 'newParticular.mainCategory');
   }, [newParticular]);
   useEffect(() => {
-    setSelectedSubCategory1(()=> selectedMainCategory?.subcategory1.find((item)=> item.name==newParticular.subCategory1)??null);
+    setSelectedSubCategory1(() => selectedMainCategory?.subcategory1.find((item) => item.name == newParticular.subCategory1) ?? null);
     console.log(newParticular.subCategory1, 'newParticular.subcategory1');
   }, [selectedMainCategory]);
   useEffect(() => {
-    setSelectedSubCategory2(()=> selectedSubCategory1?.subcategory2.find((item)=> item.name==newParticular.subCategory2)??null);
+    setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
     console.log(newParticular.subCategory2, 'newParticular.subcategory2');
   }, [selectedSubCategory1]);
   useEffect(() => {
-    setSelectedSubCategory3(()=> selectedSubCategory2?.subcategory3.find((item)=> item.name==newParticular.subCategory3)??null);
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3) ?? null);
     console.log(newParticular.subCategory3, 'newParticular.subcategory3');
     // setShowAddParticularDialog(true);
   }, [selectedSubCategory2]);
-
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   return (
@@ -268,7 +262,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (particulars.length==0) {
+              if (particulars.length == 0) {
                 enqueueSnackbar({
                   message: 'Please add particulars',
                   variant: 'warning',
@@ -282,10 +276,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               if (props.onSubmit) {
-                const updatedValue = { ...props.value,
-                  status: submit == 1?FRLifeCycleStates.WAITING_FOR_ACCOUNTS:
-                    submit == 2?FRLifeCycleStates.WAITING_FOR_PRESIDENT:undefined,
-                }; // Create a new object with updated status
+                const updatedValue = { ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
+                  FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined }; // Create a new object with updated status
                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
               navigate('/fr/');
@@ -295,7 +287,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               <Grid item xs={12} md={6}>
                 <DatePicker
                   label="Date"
-                  value={props.value.FRdate }
+                  value={props.value.FRdate}
                   onChange={(newDate) =>
                     props.onChange({
                       ...props.value,
@@ -309,7 +301,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
-                  value={props.value.purpose?? null}
+                  value={props.value.purpose ?? null}
                   options={purposes ?? []}
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedPurpose) => {
@@ -328,7 +320,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 <>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
-                      value={props.value.purposeWorker??null}
+                      value={props.value.purposeWorker ?? null}
                       options={workers ?? []}
                       getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
@@ -354,18 +346,17 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       }}
                     />
                   </Grid>
-
-
                 </>
               ) : null}
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     options={subDivisions ?? []}
-                    value={props.value.purposeSubdivision??null}
+                    value={props.value.purposeSubdivision ?? null}
                     getOptionLabel={(subDiv) => subDiv.name}
-                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined,
-                      division: newVal?.division, purposeCoordinator: newVal?.division?.details?.coordinator?? null })}
+                    onChange={(event, newVal) =>
+                      props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined, division: newVal?.division, purposeCoordinator: newVal?.division?.details?.coordinator?.name })
+                    }
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
                   />
                 </Grid>
@@ -430,36 +421,38 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       setSelectedSubCategory1(null);
                     }
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required/>}
+                  renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
-                <Button variant="contained" onClick={() => {
-                  setNewParticular((particularDetails) => ({
-                    ...particularDetails,
-                    subCategory1: '',
-                    subCategory2: '',
-                    subCategory3: '',
-                    month: '',
-                    narration: '',
-                    quantity: undefined,
-                    unitPrice: undefined,
-                    requestedAmount: undefined,
-                    attachment: [],
-                  }));
-                  setShowAddParticularDialog(true);
-                  setSelectedSubCategory1(null);
-                  setSelectedSubCategory2(null);
-                  setSelectedSubCategory3(null);
-                  setAction('add');
-                }
-                }
-                disabled={!selectedMainCategory}>
-                                    Add particulars
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setNewParticular((particularDetails) => ({
+                      ...particularDetails,
+                      subCategory1: '',
+                      subCategory2: '',
+                      subCategory3: '',
+                      month: '',
+                      narration: '',
+                      quantity: undefined,
+                      unitPrice: undefined,
+                      requestedAmount: undefined,
+                      attachment: [],
+                    }));
+                    setShowAddParticularDialog(true);
+                    setSelectedSubCategory1(null);
+                    setSelectedSubCategory2(null);
+                    setSelectedSubCategory3(null);
+                    setAction('add');
+                  }}
+                  disabled={!selectedMainCategory}
+                >
+                  Add particulars
                 </Button>
               </Grid>
-              {particulars.length>0&&(
+              {particulars.length > 0 && (
                 <Grid item xs={12}>
                   <TableContainer>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -474,36 +467,31 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-
                         {particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th" sx={{ display: 'flex' }}>
                               <PermissionChecks
                                 permissions={['WRITE_FR']}
-                                granted={(
-
-
+                                granted={
                                   <IconButton>
                                     <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
                                   </IconButton>
-
-                                )}
+                                }
                               />
                               <IconButton>
-                                <EditIcon onClick={() =>
-                                  editParticular(item, index)
-                                }/>
+                                <EditIcon onClick={() => editParticular(item, index)} />
                               </IconButton>
                               <IconButton
                                 // sx={{ px: 10 }}
                                 onClick={() => {
                                   setViewFileUploader(true);
                                   setAttachments(item.attachment);
-                                }}>
+                                }}
+                              >
                                 <AttachmentIcon />
                               </IconButton>
                             </TableCell>
-                            <TableCell align="center">{index+1}</TableCell>
+                            <TableCell align="center">{index + 1}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
@@ -513,7 +501,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                </Grid>)}
+                </Grid>
+              )}
               <Grid item xs={12} md={6}>
                 <TextField
                   label="Requested Amount"
@@ -621,7 +610,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
                         permissions={['WRITE_FR']}
-                        granted={(
+                        granted={
                           <Button
                             variant="contained"
                             color="warning"
@@ -631,32 +620,29 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                               setSubmit(2);
                             }}
                           >
-                      Submit to President
+                            Submit to President
                           </Button>
-                        )}
+                        }
                       />
                     </>
                   ) : null}
                   &nbsp;
                   <PermissionChecks
                     permissions={['WRITE_FR']}
-                    granted={(
+                    granted={
                       <Button
                         variant="contained"
                         color="info"
-                        type='submit'
+                        type="submit"
                         onClick={() => setSubmit(1)}
                         // disabled={particulars.length==0}
                       >
-                    Submit{' '}
+                        Submit{' '}
                       </Button>
-                    )}
+                    }
                   />
-
                 </div>
               </Grid>
-
-
             </Grid>
           </form>
         </CardContent>
@@ -671,15 +657,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         }}
       >
         <DialogTitle>Add Particular</DialogTitle>
-        <form onSubmit={(e)=>{
-          e.preventDefault();
-          addParticulars();
-        }}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addParticulars();
+          }}
+        >
           <DialogContent>
             <Container>
-
               <Grid container spacing={3}>
-
                 <Grid item md={12}>
                   <Autocomplete
                     value={selectedSubCategory1}
@@ -739,7 +725,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Quantity"
                     type="number"
-                    value={newParticular?.quantity == 0?'':newParticular?.quantity}
+                    value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -754,7 +740,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice == 0?'':newParticular?.unitPrice}
+                    value={newParticular?.unitPrice == 0 ? '' : newParticular?.unitPrice}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -762,7 +748,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         requestedAmount: Number(e.target.value),
                       }))
                     }
-
                     required
                     fullWidth
                   />
@@ -775,14 +760,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
-                            requestedAmount:
-                                  e.target.checked ?
-                                    (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) :
-                                    particularDetails?.unitPrice ?? 0,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
                           }))
                         }
                       />
-
                     }
                   />
                 </Grid>
@@ -838,18 +819,16 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
-                          Attachments
+                    Attachments
                   </Button>
                 </Grid>
-
               </Grid>
             </Container>
-
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" variant="contained" >
-                    Save
+            <Button type="submit" variant="contained">
+              Save
             </Button>
           </DialogActions>
         </form>
@@ -862,26 +841,24 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             e.preventDefault();
             if (remark.remark) {
               FRServices.addRemarks(remark)
-        .then((res) => {
-          setRemarks((remarks) => [...remarks, res.data]);
-          setRemark((remark) => ({
-            ...remark,
-            remark: '',
-          }));
-          toggleOpenRemarks(false);
-          enqueueSnackbar(res.message, { variant: 'success' });
-        })
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+                .then((res) => {
+                  setRemarks((remarks) => [...remarks, res.data]);
+                  setRemark((remark) => ({
+                    ...remark,
+                    remark: '',
+                  }));
+                  toggleOpenRemarks(false);
+                  enqueueSnackbar(res.message, { variant: 'success' });
+                })
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                });
             }
           }}
         >
-
-
           <DialogActions>
             <TextField
               id="remarkTextfield"
@@ -891,15 +868,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               onChange={(e) =>
                 setRemark((remark) => ({
                   ...remark,
-                  FR: props.value._id??'',
+                  FR: props.value._id ?? '',
                   remark: e.target.value,
                 }))
               }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton type="submit"
-                    >
+                    <IconButton type="submit">
                       <SendIcon />
                     </IconButton>
                   </InputAdornment>
@@ -909,26 +885,20 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             />
             <br />
             <Button variant="contained" onClick={() => toggleOpenRemarks(false)} sx={{ ml: 'auto' }}>
-                    close
+              close
             </Button>
           </DialogActions>
         </form>
       </Dialog>
       <FileUploader
         title="Attachments"
-        action='add'
-        types={[
-          'application/pdf',
-          'image/png',
-          'image/jpeg',
-          'image/jpg',
-
-        ]}
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 3,
-          maxTotalSize: 3*MB,
+          maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader}
@@ -936,8 +906,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         // getFiles={TestServices.getBills}
         getFiles={newParticular.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name)
-          .then( (res)=>{
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
             // console.log(res.data._id);
 
             setNewParticular(() => ({
@@ -950,44 +919,35 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         renameFile={(fileId: string, newName: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.map((file) =>
-              file._id === fileId ? { ...file, filename: newName } : file,
-            ),
+            attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={(fileId: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.filter((file)=>file._id!==fileId),
+            attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
       <FileUploader
         title="Attachments"
-        types={[
-          'application/pdf',
-          'image/png',
-          'image/jpeg',
-          'image/jpg',
-
-        ]}
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 3,
-          maxTotalSize: 3*MB,
+          maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}
         open={viewFileUploader}
-        action='view'
+        action="view"
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
         getFiles={attachments}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name)
-          .then((res)=>{
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
             console.log(res.data._id);
             setNewParticular((particularDetails) => ({
               ...particularDetails,
@@ -1000,21 +960,18 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         renameFile={(fileId: string, newName: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.map((file) =>
-              file._id === fileId ? { ...file, filename: newName } : file,
-            ),
+            attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={(fileId: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.filter((file)=>file._id!==fileId),
+            attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
-
     </div>
   );
 };
