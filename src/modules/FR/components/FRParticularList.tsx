@@ -6,14 +6,14 @@ import FRServices from '../extras/FRServices';
 const FRParticularList = () => {
   const [particulars, setParticulars] = useState<Particular[]>();
   useEffect(() => {
-    FRServices.getParticulars()
-      .then((res) => {
-        console.log(res);
-        setParticulars(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+    // FRServices.getParticulars()
+    //   .then((res) => {
+    //     console.log(res);
+    //     setParticulars(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
   }, []);
   return (
     <div>
