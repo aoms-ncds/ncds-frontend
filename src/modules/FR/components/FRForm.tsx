@@ -364,7 +364,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     options={subDivisions ?? []}
                     value={props.value.purposeSubdivision??null}
                     getOptionLabel={(subDiv) => subDiv.name}
-                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined, division: newVal?.division })}
+                    onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined,
+                      division: newVal?.division, purposeCoordinator: newVal?.division?.details?.coordinator?? null })}
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
                   />
                 </Grid>
