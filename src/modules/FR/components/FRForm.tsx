@@ -25,8 +25,7 @@ import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon } 
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
-import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import { enqueueSnackbar } from 'notistack';
 import { monthNames, purposes } from '../extras/FRConfig';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import SendIcon from '@mui/icons-material/Send';
@@ -36,17 +35,15 @@ import PermissionChecks from '../../User/components/PermissionChecks';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
-import index from '../../Tests';
+import { useAuth } from '../../../hooks/Authentication';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
 
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
-  const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
-  const [divisions, setDivisions] = useState<Division[]>();
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
@@ -54,6 +51,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { user } = useAuth();
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
@@ -74,8 +72,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     remark: '',
     transactionId: '',
   });
-  const [submit, setSubmit] = useState(0);
-  const [particularDialog, setparticularDialog] = useState<'add' | 'edit'>('add');
+  const [submit, setSubmit]= useState(0);
+  const [particularDialog, setParticularDialog] = useState<'add'|'edit'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
@@ -87,22 +85,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   }, [submit]);
 
   useEffect(() => {
-    if (props.value.purpose === 'Coordinator') {
-      WorkersServices.getAll()
-        .then((res) => {
-          setCoordinators(res.data);
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    } else if (props.value.purpose === 'Worker') {
-      WorkersServices.getAll()
-        .then((res) => {
-          setWorkers(res.data);
-        })
-        .catch((res) => {
-          console.log(res);
-        });
+    if ( props.value.purpose === 'Worker') {
+      WorkersServices.getWorkersByDivision()
+      .then((res) => {
+        console.log(res.data, 'WORKER');
+        setWorkers(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
         .then((res) => {
@@ -113,7 +104,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         });
     }
   }, [props.value.purpose]);
-
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
@@ -184,7 +174,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     // Other logic for API calls, snackbar, etc.
   };
   const editParticular = (particular: Particular, index: number) => {
-    setparticularDialog('edit');
+    setParticularDialog('edit');
     // setParticulars((particulars)=>
     //   (
     //     particulars.map((part, _ind)=>_ind===index?particular:part)
@@ -322,7 +312,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     <Autocomplete
                       value={props.value.purposeWorker ?? null}
                       options={workers ?? []}
-                      getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
+                      getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({

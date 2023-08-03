@@ -21,6 +21,7 @@ declare global {
         date?: Moment;
         type?: MessagingServices;
         createdAt?: Moment;
+        division:Division;
     }
 
 

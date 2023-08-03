@@ -267,8 +267,8 @@ const ReconciliationIRO = () => {
       } },
     { field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
-    { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center',
       renderCell: (params) => (
         <p
@@ -283,6 +283,9 @@ const ReconciliationIRO = () => {
         </p>
       ) },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
+    { field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
+      valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+    },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),

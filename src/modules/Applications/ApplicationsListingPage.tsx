@@ -118,7 +118,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         });
     }
   }, []);
-
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editid) {
@@ -318,7 +317,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     { field: 'name', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150 },
     { field: 'reason', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>Reason</b>), width: 150 },
+      headerAlign: 'center', renderHeader: () => (<b>Reason</b>),
+      renderCell: (params) => (
+        <p style={{ maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3 }}>
+          {params.value}
+        </p>),
+      width: 250,
+    },
     {
       field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,
@@ -397,6 +407,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       }));
                     }}
                     fullWidth
+                    multiline
                     required
                   />
                 </Grid>
