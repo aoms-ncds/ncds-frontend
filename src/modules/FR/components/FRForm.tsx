@@ -756,7 +756,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
-                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (particularDetails?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.requestedAmount?? 0) : particularDetails?.unitPrice ?? 0,
                           }))
                         }
                       />
