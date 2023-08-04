@@ -736,7 +736,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice == 0 ? '' : newParticular?.unitPrice}
+                    value={newParticular?.requestedAmount}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,

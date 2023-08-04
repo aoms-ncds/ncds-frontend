@@ -90,7 +90,7 @@ const MinimalModuleDataAnalytics = () => {
 
   return (
     <Grid container spacing={3}>
-      <PermissionChecks permissions={['READ_DIVISIONS']} granted={
+      <PermissionChecks permissions={['WRITE_DIVISIONS']} granted={
         <>
           <Grid item xs={6} md={3} xl={4}>
 
