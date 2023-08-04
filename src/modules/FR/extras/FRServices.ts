@@ -63,6 +63,8 @@ export default {
 
   getMainCategory: ()=>getStandardResponse<MainCategory[]>(axios.get('/fr/category', { headers: { ...getAuthHeader() } })),
 
+  // getParticulars: ()=>getStandardResponse<Particular[]>(axios.get('/fr/particular', { headers: { ...getAuthHeader() } })),
+
   addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
@@ -116,43 +118,43 @@ export default {
       }),
     );
   },
-  getParticulars: () => getStandardResponse<Particular[]>(
-    dummyRequest<Particular[]>({
-      data: [{
-        _id: '1',
-        mainCategory: 'main',
-        subCategory1: 'sub',
-        subCategory2: 'sub2',
-        subCategory3: 'sub3',
-        quantity: 12,
-        month: 'January',
-        requestedAmount: 300,
-        unitPrice: 300,
-        narration: 'paticularss',
-        attachment: [],
+  // getParticulars: () => getStandardResponse<Particular[]>(
+  //   dummyRequest<Particular[]>({
+  //     data: [{
+  //       _id: '1',
+  //       mainCategory: 'main',
+  //       subCategory1: 'sub',
+  //       subCategory2: 'sub2',
+  //       subCategory3: 'sub3',
+  //       quantity: 12,
+  //       month: 'January',
+  //       requestedAmount: 300,
+  //       unitPrice: 300,
+  //       narration: 'paticularss',
+  //       attachment: [],
 
-      },
-      {
-        _id: '2',
-        mainCategory: 'main',
-        subCategory1: 'sub',
-        subCategory2: 'sub2',
-        subCategory3: 'sub3',
-        quantity: 12,
-        month: 'January',
-        requestedAmount: 300,
-        unitPrice: 300,
-        narration: 'paticularss',
-        attachment: [],
+  //     },
+  //     {
+  //       _id: '2',
+  //       mainCategory: 'main',
+  //       subCategory1: 'sub',
+  //       subCategory2: 'sub2',
+  //       subCategory3: 'sub3',
+  //       quantity: 12,
+  //       month: 'January',
+  //       requestedAmount: 300,
+  //       unitPrice: 300,
+  //       narration: 'paticularss',
+  //       attachment: [],
 
-      },
-      ],
-      // error: null,
-      message: 'fetched data',
-      result: 'success',
-      timeout: 500,
-    }),
-  ),
+  //     },
+  //     ],
+  //     // error: null,
+  //     message: 'fetched data',
+  //     result: 'success',
+  //     timeout: 500,
+  //   }),
+  // ),
 
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(
@@ -167,11 +169,10 @@ export default {
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
     return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
-        console.log(frRequest);
+        console.log(frRequest, 'setRequisition');
         axios
           .patch('/fr/' + frID, {
             ...frRequest,
-            particulars: [],
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
             try {
