@@ -75,7 +75,8 @@ const ClosedIRO = () => {
               id: 'View',
               text: 'View Details ',
               component: Link,
-              to: `/fr/${props.row._id}/view`,
+              // to: `/fr/${props.row._id}/view`,
+              to: `/iro/${props.row._id}`,
               icon: PreviewIcon,
             },
             // {
