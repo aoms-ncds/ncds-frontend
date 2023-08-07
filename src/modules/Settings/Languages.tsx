@@ -215,7 +215,7 @@ const Languages = () => {
         </form>
       </Dialog>
 
-      <Card style={{ height: '80vh', width: '100%' }}>
+      <Card>
         <Grid container spacing={2} >
           <Grid item xs={12} sx={{ px: 2 }}>
             <br />
@@ -232,7 +232,9 @@ const Languages = () => {
           </Grid>
         </Grid>
 
-        <DataGrid rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
+        <DataGrid
+          style={{ height: '80vh', width: '100%' }}
+          rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
       </Card>
     </CommonPageLayout>
   );
