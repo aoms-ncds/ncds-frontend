@@ -95,8 +95,8 @@ const NewOfficialDetailsForm = (
 
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
-      // .then((res) => setSubDivisions(res.data))
-      .then((res) => console.log(res.data, 'sec'))
+      .then((res) => setSubDivisions(res.data))
+      // .then((res) => console.log(res.data, 'sec'))
       .catch((error) =>
         enqueueSnackbar({
           variant: 'error',
@@ -150,13 +150,8 @@ const NewOfficialDetailsForm = (
         <Autocomplete
           // disabled={props.kind=='worker'}
           options={divisions??[]}
-          value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
-          // value={props.value.divisionHistory[props.value.divisionHistory.length-1]?.division??null}
-          // value={
-          //   props.value.divisionHistory?.length > 0 ?
-          //     null :
-          //     newDiv
-          // }
+          // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
+          value={(props.value.divisionHistory.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1].division:null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
             setNewDiv(newVal);
