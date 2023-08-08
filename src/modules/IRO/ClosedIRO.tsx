@@ -18,14 +18,14 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>();
-  const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
+  const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
 
-  const columns: GridColDef<IROrder>[]= [
+  const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
       renderHeader: () => (<b>Action</b>),
@@ -48,6 +48,13 @@ const ClosedIRO = () => {
             //   icon: PreviewIcon,
             // },
             {
+              id: 'View',
+              text: 'View Details ',
+              component: Link,
+              to: `/iro/${props.row._id}`,
+              icon: PreviewIcon,
+            },
+            {
               id: 'remarks',
               text: 'Remarks',
               icon: EditNoteIcon,
@@ -55,14 +62,15 @@ const ClosedIRO = () => {
                 toggleOpenRemarks(true);
                 setSelectedIROId(props.row._id);
                 IROServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data??[]))
+                  .then((res) => setRemarks(res.data ?? []))
                   .catch((error) => {
                     enqueueSnackbar({
                       variant: 'error',
                       message: error.message,
                     });
                   });
-              } },
+              },
+            },
             {
               id: 'print',
               text: 'Print IRO',
@@ -71,14 +79,14 @@ const ClosedIRO = () => {
               document: <IROReceiptTemplate rowData={props.row} />,
               fileName: 'IROReceipt.pdf',
             },
-            {
-              id: 'View',
-              text: 'View Details ',
-              component: Link,
-              // to: `/fr/${props.row._id}/view`,
-              to: `/iro/${props.row._id}`,
-              icon: PreviewIcon,
-            },
+            // {
+            //   id: 'View',
+            //   text: 'View Details ',
+            //   component: Link,
+            //   // to: `/fr/${props.row._id}/view`,
+            //   to: `/iro/${props.row._id}`,
+            //   icon: PreviewIcon,
+            // },
             // {
             //   id: 'Reconciliation',
             //   text: 'Reconciliation',
@@ -98,15 +106,18 @@ const ClosedIRO = () => {
         />
       ),
     },
-    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100, align: 'center',
-      headerAlign: 'center' },
+    {
+      field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100, align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'IRODate',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>IRO Date</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130 },
+      width: 130,
+    },
     {
       field: 'divisionName',
       align: 'center',
@@ -121,7 +132,8 @@ const ClosedIRO = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Sub Division Name</b>),
       renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
-      width: 170 },
+      width: 170,
+    },
     { field: 'mainCategory', align: 'center', headerAlign: 'center', renderHeader: () => (<b>Main Category</b>), width: 245 },
     {
       field: 'requestAmount',
@@ -136,18 +148,24 @@ const ClosedIRO = () => {
           0,
         );
         return <p>{particularAmount}</p>;
-      } },
-    { field: 'updatedAt',
+      },
+    },
+    {
+      field: 'updatedAt',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Last Updated</b>),
       width: 150,
       renderCell: (props) => (
         <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
-      ) },
-    { field: 'sanctionedAmount', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150 },
-    { field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center',
+      ),
+    },
+    {
+      field: 'sanctionedAmount', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
+    },
+    {
+      field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center',
       headerAlign: 'center', width: 180, renderCell: (params) => (
         <p
           style={{
@@ -159,10 +177,14 @@ const ClosedIRO = () => {
         >
           {params.row.sanctionedAsPer}
         </p>
-      ) },
-    { field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
-      headerAlign: 'center', width: 130 },
-    { field: 'released amount ', headerName: 'Realesed Amount', width: 150, renderHeader: () => <b>Realesed Amount</b>, align: 'center', headerAlign: 'center',
+      ),
+    },
+    {
+      field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
+      headerAlign: 'center', width: 130,
+    },
+    {
+      field: 'released amount ', headerName: 'Realesed Amount', width: 150, renderHeader: () => <b>Realesed Amount</b>, align: 'center', headerAlign: 'center',
       valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
     },
   ];
@@ -191,7 +213,7 @@ const ClosedIRO = () => {
           {remarks.length > 0 ? remarks.map((remark) => (
             <MessageItem key={remark._id} sender={remark.createdBy?.basicDetails?.firstName + ' ' + remark.createdBy?.basicDetails?.lastName}
               time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
+          )) : 'No Data Found '}
         </DialogContent>
         <DialogActions>
           <TextField
@@ -202,7 +224,7 @@ const ClosedIRO = () => {
             onChange={(e) =>
               setRemark((remark) => ({
                 ...remark,
-                IRO: selectedIROId??'',
+                IRO: selectedIROId ?? '',
                 remark: e.target.value,
               }))
             }
@@ -213,19 +235,19 @@ const ClosedIRO = () => {
                     onClick={() => {
                       remark.remark ?
                         IROServices.addRemarks(remark)
-                            .then((res) => {
-                              setRemarks((remarks) => [...remarks, res.data]);
-                              setRemark((remark) => ({
-                                ...remark,
-                                remark: '',
-                              }));
-                            })
-                            .catch((error) => {
-                              enqueueSnackbar({
-                                variant: 'error',
-                                message: error.message,
-                              });
-                            }) :
+                          .then((res) => {
+                            setRemarks((remarks) => [...remarks, res.data]);
+                            setRemark((remark) => ({
+                              ...remark,
+                              remark: '',
+                            }));
+                          })
+                          .catch((error) => {
+                            enqueueSnackbar({
+                              variant: 'error',
+                              message: error.message,
+                            });
+                          }) :
                         '';
                     }}
                   >
@@ -242,7 +264,7 @@ const ClosedIRO = () => {
               toggleOpenRemarks(false);
               setSelectedIROId(null);
             }}
-            // sx={{ ml: 'auto' }}
+          // sx={{ ml: 'auto' }}
           >
             close
           </Button>
