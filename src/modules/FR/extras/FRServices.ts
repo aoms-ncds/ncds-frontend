@@ -84,6 +84,7 @@ export default {
   createFRRequests: (frRequest: CreatableFR) => {
     return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
+        console.log(frRequest, 'asd');
         axios
           .post('/fr/', {
             ...frRequest,
@@ -95,6 +96,7 @@ export default {
               if (frRequest.particulars) {
                 for (let i = 0; i < frRequest.particulars.length; i++) {
                   const particulars = frRequest.particulars[i];
+                  console.log('asd', particulars );
                   await axios.post('/fr/particulars/', {
                     FR: createdFR.data.data._id,
                     mainCategory: particulars.mainCategory,
@@ -103,6 +105,7 @@ export default {
                     subCategory3: particulars.subCategory3,
                     quantity: particulars.quantity,
                     month: particulars.month,
+                    unitPrice: particulars.unitPrice,
                     requestedAmount: particulars.requestedAmount,
                     narration: particulars.narration,
                     attachment: particulars.attachment,
@@ -187,6 +190,7 @@ export default {
                       subCategory2: particulars.subCategory2,
                       subCategory3: particulars.subCategory3,
                       quantity: particulars.quantity,
+                      unitPrice: particulars.unitPrice,
                       month: particulars.month,
                       requestedAmount: particulars.requestedAmount,
                       narration: particulars.narration,
@@ -198,6 +202,7 @@ export default {
                       subCategory1: particulars.subCategory1,
                       subCategory2: particulars.subCategory2,
                       subCategory3: particulars.subCategory3,
+                      unitPrice: particulars.unitPrice,
                       quantity: particulars.quantity,
                       month: particulars.month,
                       requestedAmount: particulars.requestedAmount,

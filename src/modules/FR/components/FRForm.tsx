@@ -43,7 +43,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
-  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number|null>(null);
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
@@ -72,8 +72,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     remark: '',
     transactionId: '',
   });
-  const [submit, setSubmit]= useState(0);
-  const [particularDialog, setParticularDialog] = useState<'add'|'edit'>('add');
+  const [submit, setSubmit] = useState(0);
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
@@ -85,15 +85,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   }, [submit]);
 
   useEffect(() => {
-    if ( props.value.purpose === 'Worker') {
+    if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
-      .then((res) => {
-        console.log(res.data, 'WORKER');
-        setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+        .then((res) => {
+          console.log(res.data, 'WORKER');
+          setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
         .then((res) => {
@@ -266,8 +266,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               if (props.onSubmit) {
-                const updatedValue = { ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
-                  FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined }; // Create a new object with updated status
+                const updatedValue = {
+                  ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
+                    FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
+                }; // Create a new object with updated status
                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
               navigate('/fr/');
@@ -387,7 +389,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.action=== 'add' &&(
+              {props.action === 'add' && (
                 <>
                   <Grid item xs={12}>
                     <Typography>Particulars</Typography>
@@ -444,7 +446,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     }}
                     disabled={!selectedMainCategory}
                   >
-      Add particulars
+                    Add particulars
                   </Button>
                 </Grid>
               )}
@@ -631,7 +633,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         color="info"
                         type="submit"
                         onClick={() => setSubmit(1)}
-                        // disabled={particulars.length==0}
+                      // disabled={particulars.length==0}
                       >
                         Submit{' '}
                       </Button>
@@ -736,7 +738,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.requestedAmount}
+                    value={newParticular?.unitPrice}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -756,7 +758,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
-                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.requestedAmount?? 0) : particularDetails?.unitPrice ?? 0,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
                           }))
                         }
                       />
