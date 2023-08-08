@@ -237,12 +237,13 @@ const Designation = () => {
                 setDialogAction('add');
               }}
             >
-        Add new
+              Add new
             </Button>
           </Grid>
         </Grid>
         <DataGrid
-          style={{ height: '80vh', width: '100%' }}
+          sx={{ height: '80vh', width: '100%' }}
+
           rows={Designation ?? []} columns={columns} getRowId={(row) => row._id} loading={Designation === null} />
       </Card>
     </CommonPageLayout>
