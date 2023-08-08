@@ -948,7 +948,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               limits={{
                 // types: [],
                 maxItemSize: 1 * MB,
-                maxItemCount: 1,
+                maxItemCount: 10,
                 maxTotalSize: 3 * MB,
               }}
               // accept={['video/*']}
