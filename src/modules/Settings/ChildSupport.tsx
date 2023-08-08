@@ -146,13 +146,13 @@ const ChildSupport = () => {
           <Container>Do you want to delete this Child Support?</Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{
+          <Button onClick={() => {
             setConfirmDelete(false);
             setChildSupportToDelete(null);
           }} variant="text">
             No, Cancel
           </Button>
-          <Button onClick={()=>{
+          <Button onClick={() => {
             if (childSupportToDelete) {
               removeChildSupport(childSupportToDelete._id);
             }
@@ -241,7 +241,7 @@ const ChildSupport = () => {
         </form>
       </Dialog>
 
-      <Card style={{ height: '80vh', width: '100%' }}>
+      <Card >
         <Grid container spacing={2} >
           <Grid item xs={12} sx={{ px: 2 }}>
             <br />
@@ -253,11 +253,14 @@ const ChildSupport = () => {
                 setDialogAction('add');
               }}
             >
-        Add new
+              Add new
             </Button>
           </Grid>
         </Grid>
-        <DataGrid rows={childSupport ?? []} columns={columns} getRowId={(row) => row._id} loading={childSupport === null} />
+        <DataGrid
+          sx={{ height: '80vh', width: '100%' }}
+
+          rows={childSupport ?? []} columns={columns} getRowId={(row) => row._id} loading={childSupport === null} />
       </Card>
     </CommonPageLayout>
   );

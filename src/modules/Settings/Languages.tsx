@@ -137,13 +137,13 @@ const Languages = () => {
           <Container>Do you want to delete this language?</Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{
+          <Button onClick={() => {
             setConfirmDelete(false);
             setLanguageToDelete(null);
           }} variant="text">
             No, Cancel
           </Button>
-          <Button onClick={()=>{
+          <Button onClick={() => {
             console.log(languageToDelete);
             if (languageToDelete) {
               removeLanguage(languageToDelete._id);
@@ -215,7 +215,7 @@ const Languages = () => {
         </form>
       </Dialog>
 
-      <Card style={{ height: '80vh', width: '100%' }}>
+      <Card>
         <Grid container spacing={2} >
           <Grid item xs={12} sx={{ px: 2 }}>
             <br />
@@ -227,12 +227,15 @@ const Languages = () => {
                 setDialogAction('add');
               }}
             >
-             Add new
+              Add new
             </Button>
           </Grid>
         </Grid>
 
-        <DataGrid rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
+        <DataGrid
+          sx={{ height: '80vh', width: '100%' }}
+          // style={{ height: '80vh', width: '100%' }}
+          rows={languages ?? []} columns={columns} getRowId={(row) => row._id} loading={languages === null} />
       </Card>
     </CommonPageLayout>
   );
