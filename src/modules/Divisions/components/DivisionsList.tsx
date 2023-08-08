@@ -7,6 +7,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -72,13 +73,22 @@ const DivisionsList = () => {
               to: `/divisions/details/${props.row._id}`,
               icon: PreviewIcon,
             },
-            {
-              id: 'edit',
-              text: 'Edit',
-              component: Link,
-              to: `/divisions/edit/${props.row._id}`,
-              icon: EditIcon,
-            },
+            // {
+            //   id: 'edit',
+            //   text: 'Edit',
+            //   component: Link,
+            //   to: `/divisions/edit/${props.row._id}`,
+            //   icon: EditIcon,
+            // },
+            ...(hasPermissions(['WRITE_DIVISIONS']) ? [
+              {
+                id: 'edit',
+                text: 'Edit',
+                component: Link,
+                to: `/divisions/edit/${props.row._id}`,
+                icon: EditIcon,
+              },
+            ] : []),
             {
               id: 'delete',
               text: 'Delete',

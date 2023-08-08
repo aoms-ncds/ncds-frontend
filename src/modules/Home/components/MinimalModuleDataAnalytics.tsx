@@ -87,35 +87,96 @@ const MinimalModuleDataAnalytics = () => {
         setIroCount('Unable to load!');
       });
   }, []);
-
+  console.log(user);
   return (
+  // <Grid container spacing={3}>
+  //   <PermissionChecks permissions={['WRITE_DIVISIONS']} granted={
+  //     <>
+  //       <Grid item xs={6} md={3} xl={4}>
+
+    //         <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/"/>
+    //       </Grid>
+    //       <Grid item xs={6} md={3} xl={4}>
+    //         <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute="/divisions/"/>
+    //       </Grid>
+    //     </>
+    //   }
+    //   />
+    //   {(user.user as User).kind!=='worker' && <><PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
+    //     <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/" />
+    //   </Grid>} /><Grid item xs={6} md={3} xl={4}>
+    //     <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/" />
+    //   </Grid><PermissionChecks permissions={['READ_FR']} granted={<Grid item xs={6} md={3} xl={4}>
+    //     <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#4cbb17" targetRoute="/fr/" />
+    //   </Grid>} /></>}
+    //   <PermissionChecks permissions={['READ_IRO']} granted={
+    //     <Grid item xs={6} md={3} xl={4}>
+    //       <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#003152" targetRoute="/iro/"/>
+    //     </Grid>
+    //   }/>
+    // </Grid>
     <Grid container spacing={3}>
+      {(user.user as User).kind !== 'worker' &&
+
       <PermissionChecks permissions={['WRITE_DIVISIONS']} granted={
         <>
           <Grid item xs={6} md={3} xl={4}>
 
-            <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/"/>
+            <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/" />
+
+          </Grid>: <Grid item xs={6} md={3} xl={4}>
+            <FRCountCard secondaryText='Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute={`/divisions/details/${(user.user as User).division}`} />
           </Grid>
-          <Grid item xs={6} md={3} xl={4}>
-            <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute="/divisions/"/>
-          </Grid>
+
         </>
       }
       />
-      {(user.user as User).kind!=='worker' && <><PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
-        <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/" />
-      </Grid>} /><Grid item xs={6} md={3} xl={4}>
-        <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/" />
-      </Grid><PermissionChecks permissions={['READ_FR']} granted={<Grid item xs={6} md={3} xl={4}>
-        <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#4cbb17" targetRoute="/fr/" />
-      </Grid>} /></>}
+      }
+      {(user.user as User).kind !== 'worker' &&
+
+<PermissionChecks permissions={['WRITE_DIVISIONS']} granted={
+  <>
+    <Grid item xs={6} md={3} xl={4}>
+
+      <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute="/divisions/" />
+
+    </Grid>: <Grid item xs={6} md={3} xl={4}>
+      <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute={`/divisions/details/${(user.user as User).division}`} />
+    </Grid>
+
+  </>
+}
+/>
+      }
+      {/* {(user.user as User).kind !== 'worker' ?
+        <Grid item xs={6} md={3} xl={4}>
+          <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute={'/divisions/'} />
+        </Grid>: <Grid item xs={6} md={3} xl={4}>
+          <FRCountCard secondaryText='Sub-Divisions' count={subDivisionsCount?.toString()} color="#90021f" targetRoute={`/divisions/details/${(user.user as User).division}`} />
+        </Grid>} */}
+      {(user.user as User).kind !== 'worker' &&
+      <>
+        <PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
+          <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/" />
+        </Grid>} />
+        <Grid item xs={6} md={3} xl={4}>
+          <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/" />
+        </Grid>
+      </>}
+      <PermissionChecks permissions={['READ_FR']} granted={
+        <Grid item xs={6} md={3} xl={4}>
+          <FRCountCard secondaryText="FR" count={frCount?.toString()} color="#4cbb17" targetRoute="/fr/" />
+        </Grid>
+      } />
       <PermissionChecks permissions={['READ_IRO']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#003152" targetRoute="/iro/"/>
+          <FRCountCard secondaryText="IRO" count={iroCount?.toString()} color="#003152" targetRoute="/iro/" />
         </Grid>
       }/>
     </Grid>
+
   );
 };
 
 export default MinimalModuleDataAnalytics;
+
