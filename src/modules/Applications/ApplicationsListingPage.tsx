@@ -448,7 +448,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
             .then((res) => {
-             
               setApplicationFormState(() => ({
                 ...applicationFormState,
                 attachment: [...applicationFormState.attachment, res.data],

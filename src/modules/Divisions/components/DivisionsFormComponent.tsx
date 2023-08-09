@@ -20,7 +20,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
 
   useEffect(()=>{
-   
     if (editID) {
       UserServices.getDivisionUser(editID)
   .then((res) => {
@@ -234,7 +233,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-                
                 props.onChange({
                   ...props.value,
                   coordinator: {
@@ -291,7 +289,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-              
                 props.onChange({
                   ...props.value,
                   seniorLeader: {
@@ -349,7 +346,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-              
                 props.onChange({
                   ...props.value,
                   juniorLeader: {
