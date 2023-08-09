@@ -147,9 +147,9 @@ const MinimalModuleDataAnalytics = () => {
         <PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
           <FRCountCard secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/" />
         </Grid>} />
-        <Grid item xs={6} md={3} xl={4}>
+        <PermissionChecks permissions={['READ_WORKERS']} granted={<Grid item xs={6} md={3} xl={4}>
           <FRCountCard secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/" />
-        </Grid>
+        </Grid>}/>
       </>}
       <PermissionChecks permissions={['READ_FR']} granted={
         <Grid item xs={6} md={3} xl={4}>
