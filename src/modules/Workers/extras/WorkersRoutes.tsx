@@ -58,7 +58,7 @@ const workersPageRoutes: ModuleRoute = {
       path: '/deactivated',
       element: <DeactivatedWorkersPage/>,
       private: true,
-      requiredAccessRights: ['MANAGE_WORKER'],
+      requiredAccessRights: ['READ_WORKERS'],
     },
     // {
     //   title: 'edit child',

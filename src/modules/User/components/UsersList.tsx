@@ -194,6 +194,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       // ),
       getActions: (params: GridRowParams) => (
         [
+
           <GridLinkAction
             key={1}
             label="View"
@@ -201,13 +202,16 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             showInMenu
             to={`/users/${props.options?.kind}/${params.row._id}`}
           />,
+          (hasPermissions(['WRITE_DIVISIONS']) &&
           <GridLinkAction
             key={2}
             label="Edit"
             icon={<EditIcon />}
             showInMenu
             to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
-          />,
+          />
+          ),
+
           <GridLinkAction
             key={3}
             label="Delete"
@@ -238,6 +242,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 }}
               />
             ) : (
+              (hasPermissions(['WRITE_DIVISIONS']) &&
               <GridLinkAction
                 key={5}
                 label="Activate"
@@ -247,6 +252,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                   activateWorker(params.row._id);
                 }}
               />
+              )
             ))
           )),
           hasPermissions(['ADMIN_ACCESS']) &&
