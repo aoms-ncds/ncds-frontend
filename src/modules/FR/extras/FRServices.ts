@@ -28,7 +28,7 @@ export default {
       })),
     ),
 
-  deleteParticulars: (particularid: string) => getStandardResponse<number>(axios.delete(`/fr/particulars/${particularid}`, { headers: { ...getAuthHeader() } })),
+  deleteParticulars: (particularId: string) => getStandardResponse<number>(axios.delete(`/fr/particulars/${particularId}`, { headers: { ...getAuthHeader() } })),
 
   getPurposes: () => getStandardResponse<FRPurpose[]>(
     dummyRequest<FRPurpose[]>({
