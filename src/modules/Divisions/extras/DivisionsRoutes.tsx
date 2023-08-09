@@ -10,7 +10,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/',
       element: <DivisionsPage />,
       private: true,
-      requiredAccessRights: ['WRITE_DIVISIONS'],
+      requiredAccessRights: ['READ_DIVISIONS'],
       showInDrawer: true,
       icon: <ExtensionIcon />,
     },
