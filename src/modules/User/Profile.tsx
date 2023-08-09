@@ -91,14 +91,12 @@ const Profile = () => {
     if (userId && userKind === 'staff') {
       StaffServices.getById(userId)
         .then((res) => {
-          console.log(res.data);
           setUser(res.data);
         })
         .catch(() => {});
     } else if (userId && userKind === 'worker') {
       WorkersServices.getById(userId)
         .then((res) => {
-          console.log(res.data);
           setUser(res.data);
         })
         .catch(() => {});

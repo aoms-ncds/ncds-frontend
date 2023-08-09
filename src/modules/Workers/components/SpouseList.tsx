@@ -10,14 +10,12 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 
 const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'active'}>) => {
   const deactivateSpouse = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
       variant: 'info',
     });
     WorkersServices.deactivatespouse(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newspouseRequests = props.value.filter((spouseRequests) => spouseRequests._id !== id);
           props.onChange(newspouseRequests);
@@ -38,14 +36,12 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       });
   };
   const activateSpouse = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Activating Spouse',
       variant: 'info',
     });
     WorkersServices.activatespouse(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newspouseRequests = props.value.filter((spouseRequests) => spouseRequests._id !== id);
           props.onChange(newspouseRequests);

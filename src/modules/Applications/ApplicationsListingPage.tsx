@@ -201,7 +201,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setAction('edit');
             ApplicationServices.getById(params.row._id)
               .then((res) => setApplicationFormState(res.data));
-            console.log(params.row);
             setShowApplicationFormDialog(true);
           }}
         />,
@@ -449,7 +448,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'Applications', file.name)
             .then((res) => {
-              // console.log(res.data._id);
+             
               setApplicationFormState(() => ({
                 ...applicationFormState,
                 attachment: [...applicationFormState.attachment, res.data],

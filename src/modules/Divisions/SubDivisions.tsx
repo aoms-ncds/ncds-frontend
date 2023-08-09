@@ -19,7 +19,6 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
 
 
   useEffect(()=>{
-    console.log({ editID });
     if (editID) {
       UserServices.getDivisionUser(editID)
   .then((res) => {
@@ -49,7 +48,6 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
     const deletedSubdivision = subDivisions.filter((_, i) => i == index);
     const deletedSubdivisionIds = deletedSubdivision.map((sub) => sub._id);
     if (deletedSubdivisionIds.length > 0) {
-      console.log('testing new', deletedSubdivisionIds[0]);
       if (editID) {
         const subDivisionId = deletedSubdivisionIds[0];
         const objectIdPattern = /^[0-9a-fA-F]{24}$/;
@@ -78,7 +76,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
       message: 'Deleted Sub Division',
       variant: 'success',
     });
-    console.log(newSubDivisions);
+
     setSubDivisions(newSubDivisions);
     onChange(newSubDivisions); // Call the onChange prop with the updated division details
     return newSubDivisions;

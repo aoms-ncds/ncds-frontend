@@ -92,8 +92,7 @@ const LocalFileUploader = (props: FileUploaderProps) => {
       const droppedFile = files[i];
       if (validateFile(droppedFile)) {
         const tempID = new Date().getTime().toString();
-        console.log(droppedFile.size);
-        console.log('Uploading');
+
         setUploadingFiles((_files) => [
           ..._files,
           {
@@ -143,8 +142,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
     fileObjects?.map((_file)=>totalSize+=_file.size);
 
     if (props.limits.maxItemCount && fileObjects && fileObjects?.length+1>props.limits.maxItemCount) {
-      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
-
       enqueueSnackbar({
         message: 'Maximum files Allowed Exceeded.  ',
         variant: 'error',
@@ -155,16 +152,12 @@ const LocalFileUploader = (props: FileUploaderProps) => {
       });
       return false;
     } else if (props.limits.maxTotalSize && totalSize+file.size>props.limits.maxTotalSize) {
-      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
-
       enqueueSnackbar({
         message: ` Maximum Total File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxTotalSize).size.toFixed(0)} ${convertFileSize(props.limits.maxTotalSize).type}`,
         variant: 'error',
       });
       return false;
     } else if (props.limits.maxItemSize && file.size>props.limits.maxItemSize) {
-      // console.log(file.size+' ----- '+props.limits.maxItemSize);
-
       enqueueSnackbar({
         message: ` File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxItemSize).size.toFixed(0)}${convertFileSize(props.limits.maxItemSize).type}`,
         variant: 'error',
@@ -181,9 +174,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
       });
       return false;
     } else {
-      // console.log(fileObjects?fileObjects.length+1:''+' ----- '+props.limits.maxItemCount);
-      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
-      // console.log(file.size+' ----- '+props.limits.maxItemSize);
       return true;
     }
   };
@@ -325,7 +315,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
                                   !_fileObjects ?
                                     null :
                                     _fileObjects.map((_fileObject) => {
-                                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
                                       return _fileObject._id === file._id ? { ..._fileObject, filename: e.target.value } : _fileObject;
                                     }),
                                 );
@@ -458,7 +447,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
                   onChange={(event) => {
                     if (event.target.files) {
                       uploadFile(event.target.files);
-                      console.log(event.target.files);
                     }
                   }}
                   style={{ display: 'none' }}
@@ -527,7 +515,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
                 !_fileObjects ?
                   null :
                   _fileObjects.map((_fileObject) => {
-                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
                     return _fileObject._id === approveFileId ? { ..._fileObject, status: CommonLifeCycleStates.APPROVED } : _fileObject;
                   }),
               );
@@ -560,7 +547,6 @@ const LocalFileUploader = (props: FileUploaderProps) => {
                 !_fileObjects ?
                   null :
                   _fileObjects.map((_fileObject) => {
-                    // console.log(_fileObject._id, rejectFileId, _fileObject._id === rejectFileId);
                     return _fileObject._id === rejectFileId ? { ..._fileObject, status: CommonLifeCycleStates.REJECTED } : _fileObject;
                   }),
               );

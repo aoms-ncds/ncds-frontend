@@ -127,7 +127,6 @@ const NotificationPage = () => {
     // setLoading((loading) => loading + 1);
     NotificationService.getMyMessages(showReadMessages)
         .then((res) => {
-          console.log(res);
           setMessages(res.data);
         })
         .catch((res) => {

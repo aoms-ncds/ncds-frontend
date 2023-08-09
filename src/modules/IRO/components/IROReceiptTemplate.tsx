@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 const IROReceiptTemplate = (props:{rowData:IROrder}) => {
   let totalAmount=0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
-  console.log(props);
+
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
 
 
@@ -118,7 +118,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
   const dateString = props.rowData?.releaseAmount?.transferredDate??null;
   const formattedDate = moment(dateString).format('DD MMMM YYYY');
   useEffect(() => {
-    console.log(totalAmount, 'xcdfv');
+
   }, [totalAmount]);
 
   // const raiseddateString = printdetails?.IROdate;

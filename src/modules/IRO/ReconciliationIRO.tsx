@@ -105,7 +105,6 @@ const ReconciliationIRO = () => {
   useEffect(() => {
     IROServices.getReconciliation()
       .then((res) => {
-        console.log(res, 'getReconciliation');
         setReconcilationIRO(res.data);
       })
       .catch((res) => {
@@ -183,7 +182,7 @@ const ReconciliationIRO = () => {
                   });
                   setReconcilationIRO(filterIRO);
                 }
-                console.log(res, 'close');
+
                 enqueueSnackbar({
                   message: res.message,
                   variant: 'success',
@@ -392,7 +391,6 @@ const ReconciliationIRO = () => {
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name)
           .then((res)=>{
-            console.log(res.data._id);
             setSelectedIRO(()=>({ ...selectedIRO,
               billAttachment: selectedIRO?.billAttachment.length>0? [...selectedIRO.billAttachment, res.data]:[res.data],
             } ));

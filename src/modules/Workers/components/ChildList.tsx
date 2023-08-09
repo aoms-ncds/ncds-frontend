@@ -14,14 +14,12 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
 
 
   const deactivateChild = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Child',
       variant: 'info',
     });
     WorkersServices.deactivatechild(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newchildRequests = props.value.filter((childRequests) => childRequests._id !== id);
           props.onChange(newchildRequests);
@@ -42,14 +40,12 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
       });
   };
   const activateChild = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Activating Child',
       variant: 'info',
     });
     WorkersServices.activatechild(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newchildRequests = props.value.filter((childRequests) => childRequests._id !== id);
           props.onChange(newchildRequests);

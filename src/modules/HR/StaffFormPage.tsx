@@ -84,7 +84,6 @@ const StaffFormPage = (props: StaffFormPageProps) => {
           },
         }}
         onSubmit={async (creatableStaff) => {
-          console.log(creatableStaff);
           try {
             if (props.action === 'add') {
               const createStaffResponse = await StaffServices.create(creatableStaff, userPhoto);

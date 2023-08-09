@@ -23,7 +23,6 @@ const Languages = () => {
     });
     LanguagesServices.delete(id)
       .then((res) => {
-        console.log('process delete', res);
         if (languages) {
           const newLanguage = languages.filter((languages) => {
             return languages._id !== id;
@@ -144,7 +143,6 @@ const Languages = () => {
             No, Cancel
           </Button>
           <Button onClick={() => {
-            console.log(languageToDelete);
             if (languageToDelete) {
               removeLanguage(languageToDelete._id);
             }

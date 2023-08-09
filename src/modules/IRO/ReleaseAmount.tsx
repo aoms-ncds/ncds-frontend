@@ -49,12 +49,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [isFocused, setFocused] = useState(false);
 
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
-    // console.log(IRO, 'IRO');
     e.preventDefault();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
     IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
-      console.log(res.data);
       enqueueSnackbar({
         message: res.message,
         variant: 'success',
@@ -66,10 +64,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     }, 500);
   };
   useEffect(() => {
-    console.log(props.data.reduce((tot, iro) => tot + iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0), 0));
-    console.log(props.data);
     if (props.action == 'add') {
-      console.log('add');
       setReleaseAmount(() => ({
         ...releaseAmount,
         releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
@@ -498,7 +493,6 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         getFiles={releaseAmount.attachment ?? []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/ReleaseAmount', file.name).then((res) => {
-            console.log(res.data._id);
             setReleaseAmount(() => ({
               ...releaseAmount,
               attachment: [...(releaseAmount.attachment || []), res.data],

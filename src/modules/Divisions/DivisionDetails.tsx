@@ -25,7 +25,6 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
     if (props.action=='add') {
       DivisionsServices.create(divisionDetails)
       .then((res) => {
-        console.log(res, 'res');
         enqueueSnackbar({
           message: 'Added new Division',
           variant: 'success',
@@ -39,13 +38,12 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
       });
     }
   };
-  console.log('Dd');
+
   const editDivision = () => {
     // event.preventDefault();
     if (editID && props.action=='edit') {
       DivisionsServices.editDivision(editID, divisionDetails)
         .then((res) => {
-          console.log(res);
           enqueueSnackbar({
             message: 'Updated Division',
             variant: 'success',
@@ -110,16 +108,12 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
     createdAt: moment(),
     updatedAt: moment(),
   });
-  console.log(divisionDetails, 'divisionDetails');
-  useEffect(() => {
-    console.log(props.action);
-    // console.log( { editID } );
 
+  useEffect(() => {
     if (divisionIDs) {
       setAction('view');
       DivisionsServices.getDivisionById(divisionIDs)
         .then((res) => {
-          console.log('the value are', res);
           setDivisionDetails(res.data);
         })
         .catch((err) => {
@@ -130,9 +124,7 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
       setAction('edit');
       DivisionsServices.getDivisionById(editID)
         .then((res) => {
-          console.log('the value are', res);
           setDivisionDetails(res.data);
-          console.log(divisionDetails);
         })
         .catch((err) => {
           console.log({ err });

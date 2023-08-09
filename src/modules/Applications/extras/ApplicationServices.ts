@@ -21,7 +21,6 @@ export default {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (application: CreatableApplication) => {
-    console.log(application, ' ...application, ...application, ...application,');
     return getStandardResponse<Application>(
       new Promise((resolve, rejects) => {
         axios

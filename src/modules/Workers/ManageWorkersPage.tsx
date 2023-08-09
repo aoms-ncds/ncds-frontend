@@ -38,7 +38,6 @@ const ManageWorkerPage = () => {
       SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
           setSpouseList(res.data);
-          console.log(res);
         })
           .catch((res) => {
             console.log(res);
@@ -46,7 +45,6 @@ const ManageWorkerPage = () => {
     } else if (currentTab == 2) {
       ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
-          console.log(res);
           setChildList(res.data);
         })
           .catch((res) => {
