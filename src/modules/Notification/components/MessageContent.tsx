@@ -15,7 +15,6 @@ function MessageContent() {
     if (_id) {
       NotificationService.getMessageById(_id)
                 .then((res) => {
-                  console.log(res);
                   if (res) {
                     setMessage(res.data);
                   }

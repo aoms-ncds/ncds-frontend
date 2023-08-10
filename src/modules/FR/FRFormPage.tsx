@@ -47,7 +47,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         message: 'Creating FR Request',
         variant: 'info',
       });
-      console.log('fr request is ', requisition);
+
       const res = await FRServices.createFRRequests(requisition);
 
       enqueueSnackbar({
@@ -70,7 +70,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         message: 'Updating FR Request',
         variant: 'info',
       });
-      console.log(requisition);
+
       if (frID) {
         const res = await FRServices.updateFRRequests(frID, requisition);
         enqueueSnackbar({
@@ -111,7 +111,7 @@ const FRFormPage = (props: FRFormPageProps) => {
                   'Send Back' + 'FR Request',
         variant: 'info',
       });
-      console.log(requisition);
+
 
       if (operation && frID) {
         const res = await FRServices.manageFRRequests(frID, operation, requisition);

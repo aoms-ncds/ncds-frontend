@@ -16,7 +16,6 @@ const DivisionsList = () => {
   useEffect(() => {
     DivisionsServices.getDivisions()
       .then((res) => {
-        console.log(res.data);
         setDivisions(res.data);
       })
       .catch((err) => {
@@ -30,7 +29,6 @@ const DivisionsList = () => {
     });
     DivisionsServices.divisionMarkAsRemove(id)
       .then((res) => {
-        console.log('process delete', res);
         if (divisions) {
           const newDivisions = divisions.filter((divisions) => {
             return divisions._id !== id;

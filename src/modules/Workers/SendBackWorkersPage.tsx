@@ -37,7 +37,6 @@ const SendBackWorkersPage = () => {
     } else if (currentTab == 1) {
       SpousesServices.getAll({ status: UserLifeCycleStates.REJECTED })
         .then((res) => {
-          console.log(res);
           setSpouseList(res.data);
         })
           .catch((res) => {
@@ -46,7 +45,6 @@ const SendBackWorkersPage = () => {
     } else if (currentTab == 2) {
       ChildrenServices.getAll({ status: UserLifeCycleStates.REJECTED })
         .then((res) => {
-          console.log(res);
           setChildList(res.data);
         })
           .catch((res) => {

@@ -55,8 +55,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
 ) => {
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
-  // console.log(props, ' console?s.log(props);');
-  // const { editID } = useParams();
+
   const navigate = useNavigate();
 
   const [newChild, setNewChild] = useState<CreatableChild>({
@@ -91,11 +90,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
   const submitForm = (data: UserType) =>{
-    console.log(data);
     if (props.action == 'add') {
       UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
       .then((res)=>{
-        console.log(res.data);
         props.onSubmit && props.onSubmit(props.value);
         navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
       })
@@ -110,7 +107,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
 
   useEffect(() => {
     const checkprops = props.action;
-    console.log({ checkprops });
+
     // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
     ChildrenServices.getAllChildSupport()
     .then((res)=>setChildSupport(res.data))

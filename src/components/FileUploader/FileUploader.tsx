@@ -78,8 +78,6 @@ const FileUploader = (props: FileUploaderProps) => {
   const [completedFile, setCompletedFile] = useState(false);
   const uploadFile = (files: FileList) => {
     if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
-      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
-
       enqueueSnackbar({
         message: 'Maximum files Allowed Exceeded.  ',
         variant: 'error',
@@ -94,8 +92,8 @@ const FileUploader = (props: FileUploaderProps) => {
       const droppedFile = files[i];
       if (validateFile(droppedFile)) {
         const tempID = new Date().getTime().toString();
-        console.log(droppedFile.size);
-        console.log('Uploading');
+
+
         setUploadingFiles((_files) => [
           ..._files,
           {
@@ -114,13 +112,6 @@ const FileUploader = (props: FileUploaderProps) => {
         .uploadFile && props
           .uploadFile(droppedFile, (progress) => {
             setUploadingFiles((_files) => _files.map((_file) => (_file.tempID === tempID ? { ..._file, progress } : _file)));
-            // setUploadingFiles((files) => {
-            //   const newFiles = [...files];
-            //   const currentFileIndex = newFiles.findIndex((item) => item.tempID === tempID);
-            //   newFiles[currentFileIndex].progress = progress;
-            //   // console.log({ progress });
-            //   return newFiles;
-            // });
           })
           .then((res) => {
             setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
@@ -145,8 +136,6 @@ const FileUploader = (props: FileUploaderProps) => {
     fileObjects?.map((_file)=>totalSize+=_file.size);
 
     if (props.limits.maxItemCount && fileObjects && fileObjects?.length+1>props.limits.maxItemCount) {
-      // console.log((fileObjects?(fileObjects.length+1):'')+' ----- '+props.limits.maxItemCount);
-
       enqueueSnackbar({
         message: 'Maximum files Allowed Exceeded.  ',
         variant: 'error',
@@ -157,16 +146,12 @@ const FileUploader = (props: FileUploaderProps) => {
       });
       return false;
     } else if (props.limits.maxTotalSize && totalSize+file.size>props.limits.maxTotalSize) {
-      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
-
       enqueueSnackbar({
         message: ` Maximum Total File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxTotalSize).size.toFixed(0)} ${convertFileSize(props.limits.maxTotalSize).type}`,
         variant: 'error',
       });
       return false;
     } else if (props.limits.maxItemSize && file.size>props.limits.maxItemSize) {
-      // console.log(file.size+' ----- '+props.limits.maxItemSize);
-
       enqueueSnackbar({
         message: ` File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxItemSize).size.toFixed(0)}${convertFileSize(props.limits.maxItemSize).type}`,
         variant: 'error',
@@ -183,9 +168,6 @@ const FileUploader = (props: FileUploaderProps) => {
       });
       return false;
     } else {
-      // console.log(fileObjects?fileObjects.length+1:''+' ----- '+props.limits.maxItemCount);
-      // console.log(totalSize+file.size+' ----- '+props.limits.maxTotalSize);
-      // console.log(file.size+' ----- '+props.limits.maxItemSize);
       return true;
     }
   };
@@ -327,7 +309,6 @@ const FileUploader = (props: FileUploaderProps) => {
                                   !_fileObjects ?
                                     null :
                                     _fileObjects.map((_fileObject) => {
-                                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
                                       return _fileObject._id === file._id ? { ..._fileObject, filename: e.target.value } : _fileObject;
                                     }),
                                 );
@@ -528,7 +509,6 @@ const FileUploader = (props: FileUploaderProps) => {
                 !_fileObjects ?
                   null :
                   _fileObjects.map((_fileObject) => {
-                    // console.log(_fileObject._id, file._id, _fileObject._id === file._id);
                     return _fileObject._id === approveFileId ? { ..._fileObject, status: CommonLifeCycleStates.APPROVED } : _fileObject;
                   }),
               );
@@ -561,7 +541,6 @@ const FileUploader = (props: FileUploaderProps) => {
                 !_fileObjects ?
                   null :
                   _fileObjects.map((_fileObject) => {
-                    // console.log(_fileObject._id, rejectFileId, _fileObject._id === rejectFileId);
                     return _fileObject._id === rejectFileId ? { ..._fileObject, status: CommonLifeCycleStates.REJECTED } : _fileObject;
                   }),
               );

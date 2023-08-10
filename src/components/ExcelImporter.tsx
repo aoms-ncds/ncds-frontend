@@ -57,8 +57,6 @@ const ExcelImporter = <T, >(props: Props<T>) => {
         raw: false,
         dateNF: 'yyyy-mm-dd HH:mm:ss',
       });
-      // Read sheet data into an array
-      //   console.log(sheetRows);
       setTotalRows(sheetRows.length);
       setFinishedRows(0);
       // Now validate each row and start sending request to server for importing data.
@@ -66,8 +64,6 @@ const ExcelImporter = <T, >(props: Props<T>) => {
         const row = sheetRows[i];
         const validateResult = props.validator(row, i + 1);
         if (validateResult === true) {
-          console.log('Importing row', row);
-
           const parsedRow = props.parser(row);
           try {
             await props.uploader(parsedRow, overwriteDuplicates);
@@ -79,7 +75,6 @@ const ExcelImporter = <T, >(props: Props<T>) => {
           }
         } else {
           setErrors((errors) => [...errors, validateResult]);
-          console.log(validateResult, i);
           setFinishedRows((count) => (count ? count + 1 : 1));
         }
       }

@@ -191,7 +191,6 @@ const ClosedIRO = () => {
   useEffect(() => {
     IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => {
-        console.log(res, 'CLOSED');
         setIROrder(res.data);
       })
       .catch((res) => {

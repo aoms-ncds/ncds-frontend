@@ -23,7 +23,6 @@ const ChildSupport = () => {
     });
     ChildSupportService.delete(id)
       .then((res) => {
-        console.log('process delete', res);
         if (childSupport) {
           const newChildSupport = childSupport?.filter((childSupport) => {
             return childSupport._id !== id;
@@ -79,7 +78,7 @@ const ChildSupport = () => {
             startIcon={<EditIcon />}
             onClick={() => {
               setDialogAction('edit');
-              console.log(dialogAction);
+
               setNewChildSupport(params.row);
             }}
           >
@@ -114,7 +113,6 @@ const ChildSupport = () => {
   useEffect(() => {
     ChildSupportService.getAll()
       .then((res) => {
-        console.log(res, 'res');
         setChildSupport(res.data);
         handleClose();
         enqueueSnackbar({

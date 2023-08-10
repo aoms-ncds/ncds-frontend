@@ -84,7 +84,6 @@ export default {
   createFRRequests: (frRequest: CreatableFR) => {
     return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
-        console.log(frRequest, 'asd');
         axios
           .post('/fr/', {
             ...frRequest,
@@ -96,7 +95,7 @@ export default {
               if (frRequest.particulars) {
                 for (let i = 0; i < frRequest.particulars.length; i++) {
                   const particulars = frRequest.particulars[i];
-                  console.log('asd', particulars );
+
                   await axios.post('/fr/particulars/', {
                     FR: createdFR.data.data._id,
                     mainCategory: particulars.mainCategory,
@@ -172,7 +171,6 @@ export default {
   updateFRRequests: (frID: string, frRequest: CreatableFR) => {
     return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
-        console.log(frRequest, 'setRequisition');
         axios
           .patch('/fr/' + frID, {
             ...frRequest,
@@ -224,7 +222,6 @@ export default {
   manageFRRequests: (frID: string, operation:string, frRequest: CreatableFR) => {
     return getStandardResponse<CreatableFR>(
       new Promise((resolve, reject) => {
-        console.log(frRequest);
         axios
           .patch('/fr/' + frID+'/'+operation, {
             ...frRequest,

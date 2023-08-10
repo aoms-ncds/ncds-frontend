@@ -42,7 +42,6 @@ const UserBasicDetailsForm = (
         $and: [{ status: CommonLifeCycleStates.ACTIVE }, { 'basicDetails.gender': props.value.gender == 'Male' ? 'Female' : props.value.gender == 'Female' ? 'Male' : 'Other' }],
       })
         .then((res) => {
-          console.log(res);
           setSpouseList(res.data);
         })
         .catch((res) => {
@@ -538,8 +537,6 @@ const UserBasicDetailsForm = (
         getFiles={props.value.aadhaar?.aadhaarFile ? [props.value.aadhaar?.aadhaarFile] : []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR/Staff', file.name).then((res) => {
-            console.log(res.data);
-
             props.onChange({
               ...props.value,
               aadhaar: {
@@ -577,7 +574,6 @@ const UserBasicDetailsForm = (
         getFiles={props.value.voterId?.voterIdFile ? [props.value.voterId?.voterIdFile] : []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'HR/Staff', file.name).then((res) => {
-            console.log(res.data);
             props.onChange({
               ...props.value,
               voterId: {

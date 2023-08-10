@@ -17,7 +17,6 @@ export default {
   getSubDivisions: () => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions', { headers: { ...getAuthHeader() } })),
   getSubDivisionsByDivisionId: (divisionId: string) => getStandardResponse<SubDivision[]>(axios.get('/divisions/sub_divisions/'+ divisionId, { headers: { ...getAuthHeader() } })),
   create: (division: Division) => {
-    console.log(division, 'dd');
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
         axios
@@ -55,7 +54,6 @@ export default {
   editDivision: (divisionId: string, division: Division) => {
     return getStandardResponse<Division>(
       new Promise((resolve, reject) => {
-        // console.log(division);
         axios
           .patch('/divisions/' + divisionId, {
             ...division,

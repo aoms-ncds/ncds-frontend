@@ -59,11 +59,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   useEffect(() => {
     NotificationService.getMyMessagesCount()
       .then((res) => {
-        console.log(res);
         setNotificationsCount(res.data);
       })
       .catch((res) => {
-        console.log(res);
         enqueueSnackbar({
           message: res.message,
           variant: 'error',

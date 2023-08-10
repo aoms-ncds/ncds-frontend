@@ -20,7 +20,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
 
   useEffect(()=>{
-    console.log({ editID });
     if (editID) {
       UserServices.getDivisionUser(editID)
   .then((res) => {
@@ -36,7 +35,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   }
   , []);
 
-  // console.log(eSign.attachment, 'eSign');
   return (
     <>
       <Grid item xs={12}>
@@ -235,7 +233,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-                console.log(res, 'resPOnse');
                 props.onChange({
                   ...props.value,
                   coordinator: {
@@ -292,7 +289,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-                console.log(res, 'resPOnse');
                 props.onChange({
                   ...props.value,
                   seniorLeader: {
@@ -350,7 +346,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
           const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
               .then((res)=>{
-                console.log(res, 'resPOnse');
                 props.onChange({
                   ...props.value,
                   juniorLeader: {

@@ -163,7 +163,7 @@ const ViewIRO = () => {
     updatedAt: moment(),
     signature: {},
   });
-  console.log(IRO, 'IRO');
+
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -175,7 +175,7 @@ const ViewIRO = () => {
 
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
-  // console.log(IROstatus);
+
 
   useEffect(() => {
     if (!iroID) {
@@ -484,7 +484,7 @@ const ViewIRO = () => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
                                         IROServices.reject(iroID as string )
                                     .then((res)=>{
-                                      console.log(res);
+
                                     });
 
                                         // if (props.onSubmit) {
@@ -508,7 +508,6 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.officeManagerApprove(iroID as string )
                                       .then((res)=>{
-                                        console.log(res);
                                         navigate('/iro/manage');
                                         // window.location.reload();
                                       });
@@ -546,7 +545,7 @@ const ViewIRO = () => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
                                         IROServices.reject(iroID as string )
                                   .then((res)=>{
-                                    console.log(res);
+
                                   });
 
                                         // if (props.onSubmit) {
@@ -571,7 +570,6 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.accountManagerApprove(iroID as string )
                                       .then((res)=>{
-                                        console.log(res);
                                         navigate('/iro/manage');
                                       });
 

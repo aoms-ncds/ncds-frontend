@@ -54,7 +54,6 @@ const AddNewApplication = () => {
     });
     ApplicationServices.create(Request)
       .then((res) => {
-        console.log(res, 'res');
         // handleClose();
         // closeSnackbar(snackbarId);
         enqueueSnackbar({

@@ -13,7 +13,6 @@ import UserServices from '../../modules/User/extras/UserServices';
 const messaging = getMessaging(app);
 
 onMessage(messaging, (payload) => {
-  console.log('Message Recieved', payload);
   enqueueSnackbar({
     message: (
       <Box sx={{ maxWidth: 500 }}>
@@ -111,7 +110,7 @@ export const unsubscribe = async () => {
   try {
     if (await messagingIsSupported()) {
       const permission = await Notification.requestPermission();
-      console.log(permission);
+
       if (permission === 'granted') {
         console.log('Notification Permission granted');
         const token = await getToken(messaging, {

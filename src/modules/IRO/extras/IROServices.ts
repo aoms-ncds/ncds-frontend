@@ -112,7 +112,6 @@ export default {
     console.log('🚀 ~ file: IROServices.ts:142 ~ IROId:', IROId);
     return getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
-        console.log(IRORequest);
         axios
         .patch('/iro/' + IROId, {
           ...IRORequest,

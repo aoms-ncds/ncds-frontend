@@ -88,11 +88,10 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
         .then((res) => {
-          console.log(res.data, 'WORKER');
           setWorkers(res.data);
         })
         .catch((res) => {
-          console.log(res);
+
         });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
@@ -100,25 +99,16 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           setSubDivisions(res.data);
         })
         .catch((res) => {
-          console.log(res);
+
         });
     }
   }, [props.value.purpose]);
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
-    // FRServices.getPurposes()
-    //   .then((res) => {
-    //     console.log(res);
-    //     setPurposes(res.data);
-    //   })
-    //   .catch((res) => {
-    //     console.log(res);
-    //   });
 
     FRServices.getMainCategory()
       .then((res) => {
-        console.log(res, 'getMainCategory');
         setMainCategories(res.data);
       })
       .catch((res) => {
@@ -127,16 +117,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
     if (props.value.particulars) {
       setParticulars(props.value.particulars);
-      console.log(particulars);
     }
-    // FRServices.getParticulars()
-    //   .then((res) => {
-    //     console.log(res);
-    //     setParticulars(res.data);
-    //   })
-    //   .catch((res) => {
-    //     console.log(res);
-    //   });
   }, [props.value.particulars]);
 
   const addParticulars = () => {
@@ -151,7 +132,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     } else {
       newParticulars = [...particulars, newParticular as Particular];
       setParticulars(newParticulars);
-      // console.log(particulars, '+++');
+
       props.onChange({
         ...props.value,
         particulars: newParticulars,
@@ -228,20 +209,15 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   };
   useEffect(() => {
     setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular.mainCategory));
-    console.log(newParticular.mainCategory, 'newParticular.mainCategory');
   }, [newParticular]);
   useEffect(() => {
     setSelectedSubCategory1(() => selectedMainCategory?.subcategory1.find((item) => item.name == newParticular.subCategory1) ?? null);
-    console.log(newParticular.subCategory1, 'newParticular.subcategory1');
   }, [selectedMainCategory]);
   useEffect(() => {
     setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
-    console.log(newParticular.subCategory2, 'newParticular.subcategory2');
   }, [selectedSubCategory1]);
   useEffect(() => {
     setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3) ?? null);
-    console.log(newParticular.subCategory3, 'newParticular.subcategory3');
-    // setShowAddParticularDialog(true);
   }, [selectedSubCategory2]);
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -946,7 +922,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         getFiles={attachments}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
-            console.log(res.data._id);
             setNewParticular((particularDetails) => ({
               ...particularDetails,
               attachment: [...particularDetails.attachment, res.data],

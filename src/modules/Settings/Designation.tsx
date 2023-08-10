@@ -21,7 +21,6 @@ const Designation = () => {
     });
     DesignationService.delete(id)
       .then((res) => {
-        console.log('process delete', res);
         if (Designation) {
           const newDesignation = Designation.filter((designation) => {
             return designation._id !== id;
@@ -76,7 +75,7 @@ const Designation = () => {
             startIcon={<EditIcon />}
             onClick={() => {
               setDialogAction('edit');
-              console.log(dialogAction);
+
               setNewDesignation(params.row);
             }}
           >
@@ -153,7 +152,6 @@ const Designation = () => {
           </Button>
           <Button
             onClick={() => {
-              console.log(designationToDelete);
               if (designationToDelete) {
                 removeDesignation(designationToDelete._id);
               }

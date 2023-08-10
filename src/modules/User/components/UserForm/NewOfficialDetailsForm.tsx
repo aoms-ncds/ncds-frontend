@@ -74,13 +74,13 @@ const NewOfficialDetailsForm = (
     }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
-  console.log(newDiv?._id, 'newDiv');
+
 
   useEffect(() => {
     // if (props.action!='add') {
     //   setCurrentDivision(props.value.divisionHistory[props.value.divisionHistory.length-1].division);
     // }
-    console.log(props.value);
+
     // if (user.user && (user.user as User).kind=='staff') {
     DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
@@ -91,7 +91,7 @@ const NewOfficialDetailsForm = (
         }),
       );
     // }
-    console.log(props.value);
+
 
     if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
       DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)

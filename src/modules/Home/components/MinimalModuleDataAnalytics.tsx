@@ -25,7 +25,6 @@ const MinimalModuleDataAnalytics = () => {
     DivisionsServices.getDivisionById(((user.user as User).division as unknown as string))
     .then((res) => {
       setCurDivision(res.data.details.name);
-      // console.log(res);
     })
     .catch((error) => {
       setErrors((errors) => [...errors, error.message]);
@@ -36,7 +35,6 @@ const MinimalModuleDataAnalytics = () => {
     DivisionsServices.getCount()
       .then((res) => {
         setDivisionsCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
@@ -47,7 +45,6 @@ const MinimalModuleDataAnalytics = () => {
     DivisionsServices.getSubDivisionsCount()
       .then((res) => {
         setSubDivisionsCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
@@ -58,7 +55,6 @@ const MinimalModuleDataAnalytics = () => {
     StaffServices.getCount()
       .then((res) => {
         setStaffsCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
@@ -69,7 +65,6 @@ const MinimalModuleDataAnalytics = () => {
     WorkersServices.getCount()
       .then((res) => {
         setWorkersCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
@@ -80,7 +75,6 @@ const MinimalModuleDataAnalytics = () => {
     FRServices.getCount()
       .then((res) => {
         setFrCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
@@ -91,14 +85,12 @@ const MinimalModuleDataAnalytics = () => {
     IROServices.getCount()
       .then((res) => {
         setIroCount(res.data.toString());
-        console.log(res);
       })
       .catch((error) => {
         setErrors((errors) => [...errors, error.message]);
         setIroCount('Unable to load!');
       });
   }, []);
-  // console.log(user);
   return (
 
     <Grid container spacing={3}>

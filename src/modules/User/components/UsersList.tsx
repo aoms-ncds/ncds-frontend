@@ -47,14 +47,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   };
 
   const deactivateWorker = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
     });
     StaffOrWorkerServices.deactivate(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
@@ -75,14 +73,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const activateWorker = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Activating Worker',
       variant: 'info',
     });
     StaffOrWorkerServices.activate(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
@@ -103,10 +99,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const assignRemark = (id: string) => {
-    console.log('setremark', id);
     toggleOpenRemarks(true);
     setSelectedUser(id);
-    console.log({ selectedUser });
+
     WorkersServices.getAllRemarksById(id)
                   .then((res) => setRemarks(res.data??[]))
                   .catch((error) => {
@@ -452,7 +447,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               WorkersServices.addRemarks(remark)
         .then((res) => {
           const x = [...remarks, res.data];
-          console.log('user', x);
+
 
           setRemarks((remarks) => [...remarks, res.data]);
           setRemark((remark) => ({

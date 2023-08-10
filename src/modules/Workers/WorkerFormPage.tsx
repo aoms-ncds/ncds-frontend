@@ -64,7 +64,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
         .then((res) => {
           if (res.data) {
             setWorker(res.data);
-            console.log(worker);
           }
         })
         .catch((res) => {
@@ -77,7 +76,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
       const divid=(auth.user as IWorker).division as unknown as string;
       DivisionsServices.getDivisionById(divid)
     .then((res)=> {
-      console.log(res.data);
       setWorker(()=>(
         { ...worker,
           officialDetails: {

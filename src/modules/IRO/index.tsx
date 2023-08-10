@@ -14,7 +14,6 @@ const IRODashboard = () => {
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
 
 
-  console.log( IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR );
   useEffect(() => {
     // IROServices.getCount()
     //   .then((res) => setIROCount(res.data))

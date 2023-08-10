@@ -178,19 +178,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     props.action == 'release' ?
       IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
           .then((res) => {
-            console.log(res);
             setIROrder(res.data);
           })
           .catch((res) => {
-            console.log(res);
+
           }) :
       IROServices.getAll()
           .then((res) => {
-            console.log(res, 'res');
             setIROrder(res.data);
           })
           .catch((res) => {
-            console.log(res);
+
           });
   }, [openRelease]);
 
@@ -204,7 +202,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     if (selectedIRO._id != '') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
-    console.log(selectedIRO, 'AA');
   }, [selectedIRO.signature]);
 
 
@@ -253,7 +250,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           });
                           setIROrder(filterIRO);
                           // }
-                          console.log(res, 'close');
+
                           enqueueSnackbar({
                             message: res.message,
                             variant: 'success',
@@ -373,7 +370,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //         });
             //         setIROrder(filterIRO);
             //       }
-            //       console.log(res, 'close');
+            //
             //       enqueueSnackbar({
             //         message: res.message,
             //         variant: 'success',
@@ -525,7 +522,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     disableRowSelectionOnClick={props.action == 'release'}
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                       // setSelectedIROrelease(newRowSelectionModel);
-                      console.log(newRowSelectionModel);
+
                       setReleaseAmountIROs(() => {
                         const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
 
@@ -559,7 +556,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           ()=> {
                             IROServices.sendNotifications('president', selectedIROId??'')
                             .then((res) => {
-                              console.log(res);
+
                             })
                             .catch((res) => {
                               console.log(res);
@@ -579,7 +576,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           ()=> {
                             IROServices.sendNotifications('accounts', selectedIROId??'')
                             .then((res) => {
-                              console.log(res);
+
                             })
                             .catch((res) => {
                               console.log(res);
@@ -599,7 +596,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           ()=> {
                             IROServices.sendNotifications('office_manager', selectedIROId??'')
                             .then((res) => {
-                              console.log(res);
+
                             })
                             .catch((res) => {
                               console.log(res);
@@ -618,7 +615,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           ()=> {
                             IROServices.sendNotifications('account_manager', selectedIROId??'')
                             .then((res) => {
-                              console.log(res);
+
                             })
                             .catch((res) => {
                               console.log(res);
@@ -636,7 +633,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           ()=> {
                             IROServices.sendNotifications('division_head', selectedIROId??'')
                             .then((res) => {
-                              console.log(res);
+
                             })
                             .catch((res) => {
                               console.log(res);
@@ -836,7 +833,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name)
                 .then((res) => {
-                  console.log(res.data, 'FFF');
                   setSelectedIRO(() => ({
                     ...selectedIRO,
                     signature: {
@@ -875,7 +871,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.signature?.accountManagerSignature ? [selectedIRO.signature.accountManagerSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
-                  console.log(res.data, 'FFF');
                   setSelectedIRO(() => ({
                     ...selectedIRO,
                     signature: {
@@ -915,7 +910,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.signature?.accountantSignature ? [selectedIRO.signature.accountantSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
-                  console.log(res.data, 'FFF');
                   setSelectedIRO((prevSelectedIRO) => ({
                     ...prevSelectedIRO,
                     signature: {
@@ -960,7 +954,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name).then((res) => {
-                  console.log(res.data._id);
                   setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
 
                   return res;
