@@ -141,7 +141,7 @@ const NotificationPage = () => {
   return (
     <CommonPageLayout title="Notifications">
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '69vh', width: '100%' }}>
+        <Card style={{ width: '100%' }}>
           <br />
           <Button
             sx={{ float: 'right' }}
