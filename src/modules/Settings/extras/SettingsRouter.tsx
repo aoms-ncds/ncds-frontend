@@ -3,6 +3,7 @@ import { Settings as SettingsIcon, Language as Lang } from '@mui/icons-material'
 import Languages from '../Languages';
 import Designation from '../Designation';
 import ChildSupport from '../ChildSupport';
+import ESignature from '../ESignature';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -56,6 +57,15 @@ const settingsRoutes: ModuleRoute = {
       title: 'ChildSupport',
       path: '/ChildSupport',
       element: <ChildSupport />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'ESignature',
+      path: '/Esignature',
+      element: <ESignature/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

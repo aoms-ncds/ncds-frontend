@@ -44,6 +44,9 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText="Child support" secondaryText={ChildSupportCount?.toString()} color="#dd571c" targetRoute="/settings/ChildSupport" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="E-Signature" color="#0D1282" targetRoute="/settings/Esignature" />
+        </Grid>
       </Grid>
     </CommonPageLayout>
   );

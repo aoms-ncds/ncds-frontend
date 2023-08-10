@@ -334,16 +334,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
               icon: MessageIcon,
             },
-            {
-              id: 'signature',
-              text: 'Add signature',
-              onClick: () => {
-                setSelectedIROId(params.row._id);
-                setSelectedIRO(params.row);
-                toggleAddSignature(true);
-              },
-              icon: FingerprintIcon,
-            },
+            // {
+            //   id: 'signature',
+            //   text: 'Add signature',
+            //   onClick: () => {
+            //     setSelectedIROId(params.row._id);
+            //     setSelectedIRO(params.row);
+            //     toggleAddSignature(true);
+            //   },
+            //   icon: FingerprintIcon,
+            // },
             ...(hasPermissions(['WRITE_IRO']) && params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
               [
                 {
