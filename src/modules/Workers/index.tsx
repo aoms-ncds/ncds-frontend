@@ -11,7 +11,7 @@ const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
-  const user=useAuth();
+  const user = useAuth();
   console.log(user);
   useEffect(() => {
     WorkerServices.getCount()
@@ -43,12 +43,10 @@ const WorkersDashboard = () => {
           </Grid>
         }
         />
-        <PermissionChecks permissions={['MANAGE_WORKER']} granted={
-          <Grid item xs={12} md={4} xl={3}>
-            <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/reject" />
-          </Grid>
-        }
-        />
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/reject" />
+        </Grid>
+
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Deactivated Workers" secondaryText={rejectedWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
         </Grid>
