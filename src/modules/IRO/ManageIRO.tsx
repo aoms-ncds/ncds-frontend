@@ -190,13 +190,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           .catch((res) => {
 
           });
-  }, [openRelease]);
+  }, [openRelease, attachment]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
   }, [selectedIRO.billAttachment]);
+  useEffect(() => {
+    if (selectedIRO._id != '') {
+      IROServices.updateIRO(selectedIRO._id, selectedIRO);
+    }
+  }, [selectedIRO]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
