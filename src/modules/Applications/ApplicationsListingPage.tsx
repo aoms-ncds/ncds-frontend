@@ -381,6 +381,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             <Container>
               <Grid container spacing={2}>
                 <Grid item md={12}>
+                  &ensp;
                   <TextField
                     label="Name"
                     value={applicationFormState.name}
