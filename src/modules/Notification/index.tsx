@@ -8,7 +8,7 @@ import moment from 'moment';
 import NotificationService from './extras/NotificationService';
 
 const NotificationPage = () => {
-  const [messages, setMessages] = useState<Message[]|null>(null);
+  const [messages, setMessages] = useState<Message[] | null>(null);
   const [showReadMessages, setShowReadMessages] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const columns: GridColDef<Message>[] = [
@@ -33,7 +33,8 @@ const NotificationPage = () => {
       type: 'string',
       renderCell: (props) => {
         return (
-          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none',
+          <Link to={`/notification/${props.row._id}`} style={{
+            textDecoration: 'none',
             maxWidth: 500,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
@@ -126,16 +127,16 @@ const NotificationPage = () => {
   useEffect(() => {
     // setLoading((loading) => loading + 1);
     NotificationService.getMyMessages(showReadMessages)
-        .then((res) => {
-          setMessages(res.data);
-        })
-        .catch((res) => {
-          console.log(res);
-          enqueueSnackbar({
-            message: res.message,
-            variant: 'error',
-          });
+      .then((res) => {
+        setMessages(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'error',
         });
+      });
   }, [showReadMessages]);
   return (
     <CommonPageLayout title="Notifications">
@@ -178,7 +179,7 @@ const NotificationPage = () => {
           <br />
           <br />
           <DataGrid
-            style={{ height: '68vh', width: '100%' }}
+            sx={{ height: '55vh', width: '100%' }}
             // components={{}}
             rows={messages ?? []}
             loading={!messages}
