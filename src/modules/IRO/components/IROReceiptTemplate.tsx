@@ -296,55 +296,35 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
               <Text style={{ ...styles.text, fontWeight: 'bold',
                 fontFamily: 'Oswald' }} >E Signature are protected</Text>
             </View>
+
           </View>
           <View style={{ flexDirection: 'row' }}>
 
-            <View style={{ ...styles.box5, marginTop: 15, left: 50 }}>
+
+            <View
+              style={{ ...styles.box5, marginTop: 15, left: 400, width: 130 }}>
               <Image style={{
                 height: 78,
-                width: 78 }}
-              src={`data:${props.rowData?.signature?.hrSignature?.type};base64, ${props.rowData?.signature?.hrSignature?.base64} `}
-              />
+                width: 128 }}
+              src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `}/>
             </View>
-            <View style={{ ...styles.box5, marginTop: 15, left: 52 }}>
-              <Image style={{
-                height: 78,
-                width: 78 }}
-              src={`data:${props.rowData?.signature?.accountManagerSignature?.type};base64, ${props.rowData?.signature?.accountManagerSignature?.base64} `}
-              />
-            </View>
-            <View style={{ ...styles.box5, marginTop: 15, left: 54 }}>
-              <Image style={{
-                height: 78,
-                width: 78 }}
-              src={`data:${props.rowData?.signature?.accountantSignature?.type};base64, ${props.rowData?.signature?.accountantSignature?.base64} `}/>
-            </View>
-            <View style={{ ...styles.box5, marginTop: 15, left: 150, width: 130 }}></View>
+
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ width: 400, flexDirection: 'row' }} >
-              <View>
-                <Text style={{ ...styles.text2, left: 52, marginTop: 5 }}>Workers Dept</Text>
-              </View>
-              <View>
-                <Text style={{ ...styles.text2, left: 85, marginTop: 5 }}>Account Manager</Text>
-              </View>
-              <View>
-                <Text style={{ ...styles.text2, left: 118, marginTop: 5 }}>Accountant</Text>
-              </View>
 
-            </View>
-            <View>
-              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>NAME</Text>
+            <View
+              style={{ ...styles.text2, marginTop: 15, left: 400, width: 130 }}
+            >
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>Office Manager</Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
+          {/* <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
             <Text style={{ ...styles.text2, left: 400, fontSize: 10, marginTop: 5 }}>ADMINISTRATOR</Text>
           </View>
           <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
 
             <Text style={{ ...styles.text2, left: 400, marginTop: 5, fontSize: 10 }}>SANCTIONING AUTHORITY</Text>
-          </View>
+          </View> */}
         </div>
         <div style={{ marginTop: '15', marginBottom: '20' }}>
           <Text style={{ fontSize: 8, color: 'grey', left: 30 }} >

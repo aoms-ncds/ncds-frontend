@@ -242,9 +242,9 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text> */}
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator Leader Sign</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Senior Leader Sign</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader Sign</Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator Leader</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Senior Leader</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text>

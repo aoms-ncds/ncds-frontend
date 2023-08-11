@@ -26,6 +26,7 @@ declare global{
       hrSignature?:FileObject;
       accountManagerSignature?:FileObject;
       accountantSignature?:FileObject;
+      officeManagerSignature?:FileObject;
     };
     // signature?: {
     //   hrSignature?: {
