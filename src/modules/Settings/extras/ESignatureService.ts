@@ -10,7 +10,7 @@ export default {
     axios.get('/settings/esignature/', { headers: { ...getAuthHeader() } },
     ),
   ),
-  removeESignature: (signatureType: 'officemanagerSignature') => getStandardResponse(
+  removeESignature: (signatureType: 'officeManagerSignature') => getStandardResponse(
     axios.patch(`/settings/esignature/${signatureType}/remove/`, null, { headers: { ...getAuthHeader() } },
     ),
   ),

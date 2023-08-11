@@ -17,7 +17,7 @@ const ESignature = () => {
   const [addSignature, toggleAddSignature] = useState(false);
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
-    officemanagerSignature: {
+    officeManagerSignature: {
       filename: '',
       size: 0,
       type: 'application/vnd.ms-excel',
@@ -51,8 +51,8 @@ const ESignature = () => {
   , []);
 
   useEffect(() => {
-    if (selectedSignature?.officemanagerSignature && selectedSignature?.officemanagerSignature._id) {
-      console.log('is here', selectedSignature.officemanagerSignature?._id);
+    if (selectedSignature?.officeManagerSignature && selectedSignature?.officeManagerSignature._id) {
+      console.log('is here', selectedSignature.officeManagerSignature?._id);
       ESignatureService.addESignature(selectedSignature)
         .then(() => {
           console.log('ESignature added successfully');
@@ -102,7 +102,7 @@ const ESignature = () => {
                     }}
                   >
                     {' '}
-                        HR signature
+                    Office Manager Signature
                   </Button>
                 </Grid>
                 <Grid item xs={12}>
@@ -166,7 +166,7 @@ const ESignature = () => {
             <FileUploader
               title="Signature"
               action="add"
-              types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+              types={['image/png', 'image/jpeg', 'image/jpg']}
               limits={{
                 // types: [],
                 maxItemSize: 1 * MB,
@@ -179,7 +179,7 @@ const ESignature = () => {
                     console.log(res.data, 'FFF');
                     setSignature(()=>({
                       ...selectedSignature,
-                      officemanagerSignature: res.data,
+                      officeManagerSignature: res.data,
                     }));
                     return res;
                   });
@@ -188,9 +188,9 @@ const ESignature = () => {
 
               open={showOfficeManagerUploader}
               onClose={() => setShowOfficeManagerFileUploader(false)}
-              getFiles={selectedSignature?.officemanagerSignature ? [selectedSignature?.officemanagerSignature]:[]}
+              getFiles={selectedSignature?.officeManagerSignature ? [selectedSignature?.officeManagerSignature]:[]}
               deleteFile={(fileId: string) => {
-                ESignatureService.removeESignature('officemanagerSignature');
+                ESignatureService.removeESignature('officeManagerSignature');
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />

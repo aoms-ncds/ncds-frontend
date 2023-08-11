@@ -5,6 +5,6 @@ declare global{
 
 interface Esignature{
     _id:string;
-    officemanagerSignature?:FileObject;
+    officeManagerSignature?:FileObject;
 }
 }
