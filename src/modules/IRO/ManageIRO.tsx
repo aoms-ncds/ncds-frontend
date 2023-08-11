@@ -179,17 +179,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
         .then((res) => {
           setIROrder(res.data);
-        })
-        .catch((res) => {
-
         }) :
+      //         .catch((res) => {
+      // console.log(res)
+      //         }):
       IROServices.getAll()
         .then((res) => {
           setIROrder(res.data);
-        })
-        .catch((res) => {
-
         });
+    // .catch((res) => {
+    //   console.log(res)
+    //           })
   }, [openRelease, attachment, addSignature]);
 
   useEffect(() => {
@@ -475,7 +475,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {params.row.sanctionedAsPer}
         </p>
-      ), align: 'center', headerAlign: 'center'
+      ), align: 'center', headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     {
@@ -562,8 +562,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={
                           () => {
                             IROServices.sendNotifications('president', selectedIROId ?? '')
-                              .then((res) => {
-
+                              .then(() => {
+                                enqueueSnackbar({
+                                  message: 'Message Sent',
+                                  variant: 'success',
+                                });
                               })
                               .catch((res) => {
                                 console.log(res);
@@ -582,8 +585,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={
                           () => {
                             IROServices.sendNotifications('accounts', selectedIROId ?? '')
-                              .then((res) => {
-
+                              .then(() => {
+                                enqueueSnackbar({
+                                  message: 'Message Sent',
+                                  variant: 'success',
+                                });
                               })
                               .catch((res) => {
                                 console.log(res);
@@ -602,8 +608,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={
                           () => {
                             IROServices.sendNotifications('office_manager', selectedIROId ?? '')
-                              .then((res) => {
-
+                              .then(() => {
+                                enqueueSnackbar({
+                                  message: 'Message Sent',
+                                  variant: 'success',
+                                });
                               })
                               .catch((res) => {
                                 console.log(res);
@@ -616,13 +625,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
-                        color="inherit"
+                        color="secondary"
                         sx={{ width: 260 }}
                         onClick={
                           () => {
                             IROServices.sendNotifications('account_manager', selectedIROId ?? '')
-                              .then((res) => {
-
+                              .then(() => {
+                                enqueueSnackbar({
+                                  message: 'Message Sent',
+                                  variant: 'success',
+                                });
                               })
                               .catch((res) => {
                                 console.log(res);
@@ -631,7 +643,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }
                         endIcon={<SendIcon />}
                       >  Send to account manager</Button>
-                      <br /><br />
+                      {/* <br /><br /> */}
                     </Grid>
                     <Grid item xs={12}>
                       <Button variant="contained" color='inherit'
@@ -639,8 +651,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={
                           () => {
                             IROServices.sendNotifications('division_head', selectedIROId ?? '')
-                              .then((res) => {
-
+                              .then(() => {
+                                enqueueSnackbar({
+                                  message: 'Message Sent',
+                                  variant: 'success',
+                                });
                               })
                               .catch((res) => {
                                 console.log(res);
@@ -650,6 +665,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         endIcon={<SendIcon />}
                       >  Send to division head</Button>
                     </Grid>
+                    <br />
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
@@ -961,7 +977,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
 
                   return res;
                 });
