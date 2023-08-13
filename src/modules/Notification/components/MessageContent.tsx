@@ -14,11 +14,11 @@ function MessageContent() {
   useEffect(() => {
     if (_id) {
       NotificationService.getMessageById(_id)
-                .then((res) => {
-                  if (res) {
-                    setMessage(res.data);
-                  }
-                });
+        .then((res) => {
+          if (res) {
+            setMessage(res.data);
+          }
+        });
     }
   }, []);
   return (
@@ -26,21 +26,23 @@ function MessageContent() {
       <Container maxWidth="md">
         <Card variant="outlined">
           <CardContent>
-            <Typography variant='body1' align='right'>
+            {/* <Typography variant='body1' align='right'>
               <b>Type: </b>  {message?.type}
-            </Typography>
+            </Typography> */}
             <Typography variant='h5'>
               {message?.title}
             </Typography>
-            <Divider/>
-            <br/>
+            <Divider />
+            <br />
             <Typography variant='body1'>
               {message?.body}
             </Typography>
             <br />
-            <Typography variant='body1' >
-              <Link to={'{message?.ref_url}'}> {message?.ref_url}</Link>
-            </Typography>
+            {message?.ref_url && (
+              <Typography variant='body1' >
+                <Link to={message?.ref_url}> {message?.ref_url}</Link>
+              </Typography>
+            )}
             <br />
             <Typography variant='body1' align='right'>
               {message && moment(message.createdAt).format('DD/MM/YYYY hh:mm A')}
