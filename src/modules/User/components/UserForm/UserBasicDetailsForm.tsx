@@ -264,6 +264,9 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, email2: e.target.value })}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
@@ -275,6 +278,9 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, phone: e.target.value })}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
@@ -286,11 +292,19 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth />
+        <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
@@ -320,6 +334,9 @@ const UserBasicDetailsForm = (
           }}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
@@ -351,6 +368,9 @@ const UserBasicDetailsForm = (
           }}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
