@@ -38,17 +38,17 @@ import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import UserServices from '../../extras/UserServices';
 
 
-const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
+const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   props: FormComponentProps<
     UserType,
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
       kind: UserKind;
-      profilePic:{
-        userPhoto?:File;
-        setUserPhoto?:(newUserPhoto: File) => void;
+      profilePic: {
+        userPhoto?: File;
+        setUserPhoto?: (newUserPhoto: File) => void;
       };
-        }
+    }
   >,
 
 
@@ -89,19 +89,19 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
   };
   const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
-  const submitForm = (data: UserType) =>{
+  const submitForm = (data: UserType) => {
     if (props.action == 'add') {
       UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
-      .then((res)=>{
-        props.onSubmit && props.onSubmit(props.value);
-        navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
-      })
-      .catch((error) =>{
-        console.log('error', error);
-      });
+        .then((res) => {
+          props.onSubmit && props.onSubmit(props.value);
+          navigate(props.options?.kind == 'worker' ? '/workers/' : '/hr/manage');
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
     } else {
       props.onSubmit && props.onSubmit(props.value);
-      navigate(props.options?.kind == 'worker'?'/workers/':'/hr/manage');
+      navigate(props.options?.kind == 'worker' ? '/workers/' : '/hr/manage');
     }
   };
 
@@ -110,13 +110,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
 
     // if (props.value.imageURL)setUserPhotoBlobURL(props.value.imageURL);
     ChildrenServices.getAllChildSupport()
-    .then((res)=>setChildSupport(res.data))
-    .catch((error) =>
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      }),
-    );
+      .then((res) => setChildSupport(res.data))
+      .catch((error) =>
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        }),
+      );
   }, []);
 
 
@@ -155,7 +155,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               <StepLabel>Offsprings details</StepLabel>
             </Step>
           )}
-          { ((props.options?.kind === 'worker' && props.value.status === UserLifeCycleStates.CREATED)||(props.options?.kind === 'staff')) && (
+          {((props.options?.kind === 'worker' && props.value.status === UserLifeCycleStates.CREATED) || (props.options?.kind === 'staff')) && (
             <Step>
               <StepLabel>Support Details</StepLabel>
             </Step>
@@ -174,7 +174,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               }}
             >
               <Grid container spacing={3}>
-                {props.options?.profilePic.setUserPhoto &&(
+                {props.options?.profilePic.setUserPhoto && (
                   <Grid item xs={12}>
                     <label htmlFor="imagePicker">
                       <Avatar
@@ -275,11 +275,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (props.options?.kind == 'worker' ) {
+                if (props.options?.kind == 'worker') {
                   if (props.value.basicDetails.martialStatus == 'Married') {
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
-                    if (props.value.status===UserLifeCycleStates.CREATED) {
+                    if (props.value.status === UserLifeCycleStates.CREATED) {
                       setActiveStep((currentStep) => currentStep + 3);
                     } else {
                       submitForm(props.value);
@@ -315,9 +315,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               >
 
                 <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
-                    Go back{' '}
+                  Go back{' '}
                 </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {(props.options?.kind === 'worker'&& !props.value.status && props.value.basicDetails.martialStatus !== 'Married')?'Submit':'Next'}
+                  {(props.options?.kind === 'worker' && !props.value.status && props.value.basicDetails.martialStatus !== 'Married') ? 'Submit' : 'Next'}
                 </Button>
 
               </div>
@@ -362,8 +362,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
           )}
           {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <form
-              onSubmit={() => {
-                if (props.value.status===UserLifeCycleStates.CREATED) {
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (props.value.status === UserLifeCycleStates.CREATED) {
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   submitForm(props.value);
@@ -418,7 +419,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 </Button>
               </Grid> */}
 
-              {props.value.status === UserLifeCycleStates.CREATED?(
+              {props.value.status === UserLifeCycleStates.CREATED ? (
                 <div
                   style={{
                     float: 'right',
@@ -429,13 +430,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 >
                   <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
-           Go back{' '}
+                    Go back{' '}
                   </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                     {' '}
-             Next{' '}
+                    Next{' '}
                   </Button>
                 </div>
-              ):(
+              ) : (
                 <div
                   style={{
                     float: 'right',
@@ -445,15 +446,15 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   }}
                 ><Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
-                Review from first step{' '}
+                    Review from first step{' '}
                   </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
-                  Go back{' '}
+                    Go back{' '}
                   </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                     {' '}
                     {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
                     {' '}
-                  Submit{' '}
+                    Submit{' '}
                   </Button></div>
 
               )
@@ -464,7 +465,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
               {/* </Grid> */}
             </form>
           )}
-          {activeStep===4 && (
+          {activeStep === 4 && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -599,7 +600,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                   {' '}
                   Review from first step{' '}
                 </Button>
-                <Button onClick={() => setActiveStep((props.value.basicDetails.martialStatus !== 'Married')?((step) => step-3):((step) => step-1))}
+                <Button onClick={() => setActiveStep((props.value.basicDetails.martialStatus !== 'Married') ? ((step) => step - 3) : ((step) => step - 1))}
                   variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                   {' '}
                   Go back{' '}
@@ -798,12 +799,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker >(
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={newChild?.childSupport}
-                    options={childSupport }
+                    options={childSupport}
                     getOptionLabel={(childSupport) => childSupport.name}
                     onChange={(_e, childSupport) => {
                       setNewChild((newChild) => ({
                         ...newChild,
-                        childSupport: childSupport??undefined,
+                        childSupport: childSupport ?? undefined,
                       }));
                     }}
                     renderInput={(params) => <TextField {...params} label="Child Support" variant={props.options?.textField.variant} required />}

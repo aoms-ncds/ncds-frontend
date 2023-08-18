@@ -138,9 +138,9 @@ const Profile = () => {
             <Tabs value={currentTab} onChange={handleChange} aria-label="basic tabs example">
               <Tab sx={{ fontWeight: 'bold' }} label="Basic Details" {...a11yProps(0)} />
               <Tab sx={{ fontWeight: 'bold' }} label="Official Details" {...a11yProps(1)} />
-              {userKind === 'worker' && (user as unknown as IWorker)?.spouse && <Tab label="Spouse Details" {...a11yProps(2)} />}
-              {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && <Tab label="Offsprings Details" {...a11yProps(3)} />}
-              <Tab label="Support Structure" {...a11yProps(userKind === 'worker' ? 4 : 2)} />
+              {userKind === 'worker' && (user as unknown as IWorker)?.spouse && <Tab label="Spouse Details" sx={{ fontWeight: 'bold' }} {...a11yProps(2)} />}
+              {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && <Tab label="Offsprings Details" sx={{ fontWeight: 'bold' }} {...a11yProps(3)} />}
+              <Tab label="Support Structure" sx={{ fontWeight: 'bold' }} {...a11yProps(userKind === 'worker' ? 4 : 2)} />
             </Tabs>
           </Box>
           <TabPanel value={currentTab} index={0}>

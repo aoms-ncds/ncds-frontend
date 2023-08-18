@@ -49,14 +49,14 @@ const workersPageRoutes: ModuleRoute = {
     {
       title: 'Send Back Workers',
       path: '/reject',
-      element: <SendBackWorkersPage/>,
+      element: <SendBackWorkersPage />,
       private: true,
-      requiredAccessRights: ['MANAGE_WORKER'],
+      requiredAccessRights: ['WRITE_WORKERS'],
     },
     {
       title: 'Deactivated Workers',
       path: '/deactivated',
-      element: <DeactivatedWorkersPage/>,
+      element: <DeactivatedWorkersPage />,
       private: true,
       requiredAccessRights: ['READ_WORKERS'],
     },
