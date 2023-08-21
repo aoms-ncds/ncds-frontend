@@ -1,13 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-multi-comp */
-import { Avatar, Box, Card, CardContent, Container, Divider, Grid, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Container, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import StaffServices from '../HR/extras/StaffServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-
+import { Attachment as AttachmentIcon } from '@mui/icons-material';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import { MB } from '../../extras/CommonConfig';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -17,6 +19,7 @@ interface TabPanelProps {
 
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -38,9 +41,13 @@ const TabPanel = (props: TabPanelProps) => {
 const a11yProps = (index: number) => ({ 'id': `simple-tab-${index}`, 'aria-controls': `simple-tabpanel-${index}` });
 
 const Profile = () => {
+  const [adharAttachments, setAdharAttachments] = useState<FileObject[]>([]);
+  const [voterAttachments, setVoterAttachments] = useState<FileObject[]>([]);
   const [user, setUser] = useState<IWorker | Staff | null>(null);
   const { userId, userKind } = useParams();
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [viewAdharFile, setviewAdharFile] = useState(false);
+  const [viewVoterIdFile, setViewVoterId] = useState(false);
   const columns: GridColDef<DivisionHistory>[] = [
     {
       field: 'division',
@@ -163,8 +170,28 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {user?.basicDetails.phone} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Alternative Phone: </Typography> {user?.basicDetails.alternativePhone} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PAN No: </Typography> {user?.basicDetails.PANNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar: </Typography> {user?.basicDetails.aadhaar?.aadhaarNo}
+
+                <IconButton
+                  onClick={() => {
+                    setviewAdharFile(true);
+                    setAdharAttachments(user?.basicDetails.aadhaar?.aadhaarFile ? [user.basicDetails.aadhaar.aadhaarFile] : []);
+                  }}
+                >
+                  <AttachmentIcon />
+                </IconButton>
+
+              </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Voter Id: </Typography> {user?.basicDetails.voterId?.voterIdNo}
+                <IconButton
+                  onClick={() => {
+                    setViewVoterId(true);
+                    setVoterAttachments(user?.basicDetails.voterId?.voterIdFile ? [user.basicDetails.voterId.voterIdFile] : []);
+                  }}
+                >
+                  <AttachmentIcon />
+                </IconButton>
+              </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
 
               <Grid item xs={12}> <Divider textAlign='left'>Permanent address</Divider> </Grid>
@@ -332,6 +359,35 @@ const Profile = () => {
         </Box>
         <br />
       </Card>
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={viewAdharFile}
+        action="view"
+        onClose={() => setviewAdharFile(false)}
+        getFiles={adharAttachments}
+      />
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={viewVoterIdFile}
+        action="view"
+        onClose={() => setViewVoterId(false)}
+        getFiles={voterAttachments}
+      />
+
     </CommonPageLayout>
   );
 };
