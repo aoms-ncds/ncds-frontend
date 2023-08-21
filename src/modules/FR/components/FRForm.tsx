@@ -569,15 +569,16 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 {/* )} */}
                 &nbsp;
                 <div style={{ float: 'right' }}>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={() => {
-                      toggleOpenRemarks(true);
-                    }}
-                  >
-                    Remark
-                  </Button>
+                  {props.action === 'edit' ?
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={() => {
+                        toggleOpenRemarks(true);
+                      }}
+                    >
+                      Remark
+                    </Button> : null}
                   &nbsp;
                   {props.action === 'add' || props.action === 'edit' ? (
                     <>
