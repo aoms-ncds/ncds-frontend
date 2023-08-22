@@ -12,6 +12,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
   public static readonly AMOUNT_RELEASED = 214;
   public static readonly RECONCILIATION_DONE = 215;
 
+
   public static readonly allTransactionStatus = ({
 
     FR_CLOSED: IROLifeCycleStates.FR_CLOSED,
@@ -28,6 +29,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
     WAITING_FOR_ACCOUNTS_STATE: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE,
     AMOUNT_RELEASED: IROLifeCycleStates.AMOUNT_RELEASED,
     RECONCILIATION_DONE: IROLifeCycleStates.RECONCILIATION_DONE,
+
   });
 
   public static readonly getStatusNameByCodeTransaction = (code: number) =>{
