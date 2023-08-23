@@ -83,7 +83,8 @@ export default {
 
   sendNotifications: (name: string, id: string) => getStandardResponse<void>(axios.post(`/iro/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
-  getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+  getReconciliation: (conditions?: { status?: number; sanctionedBank?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',
+    { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,
       IRODate: moment(IRO.IRODate),

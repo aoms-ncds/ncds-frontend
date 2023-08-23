@@ -15,11 +15,11 @@ import { MB } from '../../extras/CommonConfig';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
-
+import { useAuth } from '../../hooks/Authentication';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
-
+  const user=useAuth();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -101,15 +101,43 @@ const ReconciliationIRO = () => {
     signature: {},
   });
   const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
-
+  const permissions= (user.user as User)?.permissions;
   useEffect(() => {
-    IROServices.getReconciliation()
-      .then((res) => {
-        setReconcilationIRO(res.data);
+    if (permissions?.FCRA_ACCOUNTS_ACCESS) {
+      IROServices.getReconciliation({ sanctionedBank: 'FCRA' })
+      .then((res)=>{
+        console.log(res, 'FRDD');
+        setReconcilationIRO(()=>[...res.data]);
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((error) => {
+        console.error(error);
       });
+    }
+    if (permissions?.LOCAL_ACCOUNT_ACCESS) {
+      IROServices.getReconciliation({ sanctionedBank: 'Local Bank' })
+      .then((res)=>{
+        setReconcilationIRO(()=>[...res.data]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+    if (permissions?.PERSONAL_ACCOUNTS_ACCESS) {
+      IROServices.getReconciliation({ sanctionedBank: 'Personal Bank' })
+      .then((res)=>{
+        setReconcilationIRO(()=>[...res.data]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+    // IROServices.getReconciliation()
+    //   .then((res) => {
+    //     setReconcilationIRO(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
   }, [attachment]);
 
   const columns: GridColDef<IROrder>[]= [
