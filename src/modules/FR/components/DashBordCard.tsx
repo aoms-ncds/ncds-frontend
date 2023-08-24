@@ -57,17 +57,21 @@ const DashBoardCard = (props: {
 
 
         {props.count !== undefined && (
-          <Grid style={{  position: 'absolute', top: 0, right: 0 }}>
+          <Grid style={{ position: 'absolute', top: 0, right: 0 }}>
             <Badge
               max={9999}
               badgeContent={props.count}
               color={props.badgeColor || 'error'}
               showZero
               sx={{
-                fontSize: '4rem', // Increase the font size significantly
-                width: '6rem', // Increase the badge width
-                height: '6rem', // Increase the badge height
+                '& .MuiBadge-badge': {
+                  width: '3rem',
+                  height: '3rem',
+                  fontSize: '1.5rem',
+                  borderRadius: '50%',
+                },
               }}
+
             ></Badge>
           </Grid>
 
