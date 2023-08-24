@@ -17,7 +17,8 @@ const iroPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_IRO'],
       showInDrawer: true,
-      icon: <RequestQuoteIcon />,
+      // icon: <RequestQuoteIcon />,
+      icon: <img src="/IroLogo.png" alt="Logo" style={{ width: '30px', height: '30x' }} />,
     },
     {
       title: 'Manage IRO',

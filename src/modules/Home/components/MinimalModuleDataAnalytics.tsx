@@ -104,7 +104,7 @@ const MinimalModuleDataAnalytics = () => {
               <DashBoardCard
                 secondaryText='Divisions'
                 count={divisionsCount?.toString()}
-                color="#e12901"
+                color="#5b7f95eb"
                 targetRoute="/divisions/"
                 // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
@@ -131,7 +131,7 @@ const MinimalModuleDataAnalytics = () => {
               <DashBoardCard secondaryText='Sub-Divisions'
                 icon={<img src="/subDivisionLogo.png" alt="Logo"
                   style={{ width: '70px', height: '70px' }} />}
-                count={subDivisionsCount?.toString()} color="#90021f" targetRoute="/divisions/" />
+                count={subDivisionsCount?.toString()} color="#5b7f95eb" targetRoute="/divisions/" />
 
             </Grid>: <Grid item xs={6} md={3} xl={4}>
               <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
@@ -152,23 +152,23 @@ const MinimalModuleDataAnalytics = () => {
       <>
         <PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/staffs.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText=" Staffs" count={staffsCount?.toString()} color="#fa8128" targetRoute="/hr/" />
+            secondaryText=" Staffs" count={staffsCount?.toString()} color="#5b7f95eb" targetRoute="/hr/" />
         </Grid>} />
         <PermissionChecks permissions={['READ_WORKERS']} granted={<Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/workers.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText=" Workers" count={workersCount?.toString()} color="#6d579a" targetRoute="/workers/" />
+            secondaryText=" Workers" count={workersCount?.toString()} color="#5b7f95eb" targetRoute="/workers/" />
         </Grid>}/>
       </>}
       <PermissionChecks permissions={['READ_FR']} granted={
         <Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/FrLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText="FR" count={frCount?.toString()} color="#4cbb17" targetRoute="/fr/" />
+            secondaryText="FR" count={frCount?.toString()} color="#5b7f95eb" targetRoute="/fr/" />
         </Grid>
       } />
       <PermissionChecks permissions={['READ_IRO']} granted={
         <Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/IroLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText="IRO" count={iroCount?.toString()} color="#003152" targetRoute="/iro/" />
+            secondaryText="IRO" count={iroCount?.toString()} color="#5b7f95eb" targetRoute="/iro/" />
         </Grid>
       }/>
     </Grid>

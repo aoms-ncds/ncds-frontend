@@ -14,7 +14,7 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_FR'],
       showInDrawer: true,
-      icon: <RequestPageOutlinedIcon />,
+      icon: <img src="/FrLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Manage FR',
