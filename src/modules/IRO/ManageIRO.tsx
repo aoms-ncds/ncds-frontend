@@ -206,6 +206,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           console.error(error);
         });
       }
+      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS ) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+        .then((res) => {
+          setIROrder(res.data);
+        });
+      }
     } else {
       IROServices.getAll()
       .then((res) => {
