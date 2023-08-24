@@ -5,10 +5,11 @@ import WorkersServices from '../../Workers/extras/WorkersServices';
 import FRServices from '../../FR/extras/FRServices';
 import IROServices from '../../IRO/extras/IROServices';
 import StaffServices from '../../HR/extras/StaffServices';
+import DashBoardCard from '../../FR/components/DashBordCard';
 import FRCountCard from '../../FR/components/FRCountCard';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { useAuth } from '../../../hooks/Authentication';
-
+import { Notifications as NotificationsIcon } from '@mui/icons-material';
 
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -100,7 +101,13 @@ const MinimalModuleDataAnalytics = () => {
           {(user.user as User).kind !== 'worker' ?
             <Grid item xs={6} md={3} xl={4}>
 
-              <FRCountCard secondaryText='Divisions' count={divisionsCount?.toString()} color="#e12901" targetRoute="/divisions/" />
+              <DashBoardCard
+                secondaryText='Divisions'
+                count={divisionsCount?.toString()}
+                color="#e12901"
+                targetRoute="/divisions/"
+                icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
+              />
 
             </Grid> :
             <Grid item xs={6} md={3} xl={4}>
