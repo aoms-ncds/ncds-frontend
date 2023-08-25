@@ -197,7 +197,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             showInMenu
             to={`/users/${props.options?.kind}/${params.row._id}`}
           />,
-          (hasPermissions(['WRITE_WORKERS']) && (
+          (hasPermissions(['MANAGE_WORKER']) && (
             <GridLinkAction
               key={2}
               label="Edit"

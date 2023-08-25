@@ -358,7 +358,7 @@ const NewOfficialDetailsForm = (
           }}
           variant={props.options?.textField.variant}
           fullWidth
-          required
+
         />}
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
