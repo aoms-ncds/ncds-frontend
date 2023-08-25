@@ -16,7 +16,8 @@ const workersPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_WORKERS'],
       showInDrawer: true,
-      icon: <Diversity2Icon />,
+      // icon: <Diversity2Icon />,
+      icon: <img src="/workers.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Manage Workers',

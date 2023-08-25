@@ -164,6 +164,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
       <AppBar
         position="fixed"
         sx={{
+          backgroundColor: theme.palette.primary.main,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
