@@ -14,11 +14,11 @@ import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 
 
-const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind;status?:'reject'|'active' }>) => {
+const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active' }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<string|null>(null);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -47,14 +47,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   };
 
   const deactivateWorker = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
     });
     StaffOrWorkerServices.deactivate(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
@@ -75,14 +73,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const activateWorker = (id: string) => {
-    console.log('hey', id);
     const snackbarId = enqueueSnackbar({
       message: 'Activating Worker',
       variant: 'info',
     });
     StaffOrWorkerServices.activate(id)
       .then((res) => {
-        console.log('Response', res);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
@@ -103,18 +99,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const assignRemark = (id: string) => {
-    console.log('setremark', id);
     toggleOpenRemarks(true);
     setSelectedUser(id);
-    console.log({ selectedUser });
+
     WorkersServices.getAllRemarksById(id)
-                  .then((res) => setRemarks(res.data??[]))
-                  .catch((error) => {
-                    enqueueSnackbar({
-                      variant: 'error',
-                      message: error.message,
-                    });
-                  });
+      .then((res) => setRemarks(res.data ?? []))
+      .catch((error) => {
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        });
+      });
   };
 
   // const x = hasPermissions(['READ_ACCESS']) && [
@@ -194,6 +189,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       // ),
       getActions: (params: GridRowParams) => (
         [
+
           <GridLinkAction
             key={1}
             label="View"
@@ -201,22 +197,25 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             showInMenu
             to={`/users/${props.options?.kind}/${params.row._id}`}
           />,
-          <GridLinkAction
-            key={2}
-            label="Edit"
-            icon={<EditIcon />}
-            showInMenu
-            to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
-          />,
-          <GridLinkAction
-            key={3}
-            label="Delete"
-            icon={<DeleteIcon />}
-            showInMenu
-            onClick={() => {
-              execDelete(params.row._id);
-            }}
-          />,
+          (hasPermissions(['MANAGE_WORKER']) && (
+            <GridLinkAction
+              key={2}
+              label="Edit"
+              icon={<EditIcon />}
+              showInMenu
+              to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+            />)),
+          (hasPermissions(['MANAGE_WORKER']) && (
+            <GridLinkAction
+              key={3}
+              label="Delete"
+              icon={<DeleteIcon />}
+              showInMenu
+              onClick={() => {
+                execDelete(params.row._id);
+              }}
+            />
+          )),
           <GridLinkAction
             key={4}
             label="Remarks"
@@ -226,7 +225,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               assignRemark(params.row._id);
             }}
           />,
-          (props.options?.status != 'reject' && (
+          (props.options?.status != 'reject' && hasPermissions(['MANAGE_WORKER']) && (
             (params.row.status == UserLifeCycleStates.ACTIVE ? (
               <GridLinkAction
                 key={5}
@@ -250,13 +249,13 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             ))
           )),
           hasPermissions(['ADMIN_ACCESS']) &&
-            <GridLinkAction
-              key={6}
-              label="Manage Permissions"
-              icon={<BallotIcon />}
-              showInMenu
-              to={`/users/${params.row._id}/permission_manager`}
-            />,
+          <GridLinkAction
+            key={6}
+            label="Manage Permissions"
+            icon={<BallotIcon />}
+            showInMenu
+            to={`/users/${params.row._id}/permission_manager`}
+          />,
           false,
         ].filter((action) => action !== false) as JSX.Element[]
       ),
@@ -273,15 +272,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       },
     },
     // { field: '_id', headerName: 'SI No', width: 70 },
-    { field: `${props.options?.kind}Code`,
-      headerName: `${props.options?.kind == 'staff'?'Staff':'Worker'} Code`,
+    {
+      field: `${props.options?.kind}Code`,
+      headerName: `${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`,
       width: 120,
       headerAlign: 'center',
       renderHeader: () => (
         <b>
-          {`${props.options?.kind == 'staff'?'Staff':'Worker'} Code`}
+          {`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}
         </b>
-      ) },
+      ),
+    },
     {
       field: 'firstName',
       align: 'center',
@@ -326,7 +327,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           {'Sub-Division'}
         </b>
       ),
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails.divisionHistory.length-1].subDivision?.name,
+      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails.divisionHistory.length - 1].subDivision?.name,
     },
     //
     //   field: 'highestQualification',
@@ -399,6 +400,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       ),
       valueGetter: (params) => params.row.basicDetails.email,
     },
+    {
+      field: 'Reason',
+      width: 180,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Reason'}
+        </b>
+      ),
+      valueGetter: (params) => params.row.officialDetails.reasonForDeactivation,
+    },
     // {
     //   field: 'PANnumber',
     //   headerName: 'PAN Number',
@@ -443,29 +456,29 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           {remarks.length > 0 ? remarks.map((remark) => (
             // eslint-disable-next-line max-len
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
+          )) : 'No Data Found '}
         </DialogContent>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (remark.remark) {
               WorkersServices.addRemarks(remark)
-        .then((res) => {
-          const x = [...remarks, res.data];
-          console.log('user', x);
+                .then((res) => {
+                  const x = [...remarks, res.data];
 
-          setRemarks((remarks) => [...remarks, res.data]);
-          setRemark((remark) => ({
-            ...remark,
-            remark: '',
-          }));
-        })
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+
+                  setRemarks((remarks) => [...remarks, res.data]);
+                  setRemark((remark) => ({
+                    ...remark,
+                    remark: '',
+                  }));
+                })
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                });
             }
           }}
         >
@@ -478,7 +491,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               onChange={(e) =>
                 setRemark((remark) => ({
                   ...remark,
-                  user: selectedUser??'',
+                  user: selectedUser ?? '',
                   remark: e.target.value,
                 }))
               }
@@ -502,7 +515,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               }}
               sx={{ mx: '1rem', py: 1.7 }}
             >
-            close
+              close
             </Button>
           </DialogActions>
         </form>

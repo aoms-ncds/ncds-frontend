@@ -4,12 +4,17 @@ import DashboardCardButton from '../../components/DashboardCardButton';
 import WorkerServices from './extras/WorkersServices';
 import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
 import CommonPageLayout from '../../components/CommonPageLayout';
+import { useAuth } from '../../hooks/Authentication';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
+  const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
 
+  const user = useAuth();
+  console.log(user);
   useEffect(() => {
     WorkerServices.getCount()
       .then((res) => setWorkerCount(res.data))
@@ -26,6 +31,11 @@ const WorkersDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.INACTIVE })
+      .then((res) => setDeactivateWorkersCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
@@ -34,14 +44,18 @@ const WorkersDashboard = () => {
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#003049" targetRoute="/workers/manage" />
         </Grid>
-        <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="green" targetRoute="/workers/approve" />
-        </Grid>
+        <PermissionChecks permissions={['MANAGE_WORKER']} granted={
+          <Grid item xs={12} md={4} xl={3}>
+            <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="green" targetRoute="/workers/approve" />
+          </Grid>
+        }
+        />
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/reject" />
         </Grid>
+
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={rejectedWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
+          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={deactivateWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
         </Grid>
       </Grid>
     </CommonPageLayout>
