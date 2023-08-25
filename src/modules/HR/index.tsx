@@ -5,6 +5,7 @@ import DashboardCardButton from '../../components/DashboardCardButton';
 import StaffServices from './extras/StaffServices';
 import WorkerServices from '../Workers/extras/WorkersServices';
 import WorkerLifeCycleStates from '../Workers/extras/WorkerLifeCycleStates';
+import ButtonCard from '../../components/ButtonCard';
 
 const HRDashboard = () => {
   const [staffCount, setStaffCount] = useState<number | null>(null);
@@ -32,10 +33,10 @@ const HRDashboard = () => {
     <CommonPageLayout title="HR Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Manage Staff" secondaryText={staffCount ? staffCount?.toString() : undefined} color="#002366" targetRoute="/hr/manage" />
+          <ButtonCard secondaryText="Manage Staff" color={'#75C2F6'} count={staffCount ? staffCount?.toString() : undefined} targetRoute="/hr/manage" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#6d579a" targetRoute="/workers" />
+          <ButtonCard secondaryText="Manage Workers" count={workersCount?.toString()} color="#75C2F6" targetRoute="/workers" />
         </Grid>
         {/* <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Worker" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
