@@ -8,7 +8,7 @@ import StaffServices from '../../HR/extras/StaffServices';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { useAuth } from '../../../hooks/Authentication';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
-import DashBoardCard from '../../FR/components/DashBordCard';
+import DashBoardCard from '../../FR/components/DashBoardCard';
 
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
