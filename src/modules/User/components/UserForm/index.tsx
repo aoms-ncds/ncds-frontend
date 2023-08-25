@@ -155,7 +155,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               <StepLabel>Offsprings details</StepLabel>
             </Step>
           )}
-          {((props.options?.kind === 'worker' && props.value.status && UserLifeCycleStates.CREATED) || (props.options?.kind === 'staff')) && (
+          {((props.options?.kind === 'worker' && props.value.status &&
+          (props.value.status==UserLifeCycleStates.CREATED|| props.value.status==UserLifeCycleStates.ACTIVE)) ||
+          (props.options?.kind === 'staff')) && (
             <Step>
               <StepLabel>Support Details</StepLabel>
             </Step>
@@ -280,7 +282,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   if (props.value.basicDetails.martialStatus == 'Married') {
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
-                    if (props.value.status && UserLifeCycleStates.CREATED) {
+                    if (props.value.status && (props.value.status==UserLifeCycleStates.CREATED|| props.value.status==UserLifeCycleStates.ACTIVE)) {
                       setActiveStep((currentStep) => currentStep + 3);
                     } else {
                       submitForm(props.value);
@@ -365,7 +367,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (props.value.status === UserLifeCycleStates.CREATED) {
+                if (props.value.status === UserLifeCycleStates.CREATED||props.value.status === UserLifeCycleStates.ACTIVE) {
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   submitForm(props.value);
@@ -420,7 +422,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Button>
               </Grid> */}
 
-              {props.value.status === UserLifeCycleStates.CREATED ? (
+              {props.value.status === UserLifeCycleStates.CREATED||props.value.status === UserLifeCycleStates.ACTIVE ? (
                 <div
                   style={{
                     float: 'right',
