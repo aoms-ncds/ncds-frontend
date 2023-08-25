@@ -23,9 +23,9 @@ const App = () => {
           background: {
             default: prefersDarkMode ? '#121212' : '#e1e0e0',
           },
-          primary: {
-            main: '#c4161c',
-          },
+          // primary: {
+          //   main: '#c4161c',
+          // },
         },
         components: {
           MuiDrawer: {
