@@ -9,7 +9,7 @@ export default {
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  getAll: (conditions?: { status?: number }): Promise<StandardResponse<IROrder[]>> =>
+  getAll: (conditions?: { status?: number; sanctionedBank?: string }): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,
@@ -83,7 +83,8 @@ export default {
 
   sendNotifications: (name: string, id: string) => getStandardResponse<void>(axios.post(`/iro/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
-  getReconciliation: () => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation', { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+  getReconciliation: (conditions?: {sanctionedBank?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',
+    { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,
       IRODate: moment(IRO.IRODate),

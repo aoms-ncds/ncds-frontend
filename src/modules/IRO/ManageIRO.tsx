@@ -31,6 +31,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import { useAuth } from '../../hooks/Authentication';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -46,6 +47,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
+  const user= useAuth();
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -174,23 +176,52 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
 
+  const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
-    props.action == 'release' ?
-      IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+    if (props.action === 'release') {
+      if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'FCRA' })
         .then((res) => {
-          setIROrder(res.data);
-        }) :
-      //         .catch((res) => {
-      // console.log(res)
-      //         }):
-      IROServices.getAll()
+          setIROrder(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+      if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
+        .then((res) => {
+          setIROrder(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Personal Bank' })
+        .then((res) => {
+          setIROrder(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS ) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
         .then((res) => {
           setIROrder(res.data);
         });
-    // .catch((res) => {
-    //   console.log(res)
-    //           })
+      }
+    } else {
+      IROServices.getAll()
+      .then((res) => {
+        setIROrder(res.data);
+      });
+    }
   }, [openRelease, attachment, addSignature]);
+
+  // Rest of your component code...
+
 
   useEffect(() => {
     if (selectedIRO._id != '') {

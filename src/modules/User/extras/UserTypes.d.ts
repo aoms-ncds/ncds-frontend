@@ -34,6 +34,11 @@ declare global {
     READ_APPLICATION:boolean; // For reading applications
     WRITE_APPLICATION:boolean; // For adding and editing application details
     MANAGE_APPLICATION:boolean;// For approving Application
+
+    FCRA_ACCOUNTS_ACCESS:boolean;
+    LOCAL_ACCOUNT_ACCESS:boolean;
+    PERSONAL_ACCOUNTS_ACCESS:boolean;
+
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {
