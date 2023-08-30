@@ -104,7 +104,7 @@ const MinimalModuleDataAnalytics = () => {
                 secondaryText='Divisions'
                 count={divisionsCount?.toString()}
                 color={'#75C2F6'}
-                targetRoute="/divisions/"
+                targetRoute={`/divisions/details/${(user.user as User).division}`}
                 // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               />
@@ -114,7 +114,7 @@ const MinimalModuleDataAnalytics = () => {
 
               <DashBoardCard secondaryText='Division'
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={curDivision?.toString()}
-                color="#e12901" targetRoute={`/divisions/details/${(user.user as User).division}`} />
+                color="#e12901" targetRoute="/divisions/" />
 
             </Grid>
           }
