@@ -569,6 +569,15 @@ const UserBasicDetailsForm = (
           });
           return resp;
         }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            aadhaar: {
+              ...props.value.aadhaar,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
@@ -605,6 +614,15 @@ const UserBasicDetailsForm = (
             return res;
           });
           return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            aadhaar: {
+              ...props.value.aadhaar,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={(fileId: string) => {
           props.onChange({
