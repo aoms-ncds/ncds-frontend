@@ -133,7 +133,7 @@ const MinimalModuleDataAnalytics = () => {
                 count={subDivisionsCount?.toString()} color={'#75C2F6'} targetRoute="/divisions/" />
 
             </Grid> : <Grid item xs={6} md={3} xl={4}>
-              <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/subDivisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={subDivisionsCount?.toString()} color="#75C2F6" targetRoute={`/divisions/details/${(user.user as User).division}`} />
             </Grid>
 
