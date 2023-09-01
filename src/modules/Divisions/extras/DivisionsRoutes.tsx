@@ -11,10 +11,10 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/',
       element: <DivisionsPage />,
       private: true,
-      requiredAccessRights: ['READ_DIVISIONS'],
+      requiredAccessRights: ['WRITE_DIVISIONS'],
       showInDrawer: true,
       // icon: <ExtensionIcon />,
-      icon: <img src="/DivisionLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+      icon: <img src="/divisionLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Divisions',
