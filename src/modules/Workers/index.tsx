@@ -6,8 +6,6 @@ import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
-import { useAuth } from '../../hooks/Authentication';
-import PermissionChecks from '../User/components/PermissionChecks';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
