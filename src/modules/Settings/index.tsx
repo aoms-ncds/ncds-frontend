@@ -6,6 +6,7 @@ import DesignationService from './extras/DesignationService';
 import { useState, useEffect } from 'react';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import ChildSupportService from './extras/ChildSupportService';
+import ButtonCard from '../../components/ButtonCard';
 
 
 const SettingsDashboard = () => {
@@ -36,16 +37,16 @@ const SettingsDashboard = () => {
     <CommonPageLayout title="Settings">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Manage Languages" secondaryText={LanguageCount?.toString()} color="#ca3433" targetRoute="/settings/Languages" />
+          <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#75C2F6" targetRoute="/settings/Languages" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Manage Designation" secondaryText={DesignationCount?.toString()} color="#6d597a" targetRoute="/settings/Designation" />
+          <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#75C2F6" targetRoute="/settings/Designation" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Child support" secondaryText={ChildSupportCount?.toString()} color="#dd571c" targetRoute="/settings/ChildSupport" />
+          <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#75C2F6 " targetRoute="/settings/ChildSupport" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="E-Signature" color="#0D1282" targetRoute="/settings/Esignature" />
+          <DashboardCardButton primaryText="E-Signature" color="#75C2F6" targetRoute="/settings/Esignature" />
         </Grid>
       </Grid>
     </CommonPageLayout>

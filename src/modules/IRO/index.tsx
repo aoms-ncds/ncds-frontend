@@ -45,16 +45,16 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard targetRoute="/iro/manage" count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#033f63" />
+          <FRCountCard targetRoute="/iro/manage" count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#75C2F6" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard targetRoute="/iro/release_amount" count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#3f704d'} />
+          <FRCountCard targetRoute="/iro/release_amount" count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard targetRoute="/iro/reconciliation" count={reconciliationCount?.toString()} secondaryText={'Reconcilation'} color={'#fa8128'} />
+          <FRCountCard targetRoute="/iro/reconciliation" count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard targetRoute="/iro/closed" count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#ed2939'} />
+          <FRCountCard targetRoute="/iro/closed" count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#75C2F6'} />
         </Grid>
       </Grid>
       <br />
@@ -62,7 +62,7 @@ const IRODashboard = () => {
       <Grid container spacing={3}>
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Manage IRO" color="#003049" targetRoute="/iro/manage" />
+          <DashboardCardButton primaryText="Manage IRO" color="#75C2F6" targetRoute="/iro/manage" />
         </Grid>
 
         <PermissionChecks
@@ -70,17 +70,17 @@ const IRODashboard = () => {
           granted={(
             <>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Release Amount " color="green" targetRoute="/iro/release_amount" />
+                <DashboardCardButton primaryText="Release Amount " color="#75C2F6" targetRoute="/iro/release_amount" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Reconciliation IRO " color="orange" targetRoute="/iro/reconciliation" />
+                <DashboardCardButton primaryText="Reconciliation IRO " color="#75C2F6" targetRoute="/iro/reconciliation" />
               </Grid>
 
             </>
-          )}/>
+          )} />
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Closed IRO" color="#de2828" targetRoute="/iro/closed" />
+          <DashboardCardButton primaryText="Closed IRO" color="#75C2F6" targetRoute="/iro/closed" />
         </Grid>
       </Grid>
     </CommonPageLayout>

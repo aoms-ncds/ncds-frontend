@@ -38,34 +38,34 @@ const APPDashboard = () => {
     <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
-          <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#0a1172" />
+          <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#75C2F6" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#46458C'} />
+          <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#116A7B'} />
+          <AppCountCard targetRoute="/application/manage" count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#F24C3D'} />
+          <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#75C2F6'} />
         </Grid>
       </Grid>
       <br/>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#29cc39" targetRoute="/application/manage" />
+          <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#75C2F6" targetRoute="/application/manage" />
         </Grid>
         <PermissionChecks
           permissions={['MANAGE_APPLICATION']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application approval HR" color='#ec9706' secondaryText="" targetRoute="/application/hr_approve" />
+              <DashboardCardButton primaryText="Application approval HR" color='#75C2F6' secondaryText="" targetRoute="/application/hr_approve" />
             </Grid>)}/>
         <PermissionChecks
           permissions={['PRESIDENT_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application approval President" color='#ca3433' secondaryText="" targetRoute="/application/president_approve" />
+              <DashboardCardButton primaryText="Application approval President" color='#75C2F6' secondaryText="" targetRoute="/application/president_approve" />
             </Grid>)}/>
       </Grid>
     </CommonPageLayout>

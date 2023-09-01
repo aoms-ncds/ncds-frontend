@@ -1,11 +1,12 @@
 import React from 'react';
-import { Badge, Card, CardActionArea, Grid, CardContent, Typography, styled, IconButton, Box } from '@mui/material';
+import { Badge, Card, CardActionArea, Grid, CardContent, Typography, styled, IconButton, Box, Button, CardActions } from '@mui/material';
 import { Link } from 'react-router-dom';
+import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const DashBoardCard = (props: {
+const ButtonCard = (props: {
     count?: string;
     secondaryText: string;
     color: string;
@@ -49,7 +50,7 @@ const DashBoardCard = (props: {
           </Typography>
           <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {props.secondaryText}
-            <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> {/* Adjust the margin here */}
+            {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
           </Typography>
         </CardContent>
 
@@ -75,10 +76,32 @@ const DashBoardCard = (props: {
 
 
         )}
+        <CardActions>
+          {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}
+          <Button
+            variant="contained"
+            endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
+            sx={{
+              'ml': 'auto',
+              'color': 'black',
+              'bgcolor': 'white',
+              '&:hover': {
+                color: 'black',
+                bgcolor: 'white',
+              },
+              '&:active': {
+                color: 'black',
+                bgcolor: 'white',
+              },
+            }}
+          >
+            Go
+          </Button>
+        </CardActions>
       </CardActionArea>
     </Card>
   );
 };
 
 
-export default DashBoardCard;
+export default ButtonCard;

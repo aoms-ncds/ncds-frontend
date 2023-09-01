@@ -6,6 +6,7 @@ import WorkerLifeCycleStates from './extras/WorkerLifeCycleStates';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
+import ButtonCard from '../../components/ButtonCard';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
@@ -42,20 +43,20 @@ const WorkersDashboard = () => {
     <CommonPageLayout title="Workers Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Manage Workers" secondaryText={workersCount?.toString()} color="#003049" targetRoute="/workers/manage" />
+          <ButtonCard secondaryText="Manage Workers" count={workersCount?.toString()} color="#75C2F6" targetRoute="/workers/manage" />
         </Grid>
         <PermissionChecks permissions={['MANAGE_WORKER']} granted={
           <Grid item xs={12} md={4} xl={3}>
-            <DashboardCardButton primaryText="Approve New Workers" secondaryText={unapprovedWorkersCount?.toString()} color="green" targetRoute="/workers/approve" />
+            <ButtonCard secondaryText="Approve  Workers" count={unapprovedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/approve" />
           </Grid>
         }
         />
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Send Back workers" secondaryText={rejectedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/reject" />
+          <ButtonCard secondaryText="Send Back workers" count={rejectedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/reject" />
         </Grid>
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={deactivateWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
+          <ButtonCard secondaryText="Deactivated Workers" count={deactivateWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/deactivated" />
         </Grid>
       </Grid>
     </CommonPageLayout>
