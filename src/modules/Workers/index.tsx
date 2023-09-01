@@ -12,6 +12,7 @@ const WorkersDashboard = () => {
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
   const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
+  const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
 
   const user = useAuth();
   console.log(user);
