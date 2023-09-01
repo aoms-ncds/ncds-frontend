@@ -51,7 +51,7 @@ const IRODashboard = () => {
           <FRCountCard targetRoute="/iro/release_amount" count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard targetRoute="/iro/reconciliation" count={reconciliationCount?.toString()} secondaryText={'Reconcilation'} color={'#75C2F6'} />
+          <FRCountCard targetRoute="/iro/reconciliation" count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#75C2F6'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard targetRoute="/iro/closed" count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#75C2F6'} />
@@ -77,7 +77,7 @@ const IRODashboard = () => {
               </Grid>
 
             </>
-          )}/>
+          )} />
 
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" color="#75C2F6" targetRoute="/iro/closed" />
