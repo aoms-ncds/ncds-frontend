@@ -114,7 +114,7 @@ const MinimalModuleDataAnalytics = () => {
 
               <DashBoardCard secondaryText='Division'
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={curDivision?.toString()}
-                color="#e12901" targetRoute="/divisions/" />
+                color="#75C2F6" targetRoute="/divisions/" />
 
             </Grid>
           }
