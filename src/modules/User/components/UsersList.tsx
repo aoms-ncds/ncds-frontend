@@ -400,6 +400,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       ),
       valueGetter: (params) => params.row.basicDetails.email,
     },
+    {
+      field: 'Reason',
+      width: 180,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (
+        <b>
+          {'Reason'}
+        </b>
+      ),
+      valueGetter: (params) => params.row.officialDetails.reasonForDeactivation,
+    },
     // {
     //   field: 'PANnumber',
     //   headerName: 'PAN Number',

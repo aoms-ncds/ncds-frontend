@@ -11,6 +11,7 @@ const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
+  const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
   const user = useAuth();
   console.log(user);
   useEffect(() => {
@@ -26,6 +27,11 @@ const WorkersDashboard = () => {
       });
     WorkerServices.getCount({ status: WorkerLifeCycleStates.REJECTED })
       .then((res) => setRejectedWorkersCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.INACTIVE })
+      .then((res) => setDeactivateWorkersCount(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -48,7 +54,7 @@ const WorkersDashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={rejectedWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
+          <DashboardCardButton primaryText="Deactivated Workers" secondaryText={deactivateWorkersCount?.toString()} color="red" targetRoute="/workers/deactivated" />
         </Grid>
       </Grid>
     </CommonPageLayout>
