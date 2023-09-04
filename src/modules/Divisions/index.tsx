@@ -8,8 +8,6 @@ import PermissionChecks from '../User/components/PermissionChecks';
 const DivisionsDashboardPage = () => {
   return (
     <CommonPageLayout title="Divisions Dashboard">
-      <br />
-      <br />
       <Card style={{ height: '70vh', width: '100%' }}>
         <Grid container spacing={2} >
           <Grid item xs={12} sx={{ px: 2 }}>

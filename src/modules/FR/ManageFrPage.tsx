@@ -317,8 +317,6 @@ const ManageFrPage = () => {
           <>
             <Grid item xs={12} lg={6}>
 
-              <br />
-              <br />
               <Grid item xs={12} md={12}>
                 <Card style={{ height: '80vh', width: '100%' }}>
                   <Grid container spacing={2} >
