@@ -185,6 +185,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               }}
               component={Link}
               to="/notification"
+              target='_blank'
             >
               <Badge badgeContent={notificationsCount} color="error">
                 <NotificationsIcon />
