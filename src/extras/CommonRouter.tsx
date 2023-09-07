@@ -17,6 +17,7 @@ import UserServices from '../modules/User/extras/UserServices';
 import PermissionChecks from '../modules/User/components/PermissionChecks';
 import UnauthorizedPage from '../modules/User/UnauthorizedPage';
 import notificationPageRoutes from '../modules/Notification/extras/NotificationRouter';
+import testsPageRoutes from '../modules/Tests/extras/TestRoutes';
 
 export const allModuleRoutes = [
   homePageRoutes,
@@ -27,6 +28,7 @@ export const allModuleRoutes = [
   frPageRoutes,
   iroPageRoutes,
   // testPageRoutes,
+  testsPageRoutes,
   // samplesPageRoutes,
   applicationRoutes,
   notificationPageRoutes,

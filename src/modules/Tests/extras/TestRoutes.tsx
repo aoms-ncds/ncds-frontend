@@ -28,7 +28,7 @@ const testsPageRoutes: ModuleRoute = {
       path: '/ForgotPasswordForm',
       element: <ForgotPasswordFormPage />,
       private: false,
-      requiredAccessRights: ['READ_ACCESS'],
+      requiredAccessRights: [],
       showInDrawer: false,
     },
   ],
