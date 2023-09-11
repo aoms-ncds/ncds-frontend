@@ -10,7 +10,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
-import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;

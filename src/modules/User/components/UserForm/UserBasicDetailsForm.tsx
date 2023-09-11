@@ -30,6 +30,8 @@ const UserBasicDetailsForm = (
   const [showAadhaarUploader, setShowAadhaarUploader] = useState(false);
   const [showVoterIdUploader, setShowVoterIdUploader] = useState(false);
 
+  const [emailError, setEamilError] = useState<string|null>(null);
+
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   useEffect(() => {
     LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE }).then((res) => setLanguages(res.data));
@@ -245,7 +247,7 @@ const UserBasicDetailsForm = (
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField
+        {/* <TextField
           label="Email"
           type="email"
           value={props.value.email}
@@ -254,7 +256,31 @@ const UserBasicDetailsForm = (
           fullWidth
           InputProps={{ required: true }}
           required
+
+        /> */}
+        <TextField
+          label="Email"
+          type="email"
+          value={props.value.email}
+          onChange={(e) => {
+            const inputEmail = e.target.value;
+            props.onChange({ ...props.value, email: inputEmail });
+
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!emailPattern.test(inputEmail)) {
+              setEamilError('Please enter a valid email');
+            } else {
+              setEamilError(null);
+            }
+          }}
+          error={Boolean(emailError)}
+          helperText={emailError}
+          variant={props.options?.textField?.variant}
+          fullWidth
+          InputProps={{ required: true }}
+          required
         />
+
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
