@@ -10,6 +10,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
+import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -105,6 +106,7 @@ const Profile = () => {
       WorkersServices.getById(userId)
         .then((res) => {
           setUser(res.data);
+          console.log(res.data);
         })
         .catch(() => { });
     }
@@ -351,7 +353,10 @@ const Profile = () => {
               </Grid>
               <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.insurance?.impactNo} </Grid>
+
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
+
+
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.insurance?.nominee} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.insurance?.relation} </Grid>
             </Grid>

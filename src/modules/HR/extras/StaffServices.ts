@@ -80,6 +80,10 @@ export default {
           dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
         })),
       },
+      insurance: {
+        ...data.insurance,
+        dojInsurance: data.insurance.dojInsurance ? moment(data.insurance.dojInsurance) : undefined,
+      },
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
