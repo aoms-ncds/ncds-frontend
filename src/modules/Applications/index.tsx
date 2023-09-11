@@ -38,16 +38,16 @@ const APPDashboard = () => {
     <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
-          <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#75C2F6" />
+          <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#1093eb" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#75C2F6'} />
+          <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#1093eb'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#75C2F6'} />
+          <AppCountCard targetRoute="/application/manage" count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#1093eb'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#75C2F6'} />
+          <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#1093eb'} />
         </Grid>
       </Grid>
       <br/>

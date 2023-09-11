@@ -1,10 +1,11 @@
-import { Card, CardActionArea, CardContent, Typography, styled } from '@mui/material';
+import { Badge, Card, CardActionArea, CardContent, Grid, Typography, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FRCountCard = (props: { count?: string; secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string }) => {
+const FRCountCard = (props: { count?: string; badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
+ secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string; }) => {
   return (
     <Card
       onClick={props.onClick}
@@ -33,11 +34,32 @@ const FRCountCard = (props: { count?: string; secondaryText: string; color: stri
         }}
       >
         <CardContent>
-          <Typography variant="h5">{props.count}</Typography>
-          <Typography variant="h6" align="right">
+          <Typography variant="h5"></Typography>
+          <Typography variant="h6" align="center">
             {props.secondaryText}
           </Typography>
         </CardContent>
+        {props.count !== undefined && (
+          <Grid style={{ position: 'absolute', top: 0, right: 0 }}>
+            <Badge
+              max={9999}
+              badgeContent={props.count}
+              color={props.badgeColor || 'error'}
+              showZero
+              sx={{
+                '& .MuiBadge-badge': {
+                  width: '3rem',
+                  height: '3rem',
+                  fontSize: '1.5rem',
+                  borderRadius: '50%',
+                },
+              }}
+
+            ></Badge>
+          </Grid>
+
+
+        )}
       </CardActionArea>
     </Card>
   );

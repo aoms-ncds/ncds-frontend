@@ -56,8 +56,6 @@ const DeactivatedWorkersPage = () => {
     <CommonPageLayout title="Deactivated Workers">
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <br />
-          <br />
         </Grid>
       </Grid>
       <Card>

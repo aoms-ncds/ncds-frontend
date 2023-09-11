@@ -372,8 +372,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Button>
         )}
       />
-      <br />
-      <br />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
           <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
@@ -475,8 +473,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         }}
       />
 
-      <br />
-      <br />
+
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
           <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />

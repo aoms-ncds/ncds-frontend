@@ -199,8 +199,6 @@ const ClosedIRO = () => {
   }, []);
   return (
     <CommonPageLayout title="Closed IRO">
-      <br />
-      <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '75vh', width: '100%' }}>
           <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
