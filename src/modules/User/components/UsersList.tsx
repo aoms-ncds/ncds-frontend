@@ -205,7 +205,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               showInMenu
               to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />)),
-          (hasPermissions(['MANAGE_WORKER']) && (
+          (hasPermissions(['ADMIN_ACCESS']) && (
             <GridLinkAction
               key={3}
               label="Delete"
