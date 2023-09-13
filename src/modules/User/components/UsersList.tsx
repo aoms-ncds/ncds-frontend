@@ -55,6 +55,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     });
     StaffOrWorkerServices.deactivate(id, reason )
       .then((res) => {
+        console.log(reason);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
