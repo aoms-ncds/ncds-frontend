@@ -85,5 +85,9 @@ export default {
     })),
 
   activate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/activate`, { headers: { ...getAuthHeader() } })),
-  deactivate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`, { headers: { ...getAuthHeader() } })),
+  // deactivate: (id: string) => getStandardResponse<Staff>(axios.patch(`/hr/staffs/${id}/deactivate`, { headers: { ...getAuthHeader() } })),
+
+  deactivate: (id: string, remark: string) => getStandardResponse<Staff>(
+    axios.patch(`/hr/staffs/${id}/deactivate`, { remark }, { headers: { ...getAuthHeader() } })),
+
 };

@@ -40,11 +40,13 @@ const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
         if (typeof newValue === 'string') {
           setValue({
             name: newValue,
+            status: 0,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
             name: newValue.inputValue,
+            status: 0,
           });
         } else {
           setValue(newValue);
@@ -60,6 +62,7 @@ const DepartmentsDropdown = (props: DepartmentsDropdownProps) => {
           filtered.push({
             inputValue,
             name: `Add "${inputValue}"`,
+            status: 0,
           });
         }
 

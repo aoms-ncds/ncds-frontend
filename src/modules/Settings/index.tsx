@@ -48,6 +48,9 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText="E-Signature" color="#75C2F6" targetRoute="/settings/Esignature" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="Department" color="#75C2F6" targetRoute="/settings/Department" />
+        </Grid>
       </Grid>
     </CommonPageLayout>
   );
