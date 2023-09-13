@@ -14,11 +14,13 @@ const Designation = () => {
     name: '',
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
+
   const removeDesignation = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Designation',
       variant: 'info',
     });
+
     DesignationService.delete(id)
       .then((res) => {
         if (Designation) {
@@ -41,20 +43,13 @@ const Designation = () => {
         });
       });
   };
+
   const handleDeleteCancel = () => {
     setConfirmDelete(false);
     setDesignationToDelete(null);
   };
 
   const columns: GridColDef<IDesignation>[] = [
-    // {
-    //   field: 'SI',
-    //   headerName: 'SI',
-    //   align: 'left',
-    //   width: 150,
-    //   headerAlign: 'center',
-    //   renderCell: (index) => index.api.getRowIndexRelativeToVisibleRows(index.tabIndex) + 1,
-    // },
     {
       field: 'name',
       headerName: 'Name',
@@ -165,6 +160,7 @@ const Designation = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {

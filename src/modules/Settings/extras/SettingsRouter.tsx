@@ -4,6 +4,7 @@ import Languages from '../Languages';
 import Designation from '../Designation';
 import ChildSupport from '../ChildSupport';
 import ESignature from '../ESignature';
+import Department from '../Department';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -67,6 +68,15 @@ const settingsRoutes: ModuleRoute = {
       title: 'ESignature',
       path: '/Esignature',
       element: <ESignature/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Department',
+      path: '/Department',
+      element: <Department/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

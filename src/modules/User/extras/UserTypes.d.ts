@@ -124,6 +124,7 @@ declare global {
     totalNoOfYearsInMinistry?: number;
     typeOfFamily?: TypeOfFamily;
     withChurch?: boolean;
+    department?: Department;
   }
 
   interface Insurance {

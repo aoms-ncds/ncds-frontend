@@ -2,6 +2,7 @@ import { Autocomplete, FormControl, FormControlLabel, FormLabel, Grid, Radio, Ra
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import DesignationServices from '../../../HR/extras/DesignationServices';
+import DepartmentService from '../../../Settings/extras/DepartmentService';
 
 const NewSupportDetailsForm = (
   props: FormComponentProps<
@@ -14,11 +15,24 @@ const NewSupportDetailsForm = (
   const [designations, setDesignations] = useState<IDesignation[] | null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);
 
+  const [department, setDepartment] = useState<Department[] | null>(null);
+  const [departmentFetchError, setDepartmentFetchError] = useState<string | false>(false);
+
+
   useEffect(() => {
     DesignationServices.getAll()
       .then((res) => setDesignations(res.data))
       .catch((error) => {
         setDesignationsFetchError(error.message);
+        enqueueSnackbar({ variant: 'error', message: error.message });
+      });
+  }, []);
+
+  useEffect(() => {
+    DepartmentService.getAll()
+      .then((res) => setDepartment(res.data))
+      .catch((error) => {
+        setDepartmentFetchError(error.message);
         enqueueSnackbar({ variant: 'error', message: error.message });
       });
   }, []);
@@ -37,6 +51,26 @@ const NewSupportDetailsForm = (
               label="Designation"
               disabled={designations === null}
               helperText={designationsFetchError || (designations === null && 'Loading...')}
+              variant={props.options?.textField.variant}
+              fullWidth
+              required
+            />
+          )}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
+          options={department ?? []}
+          value={props.value?.department}
+          onChange={(e, newValue) => props.onChange({ ...props.value, department: newValue ?? undefined })}
+          getOptionLabel={(option) => option.name}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Department"
+              disabled={department === null}
+              helperText={departmentFetchError || (department === null && 'Loading...')}
               variant={props.options?.textField.variant}
               fullWidth
               required

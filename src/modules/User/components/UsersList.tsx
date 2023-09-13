@@ -1,30 +1,32 @@
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from './PermissionChecks';
-import moment from 'moment';
 import { useState } from 'react';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active' }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [rowID, setRowID] = useState<string>('');
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
-
 
   const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
@@ -46,13 +48,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
 
-  const deactivateWorker = (id: string) => {
+  const deactivateWorker = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
     });
-    StaffOrWorkerServices.deactivate(id)
+    StaffOrWorkerServices.deactivate(id, reason)
       .then((res) => {
+        console.log(reason);
         if (props.value) {
           const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
           props.onChange(newWorkerRequests);
@@ -122,7 +125,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //   />,
   // ];
   const columns: GridColDef<StaffOrWorker>[] = [
-
     {
       field: 'actions',
       type: 'actions',
@@ -187,7 +189,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       //     ]}
       //   />
       // ),
-      getActions: (params: GridRowParams) => (
+      getActions: (params: GridRowParams) =>
         [
 
           <GridLinkAction
@@ -215,17 +217,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 execDelete(params.row._id);
               }}
             />
-          )),
-          <GridLinkAction
-            key={4}
-            label="Remarks"
-            icon={<EditNoteIcon />}
-            showInMenu
-            onClick={() => {
-              assignRemark(params.row._id);
-            }}
-          />,
-          (props.options?.status != 'reject' && hasPermissions(['MANAGE_WORKER']) && (
+          ),
+            <GridLinkAction
+              key={4}
+              label="Remarks"
+              icon={<EditNoteIcon />}
+              showInMenu
+              onClick={() => {
+                assignRemark(params.row._id);
+              }}
+            />,
+            props.options?.status != 'reject' &&
+            hasPermissions(['MANAGE_WORKER']) &&
             (params.row.status == UserLifeCycleStates.ACTIVE ? (
               <GridLinkAction
                 key={5}
@@ -233,7 +236,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 icon={<NoAccountsIcon />}
                 showInMenu
                 onClick={() => {
-                  deactivateWorker(params.row._id);
+                  setRowID(params.row._id);
+                  setReasonDialog(true);
                 }}
               />
             ) : (
@@ -246,20 +250,10 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                   activateWorker(params.row._id);
                 }}
               />
-            ))
-          )),
-          hasPermissions(['ADMIN_ACCESS']) &&
-          <GridLinkAction
-            key={6}
-            label="Manage Permissions"
-            icon={<BallotIcon />}
-            showInMenu
-            to={`/users/${params.row._id}/permission_manager`}
-          />,
-          false,
-        ].filter((action) => action !== false) as JSX.Element[]
-      ),
-
+            )),
+            hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
+            false,
+        ].filter((action) => action !== false) as JSX.Element[],
     },
     {
       field: 'imageURL',
@@ -277,44 +271,27 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       headerName: `${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`,
       width: 120,
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}
-        </b>
-      ),
+      renderHeader: () => <b>{`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}</b>,
     },
     {
       field: 'firstName',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'First Name'}
-        </b>
-      ),
+      renderHeader: () => <b>{'First Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.firstName,
-
     },
     {
       field: 'lastName',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'Last Name'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Last Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'division',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'Division'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Division'}</b>,
       valueGetter: (params) => params.row.division?.details.name,
     },
     {
@@ -322,11 +299,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 130,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'Sub-Division'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails.divisionHistory.length - 1].subDivision?.name,
     },
     //
@@ -358,11 +331,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 130,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'Designation'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Designation'}</b>,
       valueGetter: (params) => params.row.supportDetails?.designation?.name,
     },
     {
@@ -370,11 +339,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 130,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (
-        <b>
-          {'Mobile Number'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Mobile Number'}</b>,
       valueGetter: (params) => params.row.basicDetails.phone,
     },
     // {
@@ -393,11 +358,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 180,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Email Id'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Email Id'}</b>,
       valueGetter: (params) => params.row.basicDetails.email,
     },
     {
@@ -405,11 +366,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 180,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (
-        <b>
-          {'Reason'}
-        </b>
-      ),
+      renderHeader: () => <b>{'Reason'}</b>,
       valueGetter: (params) => params.row.officialDetails.reasonForDeactivation,
     },
     // {
@@ -442,21 +399,25 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '66vh', width: '100%' }}>
-          <DataGrid
-            rows={props.value ?? []}
-            columns={columns}
-            getRowId={(row) => row._id}
-            loading={props.value === null}
-          />
+          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
         </Card>
       </Grid>
+
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
-          {remarks.length > 0 ? remarks.map((remark) => (
-            // eslint-disable-next-line max-len
-            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )) : 'No Data Found '}
+          {remarks.length > 0 ?
+            remarks.map((remark) => (
+              // eslint-disable-next-line max-len
+              <MessageItem
+                key={remark._id}
+                sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                time={remark.updatedAt}
+                body={remark.remark}
+                isSent={true}
+              />
+            )) :
+            'No Data Found '}
         </DialogContent>
         <form
           onSubmit={(e) => {
@@ -465,7 +426,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               WorkersServices.addRemarks(remark)
                 .then((res) => {
                   const x = [...remarks, res.data];
-
 
                   setRemarks((remarks) => [...remarks, res.data]);
                   setRemark((remark) => ({
@@ -498,8 +458,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton type='submit'
-                    >
+                    <IconButton type="submit">
                       <SendIcon />
                     </IconButton>
                   </InputAdornment>
@@ -519,6 +478,48 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <Autocomplete<string>
+            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+            value={reasonForDeactivation}
+            onChange={(e, selectedReason) => {
+              setReasonForDeactivation(selectedReason);
+            }}
+            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              (false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (reasonForDeactivation) {
+                deactivateWorker(rowID, reasonForDeactivation);
+              }
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+
+        </DialogActions>
       </Dialog>
     </>
   );
