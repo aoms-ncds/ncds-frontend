@@ -136,7 +136,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       <Container maxWidth="md">
         <Stepper activeStep={activeStep}>
           <Step>
-            <StepLabel>Basic Details</StepLabel>
+            <a>Basic Details</a>
           </Step>
           <Step>
             <StepLabel>Official Details</StepLabel>
@@ -230,6 +230,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     InputProps={{
                       readOnly: true,
                       disabled: true,
+                    }}
+                    InputLabelProps={{
+                      shrink: Boolean((props.value as CreatableStaff).staffCode),
                     }}
                     fullWidth
                   />
