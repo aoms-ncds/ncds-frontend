@@ -156,8 +156,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             </Step>
           )}
           {((props.options?.kind === 'worker' && props.value.status &&
-          (props.value.status==UserLifeCycleStates.CREATED|| props.value.status==UserLifeCycleStates.ACTIVE)) ||
-          (props.options?.kind === 'staff')) && (
+            (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
+            (props.options?.kind === 'staff')) && (
             <Step>
               <StepLabel>Support Details</StepLabel>
             </Step>
@@ -231,6 +231,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       readOnly: true,
                       disabled: true,
                     }}
+                    InputLabelProps={{
+                      shrink: Boolean((props.value as CreatableStaff).staffCode),
+                    }}
                     fullWidth
                   />
                 </Grid>
@@ -272,7 +275,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               </div>
             </form>
           )}
-          { activeStep === 1 && (
+          {activeStep === 1 && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -280,7 +283,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   if (props.value.basicDetails.martialStatus == 'Married') {
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
-                    if (props.value.status && (props.value.status==UserLifeCycleStates.CREATED|| props.value.status==UserLifeCycleStates.ACTIVE)) {
+                    if (props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) {
                       setActiveStep((currentStep) => currentStep + 3);
                     } else {
                       submitForm(props.value);
@@ -365,7 +368,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (props.value.status === UserLifeCycleStates.CREATED||props.value.status === UserLifeCycleStates.ACTIVE) {
+                if (props.value.status === UserLifeCycleStates.CREATED || props.value.status === UserLifeCycleStates.ACTIVE) {
                   setActiveStep((currentStep) => currentStep + 1);
                 } else {
                   submitForm(props.value);
@@ -420,7 +423,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Button>
               </Grid> */}
 
-              {props.value.status === UserLifeCycleStates.CREATED||props.value.status === UserLifeCycleStates.ACTIVE ? (
+              {props.value.status === UserLifeCycleStates.CREATED || props.value.status === UserLifeCycleStates.ACTIVE ? (
                 <div
                   style={{
                     float: 'right',

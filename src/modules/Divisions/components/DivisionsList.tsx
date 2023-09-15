@@ -58,6 +58,7 @@ const DivisionsList = () => {
       type: 'string',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderCell: (props: any) => (
+
         <DropdownButton
           useIconButton={true}
           id="actions"
@@ -129,22 +130,28 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
-      renderCell: (props: any) => <p> {props.row.details.coordinator?.firstName}</p>,
+      renderCell: (props: any) => {
+        console.log(props, 'prop'); // Add this line to log the props data
+        return <p>{props.row.details.coordinator?.name.basicDetails.firstName}</p>;
+      },
+
       width: 140,
+
+
     },
     {
       field: 'coordinatorEmail',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.email}</p>,
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.name.basicDetails.email}</p>,
       width: 140 },
     {
       field: 'coordinatorPhone',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.phone}</p>,
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.name.basicDetails.phone}</p>,
       width: 140 },
 
     {
