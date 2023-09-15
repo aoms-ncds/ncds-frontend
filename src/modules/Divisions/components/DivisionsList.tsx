@@ -131,7 +131,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
       renderCell: (props: any) => {
-        console.log(props, 'prop'); // Add this line to log the props data
+        // console.log(props, 'prop'); // Add this line to log the props data
         return <p>{`${props.row.details.coordinator?.name.basicDetails.firstName??''} ${props.row.details.coordinator?.name.basicDetails.lastName??''}`}</p>;
       },
 
