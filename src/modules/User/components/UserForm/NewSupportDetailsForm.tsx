@@ -9,7 +9,7 @@ const NewSupportDetailsForm = (
     SupportDetails,
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
-       kind: UserKind;
+      kind: UserKind;
     }
   >,
 ) => {
@@ -60,48 +60,26 @@ const NewSupportDetailsForm = (
         />
       </Grid>
 
-      {props.options?.kind== 'worker' ? (
 
-        <Grid item xs={12} md={6} lg={4}>
-          <Autocomplete
-            options={department ?? []}
-            value={props.value?.department}
-            onChange={(e, newValue) => props.onChange({ ...props.value, department: newValue ?? undefined })}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Department"
-                disabled={department === null}
-                helperText={departmentFetchError || (department === null && 'Loading...')}
-                variant={props.options?.textField.variant}
-                fullWidth
-
-              />
-            )}
-          />
-        </Grid>
-      ):
-        <Grid item xs={12} md={6} lg={4}>
-          <Autocomplete
-            options={department ?? []}
-            value={props.value?.department}
-            onChange={(e, newValue) => props.onChange({ ...props.value, department: newValue ?? undefined })}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Department"
-                disabled={department === null}
-                helperText={departmentFetchError || (department === null && 'Loading...')}
-                variant={props.options?.textField.variant}
-                fullWidth
-                required
-              />
-            )}
-          />
-        </Grid>
-      }
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
+          options={department ?? []}
+          value={props.value?.department}
+          onChange={(e, newValue) => props.onChange({ ...props.value, department: newValue ?? undefined })}
+          getOptionLabel={(option) => option.name}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Department"
+              disabled={department === null}
+              helperText={departmentFetchError || (department === null && 'Loading...')}
+              variant={props.options?.textField.variant}
+              fullWidth
+              required={props.options?.kind == 'staff'}
+            />
+          )}
+        />
+      </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
@@ -125,7 +103,7 @@ const NewSupportDetailsForm = (
           <RadioGroup
             aria-labelledby="TypeOfFamily"
             // defaultValue="missionar
-            value={props.value?.typeOfFamily??null}
+            value={props.value?.typeOfFamily ?? null}
             onChange={(e) => props.onChange({ ...props.value, typeOfFamily: e.target.value as TypeOfFamily | undefined })}
             name="TypeOfFamily"
             row
