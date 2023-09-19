@@ -9,6 +9,7 @@ const NewSupportDetailsForm = (
     SupportDetails,
     {
       textField: { variant: 'filled' | 'outlined' | 'standard' };
+      kind: UserKind;
     }
   >,
 ) => {
@@ -59,6 +60,7 @@ const NewSupportDetailsForm = (
         />
       </Grid>
 
+
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={department ?? []}
@@ -73,7 +75,7 @@ const NewSupportDetailsForm = (
               helperText={departmentFetchError || (department === null && 'Loading...')}
               variant={props.options?.textField.variant}
               fullWidth
-              required
+              required={props.options?.kind == 'staff'}
             />
           )}
         />
@@ -101,7 +103,7 @@ const NewSupportDetailsForm = (
           <RadioGroup
             aria-labelledby="TypeOfFamily"
             // defaultValue="missionar
-            value={props.value?.typeOfFamily??null}
+            value={props.value?.typeOfFamily ?? null}
             onChange={(e) => props.onChange({ ...props.value, typeOfFamily: e.target.value as TypeOfFamily | undefined })}
             name="TypeOfFamily"
             row
