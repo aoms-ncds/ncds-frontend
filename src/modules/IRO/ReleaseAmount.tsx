@@ -74,6 +74,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED && props.data[0]?.releaseAmount) {
         IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id).then((res) => {
+          console.log('getReleaseAmountById', res);
+
           setReleaseAmount(res.data);
         });
       }
@@ -93,7 +95,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       field: 'IRODate',
       headerName: 'IRO Date',
       width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      valueGetter: (params) => {
+        console.log('params.value', params.value);
+        return params.value?.format('DD/MM/YYYY');
+      },
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
