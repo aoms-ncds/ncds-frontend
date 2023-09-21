@@ -22,6 +22,7 @@ import {
   FormControl,
   Alert,
   Card,
+  DialogContent,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -41,6 +42,7 @@ import PermissionChecks from '../User/components/PermissionChecks';
 import { useNavigate, useParams } from 'react-router-dom';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { uncapitalizeObjectKeys } from '@mui/x-date-pickers/internals';
+import MessageItem from '../../components/MessageItem';
 
 
 const ViewIRO = () => {
@@ -166,6 +168,7 @@ const ViewIRO = () => {
 
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -430,6 +433,14 @@ const ViewIRO = () => {
                             color="info"
                             onClick={() => {
                               toggleOpenRemarks(true);
+                              IROServices.getAllRemarksById(IRO._id ??'')
+                              .then((res) => setRemarks(res.data??[]))
+                              .catch((error) => {
+                                enqueueSnackbar({
+                                  variant: 'error',
+                                  message: error.message,
+                                });
+                              });
                             }}
                           >
                             Remarks
@@ -641,6 +652,12 @@ const ViewIRO = () => {
       />
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0 ? remarks.map((remark) => (
+            // eslint-disable-next-line max-len
+            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+          )):'No Data Found '}
+        </DialogContent>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -648,6 +665,7 @@ const ViewIRO = () => {
             if (remark.remark) {
               IROServices.addRemarks(remark)
                 .then((res) => {
+                  setRemarks((remarks) => [...remarks, res.data]);
                   setRemark((remark) => ({
                     ...remark,
                     remark: '',
