@@ -14,7 +14,7 @@ interface FRFormPageProps {
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const { frID } = useParams();
-  const [requisition, setRequisition] = useState<CreatableFR>({
+  const [requisition, setRequisition] = useState<CreatableFR >({
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
@@ -26,6 +26,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     if (props.action === 'edit' || props.action === 'view') {
       FRServices.getById(frID as string)
   .then((res) => {
+    console.log(res.data, 'code');
     const convertedData: CreatableFR = {
       ...res.data,
       requestAmount: ['requestedAmount'],

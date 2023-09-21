@@ -39,10 +39,11 @@ import { useAuth } from '../../../hooks/Authentication';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
+  console.log(props, 'data for fr ');
 
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
-  const [workers, setWorkers] = useState<IWorker[]>();
+  const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
@@ -88,6 +89,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
         .then((res) => {
+          console.log(res.data, 'OWRKER');
           setWorkers(res.data);
         })
         .catch((res) => {
@@ -287,9 +289,9 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               {props.value.purpose === 'Worker' ? (
                 <>
                   <Grid item xs={12} md={6}>
-                    <Autocomplete
+                    <Autocomplete<IWorker | Staff>
                       value={props.value.purposeWorker ?? null}
-                      options={workers ?? []}
+                      options={(workers ?? [])}
                       getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -306,7 +308,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <Grid item xs={12} md={6}>
                     <TextField
                       label="Worker Code"
-                      value={props.value.purposeWorker?.workerCode}
+                      value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff|undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled
                       InputLabelProps={{
