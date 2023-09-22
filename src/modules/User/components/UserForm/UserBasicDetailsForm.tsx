@@ -41,7 +41,7 @@ const UserBasicDetailsForm = (
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
     if (props.value.martialStatus == 'Married' && props.options?.kind === 'staff') {
       UserServices.getAll({
-        $and: [{ status: CommonLifeCycleStates.ACTIVE }, { 'basicDetails.gender': props.value.gender == 'Male' ? 'Female' : props.value.gender == 'Female' ? 'Male' : 'Other' }],
+        $and: [{ status: CommonLifeCycleStates.ACTIVE }],
       })
         .then((res) => {
           setSpouseList(res.data);
@@ -50,7 +50,7 @@ const UserBasicDetailsForm = (
           console.log(res);
         });
     }
-  }, [props.value.gender, props.value.martialStatus]);
+  }, [props.value.martialStatus]);
 
 
   return (
