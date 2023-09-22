@@ -39,7 +39,6 @@ import { useAuth } from '../../../hooks/Authentication';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const navigate = useNavigate();
-  console.log(props, 'data for fr ');
 
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
@@ -89,7 +88,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
         .then((res) => {
-          console.log(res.data, 'OWRKER');
           setWorkers(res.data);
         })
         .catch((res) => {
@@ -308,7 +306,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <Grid item xs={12} md={6}>
                     <TextField
                       label="Worker Code"
-                      value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff|undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
+                      value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff | undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled
                       InputLabelProps={{
