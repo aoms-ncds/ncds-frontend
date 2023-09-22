@@ -197,14 +197,14 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   type="number"
                   value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
                   onChange={(e) =>
-                    Number(e.target.value)<= (releaseAmount.releaseAmount??0) &&
+                    Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount??0, min: 0 }}
+                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0 }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required

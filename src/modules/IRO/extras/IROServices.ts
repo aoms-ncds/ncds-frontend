@@ -16,6 +16,10 @@ export default {
         IRODate: moment(IRO.IRODate),
         createdAt: moment(IRO.createdAt),
         updatedAt: moment(IRO.updatedAt),
+        releaseAmount: IRO.releaseAmount ? {
+          ...IRO.releaseAmount,
+          transferredDate: moment(IRO.releaseAmount?.transferredDate),
+        }:undefined,
       })),
     ),
 
@@ -26,6 +30,7 @@ export default {
       releaseAmount: {
         ...data.releaseAmount,
         transferredDate: data.releaseAmount?.transferredDate ? moment(data.transferredDate) : null,
+
       },
       purposeWorker: {
         ...data.createdBy,
@@ -152,6 +157,7 @@ export default {
         createdAt: moment(iro.createdAt),
         updatedAt: moment(iro.updatedAt),
       })),
+      transferredDate: moment(releaseAmount?.transferredDate),
     })),
 
   addRemarks: (remark: CreatableRemark) =>

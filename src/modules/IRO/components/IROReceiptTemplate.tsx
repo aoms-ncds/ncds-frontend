@@ -104,8 +104,6 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-
-
   const sanctionedAmount = props.rowData && props.rowData?.sanctionedAmount;
   let sanctionedAmountWords = '';
 
