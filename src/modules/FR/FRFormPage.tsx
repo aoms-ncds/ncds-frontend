@@ -25,19 +25,19 @@ const FRFormPage = (props: FRFormPageProps) => {
     }
     if (props.action === 'edit' || props.action === 'view') {
       FRServices.getById(frID as string)
-  .then((res) => {
-    const convertedData: CreatableFR = {
-      ...res.data,
-      requestAmount: ['requestedAmount'],
-    };
-    setRequisition(convertedData);
-  })
-  .catch((error) => {
-    enqueueSnackbar({
-      variant: 'error',
-      message: error.message,
-    });
-  });
+        .then((res) => {
+          const convertedData: CreatableFR = {
+            ...res.data,
+            requestAmount: ['requestedAmount'],
+          };
+          setRequisition(convertedData);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          });
+        });
     }
   }, []);
   const addFR = async (requisition: CreatableFR) => {
@@ -91,11 +91,11 @@ const FRFormPage = (props: FRFormPageProps) => {
   const manageFR = async (requisition: CreatableFR) => {
     try {
       const operation =
-      requisition.status==FRLifeCycleStates.FR_APPROVED?'approve':
-        requisition.status==FRLifeCycleStates.REJECTED?'reject':
-          requisition.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS?'sendToAccounts':
-            requisition.status==FRLifeCycleStates.WAITING_FOR_PRESIDENT?'sendToPresident':'sendBack'
-      ;
+        requisition.status == FRLifeCycleStates.FR_APPROVED ? 'approve' :
+          requisition.status == FRLifeCycleStates.REJECTED ? 'reject' :
+            requisition.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS ? 'sendToAccounts' :
+              requisition.status == FRLifeCycleStates.WAITING_FOR_PRESIDENT ? 'sendToPresident' : 'sendBack'
+        ;
 
       enqueueSnackbar({
         // eslint-disable-next-line max-len
@@ -119,7 +119,7 @@ const FRFormPage = (props: FRFormPageProps) => {
           message: res.message,
           variant: 'success',
         });
-        if (operation=='approve') {
+        if (operation == 'approve') {
           enqueueSnackbar({
             message: 'IRO  CREATED',
             variant: 'success',
