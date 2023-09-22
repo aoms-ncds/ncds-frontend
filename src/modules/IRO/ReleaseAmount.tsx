@@ -74,8 +74,6 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED && props.data[0]?.releaseAmount) {
         IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id).then((res) => {
-          console.log('getReleaseAmountById', res);
-
           setReleaseAmount(res.data);
         });
       }
@@ -95,10 +93,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       field: 'IRODate',
       headerName: 'IRO Date',
       width: 130,
-      valueGetter: (params) => {
-        console.log('params.value', params.value);
-        return params.value?.format('DD/MM/YYYY');
-      },
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
@@ -202,14 +197,14 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   type="number"
                   value={releaseAmount?.transferredAmount != 0 ? releaseAmount?.transferredAmount : ''}
                   onChange={(e) =>
-                    Number(e.target.value)<= (releaseAmount.releaseAmount??0) &&
+                    Number(e.target.value) <= (releaseAmount.releaseAmount ?? 0) &&
                     setReleaseAmount(() => ({
                       ...releaseAmount,
                       transferredAmount: Number(e.target.value),
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount??0, min: 0 }}
+                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0 }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required
