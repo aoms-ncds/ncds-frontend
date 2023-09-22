@@ -59,7 +59,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
   const [open, setOpen] = useState(false);
   const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
-  const FRstatus=IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
+  const FRstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
   return (
     <div>
       <Container>
@@ -142,7 +142,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   <Grid item xs={12} md={6}>
                     <TextField
                       label="Worker Code"
-                      value={props.value.purposeWorker?.workerCode}
+                      value={props.value.purposeWorker?.kind === 'staff' ? (props.value.purposeWorker as Staff | undefined)?.staffCode : (props.value.purposeWorker as unknown as IWorker)?.workerCode}
                       fullWidth
                       disabled
                       InputLabelProps={{
@@ -252,7 +252,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                 <AttachmentIcon />
                               </IconButton>
                             </TableCell>
-                            <TableCell align="center">{index+1}</TableCell>
+                            <TableCell align="center">{index + 1}</TableCell>
                             <TableCell align="center">{item.mainCategory}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
@@ -277,7 +277,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   disabled
                 />
               </Grid>
-              {props.action === 'view' && props.value.status && (props.value.status>=FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status==FRLifeCycleStates.FR_CLOSED)? (
+              {props.action === 'view' && props.value.status && (props.value.status >= FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status == FRLifeCycleStates.FR_CLOSED) ? (
                 <>
                   <Grid item xs={12} md={6}>
                     {/* <Tooltip open={isFocused?true:false}
@@ -288,11 +288,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       label="Sanctioned Amount"
                       type={'number'}
                       value={props.value.sanctionedAmount}
-                      required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                      required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       disabled={!hasPermissions(['MANAGE_FR'])}
-                      onChange={(e) =>{
+                      onChange={(e) => {
                         if (totalRequestedAmount) {
                           props.onChange({
                             ...props.value,
@@ -307,13 +307,13 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                       fullWidth
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ max: totalRequestedAmount, min: 0 }}
-                      // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                    // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
                     {/* </Tooltip> */}
                   </Grid>
 
                   <Grid item xs={12} md={6}>
-                    <FormControl fullWidth required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                    <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                       <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
                       <Select
                         labelId="sanctioned_bank"
@@ -339,9 +339,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
-                      value={props.value.sanctionedAsPer ??null}
+                      value={props.value.sanctionedAsPer ?? null}
                       options={sanctionedAsPers ?? []}
-                      getOptionLabel={(requisition) => requisition }
+                      getOptionLabel={(requisition) => requisition}
                       disabled={!hasPermissions(['MANAGE_FR'])}
 
                       onChange={(_e, selectedSanction) => {
@@ -352,30 +352,31 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                           });
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required={props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
+                      renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
                       fullWidth
 
                     />
                   </Grid>
                 </>
-              ):null}
+              ) : null}
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
                 <Button
                   variant="contained"
                   color="warning"
-                  style={{ textAlign: 'left', textDecoration: 'none',
+                  style={{
+                    textAlign: 'left', textDecoration: 'none',
                   }}
-                  // onClick={() => {
-                  //   toggleOpenRemarks(true);
-                  // }}
+                // onClick={() => {
+                //   toggleOpenRemarks(true);
+                // }}
                 >
                   <PDFDownloadLink
                     document={<FRReceiptTemplate rowData={props.value as FR} />}
                     fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >
-                   Print FR
+                    Print FR
                   </PDFDownloadLink>
                 </Button>
 
@@ -387,20 +388,20 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     color="info"
                     onClick={() => {
                       toggleOpenRemarks(true);
-                      FRServices.getAllRemarksById(props.value._id ??'')
-                      .then((res) => setRemarks(res.data??[]))
-                      .catch((error) => {
-                        enqueueSnackbar({
-                          variant: 'error',
-                          message: error.message,
+                      FRServices.getAllRemarksById(props.value._id ?? '')
+                        .then((res) => setRemarks(res.data ?? []))
+                        .catch((error) => {
+                          enqueueSnackbar({
+                            variant: 'error',
+                            message: error.message,
+                          });
                         });
-                      });
                     }}
                   >
                     Remark
                   </Button>
                   &nbsp;
-                  {props.action === 'view' && FRstatus!='FR_APPROVED' ? (
+                  {props.action === 'view' && FRstatus != 'FR_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
@@ -424,7 +425,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               navigate('/fr/manage');
                             }}
                           >
-                          Send Back
+                            Send Back
                           </Button>
                         )}
                       />
@@ -433,10 +434,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                     </>
                   ) : null}
                   {
-                    props.action === 'view' && FRstatus=='WAITING_FOR_ACCOUNTS'? (
+                    props.action === 'view' && FRstatus == 'WAITING_FOR_ACCOUNTS' ? (
                       <>
                         {/* Only display buttons if props.action is 'view' */}
-                      &nbsp;
+                        &nbsp;
                         <PermissionChecks
                           permissions={['MANAGE_FR']}
                           granted={(
@@ -458,21 +459,21 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                   navigate('/fr/manage');
                                 }}
                               >
-                           Reject
+                                Reject
                               </Button>
                               &nbsp;<Button
                                 variant="contained"
                                 color="success"
                                 type='submit'
                               >
-                        Approve
+                                Approve
                               </Button>
                             </>
                           )}
                         />
 
 
-                      &nbsp;
+                        &nbsp;
                       </>
                     ) : null}
 
@@ -531,7 +532,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               navigate('/fr/manage');
                             }}
                           >
-                      Reject
+                            Reject
                           </Button>
                           &nbsp;<Button
                             variant="contained"
@@ -551,7 +552,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                               navigate('/fr/manage');
                             }}
                           >
-        Approve
+                            Approve
                           </Button></>
                       }
                     />
@@ -599,7 +600,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
           {remarks.length > 0 ? remarks.map((remark) => (
             // eslint-disable-next-line max-len
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
+          )) : 'No Data Found '}
         </DialogContent>
         <form
           onSubmit={(e) => {
@@ -607,21 +608,21 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
 
             if (remark.remark) {
               FRServices.addRemarks(remark)
-        .then((res) => {
-          setRemarks((remarks) => [...remarks, res.data]);
-          setRemark((remark) => ({
-            ...remark,
-            remark: '',
-          }));
-          toggleOpenRemarks(false);
-          enqueueSnackbar(res.message, { variant: 'success' });
-        })
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+                .then((res) => {
+                  setRemarks((remarks) => [...remarks, res.data]);
+                  setRemark((remark) => ({
+                    ...remark,
+                    remark: '',
+                  }));
+                  toggleOpenRemarks(false);
+                  enqueueSnackbar(res.message, { variant: 'success' });
+                })
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                });
             }
           }}
         >
@@ -636,7 +637,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               onChange={(e) =>
                 setRemark((remark) => ({
                   ...remark,
-                  FR: props.value._id??'',
+                  FR: props.value._id ?? '',
                   remark: e.target.value,
                 }))
               }
@@ -654,7 +655,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
             />
             <br />
             <Button variant="contained" onClick={() => toggleOpenRemarks(false)} sx={{ ml: 'auto' }}>
-                    close
+              close
             </Button>
           </DialogActions>
         </form>
@@ -670,9 +671,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 3,
-          maxTotalSize: 3*MB,
+          maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}
         open={viewFileUploader}

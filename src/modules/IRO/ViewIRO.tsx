@@ -213,7 +213,7 @@ const ViewIRO = () => {
                           options={purposes ?? []}
                           getOptionLabel={(requisition) => requisition ?? ''}
                           onChange={
-                            () => {}
+                            () => { }
                             // if (selectedPurpose) {
                             //  setIRO({
                             //     ...IRO,
@@ -233,7 +233,7 @@ const ViewIRO = () => {
                               value={IRO?.purposeWorker}
                               options={[]}
                               getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               //   if (selectedWorker) {
                               //    setIRO({
                               //       ...IRO,
@@ -249,7 +249,8 @@ const ViewIRO = () => {
                           <Grid item xs={12} md={6}>
                             <TextField
                               label="Worker Code"
-                              value={IRO?.purposeWorker?.workerCode}
+                              value={IRO.purposeWorker?.kind === 'staff' ? (IRO.purposeWorker as Staff | undefined)?.staffCode : (IRO.purposeWorker as unknown as IWorker)?.workerCode}
+
                               fullWidth
                               disabled
                               InputLabelProps={{
@@ -265,7 +266,7 @@ const ViewIRO = () => {
                             options={[]}
                             value={IRO?.purposeSubdivision}
                             getOptionLabel={(subDiv) => subDiv.name}
-                            onChange={() => {}}
+                            onChange={() => { }}
                             renderInput={(params) => <TextField {...params} label="Subdivision" />}
                             disabled
                           />
@@ -277,7 +278,7 @@ const ViewIRO = () => {
                             value={IRO?.division}
                             options={[]}
                             getOptionLabel={(division) => division.details.name}
-                            onChange={() => {}}
+                            onChange={() => { }}
                             renderInput={(params) => <TextField {...params} label="Choose Division" />}
                             fullWidth
                             disabled
@@ -411,7 +412,7 @@ const ViewIRO = () => {
                       </Grid>
                       <Grid item xs={12}>
                         {/* {props.action === 'edit' && ( */}
-                        {IRO?.status>=IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status==IROLifeCycleStates.IRO_CLOSED &&(
+                        {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
 
                           <Button
                             variant="contained"
@@ -422,7 +423,7 @@ const ViewIRO = () => {
                           // }}
                           >
                             <PDFDownloadLink document={<IROReceiptTemplate rowData={IRO} />} fileName="IROReceipt.pdf" style={{ color: 'White', textDecoration: 'none' }}>
-                            Print IRO
+                              Print IRO
                             </PDFDownloadLink>
                           </Button>
                         )}
@@ -433,14 +434,14 @@ const ViewIRO = () => {
                             color="info"
                             onClick={() => {
                               toggleOpenRemarks(true);
-                              IROServices.getAllRemarksById(IRO._id ??'')
-                              .then((res) => setRemarks(res.data??[]))
-                              .catch((error) => {
-                                enqueueSnackbar({
-                                  variant: 'error',
-                                  message: error.message,
+                              IROServices.getAllRemarksById(IRO._id ?? '')
+                                .then((res) => setRemarks(res.data ?? []))
+                                .catch((error) => {
+                                  enqueueSnackbar({
+                                    variant: 'error',
+                                    message: error.message,
+                                  });
                                 });
-                              });
                             }}
                           >
                             Remarks
@@ -493,10 +494,10 @@ const ViewIRO = () => {
                                       color="error"
                                       onClick={() => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string )
-                                    .then((res)=>{
+                                        IROServices.reject(iroID as string)
+                                          .then((res) => {
 
-                                    });
+                                          });
 
                                         // if (props.onSubmit) {
                                         //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
@@ -509,7 +510,7 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                  Reject
+                                      Reject
                                     </Button>
                                     &nbsp;
                                     <Button
@@ -517,11 +518,11 @@ const ViewIRO = () => {
                                       color="success"
                                       onClick={() => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
-                                        IROServices.officeManagerApprove(iroID as string )
-                                      .then((res)=>{
-                                        navigate('/iro/manage');
-                                        // window.location.reload();
-                                      });
+                                        IROServices.officeManagerApprove(iroID as string)
+                                          .then((res) => {
+                                            navigate('/iro/manage');
+                                            // window.location.reload();
+                                          });
                                         // if (props.onSubmit) {
                                         //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
                                         //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
@@ -533,7 +534,7 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                    Approve
+                                      Approve
                                     </Button>
                                   </>
                                 }
@@ -554,10 +555,10 @@ const ViewIRO = () => {
                                       color="error"
                                       onClick={() => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string )
-                                  .then((res)=>{
+                                        IROServices.reject(iroID as string)
+                                          .then((res) => {
 
-                                  });
+                                          });
 
                                         // if (props.onSubmit) {
                                         //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
@@ -570,19 +571,19 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                Reject
+                                      Reject
                                     </Button>
-                                  &nbsp;
+                                    &nbsp;
                                     <Button
                                       variant="contained"
                                       color="success"
                                       type='submit'
                                       onClick={() => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
-                                        IROServices.accountManagerApprove(iroID as string )
-                                      .then((res)=>{
-                                        navigate('/iro/manage');
-                                      });
+                                        IROServices.accountManagerApprove(iroID as string)
+                                          .then((res) => {
+                                            navigate('/iro/manage');
+                                          });
 
                                         // if (props.onSubmit) {
                                         //   // const updatedValue = { ...IRO, status: IROLifeCycleStates.SUBMITTED_TO_ACCOUNTS_STATE }; // Create a new object with updated status
@@ -595,7 +596,7 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                    Approve
+                                      Approve
                                     </Button>
                                   </>
                                 }
@@ -656,7 +657,7 @@ const ViewIRO = () => {
           {remarks.length > 0 ? remarks.map((remark) => (
             // eslint-disable-next-line max-len
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
+          )) : 'No Data Found '}
         </DialogContent>
         <form
           onSubmit={(e) => {
