@@ -103,7 +103,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         </FormControl>
       </Grid>
       <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
-      {(users && users.length > 0) || (props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader) && (
+      {((users && users.length > 0) || (props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader)) && (
         <>
           <Grid item xs={12}>
             <br />
