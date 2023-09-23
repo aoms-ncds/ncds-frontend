@@ -19,18 +19,18 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const { editID } = useParams();
 
 
-  useEffect(()=>{
+  useEffect(() => {
     if (editID) {
       UserServices.getDivisionUser(editID)
-  .then((res) => {
-    setUsers(res.data);
-  })
-  .catch((error) => {
-    enqueueSnackbar({
-      variant: 'error',
-      message: error.message,
-    });
-  });
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((error) => {
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          });
+        });
     }
   }
   , []);
@@ -45,7 +45,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label="Division Name" value={props.value.name} onChange={(e) => props.onChange({ ...props.value, name: e.target.value })} fullWidth required disabled={props.action=='view'} />
+          <TextField label="Division Name" value={props.value.name} onChange={(e) => props.onChange({ ...props.value, name: e.target.value })} fullWidth required disabled={props.action == 'view'} />
         </FormControl>
       </Grid>
       {/* <Grid item xs={12} md={6} lg={4}>
@@ -56,12 +56,12 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
           <TextField label=" Contact Number" value={props.value.contactNumber}
-            onChange={(e) => props.onChange({ ...props.value, contactNumber: e.target.value })} fullWidth disabled={props.action=='view'} />
+            onChange={(e) => props.onChange({ ...props.value, contactNumber: e.target.value })} fullWidth disabled={props.action == 'view'} />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl variant="outlined" fullWidth>
-          <TextField label=" Email ID" value={props.value.email} onChange={(e) => props.onChange({ ...props.value, email: e.target.value })} fullWidth disabled={props.action=='view'} />
+          <TextField label=" Email ID" value={props.value.email} onChange={(e) => props.onChange({ ...props.value, email: e.target.value })} fullWidth disabled={props.action == 'view'} />
         </FormControl>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -73,7 +73,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfWorkers: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
-            disabled={props.action=='view'}
+            disabled={props.action == 'view'}
           />
         </FormControl>
       </Grid>
@@ -98,114 +98,108 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfChurches: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
-            disabled={props.action=='view'}
+            disabled={props.action == 'view'}
           />
         </FormControl>
       </Grid>
       <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
-      {users && users.length > 0 && (
-        <Grid item xs={12}>
-          <br />
-          <Divider textAlign="left">Leaders Details</Divider>
-        </Grid>
-      )}
-      {/*
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6} lg={4}> */}
-      {/* <Grid container spacing={1} alignItems="center"> */}
+      {(users && users.length > 0) || (props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader) && (
+        <>
+          <Grid item xs={12}>
+            <br />
+            <Divider textAlign="left">Leaders Details</Divider>
+          </Grid>
 
-      {users && users.length > 0 && (
-        <Grid item xs={12} md={4}>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" fullWidth>
-              <UsersDropdown
-                users={users}
-                value={props.value.coordinator?.name ?? null}
-                onChange={(_e, newValue) => {
-                  if (newValue) {
-                    props.onChange({
-                      ...props.value,
-                      coordinator: {
-                        ...props.value.coordinator,
-                        name: newValue,
-                      },
-                    });
-                  }
-                }}
-                disabled={props.action === 'view'}
-                label={'Co-ordinator Name'}
-                required={false}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
+          <Grid item xs={12} md={4}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <UsersDropdown
+                  users={users ?? []}
+                  value={props.value.coordinator?.name ?? null}
+                  onChange={(_e, newValue) => {
+                    if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        coordinator: {
+                          ...props.value.coordinator,
+                          name: newValue,
+                        },
+                      });
+                    }
+                  }}
+                  disabled={props.action === 'view'}
+                  label={'Co-ordinator Name'}
+                  required={false}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
-            </Button>
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-      {users && users.length > 0 && (
-        <Grid item xs={12} md={4}>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" fullWidth>
-              <UsersDropdown
-                users={users}
-                value={props.value.seniorLeader?.name??null}
-                onChange={(e, newValue) => {
-                  if (newValue) {
-                    props.onChange({
-                      ...props.value,
-                      seniorLeader: {
-                        ...props.value.seniorLeader,
-                        name: newValue,
-                      },
-                    });
-                  }
-                }}
-                disabled={props.action=='view'}
-                label={'Senior Leader Name'}
-                required={false}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
+
+          <Grid item xs={12} md={4}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <UsersDropdown
+                  users={users ?? []}
+                  value={props.value.seniorLeader?.name ?? null}
+                  onChange={(e, newValue) => {
+                    if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        seniorLeader: {
+                          ...props.value.seniorLeader,
+                          name: newValue,
+                        },
+                      });
+                    }
+                  }}
+                  disabled={props.action == 'view'}
+                  label={'Senior Leader Name'}
+                  required={false}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }} >
                 E-signature
-            </Button>
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-      {users && users.length > 0 && (
-        <Grid item xs={12} md={4}>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" fullWidth>
-              <UsersDropdown
-                users={users}
-                disabled={props.action=='view'}
-                value={props.value.juniorLeader?.name??null}
-                onChange={(e, newValue) => {
-                  if (newValue) {
-                    props.onChange({
-                      ...props.value,
-                      juniorLeader: {
-                        ...props.value.juniorLeader,
-                        name: newValue,
-                      },
-                    });
-                  }
-                }}
-                label={'Junior Leader Name'}
-                required={false}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+
+          <Grid item xs={12} md={4}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <UsersDropdown
+                  users={users ?? []}
+                  disabled={props.action == 'view'}
+                  value={props.value.juniorLeader?.name ?? null}
+                  onChange={(e, newValue) => {
+                    if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        juniorLeader: {
+                          ...props.value.juniorLeader,
+                          name: newValue,
+                        },
+                      });
+                    }
+                  }}
+                  label={'Junior Leader Name'}
+                  required={false}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                 E-signature
-            </Button>
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </>
       )}
       {/* </Grid>
         </Grid>
@@ -221,27 +215,27 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 1,
-          maxTotalSize: 1*MB,
+          maxTotalSize: 1 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader1}
         onClose={() => setShowFileUploader1(false)}
-        action={props.action=='view'?'view':'add'}
-        getFiles={props.value.coordinator?.sign?[props.value.coordinator?.sign]:[]}
-        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
-          const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
-              .then((res)=>{
-                props.onChange({
-                  ...props.value,
-                  coordinator: {
-                    ...props.value.coordinator,
-                    sign: res.data,
-                  },
-                });
-                return res;
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.coordinator?.sign ? [props.value.coordinator?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
+            .then((res) => {
+              props.onChange({
+                ...props.value,
+                coordinator: {
+                  ...props.value.coordinator,
+                  sign: res.data,
+                },
               });
+              return res;
+            });
           return resp;
         }}
         renameFile={(fileId: string, newName: string) => {
@@ -249,10 +243,10 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             ...props.value,
             coordinator: {
               ...props.value.coordinator,
-              sign: props.value.coordinator?.sign?({
+              sign: props.value.coordinator?.sign ? ({
                 ...props.value.coordinator?.sign,
                 filename: newName,
-              }):undefined,
+              }) : undefined,
             },
           });
           return FileUploaderServices.renameFile(fileId, newName);
@@ -278,26 +272,26 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 1,
-          maxTotalSize: 1*MB,
+          maxTotalSize: 1 * MB,
         }}
         open={showFileUploader2}
         onClose={() => setShowFileUploader2(false)}
-        action={props.action=='view'?'view':'add'}
-        getFiles={props.value.seniorLeader?.sign?[props.value.seniorLeader?.sign]:[]}
-        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
-          const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
-              .then((res)=>{
-                props.onChange({
-                  ...props.value,
-                  seniorLeader: {
-                    ...props.value.seniorLeader,
-                    sign: res.data,
-                  },
-                });
-                return res;
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.seniorLeader?.sign ? [props.value.seniorLeader?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
+            .then((res) => {
+              props.onChange({
+                ...props.value,
+                seniorLeader: {
+                  ...props.value.seniorLeader,
+                  sign: res.data,
+                },
               });
+              return res;
+            });
           return resp;
         }}
         renameFile={(fileId: string, newName: string) => {
@@ -305,10 +299,10 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             ...props.value,
             seniorLeader: {
               ...props.value.seniorLeader,
-              sign: props.value.seniorLeader?.sign?({
+              sign: props.value.seniorLeader?.sign ? ({
                 ...props.value.seniorLeader?.sign,
                 filename: newName,
-              }):undefined,
+              }) : undefined,
             },
           });
           return FileUploaderServices.renameFile(fileId, newName);
@@ -334,27 +328,27 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 1,
-          maxTotalSize: 1*MB,
+          maxTotalSize: 1 * MB,
         }}
         // accept={['video/*']}
         open={showFileUploader3}
         onClose={() => setShowFileUploader3(false)}
-        action={props.action=='view'?'view':'add'}
-        getFiles={props.value.juniorLeader?.sign?[props.value.juniorLeader?.sign]:[]}
-        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) =>{
-          const resp=FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
-              .then((res)=>{
-                props.onChange({
-                  ...props.value,
-                  juniorLeader: {
-                    ...props.value.juniorLeader,
-                    sign: res.data,
-                  },
-                });
-                return res;
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.juniorLeader?.sign ? [props.value.juniorLeader?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name)
+            .then((res) => {
+              props.onChange({
+                ...props.value,
+                juniorLeader: {
+                  ...props.value.juniorLeader,
+                  sign: res.data,
+                },
               });
+              return res;
+            });
           return resp;
         }}
         renameFile={(fileId: string, newName: string) => {
@@ -362,10 +356,10 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             ...props.value,
             juniorLeader: {
               ...props.value.juniorLeader,
-              sign: props.value.juniorLeader?.sign?({
+              sign: props.value.juniorLeader?.sign ? ({
                 ...props.value.juniorLeader?.sign,
                 filename: newName,
-              }):undefined,
+              }) : undefined,
             },
           });
           return FileUploaderServices.renameFile(fileId, newName);
