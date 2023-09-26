@@ -96,7 +96,6 @@ const DivisionsList = () => {
               //     removeDivisions(props.row._id);
               //   },
               // }
-
             ] : []
             ),
           ]}
