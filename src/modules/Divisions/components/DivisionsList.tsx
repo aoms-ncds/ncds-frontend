@@ -132,7 +132,7 @@ const DivisionsList = () => {
       renderHeader: () => (<b>Coordinator Name</b>),
       renderCell: (props: any) => {
         // console.log(props, 'prop'); // Add this line to log the props data
-        return <p>{`${props.row.details.coordinator?.name.basicDetails.firstName??''} ${props.row.details.coordinator?.name.basicDetails.lastName??''}`}</p>;
+        return <p>{`${props.row.details.coordinator?.name?.basicDetails?.firstName??''} ${props.row.details.coordinator?.name?.basicDetails?.lastName??''}`}</p>;
       },
 
       width: 150,
@@ -144,14 +144,14 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.name.basicDetails.email}</p>,
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.name?.basicDetails?.email}</p>,
       width: 150 },
     {
       field: 'coordinatorPhone',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.name.basicDetails.phone}</p>,
+      renderCell: (props: any) => <p>{props.row.details.coordinator?.name?.basicDetails.phone}</p>,
       width: 140 },
 
     {
