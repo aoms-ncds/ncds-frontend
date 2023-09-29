@@ -113,28 +113,26 @@ const DivisionsList = () => {
       renderHeader: () => (<b>Division Name</b>),
       width: 120,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      renderCell: (props: any) => (
+      renderCell: (params) => (
         <Link
-          to={`/divisions/details/${props.row._id}`}
+          to={`/divisions/details/${params.row._id}`}
           style={{
             textDecoration: 'none',
             color: 'inherit',
           }}
         >
-          {props.row.details.name}
+          {params.value}
         </Link>
       ),
+
+      valueGetter: (props)=>props.row.details.name,
     },
     {
       field: 'coordinator',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
-      renderCell: (props: any) => {
-        // console.log(props, 'prop'); // Add this line to log the props data
-        return <p>{`${props.row.details.coordinator?.name?.basicDetails?.firstName??''} ${props.row.details.coordinator?.name?.basicDetails?.lastName??''}`}</p>;
-      },
-
+      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.firstName??'',
       width: 150,
 
 
@@ -144,14 +142,15 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.name?.basicDetails?.email}</p>,
+      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.email,
       width: 150 },
     {
       field: 'coordinatorPhone',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
-      renderCell: (props: any) => <p>{props.row.details.coordinator?.name?.basicDetails.phone}</p>,
+
+      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails.phone,
       width: 140 },
 
     {
@@ -159,14 +158,16 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
-      renderCell: (props: any) => <p> {props.row.details.noOfWorkers}</p>,
+
+      valueGetter: (props)=>props.row.details.noOfWorkers,
       width: 130 },
     {
       field: 'NoOfSubdivisions',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
-      renderCell: (props: any) => <p> {props.row.details.noOfSubdivisions}</p>,
+
+      valueGetter: (props)=>props.row.details.noOfSubdivisions,
       width: 150 },
   ];
   return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
