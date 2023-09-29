@@ -126,7 +126,7 @@ const DivisionsList = () => {
         </Link>
       ),
 
-      valueGetter: (props)=>props.row.details.name,
+      valueGetter: (props)=>props.row.details?.name,
     },
     {
       field: 'coordinator',
@@ -151,7 +151,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
 
-      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails.phone,
+      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.phone,
       width: 140 },
 
     {
@@ -160,7 +160,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
 
-      valueGetter: (props)=>props.row.details.noOfWorkers,
+      valueGetter: (props)=>props.row.details?.noOfWorkers,
       width: 130 },
     {
       field: 'NoOfSubdivisions',
@@ -168,7 +168,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
-      valueGetter: (props)=>props.row.details.noOfSubdivisions,
+      valueGetter: (props)=>props.row.details?.noOfSubdivisions,
       width: 150 },
   ];
   return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
