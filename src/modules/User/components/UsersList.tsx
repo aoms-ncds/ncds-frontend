@@ -207,17 +207,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               showInMenu
               to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />)),
-          (hasPermissions(['ADMIN_ACCESS']) && (
-            <GridLinkAction
-              key={3}
-              label="Delete"
-              icon={<DeleteIcon />}
-              showInMenu
-              onClick={() => {
-                execDelete(params.row._id);
-              }}
-            />
-          )),
+          // (hasPermissions(['ADMIN_ACCESS']) && (
+          //   <GridLinkAction
+          //     key={3}
+          //     label="Delete"
+          //     icon={<DeleteIcon />}
+          //     showInMenu
+          //     onClick={() => {
+          //       execDelete(params.row._id);
+          //     }}
+          //   />
+          // )),
           <GridLinkAction
             key={4}
             label="Remarks"
