@@ -6,7 +6,14 @@ import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelper
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   login: (loginCred: LoginCredentials) => getStandardResponse<LoginResponse>(axios.post('/users/login', loginCred, { headers: { ...getAuthHeader() } })),
-  requestForgottenPasswordReset: (email: string) => getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password', email, { headers: { ...getAuthHeader() } })),
+
+  requestForgottenPasswordReset: (email: string) => getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password',
+    { email, redirect_url: window.location.origin + '/users/rest_password_form' }, { headers: { ...getAuthHeader() } })),
+
+  confirmPasswordReset: (args: { reset_token: string; new_password: string;
+    }): Promise<StandardResponse<boolean>> =>
+    getStandardResponse(axios.post('/users/confirm_password_reset', args, { headers: { ...getAuthHeader() } })),
+
 
   getAll: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[]>(
