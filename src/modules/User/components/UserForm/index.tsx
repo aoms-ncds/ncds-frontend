@@ -232,7 +232,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       disabled: true,
                     }}
                     InputLabelProps={{
-                      shrink: Boolean((props.value as CreatableStaff).staffCode),
+                      shrink: true,
                     }}
                     fullWidth
                   />
