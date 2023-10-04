@@ -12,6 +12,7 @@ import WorkersServices from './extras/WorkersServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import SpousesServices from './extras/SpousesServices';
 import ChildrenServices from './extras/ChildrenServices';
+import UserServices from '../User/extras/UserServices';
 
 const SendBackWorkersPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -19,7 +20,7 @@ const SendBackWorkersPage = () => {
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-
+  const [coordinatorOrNot, setCoordinatorOrNot] = useState<boolean>(false);
   const [users, setUsers] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
@@ -52,6 +53,13 @@ const SendBackWorkersPage = () => {
           });
     }
   }, [currentTab]);
+  useEffect(()=>{
+    UserServices.coordinatorOrNot()
+    .then((res)=>{
+      setCoordinatorOrNot(res.data);
+      console.log(res.data, 'res.data for coordinator');
+    });
+  });
   return (
     <CommonPageLayout title="Sendback Workers">
       <Grid container spacing={2}>
@@ -92,7 +100,7 @@ const SendBackWorkersPage = () => {
               setUsers(newUsers);
             }}
             action={'view'}
-            options={{ kind: 'worker', status: 'reject' }}
+            options={{ kind: 'worker', status: 'reject', showEditButton: coordinatorOrNot === true }}
           />
         </TabPanel>
         <TabPanel value={currentTab} index={1}>

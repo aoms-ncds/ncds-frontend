@@ -134,4 +134,8 @@ export default {
     getStandardResponse(
       axios.get(`/users/mail_duplicate/${userId}`, { headers: { ...getAuthHeader() } }),
     ),
+  coordinatorOrNot: () =>
+    getStandardResponse<boolean>(
+      axios.get('/users/coordinator_or_not', { headers: { ...getAuthHeader() } }),
+    ),
 };
