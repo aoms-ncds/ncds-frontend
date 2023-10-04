@@ -7,13 +7,13 @@ import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from './PermissionChecks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
 
-const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active' }>) => {
+const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active'; showEditButton?: boolean }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -27,7 +27,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     remark: '',
     transactionId: '',
   });
-
   const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: `Removing ${props.options?.kind}`,
@@ -47,6 +46,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         enqueueSnackbar({ message: err.message, variant: 'error' });
       });
   };
+
+  // useEffect(()=>{
+  //   UserServices.coordinatorOrNot()
+  //   .then((res)=>{
+  //     setCoordinatorOrNote(res.data);
+  //     console.log(res.data, 'res.data for coordinator');
+  //   });
+  // });
 
   const deactivateWorker = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
@@ -129,66 +136,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       field: 'actions',
       type: 'actions',
       width: 5,
-
-      // renderCell: (renderCellParams) => (
-      //   <DropdownButton
-      //     useIconButton={true}
-      //     id="user action"
-      //     primaryText="Actions"
-      //     key={'User action'}
-      //     items={[
-      //       {
-      //         id: 'View',
-      //         text: 'View',
-      //         component: Link,
-      //         to: `/users/${props.options?.kind}/${renderCellParams.row._id}`,
-      //         icon: PreviewIcon,
-      //       },
-      //       {
-      //         id: 'edit',
-      //         text: 'Edit',
-      //         component: Link,
-      //         to: `/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${renderCellParams.row._id}`,
-      //         icon: EditIcon,
-      //       },
-      //       {
-      //         id: 'delete',
-      //         text: 'Delete',
-      //         component: Link,
-      //         icon: DeleteIcon,
-      //         onClick: () => {
-      //           execDelete(renderCellParams.row._id);
-      //         },
-      //       },
-      //       renderCellParams.row.status == UserLifeCycleStates.ACTIVE ?
-      //         {
-      //           id: 'deactivate',
-      //           text: 'Deactivate',
-      //           component: Link,
-      //           icon: NoAccountsIcon,
-      //           onClick: () => {
-      //             deactivateWorker(renderCellParams.row._id);
-      //           },
-      //         } :
-      //         {
-      //           id: 'activate',
-      //           text: 'Activate',
-      //           component: Link,
-      //           icon: PersonIcon,
-      //           onClick: () => {
-      //             activateWorker(renderCellParams.row._id);
-      //           },
-      //         },
-      //       {
-      //         id: 'permission_manager',
-      //         text: 'Manage Permissions',
-      //         component: Link,
-      //         to: `/users/${renderCellParams.row._id}/permission_manager`,
-      //         icon: BallotIcon,
-      //       },
-      //     ]}
-      //   />
-      // ),
       getActions: (params: GridRowParams) =>
         [
 
@@ -199,25 +146,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             showInMenu
             to={`/users/${props.options?.kind}/${params.row._id}`}
           />,
-          (hasPermissions(['MANAGE_WORKER']) && (
+          ((hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
             <GridLinkAction
               key={2}
               label="Edit"
               icon={<EditIcon />}
               showInMenu
-              to={`/${props.options?.kind == 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
-            />)),
-          // (hasPermissions(['ADMIN_ACCESS']) && (
-          //   <GridLinkAction
-          //     key={3}
-          //     label="Delete"
-          //     icon={<DeleteIcon />}
-          //     showInMenu
-          //     onClick={() => {
-          //       execDelete(params.row._id);
-          //     }}
-          //   />
-          // )),
+              to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+            />
+          )),
           <GridLinkAction
             key={4}
             label="Remarks"
