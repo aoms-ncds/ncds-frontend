@@ -48,7 +48,7 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['WRITE_WORKERS'],
     },
     {
-      title: 'Send Back Workers',
+      title: 'In Process Workers',
       path: '/reject',
       element: <SendBackWorkersPage />,
       private: true,

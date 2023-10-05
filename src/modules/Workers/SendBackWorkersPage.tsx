@@ -61,7 +61,7 @@ const SendBackWorkersPage = () => {
     });
   });
   return (
-    <CommonPageLayout title="Sendback Workers">
+    <CommonPageLayout title="In Process Workers">
       <Grid container spacing={2}>
         <Grid item xs={12}>
         </Grid>

@@ -52,7 +52,7 @@ const WorkersDashboard = () => {
         }
         />
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Send Back workers" count={rejectedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/reject" />
+          <ButtonCard secondaryText="In Process workers" count={rejectedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/reject" />
         </Grid>
 
         <Grid item xs={12} md={4} xl={3}>
