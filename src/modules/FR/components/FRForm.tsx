@@ -707,7 +707,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         quantity: Number(e.target.value),
                       }))
                     }
-                    required
+
                     fullWidth
                   />
                 </Grid>
