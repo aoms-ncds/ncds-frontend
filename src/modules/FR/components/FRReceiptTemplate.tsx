@@ -125,7 +125,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
   return (
     <Document>
       <Page size="A4">
-        <Image src="/favicon.ico" style={styles.image} />
+        <Image src="/3D Logo.png" style={styles.image} />
 
         {/* <Image
           style={styles.image}
