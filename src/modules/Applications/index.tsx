@@ -2,10 +2,10 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid } from '@mui/material';
 import DashboardCardButton from '../../components/DashboardCardButton';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
-import AppCountCard from './components/ApplicationCountCard';
 import { useEffect, useState } from 'react';
 import ApplicationServices from './extras/ApplicationServices';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
+import FRCountCard from '../FR/components/FRCountCard';
 
 const APPDashboard = () => {
   const [ApplicationCreatedCount, setApplicationCreatedCount] = useState<number| null>(null);
@@ -38,16 +38,16 @@ const APPDashboard = () => {
     <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
-          <AppCountCard targetRoute="/application/hr_approve" count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#1093eb" />
+          <FRCountCard count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#1093eb" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/president_approve" count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#1093eb'} />
+          <FRCountCard count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#1093eb'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#1093eb'} />
+          <FRCountCard count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#1093eb'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <AppCountCard targetRoute="/application/manage" count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#1093eb'} />
+          <FRCountCard count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#1093eb'} />
         </Grid>
       </Grid>
       <br/>
