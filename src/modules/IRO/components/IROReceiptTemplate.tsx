@@ -129,7 +129,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
       <Page size="A4" >
         <div>
           <>
-            <Image src="/iet_logo.png" style={styles.image} />
+            <Image src="/favicon.ico" style={styles.image} />
             <Text style={styles.heading}> INDIAN EVANGELICAL TEAM </Text></>
           {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>

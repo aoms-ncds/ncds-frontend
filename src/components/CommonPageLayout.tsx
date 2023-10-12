@@ -85,7 +85,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
       {/* <Toolbar /> */}
       <Grid sx={{ height: 155 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <img src="/iet_logo.png" alt="" style={{ height: 80, marginTop: 20 }} />
+          <img src="/favicon.ico" alt="" style={{ height: 80, marginTop: 20 }} />
           <br/>
           <b>IET</b>
         </div>
