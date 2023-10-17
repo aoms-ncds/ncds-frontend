@@ -349,7 +349,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               //     });
               // },
             },
-            ...(params.row.status == IROLifeCycleStates.IRO_CLOSED ? [
+            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE? [
               {
                 id: 'print',
                 text: 'Print IRO',
