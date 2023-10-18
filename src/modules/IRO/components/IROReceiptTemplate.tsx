@@ -113,8 +113,12 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
     sanctionedAmountWords = 'N/A';
   }
 
-  const dateString = props.rowData?.releaseAmount?.transferredDate??null;
-  const formattedDate = moment(dateString).format('DD MMMM YYYY');
+  // const dateString = props?.rowData?.releaseAmount?.transferredDate?? '';
+  // console.log(dateString, 'dateString');
+
+  // const formattedDate = moment(dateString)?.format('DD MMMM YYYY');
+  // console.log(formattedDate, 'formattedDate');
+  '';
   useEffect(() => {
 
   }, [totalAmount]);
@@ -149,7 +153,7 @@ const IROReceiptTemplate = (props:{rowData:IROrder}) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20, marginBottom: 10 }}>Fund Release date:{formattedDate}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20, marginBottom: 10 }}>Fund Release date:{props?.rowData?.releaseAmount?.transferredDate?.format('DD/MM/YYYY')?? ''}
                 </Text>
               </View>
               <View>
