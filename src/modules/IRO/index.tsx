@@ -62,7 +62,7 @@ const IRODashboard = () => {
       <Grid container spacing={3}>
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Manage IRO" color="#75C2F6" targetRoute="/iro/manage" />
+          <DashboardCardButton primaryText="Manage IRO" color="#005eb8" targetRoute="/iro/manage" />
         </Grid>
 
         <PermissionChecks
@@ -70,18 +70,32 @@ const IRODashboard = () => {
           granted={(
             <>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Release Amount " color="#75C2F6" targetRoute="/iro/release_amount" />
+                <DashboardCardButton primaryText="Release Amount " color="#005eb8" targetRoute="/iro/release_amount" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Reconciliation IRO " color="#75C2F6" targetRoute="/iro/reconciliation" />
+                <DashboardCardButton primaryText="Reconciliation IRO " color="#005eb8" targetRoute="/iro/reconciliation" />
               </Grid>
 
             </>
           )} />
 
         <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton primaryText="Closed IRO" color="#75C2F6" targetRoute="/iro/closed" />
+          <DashboardCardButton primaryText="Closed IRO" color="#005eb8" targetRoute="/iro/closed" />
         </Grid>
+        <PermissionChecks
+          permissions={['ACCOUNTS_MNGR_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton primaryText="Office manager  " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/account_approve" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['OFFICE_MNGR_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton primaryText="Accounts manager " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/office_approve" />
+            </Grid>
+          )} />
       </Grid>
     </CommonPageLayout>
   );

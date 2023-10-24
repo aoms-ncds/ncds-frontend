@@ -53,19 +53,19 @@ const APPDashboard = () => {
       <br/>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} xl={3}>
-          <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#75C2F6" targetRoute="/application/manage" />
+          <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#005eb8" targetRoute="/application/manage" />
         </Grid>
         <PermissionChecks
           permissions={['MANAGE_APPLICATION']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application approval HR" color='#75C2F6' secondaryText="" targetRoute="/application/hr_approve" />
+              <DashboardCardButton primaryText="Application approval HR" color='#005eb8' secondaryText="" targetRoute="/application/hr_approve" />
             </Grid>)}/>
         <PermissionChecks
           permissions={['PRESIDENT_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application approval President" color='#75C2F6' secondaryText="" targetRoute="/application/president_approve" />
+              <DashboardCardButton primaryText="Application approval President" color='#005eb8' secondaryText="" targetRoute="/application/president_approve" />
             </Grid>)}/>
       </Grid>
     </CommonPageLayout>

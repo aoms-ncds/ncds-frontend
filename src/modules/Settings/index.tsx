@@ -37,19 +37,19 @@ const SettingsDashboard = () => {
     <CommonPageLayout title="Settings">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#75C2F6" targetRoute="/settings/Languages" />
+          <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#005eb8" targetRoute="/settings/Languages" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#75C2F6" targetRoute="/settings/Designation" />
+          <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#005eb8" targetRoute="/settings/Designation" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#75C2F6 " targetRoute="/settings/ChildSupport" />
+          <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#005eb8 " targetRoute="/settings/ChildSupport" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="E-Signature" color="#75C2F6" targetRoute="/settings/Esignature" />
+          <DashboardCardButton primaryText="E-Signature" color="#005eb8" targetRoute="/settings/Esignature" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Department" color="#75C2F6" targetRoute="/settings/Department" />
+          <DashboardCardButton primaryText="Department" color="#005eb8" targetRoute="/settings/Department" />
         </Grid>
       </Grid>
     </CommonPageLayout>

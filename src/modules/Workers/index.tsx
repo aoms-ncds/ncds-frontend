@@ -43,20 +43,20 @@ const WorkersDashboard = () => {
     <CommonPageLayout title="Workers Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Manage Workers" count={workersCount?.toString()} color="#75C2F6" targetRoute="/workers/manage" />
+          <ButtonCard secondaryText="Manage Workers" count={workersCount?.toString()} color="#005eb8" targetRoute="/workers/manage" />
         </Grid>
         <PermissionChecks permissions={['MANAGE_WORKER']} granted={
           <Grid item xs={12} md={4} xl={3}>
-            <ButtonCard secondaryText="Approve  Workers" count={unapprovedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/approve" />
+            <ButtonCard secondaryText="Approve  Workers" count={unapprovedWorkersCount?.toString()} color="#005eb8" targetRoute="/workers/approve" />
           </Grid>
         }
         />
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="In Process workers" count={rejectedWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/reject" />
+          <ButtonCard secondaryText="In Process workers" count={rejectedWorkersCount?.toString()} color="#005eb8" targetRoute="/workers/reject" />
         </Grid>
 
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Deactivated Workers" count={deactivateWorkersCount?.toString()} color="#75C2F6" targetRoute="/workers/deactivated" />
+          <ButtonCard secondaryText="Deactivated Workers" count={deactivateWorkersCount?.toString()} color="#005eb8" targetRoute="/workers/deactivated" />
         </Grid>
       </Grid>
     </CommonPageLayout>

@@ -62,27 +62,27 @@ const frDashboard = () => {
             <br />
             <Grid container spacing={3}>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#75C2F6" targetRoute="/fr/manage" />
+                <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/manage" />
               </Grid>
               <PermissionChecks
                 permissions={['WRITE_FR']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#75C2F6" targetRoute="/fr/apply" />
+                    <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/apply" />
                   </Grid>
                 )} />
               <PermissionChecks
                 permissions={['PRESIDENT_ACCESS']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#75C2F6" targetRoute="/fr/approve" />
+                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#005eb8" targetRoute="/fr/approve" />
                   </Grid>
                 )} />
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#75C2F6" targetRoute="/fr/closed" />
+                <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/closed" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#75C2F6" targetRoute="/iro" />
+                <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#005eb8" targetRoute="/iro" />
               </Grid>
             </Grid>
 
