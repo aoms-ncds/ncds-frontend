@@ -21,8 +21,6 @@ import {
   InputAdornment,
   FormControl,
   DialogContent,
-  Tooltip,
-  FormHelperText,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
@@ -529,7 +527,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                 const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
                                 setTimeout(() => closeSnackbar(rejectedSnack), 500);
                               }, 500);
-                              navigate('/fr/manage');
+                              navigate('/fr/approve');
                             }}
                           >
                             Reject
@@ -549,7 +547,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                                 const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
                                 setTimeout(() => closeSnackbar(processedSnack), 500);
                               }, 500);
-                              navigate('/fr/manage');
+                              navigate('/fr/approve');
                             }}
                           >
                             Approve
