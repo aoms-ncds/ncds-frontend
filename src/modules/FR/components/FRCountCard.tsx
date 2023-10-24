@@ -4,8 +4,10 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FRCountCard = (props: { count?: string; badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
- secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string; }) => {
+const FRCountCard = (props: {
+  count?: string; badgeColor?: 'default' | 'error' | 'primary' | 'secondary';
+  secondaryText: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string;
+}) => {
   const countCard = (
 
     <Card
@@ -20,28 +22,28 @@ const FRCountCard = (props: { count?: string; badgeColor?: 'default' | 'error' |
         'borderRadius': 3,
         'transition': 'all 0.3s',
         'padding': 4,
-        '&:hover': {
-          boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
-          transform: 'translate(0, -2px)',
-          cursor: 'pointer',
-        },
-        '&:active': {
-          boxShadow: 'none !important',
-          transform: 'translate(0, 2px)',
-          cursor: 'pointer',
-        },
+        // '&:hover': {
+        //   boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
+        //   transform: 'translate(0, -2px)',
+        //   cursor: 'pointer',
+        // },
+        // '&:active': {
+        //   boxShadow: 'none !important',
+        //   transform: 'translate(0, 2px)',
+        //   cursor: 'pointer',
+        // },
         'width': '100%',
       }}
     >
-      <CardActionArea
-      >
-        <CardContent>
-          <Typography variant="h5"></Typography>
-          <Typography variant="h6" align="center">
-            {props.secondaryText}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+      {/* <CardActionArea
+      > */}
+      <CardContent>
+        <Typography variant="h5"></Typography>
+        <Typography variant="h6" align="center">
+          {props.secondaryText}
+        </Typography>
+      </CardContent>
+      {/* </CardActionArea> */}
     </Card>
   );
   return props.count !== undefined ? <Badge
@@ -63,7 +65,7 @@ const FRCountCard = (props: { count?: string; badgeColor?: 'default' | 'error' |
 
   >
     {countCard}
-  </Badge>:countCard;
+  </Badge> : countCard;
 };
 
 export default FRCountCard;
