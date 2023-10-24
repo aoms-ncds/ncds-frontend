@@ -6,6 +6,9 @@ import ManageIRO from '../ManageIRO';
 import ReleaseAmount from '../ReleaseAmount';
 import ViewIRO from '../ViewIRO';
 import ReconciliationIRO from '../ReconciliationIRO';
+import AccountApprove from '../AccountApprovel';
+import OfficeMangerApprove from '../OfficeManagerApprovel';
+
 
 const iroPageRoutes: ModuleRoute = {
   base: '/iro',
@@ -26,6 +29,21 @@ const iroPageRoutes: ModuleRoute = {
       element: <ManageIRO action='manage'/>,
       private: true,
       requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Office Approve',
+      path: '/account_approve',
+      element: <OfficeMangerApprove action={'manage'}/>,
+      private: true,
+      requiredAccessRights: ['OFFICE_MNGR_ACCESS'],
+      icon: <RequestPageOutlinedIcon />,
+    }, {
+      title: 'Account Approve',
+      path: '/office_approve',
+      element: <AccountApprove action={'manage'}/>,
+      private: true,
+      requiredAccessRights: ['ACCOUNTS_MNGR_ACCESS'],
+      icon: <RequestPageOutlinedIcon />,
     },
     {
       title: 'Release Amount',

@@ -103,7 +103,7 @@ const MinimalModuleDataAnalytics = () => {
               <DashBoardCard
                 secondaryText='Divisions'
                 count={divisionsCount?.toString()}
-                color={'#75C2F6'}
+                color={'#005eb8'}
                 targetRoute="/divisions/"
                 // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
@@ -114,7 +114,7 @@ const MinimalModuleDataAnalytics = () => {
 
               <DashBoardCard secondaryText='Division'
                 icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={divisionsCount?.toString()}
-                color="#75C2F6" targetRoute={`/divisions/details/${(user.user as User).division}`} />
+                color="#005eb8" targetRoute={`/divisions/details/${(user.user as User).division}`} />
 
             </Grid>
           }
@@ -130,11 +130,11 @@ const MinimalModuleDataAnalytics = () => {
               <DashBoardCard secondaryText='Sub-Divisions'
                 icon={<img src="/subDivisionLogo.png" alt="Logo"
                   style={{ width: '70px', height: '70px' }} />}
-                count={subDivisionsCount?.toString()} color={'#75C2F6'} targetRoute="/divisions/" />
+                count={subDivisionsCount?.toString()} color={'#005eb8'} targetRoute="/divisions/" />
 
             </Grid> : <Grid item xs={6} md={3} xl={4}>
               <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/subDivisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                count={subDivisionsCount?.toString()} color="#75C2F6" targetRoute={`/divisions/details/${(user.user as User).division}`} />
+                count={subDivisionsCount?.toString()} color="#005eb8" targetRoute={`/divisions/details/${(user.user as User).division}`} />
             </Grid>
 
           }
@@ -151,23 +151,23 @@ const MinimalModuleDataAnalytics = () => {
         <>
           <PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
             <DashBoardCard icon={<img src="/staffs.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-              secondaryText=" Staffs" count={staffsCount?.toString()} color={'#75C2F6'} targetRoute="/hr/" />
+              secondaryText=" Staffs" count={staffsCount?.toString()} color={'#005eb8'} targetRoute="/hr/" />
           </Grid>} />
           <PermissionChecks permissions={['READ_WORKERS']} granted={<Grid item xs={6} md={3} xl={4}>
             <DashBoardCard icon={<img src="/workers.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-              secondaryText=" Workers" count={workersCount?.toString()} color={'#75C2F6'} targetRoute="/workers/" />
+              secondaryText=" Workers" count={workersCount?.toString()} color={'#005eb8'} targetRoute="/workers/" />
           </Grid>} />
         </>}
       <PermissionChecks permissions={['READ_FR']} granted={
         <Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/FrLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText="FR" count={frCount?.toString()} color={'#75C2F6'} targetRoute="/fr/" />
+            secondaryText="FR" count={frCount?.toString()} color={'#005eb8'} targetRoute="/fr/" />
         </Grid>
       } />
       <PermissionChecks permissions={['READ_IRO']} granted={
         <Grid item xs={6} md={3} xl={4}>
           <DashBoardCard icon={<img src="/IroLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            secondaryText="IRO" count={iroCount?.toString()} color={'#75C2F6'} targetRoute="/iro/" />
+            secondaryText="IRO" count={iroCount?.toString()} color={'#005eb8'} targetRoute="/iro/" />
         </Grid>
       } />
     </Grid>

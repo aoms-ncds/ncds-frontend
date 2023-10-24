@@ -520,7 +520,7 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.officeManagerApprove(iroID as string)
                                           .then((res) => {
-                                            navigate('/iro/manage');
+                                            navigate('/iro');
                                             // window.location.reload();
                                           });
                                         // if (props.onSubmit) {
@@ -582,7 +582,7 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.accountManagerApprove(iroID as string)
                                           .then((res) => {
-                                            navigate('/iro/manage');
+                                            navigate('/iro');
                                           });
 
                                         // if (props.onSubmit) {
