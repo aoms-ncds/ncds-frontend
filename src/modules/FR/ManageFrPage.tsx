@@ -6,7 +6,6 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add a
 import { Link } from 'react-router-dom';
 import {
   Alert,
-  Autocomplete,
   Button,
   Card,
   Dialog,
@@ -21,7 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import PrintIcon from '@mui/icons-material/Print';
 // import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
@@ -249,7 +248,7 @@ const ManageFrPage = () => {
       field: 'mainCategory',
       renderHeader: () => (<b>Main Category</b>),
       width: 250,
-      // align: 'center',
+      align: 'center',
       headerAlign: 'center',
       renderCell: (props) => (
         <p

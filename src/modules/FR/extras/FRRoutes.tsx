@@ -3,6 +3,7 @@ import FRDashboard from '..';
 import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
+import PresidentApproval from '../PresidentApproval';
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
@@ -22,6 +23,14 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <ManageFRPage />,
       private: true,
       requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'FR Approve',
+      path: '/approve',
+      element: <PresidentApproval />,
+      private: true,
+      requiredAccessRights: ['PRESIDENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
     {

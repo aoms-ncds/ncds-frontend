@@ -70,7 +70,14 @@ const frDashboard = () => {
                   <Grid item xs={12} md={4} xl={3}>
                     <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#75C2F6" targetRoute="/fr/apply" />
                   </Grid>
-                )}/>
+                )} />
+              <PermissionChecks
+                permissions={['PRESIDENT_ACCESS']}
+                granted={(
+                  <Grid item xs={12} md={4} xl={3}>
+                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#75C2F6" targetRoute="/fr/approve" />
+                  </Grid>
+                )} />
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#75C2F6" targetRoute="/fr/closed" />
               </Grid>
@@ -84,7 +91,7 @@ const frDashboard = () => {
         denied={(missingPermissions) => (
           <Grid item xs={12} lg={6}>
             <Alert severity='error'>
-                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+              Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
         )}
