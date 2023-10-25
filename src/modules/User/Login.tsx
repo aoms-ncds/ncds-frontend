@@ -1,6 +1,6 @@
-import { Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
+import { Email as EmailIcon, Height, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
 import UserServices from './extras/UserServices';
@@ -21,7 +21,6 @@ const LoginPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [unknownError, setUnknownError] = useState<string>();
 
-
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -30,7 +29,7 @@ const LoginPage = () => {
         setLoading(false);
         localStorage.setItem('userToken', res.data.token);
         localStorage.setItem('userData', JSON.stringify(res.data.user));
-        setUser(res.data.user as Staff|IWorker);
+        setUser(res.data.user as Staff | IWorker);
         const urlParams = new URLSearchParams(window.location.search);
         subscribe();
         const redirectURL = urlParams.get('redirect');
@@ -69,7 +68,13 @@ const LoginPage = () => {
     console.log('unknownError', unknownError);
   }, [unknownError]);
   return (
-    <>
+    <Box sx={{ height: '100vh',
+      width: '100vw', paddingLeft: '0', paddingRight: '0',
+      paddingBottom: '0',
+      paddingTop: '0',
+      backgroundImage:
+      'url(/EZ7A9599.JPG)',
+      backgroundSize: 'cover' }}>
       <CssBaseline />
       <Card
         sx={{
@@ -158,7 +163,7 @@ const LoginPage = () => {
           </form>
         </CardContent>
       </Card>
-    </>
+    </Box>
   );
 };
 
