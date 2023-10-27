@@ -7,7 +7,6 @@ import IROServices from '../../IRO/extras/IROServices';
 import StaffServices from '../../HR/extras/StaffServices';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import { useAuth } from '../../../hooks/Authentication';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import DashBoardCard from '../../FR/components/DashBoardCard';
 
 const MinimalModuleDataAnalytics = () => {
@@ -106,14 +105,14 @@ const MinimalModuleDataAnalytics = () => {
                 color={'#005eb8'}
                 targetRoute="/divisions/"
                 // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
-                icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               />
 
             </Grid> :
             <Grid item xs={6} md={3} xl={4}>
 
               <DashBoardCard secondaryText='Division'
-                icon={<img src="/divisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={divisionsCount?.toString()}
+                icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={divisionsCount?.toString()}
                 color="#005eb8" targetRoute={`/divisions/details/${(user.user as User).division}`} />
 
             </Grid>
@@ -128,12 +127,12 @@ const MinimalModuleDataAnalytics = () => {
             <Grid item xs={6} md={3} xl={4}>
 
               <DashBoardCard secondaryText='Sub-Divisions'
-                icon={<img src="/subDivisionLogo.png" alt="Logo"
+                icon={<img src="/mod_icons/sub_division.png" alt="Logo"
                   style={{ width: '70px', height: '70px' }} />}
                 count={subDivisionsCount?.toString()} color={'#005eb8'} targetRoute="/divisions/" />
 
             </Grid> : <Grid item xs={6} md={3} xl={4}>
-              <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/subDivisionLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/submod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 count={subDivisionsCount?.toString()} color="#005eb8" targetRoute={`/divisions/details/${(user.user as User).division}`} />
             </Grid>
 
@@ -150,23 +149,23 @@ const MinimalModuleDataAnalytics = () => {
       {(user.user as User).kind !== 'worker' &&
         <>
           <PermissionChecks permissions={['READ_STAFFS']} granted={<Grid item xs={6} md={3} xl={4}>
-            <DashBoardCard icon={<img src="/staffs.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            <DashBoardCard icon={<img src="/mod_icons/staff.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               secondaryText=" Staffs" count={staffsCount?.toString()} color={'#005eb8'} targetRoute="/hr/" />
           </Grid>} />
           <PermissionChecks permissions={['READ_WORKERS']} granted={<Grid item xs={6} md={3} xl={4}>
-            <DashBoardCard icon={<img src="/workers.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            <DashBoardCard icon={<img src="/mod_icons/workers.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               secondaryText=" Workers" count={workersCount?.toString()} color={'#005eb8'} targetRoute="/workers/" />
           </Grid>} />
         </>}
       <PermissionChecks permissions={['READ_FR']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <DashBoardCard icon={<img src="/FrLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          <DashBoardCard icon={<img src="/mod_icons/fr.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             secondaryText="FR" count={frCount?.toString()} color={'#005eb8'} targetRoute="/fr/" />
         </Grid>
       } />
       <PermissionChecks permissions={['READ_IRO']} granted={
         <Grid item xs={6} md={3} xl={4}>
-          <DashBoardCard icon={<img src="/IroLogo.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          <DashBoardCard icon={<img src="/mod_icons/IRO.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             secondaryText="IRO" count={iroCount?.toString()} color={'#005eb8'} targetRoute="/iro/" />
         </Grid>
       } />

@@ -1,6 +1,6 @@
 import Profile from '../Profile';
 import PermissionManager from '../PermissionManager';
-import ResetPasswordFormPage from '../rest_password_form';
+import ForgottenPasswordFormPage from '../ForgotPasswordForm';
 
 const usersPageRoutes: ModuleRoute = {
   base: '/users',
@@ -16,8 +16,8 @@ const usersPageRoutes: ModuleRoute = {
     // },
     {
       title: 'Forgot Password',
-      path: '/rest_password_form',
-      element: <ResetPasswordFormPage />,
+      path: '/reset_password_form',
+      element: <ForgottenPasswordFormPage />,
       private: false,
     },
     {

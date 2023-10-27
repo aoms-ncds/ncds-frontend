@@ -13,7 +13,7 @@ const homePageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_ACCESS'],
       showInDrawer: true,
       // icon: <HomeIcon />,
-      icon: <img src="/HomeLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+      icon: <img src="/mod_icons/home.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Login page',

@@ -13,7 +13,7 @@ const hrPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_STAFFS'],
       showInDrawer: true,
-      icon: <img src="/HrLogo.png" alt="Logo" style={{ width: '35px', height: '36px' }} />,
+      icon: <img src="/mod_icons/HR.png" alt="Logo" style={{ width: '35px', height: '36px' }} />,
     },
     {
       title: 'Manage staff',

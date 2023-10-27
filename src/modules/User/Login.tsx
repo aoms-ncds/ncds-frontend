@@ -1,6 +1,6 @@
-import { Box, Button, Card, CardContent, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, InputBase, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Brightness1, Brightness1Rounded, Email as EmailIcon, Height, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
+import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
 import UserServices from './extras/UserServices';
@@ -69,107 +69,128 @@ const LoginPage = () => {
   }, [unknownError]);
   return (
     <>
-      <Box sx={{ height: '100vh',
+      <Box sx={{
+        height: '100vh',
         width: '100vw', paddingLeft: '0', paddingRight: '0',
         paddingBottom: '0',
         paddingTop: '0',
         backgroundImage:
-      'url(/1EZ7A95993.jpg)',
+          'url(/loginBg.jpg)',
         backgroundSize: 'cover',
+        backgroundPosition: 'center center', /* Center the background image */
+        backgroundAttachment: 'fixed',
         // boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)','
-        filter: 'brightness(50%)',
+        filter: 'brightness(100%)',
       }}></Box>
       <CssBaseline />
-      <Card
+      <Box
         sx={{
           position: 'fixed',
-          top: '50%',
+          top: '65%',
           left: '50%',
           transform: 'translate(-50%,-50%)',
           minWidth: 260,
           maxWidth: 360,
           borderRadius: 1,
-          filter: 'brightness(100%) !important',
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          // filter: 'brightness(100%) !important',
           // filter: 'brightness(100%)',
         }}
       >
-        <CardContent
-        >
-          <form onSubmit={doLogin}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                 Log in to AOMS
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Email ID/User Name "
-                  type="email"
+        {/* <CardContent
+        > */}
+        <form onSubmit={doLogin}>
+          <Grid container spacing={1}>
+            {/* <Grid item xs={12}>
+              <Typography variant="h5" sx={{ textAlign: 'center' }}>
+                Log in to AOMS
+              </Typography>
+            </Grid> */}
+
+            <Grid item xs={12}>
+              <Box >
+                <InputBase
                   value={loginCred.email}
-                  error={emailError}
-                  helperText={emailError && 'Please enter a valid email'}
                   onChange={(e) =>
                     setLoginCred((loginCred) => ({
                       ...loginCred,
                       email: e.target.value,
                     }))
                   }
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon />
-                      </InputAdornment>
-                    ),
+                  placeholder="Email ID/User Name "
+                  sx={{
+                    background: '#f4f5f4',
+                    borderRadius: 40,
+                    padding: 1.5,
+                    opacity: 0.85,
                   }}
-                  variant="standard"
+                  // disabled={loading}
                   fullWidth
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  }
                   required
                 />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  label="Password"
-                  type={passwordVisible ? 'text' : 'password'}
+                {emailError &&
+                  <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid email</Typography>
+                }
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box >
+                <InputBase
                   value={loginCred.password}
-                  error={passwordError}
-                  helperText={passwordError && 'Please enter a valid password'}
                   onChange={(e) =>
                     setLoginCred((loginCred) => ({
                       ...loginCred,
                       password: e.target.value,
                     }))
                   }
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <KeyIcon />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton onClick={() => setPasswordVisibility((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
-                      </InputAdornment>
-                    ),
+                  placeholder="Password"
+                  type={passwordVisible ? 'text' : 'password'}
+                  sx={{
+                    background: '#f4f5f4',
+                    borderRadius: 40,
+                    padding: 1.5,
+                    opacity: 0.85,
                   }}
-                  variant="standard"
+                  // disabled={loading}
                   fullWidth
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <KeyIcon />
+                    </InputAdornment>
+                  }
+                  endAdornment={
+                    <InputAdornment position="start">
+                      <IconButton onClick={() => setPasswordVisibility((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
+                    </InputAdornment>}
                   required
                 />
-                <Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2 }} component={Link} to="/tests/ForgotPasswordForm">
-                Forgot Password?
-                </Button>
-              </Grid>
-              <Grid item xs={12} >
-                <Button type="submit" variant="contained" sx={{ p: 1, backgroundColor: '#005eb8' }} disabled={isLoading} startIcon={isLoading && <CircularProgress size={20} />} fullWidth>
-                  {isLoading ? 'Login in...' : 'LOG IN'}
-                </Button>
-              </Grid>
+
+                {passwordError &&
+                  <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid password</Typography>
+                }
+              </Box>
+              <br />
+              <br />
             </Grid>
-          </form>
-        </CardContent>
-      </Card>
+            <Grid item xs={12} >
+              <Button type="submit" variant="contained"
+                sx={{ p: 1, backgroundColor: 'gray', borderRadius: 40 }}
+                disabled={isLoading} startIcon={isLoading && <CircularProgress size={20} />} fullWidth>
+                {isLoading ? 'Login in...' : 'LOG IN'}
+              </Button><Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2, color: 'white' }} component={Link} to="/users/reset_password_form">
+                Forgot Password?
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+      {/* </CardContent>
+      </Card> */}
     </>
   );
 };
