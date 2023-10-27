@@ -1,5 +1,4 @@
 import WorkersDashboard from '..';
-import Diversity2Icon from '@mui/icons-material/Diversity2';
 import ManageWorkerPage from '../ManageWorkersPage';
 import WorkerFormPage from '../WorkerFormPage';
 import ApproveWorkerPage from '../ApproveWorkersPage';
@@ -17,7 +16,7 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_WORKERS'],
       showInDrawer: true,
       // icon: <Diversity2Icon />,
-      icon: <img src="/workers.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+      icon: <img src="/mod_icons/workers.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Manage Workers',

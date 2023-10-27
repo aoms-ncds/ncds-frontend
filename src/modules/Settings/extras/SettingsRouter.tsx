@@ -17,7 +17,7 @@ const settingsRoutes: ModuleRoute = {
       requiredAccessRights: ['WRITE_STAFFS'],
       showInDrawer: true,
       // icon: <SettingsIcon />,
-      icon: <img src="/SettingsLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+      icon: <img src="/mod_icons/settings.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Languages',

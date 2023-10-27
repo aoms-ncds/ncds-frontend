@@ -17,7 +17,7 @@ const applicationRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_APPLICATION'],
       showInDrawer: true,
       // icon: <NoteAltIcon/>,
-      icon: <img src="/ApplicationLogo.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+      icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
     {
       title: 'Add Request',

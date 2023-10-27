@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Card, CardContent, Typography, TextField, Button, InputAdornment, Alert, CircularProgress, CssBaseline } from '@mui/material';
+import { Grid, Button, InputAdornment, Alert, CircularProgress, CssBaseline, Box, InputBase } from '@mui/material';
 import { Email as EmailIcon } from '@mui/icons-material';
 import UserServices from './extras/UserServices';
 
@@ -37,82 +37,103 @@ const ForgottenPasswordFormPage = () => {
 
   return (
     <>
+      <Box sx={{
+        height: '100vh',
+        width: '100vw', paddingLeft: '0', paddingRight: '0',
+        paddingBottom: '0',
+        paddingTop: '0',
+        backgroundImage:
+          'url(/loginBg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center', /* Center the background image */
+        backgroundAttachment: 'fixed',
+        // boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)','
+        filter: 'brightness(100%)',
+      }}></Box>
       <CssBaseline />
-      <Card
+      <Box
         sx={{
           position: 'fixed',
-          top: '50%',
+          top: '65%',
           left: '50%',
           transform: 'translate(-50%,-50%)',
           minWidth: 260,
           maxWidth: 360,
           borderRadius: 1,
+          backgroundColor: 'rgba(255, 255, 255, 0)',
+          // filter: 'brightness(100%) !important',
+          // filter: 'brightness(100%)',
         }}
       >
-        <CardContent>
-          <form onSubmit={execConfirmReset}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h5" sx={{ textAlign: 'center' }}>
-                  Reset password
-                </Typography>
-              </Grid>
-              {/* {unknownError && (
+        <form onSubmit={execConfirmReset}>
+          <Grid container spacing={3}>
+            {/* <Grid item xs={12}>
+              <Typography variant="h5" sx={{ textAlign: 'center', color: 'white' }}>
+                Reset password
+              </Typography>
+            </Grid> */}
+            {/* {unknownError && (
               <Grid item xs={12}>
                 <Alert severity="error">
                   Error: <b>{unknownError}</b>
                 </Alert>
               </Grid>
             )} */}
-              <Grid item xs={12}>
-                <TextField
-                  label="Enter your email"
-                  type="text"
+            <Grid item xs={12}>
+              <Box >
+                <InputBase
                   value={email}
-                  helperText={'Please enter a valid email'}
                   onChange={(e) => {
                     setEmail(e.target.value);
                     setUnknownError(null);
                   }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon />
-                      </InputAdornment>
-                    ),
+                  placeholder="Email ID/User Name "
+                  sx={{
+                    background: '#f4f5f4',
+                    borderRadius: 40,
+                    padding: 1.5,
+                    opacity: 0.85,
                   }}
-                  variant="standard"
+                  // disabled={loading}
                   fullWidth
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  }
                   required
                   disabled={success === true}
+
                 />
-              </Grid>
-              <Grid item xs={12}>
-                {success && <Alert severity="success">A password rest email has been sent to {email}!</Alert>}
-                {unknownError && (
-                  <Alert severity="error">
-                    Error: <b>{unknownError}</b>
-                  </Alert>
-                )}
-                <br />
-                {!success && (
-                  <Button
-                    type="submit"
-                    variant={'contained'}
-                    color={success ? 'success' : unknownError ? 'error' : 'primary'}
-                    sx={{ p: 1 }}
-                    disabled={isLoading || unknownError != null}
-                    startIcon={isLoading && <CircularProgress size={20} />}
-                    fullWidth
-                  >
-                    {isLoading ? 'Please wait...' : unknownError ? 'Oops!' : 'Proceed'}
-                  </Button>
-                )}
-              </Grid>
+
+              </Box>
+
             </Grid>
-          </form>
-        </CardContent>
-      </Card>
+            <Grid item xs={12}>
+              {success && <Alert severity="success">A password reset email has been sent to {email}!</Alert>}
+              {unknownError && (
+                <Alert severity="error">
+                  Error: <b>{unknownError}</b>
+                </Alert>
+              )}
+              <br />
+              {!success && (
+                <Button
+                  type="submit"
+                  variant={'contained'}
+                  color={success ? 'success' : unknownError ? 'error' : 'primary'}
+                  sx={{ p: 1, backgroundColor: 'gray', borderRadius: 40 }}
+                  disabled={isLoading || unknownError != null}
+                  startIcon={isLoading && <CircularProgress size={20} />}
+                  fullWidth
+                >
+                  {isLoading ? 'Please wait...' : unknownError ? 'Oops!' : ' Reset password'}
+                </Button>
+              )}
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
     </>
   );
 };
