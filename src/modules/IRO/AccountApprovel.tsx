@@ -10,6 +10,7 @@ import {
   AttachMoney as AttachMoneyIcon,
   CurrencyRupee as CurrencyRupeeIcon,
   Close as CloseIcon,
+  Download as DownloadIcon,
   Message as MessageIcon,
 } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -32,6 +33,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
+import * as XLSX from 'xlsx';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -233,6 +235,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
   }, [selectedIRO.billAttachment]);
+
   useEffect(() => {
     if (selectedIRO._id != '') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
@@ -527,32 +530,64 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Account Approve'}>
+    <CommonPageLayout title={'Account Manager Approve'}>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
           <>
             <Card>
               <Grid container spacing={2}>
-                {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      sx={{ float: 'right', mt: 2, mr: 2 }}
-                      startIcon={<AttachMoneyIcon />}
-                      disabled={releaseAmountIROs.length == 0}
-                      onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.division?._id == releaseAmountIROs[0].division?._id)) {
-                          setOpenRelease(true);
-                        } else {
-                          enqueueSnackbar({ message: 'IRO of Different divisions selected', variant: 'error' });
-                        }
-                      }}
-                    >
-                      Bulk Release
-                    </Button>
-                  </Grid>
-                ) : null}
+
+                <Grid item xs={12}>
+                  <Button
+                    onClick={async () => {
+                      const sheet =
+        IROrder ?
+          IROrder.map((iro:IROrder) => ([
+            iro.IROno,
+            iro.IRODate.format('DD/MM/YYYY'),
+            iro.division?.details.name,
+            iro.purposeSubdivision?.name,
+            iro.mainCategory,
+            iro.particulars?.reduce(
+              (total, particular) => total + Number(particular.requestedAmount),
+              0,
+            ),
+            iro.sanctionedAmount,
+            iro.sanctionedBank,
+            iro.sanctionedAsPer,
+            // iro.releaseAmount?.releaseAmount,
+            // iro.releaseAmount?.transferredDate,
+            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+          ])) :
+          [];
+                      const headers=[
+                        'IRO No',
+                        'Date',
+                        'Division',
+                        'Sub Division',
+                        'Main Category',
+                        'Requested Amt',
+                        'Sanctioned Amt',
+                        'Sanctioned Bank',
+                        'Sanctioned As per',
+                        // 'Released Amt',
+                        // 'Released Date',
+                        'Status',
+                      ];
+                      const worksheet = XLSX.utils.json_to_sheet(sheet);
+                      const workbook = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                      XLSX.writeFile(workbook, 'IRO_Accounts_Mngr.xlsx', { compression: true });
+                    }}
+                    startIcon={<DownloadIcon />}
+                    color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+                    variant="contained"
+                  >
+              Export
+                  </Button>
+                </Grid>
 
                 <br />
                 <br />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import {
@@ -31,7 +31,7 @@ import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
-
+import * as XLSX from 'xlsx';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -317,26 +317,76 @@ const ManageFrPage = () => {
             <Grid item xs={12} lg={6}>
 
               <Grid item xs={12} md={12}>
-                <Card style={{ height: '80vh', width: '100%' }}>
+                <Card >
                   <Grid container spacing={2} >
 
                     <Grid item xs={12} sx={{ px: 2 }}>
                       <br />
+                      <PermissionChecks
+                        permissions={['MANAGE_FR']}
+                        granted={(
+                          <Button
+                            onClick={async () => {
+                              const sheet =
+                    FRRequests ?
+                      FRRequests.map((fr:FR) => ([
+                        fr.FRno,
+                        fr.FRdate.format('DD/MM/YYYY'),
+                        fr.division?.details.name,
+                        fr.purposeSubdivision?.name,
+                        fr.mainCategory,
+                        fr.particulars?.reduce(
+                          (total, particular) => total + Number(particular.requestedAmount),
+                          0,
+                        ),
+                        fr.sanctionedAmount,
+                        fr.sanctionedBank,
+                        fr.sanctionedAsPer,
+                        IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                      ])) :
+                      [];
+                              const headers=[
+                                'FR No',
+                                'Date',
+                                'Division',
+                                'Sub Division',
+                                'Main Category',
+                                'Requested Amt',
+                                'Sanctioned Amt',
+                                'Sanctioned Bank',
+                                'Sanctioned As per',
+                                'Status',
+                              ];
+                              const worksheet = XLSX.utils.json_to_sheet(sheet);
+                              const workbook = XLSX.utils.book_new();
+                              XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                              XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                              XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
+                            }}
+                            startIcon={<DownloadIcon />}
+                            color="primary" sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                            variant="contained"
+                          >
+                              Export
+                          </Button>)}/>
 
                       <PermissionChecks
                         permissions={['WRITE_FR']}
                         granted={(
-                          <Button
-                            variant="contained"
-                            sx={{ float: 'right' }}
-                            startIcon={<AddIcon />}
-                            component={Link}
-                            to="/fr/apply"
+                          <>
+
+                            <Button
+                              variant="contained"
+                              sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                              startIcon={<AddIcon />}
+                              component={Link}
+                              to="/fr/apply"
                             // onClick={() => {
                             // }}
-                          >
+                            >
                      Add new
-                          </Button>
+                            </Button>
+                          </>
                         )}
                       />
                       <br />
@@ -345,7 +395,7 @@ const ManageFrPage = () => {
 
                     </Grid>
                   </Grid>
-                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
+                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
                 </Card>
               </Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>

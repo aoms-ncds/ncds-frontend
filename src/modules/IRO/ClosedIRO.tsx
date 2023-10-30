@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
-import { Preview as PreviewIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,7 @@ import MessageItem from '../../components/MessageItem';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import * as XLSX from 'xlsx';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -184,7 +185,7 @@ const ClosedIRO = () => {
       headerAlign: 'center', width: 130,
     },
     {
-      field: 'released amount ', headerName: 'Realesed Amount', width: 150, renderHeader: () => <b>Realesed Amount</b>, align: 'center', headerAlign: 'center',
+      field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
       valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
     },
   ];
@@ -199,11 +200,63 @@ const ClosedIRO = () => {
   }, []);
   return (
     <CommonPageLayout title="Closed IRO">
-      <Grid item xs={12} md={12}>
-        <Card style={{ height: '75vh', width: '100%' }}>
-          <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} />
-        </Card>
-      </Grid>
+      <Card >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button
+              onClick={async () => {
+                const sheet =
+                        IROrder ?
+                          IROrder.map((iro:IROrder) => ([
+                            iro.IROno,
+                            iro.IRODate.format('DD/MM/YYYY'),
+                            iro.division?.details.name,
+                            iro.purposeSubdivision?.name,
+                            iro.mainCategory,
+                            iro.particulars?.reduce(
+                              (total, particular) => total + Number(particular.requestedAmount),
+                              0,
+                            ),
+                            iro.sanctionedAmount,
+                            iro.sanctionedBank,
+                            iro.sanctionedAsPer,
+                            iro.releaseAmount?.releaseAmount,
+                            iro.releaseAmount?.transferredDate,
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                          ])) :
+                          [];
+                const headers=[
+                  'IRO No',
+                  'Date',
+                  'Division',
+                  'Sub Division',
+                  'Main Category',
+                  'Requested Amt',
+                  'Sanctioned Amt',
+                  'Sanctioned Bank',
+                  'Sanctioned As per',
+                  'Released Amt',
+                  'Released Date',
+                  'Status',
+                ];
+                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                XLSX.writeFile(workbook, 'Closed_IRO_Report.xlsx', { compression: true });
+              }}
+              startIcon={<DownloadIcon />}
+              color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+              variant="contained"
+            >
+                              Export
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}/>
+          </Grid>
+        </Grid>
+      </Card>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>

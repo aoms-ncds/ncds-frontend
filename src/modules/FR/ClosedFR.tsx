@@ -5,7 +5,7 @@ import { Card } from '@mui/material';
 const ClosedFR = () => {
   return (
     <CommonPageLayout title="Closed FR">
-      <Card sx={{ height: '100%' }}>
+      <Card >
         <ClosedFRsTable />
       </Card>
     </CommonPageLayout>
