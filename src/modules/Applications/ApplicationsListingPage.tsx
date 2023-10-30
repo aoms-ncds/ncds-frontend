@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, ThumbDown as ThumbDownIcon, Attachment as AttachmentIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
+  Attachment as AttachmentIcon } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
@@ -17,6 +18,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import moment from 'moment';
+import * as XLSX from 'xlsx';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -118,6 +120,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         });
     }
   }, []);
+
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editid) {
@@ -354,24 +357,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   ];
   return (
     <CommonPageLayout title="Application Manages ">
-      <PermissionChecks
-        permissions={['WRITE_APPLICATION']}
-        granted={(
 
-          <Button
-            style={{ display: props.action !== 'manage' ? 'none' : '' }}
-            variant="contained"
-            sx={{ float: 'right' }}
-            startIcon={<AddIcon />}
-            onClick={() => {
-              setShowApplicationFormDialog(true);
-              setAction('add');
-            }}
-          >
-            Add new
-          </Button>
-        )}
-      />
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
           <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
@@ -476,7 +462,73 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
       <Grid item xs={12} md={12}>
         <Card style={{ height: '70vh', width: '100%' }}>
-          <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
+          <Grid container spacing={0} justifyContent="space-between">
+            <Grid item xs={12} >
+              <>
+                <PermissionChecks
+                  permissions={['MANAGE_APPLICATION']}
+                  granted={(
+                    <Button
+                      onClick={async () => {
+                        const sheet =
+                          applications ?
+                            applications.map((application:Application) => ([
+                              application.applicationCode,
+                              application.name,
+                              application.reason,
+                              application.createdBy&&( application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
+                              application.division?.details?.name,
+                              Number(application.status)==CommonLifeCycleStates.CREATED?'Waiting for HR':
+                                Number(application.status)==CommonLifeCycleStates.ACTIVE?'Waiting for President':
+                                  Number(application.status)==CommonLifeCycleStates.APPROVED?'APPROVED':
+                                    Number(application.status)==CommonLifeCycleStates.REJECTED?'REJECTED':'Unknown Status ',
+                            ])) :
+                            [];
+                        const headers=[
+                          'Application No',
+                          'Name',
+                          'Reason',
+                          'Applied By',
+                          'Division',
+                          'Status',
+                        ];
+                        const worksheet = XLSX.utils.json_to_sheet(sheet);
+                        const workbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                        XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                        XLSX.writeFile(workbook, 'ApplicationReport.xlsx', { compression: true });
+                      }}
+                      startIcon={<DownloadIcon />}
+                      color="primary" sx={{ float: 'right', m: 2 }}
+                      variant="contained"
+                    >Export</Button>
+                  )}
+                />
+
+                <PermissionChecks
+                  permissions={['WRITE_APPLICATION']}
+                  granted={(
+                    <Button
+                      style={{ display: props.action !== 'manage' ? 'none' : '' }}
+                      variant="contained"
+                      sx={{ float: 'right', m: 2 }}
+                      startIcon={<AddIcon />}
+                      onClick={() => {
+                        setShowApplicationFormDialog(true);
+                        setAction('add');
+                      }}
+                    >
+            Add new
+                    </Button>
+                  )}
+                />
+              </>
+            </Grid>
+            <Grid item xs={12} >
+              <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
+            </Grid>
+          </Grid>
+
         </Card>
       </Grid>
     </CommonPageLayout>
