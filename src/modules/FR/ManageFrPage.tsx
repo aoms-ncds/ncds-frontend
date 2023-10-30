@@ -32,6 +32,7 @@ import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import * as XLSX from 'xlsx';
+import moment from 'moment';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -39,7 +40,11 @@ const ManageFrPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string|null>(null);
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('y'),
+    endDate: moment().endOf('y'),
+    rangeType: 'years',
+  });
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -50,7 +55,7 @@ const ManageFrPage = () => {
     FRServices.getAll()
       .then((res) => {
         // console.log(res, 'rr');
-        setFRRequests(res.data);
+        setFRRequests(res.data.filter((fr)=>fr.FRdate.isSameOrAfter(dateRange.startDate)&&fr.FRdate.isSameOrBefore(dateRange.endDate)));
       })
       .catch((res) => {
         console.log(res);
@@ -59,12 +64,12 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr)=>fr.FRdate.isSameOrAfter(dateRange.startDate)&&fr.FRdate.isSameOrBefore(dateRange.endDate)));
       })
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [dateRange]);
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
@@ -309,7 +314,26 @@ const ManageFrPage = () => {
   ];
 
   return (
-    <CommonPageLayout title="Manage FR">
+    <CommonPageLayout title="Manage FR"
+      momentFilter={{
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setFRRequests((fr)=>
+            fr?fr.filter((fr)=>fr.FRdate.isSameOrAfter(newDateRange.startDate)&&fr.FRdate.isSameOrBefore(newDateRange.endDate)):[],
+          );
+        },
+        rangeTypes: [
+          'weeks',
+          'months',
+          'quarter_years',
+          'years',
+          'customRange',
+          'customDay',
+        ],
+        initialRange: 'years',
+      }}>
+
       <PermissionChecks
         permissions={['READ_FR']}
         granted={(

@@ -31,10 +31,28 @@ import { useAuth } from '../hooks/Authentication';
 import { unsubscribe } from '../extras/Firebase/messaging';
 import NotificationService from '../modules/Notification/extras/NotificationService';
 import { enqueueSnackbar } from 'notistack';
+import MomentFilter from './MomentFilter';
+import { Moment } from 'moment';
 
 const drawerWidth = 240;
-
-const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean }) => {
+type DateRangeType =
+  | 'date-time'
+  | 'days'
+  | 'weeks'
+  | 'months'
+  | 'quarter_years'
+  | 'years'
+  | 'customDay'
+  | 'customRange';
+interface DateFilterProps {
+  dateRange: DateRange;
+  onChange: (newDateRange: DateRange) => void;
+  rangeTypes: DateRangeType[];
+  initialRange?: DateRangeType;
+  min?: Moment;
+  max?: Moment;
+}
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean; momentFilter?: DateFilterProps }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -274,7 +292,33 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         <Toolbar />
         {props.title && !props.hidePageHeader && (
           <>
-            <Typography variant="h4">{props.title}</Typography>
+            <Grid container spacing={2} >
+              <Grid item xs={12} md={9}>
+                <Typography variant="h4" color="color.secondary">
+                  {props.title}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={3}>
+                {props.momentFilter && (
+                  <MomentFilter
+                    dateRange={props.momentFilter.dateRange}
+                    onChange={props.momentFilter.onChange}
+                    rangeTypes={props.momentFilter.rangeTypes}
+                    initialRange={props.momentFilter.initialRange}
+                    sx={{
+                      minHeight: 40,
+                      minWidth: 268,
+                      // width: "100%",
+                      justifyContent: 'flex-end',
+                    }}
+                    min={props.momentFilter.min}
+                    max={props.momentFilter.max}
+                  />
+                )}
+              </Grid>
+
+            </Grid>
+
             <br />
             <Divider />
             <br />

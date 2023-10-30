@@ -175,7 +175,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('y'),
+    endDate: moment().endOf('y'),
+    rangeType: 'years',
+  });
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
@@ -215,10 +219,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     } else {
       IROServices.getAll()
       .then((res) => {
-        setIROrder(res.data);
+        setIROrder(res.data.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [openRelease, attachment, addSignature]);
+  }, [openRelease, attachment, addSignature, dateRange]);
 
   // Rest of your component code...
 
@@ -522,7 +526,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}>
+    <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
+      momentFilter={props.action == 'manage' ?{
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq)=>
+            iroReq?iroReq.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)):[]);
+        },
+        rangeTypes: [
+          'weeks',
+          'months',
+          'quarter_years',
+          'years',
+          'customRange',
+          'customDay',
+        ],
+        initialRange: 'years',
+      }:undefined}>
+
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={

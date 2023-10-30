@@ -88,4 +88,20 @@ declare global {
     country?: string;
     pincode?: string;
   }
+
+  interface DateRange {
+    startDate: Moment;
+    endDate: Moment;
+    rangeType?: DateRangeType;
+  }
+  type DateRangeType =
+  | 'date-time'
+  | 'days'
+  | 'weeks'
+  | 'months'
+  | 'quarter_years'
+  | 'years'
+  | 'customRange'
+  | 'customDay';
+
 }
