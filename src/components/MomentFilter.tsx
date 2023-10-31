@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ArrowBackIos as ArrowBackIosIcon,
   ArrowForwardIos as ArrowForwardIosIcon,
@@ -21,7 +21,6 @@ import {
   MenuItem,
   Stack,
   SxProps,
-  TextField,
   Theme,
   Typography,
 } from '@mui/material';
@@ -29,21 +28,6 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-interface DateRange {
-  startDate: Moment;
-  endDate: Moment;
-  rangeType?: DateRangeType;
-}
-
-type DateRangeType =
-  | 'date-time'
-  | 'days'
-  | 'weeks'
-  | 'months'
-  | 'quarter_years'
-  | 'years'
-  | 'customRange'
-  | 'customDay';
 
 interface DateFilterProps {
   dateRange: DateRange;
