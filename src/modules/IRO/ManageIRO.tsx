@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Avatar } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
   AttachFile as AttachmentIcon,
-  Edit as EditIcon,
+  Download as DownloadIcon,
   Preview as PreviewIcon,
   AttachMoney as AttachMoneyIcon,
   CurrencyRupee as CurrencyRupeeIcon,
@@ -18,7 +18,6 @@ import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -32,6 +31,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
+import * as XLSX from 'xlsx';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -175,7 +175,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('y'),
+    endDate: moment().endOf('y'),
+    rangeType: 'years',
+  });
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
@@ -215,10 +219,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     } else {
       IROServices.getAll()
       .then((res) => {
-        setIROrder(res.data);
+        setIROrder(res.data.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [openRelease, attachment, addSignature]);
+  }, [openRelease, attachment, addSignature, dateRange]);
 
   // Rest of your component code...
 
@@ -522,15 +526,85 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}>
+    <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
+      momentFilter={props.action == 'manage' ?{
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq)=>
+            iroReq?iroReq.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)):[]);
+        },
+        rangeTypes: [
+          'weeks',
+          'months',
+          'quarter_years',
+          'years',
+          'customRange',
+          'customDay',
+        ],
+        initialRange: 'years',
+      }:undefined}>
+
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
           <>
             <Card>
               <Grid container spacing={2}>
-                {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                  <Grid item xs={12}>
+                <Grid item xs={12}>
+                  <PermissionChecks
+                    permissions={['MANAGE_IRO']}
+                    granted={
+                      <Button
+                        onClick={async () => {
+                          const sheet =
+                        IROrder ?
+                          IROrder.map((iro:IROrder) => ([
+                            iro.IROno,
+                            iro.IRODate.format('DD/MM/YYYY'),
+                            iro.division?.details.name,
+                            iro.purposeSubdivision?.name,
+                            iro.mainCategory,
+                            iro.particulars?.reduce(
+                              (total, particular) => total + Number(particular.requestedAmount),
+                              0,
+                            ),
+                            iro.sanctionedAmount,
+                            iro.sanctionedBank,
+                            iro.sanctionedAsPer,
+                            iro.releaseAmount?.releaseAmount,
+                            iro.releaseAmount?.transferredDate,
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                          ])) :
+                          [];
+                          const headers=[
+                            'IRO No',
+                            'Date',
+                            'Division',
+                            'Sub Division',
+                            'Main Category',
+                            'Requested Amt',
+                            'Sanctioned Amt',
+                            'Sanctioned Bank',
+                            'Sanctioned As per',
+                            'Released Amt',
+                            'Released Date',
+                            'Status',
+                          ];
+                          const worksheet = XLSX.utils.json_to_sheet(sheet);
+                          const workbook = XLSX.utils.book_new();
+                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                          XLSX.writeFile(workbook, props.action == 'manage' ? 'IRO_Report.xlsx' : 'Release_Amt_IRO_Report.xlsx', { compression: true });
+                        }}
+                        startIcon={<DownloadIcon />}
+                        color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+                        variant="contained"
+                      >
+                              Export
+                      </Button>
+                    }/>
+                  {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
                       sx={{ float: 'right', mt: 2, mr: 2 }}
@@ -545,9 +619,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       }}
                     >
                       Bulk Release
-                    </Button>
-                  </Grid>
-                ) : null}
+                    </Button>) : null}
+                </Grid>
+
 
                 <br />
                 <br />

@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Print as PrintIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import FRServices from '../extras/FRServices';
 import DropdownButton from '../../../components/DropDownButton';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
+import { Button, Grid } from '@mui/material';
+import * as XLSX from 'xlsx';
+import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
+import PermissionChecks from '../../User/components/PermissionChecks';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -99,7 +103,64 @@ const ClosedFRsTable = () => {
         console.log({ err });
       });
   }, []);
-  return <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} />;
+  return (
+    <Grid container spacing={2} >
+
+      <Grid item xs={12} sx={{ px: 2 }}>
+        <PermissionChecks
+          permissions={['MANAGE_FR']}
+          granted={(
+            <Button
+              onClick={async () => {
+                const sheet =
+                    closedFRs ?
+                      closedFRs.map((fr:FR) => ([
+                        fr.FRno,
+                        fr.FRdate.format('DD/MM/YYYY'),
+                        fr.division?.details.name,
+                        fr.purposeSubdivision?.name,
+                        fr.mainCategory,
+                        fr.particulars?.reduce(
+                          (total, particular) => total + Number(particular.requestedAmount),
+                          0,
+                        ),
+                        fr.sanctionedAmount,
+                        fr.sanctionedBank,
+                        fr.sanctionedAsPer,
+                        IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                      ])) :
+                      [];
+                const headers=[
+                  'FR No',
+                  'Date',
+                  'Division',
+                  'Sub Division',
+                  'Main Category',
+                  'Requested Amt',
+                  'Sanctioned Amt',
+                  'Sanctioned Bank',
+                  'Sanctioned As per',
+                  'Status',
+                ];
+                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                XLSX.writeFile(workbook, 'Closed_FR_Report.xlsx', { compression: true });
+              }}
+              startIcon={<DownloadIcon />}
+              color="primary" sx={{ float: 'right', mt: 2, mr: 2 }}
+              variant="contained"
+            >
+                              Export
+            </Button>
+          )}/>
+      </Grid>
+      <Grid item xs={12} >
+        <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }}/>
+      </Grid>
+    </Grid>
+  );
 };
 
 export default ClosedFRsTable;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
-import { Send as SendIcon, Print as PrintIcon, Edit as EditIcon, Preview as PreviewIcon, Reply as ReplyIcon } from '@mui/icons-material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid } from '@mui/material';
+import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import moment from 'moment';
@@ -16,6 +15,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useAuth } from '../../hooks/Authentication';
+import * as XLSX from 'xlsx';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -332,8 +332,62 @@ const ReconciliationIRO = () => {
   ];
   return (
     <CommonPageLayout title="Reconciliation IRO">
-      <Card style={{ height: '75vh', width: '100%' }}>
-        <DataGrid rows={reconciliationIRO ?? []} columns={columns} getRowId={(row) => row._id} />
+      <Card >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Button
+              onClick={async () => {
+                const sheet =
+                        reconciliationIRO ?
+                          reconciliationIRO.map((iro:IROrder) => ([
+                            iro.IROno,
+                            iro.IRODate.format('DD/MM/YYYY'),
+                            iro.division?.details.name,
+                            iro.purposeSubdivision?.name,
+                            iro.mainCategory,
+                            iro.particulars?.reduce(
+                              (total, particular) => total + Number(particular.requestedAmount),
+                              0,
+                            ),
+                            iro.sanctionedAmount,
+                            iro.sanctionedBank,
+                            iro.sanctionedAsPer,
+                            iro.releaseAmount?.releaseAmount,
+                            iro.releaseAmount?.transferredDate,
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                          ])) :
+                          [];
+                const headers=[
+                  'IRO No',
+                  'Date',
+                  'Division',
+                  'Sub Division',
+                  'Main Category',
+                  'Requested Amt',
+                  'Sanctioned Amt',
+                  'Sanctioned Bank',
+                  'Sanctioned As per',
+                  'Released Amt',
+                  'Released Date',
+                  'Status',
+                ];
+                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
+              }}
+              startIcon={<DownloadIcon />}
+              color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+              variant="contained"
+            >
+                              Export
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <DataGrid rows={reconciliationIRO ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}/>
+          </Grid>
+        </Grid>
       </Card>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Send as SendIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import {
@@ -31,7 +31,7 @@ import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
-
+import * as XLSX from 'xlsx';
 
 const PresidentApproval = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -304,110 +304,161 @@ const PresidentApproval = () => {
         permissions={['READ_FR']}
         granted={(
           <>
-            <Grid item xs={12} lg={6}>
+            <Card >
 
-              <Grid item xs={12} md={12}>
-                <Card style={{ height: '80vh', width: '100%' }}>
-                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} />
-                </Card>
-              </Grid>
-
-              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
-                <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
-                    <Grid item>
-                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
-                      <Divider />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button variant="contained" color='success'
-                        sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('president', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
-                        endIcon={<SendIcon />}
-                      > Send to President</Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button variant="contained" color='info'
-                        sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('accounts', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
-                        endIcon={<SendIcon />}
-                      >  Send to accounts</Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button variant="contained" color='inherit'
-                        sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('division_head', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
-                        endIcon={<SendIcon />}
-                      >  Send to division head</Button>
-                      <br /><br />
-                    </Grid>
-
-                    <Grid item xs={12}>
+              <Grid container>
+                <Grid item xs={12} sx={{ px: 2 }}>
+                  <PermissionChecks
+                    permissions={['PRESIDENT_ACCESS']}
+                    granted={(
                       <Button
-                        variant="contained"
-                        onClick={() => {
-                          toggleSendNotification(false);
-                          setSelectedFR(null);
+                        onClick={async () => {
+                          const sheet =
+                    FRRequests ?
+                      FRRequests.map((fr:FR) => ([
+                        fr.FRno,
+                        fr.FRdate.format('DD/MM/YYYY'),
+                        fr.division?.details.name,
+                        fr.purposeSubdivision?.name,
+                        fr.mainCategory,
+                        fr.particulars?.reduce(
+                          (total, particular) => total + Number(particular.requestedAmount),
+                          0,
+                        ),
+                        fr.sanctionedAmount,
+                        fr.sanctionedBank,
+                        fr.sanctionedAsPer,
+                        IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                      ])) :
+                      [];
+                          const headers=[
+                            'FR No',
+                            'Date',
+                            'Division',
+                            'Sub Division',
+                            'Main Category',
+                            'Requested Amt',
+                            'Sanctioned Amt',
+                            'Sanctioned Bank',
+                            'Sanctioned As per',
+                            'Status',
+                          ];
+                          const worksheet = XLSX.utils.json_to_sheet(sheet);
+                          const workbook = XLSX.utils.book_new();
+                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                          XLSX.writeFile(workbook, 'President_FR_Report.xlsx', { compression: true });
                         }}
-                        sx={{ marginBottom: 3, width: 260 }}
-                        endIcon={<CloseIcon />}
+                        startIcon={<DownloadIcon />}
+                        color="primary" sx={{ float: 'right', mt: 2, mr: 2, mb: 2 }}
+                        variant="contained"
                       >
-                        Close
+                              Export
                       </Button>
-                    </Grid>
-                    {/* <Grid item xs={12}>
+                    )}/>
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '80vh', width: '100%' }} />
+                </Grid>
+              </Grid>
+            </Card>
+
+            <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+              <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
+                  <Grid item>
+                    <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
+                    <Divider />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button variant="contained" color='success'
+                      sx={{ width: 260 }}
+                      onClick={
+                        () => {
+                          FRServices.sendNotifications('president', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
+                        }
+                      }
+                      endIcon={<SendIcon />}
+                    > Send to President</Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button variant="contained" color='info'
+                      sx={{ width: 260 }}
+                      onClick={
+                        () => {
+                          FRServices.sendNotifications('accounts', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
+                        }
+                      }
+                      endIcon={<SendIcon />}
+                    >  Send to accounts</Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button variant="contained" color='inherit'
+                      sx={{ width: 260 }}
+                      onClick={
+                        () => {
+                          FRServices.sendNotifications('division_head', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
+                        }
+                      }
+                      endIcon={<SendIcon />}
+                    >  Send to division head</Button>
+                    <br /><br />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        toggleSendNotification(false);
+                        setSelectedFR(null);
+                      }}
+                      sx={{ marginBottom: 3, width: 260 }}
+                      endIcon={<CloseIcon />}
+                    >
+                        Close
+                    </Button>
+                  </Grid>
+                  {/* <Grid item xs={12}>
                         <Button variant="contained" color='inherit'> Send to division head</Button>
 
                       </Grid> */}
 
-                  </Grid>
-                </DialogContent>
+                </Grid>
+              </DialogContent>
 
-              </Dialog>
-              <Dialog open={openRemarks} fullWidth maxWidth="md">
-                <DialogTitle>Remarks</DialogTitle>
-                <DialogContent>
-                  {remarks.length > 0 ? remarks.map((remark) => (
-                    // eslint-disable-next-line max-len
-                    <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-                  )) : 'No Data Found '}
-                </DialogContent>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
+            </Dialog>
+            <Dialog open={openRemarks} fullWidth maxWidth="md">
+              <DialogTitle>Remarks</DialogTitle>
+              <DialogContent>
+                {remarks.length > 0 ? remarks.map((remark) => (
+                  // eslint-disable-next-line max-len
+                  <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+                )) : 'No Data Found '}
+              </DialogContent>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
 
-                    if (remark.remark) {
-                      FRServices.addRemarks(remark)
+                  if (remark.remark) {
+                    FRServices.addRemarks(remark)
                         .then((res) => {
                           const x = [...remarks, res.data];
                           console.log('🚀 ~ file: PresidentApproval.tsx:201 ~ .then ~ x:', x);
@@ -424,48 +475,47 @@ const PresidentApproval = () => {
                             message: error.message,
                           });
                         });
+                  }
+                }}
+              >
+                <DialogActions>
+                  <TextField
+                    id="remarkTextfield"
+                    placeholder="Remarks"
+                    multiline
+                    value={remark?.remark}
+                    onChange={(e) =>
+                      setRemark((remark) => ({
+                        ...remark,
+                        FR: selectedFR ?? '',
+                        remark: e.target.value,
+                      }))
                     }
-                  }}
-                >
-                  <DialogActions>
-                    <TextField
-                      id="remarkTextfield"
-                      placeholder="Remarks"
-                      multiline
-                      value={remark?.remark}
-                      onChange={(e) =>
-                        setRemark((remark) => ({
-                          ...remark,
-                          FR: selectedFR ?? '',
-                          remark: e.target.value,
-                        }))
-                      }
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton type='submit'
-                            >
-                              <SendIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      fullWidth
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        toggleOpenRemarks(false);
-                        setSelectedFR(null);
-                      }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton type='submit'
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      toggleOpenRemarks(false);
+                      setSelectedFR(null);
+                    }}
                     // sx={{ ml: 'auto' }}
-                    >
+                  >
                       Close
-                    </Button>
-                  </DialogActions>
-                </form>
-              </Dialog>
-            </Grid>
+                  </Button>
+                </DialogActions>
+              </form>
+            </Dialog>
           </>
         )}
         denied={(missingPermissions) => (
