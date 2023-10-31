@@ -5,9 +5,7 @@ import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, 
 import {
   Print as PrintIcon,
   AttachFile as AttachmentIcon,
-  Edit as EditIcon,
   Preview as PreviewIcon,
-  AttachMoney as AttachMoneyIcon,
   CurrencyRupee as CurrencyRupeeIcon,
   Close as CloseIcon,
   Message as MessageIcon,
@@ -19,7 +17,6 @@ import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -32,7 +29,6 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
@@ -49,7 +45,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
-  const user= useAuth();
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -178,7 +173,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
 
-  const userPermissions = (user.user as User)?.permissions;
+  // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
   //       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
@@ -556,7 +551,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             iro.sanctionedBank,
                             iro.sanctionedAsPer,
                             // iro.releaseAmount?.releaseAmount,
-                            // iro.releaseAmount?.transferredDate,
+                            // iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
                             IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
                           ])) :
                           [];

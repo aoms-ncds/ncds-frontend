@@ -353,7 +353,7 @@ const ReconciliationIRO = () => {
                             iro.sanctionedBank,
                             iro.sanctionedAsPer,
                             iro.releaseAmount?.releaseAmount,
-                            iro.releaseAmount?.transferredDate,
+                            iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
                             IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
                           ])) :
                           [];
