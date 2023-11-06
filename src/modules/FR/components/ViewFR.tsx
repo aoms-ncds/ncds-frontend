@@ -359,7 +359,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               ) : null}
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
-                <Button
+                {props.value.status==FRLifeCycleStates.FR_CLOSED&& <Button
                   variant="contained"
                   color="warning"
                   style={{
@@ -376,7 +376,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
                   >
                     Print FR
                   </PDFDownloadLink>
-                </Button>
+                </Button>}
 
                 {/* )} */}
                 &nbsp;

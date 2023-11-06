@@ -174,14 +174,14 @@ const PresidentApproval = () => {
               icon: EditNoteIcon,
             },
 
-            {
-              id: 'print',
-              text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row} />,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
-            },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   document: <FRReceiptTemplate rowData={props.row} />,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
             {
               id: 'notification',
               text: 'Send notification',

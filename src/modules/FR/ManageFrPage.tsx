@@ -188,15 +188,15 @@ const ManageFrPage = () => {
               },
               icon: EditNoteIcon,
             },
-
-            {
-              id: 'print',
-              text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row}/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
-            },
+            // ...(props.row.status==FRLifeCycleStates.FR_CLOSED ?
+            //   [{
+            //     id: 'print',
+            //     text: 'Print FR',
+            //     component: PDFDownloadLink,
+            //     document: <FRReceiptTemplate rowData={props.row as FR}/>,
+            //     fileName: 'FRReceipt.pdf',
+            //     icon: PrintIcon,
+            //   }]:[]),
             {
               id: 'notification',
               text: 'Send notification',
