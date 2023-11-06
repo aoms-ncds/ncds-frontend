@@ -86,14 +86,14 @@ const IRODashboard = () => {
           permissions={['ACCOUNTS_MNGR_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Office manager  " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/account_approve" />
+              <DashboardCardButton primaryText="Accounts Manager  " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/account_approve" />
             </Grid>
           )} />
         <PermissionChecks
           permissions={['OFFICE_MNGR_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Accounts manager " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/office_approve" />
+              <DashboardCardButton primaryText="Office Manager " secondaryText="Approval" color="#005eb8" targetRoute="/IRO/office_approve" />
             </Grid>
           )} />
       </Grid>
