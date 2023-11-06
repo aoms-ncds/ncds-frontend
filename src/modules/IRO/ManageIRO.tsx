@@ -47,7 +47,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
-  const user= useAuth();
+  const user = useAuth();
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -185,42 +185,42 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     if (props.action === 'release') {
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'FCRA' })
-        .then((res) => {
-          setIROrder(() => [...res.data]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .then((res) => {
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
-        .then((res) => {
-          setIROrder(() => [...res.data]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .then((res) => {
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
       if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Personal Bank' })
-        .then((res) => {
-          setIROrder(() => [...res.data]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .then((res) => {
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
-      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS ) {
+      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
-        .then((res) => {
-          setIROrder(res.data);
-        });
+          .then((res) => {
+            setIROrder(res.data);
+          });
       }
     } else {
       IROServices.getAll()
-      .then((res) => {
-        setIROrder(res.data.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)));
-      });
+        .then((res) => {
+          setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+        });
     }
   }, [openRelease, attachment, addSignature, dateRange]);
 
@@ -353,7 +353,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               //     });
               // },
             },
-            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE? [
+            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ? [
               {
                 id: 'print',
                 text: 'Print IRO',
@@ -463,7 +463,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       renderCell: (params) => (
         <p
           style={{
-            maxWidth: 150,
+            maxWidth: 250,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
           }}
@@ -496,13 +496,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
-    { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
+    // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => <b>Sanctioned As Per</b>, renderCell: (params) => (
         <p
           style={{
-            maxWidth: 180,
+            maxWidth: 250,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
             justifyContent: 'center',
@@ -516,7 +516,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'status',
       renderHeader: () => <b>Status</b>,
-      width: 200,
+      width: 250,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
@@ -527,12 +527,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
   return (
     <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
-      momentFilter={props.action == 'manage' ?{
+      momentFilter={props.action == 'manage' ? {
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setIROrder((iroReq)=>
-            iroReq?iroReq.filter((iro)=>iro.IRODate.isSameOrAfter(dateRange.startDate)&&iro.IRODate.isSameOrBefore(dateRange.endDate)):[]);
+          setIROrder((iroReq) =>
+            iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []);
         },
         rangeTypes: [
           'weeks',
@@ -543,7 +543,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           'customDay',
         ],
         initialRange: 'years',
-      }:undefined}>
+      } : undefined}>
 
       <PermissionChecks
         permissions={['READ_IRO']}
@@ -558,26 +558,26 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       <Button
                         onClick={async () => {
                           const sheet =
-                        IROrder ?
-                          IROrder.map((iro:IROrder) => ([
-                            iro.IROno,
-                            iro.IRODate.format('DD/MM/YYYY'),
-                            iro.division?.details.name,
-                            iro.purposeSubdivision?.name,
-                            iro.mainCategory,
-                            iro.particulars?.reduce(
-                              (total, particular) => total + Number(particular.requestedAmount),
-                              0,
-                            ),
-                            iro.sanctionedAmount,
-                            iro.sanctionedBank,
-                            iro.sanctionedAsPer,
-                            iro.releaseAmount?.releaseAmount,
-                            iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          ])) :
-                          [];
-                          const headers=[
+                            IROrder ?
+                              IROrder.map((iro: IROrder) => ([
+                                iro.IROno,
+                                iro.IRODate.format('DD/MM/YYYY'),
+                                iro.division?.details.name,
+                                iro.purposeSubdivision?.name,
+                                iro.mainCategory,
+                                iro.particulars?.reduce(
+                                  (total, particular) => total + Number(particular.requestedAmount),
+                                  0,
+                                ),
+                                iro.sanctionedAmount,
+                                iro.sanctionedBank,
+                                iro.sanctionedAsPer,
+                                iro.releaseAmount?.releaseAmount,
+                                iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                                IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                              ])) :
+                              [];
+                          const headers = [
                             'IRO No',
                             'Date',
                             'Division',
@@ -601,9 +601,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
                         variant="contained"
                       >
-                              Export
+                        Export
                       </Button>
-                    }/>
+                    } />
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
@@ -1082,7 +1082,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
 
                   return res;
                 });

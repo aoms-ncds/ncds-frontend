@@ -300,7 +300,7 @@ const ReconciliationIRO = () => {
       } },
     { field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
-    { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
+    // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center', headerAlign: 'center',
       renderCell: (params) => (
@@ -322,7 +322,7 @@ const ReconciliationIRO = () => {
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
-      width: 200,
+      width: 250,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {

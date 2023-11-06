@@ -500,7 +500,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
-    { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
+    // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => <b>Sanctioned As Per</b>, renderCell: (params) => (

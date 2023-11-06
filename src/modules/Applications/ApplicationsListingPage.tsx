@@ -344,7 +344,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
-      width: 130,
+      width: 205,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
