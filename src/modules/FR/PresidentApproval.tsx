@@ -288,7 +288,7 @@ const PresidentApproval = () => {
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
-      // width: 205,
+      width: 210,
       align: 'center',
       headerAlign: 'center',
       renderCell: (props) => (
