@@ -322,12 +322,22 @@ const ReconciliationIRO = () => {
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
-      width: 250,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 205,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+          }}
+        >
+          {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
+      // valueGetter: (params) => {
+      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      // },
     },
   ];
   return (

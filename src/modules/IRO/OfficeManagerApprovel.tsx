@@ -514,12 +514,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'status',
       renderHeader: () => <b>Status</b>,
-      width: 250,
+      width: 205,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 205,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+          }}
+        >
+          {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+        </p>
+      ),
+      // valueGetter: (params) => {
+      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      // },
     },
   ];
 
