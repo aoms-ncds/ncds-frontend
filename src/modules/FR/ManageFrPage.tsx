@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
-import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon,
-  Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import {
@@ -32,6 +32,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
