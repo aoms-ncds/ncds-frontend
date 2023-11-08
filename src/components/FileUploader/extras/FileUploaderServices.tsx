@@ -4,11 +4,11 @@ import { getAuthHeader, getStandardResponse } from '../../../extras/CommonHelper
 
 export default {
 
-  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void, module?:string, filename?:string) =>
+  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void, module?:string, filename?:string, iroId?:string) =>
     getStandardResponse<FileObject>(
       axios.post(
         '/file/',
-        { file, module, filename },
+        { file, module, filename, iroId },
         {
           onUploadProgress: (progressEvent) => {
             if (progressEvent && progressEvent.total) {

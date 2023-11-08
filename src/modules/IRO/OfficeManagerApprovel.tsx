@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Avatar } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -455,22 +455,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'mainCategory',
-      headerName: 'Main Category',
-      width: 150,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params) => (
-        <p
-          style={{
-            maxWidth: 150,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-          }}
-        >
-          {params.row.mainCategory}
-        </p>
-      ),
+      renderHeader: () => (<b>Main Category</b>),
+      width: 240,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.mainCategory}
+        </p>
+      ),
     },
     {
       field: 'requestAmount',
@@ -497,18 +498,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => <b>Sanctioned As Per</b>, renderCell: (params) => (
-        <p
-          style={{
-            maxWidth: 180,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-          }}
-        >
-          {params.row.sanctionedAsPer}
-        </p>
-      ), align: 'center', headerAlign: 'center',
+      field: 'sanctionedAsPer',
+      renderHeader: () => (<b>Special Sanction</b>),
+      renderCell: (props) => (
+        <p style={{
+          maxWidth: 200,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}> {props.row.sanctionedAsPer}</p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     {

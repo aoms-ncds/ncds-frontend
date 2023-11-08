@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../extras/CommonConfig';
@@ -12,7 +11,6 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
-import moment from 'moment';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -25,7 +23,6 @@ interface ReleaseDialogProps {
 }
 
 const ReleaseAmount = (props: ReleaseDialogProps) => {
-  const navigate = useNavigate();
   const [iroStatus, setIroStatus] = useState(false);
   const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
     _id: '',
@@ -46,7 +43,6 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
-  const [isFocused, setFocused] = useState(false);
 
   const saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     e.preventDefault();
@@ -116,23 +112,23 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     },
     {
       field: 'mainCategory',
-      headerName: 'Main Category',
-      width: 150,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params) => (
+      renderHeader: () => (<b>Main Category</b>),
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
         <p
           style={{
-            maxWidth: 180,
+            maxWidth: 240,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
             justifyContent: 'center',
+            textAlign: 'center',
           }}
         >
-          {params.value}
+          {props.row.mainCategory}
         </p>
       ),
-      align: 'center',
-      headerAlign: 'center',
     },
     {
       field: 'requestAmount',

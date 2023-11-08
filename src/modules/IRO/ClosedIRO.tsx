@@ -135,8 +135,26 @@ const ClosedIRO = () => {
       renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
       width: 170,
     },
-    { field: 'mainCategory', align: 'center', headerAlign: 'center', renderHeader: () => (<b>Main Category</b>), width: 245 },
     {
+      field: 'mainCategory',
+      renderHeader: () => (<b>Main Category</b>),
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.mainCategory}
+        </p>
+      ),
+    }, {
       field: 'requestAmount',
       align: 'center',
       headerAlign: 'center',
@@ -166,19 +184,20 @@ const ClosedIRO = () => {
       headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },
     {
-      field: 'sanctionedAsPer', renderHeader: () => (<b>Sanctioned As Per</b>), align: 'center',
-      headerAlign: 'center', width: 180, renderCell: (params) => (
-        <p
-          style={{
-            maxWidth: 180,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-          }}
-        >
-          {params.row.sanctionedAsPer}
-        </p>
+      field: 'sanctionedAsPer',
+      renderHeader: () => (<b>Special Sanction</b>),
+      renderCell: (props) => (
+        <p style={{
+          maxWidth: 200,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}> {props.row.sanctionedAsPer}</p>
       ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'sanctionedBank', renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center',
