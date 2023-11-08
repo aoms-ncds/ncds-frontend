@@ -40,7 +40,7 @@ import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 
-const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
+const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolean}>) => {
   const navigate = useNavigate();
   const [coordinators, setCoordinators] = useState<IWorker[]>();
   const [workers, setWorkers] = useState<IWorker[]>();
@@ -359,7 +359,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR>) => {
               ) : null}
               <Grid item xs={12}>
                 {/* {props.action === 'edit' && ( */}
-                {props.value.status==FRLifeCycleStates.FR_CLOSED&& <Button
+                {props.options?.FRLoaded && <Button
                   variant="contained"
                   color="warning"
                   style={{
