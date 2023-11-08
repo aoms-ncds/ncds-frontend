@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Avatar } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
   AttachFile as AttachmentIcon,
-  Edit as EditIcon,
+
   Preview as PreviewIcon,
-  AttachMoney as AttachMoneyIcon,
+
   CurrencyRupee as CurrencyRupeeIcon,
   Close as CloseIcon,
   Download as DownloadIcon,
@@ -19,7 +19,7 @@ import DropdownButton from '../../components/DropDownButton';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
+// import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -32,7 +32,6 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import ReleaseAmount from './ReleaseAmount';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
@@ -49,7 +48,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
-  const user= useAuth();
+  // const user= useAuth();
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -178,7 +177,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
 
-  const userPermissions = (user.user as User)?.permissions;
+  // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
   //       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
@@ -461,22 +460,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'mainCategory',
-      headerName: 'Main Category',
-      width: 150,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params) => (
-        <p
-          style={{
-            maxWidth: 150,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-          }}
-        >
-          {params.row.mainCategory}
-        </p>
-      ),
+      renderHeader: () => (<b>Main Category</b>),
+      width: 240,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.mainCategory}
+        </p>
+      ),
     },
     {
       field: 'requestAmount',
@@ -503,18 +503,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer', headerName: 'Sanctioned As Per', width: 180, renderHeader: () => <b>Sanctioned As Per</b>, renderCell: (params) => (
-        <p
-          style={{
-            maxWidth: 180,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-          }}
-        >
-          {params.row.sanctionedAsPer}
-        </p>
-      ), align: 'center', headerAlign: 'center',
+      field: 'sanctionedAsPer',
+      renderHeader: () => (<b>Special Sanction</b>),
+      renderCell: (props) => (
+        <p style={{
+          maxWidth: 200,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}> {props.row.sanctionedAsPer}</p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     {

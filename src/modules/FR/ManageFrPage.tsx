@@ -21,16 +21,13 @@ import {
 } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import PrintIcon from '@mui/icons-material/Print';
 // import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import FRReceiptTemplate from './components/FRReceiptTemplate';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 
@@ -252,15 +249,17 @@ const ManageFrPage = () => {
     {
       field: 'mainCategory',
       renderHeader: () => (<b>Main Category</b>),
-      width: 250,
+      width: 240,
       align: 'center',
       headerAlign: 'center',
       renderCell: (props) => (
         <p
           style={{
-            maxWidth: 250,
+            maxWidth: 240,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
           }}
         >
           {props.row.mainCategory}
@@ -294,7 +293,13 @@ const ManageFrPage = () => {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
       renderCell: (props) => (
-        <p> {props.row.sanctionedAsPer}</p>
+        <p style={{
+          maxWidth: 200,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}> {props.row.sanctionedAsPer}</p>
       ),
       width: 200,
       align: 'center',

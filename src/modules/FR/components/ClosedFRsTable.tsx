@@ -21,7 +21,7 @@ const ClosedFRsTable = () => {
       renderHeader: () => (<b>Action</b>),
       minWidth: 50,
       type: 'string',
-      renderCell: (props: any) => (
+      renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
           id="FR action"
@@ -73,7 +73,26 @@ const ClosedFRsTable = () => {
       renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
       width: 170,
     },
-    { field: 'mainCategory', renderHeader: () => (<b>Main Category</b>), width: 245 },
+    {
+      field: 'mainCategory',
+      renderHeader: () => (<b>Main Category</b>),
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.mainCategory}
+        </p>
+      ),
+    },
     {
       field: 'requestAmount',
       renderHeader: () => (<b>Requested Amount</b>),
