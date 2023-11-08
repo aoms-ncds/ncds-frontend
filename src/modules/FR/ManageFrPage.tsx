@@ -81,48 +81,48 @@ const ManageFrPage = () => {
       // getActions: (props: GridRowParams) => (
       //       [
 
-      //         <GridLinkAction
-      //           key={1}
-      //           label="View And Manage"
-      //           icon={<PreviewIcon />}
-      //           showInMenu
-      //           to={`/fr/${props.row._id}/view`}/>,
-      //         hasPermissions(['WRITE_FR']) &&
-      //         <GridLinkAction
-      //           key={2}
-      //           label="Edit"
-      //           icon={<EditIcon />}
-      //           showInMenu
-      //           to={ `/fr/${props.row._id}/edit`}
-      //         />,
-      //         <GridLinkAction
-      //           key={3}
-      //           label="Send Back to Division"
-      //           icon={<PreviewIcon />}
-      //           showInMenu
-      //           onClick={() => {
-      //             enqueueSnackbar({
-      //               message: 'Sent back to division',
-      //               variant: 'success',
-      //             });
-      //           } } />,
-      //         <GridLinkAction
-      //           key={4}
-      //           label="Remarks"
-      //           icon={<EditIcon />}
-      //           showInMenu
-      //           onClick={() => {
-      //             toggleOpenRemarks(true);
-      //             setSelectedFR(props.row._id);
-      //             FRServices.getAllRemarksById(props.row._id)
-      //                 .then((res) => setRemarks(res.data ?? []))
-      //                 .catch((error) => {
-      //                   enqueueSnackbar({
-      //                     variant: 'error',
-      //                     message: error.message,
-      //                   });
-      //                 });
-      //           } } />,
+      // <GridLinkAction
+      //   key={1}
+      //   label="View And Manage"
+      //   icon={<PreviewIcon />}
+      //   showInMenu
+      //   to={`/fr/${props.row._id}/view`}/>,
+      // hasPermissions(['WRITE_FR']) &&
+      // <GridLinkAction
+      //   key={2}
+      //   label="Edit"
+      //   icon={<EditIcon />}
+      //   showInMenu
+      //   to={ `/fr/${props.row._id}/edit`}
+      // />,
+      // <GridLinkAction
+      //   key={3}
+      //   label="Send Back to Division"
+      //   icon={<PreviewIcon />}
+      //   showInMenu
+      //   onClick={() => {
+      //     enqueueSnackbar({
+      //       message: 'Sent back to division',
+      //       variant: 'success',
+      //     });
+      //   } } />,
+      // <GridLinkAction
+      //   key={4}
+      //   label="Remarks"
+      //   icon={<EditIcon />}
+      //   showInMenu
+      //   onClick={() => {
+      //     toggleOpenRemarks(true);
+      //     setSelectedFR(props.row._id);
+      //     FRServices.getAllRemarksById(props.row._id)
+      //         .then((res) => setRemarks(res.data ?? []))
+      //         .catch((error) => {
+      //           enqueueSnackbar({
+      //             variant: 'error',
+      //             message: error.message,
+      //           });
+      //         });
+      //   } } />,
       //         <GridLinkAction
       //           key={5}
       //           label="Print FR"
@@ -188,15 +188,15 @@ const ManageFrPage = () => {
               },
               icon: EditNoteIcon,
             },
-            // ...(props.row.status==FRLifeCycleStates.FR_CLOSED ?
-            //   [{
-            //     id: 'print',
-            //     text: 'Print FR',
-            //     component: PDFDownloadLink,
-            //     document: <FRReceiptTemplate rowData={props.row as FR}/>,
-            //     fileName: 'FRReceipt.pdf',
-            //     icon: PrintIcon,
-            //   }]:[]),
+
+            {
+              id: 'print',
+              text: 'Print FR',
+              component: PDFDownloadLink,
+              document: <FRReceiptTemplate rowData={props.row as FR}/>,
+              fileName: 'FRReceipt.pdf',
+              icon: PrintIcon,
+            },
             {
               id: 'notification',
               text: 'Send notification',

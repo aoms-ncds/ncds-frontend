@@ -120,7 +120,6 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
 
-  // console.log(props);
   let totalAmount=0;
   return (
     <Document>
@@ -141,7 +140,10 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <div>
             <Text style={styles.divisiontitle }>Name of the Division:</Text>
             <Text style={styles.division }>{props?.rowData.division?.details?.name}</Text>
-            <Text style={styles.datetitle}>Date:  </Text>
+            {/* <Text style={styles.datetitle}>Date:  </Text> */}
+            <Text style={styles.datetitle}>
+              {/* {console.log({ theParticulars: props.rowData })} */}
+            </Text>
             <Text style={styles.date}> {moment(props.rowData.FRdate).format('DD-MM-yyyy')}</Text>
           </div>
         </div>

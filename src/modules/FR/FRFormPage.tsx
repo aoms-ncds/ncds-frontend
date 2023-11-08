@@ -14,6 +14,7 @@ interface FRFormPageProps {
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const { frID } = useParams();
+  const [FRLoaded, setFRLoaded] = useState(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
@@ -31,6 +32,8 @@ const FRFormPage = (props: FRFormPageProps) => {
             requestAmount: ['requestedAmount'],
           };
           setRequisition(convertedData);
+          setFRLoaded(true);
+          console.log({ convertedData });
         })
         .catch((error) => {
           enqueueSnackbar({
@@ -160,7 +163,7 @@ const FRFormPage = (props: FRFormPageProps) => {
                   onSubmit={editFR} // Pass the addFR function to the onSubmit prop
                 />
               ) : (
-                <ViewFR value={requisition} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />
+                <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />
               )}
             </Card>
           </>
