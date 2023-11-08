@@ -11,7 +11,7 @@ import axios from 'axios';
 axios.defaults.baseURL = window.location.hostname === 'localhost' ? 'http://localhost:8002' : 'https://iet-apis.pro910.app';
 
 const App = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   CommonHelpers.setLoader(useLoader());
   CommonHelpers.setEnqueueSnackbar(enqueueSnackbar);
 
@@ -19,9 +19,11 @@ const App = () => {
     () =>
       createTheme({
         palette: {
-          mode: prefersDarkMode ? 'dark' : 'light',
+          mode: 'light',
+          // mode: prefersDarkMode ? 'dark' : 'light',
           background: {
-            default: prefersDarkMode ? '#121212' : '#e1e0e0',
+            // default: prefersDarkMode ? '#121212' : '#e1e0e0',
+            default: '#e1e0e0',
           },
           // primary: {
           //   main: '#c4161c',
@@ -31,14 +33,16 @@ const App = () => {
           MuiDrawer: {
             styleOverrides: {
               paper: {
-                backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
+                // backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
+                backgroundColor: '#ffffff',
               },
             },
           },
           MuiCard: {
             styleOverrides: {
               root: {
-                backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
+                // backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
+                backgroundColor: '#ffffff',
               },
             },
           },
@@ -52,7 +56,7 @@ const App = () => {
 
         },
       }),
-    [prefersDarkMode],
+    [],
   );
   return (
     <ThemeProvider theme={theme}>
