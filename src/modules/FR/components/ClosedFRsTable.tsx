@@ -56,10 +56,19 @@ const ClosedFRsTable = () => {
     },
     { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 100, align: 'center',
       headerAlign: 'center' },
-    { field: 'FRdate', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
-        <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
-      ) },
+    // { field: 'FRdate', align: 'center',
+    //   headerAlign: 'center', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
+    //     <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+    //   ) },
+    {
+      field: 'FRdate',
+      headerName: 'FRdate',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
     { field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
       align: 'center', headerAlign: 'center',
