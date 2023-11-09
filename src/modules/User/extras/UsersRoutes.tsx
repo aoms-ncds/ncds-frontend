@@ -1,6 +1,7 @@
 import Profile from '../Profile';
 import PermissionManager from '../PermissionManager';
 import ForgottenPasswordFormPage from '../ForgotPasswordForm';
+import ResetPasswordFormPage from '../rest_password_form';
 
 const usersPageRoutes: ModuleRoute = {
   base: '/users',
@@ -14,6 +15,12 @@ const usersPageRoutes: ModuleRoute = {
     //   showInDrawer: true,
     //   icon: <Diversity2Icon />,
     // },
+    {
+      title: 'Forgot Password',
+      path: '/reset_password',
+      element: <ResetPasswordFormPage />,
+      private: false,
+    },
     {
       title: 'Forgot Password',
       path: '/reset_password_form',

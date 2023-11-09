@@ -8,7 +8,7 @@ export default {
   login: (loginCred: LoginCredentials) => getStandardResponse<LoginResponse>(axios.post('/users/login', loginCred, { headers: { ...getAuthHeader() } })),
 
   requestForgottenPasswordReset: (email: string) => getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password',
-    { email, redirect_url: window.location.origin + '/users/rest_password_form' }, { headers: { ...getAuthHeader() } })),
+    { email, redirect_url: window.location.origin + '/users/reset_password' }, { headers: { ...getAuthHeader() } })),
 
   confirmPasswordReset: (args: { reset_token: string; new_password: string;
     }): Promise<StandardResponse<boolean>> =>
