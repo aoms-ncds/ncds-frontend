@@ -63,14 +63,17 @@ const ClosedFRsTable = () => {
     { field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
       align: 'center', headerAlign: 'center',
-      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      // renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      valueGetter: (params) => params.row.division?.details.name,
       width: 150,
     },
     {
       field: 'subDivisionName',
       renderHeader: () => (<b>Sub Division Name</b>),
       align: 'center', headerAlign: 'center',
-      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
+      // renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>),
+      valueGetter: (params) => params.row.purposeSubdivision?.name,
+
       width: 170,
     },
     {
