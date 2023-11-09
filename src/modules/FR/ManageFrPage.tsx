@@ -226,11 +226,20 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
     },
+    // {
+    //   field: 'FRdate',
+    //   renderHeader: () => (<b>FR Date</b>),
+    //   renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
+    //   ), width: 80, align: 'center', headerAlign: 'center',
+    // },
     {
       field: 'FRdate',
-      renderHeader: () => (<b>FR Date</b>),
-      renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
-      ), width: 80, align: 'center', headerAlign: 'center',
+      headerName: 'FRdate',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
     },
     // {
     //   field: 'divisionName',
