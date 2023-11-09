@@ -442,7 +442,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      valueGetter: (params) => params.row.division?.details.name,
+      renderCell: (props) => <p> {props.row.division?.details.name}</p>,
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -450,7 +450,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'subDivisionName',
       renderHeader: () => <b>Sub Division Name</b>,
-      valueGetter: (params) => params.row.purposeSubdivision?.name,
+      renderCell: (props) => <p> {props.row.purposeSubdivision?.name}</p>,
       width: 160,
       align: 'center',
       headerAlign: 'center',
@@ -522,20 +522,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       width: 250,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 250,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-          }}
-        >
-          {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-        </p>
-      ),
-      // valueGetter: (params) => {
-      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      // },
+      // renderCell: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 250,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      },
     },
   ];
 

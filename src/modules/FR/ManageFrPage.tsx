@@ -329,20 +329,20 @@ const ManageFrPage = () => {
       width: 205,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 250,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-          }}
-        >
-          {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-        </p>
-      ),
-      // valueGetter: (params) => {
-      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      // },
+      // valueGetter: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 250,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      },
     },
 
   ];
