@@ -445,7 +445,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      renderCell: (props) => <p> {props.row.division?.details.name}</p>,
+      // renderCell: (props) => <p> {props.row.division?.details.name}</p>,
+      valueGetter: (params) => params.row.division?.details.name,
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -453,7 +454,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'subDivisionName',
       renderHeader: () => <b>Sub Division Name</b>,
-      renderCell: (props) => <p> {props.row.purposeSubdivision?.name}</p>,
+      // renderCell: (props) => <p> {props.row.purposeSubdivision?.name}</p>,
+      valueGetter: (params) => params.row.purposeSubdivision?.name,
+
       width: 160,
       align: 'center',
       headerAlign: 'center',

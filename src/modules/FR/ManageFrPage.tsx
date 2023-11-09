@@ -232,22 +232,37 @@ const ManageFrPage = () => {
       renderCell: (props) => (<p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
       ), width: 80, align: 'center', headerAlign: 'center',
     },
+    // {
+    //   field: 'divisionName',
+    //   renderHeader: () => (<b>Division Name</b>),
+    //   renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'divisionName',
-      renderHeader: () => (<b>Division Name</b>),
-      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Division'}</b>,
+      valueGetter: (params) => params.row.division?.details.name,
+    },
+    // {
+    //   field: 'subDivisionName',
+    //   renderHeader: () => (<b>Sub Division Name</b>),
+    //   valueGetter: (params) => (<p> {params.row.purposeSubdivision?.name}</p>
+    //   ),
+    //   width: 160,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    {
+      field: 'sub_division',
       width: 130,
       align: 'center',
       headerAlign: 'center',
-    },
-    {
-      field: 'subDivisionName',
-      renderHeader: () => (<b>Sub Division Name</b>),
-      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
-      ),
-      width: 160,
-      align: 'center',
-      headerAlign: 'center',
+      renderHeader: () => <b>{'Sub-Division'}</b>,
+      valueGetter: (params) => params.row.purposeSubdivision?.name,
     },
     {
       field: 'mainCategory',

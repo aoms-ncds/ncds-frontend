@@ -263,20 +263,28 @@ const ReconciliationIRO = () => {
     {
       field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
-      renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
+      valueGetter: (params) => params.row.division?.details.name,
       width: 130,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'subDivisionName',
-      renderHeader: () => (<b>Sub Division Name</b>),
-      renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
-      ),
+      renderHeader: () => <b>Sub Division Name</b>,
+      valueGetter: (params) => params.row.purposeSubdivision?.name,
       width: 160,
       align: 'center',
       headerAlign: 'center',
     },
+    // {
+    //   field: 'subDivisionName',
+    //   renderHeader: () => (<b>Sub Division Name</b>),
+    //   renderCell: (props) => (<p> {props.row.purposeSubdivision?.name}</p>
+    //   ),
+    //   width: 160,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'mainCategory',
       renderHeader: () => (<b>Main Category</b>),
