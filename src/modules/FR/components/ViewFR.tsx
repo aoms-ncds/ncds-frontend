@@ -21,6 +21,8 @@ import {
   InputAdornment,
   FormControl,
   DialogContent,
+  // Checkbox,
+  // FormControlLabel,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState } from 'react';
@@ -33,8 +35,8 @@ import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
-import { purposes, sanctionedAsPers } from '../extras/FRConfig';
-import { AttachFile as AttachmentIcon } from '@mui/icons-material';
+import { monthNames, purposes, sanctionedAsPers } from '../extras/FRConfig';
+import { AttachFile as AttachmentIcon, Edit as EditIcon } from '@mui/icons-material';
 import MessageItem from '../../../components/MessageItem';
 import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
@@ -42,10 +44,6 @@ import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolean}>) => {
   const navigate = useNavigate();
-  const [coordinators, setCoordinators] = useState<IWorker[]>();
-  const [workers, setWorkers] = useState<IWorker[]>();
-  const [divisions, setDivisions] = useState<Division[]>();
-  const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -54,10 +52,28 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
   });
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
-  const [open, setOpen] = useState(false);
-  const [isFocused, setFocused] = useState(false);
+  // const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
+  const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
+  const [newParticular, setNewParticular] = useState<CreatableParticular>({
+    mainCategory: '',
+    subCategory1: '',
+    subCategory2: '',
+    subCategory3: '',
+    month: '',
+    narration: '',
+    attachment: [],
+  });
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
+
+
+  const editParticular = (particular: Particular, index: number) => {
+    // setParticularDialog('edit');
+    setSelectedParticularIndex(index);
+    setShowAddParticularDialog(true);
+    setNewParticular(particular);
+  };
   return (
     <div>
       <Container>
@@ -122,7 +138,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={props.value.purposeWorker}
-                      options={workers ?? []}
+                      options={ []}
                       getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -155,7 +171,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    options={subDivisions ?? []}
+                    options={ []}
                     value={props.value.purposeSubdivision}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
@@ -168,7 +184,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.division}
-                    options={divisions ?? []}
+                    options={ []}
                     getOptionLabel={(division) => division.details.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
@@ -188,7 +204,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeCoordinator}
-                    options={coordinators ?? []}
+                    options={ []}
                     getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                     onChange={(e, selectedCoordinator) => {
                       if (selectedCoordinator && props.action !== 'view') {
@@ -243,6 +259,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                         props.value.particulars.map((item, index) => (
                           <TableRow key={item._id} >
                             <TableCell component="th" sx={{ display: 'flex' }}>
+                              {props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS &&(<PermissionChecks
+                                permissions={['MANAGE_FR']}
+                                granted={
+                                  <IconButton>
+                                    <EditIcon onClick={() => editParticular(item, index)} />
+                                  </IconButton>}
+                              />
+                              )}
                               <IconButton onClick={() => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
@@ -289,7 +313,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
-                      disabled={!hasPermissions(['MANAGE_FR'])}
+                      disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(e) => {
                         if (totalRequestedAmount) {
                           props.onChange({
@@ -299,8 +323,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                         }
                       }
                       }
-                      onFocus={() => setFocused(true)}
-                      onBlur={() => setFocused(false)}
+                      // onFocus={() => setFocused(true)}
+                      // onBlur={() => setFocused(false)}
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
@@ -317,8 +341,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={props.value.sanctionedBank || ''}
-                        disabled={!hasPermissions(['MANAGE_FR'])}
-
+                        disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                         onChange={(e) =>
                           props.onChange({
                             ...props.value,
@@ -340,8 +363,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       value={props.value.sanctionedAsPer ?? null}
                       options={sanctionedAsPers ?? []}
                       getOptionLabel={(requisition) => requisition}
-                      disabled={!hasPermissions(['MANAGE_FR'])}
-
+                      disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(_e, selectedSanction) => {
                         if (selectedSanction && props.action === 'view') {
                           props.onChange({
@@ -680,6 +702,149 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
         // getFiles={TestServices.getBills}
         getFiles={attachments}
       />
+      <Dialog
+        open={showAddParticularDialog}
+        onClose={ ()=>setShowAddParticularDialog(false)}
+        PaperProps={{
+          style: {
+            width: '1000px',
+          },
+        }}
+      >
+        <DialogTitle>Add Particular</DialogTitle>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowAddParticularDialog(false);
+            props.onChange({
+              ...props.value,
+              particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+            });
+            // addParticulars();
+          }}
+        >
+          <DialogContent>
+            <Container>
+              <Grid container spacing={3}>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory1}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory2}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory3}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Quantity"
+                    type="number"
+                    value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
+                    disabled
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Requested Amount"
+                    type="number"
+                    value={newParticular?.unitPrice}
+                    disabled
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                {/* <Grid item md={12}>
+                  <FormControlLabel
+                    label="Multiply By Quantity"
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
+                          }))
+                        }
+                      />
+                    }
+                  />
+                </Grid> */}
+                <Grid item md={12}>
+                  <TextField
+                    label="Total Amount"
+                    type="number"
+                    value={newParticular?.requestedAmount}
+                    fullWidth
+                    required
+                    disabled
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.month}
+                    options={monthNames ?? []}
+                    getOptionLabel={(monthName) => monthName}
+                    disabled
+                    renderInput={(params) => <TextField {...params} label="For the Month" required />}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item md={12}>
+                  <TextField
+                    label="Narration"
+                    value={newParticular.narration}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        narration: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Button variant="contained" onClick={() => {
+                    setViewFileUploader(true); setAttachments(newParticular.attachment);
+                  }} startIcon={<AttachmentIcon />}>
+                    Attachments
+                  </Button>
+                </Grid>
+              </Grid>
+            </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </div>
   );
 };

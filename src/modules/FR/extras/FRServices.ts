@@ -227,7 +227,20 @@ export default {
             ...frRequest,
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
-            resolve(updatedFR);
+            try {
+              if (frRequest.particulars) {
+                for (let i = 0; i < frRequest.particulars.length; i++) {
+                  const particulars = frRequest.particulars[i];
+
+                  await axios.patch(`/fr/particulars/${particulars._id}`, {
+                    narration: particulars.narration,
+                  }, { headers: { ...getAuthHeader() } });
+                }
+              }
+              resolve(updatedFR); // Resolve with the updated division
+            } catch (error) {
+              reject(error);
+            }
           })
           .catch(reject);
       }),
