@@ -11,7 +11,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/',
       element: <DivisionsPage />,
       private: true,
-      requiredAccessRights: ['WRITE_DIVISIONS'],
+      requiredAccessRights: ['READ_ALL_DIVISIONS'],
       showInDrawer: true,
       // icon: <ExtensionIcon />,
       icon: <img src="/mod_icons/division.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,

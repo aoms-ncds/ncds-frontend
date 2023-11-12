@@ -18,6 +18,7 @@ declare global {
     WRITE_STAFFS: boolean;// For adding and editing staff details
 
     READ_DIVISIONS: boolean; // For reading divisions
+    READ_ALL_DIVISIONS: boolean; // For reading All divisions
     WRITE_DIVISIONS: boolean; // For adding and editing division details
 
     READ_FR: boolean; // For reading FRs
