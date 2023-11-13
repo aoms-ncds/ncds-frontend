@@ -8,6 +8,7 @@ import ViewIRO from '../ViewIRO';
 import ReconciliationIRO from '../ReconciliationIRO';
 import AccountApprove from '../AccountApprovel';
 import OfficeMangerApprove from '../OfficeManagerApprovel';
+import EditIRO from '../EditIRO';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -72,6 +73,13 @@ const iroPageRoutes: ModuleRoute = {
       element: <ViewIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Edit IRO',
+      path: '/:iroID/edit',
+      element: <EditIRO />,
+      private: true,
+      requiredAccessRights: ['ACCOUNTS_MNGR_ACCESS'],
     },
     // {
     //   title: 'Release Amount',
