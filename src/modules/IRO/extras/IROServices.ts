@@ -27,11 +27,10 @@ export default {
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       IRODate: moment(data.IRODate),
-      releaseAmount: {
+      releaseAmount: data.releaseAmount ? {
         ...data.releaseAmount,
-        transferredDate: data.releaseAmount?.transferredDate ? moment(data.transferredDate) : null,
-
-      },
+        transferredDate: moment(data.releaseAmount?.transferredDate),
+      }:undefined,
       purposeWorker: {
         ...data.createdBy,
         basicDetails: {

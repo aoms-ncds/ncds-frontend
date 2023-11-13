@@ -4,6 +4,7 @@ import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, 
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
+  Edit as EditIcon,
   AttachFile as AttachmentIcon,
   Download as DownloadIcon,
   Preview as PreviewIcon,
@@ -61,22 +62,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     sanctionedBank: '',
     mainCategory: '',
     particulars: [],
-    releaseAmount: {
-      _id: '',
-      modeOfPayment: '',
-      releaseAmount: 0,
-      transactionNumber: '',
-      transferredAmount: 0,
-      transferredDate: null,
-      transferredBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-      },
-      attachment: [],
-      division: '',
-    },
+    // releaseAmount: {
+    //   _id: '',
+    //   modeOfPayment: '',
+    //   releaseAmount: 0,
+    //   transactionNumber: '',
+    //   transferredAmount: 0,
+    //   transferredDate: null,
+    //   transferredBank: {
+    //     bankName: '',
+    //     branchName: '',
+    //     accountNumber: '',
+    //     IFSCCode: '',
+    //   },
+    //   attachment: [],
+    //   division: '',
+    // },
     division: {
       _id: '',
       details: {
@@ -267,6 +268,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
             },
+            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS'])&&
+            params.row.status<=IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR&&
+            params.row.status!=IROLifeCycleStates.IRO_CLOSED? [
+                {
+                  id: 'edit',
+                  text: 'Edit',
+                  component: Link,
+                  to: `/iro/${params.row._id}/edit`,
+                  icon: EditIcon,
+                },
+              ] : []),
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [
                 {
