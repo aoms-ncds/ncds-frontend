@@ -2,7 +2,6 @@
 import moment from 'moment';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
-import ReleaseAmount from '../ReleaseAmount';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
@@ -121,8 +120,20 @@ export default {
         .patch('/iro/' + IROId, {
           ...IRORequest,
         }, { headers: { ...getAuthHeader() } })
-        .then(async (updatedIRO) => {
-          resolve(updatedIRO);
+        .then(async (updatedFR) => {
+          try {
+            if (IRORequest.particulars) {
+              for (let i = 0; i < IRORequest.particulars.length; i++) {
+                const particulars = IRORequest.particulars[i];
+                await axios.patch(`/fr/particulars/${particulars._id}`, {
+                  ...particulars,
+                }, { headers: { ...getAuthHeader() } });
+              }
+            }
+            resolve(updatedFR); // Resolve with the updated division
+          } catch (error) {
+            reject(error);
+          }
         })
         .catch(reject);
       }),

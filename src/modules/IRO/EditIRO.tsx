@@ -23,7 +23,7 @@ import {
   Select,
   DialogContent,
 } from '@mui/material';
-import { AttachFile as AttachmentIcon, Send as SendIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
@@ -50,15 +50,6 @@ const EditIRO = () => {
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [particulars, setParticulars] = useState<Particular[]>([]);
-  const [newParticular, setNewParticular] = useState<CreatableParticular>({
-    mainCategory: '',
-    subCategory1: '',
-    subCategory2: '',
-    subCategory3: '',
-    month: '',
-    narration: '',
-    attachment: [],
-  });
   const { iroID } = useParams();
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
@@ -166,6 +157,24 @@ const EditIRO = () => {
     updatedAt: moment(),
     signature: {},
   });
+  const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
+  const [newParticular, setNewParticular] = useState<Particular>({
+    _id: '',
+    mainCategory: '',
+    subCategory1: '',
+    subCategory2: '',
+    subCategory3: '',
+    month: '',
+    narration: '',
+    attachment: [],
+  });
+
+
+  const editParticular = (particular: Particular) => {
+    // setParticularDialog('edit');
+    setShowAddParticularDialog(true);
+    setNewParticular(particular);
+  };
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -345,6 +354,9 @@ const EditIRO = () => {
                                 IRO?.particulars.map((item, index) => (
                                   <TableRow key={item._id} >
                                     <TableCell component="th" sx={{ display: 'flex' }}>
+                                      <IconButton>
+                                        <EditIcon onClick={() => editParticular(item)} />
+                                      </IconButton>
                                       <IconButton
                                         onClick={() => {
                                           setViewFileUploader(true);
@@ -634,7 +646,153 @@ const EditIRO = () => {
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}
-      /></>
+      />
+
+      <Dialog
+        open={showAddParticularDialog}
+        onClose={ ()=>setShowAddParticularDialog(false)}
+        PaperProps={{
+          style: {
+            width: '1000px',
+          },
+        }}
+      >
+        <DialogTitle>Edit Particular</DialogTitle>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowAddParticularDialog(false);
+            setIRO({
+              ...IRO,
+              particulars: IRO.particulars?.map((part) => (part._id===newParticular._id ? (newParticular as Particular) : part)),
+            });
+            // addParticulars();
+          }}
+        >
+          <DialogContent>
+            <Container>
+              <Grid container spacing={3}>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory1}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory2}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.subCategory3}
+                    options={ []}
+                    onChange={() => {}}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Quantity"
+                    type="number"
+                    value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
+                    disabled
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    label="Requested Amount"
+                    type="number"
+                    value={newParticular?.unitPrice}
+                    disabled
+                    required
+                    fullWidth
+                  />
+                </Grid>
+                {/* <Grid item md={12}>
+                  <FormControlLabel
+                    label="Multiply By Quantity"
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
+                          }))
+                        }
+                      />
+                    }
+                  />
+                </Grid> */}
+                <Grid item md={12}>
+                  <TextField
+                    label="Total Amount"
+                    type="number"
+                    value={newParticular?.requestedAmount}
+                    fullWidth
+                    required
+                    disabled
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Autocomplete
+                    value={newParticular.month}
+                    options={[]}
+                    getOptionLabel={(monthName) => monthName}
+                    disabled
+                    renderInput={(params) => <TextField {...params} label="For the Month" required />}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item md={12}>
+                  <TextField
+                    label="Narration"
+                    value={newParticular.narration}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        narration: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <Button variant="contained" onClick={() => {
+                    setViewFileUploader(true); setAttachments(newParticular.attachment);
+                  }} startIcon={<AttachmentIcon />}>
+                    Attachments
+                  </Button>
+                </Grid>
+              </Grid>
+            </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
+    </>
 
 
   );
