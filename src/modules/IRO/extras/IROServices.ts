@@ -120,7 +120,7 @@ export default {
         .patch('/iro/' + IROId, {
           ...IRORequest,
         }, { headers: { ...getAuthHeader() } })
-        .then(async (updatedFR) => {
+        .then(async (updatedIRO) => {
           try {
             if (IRORequest.particulars) {
               for (let i = 0; i < IRORequest.particulars.length; i++) {
@@ -130,7 +130,7 @@ export default {
                 }, { headers: { ...getAuthHeader() } });
               }
             }
-            resolve(updatedFR); // Resolve with the updated division
+            resolve(updatedIRO); // Resolve with the updated division
           } catch (error) {
             reject(error);
           }
