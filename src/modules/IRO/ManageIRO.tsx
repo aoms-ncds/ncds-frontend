@@ -268,17 +268,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS'])&&
-            params.row.status<=IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR&&
-            params.row.status!=IROLifeCycleStates.IRO_CLOSED? [
-                {
-                  id: 'edit',
-                  text: 'Edit',
-                  component: Link,
-                  to: `/iro/${params.row._id}/edit`,
-                  icon: EditIcon,
-                },
-              ] : []),
+            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? [
+              {
+                id: 'edit',
+                text: 'Edit',
+                component: Link,
+                to: `/iro/${params.row._id}/edit`,
+                icon: EditIcon,
+              },
+            ] : []),
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [
                 {

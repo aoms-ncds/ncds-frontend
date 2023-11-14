@@ -176,13 +176,6 @@ const EditIRO = () => {
     remark: '',
     transactionId: '',
   });
-  const [submit, setSubmit] = useState(0);
-
-
-  useEffect(() => {
-    console.log({ submit });
-  }, [submit]);
-
 
   useEffect(() => {
     FRServices.getMainCategory()
@@ -478,13 +471,12 @@ const EditIRO = () => {
                       </Button>
                           &nbsp;
                       <PermissionChecks
-                        permissions={['WRITE_FR']}
+                        permissions={['ACCOUNTS_MNGR_ACCESS']}
                         granted={
                           <Button
                             variant="contained"
                             color="info"
                             type="submit"
-                            onClick={() => setSubmit(1)}
                             // disabled={particulars.length==0}
                           >
                         Submit{' '}
