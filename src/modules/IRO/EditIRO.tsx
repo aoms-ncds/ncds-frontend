@@ -246,7 +246,7 @@ const EditIRO = () => {
                   // } else if (submit == 2) {
                   //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
                   // }
-                  IROServices.updateIRO(iroID??'', IRO)
+                  IROServices.updateIRO(iroID??'', IRO, true)
                   .then((res)=> {
                     enqueueSnackbar({
                       message: res.message,

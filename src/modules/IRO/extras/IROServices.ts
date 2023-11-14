@@ -112,13 +112,13 @@ export default {
   getPrintDetails: (IROId: string) => getStandardResponse<IROrder>(axios.get(`/iro/printDetails/${IROId}`)),
 
 
-  updateIRO: (IROId:string, IRORequest: IROrder)=>{
+  updateIRO: (IROId:string, IRORequest: IROrder, notify?:boolean)=>{
     console.log('🚀 ~ file: IROServices.ts:142 ~ IROId:', IROId);
     return getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
         .patch('/iro/' + IROId, {
-          ...IRORequest,
+          IRORequest, notify,
         }, { headers: { ...getAuthHeader() } })
         .then(async (updatedIRO) => {
           try {
