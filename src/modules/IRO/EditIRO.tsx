@@ -22,6 +22,8 @@ import {
   MenuItem,
   Select,
   DialogContent,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -32,10 +34,10 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../extras/CommonConfig';
-import { purposes, sanctionedAsPers } from '../FR/extras/FRConfig';
+import { monthNames, purposes, sanctionedAsPers } from '../FR/extras/FRConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import FRServices from '../FR/extras/FRServices';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import moment from 'moment';
 import IROServices from './extras/IROServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -168,6 +170,10 @@ const EditIRO = () => {
     narration: '',
     attachment: [],
   });
+  const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
+  const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
+  const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
+  const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
 
 
   const editParticular = (particular: Particular) => {
@@ -185,21 +191,36 @@ const EditIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [mainCategories, setMainCategories] = useState<MainCategory[]>();
+
 
   useEffect(() => {
-    FRServices.getMainCategory()
-            .then(() => {
-              // setMainCategories(res.data);
-            })
-            .catch((res) => {
-              console.log(res);
-            });
+    const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
+    setSelectedMainCategory(selectedMainCategoryObj);
 
+    FRServices.getMainCategory()
+    .then((res) => {
+      setMainCategories(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
     if (IRO.particulars) {
       setParticulars(IRO.particulars);
     }
   }, [IRO.particulars]);
-
+  useEffect(() => {
+    setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular.mainCategory));
+  }, [newParticular]);
+  useEffect(() => {
+    setSelectedSubCategory1(() => selectedMainCategory?.subcategory1.find((item) => item.name == newParticular.subCategory1) ?? null);
+  }, [selectedMainCategory]);
+  useEffect(() => {
+    setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
+  }, [selectedSubCategory1]);
+  useEffect(() => {
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3)? null : null);
+  }, [selectedSubCategory2]);
 
   useEffect(() => {
     if (!iroID) {
@@ -381,26 +402,35 @@ const EditIRO = () => {
                   <Grid item xs={12} md={6}>
                     <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount} fullWidth disabled />
                   </Grid>
-
                   <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
                       value={IRO?.sanctionedAmount}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                      autoComplete='off'
                       onChange={(e) => {
-                        if (IRO) {
-                          // eslint-disable-next-line @typescript-eslint/naming-convention
-                          setIRO((IRO) => ({
+                        if (totalRequestedAmount) {
+                          setIRO({
                             ...IRO,
                             sanctionedAmount: Number(e.target.value),
-                          }));
+                          });
                         }
-                      }}
+                      }
+                      }
+                      // onFocus={() => setFocused(true)}
+                      // onBlur={() => setFocused(false)}
                       variant="outlined"
                       fullWidth
-
                       InputLabelProps={{ shrink: true }}
+                      inputProps={{ max: totalRequestedAmount, min: 0 }}
+                    // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
+                    {/* </Tooltip> */}
                   </Grid>
 
                   <Grid item xs={12} md={6}>
@@ -674,32 +704,61 @@ const EditIRO = () => {
               <Grid container spacing={3}>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={newParticular.subCategory1}
-                    options={ []}
-                    onChange={() => {}}
+                    value={selectedSubCategory1}
+                    options={selectedMainCategory?.subcategory1 ?? []}
+                    getOptionLabel={(subcategory2) => subcategory2.name}
+                    onChange={(_e, selectedSubCategory1) => {
+                      if (selectedSubCategory1) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory1: selectedSubCategory1.name,
+                        }));
+                        setSelectedSubCategory1(selectedSubCategory1);
+                      }
+                    }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
-                    disabled
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={newParticular.subCategory2}
-                    options={ []}
-                    onChange={() => {}}
+                    value={selectedSubCategory2}
+                    options={selectedSubCategory1?.subcategory2 ?? []}
+                    getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
+                    onChange={(_e, selectedSubCategory2) => {
+                      if (selectedSubCategory2) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory2: selectedSubCategory2.name,
+                        }));
+                        setSelectedSubCategory2(selectedSubCategory2);
+                      }
+                    }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                    disabled
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={newParticular.subCategory3}
-                    options={ []}
-                    onChange={() => {}}
-                    renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
+                    value={selectedSubCategory3}
+                    options={selectedSubCategory2?.subcategory3 ?? []}
+                    getOptionLabel={(subCategory3) => subCategory3.name}
+                    onChange={(e, selectedSubCategory3) => {
+                      if (selectedSubCategory3) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          subCategory3: selectedSubCategory3.name,
+                          narration: selectedSubCategory3.narration,
+                        }));
+                        setSelectedSubCategory3(selectedSubCategory3);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
-                    disabled
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -707,7 +766,14 @@ const EditIRO = () => {
                     label="Quantity"
                     type="number"
                     value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
-                    disabled
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        quantity: Number(e.target.value),
+                      }))
+                    }
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+
                     fullWidth
                   />
                 </Grid>
@@ -716,43 +782,65 @@ const EditIRO = () => {
                     label="Requested Amount"
                     type="number"
                     value={newParticular?.unitPrice}
-                    disabled
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        unitPrice: Number(e.target.value),
+                        requestedAmount: Number(e.target.value),
+                      }))
+                    }
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     required
                     fullWidth
                   />
                 </Grid>
-                {/* <Grid item md={12}>
-                  <FormControlLabel
-                    label="Multiply By Quantity"
-                    control={
-                      <Checkbox
-                        onChange={(e) =>
-                          setNewParticular((particularDetails) => ({
-                            ...particularDetails,
-                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
-                          }))
-                        }
-                      />
-                    }
-                  />
-                </Grid> */}
+                {hasPermissions(['ADMIN_ACCESS'])&&(
+                  <Grid item md={12}>
+                    <FormControlLabel
+                      label="Multiply By Quantity"
+                      control={
+                        <Checkbox
+                          onChange={(e) =>
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
+                            }))
+                          }
+                        />
+                      }
+                    />
+                  </Grid> )}
                 <Grid item md={12}>
                   <TextField
                     label="Total Amount"
                     type="number"
                     value={newParticular?.requestedAmount}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        requestedAmount: Number(e.target.value),
+                      }))
+                    }
                     fullWidth
                     required
-                    disabled
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
                     value={newParticular.month}
-                    options={[]}
+                    options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
-                    disabled
+                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    onChange={(e, selectedMonth) => {
+                      if (selectedMonth) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          month: selectedMonth,
+                        }));
+                      }
+                    }}
                     renderInput={(params) => <TextField {...params} label="For the Month" required />}
                     fullWidth
                   />
