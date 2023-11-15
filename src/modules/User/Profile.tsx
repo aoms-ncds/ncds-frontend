@@ -105,7 +105,6 @@ const Profile = () => {
       WorkersServices.getById(userId)
         .then((res) => {
           setUser(res.data);
-          console.log(res.data);
         })
         .catch(() => { });
     }
@@ -154,8 +153,6 @@ const Profile = () => {
           <TabPanel value={currentTab} index={0}>
             <Grid container spacing={3}>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff | null)?.staffCode : (user as IWorker | null)?.workerCode} </Grid>
-
-
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
@@ -275,8 +272,19 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {(user as unknown as IWorker)?.spouse?.occupation} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {(user as unknown as IWorker)?.spouse?.qualification} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known Languages: </Typography> {(user as unknown as IWorker)?.spouse?.knownLanguages?.map((lang) => lang.name).join(', ')} </Grid>
+
+
+              <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.impactNo} </Grid>
+
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography>{(user as unknown as IWorker)?.spouse?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
+
+
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.nominee}</Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.relation}</Grid>
             </Grid>}
           </TabPanel>
+
           <TabPanel value={currentTab} index={3}>
             <Container>
               <br />
@@ -357,7 +365,6 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.insurance?.impactNo} </Grid>
 
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
-
 
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.insurance?.nominee} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.insurance?.relation} </Grid>

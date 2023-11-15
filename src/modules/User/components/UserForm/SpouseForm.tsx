@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, Divider, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
@@ -171,6 +171,88 @@ const SpouseForm = (
           value={props.value.knownLanguages}
           onChange={(e, newvalue) => props.onChange({ ...props.value, knownLanguages: newvalue ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField.variant} />}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <br />
+        <Divider textAlign="left">Insurance Details</Divider>
+      </Grid>
+
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Impact No"
+          value={props.value.insurance?.impactNo}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                impactNo: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <DatePicker
+          label="Date Of Joining Insurance"
+          value={props.value.insurance?.dojInsurance}
+          onChange={(newDate) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                dojInsurance: newDate ?? undefined,
+              },
+            })
+          }
+          format="DD/MM/YYYY"
+          slotProps={{
+            textField: {
+              variant: props.options?.textField?.variant,
+              fullWidth: true,
+            },
+          }}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Nominee"
+          value={props.value.insurance?.nominee}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                nominee: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Relation "
+          value={props.value.insurance?.relation}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              insurance: {
+                ...props.value.insurance,
+                relation: e.target.value,
+              },
+            })
+          }
+          variant={props.options?.textField?.variant}
+          fullWidth
         />
       </Grid>
     </>
