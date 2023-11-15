@@ -219,7 +219,7 @@ const EditIRO = () => {
     setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
   }, [selectedSubCategory1]);
   useEffect(() => {
-    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3)? null : null);
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3)?? null);
   }, [selectedSubCategory2]);
 
   useEffect(() => {
