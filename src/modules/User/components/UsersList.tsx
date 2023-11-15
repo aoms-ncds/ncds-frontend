@@ -138,23 +138,32 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       width: 5,
       getActions: (params: GridRowParams) =>
         [
-
-          <GridLinkAction
-            key={1}
-            label="View"
-            icon={<PreviewIcon />}
-            showInMenu
-            to={`/users/${props.options?.kind}/${params.row._id}`}
-          />,
-          ((hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
+          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/${props.options?.kind}/${params.row._id}`} />,
+          (hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
+            <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`} />
+          ),
+          (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (
             <GridLinkAction
               key={2}
-              label="Edit"
-              icon={<EditIcon />}
+              label="Delete"
+              icon={<DeleteIcon />}
               showInMenu
-              to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+              onClick={() => {
+                StaffOrWorkerServices.delete(params.row._id)
+                .then((res) => {
+                  if (props.value) {
+                    props.onChange(props.value.filter((user) => user._id !== params.row._id));
+                  }
+
+                  enqueueSnackbar({ message: res.message, variant: 'success' });
+                })
+                .catch((err) => {
+                  enqueueSnackbar({ message: err.message, variant: 'error' });
+                });
+              }}
+              // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
-          )),
+          ),
           <GridLinkAction
             key={4}
             label="Remarks"
@@ -165,29 +174,29 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }}
           />,
           props.options?.status != 'reject' &&
-          hasPermissions(['MANAGE_WORKER']) &&
-          (params.row.status == UserLifeCycleStates.ACTIVE ? (
-            <GridLinkAction
-              key={5}
-              label="Deactivate"
-              icon={<NoAccountsIcon />}
-              showInMenu
-              onClick={() => {
-                setRowID(params.row._id);
-                setReasonDialog(true);
-              }}
-            />
-          ) : (
-            <GridLinkAction
-              key={5}
-              label="Activate"
-              icon={<PersonIcon />}
-              showInMenu
-              onClick={() => {
-                activateWorker(params.row._id);
-              }}
-            />
-          )),
+            hasPermissions(['MANAGE_WORKER']) &&
+            (params.row.status == UserLifeCycleStates.ACTIVE ? (
+              <GridLinkAction
+                key={5}
+                label="Deactivate"
+                icon={<NoAccountsIcon />}
+                showInMenu
+                onClick={() => {
+                  setRowID(params.row._id);
+                  setReasonDialog(true);
+                }}
+              />
+            ) : (
+              <GridLinkAction
+                key={5}
+                label="Activate"
+                icon={<PersonIcon />}
+                showInMenu
+                onClick={() => {
+                  activateWorker(params.row._id);
+                }}
+              />
+            )),
           hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -324,7 +333,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     //   // width: 130,
     //   valueGetter: (params) => params.row.basicDetails.voterId?.voterIdNo,
     // },
-    // {
+    // {S
     //   field: 'licenseNumber',
     //   headerName: 'License Number',
     //   // width: 130,
@@ -436,7 +445,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             variant="contained"
             onClick={() => {
               setReasonDialog(false);
-              (false);
+              false;
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
@@ -455,7 +464,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           >
             submit
           </Button>
-
         </DialogActions>
       </Dialog>
     </>
