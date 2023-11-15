@@ -87,17 +87,19 @@ const DivisionsList = () => {
                 to: `/divisions/edit/${props.row._id}`,
                 icon: EditIcon,
               },
-              // {
-              //   id: 'delete',
-              //   text: 'Delete',
-              //   component: Link,
-              //   icon: DeleteIcon,
-              //   onClick: () => {
-              //     removeDivisions(props.row._id);
-              //   },
-              // }
             ] : []
             ),
+            ...(hasPermissions(['ADMIN_ACCESS'])?[
+              {
+                id: 'delete',
+                text: 'Delete',
+                component: Link,
+                icon: DeleteIcon,
+                onClick: () => {
+                  removeDivisions(props.row._id);
+                },
+              },
+            ]:[]),
           ]}
         />
       ),
