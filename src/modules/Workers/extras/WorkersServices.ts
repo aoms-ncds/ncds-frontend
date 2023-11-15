@@ -32,7 +32,7 @@ export default {
    * @param {string} workerId - The ID of the worker to be deleted.
    * @return {Promise<StandardResponse<void>>} A promise that resolves to the response containing the result of the deletion.
    */
-  delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } }) ),
+  delete: (workerId: string) => getStandardResponse<void>(axios.delete(`/workers/${workerId}`, { headers: { ...getAuthHeader() } })),
 
   getWorkersByDivision: () => getStandardResponse<IWorker[]>(axios.get('/workers/division', { headers: { ...getAuthHeader() } })),
 
@@ -67,23 +67,19 @@ export default {
       })),
     ),
   getAllRemarksById: (userId: string) =>
-    getStandardResponse<Remark[]>(
-      axios.get(`/workers/remarks/${userId}`, { headers: { ...getAuthHeader() } }),
-      (remarks) => remarks.map((remark:any) => ({
+    getStandardResponse<Remark[]>(axios.get(`/workers/remarks/${userId}`, { headers: { ...getAuthHeader() } }), (remarks) =>
+      remarks.map((remark: any) => ({
         ...remark,
         createdAt: moment(remark.createdAt),
         updatedAt: moment(remark.updatedAt),
       })),
     ),
   addRemarks: (remark: CreatableRemark) =>
-    getStandardResponse<Remark>(
-      axios.post('/workers/remarks', { ...remark }, { headers: { ...getAuthHeader() } } ),
-      (remark) => ({
-        ...remark,
-        createdAt: moment(remark.createdAt),
-        updatedAt: moment(remark.updatedAt),
-      }),
-    ),
+    getStandardResponse<Remark>(axios.post('/workers/remarks', { ...remark }, { headers: { ...getAuthHeader() } }), (remark) => ({
+      ...remark,
+      createdAt: moment(remark.createdAt),
+      updatedAt: moment(remark.updatedAt),
+    })),
   /**
    * Retrieves a worker by ID.
    * @param {string} workerId - The ID of the worker to retrieve.
@@ -114,7 +110,13 @@ export default {
           dateOfBirth: data.spouse.dateOfBirth ? moment(data.spouse.dateOfBirth) : undefined,
           createdAt: moment(data.createdAt),
           updatedAt: moment(data.updatedAt),
+
+          insurance: {
+            ...data.spouse.insurance,
+            dojInsurance: data.insurance?.dojInsurance ? moment(data.insurance.dojInsurance) : undefined,
+          },
         },
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       children: !data.children ?
         undefined :
@@ -139,7 +141,6 @@ export default {
    */
   approve: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`, null, { headers: { ...getAuthHeader() } })),
 
-
   /**
    * Rejects a worker.
    * @param {string} id - The ID of the worker to reject.
@@ -149,8 +150,7 @@ export default {
   activate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
-  deactivate: (id: string, reason: string) => getStandardResponse<Staff>(
-    axios.patch(`/workers/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
+  deactivate: (id: string, reason: string) => getStandardResponse<Staff>(axios.patch(`/workers/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
 
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
 
@@ -159,5 +159,4 @@ export default {
 
   deactivatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
   activatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
-
 };
