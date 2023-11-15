@@ -428,6 +428,7 @@ const EditIRO = () => {
                       fullWidth
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ max: totalRequestedAmount, min: 0 }}
+                      disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
                     {/* </Tooltip> */}
@@ -440,8 +441,7 @@ const EditIRO = () => {
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={IRO?.sanctionedBank ?? null}
-
-
+                        disabled={!hasPermissions(['ADMIN_ACCESS'])}
                         onChange={(e) =>
                           setIRO({
                             ...IRO,
@@ -470,7 +470,7 @@ const EditIRO = () => {
                           });
                         }
                       }}
-
+                      disabled={!hasPermissions(['ADMIN_ACCESS'])}
                       renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
                       fullWidth
                     />
