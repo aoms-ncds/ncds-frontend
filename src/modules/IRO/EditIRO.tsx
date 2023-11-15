@@ -717,7 +717,7 @@ const EditIRO = () => {
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
                   />
                 </Grid>
@@ -737,7 +737,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>
@@ -757,7 +757,7 @@ const EditIRO = () => {
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
                   />
                 </Grid>
