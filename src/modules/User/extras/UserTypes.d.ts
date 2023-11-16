@@ -166,6 +166,7 @@ declare global {
     supportDetails: SupportDetails;
     supportStructure: SupportStructure;
     insurance?: Insurance;
+
   }
 
   type Gender = 'Male' | 'Female' | 'Other';

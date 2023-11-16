@@ -303,6 +303,7 @@ const Profile = () => {
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Working: </Typography> {child.working ? 'Yes' : 'No'} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {child.occupation} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {child.qualification} </Grid>
+                      <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {child?.gender} </Grid>
                     </Grid>
                   </Grid>
                 ))}
