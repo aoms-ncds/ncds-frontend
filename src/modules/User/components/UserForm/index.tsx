@@ -20,6 +20,9 @@ import {
   IconButton,
   Stack,
   Avatar,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import UserBasicDetailsForm from './UserBasicDetailsForm';
@@ -37,7 +40,6 @@ import UserLifeCycleStates from '../../extras/UserLifeCycleStates';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import UserServices from '../../extras/UserServices';
 
-
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   props: FormComponentProps<
     UserType,
@@ -50,8 +52,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       };
     }
   >,
-
-
 ) => {
   const [activeStep, setActiveStep] = useState(0);
   const spouse: CreatableSpouse = { firstName: '', lastName: '' };
@@ -62,14 +62,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     // type: '',
     firstName: '',
     lastName: '',
+    gender: undefined,
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
 
-
   // const [userPhoto, setUserPhoto] = useState<File>();
   // const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
-
 
   const [open, toggleOpen] = useState(false);
   const handleAddChild = () => {
@@ -79,6 +78,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       // type: '',
       firstName: '',
       lastName: '',
+      gender: undefined,
     });
   };
   const deleteChild = (_index: number) => {
@@ -119,7 +119,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       );
   }, []);
 
-
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {
   //   lastProgramNameField.current?.focus();
@@ -155,14 +154,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               <StepLabel>Offsprings details</StepLabel>
             </Step>
           )}
-          {((props.options?.kind === 'worker' && props.value.status &&
-            (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
-            (props.options?.kind === 'staff')) && (
+          {((props.options?.kind === 'worker' && props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
+            props.options?.kind === 'staff') && (
             <Step>
               <StepLabel>Support Details</StepLabel>
             </Step>
           )}
-
         </Stepper>
       </Container>
       <br />
@@ -187,7 +184,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                           marginLeft: 'auto',
                           marginRight: 'auto',
                         }}
-                        variant='rounded'
+                        variant="rounded"
                         src={props.value.imageURL ?? ''}
                       >
                         {!props.value.imageURL && <ImageIcon sx={{ fontSize: 100 }} />}
@@ -269,9 +266,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   padding: 20,
                 }}
               >
-                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}
-                  disabled={!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(props.value.basicDetails.email)}
-                >Next</Button>
+                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }} disabled={!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(props.value.basicDetails.email)}>
+                  Next
+                </Button>
               </div>
             </form>
           )}
@@ -292,8 +289,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 } else {
                   setActiveStep((currentStep) => currentStep + 3);
                 }
-              }
-              }
+              }}
             >
               <Grid container spacing={3}>
                 <NewOfficialDetailsForm
@@ -317,13 +313,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   padding: 20,
                 }}
               >
-
                 <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                   Go back{' '}
-                </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {(props.options?.kind === 'worker' && !props.value.status && props.value.basicDetails.martialStatus !== 'Married') ? 'Submit' : 'Next'}
                 </Button>
-
+                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                  {props.options?.kind === 'worker' && !props.value.status && props.value.basicDetails.martialStatus !== 'Married' ? 'Submit' : 'Next'}
+                </Button>
               </div>
             </form>
           )}
@@ -409,8 +404,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     Add New Child
                   </Button>
                 </Grid>
-
-
               </Grid>
               {/* <Grid sx={{ my: 2 }}>
                 <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
@@ -435,7 +428,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
                     Go back{' '}
-                  </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                  </Button>
+                  <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                     {' '}
                     Next{' '}
                   </Button>
@@ -448,21 +442,21 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     marginTop: 2,
                     padding: 20,
                   }}
-                ><Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
+                >
+                  <Button onClick={() => setActiveStep(0)} sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
                     Review from first step{' '}
-                  </Button><Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                  </Button>
+                  <Button onClick={() => setActiveStep((step) => step - 1)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
                     Go back{' '}
-                  </Button><Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
+                  </Button>
+                  <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                     {' '}
-                    {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
-                    {' '}
-                    Submit{' '}
-                  </Button></div>
-
-              )
-              }
+                    {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */} Submit{' '}
+                  </Button>
+                </div>
+              )}
               {/* <Grid item xs={12} sx={{ justifyContent: 'flex-end' }}> */}
 
               {/* </Grid> */}
@@ -474,8 +468,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               onSubmit={(e) => {
                 e.preventDefault();
                 submitForm(props.value);
-              }
-              }
+              }}
             >
               <Grid container spacing={3}>
                 <NewSupportDetailsForm
@@ -511,7 +504,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   <br />
                   <Divider textAlign="left">Insurance Details</Divider>
                 </Grid>
-
 
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
@@ -591,7 +583,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Grid>
               </Grid>
 
-
               <div
                 style={{
                   float: 'right',
@@ -604,16 +595,17 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   {' '}
                   Review from first step{' '}
                 </Button>
-                <Button onClick={() => setActiveStep((props.value.basicDetails.martialStatus !== 'Married') ? ((step) => step - 3) : ((step) => step - 1))}
-                  variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
+                <Button
+                  onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married' ? (step) => step - 3 : (step) => step - 1)}
+                  variant="outlined"
+                  sx={{ padding: '16px 64px', mr: 1 }}
+                >
                   {' '}
                   Go back{' '}
                 </Button>
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
-                  {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */}
-                  {' '}
-                  Submit{' '}
+                  {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */} Submit{' '}
                 </Button>
               </div>
             </form>
@@ -724,6 +716,28 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
 
+                <Grid item xs={12} md={12} lg={12}>
+                  <FormControl>
+                    <FormLabel id="Gender">Gender</FormLabel>
+                    <RadioGroup
+                      aria-labelledby="Gender"
+                      value={newChild.gender ?? null}
+
+                      onChange={(e) =>
+                        setNewChild((newchild) => ({
+                          ...newchild,
+                          gender: ( e.target.value as Gender | undefined),
+                        }))
+                      }
+                      name="Gender"
+                      row
+                    >
+                      <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                      <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
                 <Grid item xs={12} md={6}>
                   <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
                   <Checkbox
@@ -816,14 +830,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField
-                    label="Child Support Amount"
-                    value={newChild?.childSupport?.amount}
-                    fullWidth
-                    variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
-                    disabled
-                  />
+                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant} InputLabelProps={{ shrink: true }} disabled />
                 </Grid>
               </Grid>
             </Container>

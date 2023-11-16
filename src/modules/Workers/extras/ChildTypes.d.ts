@@ -15,6 +15,8 @@ declare global {
     working: boolean;
     occupation: string;
     qualification: string;
+    gender?: Gender;
+
   }
   interface CreatableChild extends Creatable<Child> {
     childCode?:string;
@@ -26,6 +28,7 @@ declare global {
     working?: boolean;
     occupation?: string;
     qualification?: string;
+    gender?: Gender;
   }
 
   // interface IChildSupport extends MongooseDocument{
