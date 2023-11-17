@@ -277,8 +277,8 @@ const UserBasicDetailsForm = (
           helperText={emailError}
           variant={props.options?.textField?.variant}
           fullWidth
-          InputProps={{ required: true }}
-          required
+          // InputProps={{ required: true }}
+          required={props.options?.kind === 'staff'}
         />
 
       </Grid>

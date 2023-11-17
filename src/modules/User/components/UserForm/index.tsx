@@ -266,7 +266,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   padding: 20,
                 }}
               >
-                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }} disabled={!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(props.value.basicDetails.email)}>
+                {/* <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }} disabled={!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(props.value.basicDetails.email)}>
+                  Next
+                </Button> */}
+                <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   Next
                 </Button>
               </div>
