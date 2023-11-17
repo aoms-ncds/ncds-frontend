@@ -1,13 +1,13 @@
 import { Grid } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import DivisionsServices from '../../Divisions/extras/DivisionsServices';
-import WorkersServices from '../../Workers/extras/WorkersServices';
-import FRServices from '../../FR/extras/FRServices';
-import IROServices from '../../IRO/extras/IROServices';
-import StaffServices from '../../HR/extras/StaffServices';
-import PermissionChecks from '../../User/components/PermissionChecks';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../../hooks/Authentication';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import DashBoardCard from '../../FR/components/DashBoardCard';
+import FRServices from '../../FR/extras/FRServices';
+import StaffServices from '../../HR/extras/StaffServices';
+import IROServices from '../../IRO/extras/IROServices';
+import PermissionChecks from '../../User/components/PermissionChecks';
+import WorkersServices from '../../Workers/extras/WorkersServices';
 
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
