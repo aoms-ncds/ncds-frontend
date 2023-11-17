@@ -90,7 +90,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
   const submitForm = (data: UserType) => {
-    if (props.action == 'add') {
+    if (props.action == 'add' && props.value.basicDetails.email==null) {
       UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
         .then((res) => {
           props.onSubmit && props.onSubmit(props.value);
