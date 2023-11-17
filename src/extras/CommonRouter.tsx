@@ -1,23 +1,23 @@
+import { useEffect } from 'react';
 import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom';
-import React, { useEffect } from 'react';
-import homePageRoutes from '../modules/Home/extras/HomeRoutes';
 import divisionsPageRoutes from '../modules/Divisions/extras/DivisionsRoutes';
 import frPageRoutes from '../modules/FR/extras/FRRoutes';
+import homePageRoutes from '../modules/Home/extras/HomeRoutes';
 import hrPageRoutes from '../modules/HR/extras/HRRoutes';
 import iroPageRoutes from '../modules/IRO/extras/IRORoutes';
 import workersPageRoutes from '../modules/Workers/extras/WorkersRoutes';
 // import testPageRoutes from '../modules/Tests/extras/TestRoutes';
 // import samplesPageRoutes from '../modules/Sample/extras/SampleRoutes';
-import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes';
-import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import { useAuth } from '../hooks/Authentication';
+import applicationRoutes from '../modules/Applications/extras/ApplicationRoutes';
 import LoadingPage from '../modules/Common/LoadingPage';
-import settingsRoutes from '../modules/Settings/extras/SettingsRouter';
-import UserServices from '../modules/User/extras/UserServices';
-import PermissionChecks from '../modules/User/components/PermissionChecks';
-import UnauthorizedPage from '../modules/User/UnauthorizedPage';
 import notificationPageRoutes from '../modules/Notification/extras/NotificationRouter';
+import settingsRoutes from '../modules/Settings/extras/SettingsRouter';
 import testsPageRoutes from '../modules/Tests/extras/TestRoutes';
+import PermissionChecks from '../modules/User/components/PermissionChecks';
+import UserServices from '../modules/User/extras/UserServices';
+import usersPageRoutes from '../modules/User/extras/UsersRoutes';
+import UnauthorizedPage from '../modules/User/UnauthorizedPage';
 
 export const allModuleRoutes = [
   homePageRoutes,

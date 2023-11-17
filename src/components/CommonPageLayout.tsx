@@ -1,3 +1,4 @@
+import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Menu as MenuIcon, Notifications as NotificationsIcon, Person as PersonIcon } from '@mui/icons-material';
 import {
   AppBar,
   Badge,
@@ -15,35 +16,30 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  SxProps,
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Menu as MenuIcon, Notifications as NotificationsIcon, Person as PersonIcon } from '@mui/icons-material';
+import { Moment } from 'moment';
+import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import CommonConstants from '../extras/CommonConfig';
 import { allModuleRoutes } from '../extras/CommonRouter';
-import { useLoader } from '../hooks/Loader';
-import PermissionChecks from '../modules/User/components/PermissionChecks';
-import { useAuth } from '../hooks/Authentication';
 import { unsubscribe } from '../extras/Firebase/messaging';
+import { useAuth } from '../hooks/Authentication';
+import { useLoader } from '../hooks/Loader';
 import NotificationService from '../modules/Notification/extras/NotificationService';
-import { enqueueSnackbar } from 'notistack';
+import PermissionChecks from '../modules/User/components/PermissionChecks';
 import MomentFilter from './MomentFilter';
-import { Moment } from 'moment';
 
 const drawerWidth = 240;
-type DateRangeType =
-  | 'date-time'
-  | 'days'
-  | 'weeks'
-  | 'months'
-  | 'quarter_years'
-  | 'years'
-  | 'customDay'
-  | 'customRange';
+
+
+type DateRangeType = 'date-time' | 'days' | 'weeks' | 'months' | 'quarter_years' | 'years' | 'customDay' | 'customRange';
 interface DateFilterProps {
   dateRange: DateRange;
   onChange: (newDateRange: DateRange) => void;
@@ -52,7 +48,7 @@ interface DateFilterProps {
   min?: Moment;
   max?: Moment;
 }
-const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean; momentFilter?: DateFilterProps }) => {
+const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hidePageHeader?: boolean; momentFilter?: DateFilterProps; appBarSx?: SxProps; mainContentSx?: SxProps }) => {
   const loader = useLoader();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -60,9 +56,20 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [notificationsCount, setNotificationsCount] = useState<number>();
+  const [open, setOpen] = useState(true);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleDrawerEnter = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerLeave = () => {
+    // if(){
+    //   setOpen(false);
+    // }
   };
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -87,7 +94,6 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
       });
   }, []);
 
-
   useEffect(() => {
     if (loader.count && loader.count < 0) {
       throw Error('Load count must never be less than 0');
@@ -95,26 +101,28 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   }, [loader.count]);
 
   useEffect(() => {
-    document.title = props.title ? (`IET : ${props.title}`) : 'Indian Evangelical Team';
+    document.title = props.title ? `IET : ${props.title}` : 'Indian Evangelical Team';
   }, [props.title]);
+
 
   const drawer = (
     <div>
       {/* <Toolbar /> */}
-      <Grid sx={{ height: 155 }}>
+      <Grid sx={{ height: 100 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <img src="/favicon.ico" alt="" style={{ height: 80, marginTop: 20 }} />
-          <br/>
+          <img src="/favicon.ico" alt="" style={{ height: 90, marginTop: 20 }} />
+          <br />
           {/* <b>IET</b> */}
+          <div>
+          </div>
         </div>
       </Grid>
       <Divider />
       <List>
         {allModuleRoutes
-          .map((moduleRoute, index) =>
-            moduleRoute.pages.map((page, _index) =>
-              !page.showInDrawer ? null : (
-                !page.requiredAccessRights ? (
+            .map((moduleRoute, index) =>
+              moduleRoute.pages.map((page, _index) =>
+                !page.showInDrawer ? null : !page.requiredAccessRights ? (
                   <NavLink
                     to={moduleRoute.base + page.path}
                     style={({ isActive }) =>
@@ -141,7 +149,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                   <PermissionChecks
                     key={page.path + index + _index}
                     permissions={page.requiredAccessRights}
-                    granted={(
+                    granted={
                       <NavLink
                         to={moduleRoute.base + page.path}
                         style={({ isActive }) =>
@@ -164,17 +172,22 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                           </ListItemButton>
                         </ListItem>
                       </NavLink>
-                    )}
+                    }
                   />
-                )
+                ),
               ),
-            ),
-          )
-          .flat()}
+            )
+            .flat()}
       </List>
       <Divider />
     </div>
   );
+
+  const handleDrawer = () => {
+    setOpen(!open); // Toggle the state of the drawer
+  };
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -183,11 +196,25 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         position="fixed"
         sx={{
           backgroundColor: theme.palette.primary.main,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          // width: `calc(100% - ${open ? drawerWidth : 0}px)`,
+          // ml: { sm: `${drawerWidth}px` },
+          width: () => {
+            if (isMobile) {
+              console.log('mobile');
+              return mobileOpen ? `calc(100% - ${drawerWidth}px)` : '100%';
+            } else {
+              console.log('desktop');
+              return open ? `calc(100% - ${drawerWidth}px)` : `calc(100% - ${60}px)`;
+            }
+          },
+          // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
+          ...props.appBarSx,
         }}
       >
         <Toolbar>
+          <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawer} sx={{ mr: 2, display: isMobile ? 'none' : 'inherit' }}>
+            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
             <MenuIcon />
           </IconButton>
@@ -203,7 +230,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               }}
               component={Link}
               to="/notification"
-              target='_blank'
+              target="_blank"
             >
               <Badge badgeContent={notificationsCount} color="error">
                 <NotificationsIcon />
@@ -232,16 +259,18 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem component={Link} to={`/users/${auth.user ? auth.user.kind+'/'+auth.user._id : ''}`} onClick={handleCloseUserMenu}>
+            <MenuItem component={Link} to={`/users/${auth.user ? auth.user.kind + '/' + auth.user._id : ''}`} onClick={handleCloseUserMenu}>
               <Typography textAlign="center">Profile</Typography>
             </MenuItem>
-            <MenuItem onClick={async () => {
-              await unsubscribe();
-              handleCloseUserMenu();
-              localStorage.removeItem('userToken');
-              localStorage.removeItem('userData');
-              auth.setUser(false);
-            }}>
+            <MenuItem
+              onClick={async () => {
+                await unsubscribe();
+                handleCloseUserMenu();
+                localStorage.removeItem('userToken');
+                localStorage.removeItem('userData');
+                auth.setUser(false);
+              }}
+            >
               <Typography textAlign="center">Logout</Typography>
             </MenuItem>
           </Menu>
@@ -268,12 +297,15 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           {drawer}
         </Drawer>
         <Drawer
-          variant="permanent"
+          variant="persistent"
+          onMouseEnter={handleDrawerEnter}
+          onMouseLeave={handleDrawerLeave}
           sx={{
             'display': { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: drawerWidth,
+              // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
+              width: open ? drawerWidth : '70px',
             },
           }}
           open
@@ -286,13 +318,18 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          // width: `calc(100% - ${open ? drawerWidth : 60}px)`, // Adjust width based on the drawer state
+          // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms', // Transition effect // Initial open drawer margin
+          ...(!open && {
+            marginLeft: '-180px', // Reset margin when drawer is open
+          }),
+          ...props.mainContentSx,
         }}
       >
         <Toolbar />
         {props.title && !props.hidePageHeader && (
           <>
-            <Grid container spacing={2} >
+            <Grid container spacing={2}>
               <Grid item xs={12} md={9}>
                 <Typography variant="h4" color="color.secondary">
                   {props.title}
@@ -316,7 +353,6 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                   />
                 )}
               </Grid>
-
             </Grid>
 
             <br />
