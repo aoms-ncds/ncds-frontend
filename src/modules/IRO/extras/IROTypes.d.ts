@@ -45,6 +45,7 @@ declare global{
   export interface IReleaseAmount {
     _id: string;
     modeOfPayment?: string;
+    otherModeOfPayment?: string;
     releaseAmount?: number;
     transactionNumber?: string;
     transferredAmount?: number;
