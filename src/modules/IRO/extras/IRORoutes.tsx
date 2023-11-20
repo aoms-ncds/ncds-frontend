@@ -3,7 +3,7 @@ import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import IRODashboard from '..';
 import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
-import ReleaseAmount from '../ReleaseAmount';
+import ReleaseAmount from '../components/ReleaseAmountDialog';
 import ViewIRO from '../ViewIRO';
 import ReconciliationIRO from '../ReconciliationIRO';
 import AccountApprove from '../AccountApprovel';

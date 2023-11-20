@@ -30,7 +30,7 @@ import { MB } from '../../extras/CommonConfig';
 import moment from 'moment';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
-import ReleaseAmount from './ReleaseAmount';
+import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 
