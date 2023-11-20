@@ -59,7 +59,20 @@ const NewSupportDetailsForm = (
           )}
         />
       </Grid>
-
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Other Designation"
+          value={props.value?.otherDesignation}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              otherDesignation: e.target.value,
+            })
+          }
+          variant={props.options?.textField.variant}
+          fullWidth
+        />
+      </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
