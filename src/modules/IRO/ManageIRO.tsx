@@ -176,6 +176,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
+  const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('y'),
     endDate: moment().endOf('y'),
@@ -391,7 +392,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //   },
             //   icon: FingerprintIcon,
             // },
-            ...(hasPermissions(['WRITE_IRO']) && params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
+            ...(hasPermissions(['WRITE_IRO']) && params.row.status == IROLifeCycleStates.AMOUNT_RELEASED ?
               [
                 {
                   id: 'Attachments',
@@ -404,7 +405,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   },
                 },
               ] :
-              []),
+              [
+                {
+                  id: 'Attachments',
+                  text: 'Attachments',
+                  icon: AttachmentIcon,
+                  onClick: () => {
+                    setViewFileUploader(true);
+                    setSelectedIRO(params.row);
+                  },
+                },
+              ]),
             // {
             //   id: 'Send Back',
             //   text: 'Send Back',
@@ -1130,6 +1141,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             </Alert>
           </Grid>
         )}
+      />
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action="view"
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={selectedIRO?.billAttachment ?? []}
+
       />
     </CommonPageLayout>
   );

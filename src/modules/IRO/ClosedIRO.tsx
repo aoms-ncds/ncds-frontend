@@ -14,13 +14,18 @@ import MessageItem from '../../components/MessageItem';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import * as XLSX from 'xlsx';
+import { MB } from '../../extras/CommonConfig';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>();
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -80,6 +85,7 @@ const ClosedIRO = () => {
               document: <IROReceiptTemplate rowData={props.row} />,
               fileName: 'IROReceipt.pdf',
             },
+
             // {
             //   id: 'View',
             //   text: 'View Details ',
@@ -98,11 +104,15 @@ const ClosedIRO = () => {
             //   text: 'Close IRO',
             //   icon: PreviewIcon,
             // },
-            // {
-            //   id: 'Attachments',
-            //   text: 'Attachments',
-            //   icon: PrintIcon,
-            // },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: AttachFileIcon,
+              onClick: ()=>{
+                setAttachments(props.row.billAttachment);
+                setViewFileUploader(true);
+              },
+            },
           ]}
         />
       ),
@@ -357,6 +367,23 @@ const ClosedIRO = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action="view"
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachments}
+
+      />
     </CommonPageLayout>
   );
 };

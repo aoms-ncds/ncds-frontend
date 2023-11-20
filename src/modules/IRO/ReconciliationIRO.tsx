@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid } from '@mui/material';
-import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
+import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
@@ -20,6 +20,8 @@ import * as XLSX from 'xlsx';
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
   const user=useAuth();
+  const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -248,11 +250,20 @@ const ReconciliationIRO = () => {
             //   text: 'Close IRO',
             //   icon: PreviewIcon,
             // },
-            // {
-            //   id: 'Attachments',
-            //   text: 'Attachments',
-            //   icon: PrintIcon,
-            // },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: PrintIcon,
+              onClick: ()=>{
+                // console.log(props.row.particulars );
+                // props.row.particulars.map((item)=>{
+                setAttachments(props.row.billAttachment);
+                // });
+                console.log(attachments, 'setAttachments(item.attachment);');
+
+                setViewFileUploader(true);
+              },
+            },
           ]}
         />
       ),
@@ -527,6 +538,47 @@ const ReconciliationIRO = () => {
           } ));
           return FileUploaderServices.deleteFile(fileId);
         }}
+      />
+
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action="view"
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachments}
+        // uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+        //   const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
+        //     setNewParticular((particularDetails) => ({
+        //       ...particularDetails,
+        //       attachment: [...particularDetails.attachment, res.data],
+        //     }));
+        //     return res;
+        //   });
+        //   return resp;
+        // }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        // deleteFile={(fileId: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        //   }));
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
       />
     </CommonPageLayout>
   );
