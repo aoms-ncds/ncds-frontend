@@ -64,7 +64,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       setReleaseAmount(() => ({
         ...releaseAmount,
         transferredBank:
-          props.data[0]?.sanctionedBank ? (props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
+          props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
             props.data[0]?.division?.FCRABankDetails :
             props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
               props.data[0]?.division?.localBankDetails :
@@ -74,13 +74,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 accountNumber: '',
                 IFSCCode: '',
                 beneficiary: '',
-              }) : {
-            bankName: '',
-            branchName: '',
-            accountNumber: '',
-            IFSCCode: '',
-            beneficiary: '',
-          },
+              },
         releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
         IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
