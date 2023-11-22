@@ -63,6 +63,24 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     if (props.action == 'add') {
       setReleaseAmount(() => ({
         ...releaseAmount,
+        transferredBank:
+          props.data[0]?.sanctionedBank ? (props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
+            props.data[0]?.division?.FCRABankDetails :
+            props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.localBankDetails :
+              props.data[0]?.sanctionedBank == 'Personal Bank' && props.data[0]?.division?.otherBankDetails ? props.data[0]?.division?.otherBankDetails : {
+                bankName: '',
+                branchName: '',
+                accountNumber: '',
+                IFSCCode: '',
+                beneficiary: '',
+              }) : {
+            bankName: '',
+            branchName: '',
+            accountNumber: '',
+            IFSCCode: '',
+            beneficiary: '',
+          },
         releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
         IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
@@ -363,13 +381,13 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   disabled={props.action == 'view'}
                 />
               </Grid>
-              {releaseAmount?.modeOfPayment=='Other' &&(
+              {releaseAmount?.modeOfPayment == 'Other' && (
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Other Mode of Payment:"
                     value={releaseAmount?.otherModeOfPayment}
                     onChange={(e) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setReleaseAmount(() => ({
                         ...releaseAmount,
                         otherModeOfPayment: e.target.value,
