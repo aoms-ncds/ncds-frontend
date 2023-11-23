@@ -3,7 +3,6 @@ import { Autocomplete, Button, Checkbox, Container, Dialog, DialogActions, Dialo
 import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
-import moment from 'moment';
 import { useAuth } from '../../../../hooks/Authentication';
 
 // const defaultDivisionDetails:Division = {
@@ -56,7 +55,6 @@ const NewOfficialDetailsForm = (
   const [newDiv, setNewDiv] = useState<Division|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
-  const currentDate = moment();
   const user=useAuth();
 
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
