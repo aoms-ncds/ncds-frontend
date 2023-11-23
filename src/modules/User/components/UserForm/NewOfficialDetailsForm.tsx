@@ -63,7 +63,7 @@ const NewOfficialDetailsForm = (
     event.preventDefault();
     event.currentTarget.blur();
   };
- // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
   //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
   //     event.preventDefault();
@@ -367,8 +367,7 @@ const NewOfficialDetailsForm = (
           InputLabelProps={{
             shrink: Boolean(props.value?.noOfChurches),
           }}
-          inputProps={{ onWheel: handleWheel,
-            }}
+          inputProps={{ onWheel: handleWheel }}
           variant={props.options?.textField.variant}
           fullWidth
 
