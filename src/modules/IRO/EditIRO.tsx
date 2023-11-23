@@ -198,12 +198,12 @@ const EditIRO = () => {
     event.currentTarget.blur();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // Prevent changing the value when the up or down arrow key is pressed
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      event.preventDefault();
-    }
-  };
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   // Prevent changing the value when the up or down arrow key is pressed
+  //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+  //     event.preventDefault();
+  //   }
+  // };
 
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
@@ -439,7 +439,7 @@ const EditIRO = () => {
                       fullWidth
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ max: totalRequestedAmount, min: 0, onWheel: handleWheel,
-                        onKeyDown: handleKeyDown }}
+                      }}
                       disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
@@ -786,10 +786,7 @@ const EditIRO = () => {
                     }
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     inputProps={{
-                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                        event.preventDefault();
-                        event.currentTarget.blur();
-                      },
+                      onWheel: handleWheel,
                     }}
                     fullWidth
                   />
@@ -810,10 +807,7 @@ const EditIRO = () => {
                     required
                     fullWidth
                     inputProps={{
-                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                        event.preventDefault();
-                        event.currentTarget.blur();
-                      },
+                      onWheel: handleWheel,
                     }}
                   />
                 </Grid>
@@ -849,10 +843,7 @@ const EditIRO = () => {
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     InputLabelProps={{ shrink: true }}
                     inputProps={{
-                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                        event.preventDefault();
-                        event.currentTarget.blur();
-                      },
+                      onWheel: handleWheel,
                     }}
                   />
                 </Grid>
