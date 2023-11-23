@@ -73,6 +73,12 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             onChange={(e) => props.onChange({ ...props.value, noOfWorkers: Number(e.target.value) })}
             fullWidth
             InputLabelProps={{ shrink: true }}
+            inputProps={{
+              onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                event.preventDefault();
+                event.currentTarget.blur();
+              },
+            }}
             disabled={props.action == 'view'}
           />
         </FormControl>
@@ -87,6 +93,12 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             fullWidth
             InputLabelProps={{ shrink: true }}
             disabled={true}
+            inputProps={{
+              onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                event.preventDefault();
+                event.currentTarget.blur();
+              },
+            }}
           />
         </FormControl>
       </Grid>

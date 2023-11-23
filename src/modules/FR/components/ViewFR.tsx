@@ -67,6 +67,17 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
 
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+  };
+
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   // Prevent changing the value when the up or down arrow key is pressed
+  //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+  //     event.preventDefault();
+  //   }
+  // };
 
   const editParticular = (particular: Particular, index: number) => {
     // setParticularDialog('edit');
@@ -328,7 +339,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ max: totalRequestedAmount, min: 0 }}
+                      inputProps={{ max: totalRequestedAmount, min: 0,
+                        onWheel: handleWheel,
+                      }}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
                     {/* </Tooltip> */}
@@ -763,6 +776,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                     value={newParticular?.quantity == 0 ? '' : newParticular?.quantity}
                     disabled
                     fullWidth
+                    inputProps={{
+                      onWheel: handleWheel,
+                    }}
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -773,6 +789,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                     disabled
                     required
                     fullWidth
+                    inputProps={{
+                      onWheel: handleWheel,
+                    }}
                   />
                 </Grid>
                 {/* <Grid item md={12}>

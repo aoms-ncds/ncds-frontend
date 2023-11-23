@@ -196,6 +196,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   fullWidth
                   disabled
+                  inputProps={{
+                    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    },
+                  }}
                 />
               </Grid>
 
@@ -212,7 +218,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0 }}
+                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                    event.preventDefault();
+                    event.currentTarget.blur();
+                  } }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required

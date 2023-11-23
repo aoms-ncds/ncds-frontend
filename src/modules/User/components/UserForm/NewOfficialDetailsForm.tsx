@@ -3,7 +3,6 @@ import { Autocomplete, Button, Checkbox, Container, Dialog, DialogActions, Dialo
 import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
-import moment from 'moment';
 import { useAuth } from '../../../../hooks/Authentication';
 
 // const defaultDivisionDetails:Division = {
@@ -56,8 +55,18 @@ const NewOfficialDetailsForm = (
   const [newDiv, setNewDiv] = useState<Division|null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
-  const currentDate = moment();
   const user=useAuth();
+
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+  };
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   // Prevent changing the value when the up or down arrow key is pressed
+  //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+  //     event.preventDefault();
+  //   }
+  // };
   useEffect(() => {
     if (newDiv) {
       if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
@@ -356,6 +365,7 @@ const NewOfficialDetailsForm = (
           InputLabelProps={{
             shrink: Boolean(props.value?.noOfChurches),
           }}
+          inputProps={{ onWheel: handleWheel }}
           variant={props.options?.textField.variant}
           fullWidth
 
