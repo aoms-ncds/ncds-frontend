@@ -23,6 +23,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -39,6 +45,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -55,6 +67,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -71,6 +89,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -87,6 +111,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -103,6 +133,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -119,6 +155,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -135,6 +177,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -151,6 +199,12 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 

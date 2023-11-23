@@ -307,6 +307,12 @@ const UserBasicDetailsForm = (
           InputLabelProps={{
             shrink: true,
           }}
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
+          }}
         />
       </Grid>
 
@@ -320,6 +326,12 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+          }}
+          inputProps={{
+            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+              event.preventDefault();
+              event.currentTarget.blur();
+            },
           }}
         />
       </Grid>

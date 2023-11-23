@@ -179,6 +179,17 @@ const ViewIRO = () => {
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
 
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent changing the value when the up or down arrow key is pressed
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+    }
+  };
 
   useEffect(() => {
     if (!iroID) {
@@ -365,6 +376,8 @@ const ViewIRO = () => {
                           fullWidth
                           disabled
                           InputLabelProps={{ shrink: true }}
+                          inputProps={{ onWheel: handleWheel,
+                            onKeyDown: handleKeyDown }}
                         />
                       </Grid>
 

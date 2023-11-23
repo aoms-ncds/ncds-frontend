@@ -214,6 +214,12 @@ const ChildSupport = () => {
               value={newChildSupport.amount}
               onChange={(e) => setNewChildSupport((prev) => ({ ...prev, amount: Number(e.target.value) }))}
               required
+              inputProps={{
+                onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                  event.preventDefault();
+                  event.currentTarget.blur();
+                },
+              }}
             />
           </DialogContent>
           <DialogActions>

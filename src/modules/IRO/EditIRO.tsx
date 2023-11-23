@@ -193,6 +193,17 @@ const EditIRO = () => {
   });
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
 
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent changing the value when the up or down arrow key is pressed
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+    }
+  };
 
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
@@ -427,7 +438,8 @@ const EditIRO = () => {
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ max: totalRequestedAmount, min: 0 }}
+                      inputProps={{ max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                        onKeyDown: handleKeyDown }}
                       disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
@@ -773,7 +785,12 @@ const EditIRO = () => {
                       }))
                     }
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
-
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                     fullWidth
                   />
                 </Grid>
@@ -792,6 +809,12 @@ const EditIRO = () => {
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     required
                     fullWidth
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                   />
                 </Grid>
                 {hasPermissions(['ADMIN_ACCESS'])&&(
@@ -825,6 +848,12 @@ const EditIRO = () => {
                     required
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     InputLabelProps={{ shrink: true }}
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item md={12}>

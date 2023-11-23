@@ -58,6 +58,18 @@ const NewOfficialDetailsForm = (
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const currentDate = moment();
   const user=useAuth();
+
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent changing the value when the up or down arrow key is pressed
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+    }
+  };
   useEffect(() => {
     if (newDiv) {
       if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
@@ -356,6 +368,8 @@ const NewOfficialDetailsForm = (
           InputLabelProps={{
             shrink: Boolean(props.value?.noOfChurches),
           }}
+          inputProps={{ onWheel: handleWheel,
+            onKeyDown: handleKeyDown }}
           variant={props.options?.textField.variant}
           fullWidth
 

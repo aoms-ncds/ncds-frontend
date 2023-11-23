@@ -707,7 +707,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         quantity: Number(e.target.value),
                       }))
                     }
-
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                     fullWidth
                   />
                 </Grid>
@@ -723,6 +728,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         requestedAmount: Number(e.target.value),
                       }))
                     }
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                     required
                     fullWidth
                   />
@@ -756,6 +767,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     fullWidth
                     required
                     disabled
+                    inputProps={{
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
+                    }}
                     InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
