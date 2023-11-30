@@ -33,18 +33,18 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 interface FileUploaderProps {
   id?: string;
   title: string;
-  action: 'add'|'view'|'manage';
+  action: 'add' | 'view' | 'manage';
   types: FileObjectType[]; // pass the type of file you need to upload
   // accept: ('video/*' | 'image/*' | 'image/jpeg' | 'image/png' | 'image/gif' | '.xlsx' | '.xls')[];
-  limits:{
+  limits: {
     maxItemSize?: number;
-   maxItemCount?: number;
-   maxTotalSize?: number;
+    maxItemCount?: number;
+    maxTotalSize?: number;
   };
   open: boolean;
   onClose: () => void;
-  postApprove?:() => Promise<StandardResponse<void>>;
-  postReject?:() => Promise<StandardResponse<void>>;
+  postApprove?: () => Promise<StandardResponse<void>>;
+  postReject?: () => Promise<StandardResponse<void>>;
   uploadFile?: (file: File, onProgress: (progress: AJAXProgress) => void) => Promise<StandardResponse<FileObject>>;
   getFiles: FileObject[];
   renameFile?: (fileID: string, newName: string) => Promise<StandardResponse<void>>;
@@ -71,13 +71,13 @@ const FileUploader = (props: FileUploaderProps) => {
   const [dragged, setDragged] = useState(false);
 
 
-  const [deleteFileId, setDeleteFileId] = useState<string|null>(null);
-  const [approveFileId, setApproveFileId] = useState<string|null>(null);
+  const [deleteFileId, setDeleteFileId] = useState<string | null>(null);
+  const [approveFileId, setApproveFileId] = useState<string | null>(null);
   const [allApproved, setAllApproved] = useState(true);
-  const [rejectFileId, setRejectFileId] = useState<string|null>(null);
+  const [rejectFileId, setRejectFileId] = useState<string | null>(null);
   const [completedFile, setCompletedFile] = useState(false);
   const uploadFile = (files: FileList) => {
-    if (props.limits.maxItemCount && fileObjects && (fileObjects?.length+files.length)>props.limits.maxItemCount) {
+    if (props.limits.maxItemCount && fileObjects && (fileObjects?.length + files.length) > props.limits.maxItemCount) {
       enqueueSnackbar({
         message: 'Maximum files Allowed Exceeded.  ',
         variant: 'error',
@@ -109,21 +109,21 @@ const FileUploader = (props: FileUploaderProps) => {
           },
         ]);
         props
-        .uploadFile && props
-          .uploadFile(droppedFile, (progress) => {
-            setUploadingFiles((_files) => _files.map((_file) => (_file.tempID === tempID ? { ..._file, progress } : _file)));
-          })
-          .then((res) => {
-            setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
-            setFileObjects((_file) => (_file ? [..._file, res.data] : [res.data]));
-            enqueueSnackbar({
-              message: `Successfully Uploaded  ${res.data.filename}`,
-              variant: 'success',
+          .uploadFile && props
+            .uploadFile(droppedFile, (progress) => {
+              setUploadingFiles((_files) => _files.map((_file) => (_file.tempID === tempID ? { ..._file, progress } : _file)));
+            })
+            .then((res) => {
+              setUploadingFiles((_files) => _files.filter((_file) => _file.tempID !== tempID));
+              setFileObjects((_file) => (_file ? [..._file, res.data] : [res.data]));
+              enqueueSnackbar({
+                message: `Successfully Uploaded  ${res.data.filename}`,
+                variant: 'success',
+              });
+            })
+            .catch((error) => {
+              console.log('Caught error', error);
             });
-          })
-          .catch((error) => {
-            console.log('Caught error', error);
-          });
         // setFile(droppedFile);
         // setUploadingFiles
         // readFileContent(droppedFile);
@@ -131,11 +131,11 @@ const FileUploader = (props: FileUploaderProps) => {
     }
   };
 
-  const validateFile=(file:File)=>{
-    let totalSize=0;
-    fileObjects?.map((_file)=>totalSize+=_file.size);
+  const validateFile = (file: File) => {
+    let totalSize = 0;
+    fileObjects?.map((_file) => totalSize += _file.size);
 
-    if (props.limits.maxItemCount && fileObjects && fileObjects?.length+1>props.limits.maxItemCount) {
+    if (props.limits.maxItemCount && fileObjects && fileObjects?.length + 1 > props.limits.maxItemCount) {
       enqueueSnackbar({
         message: 'Maximum files Allowed Exceeded.  ',
         variant: 'error',
@@ -145,13 +145,13 @@ const FileUploader = (props: FileUploaderProps) => {
         variant: 'info',
       });
       return false;
-    } else if (props.limits.maxTotalSize && totalSize+file.size>props.limits.maxTotalSize) {
+    } else if (props.limits.maxTotalSize && totalSize + file.size > props.limits.maxTotalSize) {
       enqueueSnackbar({
         message: ` Maximum Total File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxTotalSize).size.toFixed(0)} ${convertFileSize(props.limits.maxTotalSize).type}`,
         variant: 'error',
       });
       return false;
-    } else if (props.limits.maxItemSize && file.size>props.limits.maxItemSize) {
+    } else if (props.limits.maxItemSize && file.size > props.limits.maxItemSize) {
       enqueueSnackbar({
         message: ` File Size Exceeds. Allowed size: ${convertFileSize(props.limits.maxItemSize).size.toFixed(0)}${convertFileSize(props.limits.maxItemSize).type}`,
         variant: 'error',
@@ -174,7 +174,7 @@ const FileUploader = (props: FileUploaderProps) => {
   useEffect(() => {
     setAllApproved(true);
     fileObjects?.forEach((_fileObject) => {
-      if (_fileObject.status!=CommonLifeCycleStates.APPROVED) {
+      if (_fileObject.status != CommonLifeCycleStates.APPROVED) {
         setAllApproved(false);
         return;
       }
@@ -190,7 +190,7 @@ const FileUploader = (props: FileUploaderProps) => {
   useEffect(() => {
     fileObjects?.forEach((_fileObject) => {
       setAllApproved(true);
-      if (_fileObject.status!=CommonLifeCycleStates.APPROVED) {
+      if (_fileObject.status != CommonLifeCycleStates.APPROVED) {
         setAllApproved(false);
         return;
       }
@@ -212,12 +212,12 @@ const FileUploader = (props: FileUploaderProps) => {
         <Box
           onDragOver={(event) => {
             event.preventDefault();
-            if (props.action=='add') {
+            if (props.action == 'add') {
               setDragged(true);
             }
           }}
           onDragLeave={() => {
-            if (props.action=='add') setDragged(false);
+            if (props.action == 'add') setDragged(false);
           }}
         >
           <DialogTitle>{props.title}</DialogTitle>
@@ -227,7 +227,7 @@ const FileUploader = (props: FileUploaderProps) => {
             onDragStart={(event) => event.preventDefault()}
             onDrop={(event) => {
               event.preventDefault();
-              if (props.action=='add') {
+              if (props.action == 'add') {
                 uploadFile(event.dataTransfer.files);
                 setDragged(false);
               }
@@ -269,10 +269,10 @@ const FileUploader = (props: FileUploaderProps) => {
                     }}
                   >
                     <Typography variant="h4" sx={{ textAlign: 'center' }} color="inherit">
-                    Drag and Drop here
+                      Drag and Drop here
                     </Typography>
                     <Typography variant="body1" sx={{ textAlign: 'center' }}>
-                    Supported formats: <br /> {props.types.join(', ')}
+                      Supported formats: <br /> {props.types.join(', ')}
                     </Typography>
                   </Box>
                 </Box>
@@ -293,8 +293,8 @@ const FileUploader = (props: FileUploaderProps) => {
               <Grid container spacing={3}>
                 {fileObjects.map((file, index) => (
                   <Grid key={index} item xs={12} md={6} lg={4} xl={3}>
-                    <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }} onClick={()=>{
-                    // file.downloadURL? window.open(file.downloadURL, '_blank'):null;
+                    <Card sx={{ backgroundColor: isDark ? '#000' : '#eee' }} onClick={() => {
+                      // file.downloadURL? window.open(file.downloadURL, '_blank'):null;
                     }}>
                       <CardContent sx={{ pb: 0 }}>
                         <Grid container spacing={3}>
@@ -313,13 +313,13 @@ const FileUploader = (props: FileUploaderProps) => {
                                     }),
                                 );
                                 props
-                                .renameFile && props
-                                .renameFile(file._id, e.target.value)
-                                .then((res) => {
-                                })
-                                .catch((error) => {
-                                  // Implement
-                                });
+                                  .renameFile && props
+                                    .renameFile(file._id, e.target.value)
+                                    .then((res) => {
+                                    })
+                                    .catch((error) => {
+                                      // Implement
+                                    });
                               }}
                               disableUnderline
                               fullWidth
@@ -329,11 +329,11 @@ const FileUploader = (props: FileUploaderProps) => {
                         </Grid>
                       </CardContent>
                       <CardActions sx={{ pt: 0 }}>
-                        {file.status==CommonLifeCycleStates.APPROVED?
-                          <Chip variant="outlined" label="Accepted" color="success" size="small" icon={<CheckIcon />} />:
-                          file.status==CommonLifeCycleStates.REJECTED?
-                            <Chip variant="outlined" label="Rejected" color="error" size="small" icon={<ClearIcon />} />:
-                            props.action=='manage'?
+                        {file.status == CommonLifeCycleStates.APPROVED ?
+                          <Chip variant="outlined" label="Accepted" color="success" size="small" icon={<CheckIcon />} /> :
+                          file.status == CommonLifeCycleStates.REJECTED ?
+                            <Chip variant="outlined" label="Rejected" color="error" size="small" icon={<ClearIcon />} /> :
+                            props.action == 'manage' ?
                               <>
                                 <IconButton
                                   sx={{ ml: 'auto' }}
@@ -353,9 +353,9 @@ const FileUploader = (props: FileUploaderProps) => {
                                 >
                                   <ClearIcon />
                                 </IconButton>
-                              </>:null
+                              </> : null
                         }
-                        {file.downloadURL&&(
+                        {file.downloadURL && (
                           <IconButton
                             sx={{ ml: 'auto' }}
                             color="error"
@@ -371,7 +371,7 @@ const FileUploader = (props: FileUploaderProps) => {
                             <FileDownloadIcon />
                           </IconButton>
                         )}
-                        { props.deleteFile && props.action!='manage' &&(
+                        {props.deleteFile && props.action != 'manage' && (
                           <IconButton
                             sx={{ ml: 'auto' }}
                             color="error"
@@ -415,23 +415,23 @@ const FileUploader = (props: FileUploaderProps) => {
             {fileObjects && fileObjects.length === 0 && uploadingFiles.length === 0 && (
               <>
                 <Typography variant="h4" sx={{ textAlign: 'center', mt: 5 }}>
-                  {props.action=='add'? 'Drag and Drop here':'No files Found'}
+                  {props.action == 'add' ? 'Drag and Drop here' : 'No files Found'}
                 </Typography>
               </>
             )}
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" onClick={props.onClose}>
-            Close
+              Close
             </Button>
-            {props.action=='manage'&& props.postApprove &&(
-              <Button variant="contained" onClick={()=>setCompletedFile(true)} disabled={!allApproved }>
-            Reconciliation Done
+            {props.action == 'manage' && props.postApprove && (
+              <Button variant="contained" onClick={() => setCompletedFile(true)} disabled={!allApproved}>
+                Reconciliation Done
               </Button>
             )}
 
-          &nbsp;
-            {props.action==='add'&&(
+            &nbsp;
+            {props.action === 'add' && (
               <>
                 <input
                   type="file"
@@ -449,11 +449,11 @@ const FileUploader = (props: FileUploaderProps) => {
                 />
                 <label htmlFor={props.id ?? 'file-input'}>
                   <Button variant="contained" onClick={() => inputFileField.current?.click()} disabled={fileObjects === null}>
-              Choose file
+                    Choose file
                   </Button>
                 </label>
               </>
-            ) }
+            )}
           </DialogActions>
         </Box>
       </Dialog>
@@ -468,24 +468,24 @@ const FileUploader = (props: FileUploaderProps) => {
               setDeleteFileId(null);
             }}
           >
-         No, Cancel
+            No, Cancel
           </Button>
           <Button
             onClick={() => {
               props.deleteFile && props
-              .deleteFile(deleteFileId??'')
-              .then(() => {
-                setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== deleteFileId ?? null)));
-              })
-              .catch((error) => {
-                console.log({ error });
-              });
+                .deleteFile(deleteFileId ?? '')
+                .then(() => {
+                  setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== deleteFileId ?? null)));
+                })
+                .catch((error) => {
+                  console.log({ error });
+                });
               setDeleteFileId(null);
             }}
             variant="contained"
             color="error"
           >
-         Yes, Delete
+            Yes, Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -500,7 +500,7 @@ const FileUploader = (props: FileUploaderProps) => {
               setApproveFileId(null);
             }}
           >
-                  No, Cancel
+            No, Cancel
           </Button>
           <Button
             onClick={() => {
@@ -517,7 +517,7 @@ const FileUploader = (props: FileUploaderProps) => {
             variant="contained"
             color="error"
           >
-                  Yes, Approve
+            Yes, Approve
           </Button>
         </DialogActions>
       </Dialog>
@@ -532,7 +532,7 @@ const FileUploader = (props: FileUploaderProps) => {
               setRejectFileId(null);
             }}
           >
-                  No, Cancel
+            No, Cancel
           </Button>
           <Button
             onClick={() => {
@@ -549,7 +549,7 @@ const FileUploader = (props: FileUploaderProps) => {
             variant="contained"
             color="error"
           >
-                  Yes, Reject
+            Yes, Reject
           </Button>
         </DialogActions>
       </Dialog>
@@ -564,7 +564,7 @@ const FileUploader = (props: FileUploaderProps) => {
               setCompletedFile(false)
             }
           >
-                  No, Cancel
+            No, Cancel
           </Button>
           <Button
             onClick={() => {
@@ -575,7 +575,7 @@ const FileUploader = (props: FileUploaderProps) => {
             variant="contained"
             color="error"
           >
-                  Yes, Reconciliation Completed
+            Yes, Reconciliation Completed
           </Button>
         </DialogActions>
       </Dialog>
@@ -592,12 +592,12 @@ export const GetFileIconByType = (props: { type: FileObjectType }) => {
     return <PictureAsPdf fontSize="large" />;
   } else if (props.type === 'video/quicktime') {
     return <SmartDisplay fontSize="large" />;
-  } else if (props.type === 'image/png'||props.type === 'image/jpeg'||props.type === 'image/jpg') {
+  } else if (props.type === 'image/png' || props.type === 'image/jpeg' || props.type === 'image/jpg') {
     return <Photo fontSize="large" />;
   } else {
     return <InsertDriveFile fontSize="large" />;
   }
 };
-const MB10 = 1000 * 1000;
+const MB10 = 1024 * 1024;
 const convertFileSize = (size: number) => ({ size: size / 1000 / (size > MB10 ? 1000 : 1), type: size > MB10 ? 'MB' : 'KB' });
 export default FileUploader;
