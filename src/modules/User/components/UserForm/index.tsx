@@ -118,6 +118,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         }),
       );
   }, []);
+  console.log(props.value, 'props.value.officialDetails');
 
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {

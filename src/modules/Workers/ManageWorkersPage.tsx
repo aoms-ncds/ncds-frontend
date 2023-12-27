@@ -85,7 +85,7 @@ const ManageWorkerPage = () => {
                         user.basicDetails.firstName,
                         user.basicDetails.lastName,
                         user.division?.details.name,
-                        user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length-1].subDivision,
+                        user?.officialDetails?.divisionHistory[user?.officialDetails?.divisionHistory?.length-1]?.subDivision,
                         user.basicDetails.phone,
                         user.basicDetails.email,
                         user.basicDetails.alternativePhone,

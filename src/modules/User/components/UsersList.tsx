@@ -238,7 +238,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
-      valueGetter: (params) => params.row.division?.details.name,
+      valueGetter: (params) => params.row?.division?.details?.name,
     },
     {
       field: 'sub_division',
@@ -246,7 +246,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails.divisionHistory.length - 1].subDivision?.name,
+      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
     },
     //
     //   field: 'highestQualification',

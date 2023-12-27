@@ -55,13 +55,13 @@ const Profile = () => {
       width: 200,
       renderCell: (props) => (
         <Link
-          to={`/divisions/details/${props.row.division._id}`}
+          to={`/divisions/details/${props.row.division?._id}`}
           style={{
             textDecoration: 'none',
             color: 'inherit',
           }}
         >
-          {props.row.division.details.name}
+          {props.row.division?.details?.name}
         </Link>
       ),
     },
@@ -130,7 +130,7 @@ const Profile = () => {
                 textDecoration: 'none',
                 color: 'inherit',
               }}
-            ><Typography variant="body1" >{`${user?.division?.details.name}`}
+            ><Typography variant="body1" >{`${user?.division?.details?.name}`}
 
               </Typography></Link>
           </Typography>

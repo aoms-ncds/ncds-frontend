@@ -83,6 +83,7 @@ const NewOfficialDetailsForm = (
     }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
+  console.log(props.value.divisionHistory, 'props');
 
 
   useEffect(() => {
@@ -165,7 +166,7 @@ const NewOfficialDetailsForm = (
           onChange={(event, newVal) => {
             setNewDiv(newVal);
             if (props.action==='edit') {
-              if (newVal?._id!=props.value.divisionHistory[props.value.divisionHistory.length-1].division?._id) {
+              if (newVal?._id!=props?.value?.divisionHistory[props?.value?.divisionHistory?.length-1].division?._id) {
                 toggleOpenDivConfirm(true);
               }
             } else if (props.action==='add') {
