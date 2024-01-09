@@ -209,6 +209,9 @@ const UserBasicDetailsForm = (
           onChange={(e) => props.onChange({ ...props.value, highestQualification: e.target.value })}
           variant={props.options?.textField?.variant}
           fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </Grid>
 
