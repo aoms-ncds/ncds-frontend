@@ -113,7 +113,7 @@ const SpouseForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Age"
-          value={props.value.dateOfBirth?.fromNow()}
+          value={(props.value.dateOfBirth?.fromNow() || '').replace(' ago', '')}
           variant={props.options?.textField.variant}
           InputLabelProps={{
             shrink: Boolean(props.value.dateOfBirth?.fromNow()),
