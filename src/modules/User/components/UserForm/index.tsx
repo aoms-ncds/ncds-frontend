@@ -814,7 +814,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: false }}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
 

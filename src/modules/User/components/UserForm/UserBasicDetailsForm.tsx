@@ -57,12 +57,16 @@ const UserBasicDetailsForm = (
     <>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
-          <FormLabel id="Field">Field</FormLabel>
+          <FormLabel id="martialStatus">Field</FormLabel>
           <RadioGroup
-            aria-labelledby="Field"
-            // defaultValue="missionary
-            value={props.value.field}
-            onChange={(e) => props.onChange({ ...props.value, field: e.target.value as WorkerField | undefined })}
+            aria-labelledby="martialStatus"
+            value={props.value.field ?? null}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                field: e.target.value as WorkerField | undefined,
+              })
+            }
             name="Field"
             row
           >
@@ -426,6 +430,9 @@ const UserBasicDetailsForm = (
               licenseNumber: e.target.value,
             })
           }
+          InputLabelProps={{
+            shrink: true,
+          }}
           variant={props.options?.textField?.variant}
           fullWidth
         />
