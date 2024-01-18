@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Checkbox, Divider, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, Divider, FormControlLabel, FormLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
@@ -122,19 +122,30 @@ const SpouseForm = (
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <FormControlLabel
+        {/* <FormControlLabel
           label="Working"
           control={
             <Checkbox
               value={props.value.working}
               onChange={(e) =>
-                props.onChange({
+                props .onChange({
                   ...props.value,
                   working: e.target.checked,
                 })
               }
             />
           }
+        /> */}
+        <FormLabel>Working</FormLabel>
+        <Checkbox
+          checked={props.value.working}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              working: e.target.checked,
+            })
+          }
+          color="primary"
         />
       </Grid>
 
