@@ -13,7 +13,7 @@ export default {
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) =>data.map((fr:FR)=>({
     ...fr,
-    FRdate: moment(fr.FRdate),
+    FRdate: moment(fr.FRdate ),
     createdAt: moment(fr.createdAt),
     updatedAt: moment(fr.updatedAt),
   }))),
