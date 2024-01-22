@@ -65,7 +65,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   }, []);
 
   return (
-    <CommonPageLayout title={'Add Staff'}>
+    <CommonPageLayout title={'Edit Staff'}>
       <UserForm<CreatableStaff>
         action={props.action}
         value={staff}

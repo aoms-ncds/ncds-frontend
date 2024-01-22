@@ -89,6 +89,7 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          InputLabelProps={{ shrink: true }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
               event.preventDefault();
@@ -155,6 +156,7 @@ const NewUserSupportStructureForm = (
           }
           variant={props.options?.textField.variant}
           fullWidth
+          InputLabelProps={{ shrink: true }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
               event.preventDefault();

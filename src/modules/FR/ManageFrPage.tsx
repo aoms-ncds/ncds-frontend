@@ -234,7 +234,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'FRdate',
-      headerName: 'FRdate',
+      headerName: 'FR Date',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
