@@ -156,6 +156,12 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}>
+                <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                    Age:
+                </Typography>
+                {((user as unknown as IWorker)?.basicDetails.dateOfBirth?.fromNow() || '').replace(' ago', '')}
+              </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Martial Status: </Typography> {user?.basicDetails.martialStatus} </Grid>
@@ -308,6 +314,12 @@ const Profile = () => {
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name: </Typography> {child.firstName} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {child.lastName} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date Of Birth: </Typography> {child.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
+                      <Grid item xs={12} lg={4}>
+                        <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                    Age:
+                        </Typography>
+                        {(child.dateOfBirth?.fromNow() || '').replace(' ago', '')}
+                      </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Level: </Typography> {child.childSupport.name} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Amount: </Typography> {child.childSupport.amount} </Grid>
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Studying: </Typography> {child.studying ? 'Yes' : 'No'} </Grid>
