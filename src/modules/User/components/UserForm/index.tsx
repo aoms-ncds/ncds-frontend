@@ -186,7 +186,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                           marginRight: 'auto',
                         }}
                         variant="rounded"
-                        src={props.value.imageURL ?? ''}
+                        src={props.value.imageURL?.replace('uc', 'thumbnail')?? ''}
                       >
                         {!props.value.imageURL && <ImageIcon sx={{ fontSize: 100 }} />}
                       </Avatar>
