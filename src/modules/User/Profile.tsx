@@ -116,11 +116,11 @@ const Profile = () => {
     >
       <Grid container >
         <Grid item xs={12} md={1}>
-          <Avatar
-            sx={{ width: 60, height: 60 }}
-            src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
-            alt={`${user?.basicDetails.firstName}`}
-          />
+        <Avatar
+  sx={{ width: 60, height: 60 }}
+  src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
+  alt={`${user?.basicDetails.firstName}`}
+/>
         </Grid>
         <Grid item xs={12} md={11}>
           <Typography variant="h4" component='span'>{`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
@@ -223,12 +223,12 @@ const Profile = () => {
           </TabPanel>
           <TabPanel value={currentTab} index={1}>
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Joining:</Typography> {user?.officialDetails.dateOfJoining?.format(', DD/MM/YYYY')} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Joining Organization:</Typography> {user?.officialDetails.dateOfJoining?.format(' DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>No Of Years With The Organization:</Typography> {user?.officialDetails.status != 'Left' ? user?.officialDetails.dateOfJoining?.fromNow(true) : user?.officialDetails.dateOfLeaving?.from(user?.officialDetails.dateOfJoining, true)} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Status:</Typography> {user?.officialDetails.status} </Grid>
               {user?.officialDetails.status == 'Left' && (
                 <>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving:</Typography> {user?.officialDetails.dateOfLeaving?.format('DD/MM/YYYY')} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Leaving Organization:</Typography> {user?.officialDetails.dateOfLeaving?.format('DD/MM/YYYY')} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Reason for Deactivation:</Typography> {user?.officialDetails.reasonForDeactivation} </Grid>
                 </>
               )}
@@ -236,7 +236,7 @@ const Profile = () => {
 
               {userKind === 'worker' &&(
 
-                <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
+                <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches Planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
               )}
 
 
@@ -261,12 +261,18 @@ const Profile = () => {
                     </Grid>
                   </Grid>
                 </CardContent>
-                <DataGrid
-                  rows={user?.officialDetails.divisionHistory ?? []}
-                  columns={columns}
-                  getRowId={(row) => row._id}
-                  style={{ height: '40vh', width: '100%', justifyContent: 'center' }}
-                />
+                  <DataGrid
+                    rows={user?.officialDetails.divisionHistory ?? []}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    sortModel={[
+                      {
+                        field: 'dateOfDivisionJoining',
+                        sort: 'asc', // or 'desc' for descending order
+                      },
+                    ]}
+                    style={{ height: '40vh', width: '100%', justifyContent: 'center' }}
+                  />
               </Card>
             </Container>
 
