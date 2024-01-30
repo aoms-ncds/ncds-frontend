@@ -116,11 +116,11 @@ const Profile = () => {
     >
       <Grid container >
         <Grid item xs={12} md={1}>
-        <Avatar
-  sx={{ width: 60, height: 60 }}
-  src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
-  alt={`${user?.basicDetails.firstName}`}
-/>
+          <Avatar
+            sx={{ width: 60, height: 60 }}
+            src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
+            alt={`${user?.basicDetails.firstName}`}
+          />
         </Grid>
         <Grid item xs={12} md={11}>
           <Typography variant="h4" component='span'>{`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
@@ -261,18 +261,18 @@ const Profile = () => {
                     </Grid>
                   </Grid>
                 </CardContent>
-                  <DataGrid
-                    rows={user?.officialDetails.divisionHistory ?? []}
-                    columns={columns}
-                    getRowId={(row) => row._id}
-                    sortModel={[
-                      {
-                        field: 'dateOfDivisionJoining',
-                        sort: 'asc', // or 'desc' for descending order
-                      },
-                    ]}
-                    style={{ height: '40vh', width: '100%', justifyContent: 'center' }}
-                  />
+                <DataGrid
+                  rows={user?.officialDetails.divisionHistory ?? []}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  sortModel={[
+                    {
+                      field: 'dateOfDivisionJoining',
+                      sort: 'desc', // or 'desc' for descending order
+                    },
+                  ]}
+                  style={{ height: '40vh', width: '100%', justifyContent: 'center' }}
+                />
               </Card>
             </Container>
 
