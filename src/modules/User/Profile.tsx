@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-multi-comp */
-import { Avatar, Box, Card, CardContent, Container, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Container, Dialog, DialogContent, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -10,6 +10,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,6 +49,7 @@ const Profile = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [viewAdharFile, setviewAdharFile] = useState(false);
   const [viewVoterIdFile, setViewVoterId] = useState(false);
+  const [showLotImage, setShowLotImage] = useState<boolean>(false);
   const columns: GridColDef<DivisionHistory>[] = [
     {
       field: 'division',
@@ -114,12 +116,45 @@ const Profile = () => {
       title={`Profile of ${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
       hidePageHeader={true}
     >
+      <Dialog
+        open={showLotImage}
+        onClose={() => setShowLotImage(false)}
+        fullWidth
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          padding: 0,
+        }}
+      >
+        <DialogContent>
+          {user?.imageURL?.replace('uc', 'thumbnail') && (
+            <TransformWrapper>
+              <TransformComponent>
+                <img
+                  src={user?.imageURL?.replace('uc', 'thumbnail')}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    padding: 0,
+                    margin: 0,
+                  }}
+                />
+              </TransformComponent>
+            </TransformWrapper>
+          )}
+        </DialogContent>
+      </Dialog>
       <Grid container >
         <Grid item xs={12} md={1}>
           <Avatar
-            sx={{ width: 60, height: 60 }}
+            sx={{ width: 80, height: 80, borderRadius: 1 }}
             src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
             alt={`${user?.basicDetails.firstName}`}
+            onClick={() => {
+              setShowLotImage(true);
+            }}
           />
         </Grid>
         <Grid item xs={12} md={11}>
@@ -158,7 +193,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}>
                 <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                  Age:
                 </Typography>
                 {((user as unknown as IWorker)?.basicDetails.dateOfBirth?.fromNow() || '').replace(' ago', '')}
               </Grid>
@@ -234,7 +269,7 @@ const Profile = () => {
               )}
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
 
-              {userKind === 'worker' &&(
+              {userKind === 'worker' && (
 
                 <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches Planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
               )}
@@ -288,7 +323,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}>
                 <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                  Age:
                 </Typography>
                 {((user as unknown as IWorker)?.spouse?.dateOfBirth?.fromNow() || '').replace(' ago', '')}
               </Grid>
@@ -322,7 +357,7 @@ const Profile = () => {
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date Of Birth: </Typography> {child.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
                       <Grid item xs={12} lg={4}>
                         <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                          Age:
                         </Typography>
                         {(child.dateOfBirth?.fromNow() || '').replace(' ago', '')}
                       </Grid>
@@ -348,7 +383,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Other Designation: </Typography> {user?.supportDetails?.otherDesignation} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Department: </Typography> {user?.supportDetails?.department?.name} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails?.totalNoOfYearsInMinistry} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily?? 'Not specified'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily ?? 'Not specified'} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails?.withChurch ? 'Yes' : (user?.supportDetails?.withChurch === false ? 'No' : 'Not specified')} </Grid>
 
               <Grid item xs={12}><br /><Divider textAlign="left">Support Structure</Divider></Grid>
@@ -404,6 +439,8 @@ const Profile = () => {
             </Grid>
           </TabPanel>
         </Box>
+
+
         <br />
       </Card>
       <FileUploader
