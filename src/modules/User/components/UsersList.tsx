@@ -135,7 +135,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'actions',
       type: 'actions',
-      width: 5,
+      headerClassName: 'super-app-theme--header',
+      renderHeader: () => <b>{'Action'}</b>,
+      width: 80,
       getActions: (params: GridRowParams) =>
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/${props.options?.kind}/${params.row._id}`} />,
@@ -150,18 +152,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               showInMenu
               onClick={() => {
                 StaffOrWorkerServices.delete(params.row._id)
-                .then((res) => {
-                  if (props.value) {
-                    props.onChange(props.value.filter((user) => user._id !== params.row._id));
-                  }
+                  .then((res) => {
+                    if (props.value) {
+                      props.onChange(props.value.filter((user) => user._id !== params.row._id));
+                    }
 
-                  enqueueSnackbar({ message: res.message, variant: 'success' });
-                })
-                .catch((err) => {
-                  enqueueSnackbar({ message: err.message, variant: 'error' });
-                });
+                    enqueueSnackbar({ message: res.message, variant: 'success' });
+                  })
+                  .catch((err) => {
+                    enqueueSnackbar({ message: err.message, variant: 'error' });
+                  });
               }}
-              // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+            // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
           ),
           <GridLinkAction
@@ -174,29 +176,29 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }}
           />,
           props.options?.status != 'reject' &&
-            hasPermissions(['MANAGE_WORKER']) &&
-            (params.row.status == UserLifeCycleStates.ACTIVE ? (
-              <GridLinkAction
-                key={5}
-                label="Deactivate"
-                icon={<NoAccountsIcon />}
-                showInMenu
-                onClick={() => {
-                  setRowID(params.row._id);
-                  setReasonDialog(true);
-                }}
-              />
-            ) : (
-              <GridLinkAction
-                key={5}
-                label="Activate"
-                icon={<PersonIcon />}
-                showInMenu
-                onClick={() => {
-                  activateWorker(params.row._id);
-                }}
-              />
-            )),
+          hasPermissions(['MANAGE_WORKER']) &&
+          (params.row.status == UserLifeCycleStates.ACTIVE ? (
+            <GridLinkAction
+              key={5}
+              label="Deactivate"
+              icon={<NoAccountsIcon />}
+              showInMenu
+              onClick={() => {
+                setRowID(params.row._id);
+                setReasonDialog(true);
+              }}
+            />
+          ) : (
+            <GridLinkAction
+              key={5}
+              label="Activate"
+              icon={<PersonIcon />}
+              showInMenu
+              onClick={() => {
+                activateWorker(params.row._id);
+              }}
+            />
+          )),
           hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -204,6 +206,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'imageURL',
       headerName: '',
+      headerClassName: 'super-app-theme--header',
       width: 25,
       minWidth: 65,
       type: 'string',
@@ -216,12 +219,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       field: `${props.options?.kind}Code`,
       headerName: `${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`,
       width: 120,
+      headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       renderHeader: () => <b>{`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}</b>,
     },
     {
       field: 'firstName',
       align: 'center',
+      headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       renderHeader: () => <b>{'First Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.firstName,
@@ -229,12 +234,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'lastName',
       align: 'center',
+      headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       renderHeader: () => <b>{'Last Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'division',
+      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
@@ -243,6 +250,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'sub_division',
       width: 130,
+      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
@@ -275,6 +283,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'designation',
       width: 130,
+      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Designation'}</b>,
@@ -283,6 +292,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'phone',
       width: 130,
+      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Mobile Number'}</b>,
@@ -302,6 +312,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'email',
       width: 180,
+      headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Email Id'}</b>,
@@ -310,6 +321,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'Reason',
       width: 180,
+      headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Reason'}</b>,
@@ -344,7 +356,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     <>
       <br />
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '66vh', width: '100%' }}>
+        <Card sx={{
+          height: '66vh', width: '100%',
+          '& .super-app-theme--header': {
+            backgroundColor: '#f1f5fa',
+            fontSize: '16px',
+            fontWeight: '500'
+          },
+        }}>
           <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
         </Card>
       </Grid>
