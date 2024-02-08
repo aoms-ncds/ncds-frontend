@@ -158,7 +158,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}>
                 <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                  Age:
                 </Typography>
                 {((user as unknown as IWorker)?.basicDetails.dateOfBirth?.fromNow() || '').replace(' ago', '')}
               </Grid>
@@ -198,21 +198,21 @@ const Profile = () => {
               </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>License Number: </Typography> {user?.basicDetails.licenseNumber} </Grid>
 
-              <Grid item xs={12}> <Divider textAlign='left'>Permanent Address</Divider> </Grid>
+              <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Permanent Address</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.permanentAddress?.buildingName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.permanentAddress?.street} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.permanentAddress?.city} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.permanentAddress?.state} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.permanentAddress?.country} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.permanentAddress?.pincode} </Grid>
-              <Grid item xs={12}> <Divider textAlign='left'>Current Official Address</Divider> </Grid>
+              <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Current Official Address</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.currentOfficialAddress?.buildingName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.currentOfficialAddress?.street} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.currentOfficialAddress?.city} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>State: </Typography> {user?.basicDetails.currentOfficialAddress?.state} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Country: </Typography> {user?.basicDetails.currentOfficialAddress?.country} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Pincode: </Typography> {user?.basicDetails.currentOfficialAddress?.pincode} </Grid>
-              <Grid item xs={12}> <Divider textAlign='left'>Residing Address</Divider> </Grid>
+              <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Residing Address </Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Building Name: </Typography> {user?.basicDetails.residingAddress?.buildingName} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Street: </Typography> {user?.basicDetails.residingAddress?.street} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>City: </Typography> {user?.basicDetails.residingAddress?.city} </Grid>
@@ -234,7 +234,7 @@ const Profile = () => {
               )}
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remarks:</Typography> {user?.officialDetails.remarks} </Grid>
 
-              {userKind === 'worker' &&(
+              {userKind === 'worker' && (
 
                 <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches Planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
               )}
@@ -254,7 +254,8 @@ const Profile = () => {
                     <Grid item xs={12} >
                       <Divider textAlign="center">
 
-                        <Typography variant="h5" color="text.secondary" gutterBottom>
+                        <Typography sx={{ fontWeight: 600, fontSize: 20 }} variant="h5" color="text.secondary" gutterBottom>
+
                           DIVISION HISTORY
                         </Typography>
                       </Divider>
@@ -288,7 +289,7 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
               <Grid item xs={12} lg={4}>
                 <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                  Age:
                 </Typography>
                 {((user as unknown as IWorker)?.spouse?.dateOfBirth?.fromNow() || '').replace(' ago', '')}
               </Grid>
@@ -322,7 +323,7 @@ const Profile = () => {
                       <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date Of Birth: </Typography> {child.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
                       <Grid item xs={12} lg={4}>
                         <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
-                    Age:
+                          Age:
                         </Typography>
                         {(child.dateOfBirth?.fromNow() || '').replace(' ago', '')}
                       </Grid>
@@ -348,10 +349,10 @@ const Profile = () => {
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Other Designation: </Typography> {user?.supportDetails?.otherDesignation} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Department: </Typography> {user?.supportDetails?.department?.name} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails?.totalNoOfYearsInMinistry} </Grid>
-              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily?? 'Not specified'} </Grid>
+              <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily ?? 'Not specified'} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails?.withChurch ? 'Yes' : (user?.supportDetails?.withChurch === false ? 'No' : 'Not specified')} </Grid>
 
-              <Grid item xs={12}><br /><Divider textAlign="left">Support Structure</Divider></Grid>
+              <Grid item xs={12}><br /><Divider textAlign="left" sx={{ fontWeight: 600, fontSize: 20 }}>Support Structure</Divider></Grid>
 
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Basic: </Typography> {user?.supportStructure?.basic} </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>HRA: </Typography> {user?.supportStructure?.HRA} </Grid>
@@ -394,7 +395,7 @@ const Profile = () => {
                   )
                 }
               </Grid>
-              <Grid item xs={12}> <Divider textAlign='left'>Insurance</Divider> </Grid>
+              <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Insurance</Divider> </Grid>
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.insurance?.impactNo} </Grid>
 
               <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>

@@ -18,12 +18,18 @@ const App = () => {
   const theme = useMemo(
     () =>
       createTheme({
+        typography: {
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: 14,
+        },
+
         palette: {
           mode: 'light',
           // mode: prefersDarkMode ? 'dark' : 'light',
           background: {
             // default: prefersDarkMode ? '#121212' : '#e1e0e0',
             default: '#e1e0e1',
+
           },
           primary: {
             main: '#3b32e6',
@@ -35,6 +41,8 @@ const App = () => {
               paper: {
                 // backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
                 backgroundColor: '#ffffff',
+                fontWeight: "bold",
+                lineHeight: "1.2em"
               },
             },
           },
