@@ -33,10 +33,10 @@ const HRDashboard = () => {
     <CommonPageLayout title="HR Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Manage Staff" color={'#005eb8'} count={staffCount ? staffCount?.toString() : undefined} targetRoute="/hr/manage" />
+          <ButtonCard secondaryText="Manage Staff" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={staffCount ? staffCount?.toString() : undefined} targetRoute="/hr/manage" />
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Manage Workers" count={workersCount?.toString()} color="#005eb8" targetRoute="/workers" />
+          <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
         </Grid>
         {/* <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Worker" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
