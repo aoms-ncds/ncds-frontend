@@ -120,64 +120,64 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
       <Divider />
       <List>
         {allModuleRoutes
-            .map((moduleRoute, index) =>
-              moduleRoute.pages.map((page, _index) =>
-                !page.showInDrawer ? null : !page.requiredAccessRights ? (
-                  <NavLink
-                    to={moduleRoute.base + page.path}
-                    style={({ isActive }) =>
-                      !isActive ?
-                        {
-                          color: theme.palette.text.secondary,
-                          textDecoration: 'none',
-                        } :
-                        {
-                          color: isDark ? 'black' : 'white',
-                          textDecoration: 'none',
-                          backgroundColor: theme.palette.primary.main,
-                        }
-                    }
-                  >
-                    <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
-                      <ListItemButton>
-                        {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
-                        <ListItemText primary={page.title} />
-                      </ListItemButton>
-                    </ListItem>
-                  </NavLink>
-                ) : (
-                  <PermissionChecks
-                    key={page.path + index + _index}
-                    permissions={page.requiredAccessRights}
-                    granted={
-                      <NavLink
-                        to={moduleRoute.base + page.path}
-                        style={({ isActive }) =>
-                          !isActive ?
-                            {
-                              color: theme.palette.text.secondary,
-                              textDecoration: 'none',
-                            } :
-                            {
-                              color: isDark ? 'black' : 'white',
-                              textDecoration: 'none',
-                              backgroundColor: theme.palette.primary.main,
-                            }
-                        }
-                      >
-                        <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
-                          <ListItemButton>
-                            {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
-                            <ListItemText primary={page.title} />
-                          </ListItemButton>
-                        </ListItem>
-                      </NavLink>
-                    }
-                  />
-                ),
+          .map((moduleRoute, index) =>
+            moduleRoute.pages.map((page, _index) =>
+              !page.showInDrawer ? null : !page.requiredAccessRights ? (
+                <NavLink
+                  to={moduleRoute.base + page.path}
+                  style={({ isActive }) =>
+                    !isActive ?
+                      {
+                        color: theme.palette.text.secondary,
+                        textDecoration: 'none',
+                      } :
+                      {
+                        color: isDark ? 'black' : 'white',
+                        textDecoration: 'none',
+                        backgroundColor: theme.palette.primary.main,
+                      }
+                  }
+                >
+                  <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                    <ListItemButton>
+                      {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
+                      <ListItemText primary={page.title} />
+                    </ListItemButton>
+                  </ListItem>
+                </NavLink>
+              ) : (
+                <PermissionChecks
+                  key={page.path + index + _index}
+                  permissions={page.requiredAccessRights}
+                  granted={
+                    <NavLink
+                      to={moduleRoute.base + page.path}
+                      style={({ isActive }) =>
+                        !isActive ?
+                          {
+                            color: theme.palette.text.secondary,
+                            textDecoration: 'none',
+                          } :
+                          {
+                            color: isDark ? 'black' : 'white',
+                            textDecoration: 'none',
+                            backgroundColor: theme.palette.primary.main,
+                          }
+                      }
+                    >
+                      <ListItem disablePadding sx={{ backgroundColor: 'inherit' }}>
+                        <ListItemButton>
+                          {<ListItemIcon sx={{ color: 'inherit' }}>{page.icon}</ListItemIcon>}
+                          <ListItemText primary={page.title} />
+                        </ListItemButton>
+                      </ListItem>
+                    </NavLink>
+                  }
+                />
               ),
-            )
-            .flat()}
+            ),
+          )
+          .flat()}
       </List>
       <Divider />
     </div>
@@ -198,20 +198,20 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           backgroundColor: theme.palette.primary.main,
           // width: `calc(100% - ${open ? drawerWidth : 0}px)`,
           // ml: { sm: `${drawerWidth}px` },
-          width: () => {
-            if (isMobile) {
-              console.log('mobile');
-              return mobileOpen ? `calc(100% - ${drawerWidth}px)` : '100%';
-            } else {
-              console.log('desktop');
-              return open ? `calc(100% - ${drawerWidth}px)` : `calc(100% - ${60}px)`;
-            }
-          },
+          // width: () => {
+          //   if (isMobile) {
+          //     console.log('mobile');
+          //     return mobileOpen ? `calc(100% - ${drawerWidth}px)` : '100%';
+          //   } else {
+          //     console.log('desktop');
+          //     return open ? `calc(100% - ${drawerWidth}px)` : `calc(100% - ${60}px)`;
+          //   }
+          // },
           // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
           ...props.appBarSx,
         }}
       >
-        <Toolbar>
+        <Toolbar >
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawer} sx={{ mr: 2, display: isMobile ? 'none' : 'inherit' }}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -306,6 +306,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               boxSizing: 'border-box',
               // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
               width: open ? drawerWidth : '70px',
+              marginTop: '65px'
             },
           }}
           open
@@ -335,7 +336,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                   {props.title}
                 </Typography>
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={3} >
                 {props.momentFilter && (
                   <MomentFilter
                     dateRange={props.momentFilter.dateRange}
@@ -359,6 +360,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
             <Divider />
             <br />
           </>
+
         )}
         {props.children}
       </Box>
