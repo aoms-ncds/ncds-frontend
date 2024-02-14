@@ -29,12 +29,18 @@ const App = () => {
             main: '#3b32e6',
           },
         },
+        typography: {
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: 14,
+        },
         components: {
           MuiDrawer: {
             styleOverrides: {
               paper: {
                 // backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
                 backgroundColor: '#ffffff',
+                fontWeight: "bold",
+                lineHeight: "1.2em"
               },
             },
           },

@@ -52,10 +52,10 @@ const frDashboard = () => {
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard count={waitingForPresidentFrCount?.toString()}
                   secondaryText={'Waiting for President'}
-                  color={'#1093eb'} />
+                  color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#1093eb'} />
+                <FRCountCard count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'} />
               </Grid>
             </Grid>
             <br />
