@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
 // eslint-disable-next-line max-len
@@ -37,6 +37,7 @@ import * as XLSX from 'xlsx';
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -49,7 +50,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
   const user = useAuth();
-
+  const [searchText, setSearchText] = useState('');
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -559,7 +560,34 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       },
     },
   ];
+  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSearchText(event.target.value);
+  };
 
+  const filteredRows = (IROrder ?? []).filter(row => {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+    (row.IRODate && formatDate(row.IRODate).toLowerCase().includes(searchText.toLowerCase()))) {
+  return true;
+}
+
+function formatDate(date: string | moment.Moment) {
+  let dateString: string;
+  if (typeof date === 'string') {
+    dateString = date;
+  } else {
+    dateString = date.format('DD/MM/YYYY');
+  }
+  const parts = dateString.split("/");
+  const day = parts[0];
+  const month = parts[1];
+  const year = parts[2];
+  return `${day}/${month}/${year}`;
+}
+
+    return Object.values(row).some(value =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
   return (
     <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
       momentFilter={props.action == 'manage' ? {
@@ -660,9 +688,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
                 <br />
                 <br />
+                <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchText}
+          onChange={handleSearchChange}
+          fullWidth
+          style={{ marginBottom: '1rem',width: '10vw'}}
+        />
+    </Grid>
                 <Grid item xs={12}>
                   <DataGrid
-                    rows={IROrder ?? []}
+                    rows={filteredRows ?? []}
                     columns={columns}
                     getRowId={(row) => row._id}
                     checkboxSelection={props.action == 'release'}

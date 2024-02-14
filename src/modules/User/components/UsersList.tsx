@@ -7,7 +7,7 @@ import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from './PermissionChecks';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
@@ -23,6 +23,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
 
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -121,6 +122,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
+  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (props.value ?? []).filter(row => {
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||(row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+  return true;
+}
+    return Object.values(row).some(value =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
 
   // const x = hasPermissions(['READ_ACCESS']) && [
   //   <GridLinkAction
@@ -208,7 +221,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       minWidth: 65,
       type: 'string',
       renderCell: (props) => {
-        return <Avatar src={props.value} />;
+        return <Avatar src={props.value?.replace('uc', 'thumbnail')} />;
       },
     },
     // { field: '_id', headerName: 'SI No', width: 70 },
@@ -343,9 +356,19 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   return (
     <>
       <br />
+      <Grid sx={{ width: '30px', paddingLeft: '85%',paddingTop: '2px'}}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchText}
+          onChange={handleSearchChange}
+          fullWidth
+          style={{ marginBottom: '1rem',width: '10vw'}}
+        />
+    </Grid>
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '66vh', width: '100%' }}>
-          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+        <Card style={{ height: '66vh', width: '100%', }}>
+           <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
         </Card>
       </Grid>
 
@@ -388,7 +411,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }
           }}
         >
-          <DialogActions>
+          <DialogActions>   
             <TextField
               id="remarkTextfield"
               placeholder="Remarks"
