@@ -2,7 +2,8 @@ import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import {
-  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon } from '@mui/icons-material';
+  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon
+} from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
 import {
@@ -39,7 +40,7 @@ const ManageFrPage = () => {
   const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
-  const [selectedFR, setSelectedFR] = useState<string|null>(null);
+  const [selectedFR, setSelectedFR] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('y'),
     endDate: moment().endOf('y'),
@@ -55,7 +56,7 @@ const ManageFrPage = () => {
     FRServices.getAll()
       .then((res) => {
         // console.log(res, 'rr');
-        setFRRequests(res.data.filter((fr)=>fr.FRdate.isSameOrAfter(dateRange.startDate)&&fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        setFRRequests(res.data.filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
       })
       .catch((res) => {
         console.log(res);
@@ -64,7 +65,7 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr)=>fr.FRdate.isSameOrAfter(dateRange.startDate)&&fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
       })
       .catch((res) => {
         console.log(res);
@@ -73,8 +74,10 @@ const ManageFrPage = () => {
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
+      headerClassName: 'super-app-theme--header',
       headerName: '',
-      width: 50,
+      renderHeader: () => (<b>Action</b>),
+      width: 80,
       align: 'center',
       headerAlign: 'center',
       type: 'string',
@@ -149,7 +152,7 @@ const ManageFrPage = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['WRITE_FR'])&& props.row.status==FRLifeCycleStates.FR_SEND_BACK ? [
+            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ? [
               {
                 id: 'edit',
                 text: 'Edit',
@@ -178,7 +181,7 @@ const ManageFrPage = () => {
                 toggleOpenRemarks(true);
                 setSelectedFR(props.row._id);
                 FRServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data??[]))
+                  .then((res) => setRemarks(res.data ?? []))
                   .catch((error) => {
                     enqueueSnackbar({
                       variant: 'error',
@@ -193,7 +196,7 @@ const ManageFrPage = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row as FR}/>,
+              document: <FRReceiptTemplate rowData={props.row as FR} />,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
@@ -221,9 +224,11 @@ const ManageFrPage = () => {
     // },
     {
       field: 'FRno',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>FR No</b>),
       width: 100,
       align: 'center',
+
       headerAlign: 'center',
     },
     // {
@@ -235,6 +240,7 @@ const ManageFrPage = () => {
     {
       field: 'FRdate',
       headerName: 'FR Date',
+      headerClassName: 'super-app-theme--header',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -251,6 +257,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'divisionName',
+      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
@@ -267,6 +274,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'sub_division',
+      headerClassName: 'super-app-theme--header',
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -275,6 +283,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'mainCategory',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Main Category</b>),
       width: 240,
       align: 'center',
@@ -295,6 +304,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'requestedAmount',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
       align: 'center', headerAlign: 'center',
@@ -310,6 +320,7 @@ const ManageFrPage = () => {
 
     {
       field: 'updatedAt',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130,
@@ -318,6 +329,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'sanctionedAsPer',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Special Sanction</b>),
       renderCell: (props) => (
         <p style={{
@@ -334,6 +346,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'status',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Status</b>),
       width: 205,
       align: 'center',
@@ -390,8 +403,8 @@ function formatDate(date: string | moment.Moment) {
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setFRRequests((fr)=>
-            fr?fr.filter((fr)=>fr.FRdate.isSameOrAfter(newDateRange.startDate)&&fr.FRdate.isSameOrBefore(newDateRange.endDate)):[],
+          setFRRequests((fr) =>
+            fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : [],
           );
         },
         rangeTypes: [
@@ -423,24 +436,24 @@ function formatDate(date: string | moment.Moment) {
                           <Button
                             onClick={async () => {
                               const sheet =
-                    FRRequests ?
-                      FRRequests.map((fr:FR) => ([
-                        fr.FRno,
-                        fr.FRdate.format('DD/MM/YYYY'),
-                        fr.division?.details.name,
-                        fr.purposeSubdivision?.name,
-                        fr.mainCategory,
-                        fr.particulars?.reduce(
-                          (total, particular) => total + Number(particular.requestedAmount),
-                          0,
-                        ),
-                        fr.sanctionedAmount,
-                        fr.sanctionedBank,
-                        fr.sanctionedAsPer,
-                        IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                      ])) :
-                      [];
-                              const headers=[
+                                FRRequests ?
+                                  FRRequests.map((fr: FR) => ([
+                                    fr.FRno,
+                                    fr.FRdate.format('DD/MM/YYYY'),
+                                    fr.division?.details.name,
+                                    fr.purposeSubdivision?.name,
+                                    fr.mainCategory,
+                                    fr.particulars?.reduce(
+                                      (total, particular) => total + Number(particular.requestedAmount),
+                                      0,
+                                    ),
+                                    fr.sanctionedAmount,
+                                    fr.sanctionedBank,
+                                    fr.sanctionedAsPer,
+                                    IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                                  ])) :
+                                  [];
+                              const headers = [
                                 'FR No',
                                 'Date',
                                 'Division',
@@ -462,8 +475,8 @@ function formatDate(date: string | moment.Moment) {
                             color="primary" sx={{ float: 'right', marginBottom: 3, mr: 2 }}
                             variant="contained"
                           >
-                              Export
-                          </Button>)}/>
+                            Export
+                          </Button>)} />
 
                       <PermissionChecks
                         permissions={['WRITE_FR']}
@@ -479,7 +492,7 @@ function formatDate(date: string | moment.Moment) {
                             // onClick={() => {
                             // }}
                             >
-                     Add new
+                              Add new
                             </Button>
                           </>
                         )}
@@ -490,7 +503,9 @@ function formatDate(date: string | moment.Moment) {
 
                     </Grid>
                   </Grid>
-                  <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
+
+                 
+         <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
         <TextField
           label="Search"
           variant="outlined"
@@ -501,6 +516,7 @@ function formatDate(date: string | moment.Moment) {
         />
     </Grid>
                   <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
+
                 </Card>
               </Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
@@ -512,24 +528,24 @@ function formatDate(date: string | moment.Moment) {
 
                     <Grid item>
                       <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
-                      <Divider/>
+                      <Divider />
                     </Grid>
                     <Grid item xs={12}>
                       <Button variant="contained" color='success'
                         sx={{ width: 260 }}
 
                         onClick={
-                          ()=> {
-                            FRServices.sendNotifications('president', selectedFR??'')
-                            .then((res) => {
-                              console.log(res);
-                            })
-                            .catch((res) => {
-                              console.log(res);
-                            });
+                          () => {
+                            FRServices.sendNotifications('president', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
                           }
                         }
-                        endIcon={<SendIcon/>}
+                        endIcon={<SendIcon />}
                       > Send to President</Button>
                     </Grid>
                     <Grid item xs={12}>
@@ -537,36 +553,36 @@ function formatDate(date: string | moment.Moment) {
                         sx={{ width: 260 }}
 
                         onClick={
-                          ()=> {
-                            FRServices.sendNotifications('accounts', selectedFR??'')
-                          .then((res) => {
-                            console.log(res);
-                          })
-                          .catch((res) => {
-                            console.log(res);
-                          });
+                          () => {
+                            FRServices.sendNotifications('accounts', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
                           }
                         }
-                        endIcon={<SendIcon/>}
+                        endIcon={<SendIcon />}
                       >  Send to accounts</Button>
                     </Grid>
                     <Grid item xs={12}>
                       <Button variant="contained" color='inherit'
                         sx={{ width: 260 }}
                         onClick={
-                          ()=> {
-                            FRServices.sendNotifications('division_head', selectedFR??'')
-                          .then((res) => {
-                            console.log(res);
-                          })
-                          .catch((res) => {
-                            console.log(res);
-                          });
+                          () => {
+                            FRServices.sendNotifications('division_head', selectedFR ?? '')
+                              .then((res) => {
+                                console.log(res);
+                              })
+                              .catch((res) => {
+                                console.log(res);
+                              });
                           }
                         }
-                        endIcon={<SendIcon/>}
+                        endIcon={<SendIcon />}
                       >  Send to division head</Button>
-                      <br/><br/>
+                      <br /><br />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -577,9 +593,9 @@ function formatDate(date: string | moment.Moment) {
                           setSelectedFR(null);
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
-                        endIcon={<CloseIcon/>}
+                        endIcon={<CloseIcon />}
                       >
-                      close
+                        close
                       </Button>
                     </Grid>
                     {/* <Grid item xs={12}>
@@ -597,7 +613,7 @@ function formatDate(date: string | moment.Moment) {
                   {remarks.length > 0 ? remarks.map((remark) => (
                     // eslint-disable-next-line max-len
                     <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-                  )):'No Data Found '}
+                  )) : 'No Data Found '}
                 </DialogContent>
                 <form
                   onSubmit={(e) => {
@@ -605,22 +621,22 @@ function formatDate(date: string | moment.Moment) {
 
                     if (remark.remark) {
                       FRServices.addRemarks(remark)
-        .then((res) => {
-          const x = [...remarks, res.data];
-          console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
+                        .then((res) => {
+                          const x = [...remarks, res.data];
+                          console.log('🚀 ~ file: ManageFrPage.tsx:201 ~ .then ~ x:', x);
 
-          setRemarks((remarks) => [...remarks, res.data]);
-          setRemark((remark) => ({
-            ...remark,
-            remark: '',
-          }));
-        })
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+                          setRemarks((remarks) => [...remarks, res.data]);
+                          setRemark((remark) => ({
+                            ...remark,
+                            remark: '',
+                          }));
+                        })
+                        .catch((error) => {
+                          enqueueSnackbar({
+                            variant: 'error',
+                            message: error.message,
+                          });
+                        });
                     }
                   }}
                 >
@@ -633,7 +649,7 @@ function formatDate(date: string | moment.Moment) {
                       onChange={(e) =>
                         setRemark((remark) => ({
                           ...remark,
-                          FR: selectedFR??'',
+                          FR: selectedFR ?? '',
                           remark: e.target.value,
                         }))
                       }
@@ -657,7 +673,7 @@ function formatDate(date: string | moment.Moment) {
                       }}
                     // sx={{ ml: 'auto' }}
                     >
-            close
+                      close
                     </Button>
                   </DialogActions>
                 </form>
@@ -668,7 +684,7 @@ function formatDate(date: string | moment.Moment) {
         denied={(missingPermissions) => (
           <Grid item xs={12} lg={6}>
             <Alert severity='error'>
-                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+              Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
         )}

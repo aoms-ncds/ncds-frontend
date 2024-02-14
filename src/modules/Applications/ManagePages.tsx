@@ -25,6 +25,7 @@ const ApplicationManagePages = () => {
     {
       field: 'actions',
       type: 'actions',
+
       getActions: (params: GridRowParams) => [<GridLinkAction key={1} to={`/application/manage/${params.id}`} label="View" icon={<PreviewIcon />} showInMenu />],
     },
     //   {
@@ -66,6 +67,7 @@ const ApplicationManagePages = () => {
 
     //     ),
     // },
+    { field: '_manage', headerName: 'Action ', width: 250 },
     { field: '_id', headerName: 'SI NO', width: 250 },
     { field: 'name', headerName: 'name', width: 250 },
     { field: 'reason', headerName: 'Reason', width: 250 },
@@ -78,7 +80,7 @@ const ApplicationManagePages = () => {
         permissions={['WRITE_APPLICATION']}
         granted={(
           <Button variant="contained" sx={{ float: 'right' }} startIcon={<AddIcon />} component={Link} to="/application/add">
-                  Add new
+            Add new
           </Button>
         )}
       />

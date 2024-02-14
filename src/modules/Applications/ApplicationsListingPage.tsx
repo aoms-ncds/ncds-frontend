@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
-  Attachment as AttachmentIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
+  Attachment as AttachmentIcon
+} from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
@@ -84,7 +86,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     attachment: [],
   });
-  const showLinkAction=props.action === 'manage';
+  const showLinkAction = props.action === 'manage';
   useEffect(() => {
     if (props.action == 'hr') {
       ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
@@ -192,6 +194,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'actions',
       type: 'actions',
+      headerClassName: 'super-app-theme--header',
+      renderHeader: () => (<b>Action</b>),
+      width: 80,
       getActions: (params: GridRowParams) => ([
         <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/application/${params.id}/approval`} />,
         showLinkAction && <GridLinkAction
@@ -207,7 +212,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setShowApplicationFormDialog(true);
           }}
         />,
-        (props.action=='hr' || props.action=='president') && (hasPermissions(['MANAGE_APPLICATION']) || hasPermissions(['PRESIDENT_ACCESS'])) &&
+        (props.action == 'hr' || props.action == 'president') && (hasPermissions(['MANAGE_APPLICATION']) || hasPermissions(['PRESIDENT_ACCESS'])) &&
         <GridLinkAction
           key={3}
           label="Approve"
@@ -242,7 +247,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        props.action=='hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={3}
           label="Forward to president"
@@ -277,7 +282,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        props.action==='hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
           label="Reject"
@@ -314,44 +319,52 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       ].filter((action) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
-    { field: 'applicationCode', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150 },
-    { field: 'name', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150 },
-    { field: 'reason', align: 'center',
+    {
+      field: 'applicationCode', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150
+    },
+    {
+      field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150
+    },
+    {
+      field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Reason</b>),
       renderCell: (params) => (
-        <p style={{ maxWidth: 250,
+        <p style={{
+          maxWidth: 250,
           whiteSpace: 'normal',
           wordBreak: 'break-word',
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3 }}>
+          WebkitLineClamp: 3
+        }}>
           {params.value}
         </p>),
       width: 250,
     },
     {
-      field: 'createdBy', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
+      field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
-      field: 'division', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
-        <p> {props.row.division?.details?.name }</p>,
+      field: 'division', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
+        <p> {props.row.division?.details?.name}</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
       field: 'status',
+      headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Status</b>),
       width: 205,
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return params.value==CommonLifeCycleStates.CREATED?'Waiting for HR':
-          params.value==CommonLifeCycleStates.ACTIVE?'Waiting for President':
-            params.value==CommonLifeCycleStates.APPROVED?'APPROVED':
-              params.value==CommonLifeCycleStates.REJECTED?'REJECTED':'Unknown Status ';
+        return params.value == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
+          params.value == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
+            params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+              params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
     },
   ];
@@ -472,19 +485,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       onClick={async () => {
                         const sheet =
                           applications ?
-                            applications.map((application:Application) => ([
+                            applications.map((application: Application) => ([
                               application.applicationCode,
                               application.name,
                               application.reason,
-                              application.createdBy&&( application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
+                              application.createdBy && (application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
                               application.division?.details?.name,
-                              Number(application.status)==CommonLifeCycleStates.CREATED?'Waiting for HR':
-                                Number(application.status)==CommonLifeCycleStates.ACTIVE?'Waiting for President':
-                                  Number(application.status)==CommonLifeCycleStates.APPROVED?'APPROVED':
-                                    Number(application.status)==CommonLifeCycleStates.REJECTED?'REJECTED':'Unknown Status ',
+                              Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
+                                Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
+                                  Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+                                    Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ',
                             ])) :
                             [];
-                        const headers=[
+                        const headers = [
                           'Application No',
                           'Name',
                           'Reason',
@@ -518,14 +531,24 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         setAction('add');
                       }}
                     >
-            Add new
+                      Add new
                     </Button>
                   )}
                 />
               </>
             </Grid>
             <Grid item xs={12} >
-              <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
+              <Card sx={{
+                height: '66vh', width: '100%',
+                '& .super-app-theme--header': {
+                  backgroundColor: '#f1f5fa',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                },
+              }}>
+
+                <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
+              </Card>
             </Grid>
           </Grid>
 
