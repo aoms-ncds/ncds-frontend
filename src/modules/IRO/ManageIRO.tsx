@@ -33,6 +33,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
+import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -269,7 +270,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? [
+            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ? [
               {
                 id: 'edit',
                 text: 'Edit',
@@ -371,6 +372,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 icon: PrintIcon,
                 component: PDFDownloadLink,
                 document: <IROReceiptTemplate rowData={params.row} />,
+                // document: <IROTemplate rowData={params.row} coordinatorName={"ssss"} />,
                 fileName: 'IROReceipt.pdf',
               }] : []),
             {
@@ -1117,7 +1119,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
 
                   return res;
                 });

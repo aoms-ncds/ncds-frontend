@@ -118,7 +118,7 @@ const ManageWorkerPage = () => {
                         'Division',
                         'Sub Division',
                         'Mobile No',
-                        'Email Id',
+                        'Email ID',
                         'Alt Phone',
                         'DOB',
                         'Field',

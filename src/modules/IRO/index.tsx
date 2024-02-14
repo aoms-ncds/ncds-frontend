@@ -48,7 +48,7 @@ const IRODashboard = () => {
           <FRCountCard count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#1093eb" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#1093eb'} />
+          <FRCountCard count={amountReleasedCount?.toString()} secondaryText={'Amount Released'} color={'#1093eb'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#1093eb'} />

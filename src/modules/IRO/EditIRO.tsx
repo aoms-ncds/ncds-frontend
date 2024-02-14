@@ -210,12 +210,12 @@ const EditIRO = () => {
     setSelectedMainCategory(selectedMainCategoryObj);
 
     FRServices.getMainCategory()
-    .then((res) => {
-      setMainCategories(res.data);
-    })
-    .catch((res) => {
-      console.log(res);
-    });
+      .then((res) => {
+        setMainCategories(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
     if (IRO.particulars) {
       setParticulars(IRO.particulars);
     }
@@ -230,7 +230,7 @@ const EditIRO = () => {
     setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
   }, [selectedSubCategory1]);
   useEffect(() => {
-    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3)?? null);
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3) ?? null);
   }, [selectedSubCategory2]);
 
   useEffect(() => {
@@ -257,14 +257,14 @@ const EditIRO = () => {
                   // } else if (submit == 2) {
                   //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
                   // }
-                  IROServices.updateIRO(iroID??'', IRO, true)
-                  .then((res)=> {
-                    enqueueSnackbar({
-                      message: res.message,
-                      variant: 'success',
+                  IROServices.updateIRO(iroID ?? '', IRO, true)
+                    .then((res) => {
+                      enqueueSnackbar({
+                        message: res.message,
+                        variant: 'success',
+                      });
+                      navigate(`/iro/${iroID}`);
                     });
-                    navigate(`/iro/${iroID}`);
-                  });
                 }}
               >
                 <Grid container spacing={3}>
@@ -373,7 +373,7 @@ const EditIRO = () => {
                         <TableHead>
                           <TableRow>
                             <TableCell></TableCell>
-                            <TableCell align="center">SI NO</TableCell>
+                            <TableCell align="center">S.No</TableCell>
                             <TableCell align="center">Main Category</TableCell>
                             <TableCell align="center">Particulars</TableCell>
                             <TableCell align="center">Quantity</TableCell>
@@ -383,29 +383,29 @@ const EditIRO = () => {
                         </TableHead>
                         <TableBody>
                           {IRO?.particulars &&
-                                IRO?.particulars.map((item, index) => (
-                                  <TableRow key={item._id} >
-                                    <TableCell component="th" sx={{ display: 'flex' }}>
-                                      <IconButton>
-                                        <EditIcon onClick={() => editParticular(item)} />
-                                      </IconButton>
-                                      <IconButton
-                                        onClick={() => {
-                                          setViewFileUploader(true);
-                                          setAttachments(item.attachment);
-                                        }}
-                                      >
-                                        <AttachmentIcon />
-                                      </IconButton>
-                                    </TableCell>
-                                    <TableCell align="center">{index + 1}</TableCell>
-                                    <TableCell align="center">{item.mainCategory}</TableCell>
-                                    <TableCell align="center">{item.narration}</TableCell>
-                                    <TableCell align="center">{item.quantity}</TableCell>
-                                    <TableCell align="center">{item.month}</TableCell>
-                                    <TableCell align="center">{item.requestedAmount}</TableCell>
-                                  </TableRow>
-                                ))}
+                            IRO?.particulars.map((item, index) => (
+                              <TableRow key={item._id} >
+                                <TableCell component="th" sx={{ display: 'flex' }}>
+                                  <IconButton>
+                                    <EditIcon onClick={() => editParticular(item)} />
+                                  </IconButton>
+                                  <IconButton
+                                    onClick={() => {
+                                      setViewFileUploader(true);
+                                      setAttachments(item.attachment);
+                                    }}
+                                  >
+                                    <AttachmentIcon />
+                                  </IconButton>
+                                </TableCell>
+                                <TableCell align="center">{index + 1}</TableCell>
+                                <TableCell align="center">{item.mainCategory}</TableCell>
+                                <TableCell align="center">{item.narration}</TableCell>
+                                <TableCell align="center">{item.quantity}</TableCell>
+                                <TableCell align="center">{item.month}</TableCell>
+                                <TableCell align="center">{item.requestedAmount}</TableCell>
+                              </TableRow>
+                            ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -438,7 +438,8 @@ const EditIRO = () => {
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                      inputProps={{
+                        max: totalRequestedAmount, min: 0, onWheel: handleWheel,
                       }}
                       disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -495,16 +496,16 @@ const EditIRO = () => {
                         variant="contained"
                         color="warning"
                         style={{ textAlign: 'left', textDecoration: 'none' }}
-                        // onClick={() => {
-                        //   toggleOpenRemarks(true);
-                        // }}
+                      // onClick={() => {
+                      //   toggleOpenRemarks(true);
+                      // }}
                       >
                         <PDFDownloadLink document={<IROReceiptTemplate rowData={IRO} />} fileName="IROReceipt.pdf" style={{ color: 'White', textDecoration: 'none' }}>
-                              Print IRO
+                          Print IRO
                         </PDFDownloadLink>
                       </Button>
                     )}
-                        &nbsp;
+                    &nbsp;
                     <div style={{ float: 'right' }}>
                       <Button
                         variant="contained"
@@ -512,18 +513,18 @@ const EditIRO = () => {
                         onClick={() => {
                           toggleOpenRemarks(true);
                           IROServices.getAllRemarksById(IRO._id ?? '')
-                                .then((res) => setRemarks(res.data ?? []))
-                                .catch((error) => {
-                                  enqueueSnackbar({
-                                    variant: 'error',
-                                    message: error.message,
-                                  });
-                                });
+                            .then((res) => setRemarks(res.data ?? []))
+                            .catch((error) => {
+                              enqueueSnackbar({
+                                variant: 'error',
+                                message: error.message,
+                              });
+                            });
                         }}
                       >
-                            Remarks
+                        Remarks
                       </Button>
-                          &nbsp;
+                      &nbsp;
                       <PermissionChecks
                         permissions={['ACCOUNTS_MNGR_ACCESS']}
                         granted={
@@ -531,11 +532,11 @@ const EditIRO = () => {
                             variant="contained"
                             color="info"
                             type="submit"
-                            // disabled={particulars.length==0}
+                          // disabled={particulars.length==0}
                           >
-                        Submit{' '}
+                            Submit{' '}
                           </Button>
-                        }/>
+                        } />
                     </div>
                   </Grid>
                 </Grid>
@@ -692,7 +693,7 @@ const EditIRO = () => {
 
       <Dialog
         open={showAddParticularDialog}
-        onClose={ ()=>setShowAddParticularDialog(false)}
+        onClose={() => setShowAddParticularDialog(false)}
         PaperProps={{
           style: {
             width: '1000px',
@@ -706,7 +707,7 @@ const EditIRO = () => {
             setShowAddParticularDialog(false);
             setIRO({
               ...IRO,
-              particulars: IRO.particulars?.map((part) => (part._id===newParticular._id ? (newParticular as Particular) : part)),
+              particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
             });
             // addParticulars();
           }}
@@ -749,7 +750,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>
@@ -811,7 +812,7 @@ const EditIRO = () => {
                     }}
                   />
                 </Grid>
-                {hasPermissions(['ADMIN_ACCESS'])&&(
+                {hasPermissions(['ADMIN_ACCESS']) && (
                   <Grid item md={12}>
                     <FormControlLabel
                       label="Multiply By Quantity"
@@ -826,7 +827,7 @@ const EditIRO = () => {
                         />
                       }
                     />
-                  </Grid> )}
+                  </Grid>)}
                 <Grid item md={12}>
                   <TextField
                     label="Total Amount"
@@ -892,7 +893,7 @@ const EditIRO = () => {
             </Container>
           </DialogContent>
           <DialogActions>
-            <Button onClick={()=>setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button onClick={() => setShowAddParticularDialog(false)}>Cancel</Button>
             <Button type="submit" variant="contained">
               Save
             </Button>

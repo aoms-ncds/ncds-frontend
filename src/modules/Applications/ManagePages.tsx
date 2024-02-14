@@ -66,7 +66,7 @@ const ApplicationManagePages = () => {
 
     //     ),
     // },
-    { field: '_id', headerName: 'SI NO', width: 250 },
+    { field: '_id', headerName: 'S.No', width: 250 },
     { field: 'name', headerName: 'name', width: 250 },
     { field: 'reason', headerName: 'Reason', width: 250 },
     { field: 'status', headerName: 'Status', width: 300 },
@@ -78,7 +78,7 @@ const ApplicationManagePages = () => {
         permissions={['WRITE_APPLICATION']}
         granted={(
           <Button variant="contained" sx={{ float: 'right' }} startIcon={<AddIcon />} component={Link} to="/application/add">
-                  Add new
+            Add new
           </Button>
         )}
       />

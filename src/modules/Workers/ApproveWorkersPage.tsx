@@ -185,7 +185,7 @@ const ApproveWorkerPage = () => {
                     user.basicDetails.dateOfBirth,
                     user.basicDetails.field,
                     user.basicDetails.martialStatus,
-                    user.basicDetails.knownLanguages?.map((lang)=>lang.name)?.join(', '),
+                    user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
                     user.basicDetails.highestQualification,
                     user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
                     user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
@@ -195,11 +195,11 @@ const ApproveWorkerPage = () => {
                     user.spouse?.spouseCode,
                     user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
                     (user.supportStructure?.basic ?? 0) +
-                        (user.supportStructure?.HRA ?? 0) +
-                        (user.supportStructure?.spouseAllowance ?? 0) +
-                        (user.supportStructure?.positionalAllowance ?? 0) +
-                        (user.supportStructure?.specialAllowance ?? 0) +
-                        (user.supportStructure?.telAllowance ?? 0),
+                    (user.supportStructure?.HRA ?? 0) +
+                    (user.supportStructure?.spouseAllowance ?? 0) +
+                    (user.supportStructure?.positionalAllowance ?? 0) +
+                    (user.supportStructure?.specialAllowance ?? 0) +
+                    (user.supportStructure?.telAllowance ?? 0),
                     user.insurance?.impactNo,
                   ]) :
                   [];
@@ -210,7 +210,7 @@ const ApproveWorkerPage = () => {
                   'Division',
                   'Sub Division',
                   'Mobile No',
-                  'Email Id',
+                  'Email ID',
                   'Alt Phone',
                   'DOB',
                   'Field',

@@ -90,7 +90,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   const [childSupport, setChildSupport] = useState<IChildSupport[]>([]);
 
   const submitForm = (data: UserType) => {
-    if (props.action == 'add' && props.value.basicDetails.email==null) {
+    if (props.action == 'add' && props.value.basicDetails.email == null) {
       UserServices.checkDuplicationOfMail(props.value.basicDetails.email)
         .then((res) => {
           props.onSubmit && props.onSubmit(props.value);
@@ -147,20 +147,20 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           </Step> */}
           {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus === 'Married' && (
             <Step>
-              <StepLabel>Spouse details</StepLabel>
+              <StepLabel>Spouse Details</StepLabel>
             </Step>
           )}
           {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
             <Step>
-              <StepLabel>Offsprings details</StepLabel>
+              <StepLabel>Offsprings Details</StepLabel>
             </Step>
           )}
           {((props.options?.kind === 'worker' && props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
             props.options?.kind === 'staff') && (
-            <Step>
-              <StepLabel>Support Details</StepLabel>
-            </Step>
-          )}
+              <Step>
+                <StepLabel>Support Details</StepLabel>
+              </Step>
+            )}
         </Stepper>
       </Container>
       <br />
@@ -186,7 +186,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                           marginRight: 'auto',
                         }}
                         variant="rounded"
-                        src={props.value.imageURL?.replace('uc', 'thumbnail')?? ''}
+                        src={props.value.imageURL?.replace('uc', 'thumbnail') ?? ''}
                       >
                         {!props.value.imageURL && <ImageIcon sx={{ fontSize: 100 }} />}
                       </Avatar>
@@ -658,7 +658,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                     required
                   />
                 </Grid>
@@ -674,7 +674,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                     required
                   />
                 </Grid>
@@ -715,7 +715,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     // }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                     disabled
                   />
                 </Grid>
@@ -730,7 +730,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       onChange={(e) =>
                         setNewChild((newchild) => ({
                           ...newchild,
-                          gender: ( e.target.value as Gender | undefined),
+                          gender: (e.target.value as Gender | undefined),
                         }))
                       }
                       name="Gender"
@@ -768,7 +768,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                   />
                 </Grid>
 
@@ -798,7 +798,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                   />
                 </Grid>
 
@@ -814,7 +814,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     fullWidth
                     variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                   />
                 </Grid>
 
@@ -834,7 +834,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant} InputLabelProps={{ shrink: true }} disabled />
+                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant} InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
                 </Grid>
               </Grid>
             </Container>

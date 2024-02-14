@@ -22,7 +22,7 @@ const FRParticularList = () => {
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              <TableCell align="center">SI NO</TableCell>
+              <TableCell align="center">S.No</TableCell>
               <TableCell align="center">Particulars</TableCell>
               <TableCell align="center">Quantity</TableCell>
               <TableCell align="center">Month</TableCell>

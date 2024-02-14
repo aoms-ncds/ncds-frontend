@@ -40,17 +40,17 @@ const DeactivatedWorkersPage = () => {
         .then((res) => {
           setSpouseList(res.data);
         })
-          .catch((res) => {
-            console.log(res);
-          });
+        .catch((res) => {
+          console.log(res);
+        });
     } else if (currentTab == 2) {
       ChildrenServices.getAll({ status: UserLifeCycleStates.INACTIVE })
         .then((res) => {
           setChildList(res.data);
         })
-          .catch((res) => {
-            console.log(res);
-          });
+        .catch((res) => {
+          console.log(res);
+        });
     }
   }, [currentTab]);
   return (
@@ -78,45 +78,45 @@ const DeactivatedWorkersPage = () => {
                   <Button
                     onClick={async () => {
                       const sheet =
-        users ?
-          users.map((user:IWorker) => ([
-            user.workerCode,
-            user.basicDetails.firstName,
-            user.basicDetails.lastName,
-            user.division?.details.name,
-            user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length-1].subDivision,
-            user.basicDetails.phone,
-            user.basicDetails.email,
-            user.basicDetails.alternativePhone,
-            user.basicDetails.dateOfBirth,
-            user.basicDetails.field,
-            user.basicDetails.martialStatus,
-            user.basicDetails.knownLanguages?.map((lang)=>lang.name)?.join(', '),
-            user.basicDetails.highestQualification,
-            user.status&&UserLifeCycleStates.getStatusNameByCode(user.status as number),
-            user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-            user.officialDetails.status=='Left' && user.officialDetails.dateOfLeaving?
-              user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true):
-              ( user.officialDetails.dateOfJoining?.fromNow(true)),
-            user.spouse?.spouseCode,
-            user.spouse&& user.spouse?.firstName+' '+user.spouse?.lastName,
-            ((user.supportStructure?.basic ?? 0) +
-              (user.supportStructure?.HRA ?? 0) +
-              (user.supportStructure?.spouseAllowance ?? 0) +
-              (user.supportStructure?.positionalAllowance ?? 0) +
-              (user.supportStructure?.specialAllowance ?? 0) +
-              (user.supportStructure?.telAllowance ?? 0)),
-            user.insurance?.impactNo,
-          ])) :
-          [];
-                      const headers=[
+                        users ?
+                          users.map((user: IWorker) => ([
+                            user.workerCode,
+                            user.basicDetails.firstName,
+                            user.basicDetails.lastName,
+                            user.division?.details.name,
+                            user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
+                            user.basicDetails.phone,
+                            user.basicDetails.email,
+                            user.basicDetails.alternativePhone,
+                            user.basicDetails.dateOfBirth,
+                            user.basicDetails.field,
+                            user.basicDetails.martialStatus,
+                            user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
+                            user.basicDetails.highestQualification,
+                            user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
+                            user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
+                            user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+                              user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
+                              (user.officialDetails.dateOfJoining?.fromNow(true)),
+                            user.spouse?.spouseCode,
+                            user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
+                            ((user.supportStructure?.basic ?? 0) +
+                              (user.supportStructure?.HRA ?? 0) +
+                              (user.supportStructure?.spouseAllowance ?? 0) +
+                              (user.supportStructure?.positionalAllowance ?? 0) +
+                              (user.supportStructure?.specialAllowance ?? 0) +
+                              (user.supportStructure?.telAllowance ?? 0)),
+                            user.insurance?.impactNo,
+                          ])) :
+                          [];
+                      const headers = [
                         'Workers Code',
                         'First Name',
                         'Last Name',
                         'Division',
                         'Sub Division',
                         'Mobile No',
-                        'Email Id',
+                        'Email ID',
                         'Alt Phone',
                         'DOB',
                         'Field',

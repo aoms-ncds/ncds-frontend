@@ -89,7 +89,7 @@ const DivisionsList = () => {
               },
             ] : []
             ),
-            ...(hasPermissions(['ADMIN_ACCESS'])?[
+            ...(hasPermissions(['ADMIN_ACCESS']) ? [
               {
                 id: 'delete',
                 text: 'Delete',
@@ -99,16 +99,18 @@ const DivisionsList = () => {
                   removeDivisions(props.row._id);
                 },
               },
-            ]:[]),
+            ] : []),
           ]}
         />
       ),
     },
-    { field: 'divisionId',
+    {
+      field: 'divisionId',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (<b>Division Id</b>),
-      width: 110, valueGetter: (props) => props.row.details.divisionId },
+      renderHeader: () => (<b>Division ID</b>),
+      width: 110, valueGetter: (props) => props.row.details.divisionId
+    },
     {
       field: 'divisionName',
       align: 'center',
@@ -128,14 +130,14 @@ const DivisionsList = () => {
         </Link>
       ),
 
-      valueGetter: (props)=>props.row.details?.name,
+      valueGetter: (props) => props.row.details?.name,
     },
     {
       field: 'coordinator',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
-      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.firstName??'',
+      valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
       width: 150,
 
 
@@ -145,16 +147,18 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
-      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.email,
-      width: 150 },
+      valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.email,
+      width: 150
+    },
     {
       field: 'coordinatorPhone',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
 
-      valueGetter: (props)=>props.row.details.coordinator?.name?.basicDetails?.phone,
-      width: 140 },
+      valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.phone,
+      width: 140
+    },
 
     {
       field: 'noOfWorkers',
@@ -162,16 +166,18 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
 
-      valueGetter: (props)=>props.row.details?.noOfWorkers,
-      width: 130 },
+      valueGetter: (props) => props.row.details?.noOfWorkers,
+      width: 130
+    },
     {
       field: 'NoOfSubdivisions',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
-      valueGetter: (props)=>props.row.details?.noOfSubdivisions,
-      width: 150 },
+      valueGetter: (props) => props.row.details?.noOfSubdivisions,
+      width: 150
+    },
   ];
   return <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
 };
