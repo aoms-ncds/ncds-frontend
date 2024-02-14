@@ -81,7 +81,7 @@ const HomePage = () => {
         <Grid container spacing={3}>
           {/* Sales Overview */}
           <Grid item xs={12} lg={12} xl={12}>
-            <Card>
+            <Card sx={{ backgroundColor: '#e1e0e1' }}>
               <CardContent>
                 <Grid container spacing={3} sx={{ marginTop: '5px' }}>
                   <Grid item xs={12} lg={12}>
@@ -98,7 +98,7 @@ const HomePage = () => {
                     denied={(missingPermissions) => (
                       <Grid item xs={12} lg={6}>
                         <Alert severity='error'>
-                Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
+                          Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
                         </Alert>
                       </Grid>
                     )}
@@ -116,10 +116,10 @@ const HomePage = () => {
               <Grid container alignItems="center">
                 <Grid item>
                   <Typography variant="body1" component="p" gutterBottom>
-              Expenses
+                    Expenses
                   </Typography>
                   <Typography variant="h5" component="h5" gutterBottom>
-              38.5%
+                    38.5%
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm="auto">
@@ -141,10 +141,10 @@ const HomePage = () => {
               <Grid container alignItems="center">
                 <Grid item>
                   <Typography variant="body1" component="p" gutterBottom>
-              IR
+                    IR
                   </Typography>
                   <Typography variant="h5" component="h5" gutterBottom>
-              42.5%
+                    42.5%
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm="auto">
@@ -167,10 +167,10 @@ const HomePage = () => {
               <Grid container alignItems="center">
                 <Grid item>
                   <Typography variant="body1" component="p" gutterBottom>
-              FR
+                    FR
                   </Typography>
                   <Typography variant="h5" component="h5" gutterBottom>
-              48%
+                    48%
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm="auto">

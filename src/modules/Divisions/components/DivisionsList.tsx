@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Card, Typography } from '@mui/material';
+import { Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -12,6 +12,7 @@ import PermissionChecks, { hasPermissions } from '../../User/components/Permissi
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     DivisionsServices.getDivisions()
@@ -187,22 +188,35 @@ const DivisionsList = () => {
       width: 165
     },
   ];
-  return (
+
+  const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (divisions ?? []).filter(row => {
+    if ((row.details.name && row.details.name.toLowerCase().includes(searchText.toLowerCase()))) {
+  return true;
+}
+    return Object.values(row).some(value =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
+  return ( 
     <>
-      <Card sx={{
-        height: '66vh', width: '100%',
-        '& .super-app-theme--header': {
-          backgroundColor: '#f1f5fa',
-          fontSize: '16px',
-          fontWeight: '500'
-        },
-      }}>
-
-        <DataGrid rows={divisions ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
-      </Card>
+    <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchText}
+          onChange={handleSearchChange}
+          fullWidth
+          style={{ marginBottom: '1rem',width: '10vw'}}
+        />
+    </Grid>
+    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
     </>
-  )
 
+  )
 };
 
 export default DivisionsList;

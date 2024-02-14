@@ -24,7 +24,7 @@ const DashboardCardButton = (props: { primaryText: string; secondaryText?: strin
           'borderRadius': 3,
           'transition': 'all 0.3s',
           'padding': 1,
-          'height': 160,
+          'height': 190,
           '&:hover': {
             boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
             transform: 'translate(0, -2px)',
@@ -38,8 +38,8 @@ const DashboardCardButton = (props: { primaryText: string; secondaryText?: strin
         }}
       >
         <CardContent sx={{ padding: 1 }}>
-          <Typography variant="h6">{props.primaryText}</Typography>
-          <Typography variant="h6">{props.secondaryText ?? <>&nbsp;</>}</Typography>
+          <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black' }}>{props.primaryText}</Typography>
+          <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black' }} >{props.secondaryText ?? <>&nbsp;</>}</Typography>
         </CardContent>
         <CardActions>
           {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}
@@ -48,15 +48,15 @@ const DashboardCardButton = (props: { primaryText: string; secondaryText?: strin
             endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
             sx={{
               'ml': 'auto',
-              'color': 'black',
-              'bgcolor': 'white',
+              'color': 'white',
+              'bgcolor': 'orange',
               '&:hover': {
-                color: 'black',
-                bgcolor: 'white',
+                color: 'white',
+                bgcolor: 'black',
               },
               '&:active': {
-                color: 'black',
-                bgcolor: 'white',
+                color: 'white',
+                bgcolor: 'black',
               },
             }}
           >

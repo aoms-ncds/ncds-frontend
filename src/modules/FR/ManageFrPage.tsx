@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import {
@@ -37,7 +37,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
-
+  const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
@@ -368,6 +368,34 @@ const ManageFrPage = () => {
     },
 
   ];
+  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (FRRequests ?? []).filter(row => {
+    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) ||
+    (row.FRdate && formatDate(row.FRdate).toLowerCase().includes(searchText.toLowerCase()))) {
+  return true;
+}
+
+function formatDate(date: string | moment.Moment) {
+  let dateString: string;
+  if (typeof date === 'string') {
+    dateString = date;
+  } else {
+    dateString = date.format('DD/MM/YYYY');
+  }
+  const parts = dateString.split("/");
+  const day = parts[0];
+  const month = parts[1];
+  const year = parts[2];
+  return `${day}/${month}/${year}`;
+}
+
+    return Object.values(row).some(value =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
 
   return (
     <CommonPageLayout title="Manage FR"
@@ -475,17 +503,20 @@ const ManageFrPage = () => {
 
                     </Grid>
                   </Grid>
-                  <Card sx={{
-                    height: '66vh', width: '100%',
-                    '& .super-app-theme--header': {
-                      backgroundColor: '#f1f5fa',
-                      fontSize: '16px',
-                      fontWeight: '500'
-                    },
-                  }}>
-                    <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
 
-                  </Card>
+                 
+         <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchText}
+          onChange={handleSearchChange}
+          fullWidth
+          style={{ marginBottom: '1rem',width: '10vw'}}
+        />
+    </Grid>
+                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
+
                 </Card>
               </Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
