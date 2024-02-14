@@ -18,7 +18,7 @@ const FRCountCard = (props: {
       // })}
       sx={{
         'backgroundColor': props.color,
-        'color': 'white',
+        'color': 'black',
         'borderRadius': 3,
         'transition': 'all 0.3s',
         'padding': 4,
@@ -42,30 +42,14 @@ const FRCountCard = (props: {
         <Typography variant="h6" align="center">
           {props.secondaryText}
         </Typography>
+        <Typography variant="h6" color={'#5b4ec7'} fontWeight={600} align="center">
+          {props.count}
+        </Typography>
       </CardContent>
       {/* </CardActionArea> */}
     </Card>
   );
-  return props.count !== undefined ? <Badge
-    max={9999}
-    badgeContent={props.count}
-    color={props.badgeColor || 'error'}
-    showZero
-    sx={{
-      '& .MuiBadge-badge': {
-        width: '3rem',
-        height: '3rem',
-        fontSize: '1.5rem',
-        borderRadius: '50%',
-        // position: 'absolute', top: 0, right: 0,
-        zIndex: 9999,
-      },
-      'width': '100%',
-    }}
-
-  >
-    {countCard}
-  </Badge> : countCard;
+  return countCard;
 };
 
 export default FRCountCard;

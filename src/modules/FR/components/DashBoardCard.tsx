@@ -6,16 +6,16 @@ const StyledLink = styled(Link)`
 `;
 
 const DashBoardCard = (props: {
-    count?: string;
-    secondaryText: string;
-    color: string;
-    onClick?: React.MouseEventHandler<HTMLDivElement>;
-    targetRoute?: string;
-    icon?: React.ReactNode; // Allow passing an icon as a prop
-    badgeContent?: number;
-    badgeColor?: 'default' | 'error' | 'primary' | 'secondary'; // Allow customizing badge color
-    contentAlignment?: 'left' | 'center' | 'right'; // Allow customizing content alignment
-  }) => {
+  count?: string;
+  secondaryText: string;
+  color: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  targetRoute?: string;
+  icon?: React.ReactNode; // Allow passing an icon as a prop
+  badgeContent?: number;
+  badgeColor?: 'default' | 'error' | 'primary' | 'secondary'; // Allow customizing badge color
+  contentAlignment?: 'left' | 'center' | 'right'; // Allow customizing content alignment
+}) => {
   return (
     <Card
       onClick={props.onClick}
@@ -47,14 +47,18 @@ const DashBoardCard = (props: {
           <Typography variant="h4" sx={{ fontSize: '2.5rem' }}>
             {/* {props.count} */}
           </Typography>
-          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black' }}>
             {props.secondaryText}
             <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> {/* Adjust the margin here */}
+          </Typography>
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#5b4ec7', fontWeight: 600 }}>
+            {props.count}
+            {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
           </Typography>
         </CardContent>
 
 
-        {props.count !== undefined && (
+        {/* {props.count !== undefined && (
           <Grid style={{ position: 'absolute', top: 0, right: 0 }}>
             <Badge
               max={9999}
@@ -74,7 +78,7 @@ const DashBoardCard = (props: {
           </Grid>
 
 
-        )}
+        )} */}
       </CardActionArea>
     </Card>
   );

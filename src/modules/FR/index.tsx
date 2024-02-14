@@ -44,45 +44,45 @@ const frDashboard = () => {
 
             <Grid container spacing={3}>
               <Grid item xs={6} md={3} xl={2}>
-                <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#1093eb" />
+                <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
               </Grid>
               <Grid item xs={6} md={3} xl={2}>
-                <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#1093eb'} />
+                <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard count={waitingForPresidentFrCount?.toString()}
                   secondaryText={'Waiting to President'}
-                  color={'#1093eb'} />
+                  color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting to Account'} color={'#1093eb'} />
+                <FRCountCard count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting to Account'} color={'#fff'} />
               </Grid>
             </Grid>
             <br />
             <br />
             <Grid container spacing={3}>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/manage" />
+                <DashboardCardButton primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
               </Grid>
               <PermissionChecks
                 permissions={['WRITE_FR']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/apply" />
+                    <DashboardCardButton primaryText="Apply New" secondaryText="Finance Request" color="#fff" targetRoute="/fr/apply" />
                   </Grid>
                 )} />
               <PermissionChecks
                 permissions={['PRESIDENT_ACCESS']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#005eb8" targetRoute="/fr/approve" />
+                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#fff" targetRoute="/fr/approve" />
                   </Grid>
                 )} />
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#005eb8" targetRoute="/fr/closed" />
+                <DashboardCardButton primaryText="Closed" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#005eb8" targetRoute="/iro" />
+                <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
               </Grid>
             </Grid>
 
