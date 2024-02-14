@@ -108,11 +108,10 @@ const DivisionsList = () => {
     },
     {
       field: 'divisionId',
-      headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => (<b>Division Id</b>),
-      width: 120, valueGetter: (props) => props.row.details.divisionId
+      renderHeader: () => (<b>Division ID</b>),
+      width: 110, valueGetter: (props) => props.row.details.divisionId
     },
     {
       field: 'divisionName',
@@ -143,7 +142,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
-      width: 160,
+      width: 150,
 
 
     },
@@ -164,7 +163,7 @@ const DivisionsList = () => {
       renderHeader: () => (<b>Coordinator Phone</b>),
 
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.phone,
-      width: 165
+      width: 140
     },
 
     {
@@ -185,7 +184,7 @@ const DivisionsList = () => {
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
       valueGetter: (props) => props.row.details?.noOfSubdivisions,
-      width: 165
+      width: 150
     },
   ];
 
@@ -195,25 +194,25 @@ const DivisionsList = () => {
 
   const filteredRows = (divisions ?? []).filter(row => {
     if ((row.details.name && row.details.name.toLowerCase().includes(searchText.toLowerCase()))) {
-  return true;
-}
+      return true;
+    }
     return Object.values(row).some(value =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase())
     );
   });
-  return ( 
+  return (
     <>
-    <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
+      <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
         <TextField
           label="Search"
           variant="outlined"
           value={searchText}
           onChange={handleSearchChange}
           fullWidth
-          style={{ marginBottom: '1rem',width: '10vw'}}
+          style={{ marginBottom: '1rem', width: '10vw' }}
         />
-    </Grid>
-    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
+      </Grid>
+      <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
     </>
 
   )

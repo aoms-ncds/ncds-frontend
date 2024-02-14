@@ -217,7 +217,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
   }, [selectedSubCategory1]);
   useEffect(() => {
-    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3)?? null);
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3) ?? null);
   }, [selectedSubCategory2]);
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -433,7 +433,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       <TableHead>
                         <TableRow>
                           <TableCell></TableCell>
-                          <TableCell align="center">SI NO</TableCell>
+                          <TableCell align="center">S.No</TableCell>
                           <TableCell align="center">Particulars</TableCell>
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>

@@ -96,7 +96,7 @@ const NewSupportDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Total Number Of Years In Ministry"
+          label="Total Number of Years In Ministry"
           type="number"
           value={props.value?.totalNoOfYearsInMinistry}
           onChange={(e) =>
@@ -135,7 +135,7 @@ const NewSupportDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
-          <FormLabel id="withChurch">Type of church:</FormLabel>
+          <FormLabel id="withChurch">Type of Church:</FormLabel>
           <RadioGroup
             aria-labelledby="withChurch"
             // defaultValue="missionar

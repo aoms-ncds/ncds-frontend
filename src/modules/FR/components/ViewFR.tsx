@@ -42,7 +42,7 @@ import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 
-const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolean}>) => {
+const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
   const navigate = useNavigate();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -149,7 +149,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={props.value.purposeWorker}
-                      options={ []}
+                      options={[]}
                       getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -182,7 +182,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    options={ []}
+                    options={[]}
                     value={props.value.purposeSubdivision}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
@@ -195,7 +195,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.division}
-                    options={ []}
+                    options={[]}
                     getOptionLabel={(division) => division.details.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
@@ -215,7 +215,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.purposeCoordinator}
-                    options={ []}
+                    options={[]}
                     getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                     onChange={(e, selectedCoordinator) => {
                       if (selectedCoordinator && props.action !== 'view') {
@@ -257,7 +257,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       <TableRow>
 
                         <TableCell ></TableCell>
-                        <TableCell align="center">SI NO</TableCell>
+                        <TableCell align="center">S.No</TableCell>
                         <TableCell align="center">Main Category</TableCell>
                         <TableCell align="center">Particulars</TableCell>
                         <TableCell align="center">Quantity</TableCell>
@@ -270,7 +270,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                         props.value.particulars.map((item, index) => (
                           <TableRow key={item._id} >
                             <TableCell component="th" sx={{ display: 'flex' }}>
-                              {props.value.status==FRLifeCycleStates.WAITING_FOR_ACCOUNTS &&(<PermissionChecks
+                              {props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS && (<PermissionChecks
                                 permissions={['MANAGE_FR']}
                                 granted={
                                   <IconButton>
@@ -324,7 +324,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
-                      disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                      disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(e) => {
                         if (totalRequestedAmount) {
                           props.onChange({
@@ -339,7 +339,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ max: totalRequestedAmount, min: 0,
+                      inputProps={{
+                        max: totalRequestedAmount, min: 0,
                         onWheel: handleWheel,
                       }}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -354,7 +355,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={props.value.sanctionedBank || ''}
-                        disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                        disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                         onChange={(e) =>
                           props.onChange({
                             ...props.value,
@@ -376,7 +377,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                       value={props.value.sanctionedAsPer ?? null}
                       options={sanctionedAsPers ?? []}
                       getOptionLabel={(requisition) => requisition}
-                      disabled={!hasPermissions(['MANAGE_FR'])||props.value.status!=FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                      disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(_e, selectedSanction) => {
                         if (selectedSanction && props.action === 'view') {
                           props.onChange({
@@ -603,18 +604,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                  //                     setTimeout(() => {
-                  //                       closeSnackbar(processingSnack);
-                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                  //                     }, 500);
-                  //                     navigate('/fr/manage');
-                  //                   }}
-                  //                 >
-                  // Submit
-                  //                 </Button>
-                  //               }
-                  //             />
+                    //                     setTimeout(() => {
+                    //                       closeSnackbar(processingSnack);
+                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                    //                     }, 500);
+                    //                     navigate('/fr/manage');
+                    //                   }}
+                    //                 >
+                    // Submit
+                    //                 </Button>
+                    //               }
+                    //             />
                   ) : null}
 
 
@@ -717,7 +718,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
       />
       <Dialog
         open={showAddParticularDialog}
-        onClose={ ()=>setShowAddParticularDialog(false)}
+        onClose={() => setShowAddParticularDialog(false)}
         PaperProps={{
           style: {
             width: '1000px',
@@ -742,8 +743,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item md={12}>
                   <Autocomplete
                     value={newParticular.subCategory1}
-                    options={ []}
-                    onChange={() => {}}
+                    options={[]}
+                    onChange={() => { }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
                     fullWidth
                     disabled
@@ -752,8 +753,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item md={12}>
                   <Autocomplete
                     value={newParticular.subCategory2}
-                    options={ []}
-                    onChange={() => {}}
+                    options={[]}
+                    onChange={() => { }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
                     disabled
@@ -762,8 +763,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
                 <Grid item md={12}>
                   <Autocomplete
                     value={newParticular.subCategory3}
-                    options={ []}
-                    onChange={() => {}}
+                    options={[]}
+                    onChange={() => { }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
                     disabled
@@ -857,7 +858,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, {FRLoaded: boolea
             </Container>
           </DialogContent>
           <DialogActions>
-            <Button onClick={()=>setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button onClick={() => setShowAddParticularDialog(false)}>Cancel</Button>
             <Button type="submit" variant="contained">
               Save
             </Button>

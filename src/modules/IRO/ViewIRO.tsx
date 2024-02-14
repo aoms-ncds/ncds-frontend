@@ -319,7 +319,7 @@ const ViewIRO = () => {
                             <TableHead>
                               <TableRow>
                                 <TableCell></TableCell>
-                                <TableCell align="center">SI NO</TableCell>
+                                <TableCell align="center">S.No</TableCell>
                                 <TableCell align="center">Main Category</TableCell>
                                 <TableCell align="center">Particulars</TableCell>
                                 <TableCell align="center">Quantity</TableCell>

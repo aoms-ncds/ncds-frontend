@@ -224,6 +224,7 @@ const NewUserSupportStructureForm = (
           variant={props.options?.textField.variant}
           fullWidth
           disabled
+
         />
       </Grid>
 

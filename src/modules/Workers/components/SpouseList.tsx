@@ -8,7 +8,7 @@ import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import { hasPermissions } from '../../User/components/PermissionChecks';
 
-const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'active'}>) => {
+const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
   const deactivateSpouse = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
@@ -116,7 +116,8 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>First Name</b>) },
+      renderHeader: () => (<b>First Name</b>)
+    },
     {
       field: 'lastName',
       width: 120,
@@ -124,7 +125,8 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       align: 'center',
       renderHeader: () => (<b>Last Name</b>),
     },
-    { field: 'phone',
+    {
+      field: 'phone',
       width: 120,
       headerAlign: 'center',
       align: 'center',
@@ -137,24 +139,27 @@ const SpouseListPage = (props:FormComponentProps<Spouse[], {status?:'reject'|'ac
       renderCell: (params: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b>DOB</b>),
     },
-    { field: 'qualification',
+    {
+      field: 'qualification',
       width: 130,
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Qualification</b>),
     },
-    { field: 'spouseOf',
-      renderCell: (props: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => <p> {props.row.spouseOf?.basicDetails.firstName+' '+props.row.spouseOf?.basicDetails.lastName}</p>,
+    {
+      field: 'spouseOf',
+      renderCell: (props: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => <p> {props.row.spouseOf?.basicDetails.firstName + ' ' + props.row.spouseOf?.basicDetails.lastName}</p>,
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Spouse</b>),
+      renderHeader: () => (<b>Spouse Of</b>),
     },
-    { field: 'email',
+    {
+      field: 'email',
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Email Id</b>),
+      renderHeader: () => (<b>Email ID</b>),
     },
   ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (

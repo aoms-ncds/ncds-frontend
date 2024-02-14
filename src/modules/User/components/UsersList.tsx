@@ -328,7 +328,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => <b>{'Email Id'}</b>,
+      renderHeader: () => <b>{'Email ID'}</b>,
       valueGetter: (params) => params.row.basicDetails.email,
     },
     {

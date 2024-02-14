@@ -33,6 +33,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
+import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -374,6 +375,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 icon: PrintIcon,
                 component: PDFDownloadLink,
                 document: <IROReceiptTemplate rowData={params.row} />,
+                // document: <IROTemplate rowData={params.row} coordinatorName={"ssss"} />,
                 fileName: 'IROReceipt.pdf',
               }] : []),
             {

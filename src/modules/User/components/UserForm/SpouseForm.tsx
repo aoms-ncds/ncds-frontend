@@ -16,8 +16,8 @@ const SpouseForm = (
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   useEffect(() => {
     LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE })
-  .then((res) =>
-    setLanguages(res.data));
+      .then((res) =>
+        setLanguages(res.data));
   }, []);
   return (
     <>
@@ -93,7 +93,7 @@ const SpouseForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Birth"
+          label="Date of Birth"
           value={props.value.dateOfBirth}
           format="DD/MM/YYYY"
           onChange={(date: Moment | null) => {

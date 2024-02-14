@@ -19,7 +19,7 @@ import * as XLSX from 'xlsx';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
-  const user=useAuth();
+  const user = useAuth();
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -102,42 +102,42 @@ const ReconciliationIRO = () => {
     billAttachment: [],
     signature: {},
   });
-  const [selectedIROId, setSelectedIROId] = useState<string|null>(null);
-  const permissions= (user.user as User)?.permissions;
+  const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
+  const permissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation({ sanctionedBank: 'FCRA' })
-      .then((res)=>{
-        console.log(res, 'FRDD');
-        setReconcilationIRO(()=>[...res.data]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((res) => {
+          console.log(res, 'FRDD');
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS) {
       IROServices.getReconciliation({ sanctionedBank: 'Local Bank' })
-      .then((res)=>{
-        setReconcilationIRO(()=>[...res.data]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
     if (permissions?.PERSONAL_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation({ sanctionedBank: 'Personal Bank' })
-      .then((res)=>{
-        setReconcilationIRO(()=>[...res.data]);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-    if (permissions?.PERSONAL_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS ) {
+    if (permissions?.PERSONAL_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation()
-      .then((res) => {
-        setReconcilationIRO(res.data);
-      });
+        .then((res) => {
+          setReconcilationIRO(res.data);
+        });
     }
     // IROServices.getReconciliation()
     //   .then((res) => {
@@ -148,7 +148,7 @@ const ReconciliationIRO = () => {
     //   });
   }, [attachment]);
 
-  const columns: GridColDef<IROrder>[]= [
+  const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
       headerName: '',
@@ -185,7 +185,7 @@ const ReconciliationIRO = () => {
                 toggleOpenRemarks(true);
                 setSelectedIROId(props.row._id);
                 IROServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data??[]))
+                  .then((res) => setRemarks(res.data ?? []))
                   .catch((error) => {
                     enqueueSnackbar({
                       variant: 'error',
@@ -194,43 +194,43 @@ const ReconciliationIRO = () => {
                   });
               },
             },
-            ...(props.row.status==IROLifeCycleStates.AMOUNT_RELEASED?[
+            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Reconciliation',
                 text: 'Reconciliation',
                 icon: EditIcon,
-                onClick: ()=>{
+                onClick: () => {
                   setAttachment(true);
                   setSelectedIRO(props.row);
                 },
-              }]:[]),
+              }] : []),
             {
               id: 'Close IRO',
               text: 'Close IRO',
               icon: PreviewIcon,
-              onClick: ()=>{
+              onClick: () => {
                 IROServices.close(props.row._id)
-              .then((res)=>{
-                if (reconciliationIRO) {
-                  // eslint-disable-next-line @typescript-eslint/naming-convention
-                  const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
-                    return reconciliationIROs._id !== props.row._id;
+                  .then((res) => {
+                    if (reconciliationIRO) {
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
+                      const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
+                        return reconciliationIROs._id !== props.row._id;
+                      });
+                      setReconcilationIRO(filterIRO);
+                    }
+
+                    enqueueSnackbar({
+                      message: res.message,
+                      variant: 'success',
+                    });
+                  })
+
+                  .catch((err) => {
+                    enqueueSnackbar({
+                      message: err.message,
+                      variant: 'error',
+                    });
                   });
-                  setReconcilationIRO(filterIRO);
-                }
-
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-              })
-
-              .catch((err) => {
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
               },
             },
             // {
@@ -254,7 +254,7 @@ const ReconciliationIRO = () => {
               id: 'Attachments',
               text: 'Attachments',
               icon: PrintIcon,
-              onClick: ()=>{
+              onClick: () => {
                 // console.log(props.row.particulars );
                 // props.row.particulars.map((item)=>{
                 setAttachments(props.row.billAttachment);
@@ -269,8 +269,10 @@ const ReconciliationIRO = () => {
       ),
     },
     { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
-    { field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
+    {
+      field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center'
+    },
     {
       field: 'divisionName',
       renderHeader: () => (<b>Division Name</b>),
@@ -316,7 +318,8 @@ const ReconciliationIRO = () => {
         </p>
       ),
     },
-    { field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
+    {
+      field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as IROrder;
@@ -325,9 +328,12 @@ const ReconciliationIRO = () => {
           0,
         );
         return <p>{particularAmount}</p>;
-      } },
-    { field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center' },
+      }
+    },
+    {
+      field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center'
+    },
     // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
@@ -347,7 +353,8 @@ const ReconciliationIRO = () => {
       headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
-    { field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
+    {
+      field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
       valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
     },
     {
@@ -365,6 +372,7 @@ const ReconciliationIRO = () => {
       //   </p>
       // ),
       align: 'center',
+      width: 250,
       headerAlign: 'center',
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
@@ -379,26 +387,26 @@ const ReconciliationIRO = () => {
             <Button
               onClick={async () => {
                 const sheet =
-                        reconciliationIRO ?
-                          reconciliationIRO.map((iro:IROrder) => ([
-                            iro.IROno,
-                            iro.IRODate.format('DD/MM/YYYY'),
-                            iro.division?.details.name,
-                            iro.purposeSubdivision?.name,
-                            iro.mainCategory,
-                            iro.particulars?.reduce(
-                              (total, particular) => total + Number(particular.requestedAmount),
-                              0,
-                            ),
-                            iro.sanctionedAmount,
-                            iro.sanctionedBank,
-                            iro.sanctionedAsPer,
-                            iro.releaseAmount?.releaseAmount,
-                            iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          ])) :
-                          [];
-                const headers=[
+                  reconciliationIRO ?
+                    reconciliationIRO.map((iro: IROrder) => ([
+                      iro.IROno,
+                      iro.IRODate.format('DD/MM/YYYY'),
+                      iro.division?.details.name,
+                      iro.purposeSubdivision?.name,
+                      iro.mainCategory,
+                      iro.particulars?.reduce(
+                        (total, particular) => total + Number(particular.requestedAmount),
+                        0,
+                      ),
+                      iro.sanctionedAmount,
+                      iro.sanctionedBank,
+                      iro.sanctionedAsPer,
+                      iro.releaseAmount?.releaseAmount,
+                      iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                      IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                    ])) :
+                    [];
+                const headers = [
                   'IRO No',
                   'Date',
                   'Division',
@@ -422,11 +430,11 @@ const ReconciliationIRO = () => {
               color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
               variant="contained"
             >
-                              Export
+              Export
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <DataGrid rows={reconciliationIRO ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}/>
+            <DataGrid rows={reconciliationIRO ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} />
           </Grid>
         </Grid>
       </Card>
@@ -436,7 +444,7 @@ const ReconciliationIRO = () => {
           {remarks.length > 0 ? remarks.map((remark) => (
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
               time={remark.updatedAt} body={remark.remark} isSent={true} />
-          )):'No Data Found '}
+          )) : 'No Data Found '}
         </DialogContent>
         <DialogActions>
           <TextField
@@ -447,7 +455,7 @@ const ReconciliationIRO = () => {
             onChange={(e) =>
               setRemark((remark) => ({
                 ...remark,
-                IRO: selectedIROId??'',
+                IRO: selectedIROId ?? '',
                 remark: e.target.value,
               }))
             }
@@ -458,19 +466,19 @@ const ReconciliationIRO = () => {
                     onClick={() => {
                       remark.remark ?
                         IROServices.addRemarks(remark)
-                            .then((res) => {
-                              setRemarks((remarks) => [...remarks, res.data]);
-                              setRemark((remark) => ({
-                                ...remark,
-                                remark: '',
-                              }));
-                            })
-                            .catch((error) => {
-                              enqueueSnackbar({
-                                variant: 'error',
-                                message: error.message,
-                              });
-                            }) :
+                          .then((res) => {
+                            setRemarks((remarks) => [...remarks, res.data]);
+                            setRemark((remark) => ({
+                              ...remark,
+                              remark: '',
+                            }));
+                          })
+                          .catch((error) => {
+                            enqueueSnackbar({
+                              variant: 'error',
+                              message: error.message,
+                            });
+                          }) :
                         '';
                     }}
                   >
@@ -487,7 +495,7 @@ const ReconciliationIRO = () => {
               toggleOpenRemarks(false);
               setSelectedIROId(null);
             }}
-            // sx={{ ml: 'auto' }}
+          // sx={{ ml: 'auto' }}
           >
             close
           </Button>
@@ -504,38 +512,42 @@ const ReconciliationIRO = () => {
         ]}
         limits={{
           // types: [],
-          maxItemSize: 1*MB,
+          maxItemSize: 1 * MB,
           maxItemCount: 3,
-          maxTotalSize: 3*MB,
+          maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}
         open={attachment}
         action='manage'
-        postApprove={()=>IROServices.reconciliationCompleted(selectedIRO._id)}
+        postApprove={() => IROServices.reconciliationCompleted(selectedIRO._id)}
         onClose={() => setAttachment(false)}
         // getFiles={TestServices.getBills}
-        getFiles={selectedIRO?.billAttachment??[]}
+        getFiles={selectedIRO?.billAttachment ?? []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name)
-          .then((res)=>{
-            setSelectedIRO(()=>({ ...selectedIRO,
-              billAttachment: selectedIRO?.billAttachment.length>0? [...selectedIRO.billAttachment, res.data]:[res.data],
-            } ));
+            .then((res) => {
+              setSelectedIRO(() => ({
+                ...selectedIRO,
+                billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data],
+              }));
 
-            return res;
-          });
+              return res;
+            });
         }}
         renameFile={(fileId: string, newName: string) => {
-          setSelectedIRO(()=>({ ...selectedIRO,
+          setSelectedIRO(() => ({
+            ...selectedIRO,
             billAttachment: selectedIRO?.billAttachment.map((file) =>
               file._id === fileId ? { ...file, filename: newName } : file,
-            ) } ));
+            )
+          }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={(fileId: string) => {
-          setSelectedIRO(()=>({ ...selectedIRO,
-            billAttachment: selectedIRO?.billAttachment.filter((file)=>file._id!==fileId),
-          } ));
+          setSelectedIRO(() => ({
+            ...selectedIRO,
+            billAttachment: selectedIRO?.billAttachment.filter((file) => file._id !== fileId),
+          }));
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
@@ -555,30 +567,30 @@ const ReconciliationIRO = () => {
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
         getFiles={attachments}
-        // uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-        //   const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
-        //     setNewParticular((particularDetails) => ({
-        //       ...particularDetails,
-        //       attachment: [...particularDetails.attachment, res.data],
-        //     }));
-        //     return res;
-        //   });
-        //   return resp;
-        // }}
-        // renameFile={(fileId: string, newName: string) => {
-        //   setNewParticular((particularDetails) => ({
-        //     ...particularDetails,
-        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
-        //   }));
-        //   return FileUploaderServices.renameFile(fileId, newName);
-        // }}
-        // deleteFile={(fileId: string) => {
-        //   setNewParticular((particularDetails) => ({
-        //     ...particularDetails,
-        //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
-        //   }));
-        //   return FileUploaderServices.deleteFile(fileId);
-        // }}
+      // uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+      //   const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
+      //     setNewParticular((particularDetails) => ({
+      //       ...particularDetails,
+      //       attachment: [...particularDetails.attachment, res.data],
+      //     }));
+      //     return res;
+      //   });
+      //   return resp;
+      // }}
+      // renameFile={(fileId: string, newName: string) => {
+      //   setNewParticular((particularDetails) => ({
+      //     ...particularDetails,
+      //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+      //   }));
+      //   return FileUploaderServices.renameFile(fileId, newName);
+      // }}
+      // deleteFile={(fileId: string) => {
+      //   setNewParticular((particularDetails) => ({
+      //     ...particularDetails,
+      //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+      //   }));
+      //   return FileUploaderServices.deleteFile(fileId);
+      // }}
       />
     </CommonPageLayout>
   );

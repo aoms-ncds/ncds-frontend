@@ -30,7 +30,7 @@ const UserBasicDetailsForm = (
   const [showAadhaarUploader, setShowAadhaarUploader] = useState(false);
   const [showVoterIdUploader, setShowVoterIdUploader] = useState(false);
 
-  const [emailError, setEamilError] = useState<string|null>(null);
+  const [emailError, setEamilError] = useState<string | null>(null);
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   useEffect(() => {
@@ -128,10 +128,12 @@ const UserBasicDetailsForm = (
           InputProps={{
             readOnly: true,
             disabled: true,
+
           }}
           variant={props.options?.textField?.variant}
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
           fullWidth
+
         />
       </Grid>
 
@@ -215,7 +217,9 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
+
         />
       </Grid>
 
@@ -299,6 +303,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
         />
       </Grid>
@@ -312,7 +317,9 @@ const UserBasicDetailsForm = (
           variant={props.options?.textField?.variant}
           fullWidth
           InputLabelProps={{
+
             shrink: true,
+            style: { fontSize: '20px' }
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -333,6 +340,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -347,6 +355,7 @@ const UserBasicDetailsForm = (
         <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
         />
 
@@ -381,6 +390,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
         />
       </Grid>
@@ -415,6 +425,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
         />
       </Grid>
@@ -432,6 +443,7 @@ const UserBasicDetailsForm = (
           }
           InputLabelProps={{
             shrink: true,
+            style: { fontSize: '20px' }
           }}
           variant={props.options?.textField?.variant}
           fullWidth
@@ -543,7 +555,7 @@ const UserBasicDetailsForm = (
           textField: {
             variant: props.options?.textField?.variant ?? 'outlined',
           },
-          title: 'Current Official address',
+          title: 'Current Official Address',
         }}
       />
       <NewAddressForm
@@ -560,9 +572,9 @@ const UserBasicDetailsForm = (
           textField: {
             variant: props.options?.textField?.variant ?? 'outlined',
           },
-          title: 'Permanent address',
+          title: 'Permanent Address',
           copyAddressCheckBox: {
-            label: 'Same as Current address',
+            label: 'Same as Current Address',
             onChange: (value) => {
               setDuplicateCurrentAddress(value);
               props.onChange({

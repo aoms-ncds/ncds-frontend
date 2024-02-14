@@ -52,10 +52,10 @@ const NewOfficialDetailsForm = (
 ) => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [isDivisionChanged, setIsDivisionChanged] = useState<boolean>(false);
-  const [newDiv, setNewDiv] = useState<Division|null>(null);
+  const [newDiv, setNewDiv] = useState<Division | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
-  const user=useAuth();
+  const user = useAuth();
 
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -69,16 +69,16 @@ const NewOfficialDetailsForm = (
   // };
   useEffect(() => {
     if (newDiv) {
-      if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division) {
+      if (props.value.divisionHistory[props.value.divisionHistory?.length - 1]?.division) {
         DivisionsServices.getSubDivisionsByDivisionId(newDiv?._id as string)
-      // .then((res) => console.log(res.data, 'data'))
-      .then((res) => setSubDivisions(res.data))
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-      );
+          // .then((res) => console.log(res.data, 'data'))
+          .then((res) => setSubDivisions(res.data))
+          .catch((error) =>
+            enqueueSnackbar({
+              variant: 'error',
+              message: error.message,
+            }),
+          );
       }
     }
     // console.log(props.value.divisionHistory);
@@ -103,16 +103,16 @@ const NewOfficialDetailsForm = (
     // }
 
 
-    if (props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id) {
-      DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division?._id as string)
-      .then((res) => setSubDivisions(res.data))
-      // .then((res) => console.log(res.data, 'sec'))
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-      );
+    if (props.value.divisionHistory[props.value.divisionHistory?.length - 1]?.division?._id) {
+      DivisionsServices.getSubDivisionsByDivisionId(props.value.divisionHistory[props.value.divisionHistory?.length - 1]?.division?._id as string)
+        .then((res) => setSubDivisions(res.data))
+        // .then((res) => console.log(res.data, 'sec'))
+        .catch((error) =>
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          }),
+        );
     }
   }, []);
   return (
@@ -120,7 +120,7 @@ const NewOfficialDetailsForm = (
       {/* {console.log({ abc: props.value.dateOfJoining })} */}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Joining in Organization"
+          label="Date of Joining in Organisation"
           value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -144,7 +144,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="No Of Years With The Organization"
-          value={props.value.status=='Left' && props.value.dateOfLeaving? props.value.dateOfLeaving?.from(props.value.dateOfJoining, true):( props.value.dateOfJoining?.fromNow(true))}
+          value={props.value.status == 'Left' && props.value.dateOfLeaving ? props.value.dateOfLeaving?.from(props.value.dateOfJoining, true) : (props.value.dateOfJoining?.fromNow(true))}
           variant={props.options?.textField.variant}
           fullWidth
           InputProps={{ readOnly: true }}
@@ -159,24 +159,26 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           // disabled={props.kind=='worker'}
-          options={divisions??[]}
+          options={divisions ?? []}
           // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
-          value={(props.value.divisionHistory.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1].division:null}
+          value={(props.value.divisionHistory.length > 0) ? props.value.divisionHistory[props.value.divisionHistory?.length - 1].division : null}
           getOptionLabel={(div) => div.details.name}
           onChange={(event, newVal) => {
             setNewDiv(newVal);
-            if (props.action==='edit') {
-              if (newVal?._id!=props?.value?.divisionHistory[props?.value?.divisionHistory?.length-1].division?._id) {
+            if (props.action === 'edit') {
+              if (newVal?._id != props?.value?.divisionHistory[props?.value?.divisionHistory?.length - 1].division?._id) {
                 toggleOpenDivConfirm(true);
               }
-            } else if (props.action==='add') {
-              props.onChange({ ...props.value, divisionHistory: [
-                {
-                  division: newVal ?? undefined,
-                  subDivision: undefined,
-                  dateOfDivisionJoining: null,
-                  dateOfDivisionLeaving: null,
-                }]});
+            } else if (props.action === 'add') {
+              props.onChange({
+                ...props.value, divisionHistory: [
+                  {
+                    division: newVal ?? undefined,
+                    subDivision: undefined,
+                    dateOfDivisionJoining: null,
+                    dateOfDivisionLeaving: null,
+                  }]
+              });
             }
 
             // newVal?._id!==currentDiv._id? (
@@ -203,14 +205,14 @@ const NewOfficialDetailsForm = (
             <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant={props.options?.textField?.variant}
               required />
           )}
-          disabled={Boolean(user.user && (user.user as User).kind=='worker')}
+          disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
         />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={subDivisions ?? []}
-          value={(props.value.divisionHistory.length>0)?props.value.divisionHistory[props.value.divisionHistory.length-1].subDivision:null}
+          value={(props.value.divisionHistory.length > 0) ? props.value.divisionHistory[props.value.divisionHistory.length - 1].subDivision : null}
           getOptionLabel={(subDiv) => subDiv.name}
           onChange={(event, newVal) =>
             props.onChange({
@@ -236,8 +238,8 @@ const NewOfficialDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Joining Current Division"
-          value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory.length-1]?.dateOfDivisionJoining: null}
+          label="Date of Joining in Current Division"
+          value={(props.value.divisionHistory?.length > 0) ? props.value.divisionHistory[props.value.divisionHistory.length - 1]?.dateOfDivisionJoining : null}
           onChange={(newDate) => {
             props.onChange({
               ...props.value,
@@ -260,17 +262,17 @@ const NewOfficialDetailsForm = (
               required: true,
             },
           }}
-          // autoFocus
-          // required={isDivisionChanged}
+        // autoFocus
+        // required={isDivisionChanged}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Date of Leaving Previous Division"
-          value={(props.value.divisionHistory.length>1)?props.value.divisionHistory[props.value.divisionHistory.length-2].dateOfDivisionLeaving:null}
-          disabled={(props.value.divisionHistory.length==1)}
+          value={(props.value.divisionHistory.length > 1) ? props.value.divisionHistory[props.value.divisionHistory.length - 2].dateOfDivisionLeaving : null}
+          disabled={(props.value.divisionHistory.length == 1)}
           onChange={(newDate) => {
-            if (props.value.divisionHistory.length>1) {
+            if (props.value.divisionHistory.length > 1) {
               props.onChange({
                 ...props.value,
                 divisionHistory: props.value.divisionHistory.map((division, index) =>
@@ -295,7 +297,7 @@ const NewOfficialDetailsForm = (
 
             },
           }}
-          // autoFocus
+        // autoFocus
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
@@ -315,8 +317,8 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
           label="Left Organization On"
-          value={props.value.status!='Left'?null:props.value.dateOfLeaving}
-          disabled={props.value.status!='Left'}
+          value={props.value.status != 'Left' ? null : props.value.dateOfLeaving}
+          disabled={props.value.status != 'Left'}
           onChange={(newDate) =>
             props.onChange({
               ...props.value,
@@ -335,7 +337,7 @@ const NewOfficialDetailsForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<DeactivationReason>
           options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
-          disabled={ props.value.status!='Left'}
+          disabled={props.value.status != 'Left'}
           value={props.value.reasonForDeactivation}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason ?? undefined })}
           renderInput={(params) => <TextField {...params} label="Reason for Deactivation" variant={props.options?.textField.variant} />}
@@ -353,10 +355,10 @@ const NewOfficialDetailsForm = (
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        {props.options?.kind==='worker' && <TextField
+        {props.options?.kind === 'worker' && <TextField
           label="Churches Planted"
           type={'number'}
-          value={props.value.noOfChurches == 0?'':props.value.noOfChurches}
+          value={props.value.noOfChurches == 0 ? '' : props.value.noOfChurches}
           onChange={(e) =>
             props.onChange({
               ...props.value,
@@ -373,7 +375,7 @@ const NewOfficialDetailsForm = (
         />}
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        {props.options?.kind==='worker' && <FormControlLabel
+        {props.options?.kind === 'worker' && <FormControlLabel
           label="Self Support"
           control={
             <Checkbox
@@ -387,7 +389,7 @@ const NewOfficialDetailsForm = (
           }
         />}
       </Grid>
-      <Dialog open={ openDivConfirm} maxWidth="xs" fullWidth>
+      <Dialog open={openDivConfirm} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
           <Container>
@@ -395,7 +397,7 @@ const NewOfficialDetailsForm = (
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() =>{
+          <Button onClick={() => {
             toggleOpenDivConfirm(false);
           }}>No, Cancel</Button>
           <Button
@@ -412,29 +414,35 @@ const NewOfficialDetailsForm = (
               //     }]});
               // }
               if (!isDivisionChanged) {
-                if (props.value.divisionHistory[props.value.divisionHistory.length-1].division?._id!==newDiv?._id ) {
-                  props.onChange({ ...props.value, divisionHistory: [
-                    ...props.value.divisionHistory, {
-                      division: newDiv,
-                      subDivision: null,
-                      dateOfDivisionJoining: null,
-                      dateOfDivisionLeaving: null,
-                    }]});
+                if (props.value.divisionHistory[props.value.divisionHistory.length - 1].division?._id !== newDiv?._id) {
+                  props.onChange({
+                    ...props.value, divisionHistory: [
+                      ...props.value.divisionHistory, {
+                        division: newDiv,
+                        subDivision: null,
+                        dateOfDivisionJoining: null,
+                        dateOfDivisionLeaving: null,
+                      }]
+                  });
                   setIsDivisionChanged(true);
                 }
               } else {
-                if (props.value.divisionHistory[props.value.divisionHistory.length-2].division?._id===newDiv?._id ) {
-                  props.onChange({ ...props.value, divisionHistory: [
-                    ...props.value.divisionHistory.slice(0, -1)]});
+                if (props.value.divisionHistory[props.value.divisionHistory.length - 2].division?._id === newDiv?._id) {
+                  props.onChange({
+                    ...props.value, divisionHistory: [
+                      ...props.value.divisionHistory.slice(0, -1)]
+                  });
                   setIsDivisionChanged(false);
                 } else {
-                  props.onChange({ ...props.value, divisionHistory: [
-                    ...props.value.divisionHistory.slice(0, -1), {
-                      division: newDiv,
-                      subDivision: null,
-                      dateOfDivisionJoining: null,
-                      dateOfDivisionLeaving: null,
-                    }]});
+                  props.onChange({
+                    ...props.value, divisionHistory: [
+                      ...props.value.divisionHistory.slice(0, -1), {
+                        division: newDiv,
+                        subDivision: null,
+                        dateOfDivisionJoining: null,
+                        dateOfDivisionLeaving: null,
+                      }]
+                  });
                   setIsDivisionChanged(true);
                 }
               }
