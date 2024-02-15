@@ -33,12 +33,15 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
+import IROTemplate from './components/IROTemplate';
+import UserServices from '../User/extras/UserServices';
+import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
-
+  const [fr, setFr] = useState<FR>();
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -184,6 +187,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     endDate: moment().endOf('y'),
     rangeType: 'years',
   });
+  console.log(selectedIRO, 'selectedIRO');
+
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
@@ -215,22 +220,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
-          .then((res) => {
-            setIROrder(res.data);
-          });
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
+          setIROrder(res.data);
+        });
       }
     } else {
-      IROServices.getAll()
-        .then((res) => {
-          setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        });
+      IROServices.getAll().then((res) => {
+        setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+      });
     }
   }, [openRelease, attachment, addSignature, dateRange]);
 
   // Rest of your component code...
-
-
   useEffect(() => {
     if (selectedIRO._id != '') {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
@@ -248,13 +249,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [selectedIRO.signature]);
 
-
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
       headerClassName: 'super-app-theme--header',
       headerName: '',
-      renderHeader: () => (<b>Action</b>),
+      renderHeader: () => <b>Action</b>,
       width: 80,
       align: 'center',
       headerAlign: 'center',
@@ -273,15 +273,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ? [
-              {
-                id: 'edit',
-                text: 'Edit',
-                component: Link,
-                to: `/iro/${params.row._id}/edit`,
-                icon: EditIcon,
-              },
-            ] : []),
+            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit',
+                  component: Link,
+                  to: `/iro/${params.row._id}/edit`,
+                  icon: EditIcon,
+                },
+              ] :
+              []),
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [
                 {
@@ -368,16 +370,27 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               //     });
               // },
             },
-            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ? [
-              {
-                id: 'print',
-                text: 'Print IRO',
-                icon: PrintIcon,
-                component: PDFDownloadLink,
-                document: <IROReceiptTemplate rowData={params.row} />,
-                // document: <IROTemplate rowData={params.row} coordinatorName={"ssss"} />,
-                fileName: 'IROReceipt.pdf',
-              }] : []),
+            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ?
+              [
+                {
+                  id: 'print',
+                  text: 'Print IRO',
+                  icon: PrintIcon,
+                  component: PDFDownloadLink,
+                  // document: <IROReceiptTemplate rowData={params.row} />,
+                  document: <IROTemplate rowData={params.row} fr={fr} />,
+                  fileName: 'IROReceipt.pdf',
+                  // onClick: () => {
+                  //   if (params.row.FR) {
+                  //     FRServices.getById(params.row.FR).then((res) => {
+                  //       setFr(res.data);
+                  //       console.log(res.data, 'frsss');
+                  //     });
+                  //   }
+                  // },
+                },
+              ] :
+              []),
             {
               id: 'notification',
               text: 'Send notification',
@@ -455,7 +468,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    { field: 'IROno', headerClassName: 'super-app-theme--header', headerName: 'IRO No', width: 100, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'IROno',
+      headerClassName: 'super-app-theme--header',
+      headerName: 'IRO No',
+      width: 100,
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'IRODate',
       headerClassName: 'super-app-theme--header',
@@ -487,7 +508,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'mainCategory',
       headerClassName: 'super-app-theme--header',
-      renderHeader: () => (<b>Main Category</b>),
+      renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
@@ -530,25 +551,46 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAmount', headerClassName: 'super-app-theme--header', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'sanctionedAmount',
+      headerClassName: 'super-app-theme--header',
+      headerName: 'Sanctioned Amount',
+      width: 150,
+      renderHeader: () => <b>Sanctioned Amount</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'sanctionedAsPer',
       headerClassName: 'super-app-theme--header',
-      renderHeader: () => (<b>Special Sanction</b>),
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedAsPer}
+        </p>
       ),
       width: 200,
       align: 'center',
       headerAlign: 'center',
     },
-    { field: 'sanctionedBank', headerClassName: 'super-app-theme--header', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'sanctionedBank',
+      headerClassName: 'super-app-theme--header',
+      headerName: 'Sanctioned Bank',
+      width: 150,
+      renderHeader: () => <b>Sanctioned Bank</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'status',
       headerClassName: 'super-app-theme--header',
@@ -572,54 +614,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       },
     },
   ];
-  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (IROrder ?? []).filter(row => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && formatDate(row.IRODate).toLowerCase().includes(searchText.toLowerCase()))) {
+  const filteredRows = (IROrder ?? []).filter((row) => {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) || (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-
-    function formatDate(date: string | moment.Moment) {
-      let dateString: string;
-      if (typeof date === 'string') {
-        dateString = date;
-      } else {
-        dateString = date.format('DD/MM/YYYY');
-      }
-      const parts = dateString.split("/");
-      const day = parts[0];
-      const month = parts[1];
-      const year = parts[2];
-      return `${day}/${month}/${year}`;
-    }
-
-    return Object.values(row).some(value =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
   return (
-    <CommonPageLayout title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
-      momentFilter={props.action == 'manage' ? {
-        dateRange: dateRange,
-        onChange: (newDateRange) => {
-          setDateRange(newDateRange);
-          setIROrder((iroReq) =>
-            iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []);
-        },
-        rangeTypes: [
-          'weeks',
-          'months',
-          'quarter_years',
-          'years',
-          'customRange',
-          'customDay',
-        ],
-        initialRange: 'years',
-      } : undefined}>
-
+    <CommonPageLayout
+      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
+      momentFilter={
+        props.action == 'manage' ?
+          {
+            dateRange: dateRange,
+            onChange: (newDateRange) => {
+              setDateRange(newDateRange);
+              setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
+            },
+            rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+            initialRange: 'years',
+          } :
+          undefined
+      }
+    >
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
@@ -632,26 +653,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     granted={
                       <Button
                         onClick={async () => {
-                          const sheet =
-                            IROrder ?
-                              IROrder.map((iro: IROrder) => ([
-                                iro.IROno,
-                                iro.IRODate.format('DD/MM/YYYY'),
-                                iro.division?.details.name,
-                                iro.purposeSubdivision?.name,
-                                iro.mainCategory,
-                                iro.particulars?.reduce(
-                                  (total, particular) => total + Number(particular.requestedAmount),
-                                  0,
-                                ),
-                                iro.sanctionedAmount,
-                                iro.sanctionedBank,
-                                iro.sanctionedAsPer,
-                                iro.releaseAmount?.releaseAmount,
-                                iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                                IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                              ])) :
-                              [];
+                          const sheet = IROrder ?
+                            IROrder.map((iro: IROrder) => [
+                              iro.IROno,
+                              iro.IRODate.format('DD/MM/YYYY'),
+                              iro.division?.details.name,
+                              iro.purposeSubdivision?.name,
+                              iro.mainCategory,
+                              iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
+                              iro.sanctionedAmount,
+                              iro.sanctionedBank,
+                              iro.sanctionedAsPer,
+                              iro.releaseAmount?.releaseAmount,
+                              iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                              IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                            ]) :
+                            [];
                           const headers = [
                             'IRO No',
                             'Date',
@@ -673,12 +690,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           XLSX.writeFile(workbook, props.action == 'manage' ? 'IRO_Report.xlsx' : 'Release_Amt_IRO_Report.xlsx', { compression: true });
                         }}
                         startIcon={<DownloadIcon />}
-                        color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+                        color="primary"
+                        sx={{ float: 'right', mr: 2, mt: 2 }}
                         variant="contained"
                       >
                         Export
                       </Button>
-                    } />
+                    }
+                  />
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
@@ -694,33 +713,27 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       }}
                     >
                       Bulk Release
-                    </Button>) : null}
+                    </Button>
+                  ) : null}
                 </Grid>
-
 
                 <br />
                 <br />
                 <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
-                  <TextField
-                    label="Search"
-                    variant="outlined"
-                    value={searchText}
-                    onChange={handleSearchChange}
-                    fullWidth
-                    style={{ marginBottom: '1rem', width: '10vw' }}
-                  />
+                  <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ marginBottom: '1rem', width: '10vw' }} />
                 </Grid>
                 <Grid item xs={12}>
-
-                  <Card sx={{
-                    height: '66vh', width: '100%',
-                    '& .super-app-theme--header': {
-                      backgroundColor: '#f1f5fa',
-                      fontSize: '16px',
-                      fontWeight: '500'
-                    },
-                  }}>
-
+                  <Card
+                    sx={{
+                      'height': '66vh',
+                      'width': '100%',
+                      '& .super-app-theme--header': {
+                        backgroundColor: '#f1f5fa',
+                        fontSize: '16px',
+                        fontWeight: '500',
+                      },
+                    }}
+                  >
                     <DataGrid
                       rows={filteredRows ?? []}
                       columns={columns}
@@ -745,7 +758,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               </Grid>
             </Card>
             <Grid>
-              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }} >
+              <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
@@ -759,112 +772,116 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         variant="contained"
                         color="success"
                         sx={{ width: 260 }}
-
-                        onClick={
-                          () => {
-                            IROServices.sendNotifications('president', selectedIROId ?? '')
-                              .then(() => {
-                                enqueueSnackbar({
-                                  message: 'Message Sent',
-                                  variant: 'success',
-                                });
-                              })
-                              .catch((res) => {
-                                console.log(res);
+                        onClick={() => {
+                          IROServices.sendNotifications('president', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
                               });
-                          }
-                        }
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      > Send to President</Button>
+                      >
+                        {' '}
+                        Send to President
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
                         color="info"
                         sx={{ width: 260 }}
-
-                        onClick={
-                          () => {
-                            IROServices.sendNotifications('accounts', selectedIROId ?? '')
-                              .then(() => {
-                                enqueueSnackbar({
-                                  message: 'Message Sent',
-                                  variant: 'success',
-                                });
-                              })
-                              .catch((res) => {
-                                console.log(res);
+                        onClick={() => {
+                          IROServices.sendNotifications('accounts', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
                               });
-                          }
-                        }
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to accounts</Button>
+                      >
+                        {' '}
+                        Send to accounts
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
                         color="warning"
                         sx={{ width: 260 }}
-
-                        onClick={
-                          () => {
-                            IROServices.sendNotifications('office_manager', selectedIROId ?? '')
-                              .then(() => {
-                                enqueueSnackbar({
-                                  message: 'Message Sent',
-                                  variant: 'success',
-                                });
-                              })
-                              .catch((res) => {
-                                console.log(res);
+                        onClick={() => {
+                          IROServices.sendNotifications('office_manager', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
                               });
-                          }
-                        }
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to office manager</Button>
+                      >
+                        {' '}
+                        Send to office manager
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
                         color="secondary"
                         sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            IROServices.sendNotifications('account_manager', selectedIROId ?? '')
-                              .then(() => {
-                                enqueueSnackbar({
-                                  message: 'Message Sent',
-                                  variant: 'success',
-                                });
-                              })
-                              .catch((res) => {
-                                console.log(res);
+                        onClick={() => {
+                          IROServices.sendNotifications('account_manager', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
                               });
-                          }
-                        }
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to account manager</Button>
+                      >
+                        {' '}
+                        Send to account manager
+                      </Button>
                       {/* <br /><br /> */}
                     </Grid>
                     <Grid item xs={12}>
-                      <Button variant="contained" color='inherit'
+                      <Button
+                        variant="contained"
+                        color="inherit"
                         sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            IROServices.sendNotifications('division_head', selectedIROId ?? '')
-                              .then(() => {
-                                enqueueSnackbar({
-                                  message: 'Message Sent',
-                                  variant: 'success',
-                                });
-                              })
-                              .catch((res) => {
-                                console.log(res);
+                        onClick={() => {
+                          IROServices.sendNotifications('division_head', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
                               });
-                          }
-                        }
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to division head</Button>
+                      >
+                        {' '}
+                        Send to division head
+                      </Button>
                     </Grid>
                     <br />
                     <Grid item xs={12}>
@@ -887,7 +904,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   </Grid>
                 </DialogContent>
               </Dialog>
-              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }} >
+              <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
@@ -950,10 +967,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={() => {
                           setSelectedIROId('');
                           toggleAddSignature(false);
-                          IROServices.getAll()
-                            .then((res) => {
-                              setIROrder(res.data);
-                            });
+                          IROServices.getAll().then((res) => {
+                            setIROrder(res.data);
+                          });
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}
@@ -1055,18 +1071,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               // getFiles={selectedIRO?.signature?.hrSignature}
               getFiles={selectedIRO?.signature?.hrSignature ? [selectedIRO.signature.hrSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name)
-                  .then((res) => {
-                    setSelectedIRO(() => ({
-                      ...selectedIRO,
-                      signature: {
-                        ...selectedIRO.signature,
-                        hrSignature: res.data,
-                      },
-                    }));
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+                  setSelectedIRO(() => ({
+                    ...selectedIRO,
+                    signature: {
+                      ...selectedIRO.signature,
+                      hrSignature: res.data,
+                    },
+                  }));
 
-                    return res;
-                  });
+                  return res;
+                });
               }}
               deleteFile={(fileId: string) => {
                 setSelectedIRO(() => ({
@@ -1116,7 +1131,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 }));
                 return FileUploaderServices.deleteFile(fileId);
               }}
-
             />
             <FileUploader
               title="Accountant Signature"
@@ -1142,7 +1156,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     },
                   }));
 
-
                   return res;
                 });
               }}
@@ -1156,8 +1169,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 }));
                 return FileUploaderServices.deleteFile(fileId);
               }}
-
-
             />
 
             <FileUploader
@@ -1178,8 +1189,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
-
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
                   return res;
                 });
               }}
@@ -1218,7 +1228,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
-
       />
     </CommonPageLayout>
   );

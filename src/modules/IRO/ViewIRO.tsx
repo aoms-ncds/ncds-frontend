@@ -342,7 +342,9 @@ const ViewIRO = () => {
                                       </IconButton>
                                     </TableCell>
                                     <TableCell align="center">{index + 1}</TableCell>
-                                    <TableCell align="center">{item.mainCategory}</TableCell>
+                                    <TableCell align="center"> {`${item.mainCategory == 'Select'? '' : item.mainCategory } 
+                            > ${item.subCategory1=='Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
                                     <TableCell align="center">{item.narration}</TableCell>
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>

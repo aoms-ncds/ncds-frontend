@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import {
-  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon
+  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon,
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
@@ -368,32 +368,17 @@ const ManageFrPage = () => {
     },
 
   ];
-  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (FRRequests ?? []).filter(row => {
+  const filteredRows = (FRRequests ?? []).filter((row) => {
     if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) ||
-    (row.FRdate && formatDate(row.FRdate).toLowerCase().includes(searchText.toLowerCase()))) {
-  return true;
-}
-
-function formatDate(date: string | moment.Moment) {
-  let dateString: string;
-  if (typeof date === 'string') {
-    dateString = date;
-  } else {
-    dateString = date.format('DD/MM/YYYY');
-  }
-  const parts = dateString.split("/");
-  const day = parts[0];
-  const month = parts[1];
-  const year = parts[2];
-  return `${day}/${month}/${year}`;
-}
-
-    return Object.values(row).some(value =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
 
@@ -504,17 +489,17 @@ function formatDate(date: string | moment.Moment) {
                     </Grid>
                   </Grid>
 
-                 
-         <Grid sx={{ width: '30px', paddingLeft: '2%'}}>
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={handleSearchChange}
-          fullWidth
-          style={{ marginBottom: '1rem',width: '10vw'}}
-        />
-    </Grid>
+
+                  <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
+                    <TextField
+                      label="Search"
+                      variant="outlined"
+                      value={searchText}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      style={{ marginBottom: '1rem', width: '10vw' }}
+                    />
+                  </Grid>
                   <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
 
                 </Card>

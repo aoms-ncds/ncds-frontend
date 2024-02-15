@@ -142,7 +142,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
         <div style={{ marginTop: 100 }}>
           <Text style={{
             ...styles.h1, fontWeight: 'bold',
-            fontFamily: 'Oswald'
+            fontFamily: 'Oswald',
           }}>Financial Request Details</Text>
           <View style={{ ...styles.box, marginTop: 15 }}>
             <View style={{ flexDirection: 'row' }}>
@@ -170,7 +170,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
         <div style={{ marginTop: 20 }}>
           <Text style={{
             ...styles.h1, fontWeight: 'bold',
-            fontFamily: 'Oswald'
+            fontFamily: 'Oswald',
           }}>Division Details</Text>
           <View style={{ ...styles.box2, marginTop: 15 }}>
             <View style={{ flexDirection: 'row' }}>
@@ -189,7 +189,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
         <div style={{ marginTop: 30 }}>
           <Text style={{
             ...styles.h1, fontWeight: 'bold',
-            fontFamily: 'Oswald'
+            fontFamily: 'Oswald',
           }}>Deposit Bank Details</Text>
           <View style={{ ...styles.box4, marginTop: 15 }}>
             <View style={{ flexDirection: 'row' }}>
@@ -218,31 +218,31 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
         <div style={{ marginTop: 25 }}>
           <Text style={{
             ...styles.h1, fontWeight: 'bold',
-            fontFamily: 'Oswald'
+            fontFamily: 'Oswald',
           }}>Expense Details</Text>
           <PDFTable style={{ marginTop: 15, width: 500, left: 45, right: 15 }}>
             <PDFTableHeader>
               <PDFCell style={{
                 textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                fontFamily: 'Oswald'
+                fontFamily: 'Oswald',
               }} width={'50%'}>
                 Sl No
               </PDFCell>
               <PDFCell style={{
                 textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                fontFamily: 'Oswald'
+                fontFamily: 'Oswald',
               }} width={'100%'}>
                 Main Category
               </PDFCell>
               <PDFCell style={{
                 textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                fontFamily: 'Oswald'
+                fontFamily: 'Oswald',
               }} width={'100%'}>
                 Narration
               </PDFCell>
               <PDFCell style={{
                 textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                fontFamily: 'Oswald'
+                fontFamily: 'Oswald',
               }} width={'40%'}>
                 Requested Amount
               </PDFCell>
@@ -253,22 +253,22 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
               return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'50%'}>
                 {String(index + 1)}
               </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                  {item.mainCategory}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.mainCategory}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                  {item.narration}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.narration}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                  {String(item.requestedAmount)}
-                </PDFCell>
-                {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                {String(item.requestedAmount)}
+              </PDFCell>
+              {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                     {item.sanctionedAmount?.toString()}
                   </PDFCell> */}
               </PDFTableRow>);
@@ -297,7 +297,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
               <View style={{ width: 130 }}>
                 <Text style={{
                   ...styles.text, marginTop: 10, left: 15, fontWeight: 'bold',
-                  fontFamily: 'Oswald'
+                  fontFamily: 'Oswald',
                 }} >Sanctioned Amount in Words : </Text></View>
               <View>
                 <Text style={{ ...styles.text, marginTop: 12 }} >{sanctionedAmountWords.charAt(0).toUpperCase() +
@@ -312,12 +312,12 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
             <View style={{ width: 400 }}>
               <Text style={{
                 ...styles.text, fontWeight: 'bold',
-                fontFamily: 'Oswald', left: 50
+                fontFamily: 'Oswald', left: 50,
               }} >E Signature</Text></View>
             <View>
               <Text style={{
                 ...styles.text, fontWeight: 'bold',
-                fontFamily: 'Oswald'
+                fontFamily: 'Oswald',
               }} >E Signature are protected</Text>
             </View>
 
@@ -329,9 +329,9 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
               style={{ ...styles.box5, marginTop: 15, left: 400, width: 130 }}>
               <Image style={{
                 height: 78,
-                width: 128
+                width: 128,
               }}
-                src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
+              src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>
