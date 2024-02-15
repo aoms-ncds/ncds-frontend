@@ -258,8 +258,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
                         <TableCell ></TableCell>
                         <TableCell align="center">S.No</TableCell>
-                        <TableCell align="center">Main Category</TableCell>
-                        <TableCell align="center">Particulars</TableCell>
+                        <TableCell align="center"> Category</TableCell>
+                        <TableCell align="center">Narration</TableCell>
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
@@ -286,7 +286,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                               </IconButton>
                             </TableCell>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center">{item.mainCategory}</TableCell>
+                            <TableCell align="center"> {`${item.mainCategory == 'Select'? '' : item.mainCategory } 
+                            > ${item.subCategory1=='Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
@@ -604,18 +606,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                    //                     setTimeout(() => {
-                    //                       closeSnackbar(processingSnack);
-                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                    //                     }, 500);
-                    //                     navigate('/fr/manage');
-                    //                   }}
-                    //                 >
-                    // Submit
-                    //                 </Button>
-                    //               }
-                    //             />
+                  //                     setTimeout(() => {
+                  //                       closeSnackbar(processingSnack);
+                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                  //                     }, 500);
+                  //                     navigate('/fr/manage');
+                  //                   }}
+                  //                 >
+                  // Submit
+                  //                 </Button>
+                  //               }
+                  //             />
                   ) : null}
 
 
