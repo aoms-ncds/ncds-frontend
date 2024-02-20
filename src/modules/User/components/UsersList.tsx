@@ -1,7 +1,7 @@
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Autocomplete, Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
@@ -201,7 +201,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'actions',
       type: 'actions',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>{'Action'}</b>,
       width: 80,
       getActions: (params: GridRowParams) =>
@@ -272,7 +272,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'imageURL',
       headerName: '',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       width: 25,
       minWidth: 65,
       type: 'string',
@@ -285,14 +285,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       field: `${props.options?.kind}Code`,
       headerName: `${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`,
       width: 120,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}</b>,
     },
     {
       field: 'firstName',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
+
       headerAlign: 'center',
       renderHeader: () => <b>{'First Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.firstName,
@@ -300,14 +301,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'lastName',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{'Last Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'division',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
@@ -316,7 +317,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'sub_division',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
@@ -349,7 +350,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'designation',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Designation'}</b>,
@@ -358,7 +359,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'phone',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Mobile Number'}</b>,
@@ -378,7 +379,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'email',
       width: 180,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Email ID'}</b>,
@@ -387,7 +388,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'Reason',
       width: 180,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Reason'}</b>,
@@ -600,8 +601,40 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
 
 
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '66vh', width: '100%' }}>
-          <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+        <Card style={{ height: '62vh', width: '100%' }}>
+          <Box
+            sx={{
+              height: 300,
+              width: '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+          >
+
+            <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            } />
+          </Box>
+
         </Card>
       </Grid>
 

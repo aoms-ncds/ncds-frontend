@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -55,7 +55,7 @@ const DivisionsList = () => {
   const columns: GridColDef<Division>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Action</b>),
       width: 60,
       type: 'string',
@@ -109,6 +109,7 @@ const DivisionsList = () => {
     },
     {
       field: 'divisionId',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Division ID</b>),
@@ -116,7 +117,7 @@ const DivisionsList = () => {
     },
     {
       field: 'divisionName',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Division Name</b>),
@@ -139,7 +140,7 @@ const DivisionsList = () => {
     {
       field: 'coordinator',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
@@ -149,7 +150,7 @@ const DivisionsList = () => {
     },
     {
       field: 'coordinatorEmail',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
@@ -158,7 +159,7 @@ const DivisionsList = () => {
     },
     {
       field: 'coordinatorPhone',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
@@ -170,7 +171,7 @@ const DivisionsList = () => {
     {
       field: 'noOfWorkers',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
 
@@ -179,13 +180,13 @@ const DivisionsList = () => {
     },
     {
       field: 'NoOfSubdivisions',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
       valueGetter: (props) => props.row.details?.noOfSubdivisions,
-      width: 150
+      width: 210
     },
   ];
 
@@ -237,9 +238,47 @@ const DivisionsList = () => {
 
 
       </Grid>
+      <Box
+        sx={{
+          height: 300,
+          width: '100%',
+          '& .super-app-theme--cell': {
+            backgroundColor: '#f1f5fa',
+            color: 'black',
+            fontWeight: '600',
+          },
+          '& .super-app.negative': {
+            backgroundColor: 'rgba(157, 255, 118, 0.49)',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .super-app.positive': {
+            backgroundColor: '#d47483',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .even': {
+            backgroundColor: '#DEDAFF', // Change to red for even rows
+          },
+          '& .odd': {
+            backgroundColor: '#fff', // Change to blue for odd rows
+          },
+        }}
+      >
+        <DataGrid
+          rows={filteredRows ?? []}
+          columns={columns}
+          getRowId={(row) => row._id as string}
+          loading={divisions === null}
+          sx={{ height: '55vh', width: '100%' }}
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          }
+        />
+      </Box>
 
 
-      <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
+
     </>
 
   )

@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -252,7 +252,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: '',
       renderHeader: () => <b>Action</b>,
       width: 80,
@@ -470,7 +470,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'IROno',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'IRO No',
       width: 100,
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -479,7 +479,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'IRODate',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'IRO Date',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
@@ -489,7 +489,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'divisionName',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Division Name</b>,
       valueGetter: (params) => params.row.division?.details.name,
       width: 130,
@@ -498,7 +498,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'subDivisionName',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Division Name</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
       width: 160,
@@ -507,7 +507,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
@@ -528,7 +528,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',
@@ -543,7 +543,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -553,7 +553,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Amount',
       width: 150,
       renderHeader: () => <b>Sanctioned Amount</b>,
@@ -562,7 +562,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'sanctionedAsPer',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
         <p
@@ -584,7 +584,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'sanctionedBank',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
@@ -593,7 +593,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'status',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Status</b>,
       width: 250,
       align: 'center',
@@ -719,22 +719,69 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     </Button>
                   ) : null}
                 </Grid>
-
-
-
                 <Grid item xs={12}>
                   <Card
                     sx={{
                       'height': '66vh',
                       'width': '100%',
-                      '& .super-app-theme--header': {
+                      '& .super-app-theme--cell': {
                         backgroundColor: '#f1f5fa',
                         fontSize: '16px',
                         fontWeight: '500',
                       },
                     }}
                   >
-                    <DataGrid
+                    <Box
+                      sx={{
+                        height: 300,
+                        width: '100%',
+                        '& .super-app-theme--cell': {
+                          backgroundColor: '#f1f5fa',
+                          color: 'black',
+                          fontWeight: '600',
+                        },
+                        '& .super-app.negative': {
+                          backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                          color: '#1a3e72',
+                          fontWeight: '600',
+                        },
+                        '& .super-app.positive': {
+                          backgroundColor: '#d47483',
+                          color: '#1a3e72',
+                          fontWeight: '600',
+                        },
+                        '& .even': {
+                          backgroundColor: '#DEDAFF', // Change to red for even rows
+                        },
+                        '& .odd': {
+                          backgroundColor: '#fff', // Change to blue for odd rows
+                        },
+                      }}
+                    >
+                      <DataGrid
+                        rows={filteredRows ?? []}
+                        columns={columns}
+                        getRowId={(row) => row._id}
+                        checkboxSelection={props.action == 'release'}
+                        disableRowSelectionOnClick={props.action == 'release'}
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                          // setSelectedIROrelease(newRowSelectionModel);
+
+                          setReleaseAmountIROs(() => {
+                            const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
+
+                            return selectedIROs;
+                          });
+                        }}
+                        getRowClassName={(params) =>
+                          params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                        }
+                        style={{ height: '80vh', width: '100%' }}
+                      // rowSelectionModel={selectedIROrelease}
+                      //
+                      />
+                    </Box>
+                    {/* <DataGrid
                       rows={filteredRows ?? []}
                       columns={columns}
                       getRowId={(row) => row._id}
@@ -752,7 +799,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       style={{ height: '80vh', width: '100%' }}
                     // rowSelectionModel={selectedIROrelease}
                     //
-                    />
+                    /> */}
                   </Card>
                 </Grid>
               </Grid>

@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import {
   Alert,
+  Box,
   Button,
   Card,
   Dialog,
@@ -74,7 +75,7 @@ const ManageFrPage = () => {
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerName: '',
       renderHeader: () => (<b>Action</b>),
       width: 80,
@@ -224,7 +225,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'FRno',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>FR No</b>),
       width: 100,
       align: 'center',
@@ -240,7 +241,7 @@ const ManageFrPage = () => {
     {
       field: 'FRdate',
       headerName: 'FR Date',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -257,7 +258,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'divisionName',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
@@ -274,7 +275,7 @@ const ManageFrPage = () => {
     // },
     {
       field: 'sub_division',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -283,7 +284,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Main Category</b>),
       width: 240,
       align: 'center',
@@ -304,7 +305,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'requestedAmount',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
       align: 'center', headerAlign: 'center',
@@ -320,7 +321,7 @@ const ManageFrPage = () => {
 
     {
       field: 'updatedAt',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130,
@@ -329,7 +330,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'sanctionedAsPer',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Special Sanction</b>),
       renderCell: (props) => (
         <p style={{
@@ -346,7 +347,7 @@ const ManageFrPage = () => {
     },
     {
       field: 'status',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Status</b>),
       width: 205,
       align: 'center',
@@ -500,9 +501,39 @@ const ManageFrPage = () => {
 
                   </Grid>
 
+                  <Box
+        sx={{
+          height: 300,
+          width: '100%',
+          '& .super-app-theme--cell': {
+            backgroundColor: '#f1f5fa',
+            color: 'black',
+            fontWeight: '600',
+          },
+          '& .super-app.negative': {
+            backgroundColor: 'rgba(157, 255, 118, 0.49)',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .super-app.positive': {
+            backgroundColor: '#d47483',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .even': {
+            backgroundColor: '#DEDAFF', // Change to red for even rows
+          },
+          '& .odd': {
+            backgroundColor: '#fff', // Change to blue for odd rows
+          },
+        }}
+      >
+         <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }}  getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          } />
+      </Box>
 
-
-                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
+                 
 
                 </Card>
               </Grid>
