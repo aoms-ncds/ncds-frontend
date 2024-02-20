@@ -646,8 +646,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         granted={
           <>
             <Card>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+              <Grid container spacing={2} padding={2}>
+                <Grid item xs={6}>
+                  <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '20%' }} />
+                </Grid>
+                <Grid item xs={6}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
@@ -717,11 +720,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   ) : null}
                 </Grid>
 
-                <br />
-                <br />
-                <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
-                  <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ marginBottom: '1rem', width: '10vw' }} />
-                </Grid>
+
+
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -1189,7 +1189,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
                   return res;
                 });
               }}

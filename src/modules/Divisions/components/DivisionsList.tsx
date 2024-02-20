@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -8,6 +8,7 @@ import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
+import { Add as AddIcon } from '@mui/icons-material';
 
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -202,16 +203,42 @@ const DivisionsList = () => {
   });
   return (
     <>
-      <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={handleSearchChange}
-          fullWidth
-          style={{ marginBottom: '1rem', width: '10vw' }}
-        />
+      <Grid container spacing={2} padding={2}>
+        <Grid item xs={6}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '30%', alignItems: 'start' }}
+          />
+        </Grid>
+        <Grid item xs={6} >
+          <br />
+          <PermissionChecks
+            permissions={['WRITE_DIVISIONS']}
+            granted={(
+
+              <Button
+                variant="contained"
+                sx={{ float: 'right', background: 'green' }}
+                startIcon={<AddIcon />}
+                component={Link}
+                to="/divisions/add"
+              // onClick={() => {
+              // }}
+              >
+                Add new
+              </Button>
+            )}
+          />
+        </Grid>
+
+
       </Grid>
+
+
       <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
     </>
 

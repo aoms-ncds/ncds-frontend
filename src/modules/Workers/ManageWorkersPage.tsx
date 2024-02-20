@@ -71,7 +71,7 @@ const ManageWorkerPage = () => {
               {/* <Tab label="Files" {...a11yProps(4)} /> */}
             </Tabs>
           </Grid>
-          <Grid item xs={12} lg={4}>
+          {/* <Grid item xs={12} lg={4}>
 
             <PermissionChecks
               permissions={['WRITE_WORKERS']}
@@ -155,7 +155,7 @@ const ManageWorkerPage = () => {
                 </>
               ) || null}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
         <TabPanel value={currentTab} index={0}>
           <UsersList<IWorker>

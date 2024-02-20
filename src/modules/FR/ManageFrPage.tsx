@@ -411,9 +411,18 @@ const ManageFrPage = () => {
 
               <Grid item xs={12} md={12}>
                 <Card >
-                  <Grid container spacing={2} >
-
-                    <Grid item xs={12} sx={{ px: 2 }}>
+                  <Grid container spacing={2} padding={2} >
+                    <Grid item xs={6}>
+                      <TextField
+                        label="Search"
+                        variant="outlined"
+                        value={searchText}
+                        onChange={handleSearchChange}
+                        fullWidth
+                        style={{ width: '25%' }}
+                      />
+                    </Grid>
+                    <Grid item xs={6} sx={{ px: 2 }}>
                       <br />
                       <PermissionChecks
                         permissions={['MANAGE_FR']}
@@ -482,24 +491,17 @@ const ManageFrPage = () => {
                           </>
                         )}
                       />
-                      <br />
-                      <br />
+
 
 
                     </Grid>
+
+
+
                   </Grid>
 
 
-                  <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
-                    <TextField
-                      label="Search"
-                      variant="outlined"
-                      value={searchText}
-                      onChange={handleSearchChange}
-                      fullWidth
-                      style={{ marginBottom: '1rem', width: '10vw' }}
-                    />
-                  </Grid>
+
                   <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} />
 
                 </Card>
