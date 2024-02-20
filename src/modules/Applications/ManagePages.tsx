@@ -88,7 +88,7 @@ const ApplicationManagePages = () => {
       <br />
 
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '70vh', width: '100%' }}>
+        <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
           <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
         </Card>
       </Grid>

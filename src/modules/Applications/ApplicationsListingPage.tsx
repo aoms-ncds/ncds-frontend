@@ -474,7 +474,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
 
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '70vh', width: '100%' }}>
+        <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
           <Grid container spacing={0} justifyContent="space-between">
             <Grid item xs={12} >
               <>

@@ -27,10 +27,10 @@ const ButtonCard = (props: {
           component: StyledLink,
           to: props.targetRoute,
         })}
-
       >
         <CardActionArea
           sx={{
+            'border': '2px solid #3B32E6',
             'backgroundColor': props.color,
             'color': 'white',
             'borderRadius': 3,

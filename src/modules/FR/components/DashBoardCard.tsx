@@ -18,6 +18,7 @@ const DashBoardCard = (props: {
 }) => {
   return (
     <Card
+
       onClick={props.onClick}
       {...(props.targetRoute && {
         component: StyledLink,
@@ -26,6 +27,7 @@ const DashBoardCard = (props: {
     >
       <CardActionArea
         sx={{
+          'border': '2px solid #8833ff',
           'backgroundColor': props.color,
           'color': 'white',
           'borderRadius': 3,

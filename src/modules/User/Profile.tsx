@@ -177,39 +177,38 @@ const Profile = () => {
       <Grid container spacing={2}>
         <Grid item xs={6} md={3}>
           <Card >
-            <Box sx={{ width: '100%', height: '60vh' }}>
-              <br />
-              <Grid container >
-                <Container>
-                  <Grid item xs={12} md={6}>
-                    <Avatar
-                      sx={{ width: '18vw', height: '40vh', borderRadius: 1 }}
-                      src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
-                      alt={`${user?.basicDetails.firstName}`}
-                      onClick={() => {
-                        setShowLotImage(true);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="h4" component='span' style={{ whiteSpace: 'nowrap', }}>
-                      {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}<br />
-                      <Link
-                        to={`/divisions/details/${user?.division?._id}`}
-                        style={{
-                          textDecoration: 'none',
-                          color: 'inherit',
-                        }}
-                      >
-                        <Typography variant="body1">{`${user?.supportDetails?.designation?.name}`}</Typography>
-                        <Typography variant="body1">{`${user?.division?.details?.name}`}</  Typography>
-                      </Link>
-                    </Typography>
-                  </Grid>
+            <Box sx={{ width: '100%', height: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                </Container>
-              </Grid>
+              <Container>
+                <Grid item xs={12} md={6} style={{ textAlign: 'center' }}>
+                  <Avatar
+                    sx={{ width: '200%', height: '100%', objectFit: 'cover', borderRadius: 1, textAlign: 'center' }}
+                    src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
+                    alt={`${user?.basicDetails.firstName}`}
+                    onClick={() => {
+                      setShowLotImage(true);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Typography variant="h4" component='span' style={{ whiteSpace: 'nowrap' }}>
+                    {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}<br />
+                    <Link
+                      to={`/divisions/details/${user?.division?._id}`}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                      }}
+                    >
+                      <Typography variant="body1">{`${user?.supportDetails?.designation?.name}`}</Typography>
+                      <Typography variant="body1">{`${user?.division?.details?.name}`}</Typography>
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Container>
             </Box>
+
+
           </Card>
         </Grid>
         <Grid item xs={12} md={9}>

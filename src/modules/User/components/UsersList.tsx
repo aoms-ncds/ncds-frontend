@@ -430,12 +430,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             value={searchText}
             onChange={handleSearchChange}
             fullWidth
-            style={{ width: '25%' }}
+            style={{ width: '25%', alignItems: 'start' }}
           />
           {/* </Grid> */}
         </Grid>
         {props.options?.kind === 'staff' ? (
-          <Grid item xs={6}>
+          <Grid item xs={6} >
             {/* <Grid item xs={12} lg={3} sx={{ px: 5, py: 2 }}> */}
             <PermissionChecks
               permissions={['WRITE_STAFFS']}
@@ -508,7 +508,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             />
           </Grid>
         ) : (
-          <Grid item xs={12} lg={4}>
+          <Grid item xs={6} >
 
             <PermissionChecks
               permissions={['WRITE_WORKERS']}
@@ -601,7 +601,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
 
 
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '62vh', width: '100%' }}>
+        <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
               height: 300,
@@ -630,7 +630,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }}
           >
 
-            <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
+            <DataGrid rows={filteredRows ?? []} sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             } />
           </Box>

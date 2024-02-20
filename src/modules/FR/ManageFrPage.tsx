@@ -411,7 +411,7 @@ const ManageFrPage = () => {
             <Grid item xs={12} lg={6}>
 
               <Grid item xs={12} md={12}>
-                <Card >
+                <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}  >
                   <Grid container spacing={2} padding={2} >
                     <Grid item xs={6}>
                       <TextField
@@ -502,38 +502,38 @@ const ManageFrPage = () => {
                   </Grid>
 
                   <Box
-        sx={{
-          height: 300,
-          width: '100%',
-          '& .super-app-theme--cell': {
-            backgroundColor: '#f1f5fa',
-            color: 'black',
-            fontWeight: '600',
-          },
-          '& .super-app.negative': {
-            backgroundColor: 'rgba(157, 255, 118, 0.49)',
-            color: '#1a3e72',
-            fontWeight: '600',
-          },
-          '& .super-app.positive': {
-            backgroundColor: '#d47483',
-            color: '#1a3e72',
-            fontWeight: '600',
-          },
-          '& .even': {
-            backgroundColor: '#DEDAFF', // Change to red for even rows
-          },
-          '& .odd': {
-            backgroundColor: '#fff', // Change to blue for odd rows
-          },
-        }}
-      >
-         <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }}  getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-          } />
-      </Box>
+                    sx={{
+                      height: 300,
+                      width: '100%',
+                      '& .super-app-theme--cell': {
+                        backgroundColor: '#f1f5fa',
+                        color: 'black',
+                        fontWeight: '600',
+                      },
+                      '& .super-app.negative': {
+                        backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                        color: '#1a3e72',
+                        fontWeight: '600',
+                      },
+                      '& .super-app.positive': {
+                        backgroundColor: '#d47483',
+                        color: '#1a3e72',
+                        fontWeight: '600',
+                      },
+                      '& .even': {
+                        backgroundColor: '#DEDAFF', // Change to red for even rows
+                      },
+                      '& .odd': {
+                        backgroundColor: '#fff', // Change to blue for odd rows
+                      },
+                    }}
+                  >
+                    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
+                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    } />
+                  </Box>
 
-                 
+
 
                 </Card>
               </Grid>

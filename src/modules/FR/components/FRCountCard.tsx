@@ -19,9 +19,10 @@ const FRCountCard = (props: {
       sx={{
         'backgroundColor': props.color,
         'color': 'black',
-        'borderRadius': 3,
+        'borderRadius': '15px 0 15px 0', // Rounded corners on top sides only
         'transition': 'all 0.3s',
         'padding': 4,
+        'border': '2px solid #8833ff', // Adding red border
         // '&:hover': {
         //   boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
         //   transform: 'translate(0, -2px)',
@@ -42,7 +43,7 @@ const FRCountCard = (props: {
         <Typography variant="h6" align="center">
           {props.secondaryText}
         </Typography>
-        <Typography variant="h6" color={'#5b4ec7'} fontWeight={600} align="center">
+        <Typography variant="h6" color={'#8833ff'} fontSize={34} fontWeight={600} align="center">
           {props.count}
         </Typography>
       </CardContent>
