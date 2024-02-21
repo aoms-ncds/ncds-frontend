@@ -39,6 +39,7 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
+  console.log(props, 'dd')
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [fr, setFr] = useState<FR>();
@@ -176,6 +177,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
+    specialsanction: ''
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -563,7 +565,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'sanctionedAsPer',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction As Per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -576,6 +578,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {' '}
           {props.row.sanctionedAsPer}
+        </p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
+    {
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
         </p>
       ),
       width: 200,

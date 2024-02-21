@@ -10,11 +10,12 @@ declare global {
     // requestAmount: string;
     sanction: string;
     purpose: FRPurpose;
-    IRO?:string;
+    IRO?: string;
+
   }
 
   interface CreatableFR extends Creatable<FR> {
-    _id?:string;
+    _id?: string;
     FRdate?: Moment;
     FRno?: FR['FRno'];
     lastUpdatedDate?: Moment;
@@ -28,6 +29,7 @@ declare global {
     division?: FR['division'];
     purposeCoordinator?: FR['purposeCoordinator'];
     sanctionedAsPer?: FR['sanctionedAsPer'];
+    specialsanction?: FR['specialsanction'];
     sanctionedBank?: FR['sanctionedBank'];
     status?: number;
     purposeOthers?: string; // Added missing property
@@ -51,7 +53,8 @@ declare global {
         subcategory3: {
           name: string;
           narration: string;
-        }[];}[];
+        }[];
+      }[];
     }[];
   }
   interface SubCategory1 {
@@ -101,6 +104,7 @@ declare global {
     sanctionedAmount: number;
     status: number;
     sanctionedAsPer: string;
+    specialsanction: string
     sanctionedBank: string;
     mainCategory: string;
     createdBy: IWorker;

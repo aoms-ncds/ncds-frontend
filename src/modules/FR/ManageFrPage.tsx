@@ -331,7 +331,7 @@ const ManageFrPage = () => {
     {
       field: 'sanctionedAsPer',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Special Sanction</b>),
+      renderHeader: () => (<b> Sanction as per</b>),
       renderCell: (props) => (
         <p style={{
           maxWidth: 200,
@@ -340,6 +340,23 @@ const ManageFrPage = () => {
           justifyContent: 'center',
           textAlign: 'center',
         }}> {props.row.sanctionedAsPer}</p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => (<b>Special Sanction</b>),
+      renderCell: (props) => (
+        <p style={{
+          maxWidth: 200,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}>{props.row.specialsanction}</p>
       ),
       width: 200,
       align: 'center',
