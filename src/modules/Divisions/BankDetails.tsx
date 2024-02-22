@@ -35,7 +35,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, { title
               }
               variant="outlined"
               fullWidth
-              disabled={props.action=='view'}
+              disabled={props.action == 'view'}
             />
           </Grid>
           <Grid item xs={12}>
@@ -73,7 +73,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, { title
               }
               variant="outlined"
               fullWidth
-              disabled={props.action=='view'}
+              disabled={props.action == 'view'}
             />
           </Grid>
           <Grid item xs={12}>
@@ -92,7 +92,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, { title
               }
               variant="outlined"
               fullWidth
-              disabled={props.action=='view'}
+              disabled={props.action == 'view'}
             />
           </Grid>
           <Grid item xs={12}>
@@ -111,7 +111,7 @@ const BankDetailsFormComponent = (props: FormComponentProps<BankDetails, { title
               }
               variant="outlined"
               fullWidth
-              disabled={props.action=='view'}
+              disabled={props.action == 'view'}
             />
           </Grid>
         </Grid>

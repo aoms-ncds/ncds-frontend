@@ -11,6 +11,7 @@ import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -111,6 +112,8 @@ const Profile = () => {
         .catch(() => { });
     }
   }, []);
+
+
   return (
     <CommonPageLayout
       title={`Profile of ${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
@@ -359,6 +362,14 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {(user as unknown as IWorker)?.spouse?.email} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {(user as unknown as IWorker)?.spouse?.phone} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                      Profile Added On:
+                    </Typography>
+                    {((user as unknown as IWorker)?.spouse?.ProfileAddedOn && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).isValid()) && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).format('DD/MM/YYYY')}
+                  </Grid>
+
+
                   <Grid item xs={12} lg={4}>
                     <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
                       Age:
