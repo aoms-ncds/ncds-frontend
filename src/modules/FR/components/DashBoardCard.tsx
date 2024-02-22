@@ -53,7 +53,7 @@ const DashBoardCard = (props: {
             {props.secondaryText}
             <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> {/* Adjust the margin here */}
           </Typography>
-          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#5b4ec7', fontWeight: 600 }}>
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#8833ff', fontWeight: 600 }}>
             {props.count}
             {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
           </Typography>
