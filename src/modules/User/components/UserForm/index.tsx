@@ -63,6 +63,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     firstName: '',
     lastName: '',
     gender: undefined,
+    adharCardNo: 0,
+    phoneNumber: 0,
+    emailId: ''
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
@@ -79,6 +82,9 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       firstName: '',
       lastName: '',
       gender: undefined,
+      adharCardNo: 0,
+      phoneNumber: 0,
+      emailId: ''
     });
   };
   const deleteChild = (_index: number) => {
@@ -702,6 +708,29 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     />
                   </FormControl>
                 </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl variant={props.options?.textField.variant} fullWidth>
+                    <DatePicker
+                      label="profile Added On"
+                      value={moment(newChild?.profileAddedOn)}
+                      format="DD/MM/YYYY"
+                      onChange={(date: Moment | null) => {
+                        if (date) {
+                          setNewChild((newChild) => ({
+                            ...newChild,
+                            profileAddedOn: date,
+                          }));
+                        }
+                      }}
+                      slotProps={{
+                        textField: {
+                          variant: props.options?.textField.variant,
+                          fullWidth: true,
+                        },
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
 
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -719,7 +748,54 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     disabled
                   />
                 </Grid>
-
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label=" Adhaar ard No:"
+                    value={newChild?.adharCardNo}
+                    onChange={(e) =>
+                      setNewChild((newchild: any) => ({
+                        ...newchild,
+                        adharCardNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label=" Phone:"
+                    value={newChild?.phoneNumber}
+                    onChange={(e) =>
+                      setNewChild((newchild: any) => ({
+                        ...newchild,
+                        phoneNumber: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label=" Email :"
+                    value={newChild?.emailId}
+                    onChange={(e) =>
+                      setNewChild((newchild: any) => ({
+                        ...newchild,
+                        emailId: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                    required
+                  />
+                </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <FormControl>
                     <FormLabel id="Gender">Gender</FormLabel>
@@ -829,7 +905,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                         childSupport: childSupport ?? undefined,
                       }));
                     }}
-                    renderInput={(params) => <TextField {...params} label="Child Support" variant={props.options?.textField.variant} required />}
+                    renderInput={(params) => <TextField {...params} label="Child Education Allowance" variant={props.options?.textField.variant} required />}
                     fullWidth
                   />
                 </Grid>

@@ -140,6 +140,7 @@ export default {
    * @return {Promise<StandardResponse<Worker>>} A promise that resolves to the response containing the approved worker.
    */
   approve: (id: string) => getStandardResponse<Worker>(axios.patch(`/workers/${id}/approve`, null, { headers: { ...getAuthHeader() } })),
+  getUser: (id: string) => getStandardResponse<IWorker>(axios.get(`/workers/spouse/${id}`, { headers: { ...getAuthHeader() } })),
 
   /**
    * Rejects a worker.

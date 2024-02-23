@@ -4,7 +4,7 @@ export default {};
 
 declare global {
   interface Child extends MongooseDocument {
-    childCode:string;
+    childCode: string;
     firstName: string;
     lastName: string;
     dateOfBirth: Moment;
@@ -16,10 +16,14 @@ declare global {
     occupation: string;
     qualification: string;
     gender?: Gender;
+    profileAddedOn?: Moment,
+    adharCardNo?: number,
+    phoneNumber?: number,
+    emailId?: string
 
   }
   interface CreatableChild extends Creatable<Child> {
-    childCode?:string;
+    childCode?: string;
     dateOfBirth?: Moment;
     childOf?: IWorker | null;
     childSupport?: IChildSupport;
@@ -29,6 +33,10 @@ declare global {
     occupation?: string;
     qualification?: string;
     gender?: Gender;
+    profileAddedOn?: Moment,
+    adharCardNo?: number,
+    phoneNumber?: number,
+    emailId?: string
   }
 
   // interface IChildSupport extends MongooseDocument{
