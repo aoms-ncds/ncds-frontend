@@ -20,6 +20,15 @@ declare global {
     adharCardNo?: number,
     phoneNumber?: number,
     emailId?: string
+    higherEducation?: boolean,
+    courseName: string,
+    totalAmountforCourse: number,
+    startingYear: Moment,
+    endingYear: Moment
+
+
+
+
 
   }
   interface CreatableChild extends Creatable<Child> {
@@ -37,6 +46,11 @@ declare global {
     adharCardNo?: number,
     phoneNumber?: number,
     emailId?: string
+    higherEducation?: boolean,
+    courseName?: string,
+    totalAmountforCourse?: number,
+    startingYear?: Moment,
+    endingYear?: Moment
   }
 
   // interface IChildSupport extends MongooseDocument{

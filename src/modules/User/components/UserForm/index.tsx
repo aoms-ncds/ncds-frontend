@@ -65,7 +65,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     gender: undefined,
     adharCardNo: 0,
     phoneNumber: 0,
-    emailId: ''
+    emailId: '',
+    higherEducation: false,
+    courseName: '',
+    totalAmountforCourse: 0,
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
@@ -711,7 +714,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 <Grid item xs={12} md={6}>
                   <FormControl variant={props.options?.textField.variant} fullWidth>
                     <DatePicker
-                      label="profile Added On"
+                      label="Profile Added On"
                       value={moment(newChild?.profileAddedOn)}
                       format="DD/MM/YYYY"
                       onChange={(date: Moment | null) => {
@@ -818,7 +821,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={3.5}>
                   <FormLabel id="demo-radio-buttons-group-label">Studying</FormLabel>
                   <Checkbox
                     checked={newChild.studying}
@@ -831,6 +834,108 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     color="primary"
                   />
                 </Grid>
+                <Grid item xs={12} md={5}>
+                  <FormLabel id="demo-radio-buttons-group-label">Higher Education</FormLabel>
+                  <Checkbox
+                    checked={newChild.higherEducation}
+                    onChange={(e) =>
+                      setNewChild((newchild) => ({
+                        ...newchild,
+                        higherEducation: e.target.checked,
+                      }))
+                    }
+                    color="primary"
+                  />
+                </Grid>
+                <Grid item xs={12} md={3.5}>
+                  <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
+                  <Checkbox
+                    checked={newChild.working}
+                    onChange={(e) =>
+                      setNewChild((newchild) => ({
+                        ...newchild,
+                        working: e.target.checked,
+                      }))
+                    }
+                    color="primary"
+                  />
+                </Grid>
+
+                {newChild.higherEducation == true && (
+                  <>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Course Name"
+                        value={newChild?.courseName}
+                        onChange={(e) => setNewChild((newchild) => ({
+                          ...newchild,
+                          courseName: e.target.value,
+                        }))}
+                        fullWidth
+                        variant={props.options?.textField.variant}
+                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Total Amount for Course"
+                        value={newChild?.totalAmountforCourse}
+                        onChange={(e) => setNewChild((newchild: any) => ({
+                          ...newchild,
+                          totalAmountforCourse: e.target.value,
+                        }))}
+                        fullWidth
+                        variant={props.options?.textField.variant}
+                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <FormControl variant={props.options?.textField.variant} fullWidth>
+                        <DatePicker
+                          label="Starting Year"
+                          value={moment(newChild?.startingYear)}
+                          format="DD/MM/YYYY"
+                          onChange={(date: Moment | null) => {
+                            if (date) {
+                              setNewChild((newChild) => ({
+                                ...newChild,
+                                startingYear: date,
+                              }));
+                            }
+                          }}
+                          slotProps={{
+                            textField: {
+                              variant: props.options?.textField.variant,
+                              fullWidth: true,
+                            },
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <FormControl variant={props.options?.textField.variant} fullWidth>
+                        <DatePicker
+                          label="Ending Year"
+                          value={moment(newChild?.endingYear)}
+                          format="DD/MM/YYYY"
+                          onChange={(date: Moment | null) => {
+                            if (date) {
+                              setNewChild((newChild) => ({
+                                ...newChild,
+                                endingYear: date,
+                              }));
+                            }
+                          }}
+                          slotProps={{
+                            textField: {
+                              variant: props.options?.textField.variant,
+                              fullWidth: true,
+                            },
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                  </>
+                )}
 
                 <Grid item xs={12} md={6}>
                   <TextField
@@ -848,7 +953,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                {/* <Grid item xs={12} md={6}>
                   <FormLabel id="demo-radio-buttons-group-label">Working</FormLabel>
                   <Checkbox
                     checked={newChild.working}
@@ -860,7 +965,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     color="primary"
                   />
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={12} md={6}>
                   <TextField
