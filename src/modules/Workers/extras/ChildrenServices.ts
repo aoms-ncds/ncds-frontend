@@ -13,7 +13,8 @@ export default {
     getStandardResponse<Child[]>(axios.get('/workers/children/', { params: conditions, headers: { ...getAuthHeader() } }), (children) =>
       children.map((children: Child) => ({
         ...children,
-        dateOfBirth: children.dateOfBirth? moment(children.dateOfBirth): undefined,
+        dateOfBirth: children.dateOfBirth ? moment(children.dateOfBirth) : undefined,
+        profileAddedOn: children.profileAddedOn ? moment(children.profileAddedOn) : undefined,
         createdAt: moment(children.createdAt),
         updatedAt: moment(children.updatedAt),
       })),

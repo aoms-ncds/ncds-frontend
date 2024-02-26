@@ -28,6 +28,13 @@ const usersPageRoutes: ModuleRoute = {
       private: false,
     },
     {
+      title: 'View spouse',
+      path: '/:userKind/:userId/:tabNO',
+      element: <Profile />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+    },
+    {
       title: 'View Profile',
       path: '/:userKind/:userId',
       element: <Profile />,

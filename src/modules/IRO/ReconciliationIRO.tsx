@@ -101,6 +101,7 @@ const ReconciliationIRO = () => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
+    specialsanction: ''
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;

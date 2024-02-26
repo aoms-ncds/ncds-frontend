@@ -19,6 +19,8 @@ const DashboardCardButton = (props: { primaryText: string; secondaryText?: strin
     >
       <CardActionArea
         sx={{
+          'fontSize': '12px',
+          'border': '2px solid #3B32E6',
           'backgroundColor': props.color,
           'color': 'white',
           'borderRadius': 3,

@@ -171,6 +171,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
+    specialsanction: ''
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -222,7 +223,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   //   }, [openRelease, attachment, addSignature]);
 
   // Rest of your component code...
-  useEffect(()=>{
+  useEffect(() => {
     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
       .then((res) => {
         setIROrder(res.data);
@@ -356,7 +357,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               //     });
               // },
             },
-            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE? [
+            ...(params.row.status === IROLifeCycleStates.IRO_CLOSED || params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE ? [
               {
                 id: 'print',
                 text: 'Print IRO',
@@ -558,26 +559,26 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   <Button
                     onClick={async () => {
                       const sheet =
-        IROrder ?
-          IROrder.map((iro:IROrder) => ([
-            iro.IROno,
-            iro.IRODate.format('DD/MM/YYYY'),
-            iro.division?.details.name,
-            iro.purposeSubdivision?.name,
-            iro.mainCategory,
-            iro.particulars?.reduce(
-              (total, particular) => total + Number(particular.requestedAmount),
-              0,
-            ),
-            iro.sanctionedAmount,
-            iro.sanctionedBank,
-            iro.sanctionedAsPer,
-            // iro.releaseAmount?.releaseAmount,
-            // iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-          ])) :
-          [];
-                      const headers=[
+                        IROrder ?
+                          IROrder.map((iro: IROrder) => ([
+                            iro.IROno,
+                            iro.IRODate.format('DD/MM/YYYY'),
+                            iro.division?.details.name,
+                            iro.purposeSubdivision?.name,
+                            iro.mainCategory,
+                            iro.particulars?.reduce(
+                              (total, particular) => total + Number(particular.requestedAmount),
+                              0,
+                            ),
+                            iro.sanctionedAmount,
+                            iro.sanctionedBank,
+                            iro.sanctionedAsPer,
+                            // iro.releaseAmount?.releaseAmount,
+                            // iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                          ])) :
+                          [];
+                      const headers = [
                         'IRO No',
                         'Date',
                         'Division',
@@ -601,7 +602,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
                     variant="contained"
                   >
-              Export
+                    Export
                   </Button>
                 </Grid>
 
@@ -1064,7 +1065,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
 
                   return res;
                 });

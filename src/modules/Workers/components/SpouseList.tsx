@@ -7,13 +7,21 @@ import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-m
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import { hasPermissions } from '../../User/components/PermissionChecks';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
+  const navigate = useNavigate();
+  const [spousid, setId] = useState('')
   const deactivateSpouse = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
       variant: 'info',
     });
+    console.log(spousid, 'idid');
+
     WorkersServices.deactivatespouse(id)
       .then((res) => {
         if (props.value) {
@@ -40,6 +48,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       message: 'Activating Spouse',
       variant: 'info',
     });
+
+
     WorkersServices.activatespouse(id)
       .then((res) => {
         if (props.value) {
@@ -66,6 +76,19 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   // }, [spouseList]);
 
 
+
+  const handleClick = (params: any) => {
+    WorkersServices.getUser(params.row._id)
+      .then((res) => {
+        console.log(res.data._id, 'gfgg');
+        setId(res.data._id);
+        navigate(`/users/worker/${res.data._id}/2`);
+      })
+      .catch(error => {
+        console.error('Error fetching user:', error);
+      });
+    console.log(params.row._id, 'ooo');
+  };
   const columns: GridColDef<Spouse>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
     {
@@ -100,7 +123,15 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
               />
             ))
           )),
+
           false,
+          <GridLinkAction
+            key={5}
+            label="View"
+            icon={<VisibilityIcon />}
+            showInMenu
+            onClick={() => handleClick(params)}
+          />
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
@@ -176,4 +207,6 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
 
 
 export default SpouseListPage;
+
+
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -8,6 +8,7 @@ import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
+import { Add as AddIcon } from '@mui/icons-material';
 
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -54,7 +55,7 @@ const DivisionsList = () => {
   const columns: GridColDef<Division>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Action</b>),
       width: 60,
       type: 'string',
@@ -108,6 +109,7 @@ const DivisionsList = () => {
     },
     {
       field: 'divisionId',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Division ID</b>),
@@ -115,7 +117,7 @@ const DivisionsList = () => {
     },
     {
       field: 'divisionName',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Division Name</b>),
@@ -138,7 +140,7 @@ const DivisionsList = () => {
     {
       field: 'coordinator',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
@@ -148,7 +150,7 @@ const DivisionsList = () => {
     },
     {
       field: 'coordinatorEmail',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
@@ -157,7 +159,7 @@ const DivisionsList = () => {
     },
     {
       field: 'coordinatorPhone',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Phone</b>),
@@ -169,7 +171,7 @@ const DivisionsList = () => {
     {
       field: 'noOfWorkers',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Workers</b>),
 
@@ -178,13 +180,13 @@ const DivisionsList = () => {
     },
     {
       field: 'NoOfSubdivisions',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
       valueGetter: (props) => props.row.details?.noOfSubdivisions,
-      width: 150
+      width: 210
     },
   ];
 
@@ -202,17 +204,81 @@ const DivisionsList = () => {
   });
   return (
     <>
-      <Grid sx={{ width: '30px', paddingLeft: '2%' }}>
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={handleSearchChange}
-          fullWidth
-          style={{ marginBottom: '1rem', width: '10vw' }}
-        />
+      <Grid container spacing={2} padding={2}>
+        <Grid item xs={6}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '30%', alignItems: 'start' }}
+          />
+        </Grid>
+        <Grid item xs={6} >
+          <br />
+          <PermissionChecks
+            permissions={['WRITE_DIVISIONS']}
+            granted={(
+
+              <Button
+                variant="contained"
+                sx={{ float: 'right', background: 'green' }}
+                startIcon={<AddIcon />}
+                component={Link}
+                to="/divisions/add"
+              // onClick={() => {
+              // }}
+              >
+                Add new
+              </Button>
+            )}
+          />
+        </Grid>
+
+
       </Grid>
-      <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id as string} loading={divisions === null} sx={{ height: '55vh', width: '100%' }} />;
+      <Box
+        sx={{
+          height: 300,
+          width: '100%',
+          '& .super-app-theme--cell': {
+            backgroundColor: '#f1f5fa',
+            color: 'black',
+            fontWeight: '600',
+          },
+          '& .super-app.negative': {
+            backgroundColor: 'rgba(157, 255, 118, 0.49)',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .super-app.positive': {
+            backgroundColor: '#d47483',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .even': {
+            backgroundColor: '#DEDAFF', // Change to red for even rows
+          },
+          '& .odd': {
+            backgroundColor: '#fff', // Change to blue for odd rows
+          },
+        }}
+      >
+        <DataGrid
+          rows={filteredRows ?? []}
+          columns={columns}
+          getRowId={(row) => row._id as string}
+          loading={divisions === null}
+          sx={{ height: '55vh', width: '100%' }}
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          }
+        />
+      </Box>
+
+
+
     </>
 
   )

@@ -8,9 +8,13 @@ import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
 import { hasPermissions } from '../../User/components/PermissionChecks';
+import { useNavigate } from 'react-router-dom';
+import ChildrenServices from '../extras/ChildrenServices';
 
-const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'active'}>) => {
+const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 'active' }>) => {
   // const [childList, setChildList] = useState<Child[]>();
+
+  const navigate = useNavigate();
 
 
   const deactivateChild = (id: string) => {
@@ -66,6 +70,15 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
       });
   };
 
+  const handleClick = (rowId: any) => {
+    ChildrenServices.getById(rowId.id)
+      .then((res) => {
+        navigate(`/users/worker/${res.data.childOf}/3`);
+      })
+      .catch(error => {
+        console.error('Error fetching user:', error);
+      });
+  };
 
   const columns: GridColDef<Child>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
@@ -102,48 +115,60 @@ const ChildListPage = (props:FormComponentProps<Child[], {status?:'reject'|'acti
             ))
           )),
           false,
+          <GridLinkAction
+            key={5}
+            label="View"
+            icon={<PersonIcon />}
+            showInMenu
+            onClick={() => handleClick(params)}
+          />
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
-    { field: 'childCode',
+    {
+      field: 'childCode',
       width: 130,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: ()=>( <b>Child Code</b>),
+      renderHeader: () => (<b>Child Code</b>),
     },
-    { field: 'firstName',
+    {
+      field: 'firstName',
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: ()=>( <b>First Name</b>),
+      renderHeader: () => (<b>First Name</b>),
     },
-    { field: 'lastName',
+    {
+      field: 'lastName',
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: ()=>( <b>Last Name</b>),
+      renderHeader: () => (<b>Last Name</b>),
     },
-    { field: 'dateOfBirth',
+    {
+      field: 'dateOfBirth',
       width: 90,
       headerAlign: 'center',
       align: 'center',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
-      renderHeader: ()=>( <b>DOB</b>),
+      renderHeader: () => (<b>DOB</b>),
     },
-    { field: 'childSupport',
+    {
+      field: 'childSupport',
       width: 110,
       headerAlign: 'center',
       align: 'center',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {(props.value as IChildSupport)?.name}</p>,
-      renderHeader: ()=>( <b>Child Support</b>),
+      renderHeader: () => (<b>Child Support</b>),
     },
     {
       field: 'childOf',
-      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {props.row.childOf?.basicDetails.firstName+' '+props.row.childOf?.basicDetails.lastName}</p>,
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {props.row.childOf?.basicDetails.firstName + ' ' + props.row.childOf?.basicDetails.lastName}</p>,
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: ()=>( <b>Child Of</b>),
+      renderHeader: () => (<b>Child Of</b>),
     },
   ].filter((action) => action !== false) as GridColDef<Child>[];
 

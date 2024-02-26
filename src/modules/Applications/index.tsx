@@ -52,7 +52,7 @@ const APPDashboard = () => {
       </Grid>
       <br />
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} xl={3}>
+        <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Manage Application" secondaryText="" color="#fff" targetRoute="/application/manage" />
         </Grid>
         <PermissionChecks

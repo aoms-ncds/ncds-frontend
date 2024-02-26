@@ -14,7 +14,8 @@ export default {
     getStandardResponse<Spouse[]>(axios.get('/workers/spouse/', { params: conditions, headers: { ...getAuthHeader() } }), (spouse) =>
       spouse.map((spouse: Spouse) => ({
         ...spouse,
-        dateOfBirth: spouse.dateOfBirth? moment(spouse.dateOfBirth): undefined,
+        dateOfBirth: spouse.dateOfBirth ? moment(spouse.dateOfBirth) : undefined,
+        ProfileAddedOn: spouse.ProfileAddedOn ? moment(spouse.ProfileAddedOn) : undefined,
         createdAt: moment(spouse.createdAt),
         updatedAt: moment(spouse.updatedAt),
       })),

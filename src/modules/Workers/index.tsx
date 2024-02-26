@@ -7,12 +7,20 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
 import ButtonCard from '../../components/ButtonCard';
+import FRCountCard from '../FR/components/FRCountCard';
+import SpousesServices from './extras/SpousesServices';
+import ChildrenServices from './extras/ChildrenServices';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const WorkersDashboard = () => {
   const [workersCount, setWorkerCount] = useState<number | null>(null);
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
   const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
+  const [activeWorker, setActiveWorker] = useState<number | null>(null);
+  const [activeSpouse, setActiveSpouse] = useState<Spouse[] | null>([]);
+  const [activeChild, setActiveChild] = useState<Child[] | null>([]);
+  console.log(activeChild?.length, 'activeSpouse');
 
   const user = useAuth();
   console.log(user);
@@ -37,10 +45,41 @@ const WorkersDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    WorkerServices.getCount({ status: WorkerLifeCycleStates.ACTIVE })
+      .then((res) => setActiveWorker(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    SpousesServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
+      .then((res) => setActiveSpouse(res.data) as unknown as Spouse[])
+      .catch((error) => {
+        console.log(error);
+      });
+    ChildrenServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
+      .then((res) => setActiveChild(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (
     <CommonPageLayout title="Workers Dashboard">
+
+      <Grid container spacing={3}>
+        <Grid item xs={6} md={4} xl={3}>
+          <FRCountCard count={activeWorker?.toString()} secondaryText="Active Worker" color="#fff" />
+        </Grid>
+        <Grid item xs={6} md={4} xl={3}>
+          <FRCountCard count={activeSpouse?.length.toString()} secondaryText={'Active Spouse'} color={'#fff'} />
+        </Grid>
+        <Grid item xs={6} md={4} xl={3}>
+          <FRCountCard count={activeChild?.length.toString()}
+            secondaryText={'Active Child'}
+            color={'#fff'} />
+        </Grid>
+      </Grid>
+      <br />
+      <br />
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={workersCount?.toString()} color="#fff" targetRoute="/workers/manage" />

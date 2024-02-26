@@ -232,14 +232,17 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         }}
       >
         <Toolbar >
+          <Typography variant="h6" noWrap component="div" sx={{ padding: '10px', fontSize: '17px', marginRight: '15px' }}>
+            {CommonConstants.appName}
+          </Typography>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawer} sx={{ mr: 2, display: isMobile ? 'none' : 'inherit' }}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {CommonConstants.appName}
+          <Typography variant="h6" noWrap component="div" sx={{ fontSize: '13px' }}>
+            {props.title}
           </Typography>
           <Tooltip title="Notifications">
             <IconButton
@@ -374,9 +377,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           <>
             <Grid container spacing={2}>
               <Grid item xs={12} md={9}>
-                <Typography variant="h4" color="color.secondary">
+                {/* <Typography variant="h4" color="color.secondary">
                   {props.title}
-                </Typography>
+                </Typography> */}
               </Grid>
               <Grid item xs={12} md={3} >
                 {props.momentFilter && (

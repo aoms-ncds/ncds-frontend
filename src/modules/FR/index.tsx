@@ -43,10 +43,10 @@ const frDashboard = () => {
           <>
 
             <Grid container spacing={3}>
-              <Grid item xs={6} md={3} xl={2}>
+              <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
               </Grid>
-              <Grid item xs={6} md={3} xl={2}>
+              <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>

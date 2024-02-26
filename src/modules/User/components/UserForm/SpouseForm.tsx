@@ -4,6 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
+import moment from 'moment';
 
 const SpouseForm = (
   props: FormComponentProps<
@@ -99,6 +100,25 @@ const SpouseForm = (
           onChange={(date: Moment | null) => {
             if (date) {
               props.onChange({ ...props.value, dateOfBirth: date });
+            }
+          }}
+          slotProps={{
+            textField: {
+              variant: props.options?.textField.variant,
+              fullWidth: true,
+            },
+          }}
+        />
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <DatePicker
+          label="Profile Added On"
+          value={moment(props.value.ProfileAddedOn)}
+          format="DD/MM/YYYY"
+          onChange={(date: Moment | null) => {
+            if (date) {
+              props.onChange({ ...props.value, ProfileAddedOn: date });
             }
           }}
           slotProps={{

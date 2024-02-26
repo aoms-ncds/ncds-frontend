@@ -1,25 +1,34 @@
 import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Autocomplete, Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
-import { hasPermissions } from './PermissionChecks';
+import PermissionChecks, { hasPermissions } from './PermissionChecks';
 import { SetStateAction, useEffect, useState } from 'react';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
+import * as XLSX from 'xlsx';
+import { Add as AddIcon, Download as DownloadIcon } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import ChildrenServices from '../../Workers/extras/ChildrenServices';
+import SpousesServices from '../../Workers/extras/SpousesServices';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active'; showEditButton?: boolean }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
-
+  const [staffs, setStaffs] = useState<Staff[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [rowID, setRowID] = useState<string>('');
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+  const [users, setUsers] = useState<IWorker[]>([]);
+  const [spouseList, setSpouseList] = useState<Spouse[]>([]);
+  const [childList, setChildList] = useState<Child[]>([]);
 
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -28,6 +37,50 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     remark: '',
     transactionId: '',
   });
+
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const switchTab = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
+  };
+
+
+
+  useEffect(() => {
+    if (currentTab == 0) {
+      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (currentTab == 1) {
+      SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+        .then((res) => {
+          setSpouseList(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (currentTab == 2) {
+      ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+        .then((res) => {
+          setChildList(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+  }, [currentTab]);
+  useEffect(() => {
+    StaffServices.getAll()
+      .then((staffsRes) => setStaffs(staffsRes.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const execDelete = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: `Removing ${props.options?.kind}`,
@@ -127,9 +180,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   };
 
   const filteredRows = (props.value ?? []).filter(row => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||(row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
-  return true;
-}
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+      return true;
+    }
     return Object.values(row).some(value =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase())
     );
@@ -148,7 +201,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'actions',
       type: 'actions',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>{'Action'}</b>,
       width: 80,
       getActions: (params: GridRowParams) =>
@@ -219,7 +272,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'imageURL',
       headerName: '',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       width: 25,
       minWidth: 65,
       type: 'string',
@@ -232,14 +285,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       field: `${props.options?.kind}Code`,
       headerName: `${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`,
       width: 120,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{`${props.options?.kind == 'staff' ? 'Staff' : 'Worker'} Code`}</b>,
     },
     {
       field: 'firstName',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
+
       headerAlign: 'center',
       renderHeader: () => <b>{'First Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.firstName,
@@ -247,14 +301,14 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'lastName',
       align: 'center',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{'Last Name'}</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
     {
       field: 'division',
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
@@ -263,7 +317,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'sub_division',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
@@ -296,7 +350,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'designation',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Designation'}</b>,
@@ -305,7 +359,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'phone',
       width: 130,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Mobile Number'}</b>,
@@ -325,7 +379,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'email',
       width: 180,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Email ID'}</b>,
@@ -334,7 +388,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     {
       field: 'Reason',
       width: 180,
-      headerClassName: 'super-app-theme--header',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Reason'}</b>,
@@ -367,20 +421,220 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   ];
   return (
     <>
-      <br />
-      <Grid sx={{ width: '30px', paddingLeft: '85%',paddingTop: '2px'}}>
-        <TextField
-          label="Search"
-          variant="outlined"
-          value={searchText}
-          onChange={handleSearchChange}
-          fullWidth
-          style={{ marginBottom: '1rem',width: '10vw'}}
-        />
-    </Grid>
+      <Grid container spacing={2} padding={2}>
+        <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+        {props.options?.kind === 'staff' ? (
+          <Grid item xs={6} >
+            {/* <Grid item xs={12} lg={3} sx={{ px: 5, py: 2 }}> */}
+            <PermissionChecks
+              permissions={['WRITE_STAFFS']}
+              granted={(
+                <>
+                  <Button
+                    onClick={async () => {
+                      const sheet =
+                        staffs ?
+                          staffs.map((user: Staff) => ([
+                            user.staffCode,
+                            user.basicDetails.firstName,
+                            user.basicDetails.lastName,
+                            user.supportDetails.designation?.name,
+                            user.supportDetails.department?.name,
+                            user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
+                            user.basicDetails.phone,
+                            user.basicDetails.email,
+                            user.basicDetails.alternativePhone,
+                            user.basicDetails.dateOfBirth,
+                            user.basicDetails.field,
+                            user.basicDetails.martialStatus,
+                            user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
+                            user.basicDetails.highestQualification,
+                            user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
+                            user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
+                            user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+                              user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
+                              (user.officialDetails.dateOfJoining?.fromNow(true)),
+                            ((user.supportStructure?.basic ?? 0) +
+                              (user.supportStructure?.HRA ?? 0) +
+                              (user.supportStructure?.spouseAllowance ?? 0) +
+                              (user.supportStructure?.positionalAllowance ?? 0) +
+                              (user.supportStructure?.specialAllowance ?? 0) +
+                              (user.supportStructure?.telAllowance ?? 0)),
+                            user.insurance?.impactNo,
+                          ])) :
+                          [];
+                      const headers = [
+                        'Staff Code',
+                        'First Name',
+                        'Last Name',
+                        'Designation',
+                        'Department',
+                        'Mobile No',
+                        'Email ID',
+                        'Alt Phone',
+                        'DOB',
+                        'Field',
+                        'Status',
+                        'Date of Joining',
+                        'No of year in Org',
+                        'Net Support',
+                      ];
+                      const worksheet = XLSX.utils.json_to_sheet(sheet);
+                      const workbook = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                      XLSX.writeFile(workbook, 'Staff_Report.xlsx', { compression: true });
+                    }}
+                    startIcon={<DownloadIcon />}
+                    color="primary" sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                    variant="contained"
+                  >Export</Button>
+                  <Button variant="contained" sx={{ float: 'right', marginBottom: 3, mr: 2 }} startIcon={<AddIcon />} component={Link} to="/hr/add">
+                    Add new
+                  </Button>
+                </>
+              )}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={6} >
+
+            <PermissionChecks
+              permissions={['WRITE_WORKERS']}
+              granted={currentTab === 0 && (
+                <>
+                  <Button
+                    onClick={async () => {
+                      const sheet =
+                        users ?
+                          users.map((user: IWorker) => ([
+                            user.workerCode,
+                            user.basicDetails.firstName,
+                            user.basicDetails.lastName,
+                            user.division?.details.name,
+                            user?.officialDetails?.divisionHistory[user?.officialDetails?.divisionHistory?.length - 1]?.subDivision,
+                            user.basicDetails.phone,
+                            user.basicDetails.email,
+                            user.basicDetails.alternativePhone,
+                            user.basicDetails.dateOfBirth,
+                            user.basicDetails.field,
+                            user.basicDetails.martialStatus,
+                            user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
+                            user.basicDetails.highestQualification,
+                            user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
+                            user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
+                            user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+                              moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true) :
+                              (moment(user.officialDetails.dateOfJoining)?.fromNow(true)),
+                            user.spouse?.spouseCode,
+                            user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
+                            ((user.supportStructure?.basic ?? 0) +
+                              (user.supportStructure?.HRA ?? 0) +
+                              (user.supportStructure?.spouseAllowance ?? 0) +
+                              (user.supportStructure?.positionalAllowance ?? 0) +
+                              (user.supportStructure?.specialAllowance ?? 0) +
+                              (user.supportStructure?.telAllowance ?? 0)),
+                            user.insurance?.impactNo,
+                          ])) :
+                          [];
+                      const headers = [
+                        'Workers Code',
+                        'First Name',
+                        'Last Name',
+                        'Division',
+                        'Sub Division',
+                        'Mobile No',
+                        'Email ID',
+                        'Alt Phone',
+                        'DOB',
+                        'Field',
+                        'Marital Status',
+                        'Known Languages',
+                        'Highest Qualifications',
+                        'Status',
+                        'Date of Joining',
+                        'No of year in Org',
+                        'Spouse Code',
+                        'Spouse Name',
+                        'Net Support',
+                        'Insurance No',
+                      ];
+                      const worksheet = XLSX.utils.json_to_sheet(sheet);
+                      const workbook = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                      XLSX.writeFile(workbook, 'WorkerReport.xlsx', { compression: true });
+                    }}
+                    startIcon={<DownloadIcon />}
+                    color="primary" sx={{ float: 'right', mt: 2, mr: 2 }}
+                    variant="contained"
+                  >Export</Button>
+                  <Button
+                    variant="contained"
+                    sx={{ float: 'right', mt: 2, mr: 2 }}
+                    startIcon={<AddIcon />}
+                    component={Link}
+                    to={'/workers/add'}
+                  >
+                    Add New
+                  </Button>
+                </>
+              ) || null}
+            />
+          </Grid>
+        )}
+
+      </Grid>
+
+      {/* </Grid> */}
+
+
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '66vh', width: '100%', }}>
-           <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+        <Card style={{ height: '60vh', width: '100%' }}>
+          <Box
+            sx={{
+              height: 300,
+              width: '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+          >
+
+            <DataGrid rows={filteredRows ?? []} sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            } />
+          </Box>
+
         </Card>
       </Grid>
 
@@ -423,7 +677,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }
           }}
         >
-          <DialogActions>   
+          <DialogActions>
             <TextField
               id="remarkTextfield"
               placeholder="Remarks"

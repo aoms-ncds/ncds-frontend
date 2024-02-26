@@ -10,26 +10,7 @@ const DivisionsDashboardPage = () => {
     <CommonPageLayout title="Divisions Dashboard">
       <Card style={{ height: '70vh', width: '100%' }}>
         <Grid container spacing={2} >
-          <Grid item xs={12} sx={{ px: 2 }}>
-            <br/>
-            <PermissionChecks
-              permissions={['WRITE_DIVISIONS']}
-              granted={(
 
-                <Button
-                  variant="contained"
-                  sx={{ float: 'right', background: 'green' }}
-                  startIcon={<AddIcon />}
-                  component={Link}
-                  to="/divisions/add"
-                // onClick={() => {
-                // }}
-                >
-        Add new
-                </Button>
-              )}
-            />
-          </Grid>
           <Grid item xs={12}>
 
             <DivisionsList />

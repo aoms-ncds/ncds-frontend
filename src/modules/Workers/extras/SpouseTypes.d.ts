@@ -3,11 +3,12 @@ export default {};
 
 declare global {
   interface Spouse extends MongooseDocument {
-    spouseCode:string;
+    spouseCode: string;
     firstName: string;
     lastName: string;
     email?: string;
     phone?: string;
+    ProfileAddedOn?: Moment;
     dateOfBirth?: Moment;
     spouseOf: IWorker;
     working?: boolean;
@@ -17,7 +18,7 @@ declare global {
     insurance?: Insurance;
   }
   interface CreatableSpouse extends Creatable<Spouse> {
-    spouseCode?:string;
+    spouseCode?: string;
     spouseOf?: IWorker;
   }
 }

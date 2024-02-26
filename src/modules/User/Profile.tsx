@@ -11,6 +11,7 @@ import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,7 +46,7 @@ const Profile = () => {
   const [adharAttachments, setAdharAttachments] = useState<FileObject[]>([]);
   const [voterAttachments, setVoterAttachments] = useState<FileObject[]>([]);
   const [user, setUser] = useState<IWorker | Staff | null>(null);
-  const { userId, userKind } = useParams();
+  const { userId, userKind, tabNO } = useParams();
   const [currentTab, setCurrentTab] = React.useState(0);
   const [viewAdharFile, setviewAdharFile] = useState(false);
   const [viewVoterIdFile, setViewVoterId] = useState(false);
@@ -95,7 +96,13 @@ const Profile = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-
+  useEffect(() => {
+    if (tabNO == '2') {
+      setCurrentTab(2);
+    } else if (tabNO == '3') {
+      setCurrentTab(3);
+    }
+  }, [])
   useEffect(() => {
     if (userId && userKind === 'staff') {
       StaffServices.getById(userId)
@@ -111,6 +118,9 @@ const Profile = () => {
         .catch(() => { });
     }
   }, []);
+  console.log(tabNO, 'tabNO');
+
+
   return (
     <CommonPageLayout
       title={`Profile of ${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}
@@ -177,39 +187,38 @@ const Profile = () => {
       <Grid container spacing={2}>
         <Grid item xs={6} md={3}>
           <Card >
-            <Box sx={{ width: '100%', height: '60vh' }}>
-              <br />
-              <Grid container >
-                <Container>
-                  <Grid item xs={12} md={6}>
-                    <Avatar
-                      sx={{ width: '18vw', height: '40vh', borderRadius: 1 }}
-                      src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
-                      alt={`${user?.basicDetails.firstName}`}
-                      onClick={() => {
-                        setShowLotImage(true);
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Typography variant="h4" component='span' style={{ whiteSpace: 'nowrap', }}>
-                      {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}<br />
-                      <Link
-                        to={`/divisions/details/${user?.division?._id}`}
-                        style={{
-                          textDecoration: 'none',
-                          color: 'inherit',
-                        }}
-                      >
-                        <Typography variant="body1">{`${user?.supportDetails?.designation?.name}`}</Typography>
-                        <Typography variant="body1">{`${user?.division?.details?.name}`}</  Typography>
-                      </Link>
-                    </Typography>
-                  </Grid>
+            <Box sx={{ width: '100%', height: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                </Container>
-              </Grid>
+              <Container>
+                <Grid item xs={12} md={6} style={{ textAlign: 'center' }}>
+                  <Avatar
+                    sx={{ width: '200%', height: '100%', objectFit: 'cover', borderRadius: 1, textAlign: 'center' }}
+                    src={`${user?.imageURL?.replace('uc', 'thumbnail')}`}
+                    alt={`${user?.basicDetails.firstName}`}
+                    onClick={() => {
+                      setShowLotImage(true);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Typography variant="h4" component='span' style={{ whiteSpace: 'nowrap' }}>
+                    {`${user?.basicDetails.firstName} ${user?.basicDetails.lastName}`}<br />
+                    <Link
+                      to={`/divisions/details/${user?.division?._id}`}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                      }}
+                    >
+                      <Typography variant="body1">{`${user?.supportDetails?.designation?.name}`}</Typography>
+                      <Typography variant="body1">{`${user?.division?.details?.name}`}</Typography>
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Container>
             </Box>
+
+
           </Card>
         </Grid>
         <Grid item xs={12} md={9}>
@@ -362,6 +371,14 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {(user as unknown as IWorker)?.spouse?.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
                   <Grid item xs={12} lg={4}>
                     <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                      Profile Added On:
+                    </Typography>
+                    {((user as unknown as IWorker)?.spouse?.ProfileAddedOn && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).isValid()) && moment((user as unknown as IWorker)?.spouse?.ProfileAddedOn).format('DD/MM/YYYY')}
+                  </Grid>
+
+
+                  <Grid item xs={12} lg={4}>
+                    <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
                       Age:
                     </Typography>
                     {((user as unknown as IWorker)?.spouse?.dateOfBirth?.fromNow() || '').replace(' ago', '')}
@@ -386,9 +403,9 @@ const Profile = () => {
               <TabPanel value={currentTab} index={3}>
                 <Container>
                   <br />
-                  <Grid container spacing={3} width={'175vh'}>
+                  <Grid container spacing={5} width={'80vw'}  >
                     {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && (user as unknown as IWorker)?.children.map((child) => (
-                      <Grid key={child._id} item xs={12} lg={4}>
+                      <Grid key={child._id} item xs={12} lg={4} sx={{ width: '80px' }}>
                         <Grid container spacing={3} sx={{ border: '1px dashed grey', borderRadius: 2, pb: 3 }}>
                           <Grid item xs={12}><br /><Typography textAlign="center"> <span style={{ fontWeight: 600 }}> CHILD CODE :</span> {child.childCode}</Typography></Grid>
                           {/* <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Code: </Typography> {child.childCode} </Grid> */}
@@ -407,6 +424,17 @@ const Profile = () => {
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Level: </Typography> </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}></Typography> {child.childSupport.name} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Amount: </Typography> {child.childSupport.amount} </Grid>
+
+                          {/* <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Profile Added On: </Typography> {child?.profileAddedOn?.format('DD/MM/YYYY')} </Grid> */}
+                          <Grid item xs={12} lg={4}>
+                            <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>
+                              Profile Added On:
+                            </Typography>
+                            {(child?.profileAddedOn && moment(child?.profileAddedOn).isValid()) && moment(child?.profileAddedOn).format('DD/MM/YYYY')}
+                          </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Adhaar NO : </Typography> {child.adharCardNo} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {child.phoneNumber} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {child.emailId} </Grid>
                         </Grid>
                       </Grid>
                     ))}
