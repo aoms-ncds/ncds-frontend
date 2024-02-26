@@ -96,13 +96,13 @@ const Profile = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-  if (tabNO == '2') {
-    useEffect(() => {
+  useEffect(() => {
+    if (tabNO == '2') {
       setCurrentTab(2);
-    }, [])
-  } else if (tabNO == '3') {
-    setCurrentTab(3);
-  }
+    } else if (tabNO == '3') {
+      setCurrentTab(3);
+    }
+  }, [])
   useEffect(() => {
     if (userId && userKind === 'staff') {
       StaffServices.getById(userId)
