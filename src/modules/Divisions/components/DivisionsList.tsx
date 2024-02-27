@@ -4,11 +4,11 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
-import { Add as AddIcon } from '@mui/icons-material';
+
 
 const DivisionsList = () => {
   const [loadCount, setLoadCount] = useState(0);
@@ -113,7 +113,7 @@ const DivisionsList = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => (<b>Division ID</b>),
-      width: 110, valueGetter: (props) => props.row.details.divisionId
+      width: 110, valueGetter: (props) => props.row.details.divisionId,
     },
     {
       field: 'divisionName',
@@ -155,7 +155,7 @@ const DivisionsList = () => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.email,
-      width: 150
+      width: 150,
     },
     {
       field: 'coordinatorPhone',
@@ -165,7 +165,7 @@ const DivisionsList = () => {
       renderHeader: () => (<b>Coordinator Phone</b>),
 
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.phone,
-      width: 140
+      width: 140,
     },
 
     {
@@ -176,7 +176,7 @@ const DivisionsList = () => {
       renderHeader: () => (<b>No. of Workers</b>),
 
       valueGetter: (props) => props.row.details?.noOfWorkers,
-      width: 130
+      width: 130,
     },
     {
       field: 'NoOfSubdivisions',
@@ -186,20 +186,20 @@ const DivisionsList = () => {
       renderHeader: () => (<b>No. of Subdivisions</b>),
 
       valueGetter: (props) => props.row.details?.noOfSubdivisions,
-      width: 210
+      width: 210,
     },
   ];
 
-  const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (divisions ?? []).filter(row => {
+  const filteredRows = (divisions ?? []).filter((row) => {
     if ((row.details.name && row.details.name.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-    return Object.values(row).some(value =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
   return (
@@ -240,8 +240,8 @@ const DivisionsList = () => {
       </Grid>
       <Box
         sx={{
-          height: 300,
-          width: '100%',
+          'height': 300,
+          'width': '100%',
           '& .super-app-theme--cell': {
             backgroundColor: '#f1f5fa',
             color: 'black',
@@ -278,10 +278,9 @@ const DivisionsList = () => {
       </Box>
 
 
-
     </>
 
-  )
+  );
 };
 
 export default DivisionsList;

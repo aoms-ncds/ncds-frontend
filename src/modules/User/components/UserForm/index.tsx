@@ -87,7 +87,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       gender: undefined,
       adharCardNo: 0,
       phoneNumber: 0,
-      emailId: ''
+      emailId: '',
     });
   };
   const deleteChild = (_index: number) => {
@@ -515,12 +515,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
 
                 <Grid item xs={12}>
                   <br />
-                  <Divider textAlign="left">Insurance Details</Divider>
+                  <Divider textAlign="left">Welfare Scheme Details</Divider>
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
-                    label="Impact No"
+                    label="ID No"
                     value={props.value.insurance?.impactNo}
                     onChange={(e) =>
                       props.onChange({
@@ -538,7 +538,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
 
                 <Grid item xs={12} md={6} lg={4}>
                   <DatePicker
-                    label="Date Of Joining Insurance"
+                    label="Date Of Joining"
                     value={props.value.insurance?.dojInsurance}
                     onChange={(newDate) =>
                       props.onChange({
@@ -1015,7 +1015,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant} InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
+                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
                 </Grid>
               </Grid>
             </Container>

@@ -1,4 +1,8 @@
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts
+  as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Add as
+  AddIcon, Download as DownloadIcon,
+} from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -13,7 +17,7 @@ import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
 import * as XLSX from 'xlsx';
-import { Add as AddIcon, Download as DownloadIcon } from '@mui/icons-material';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ChildrenServices from '../../Workers/extras/ChildrenServices';
@@ -43,7 +47,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-
 
 
   useEffect(() => {
@@ -175,16 +178,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
-  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (props.value ?? []).filter(row => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+  const filteredRows = (props.value ?? []).filter((row) => {
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-    return Object.values(row).some(value =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
 
@@ -604,8 +608,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
-              height: 300,
-              width: '100%',
+              'height': 300,
+              'width': '100%',
               '& .super-app-theme--cell': {
                 backgroundColor: '#f1f5fa',
                 color: 'black',

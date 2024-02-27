@@ -20,6 +20,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     tokens: [],
     basicDetails: {
       firstName: '',
+      middleName: '',
       lastName: '',
       email: '',
       permanentAddress: {},
@@ -29,10 +30,11 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     officialDetails: {
       divisionHistory: [],
       remarks: '',
-      selfSupport: true,
       // status: '',
     },
     supportDetails: {
+      selfSupport: true,
+      percentageofSelfSupport: 0,
       // totalNoOfYearsInMinistry: 10,
       // withChurch: true,
     },
@@ -72,25 +74,27 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     }
 
     if (props.action == 'add') {
-    // console.log((auth.user as IWorker).division, 'vbhfvh');
-      const divid=(auth.user as IWorker).division as unknown as string;
+      // console.log((auth.user as IWorker).division, 'vbhfvh');
+      const divid = (auth.user as IWorker).division as unknown as string;
       DivisionsServices.getDivisionById(divid)
-    .then((res)=> {
-      setWorker(()=>(
-        { ...worker,
-          officialDetails: {
-            ...worker.officialDetails,
-            divisionHistory: [
-              {
-                division: res.data,
-                subDivision: undefined,
-                dateOfDivisionJoining: null,
-                dateOfDivisionLeaving: null,
-              }],
-          } }),
-      );
-    },
-    );
+        .then((res) => {
+          setWorker(() => (
+            {
+              ...worker,
+              officialDetails: {
+                ...worker.officialDetails,
+                divisionHistory: [
+                  {
+                    division: res.data,
+                    subDivision: undefined,
+                    dateOfDivisionJoining: null,
+                    dateOfDivisionLeaving: null,
+                  }],
+              }
+            }),
+          );
+        },
+        );
     }
   }, []);
 
@@ -109,7 +113,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           kind: 'worker',
           profilePic: {
             userPhoto: userPhoto,
-            setUserPhoto: ((newUserPhoto)=>setUserPhoto(newUserPhoto)),
+            setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
 
           },
         }}
@@ -122,7 +126,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
               const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (error: any) {
             enqueueSnackbar({
               variant: 'error',

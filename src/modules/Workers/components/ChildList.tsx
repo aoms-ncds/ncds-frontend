@@ -75,7 +75,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       .then((res) => {
         navigate(`/users/worker/${res.data.childOf}/3`);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching user:', error);
       });
   };
@@ -121,7 +121,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
             icon={<PersonIcon />}
             showInMenu
             onClick={() => handleClick(params)}
-          />
+          />,
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },

@@ -72,9 +72,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
       if (divDi) {
         DivisionsServices.getDivisionById(divDi).then((res) => {
           setDivision(res.data.details.name);
-
-
-        })
+        });
       }
     }, []);
   }
@@ -351,7 +349,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               boxSizing: 'border-box',
               // transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
               width: open ? drawerWidth : '70px',
-              marginTop: '65px'
+              marginTop: '65px',
             },
           }}
           open

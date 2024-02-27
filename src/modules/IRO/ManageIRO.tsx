@@ -39,7 +39,7 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
-  console.log(props, 'dd')
+  console.log(props, 'dd');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [fr, setFr] = useState<FR>();
@@ -139,6 +139,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       tokens: [],
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -149,11 +150,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -177,7 +179,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -758,8 +760,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   >
                     <Box
                       sx={{
-                        height: 300,
-                        width: '100%',
+                        'height': 300,
+                        'width': '100%',
                         '& .super-app-theme--cell': {
                           backgroundColor: '#f1f5fa',
                           color: 'black',

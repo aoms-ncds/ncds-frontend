@@ -69,8 +69,10 @@ const EditIRO = () => {
       workerCode: '',
       kind: 'worker',
       tokens: [],
+
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -81,11 +83,12 @@ const EditIRO = () => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -158,7 +161,7 @@ const EditIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   const [newParticular, setNewParticular] = useState<Particular>({

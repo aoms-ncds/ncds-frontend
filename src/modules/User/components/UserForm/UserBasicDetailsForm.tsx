@@ -1,4 +1,4 @@
-import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider, IconButton } from '@mui/material';
+import { Grid, FormControl, TextField, FormControlLabel, FormLabel, Radio, RadioGroup, Autocomplete, Divider, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -70,8 +70,8 @@ const UserBasicDetailsForm = (
             name="Field"
             row
           >
-            <FormControlLabel value="Missionary" control={<Radio />} label="Missionary" />
-            <FormControlLabel value="Non-Missionary" control={<Radio />} label="Non-Missionary" />
+            <FormControlLabel value="Field" control={<Radio />} label="Field" />
+            <FormControlLabel value="Office Staff" control={<Radio />} label="Office Staff" />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -85,6 +85,19 @@ const UserBasicDetailsForm = (
           fullWidth
           InputProps={{ required: true, autoFocus: true }}
           required
+        />
+
+        <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Name as per the Aadhar card )</Typography>
+      </Grid>
+
+      <Grid item xs={12} md={6} lg={4}>
+        <TextField
+          label="Middle Name"
+          value={props.value.middleName}
+          onChange={(e) => props.onChange({ ...props.value, middleName: e.target.value })}
+          variant={props.options?.textField?.variant}
+          fullWidth
+          InputProps={{ required: false, autoFocus: false }}
         />
       </Grid>
 
@@ -217,7 +230,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
 
         />
@@ -303,7 +316,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
       </Grid>
@@ -319,7 +332,7 @@ const UserBasicDetailsForm = (
           InputLabelProps={{
 
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -340,7 +353,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -355,7 +368,7 @@ const UserBasicDetailsForm = (
         <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
 
@@ -390,8 +403,9 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
+          required
         />
       </Grid>
 
@@ -425,7 +439,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
       </Grid>
@@ -443,7 +457,7 @@ const UserBasicDetailsForm = (
           }
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           variant={props.options?.textField?.variant}
           fullWidth
@@ -452,7 +466,7 @@ const UserBasicDetailsForm = (
 
       {/* <Grid item xs={12}>
         <br />
-        <Divider textAlign="left">Insurance Details</Divider>
+        <Divider textAlign="left">Welfare Scheme Details</Divider>
       </Grid>
 
 
@@ -476,7 +490,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Joining Insurance"
+          label="Date Of Joining"
           value={props.value.insurance?.dojInsurance}
           onChange={(newDate) =>
             props.onChange({

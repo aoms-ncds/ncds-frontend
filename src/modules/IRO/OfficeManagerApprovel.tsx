@@ -129,6 +129,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       tokens: [],
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -139,11 +140,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -167,7 +169,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
