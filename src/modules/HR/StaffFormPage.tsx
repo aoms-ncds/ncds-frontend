@@ -49,6 +49,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   });
 
   const [userPhoto, setUserPhoto] = useState<File>();
+  const [childPhoto, setChildPhoto] = useState<File>();
 
   useEffect(() => {
     if (id) {
@@ -82,6 +83,11 @@ const StaffFormPage = (props: StaffFormPageProps) => {
           profilePic: {
             userPhoto: userPhoto,
             setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
+
+          },
+          childprofilePic: {
+            childPhoto: childPhoto,
+            setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
 
           },
         }}

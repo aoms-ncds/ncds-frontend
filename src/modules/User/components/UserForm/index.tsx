@@ -50,6 +50,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         userPhoto?: File;
         setUserPhoto?: (newUserPhoto: File) => void;
       };
+      childprofilePic: {
+        childPhoto?: File;
+        setChildPhoto?: (newChildPhoto: File) => void;
+      };
+
     }
   >,
 ) => {
@@ -69,6 +74,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     higherEducation: false,
     courseName: '',
     totalAmountforCourse: 0,
+    childProfile: ''
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
@@ -88,6 +94,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       adharCardNo: 0,
       phoneNumber: 0,
       emailId: '',
+      childProfile: ''
     });
   };
   const deleteChild = (_index: number) => {
@@ -128,7 +135,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       );
   }, []);
   console.log(props.value, 'props.value.officialDetails');
-
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {
   //   lastProgramNameField.current?.focus();
@@ -139,6 +145,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   //   //   })
   //   // }
   // }, [children]);
+  console.log(newChild, 'ptoorororo');
 
   return (
     <>
@@ -207,6 +214,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       style={{ display: 'none' }}
                       onChange={(e) => {
                         e.preventDefault(); // Prevent the default behavior of the file input
+                        console.log(e.target.files, 'wrkerpic');
 
                         if (e.target.files) {
                           console.log('size is', e.target.files[0].size / 1024);
@@ -652,6 +660,62 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         >
           <DialogTitle>Add Child</DialogTitle>
           <DialogContent>
+            <br />
+            <Grid container spacing={3}>
+              {/* {props.options?.childprofilePic?.setChildPhoto && ( */}
+              <Grid item xs={12}>
+                <label htmlFor="imagePicker">
+                  <Avatar
+                    sx={{
+                      height: 150,
+                      width: 150,
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                    variant="rounded"
+                    src={newChild.childProfile?.replace('uc', 'thumbnail') ?? ''}
+                  >
+                    {/* {!newChild.childProfile && <ImageIcon sx={{ fontSize: 100 }} />} */}
+                  </Avatar>
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="imagePicker"
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    e.preventDefault(); // Prevent the default behavior of the file input
+                    console.log(e.target?.files, 'ddd');
+
+                    if (e.target.files && e.target.files[0]) {
+                      const selectedFile = e.target.files[0];
+
+                      if (selectedFile.size > 1e6) {
+                        enqueueSnackbar({
+                          message: 'File size cannot be greater than 1 MB',
+                          variant: 'error',
+                        });
+                      } else {
+                        const fileURL = URL.createObjectURL(selectedFile);
+                        console.log(fileURL, 'fileURL');
+
+
+                        // Update the state with the new file URL
+                        setNewChild((newChild) => ({
+                          ...newChild,
+                          childProfile: fileURL,
+                        }));
+
+                        // Optionally, you can also set the file in your props
+                        props.options?.childprofilePic?.setChildPhoto?.(selectedFile);
+                      }
+                    }
+                  }}
+                />
+
+              </Grid>
+              {/* )} */}
+            </Grid>
             <br />
             <Container>
               <Grid container spacing={3}>

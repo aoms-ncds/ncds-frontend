@@ -58,6 +58,9 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   });
 
   const [userPhoto, setUserPhoto] = useState<File>();
+  const [childPhoto, setChildPhoto] = useState<File>();
+  console.log(childPhoto, 'childPhoto');
+  console.log(userPhoto, 'childPhoto');
 
 
   useEffect(() => {
@@ -116,15 +119,22 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
 
           },
+          childprofilePic: {
+            childPhoto: childPhoto,
+            setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
+
+          },
         }}
+
         onSubmit={async (creatableWorker) => {
           try {
             if (props.action === 'add') {
-              const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto);
+              const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto, childPhoto);
               enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
             } else if (props.action === 'edit') {
-              const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto);
+              const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto, childPhoto);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
+
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (error: any) {

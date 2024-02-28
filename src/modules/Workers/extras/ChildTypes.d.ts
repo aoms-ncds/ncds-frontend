@@ -7,6 +7,7 @@ declare global {
     childCode: string;
     firstName: string;
     lastName: string;
+    childProfile: string;
     dateOfBirth: Moment;
     childOf: IWorker | null;
     childSupport: IChildSupport;
@@ -27,11 +28,13 @@ declare global {
     endingYear: Moment;
 
 
+
   }
   interface CreatableChild extends Creatable<Child> {
     childCode?: string;
     dateOfBirth?: Moment;
     childOf?: IWorker | null;
+    childProfile: string;
     childSupport?: IChildSupport;
     studying?: boolean;
     classOfStudy?: string;
