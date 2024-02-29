@@ -47,6 +47,20 @@ const workersPageRoutes: ModuleRoute = {
       requiredAccessRights: ['WRITE_WORKERS'],
     },
     {
+      title: 'Edit Worker',
+      path: '/edit/:id/:tabNO',
+      element: <WorkerFormPage action="edit" />,
+      private: true,
+      requiredAccessRights: ['WRITE_WORKERS'],
+    },
+    // {
+    //   title: 'Edit child',
+    //   path: '/:userKind/:userId',
+    //   element: <WorkerFormPage action="edit" />,
+    //   private: true,
+    //   requiredAccessRights: ['READ_ACCESS'],
+    // },
+    {
       title: 'In Process Workers',
       path: '/reject',
       element: <SendBackWorkersPage />,

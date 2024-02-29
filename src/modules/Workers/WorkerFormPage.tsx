@@ -12,7 +12,9 @@ interface WorkerFormPageProps {
 }
 const WorkerFormPage = (props: WorkerFormPageProps) => {
   const auth = useAuth();
-  const { id } = useParams();
+  // const { id } = useParams();
+  const { id, userId, userKind, tabNO } = useParams();
+  console.log(tabNO, 'ss');
 
   const [worker, setWorker] = useState<CreatableIWorker>({
     workerCode: '',
@@ -59,8 +61,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
 
   const [userPhoto, setUserPhoto] = useState<File>();
   const [childPhoto, setChildPhoto] = useState<File>();
-  console.log(childPhoto, 'childPhoto');
-  console.log(userPhoto, 'childPhoto');
 
 
   useEffect(() => {
@@ -124,6 +124,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
 
           },
+          tab: tabNO
         }}
 
         onSubmit={async (creatableWorker) => {

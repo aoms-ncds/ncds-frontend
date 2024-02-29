@@ -2,6 +2,7 @@ import Profile from '../Profile';
 import PermissionManager from '../PermissionManager';
 import ForgottenPasswordFormPage from '../ForgotPasswordForm';
 import ResetPasswordFormPage from '../rest_password_form';
+import WorkerFormPage from '../../Workers/WorkerFormPage';
 
 const usersPageRoutes: ModuleRoute = {
   base: '/users',
@@ -31,6 +32,13 @@ const usersPageRoutes: ModuleRoute = {
       title: 'View spouse',
       path: '/:userKind/:userId/:tabNO',
       element: <Profile />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+    },
+    {
+      title: 'Edit child',
+      path: '/:userKind/:userId/:tabNO',
+      element: <WorkerFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
     },

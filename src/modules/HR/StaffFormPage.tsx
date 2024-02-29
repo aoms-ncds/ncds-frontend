@@ -90,6 +90,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
             setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
 
           },
+          tab: 0
         }}
         onSubmit={async (creatableStaff) => {
           try {

@@ -54,6 +54,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         childPhoto?: File;
         setChildPhoto?: (newChildPhoto: File) => void;
       };
+      tab: any
 
     }
   >,
@@ -97,6 +98,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       childProfile: ''
     });
   };
+  if (props?.options?.tab) {
+
+    useEffect(() => {
+      setActiveStep(3)
+    }, [])
+  }
   const deleteChild = (_index: number) => {
     props.onChange({
       ...props.value,

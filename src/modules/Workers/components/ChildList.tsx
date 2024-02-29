@@ -2,12 +2,13 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Card, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
+import EditIcon from '@mui/icons-material/Edit';
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
-import { hasPermissions } from '../../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useNavigate } from 'react-router-dom';
 import ChildrenServices from '../extras/ChildrenServices';
 
@@ -80,6 +81,17 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       });
   };
 
+  const handleEdit = (rowId: any) => {
+    ChildrenServices.getById(rowId.id)
+      .then((res) => {
+        navigate(`/workers/edit/${res.data.childOf}/4`);
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      });
+
+  }
+
   const columns: GridColDef<Child>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
     {
@@ -122,6 +134,21 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
             showInMenu
             onClick={() => handleClick(params)}
           />,
+
+          ...(hasPermissions(['HR_DPARTMENT_ACCESS']) ?
+            [
+              <GridLinkAction
+                key={5}
+                label="Edit"
+                icon={<EditIcon />}
+                showInMenu
+                onClick={() => handleEdit(params)}
+              />
+            ] :
+            []),
+
+
+
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },

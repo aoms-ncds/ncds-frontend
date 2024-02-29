@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 // import languages from './CommonConfig';
 
-export default { };
+export default {};
 
 declare global {
   interface ModuleRoute {
@@ -41,9 +41,9 @@ declare global {
     fileId: string;
     downloadURL: string | null;
     private: boolean;
-    status:number;
-    refId?:string;
-    base64?:string;
+    status: number;
+    refId?: string;
+    base64?: string;
 
   }
   type FileObjectType =
@@ -75,7 +75,7 @@ declare global {
     options?: Options;
   }
 
- type RecursivePartial<T> = {
+  type RecursivePartial<T> = {
     [P in keyof T]?: T[P] extends object ? RecursivePartial<T[P]> : T[P];
   };
 
@@ -95,13 +95,13 @@ declare global {
     rangeType?: DateRangeType;
   }
   type DateRangeType =
-  | 'date-time'
-  | 'days'
-  | 'weeks'
-  | 'months'
-  | 'quarter_years'
-  | 'years'
-  | 'customRange'
-  | 'customDay';
+    | 'date-time'
+    | 'days'
+    | 'weeks'
+    | 'months'
+    | 'quarter_years'
+    | 'years'
+    | 'customRange'
+    | 'customDay';
 
 }
