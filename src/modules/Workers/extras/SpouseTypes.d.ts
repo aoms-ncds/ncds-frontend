@@ -16,7 +16,9 @@ declare global {
     qualification?: string;
     knownLanguages?: ILanguage[];
     insurance?: Insurance;
+    reasonForDeactivation?: DeactivationReason;
   }
+
   interface CreatableSpouse extends Creatable<Spouse> {
     spouseCode?: string;
     spouseOf?: IWorker;

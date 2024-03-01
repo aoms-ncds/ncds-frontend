@@ -26,6 +26,7 @@ declare global {
     totalAmountforCourse: number;
     startingYear: Moment;
     endingYear: Moment;
+    reasonForDeactivation?: DeactivationReason;
 
 
 
@@ -51,6 +52,7 @@ declare global {
     totalAmountforCourse?: number;
     startingYear?: Moment;
     endingYear?: Moment;
+    reasonForDeactivation?: DeactivationReason;
   }
 
   // interface IChildSupport extends MongooseDocument{
