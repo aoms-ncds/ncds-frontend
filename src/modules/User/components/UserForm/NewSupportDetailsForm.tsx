@@ -127,8 +127,8 @@ const NewSupportDetailsForm = (
             name="TypeOfFamily"
             row
           >
-            <FormControlLabel value={'Single Missionary'} control={<Radio />} label="Single Missionary" />
-            <FormControlLabel value={'Family Missionary'} control={<Radio />} label="Family Missionary" />
+            <FormControlLabel value={'Single'} control={<Radio />} label="Single" />
+            <FormControlLabel value={'Family'} control={<Radio />} label="Family" />
           </RadioGroup>
         </FormControl>
       </Grid>

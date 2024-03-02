@@ -88,6 +88,12 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText="Child Support Age Edit" color="#fff" onClick={handleClickOpen} />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText=" Add Gander" color="#fff" targetRoute="/settings/Gander" />
+        </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText=" Add Religion" color="#fff" targetRoute="/settings/Relogion" />
+        </Grid>
       </Grid>
 
 

@@ -168,7 +168,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="PION Missionary Fund"
+          label="PNRM Allowance"
           type="number"
           value={props.value?.PIONMissionaryFund === 0 ? '' : props.value?.PIONMissionaryFund}
           onChange={(e) =>
@@ -190,7 +190,7 @@ const NewUserSupportStructureForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="MUT Deduction (Medical Insurance)"
+          label="WS Deduction"
           type="number"
           value={props.value?.MUTDeduction === 0 ? '' : props.value?.MUTDeduction}
           onChange={(e) =>

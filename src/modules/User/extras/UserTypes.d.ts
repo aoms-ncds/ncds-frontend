@@ -48,7 +48,7 @@ declare global {
     middleName: string;
     lastName: string;
     dateOfBirth: Moment;
-    gender?: Gender;
+    gender?: string;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
     religion?: Religion;
@@ -117,7 +117,7 @@ declare global {
   };
   type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
   type OfficialDetailsStatus = 'Active' | 'Left' | 'Education Leave' | 'Sabbatical Leave' | null;
-  type TypeOfFamily = 'Single Missionary' | 'Family Missionary';
+  type TypeOfFamily = 'Single' | 'Family';
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
     divisionHistory: CreatableDivisionHistory[];
@@ -176,10 +176,10 @@ declare global {
 
   }
 
-  type Gender = 'Male' | 'Female' | 'Other';
+  // type Gender = 'Male' | 'Female' | 'Other';
   type MaritalStatus = 'Married' | 'Unmarried';
   type WorkerField = 'Field' | 'Office Staff';
-  type Religion = 'Hindu' | 'Muslim' | 'Christian' | 'Sikh';
+  // type Religion = 'Hindu' | 'Muslim' | 'Christian' | 'Sikh';
   interface LoginCredentials {
     email: string;
     password: string;

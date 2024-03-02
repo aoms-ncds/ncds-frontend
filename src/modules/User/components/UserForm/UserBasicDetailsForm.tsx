@@ -11,6 +11,7 @@ import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../../../extras/CommonConfig';
+import GenderService from '../../../Settings/extras/GenderService';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<
@@ -33,8 +34,10 @@ const UserBasicDetailsForm = (
   const [emailError, setEamilError] = useState<string | null>(null);
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
+  const [gender, setGender] = useState<IGender[]>([]);
   useEffect(() => {
     LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE }).then((res) => setLanguages(res.data));
+    GenderService.getAll().then((res) => setGender(res.data));
   }, []);
 
   useEffect(() => {
@@ -150,7 +153,7 @@ const UserBasicDetailsForm = (
         />
       </Grid>
 
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="Gender">Gender</FormLabel>
           <RadioGroup
@@ -170,7 +173,18 @@ const UserBasicDetailsForm = (
             <FormControlLabel value="Other" control={<Radio />} label="Other" />
           </RadioGroup>
         </FormControl>
+      </Grid> */}
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
+          id="gender"
+          options={gender}
+          getOptionLabel={(option) => option.gender}
+          value={props.value.gender ?? ''}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: props.value ?? '' })}
+          renderInput={(params) => <TextField {...params} label="Gender" variant={props.options?.textField?.variant} />}
+        />
       </Grid>
+
 
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
