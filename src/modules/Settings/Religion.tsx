@@ -5,7 +5,7 @@ import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
-import ReligionService from './extras/RelogionService';
+import ReligionService from './extras/ReligionService';
 
 const Relogion = () => {
     const [religion, setReligion] = useState<IReligion[] | null>(null);

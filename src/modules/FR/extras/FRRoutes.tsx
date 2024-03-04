@@ -4,6 +4,8 @@ import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
 import PresidentApproval from '../PresidentApproval';
+import SentBack from '../SendBack';
+         
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
@@ -24,10 +26,10 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
-    },
+    },  
     {
-      title: 'FR Approve',
-      path: '/approve',
+      title: 'FR Verify',
+      path: '/Approve',
       element: <PresidentApproval />,
       private: true,
       requiredAccessRights: ['PRESIDENT_ACCESS'],
@@ -61,6 +63,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'edit FR',
       path: '/:frID/edit',
       element: <FRFormPage action="edit" />,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Revert Fr',
+      path: '/sentBack',
+      element: <SentBack/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,

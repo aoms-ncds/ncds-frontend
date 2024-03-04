@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ChildrenServices from '../../Workers/extras/ChildrenServices';
 import SpousesServices from '../../Workers/extras/SpousesServices';
+import ReasonforDeactivationService from '../../Settings/extras/ReasonforDeactivationService';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active'; showEditButton?: boolean }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
@@ -29,11 +30,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [rowID, setRowID] = useState<string>('');
-  const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null |strin>();
   const [users, setUsers] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
-
+  const [reason, setReason] = useState<IReason[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -47,7 +48,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-
+useEffect(()=>{
+  ReasonforDeactivationService.getAll().then((res)=>{
+    setReason(res.data)
+  })
+},[])
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -112,7 +117,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //   });
   // });
 
-  const deactivateWorker = (id: string, reason: string) => {
+  const deactivateWorker = (id: string, reason: string | [])  => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
@@ -723,11 +728,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <DialogTitle>Reason</DialogTitle>
         <DialogContent>
           <br />
-          <Autocomplete<string>
-            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
-            value={reasonForDeactivation}
+          <Autocomplete<IReason>
+            options={reason?? undefined}
+            value={reasonForDeactivation?? undefined}
+            getOptionLabel={(option) => option.reason ?? ''}
             onChange={(e, selectedReason) => {
-              setReasonForDeactivation(selectedReason);
+              setReasonForDeactivation(selectedReason ?? null);
             }}
             renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
             fullWidth

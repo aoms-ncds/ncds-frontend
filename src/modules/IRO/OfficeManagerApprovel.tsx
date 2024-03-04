@@ -513,7 +513,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        }}> {props?.row?.sanctionedAsPer?.toString()}</p>
       ),
       width: 200,
       align: 'center',
@@ -544,7 +544,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Office Manager Approve'}>
+    <CommonPageLayout title={'Office Manager Verify'}>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={

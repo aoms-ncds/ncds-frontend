@@ -579,7 +579,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {' '}
-          {props.row.sanctionedAsPer}
+          {props.row.sanctionedAsPer.toString()}
         </p>
       ),
       width: 200,
@@ -636,8 +636,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
       //   </p>
       // ),
+      // valueGetter: (params) => {
+      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      // },
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        console.log(statusName, 'lolpß');
+        // Check if the status name needs to be changed
+        switch (statusName) {
+          case 'SEND_BACK':
+            statusName = 'REVERTED';
+            break;
+          case 'FR_APPROVED':
+            statusName = 'FR VERIFIED'; // Change to whatever new name you want
+            break;
+          case 'FR_REJECTED':
+            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+            break;
+          // Add more cases for other status names you want to change
+          default:
+            statusName = statusName.replaceAll('_', ' ');
+            break;
+        }
+        return statusName;
       },
     },
   ];

@@ -11,6 +11,7 @@ declare global {
     sanction: string;
     purpose: FRPurpose;
     IRO?: string;
+    reasonForSentBack:string
 
   }
 
@@ -35,11 +36,13 @@ declare global {
     purposeOthers?: string; // Added missing property
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
+    reasonForSentBack:string
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
 
-  type SanctionedAsPer = 'As per sanction by Manager' | 'As per policy' | 'As Per List Attached' | 'As Per Ticket Attached' | 'As Per Bill Attached' | 'As per Index Attached' | 'As Per Budget';
+  // type SanctionedAsPer = 'As per sanction by Manager' | 'As per policy' | 'As Per List Attached' | 'As Per Ticket Attached' | 'As Per Bill Attached' | 'As per Index Attached' | 'As Per Budget';
+  type SanctionedAsPer = [];
   interface Coordinator {
     _id: string;
     coordinatorName: string | undefined;
@@ -103,7 +106,7 @@ declare global {
     purposeOthers?: string;
     sanctionedAmount: number;
     status: number;
-    sanctionedAsPer: string;
+    sanctionedAsPer: string | ISanctionedAsPer;
     specialsanction: string;
     sanctionedBank: string;
     mainCategory: string;

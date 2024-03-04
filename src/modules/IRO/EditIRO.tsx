@@ -34,7 +34,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../extras/CommonConfig';
-import { monthNames, purposes, sanctionedAsPers } from '../FR/extras/FRConfig';
+import { monthNames, purposes } from '../FR/extras/FRConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import FRServices from '../FR/extras/FRServices';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
@@ -44,6 +44,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
+import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -178,8 +179,16 @@ const EditIRO = () => {
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
+  useEffect( ()=>{
+    const ddata=  SanctionedAsPerService.getAll().then((res)=>{
+      console.log(ddata, 'fdfd');
+      
+      setSanctionedAsPer(res.data)
+    })
 
-
+  },[])
+  
   const editParticular = (particular: Particular) => {
     // setParticularDialog('edit');
     setShowAddParticularDialog(true);
@@ -479,13 +488,13 @@ const EditIRO = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={IRO?.sanctionedAsPer}
-                      options={sanctionedAsPers ?? []}
-                      getOptionLabel={(requisition) => requisition ?? ''}
+                      options={sanctionedAsPer ?? []}
+                      getOptionLabel={(option) => option.asPer ?? ''}
                       onChange={(_e, selectedSanction) => {
                         if (selectedSanction) {
                           setIRO({
                             ...IRO,
-                            sanctionedAsPer: selectedSanction as SanctionedAsPer,
+                            sanctionedAsPer: selectedSanction as ISanctionedAsPer,
                           });
                         }
                       }}
@@ -906,10 +915,7 @@ const EditIRO = () => {
           </DialogActions>
         </form>
       </Dialog>
-
     </>
-
-
   );
 };
 

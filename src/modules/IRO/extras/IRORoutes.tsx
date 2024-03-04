@@ -32,14 +32,14 @@ const iroPageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_IRO'],
     },
     {
-      title: 'Office Approve',
+      title: 'Office Verify',
       path: '/office_approve',
       element: <OfficeMangerApprove action={'manage'}/>,
       private: true,
       requiredAccessRights: ['OFFICE_MNGR_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     }, {
-      title: 'Account Approve',
+      title: 'Account Verify',
       path: '/account_approve',
       element: <AccountApprove action={'manage'}/>,
       private: true,

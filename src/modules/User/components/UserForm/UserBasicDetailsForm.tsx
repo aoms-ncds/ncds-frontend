@@ -12,6 +12,7 @@ import FileUploader from '../../../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../../../extras/CommonConfig';
 import GenderService from '../../../Settings/extras/GenderService';
+import ReligionService from '../../../Settings/extras/ReligionService';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<
@@ -35,9 +36,11 @@ const UserBasicDetailsForm = (
 
   const [languages, setLanguages] = useState<ILanguage[]>([]);
   const [gender, setGender] = useState<IGender[]>([]);
+  const [religion, setReligion] = useState<IReligion[]>([]);
   useEffect(() => {
     LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE }).then((res) => setLanguages(res.data));
     GenderService.getAll().then((res) => setGender(res.data));
+    ReligionService.getAll().then((res) => setReligion(res.data));
   }, []);
 
   useEffect(() => {
@@ -180,7 +183,7 @@ const UserBasicDetailsForm = (
           options={gender}
           getOptionLabel={(option) => option.gender}
           value={props.value.gender ?? ''}
-          onChange={(e, newValue) => props.onChange({ ...props.value, gender: props.value ?? '' })}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue ?? '' })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props.options?.textField?.variant} />}
         />
       </Grid>
@@ -223,9 +226,10 @@ const UserBasicDetailsForm = (
         </Grid>
       )}
       <Grid item xs={12} md={6} lg={4}>
-        <Autocomplete<Religion>
-          options={['Hindu', 'Muslim', 'Christian', 'Sikh']}
+        <Autocomplete<IReligion>
+          options={religion}
           value={props.value.religion ?? null}
+          getOptionLabel={(option) => option.religion}
           onChange={(e, selectedReligion) =>
             props.onChange({
               ...props.value,

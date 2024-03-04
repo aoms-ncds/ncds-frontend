@@ -25,7 +25,7 @@ import {
   // FormControlLabel,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
@@ -35,12 +35,14 @@ import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
-import { monthNames, purposes, sanctionedAsPers } from '../extras/FRConfig';
+import { monthNames, purposes } from '../extras/FRConfig';
 import { AttachFile as AttachmentIcon, Edit as EditIcon } from '@mui/icons-material';
 import MessageItem from '../../../components/MessageItem';
 import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
+import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
+import CloseIcon from '@mui/icons-material/Close';
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
   const navigate = useNavigate();
@@ -51,6 +53,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     transactionId: '',
   });
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonForSentBack, setReasonForSentBack] = useState<string | null>('');
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   // const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -71,6 +76,31 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     event.preventDefault();
     event.currentTarget.blur();
   };
+  useEffect( ()=>{
+    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+     
+
+      setSanctionedAsPer(res.data);
+    });
+  }, []);
+
+  const sentBack=(()=>{
+
+    setReasonDialog(true);
+    console.log('fdfd');
+    const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
+    if (props.onSubmit) {
+      const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ??''}; 
+      // Create a new object with updated status
+      props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+    }
+    setTimeout(() => {
+      closeSnackbar(rejectionSnack);
+      const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });
+      setTimeout(() => closeSnackbar(rejectedSnack), 500);
+    }, 500);
+    navigate('/fr/manage');
+  });
 
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
@@ -102,7 +132,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }
                   setTimeout(() => {
                     closeSnackbar(approvalSnack);
-                    const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                    const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
                     setTimeout(() => closeSnackbar(approvedSnack), 500);
                   }, 500);
                 }
@@ -375,16 +405,17 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     </FormControl>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <Autocomplete
+                    <Autocomplete<ISanctionedAsPer>
                       value={props.value.sanctionedAsPer ?? null}
-                      options={sanctionedAsPers ?? []}
-                      getOptionLabel={(requisition) => requisition}
+                      options={sanctionedAsPer ?? []}
+                      getOptionLabel={(option) => option.asPer}
+                      // getOptionLabel={(requisition) => requisition}
                       disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(_e, selectedSanction) => {
                         if (selectedSanction && props.action === 'view') {
                           props.onChange({
                             ...props.value,
-                            sanctionedAsPer: selectedSanction as SanctionedAsPer,
+                            sanctionedAsPer: selectedSanction as ISanctionedAsPer,
                           });
                         }
                       }}
@@ -447,25 +478,56 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                           <Button
                             variant="contained"
                             color="warning"
-                            onClick={() => {
-                              const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
-                              if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK }; // Create a new object with updated status
-                                props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                              }
-                              setTimeout(() => {
-                                closeSnackbar(rejectionSnack);
-                                const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });
-                                setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                              }, 500);
-                              navigate('/fr/manage');
+                            onClick={()=>{
+                               setReasonDialog(true)
                             }}
+                            
                           >
-                            Send Back
+                            Revert
                           </Button>
                         )}
                       />
+                      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+                        <DialogTitle>Reason</DialogTitle>
+                        <DialogContent>
+                          <br />
+                          <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              setReasonDialog(false);
+                              false;
+                            }}
+                            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+                          >
+                            <CloseIcon sx={{ color: 'white' }} />
+                          </Button>
 
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              if (reasonForSentBack) {
+                                // deactivateSpouse(iroID, reasonForDeactivation);
+                                sentBack()
+                              }
+                              setReasonDialog(false);
+                            }}
+                            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+                          >
+            submit
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                       &nbsp;
                     </>
                   ) : null}
@@ -489,20 +551,20 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                   }
                                   setTimeout(() => {
                                     closeSnackbar(rejectionSnack);
-                                    const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                    const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
                                     setTimeout(() => closeSnackbar(rejectedSnack), 500);
                                   }, 500);
                                   navigate('/fr/manage');
                                 }}
                               >
-                                Reject
+                                Disapprove
                               </Button>
                               &nbsp;<Button
                                 variant="contained"
                                 color="success"
                                 type='submit'
                               >
-                                Approve
+                                Verify
                               </Button>
                             </>
                           )}
@@ -562,13 +624,13 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                               }
                               setTimeout(() => {
                                 closeSnackbar(rejectionSnack);
-                                const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
                                 setTimeout(() => closeSnackbar(rejectedSnack), 500);
                               }, 500);
-                              navigate('/fr/approve');
+                              navigate('/fr/Approve');
                             }}
                           >
-                            Reject
+                            Disapprove
                           </Button>
                           &nbsp;<Button
                             variant="contained"
@@ -585,10 +647,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                 const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
                                 setTimeout(() => closeSnackbar(processedSnack), 500);
                               }, 500);
-                              navigate('/fr/approve');
+                              navigate('/fr/Approve');
                             }}
                           >
-                            Approve
+                            verify
                           </Button></>
                       }
                     />
@@ -739,6 +801,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
             // addParticulars();
           }}
         >
+
           <DialogContent>
             <Container>
               <Grid container spacing={3}>

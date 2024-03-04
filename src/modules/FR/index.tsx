@@ -47,7 +47,7 @@ const frDashboard = () => {
                 <FRCountCard count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Approved'} color={'#fff'} />
+                <FRCountCard count={approvedFrCount?.toString()} secondaryText={'Verified'} color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard count={waitingForPresidentFrCount?.toString()}
@@ -75,7 +75,7 @@ const frDashboard = () => {
                 permissions={['PRESIDENT_ACCESS']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#fff" targetRoute="/fr/approve" />
+                    <DashboardCardButton primaryText="President" secondaryText="Approval" color="#fff" targetRoute="/fr/Approve" />
                   </Grid>
                 )} />
               <Grid item xs={12} md={4} xl={3}>
@@ -84,8 +84,11 @@ const frDashboard = () => {
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
               </Grid>
+              <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton primaryText="Sent" secondaryText="Back FR" color="#fff" targetRoute="/fr/sentBack" />
+              </Grid>
             </Grid>
-
+ 
           </>
         )}
         denied={(missingPermissions) => (

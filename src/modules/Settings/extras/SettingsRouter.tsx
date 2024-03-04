@@ -7,6 +7,8 @@ import ESignature from '../ESignature';
 import Department from '../Department';
 import Gender from '../Gender';
 import Relogion from '../Religion';
+import ReasonforDeactivation from '../ReasonforDeactivation';
+import SanctionedAsPer from '../SanctionedAsPer';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -102,6 +104,24 @@ const settingsRoutes: ModuleRoute = {
       showInDrawer: false,
       icon: <Lang />,
     },
+    {
+      title: 'Deactivarion Resaon',
+      path: '/ReasonforDeactivation',
+      element: <ReasonforDeactivation />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+    title: 'Santioned As Per',
+    path: '/SanctionedAsPer',
+    element: <SanctionedAsPer />,
+    private: true,
+    requiredAccessRights: ['ADMIN_ACCESS'],
+    showInDrawer: false,
+    icon: <Lang />,
+  },
 
   ],
 };

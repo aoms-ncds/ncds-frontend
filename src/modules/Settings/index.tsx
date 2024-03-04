@@ -94,6 +94,12 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText=" Add Religion" color="#fff" targetRoute="/settings/Relogion" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText=" Reason for Deactivation" color="#fff" targetRoute="/settings/ReasonforDeactivation" />
+        </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText=" Add Sanctioned as  per" color="#fff" targetRoute="/settings/SanctionedAsPer" />
+        </Grid>
       </Grid>
 
 
