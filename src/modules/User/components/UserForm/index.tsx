@@ -1015,7 +1015,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField label="Child Support Amount" value={newChild?.childSupport?.amount} fullWidth variant={props.options?.textField.variant} InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
+                  <TextField
+                    label="Child Support Amount"
+                    value={newChild?.childSupport?.amount}
+                    fullWidth variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
                 </Grid>
               </Grid>
             </Container>

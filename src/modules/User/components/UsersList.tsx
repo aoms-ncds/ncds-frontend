@@ -1,4 +1,12 @@
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Add as AddIcon, Download as DownloadIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon,
+  Preview as PreviewIcon,
+  Delete as DeleteIcon,
+  NoAccounts as NoAccountsIcon,
+  Person as PersonIcon,
+  Ballot as BallotIcon,
+  Add as AddIcon,
+  Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -179,7 +187,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   };
 
   const filteredRows = (props.value ?? []).filter((row) => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.basicDetails.firstName &&
+       row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
     return Object.values(row).some((value) =>
