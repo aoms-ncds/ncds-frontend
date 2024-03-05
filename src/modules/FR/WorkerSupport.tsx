@@ -192,19 +192,19 @@ const WorkerSupportPage = () => {
           (spouseAllowance ?? 0) +
           (positionalAllowance ?? 0) +
           (specialAllowance ?? 0) +
+          (PIONMissionaryFund ?? 0) +
           (telAllowance ?? 0),
           deduction: (impactDeduction ?? 0) +
-          (PIONMissionaryFund ?? 0) +
           (MUTDeduction ?? 0),
           net: (basic ?? 0) +
           (HRA ?? 0) +
           (spouseAllowance ?? 0) +
           (positionalAllowance ?? 0) +
           (specialAllowance ?? 0) +
+          (PIONMissionaryFund ?? 0) +
           (telAllowance ?? 0) -
           (
             (impactDeduction ?? 0) +
-            (PIONMissionaryFund ?? 0) +
             (MUTDeduction ?? 0)
           ),
         });

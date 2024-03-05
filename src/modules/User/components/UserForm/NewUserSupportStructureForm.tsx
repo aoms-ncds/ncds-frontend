@@ -249,6 +249,7 @@ const NewUserSupportStructureForm = (
             (props.value?.spouseAllowance ?? 0) +
             (props.value?.positionalAllowance ?? 0) +
             (props.value?.specialAllowance ?? 0) +
+            (props.value?.PIONMissionaryFund ?? 0) +
             (props.value?.telAllowance ?? 0)
           }
           variant={props.options?.textField.variant}
@@ -261,7 +262,7 @@ const NewUserSupportStructureForm = (
       <Grid item xs={12} md={6} lg={4}>
         <TextField
           label="Total Deduction"
-          value={(props.value?.impactDeduction ?? 0) + (props.value?.PIONMissionaryFund ?? 0) + (props.value?.MUTDeduction ?? 0)}
+          value={(props.value?.impactDeduction ?? 0) + (props.value?.MUTDeduction ?? 0)}
           variant={props.options?.textField.variant}
           fullWidth
           disabled
@@ -277,8 +278,9 @@ const NewUserSupportStructureForm = (
             (props.value?.spouseAllowance ?? 0) +
             (props.value?.positionalAllowance ?? 0) +
             (props.value?.specialAllowance ?? 0) +
+            (props.value?.PIONMissionaryFund ?? 0) +
             (props.value?.telAllowance ?? 0) -
-            ((props.value?.impactDeduction ?? 0) + (props.value?.PIONMissionaryFund ?? 0) + (props.value?.MUTDeduction ?? 0))
+            ((props.value?.impactDeduction ?? 0) + (props.value?.MUTDeduction ?? 0))
           }
           variant={props.options?.textField.variant}
           fullWidth

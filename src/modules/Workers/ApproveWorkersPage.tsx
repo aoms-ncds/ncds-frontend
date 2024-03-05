@@ -199,6 +199,7 @@ const ApproveWorkerPage = () => {
                     (user.supportStructure?.spouseAllowance ?? 0) +
                     (user.supportStructure?.positionalAllowance ?? 0) +
                     (user.supportStructure?.specialAllowance ?? 0) +
+                    (user.supportStructure?.PIONMissionaryFund ?? 0) +
                     (user.supportStructure?.telAllowance ?? 0),
                     user.insurance?.impactNo,
                   ]) :
