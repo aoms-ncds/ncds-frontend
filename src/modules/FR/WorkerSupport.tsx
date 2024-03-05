@@ -1,25 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Button, Card, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
-import { enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
-import MessageItem from '../../components/MessageItem';
-import SendIcon from '@mui/icons-material/Send';
 import GridLinkAction from '../../components/GridLinkAction';
-import { Edit as EditIcon, Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 
+interface TotalSupportStructure {
+  basic?: number;
+  prevBasic?: number;
+  HRA?: number;
+  prevHRA?: number;
+  spouseAllowance?: number;
+  prevSpouseAllowance?: number;
+  positionalAllowance?: number;
+  prevPositionalAllowance?: number;
+  specialAllowance?: number;
+  prevSpecialAllowance?: number;
+  impactDeduction?: number;
+  prevImpactDeduction?: number;
+  telAllowance?: number;
+  prevTelAllowance?: number;
+  PIONMissionaryFund?: number;
+  prevPIONMissionaryFund?: number;
+  MUTDeduction?: number;
+  prevMUTDeduction?: number;
+  total?: number;
+  prevTotal?: number;
+  deduction?: number;
+  prevDeduction?: number;
+  net?: number;
+  prevNet?: number;
+}
 const WorkerSupportPage = () => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
-  const [openRemarks, toggleOpenRemarks] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [remarks, setRemarks] = useState<Remark[]>([]);
-  const [remark, setRemark] = useState<CreatableRemark>({
-    remark: '',
-    transactionId: '',
+
+  const [total, setTotal] = useState<TotalSupportStructure>({
+    basic: 0,
+    prevBasic: 0,
+    HRA: 0,
+    prevHRA: 0,
+    spouseAllowance: 0,
+    prevSpouseAllowance: 0,
+    positionalAllowance: 0,
+    prevPositionalAllowance: 0,
+    specialAllowance: 0,
+    prevSpecialAllowance: 0,
+    impactDeduction: 0,
+    prevImpactDeduction: 0,
+    telAllowance: 0,
+    prevTelAllowance: 0,
+    PIONMissionaryFund: 0,
+    prevPIONMissionaryFund: 0,
+    MUTDeduction: 0,
+    prevMUTDeduction: 0,
+    total: 0,
+    prevTotal: 0,
+    deduction: 0,
+    prevDeduction: 0,
+    net: 0,
+    prevNet: 0,
   });
   // useEffect(() => {
   //   DivisionsServices.getDivisions()
@@ -32,21 +75,150 @@ const WorkerSupportPage = () => {
   //     });
   // }, []);
 
+  // eslint-disable-next-line react/no-multi-comp
+  const CustomFooter = () => (
+    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px' }}>
+      {columns.map((column) => (
+        <div key={column.field} style={{ width: column.width, textAlign: 'center' }}>
+          <b> { typeof total[column.field as keyof TotalSupportStructure] ==='number'?total[column.field as keyof TotalSupportStructure]:null}
+          </b>
+        </div>
+      ))}
+    </div>
+  );
+
   useEffect(() => {
-    WorkersServices.getAll({ status: UserLifeCycleStates.CREATED })
+    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
         console.log(res);
         setWorkers(res.data);
+        console.log( 'basic', res.data.reduce(
+          (total, worker) => worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
+          0,
+        ));
+        const basic= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
+          0,
+        );
+        const prevBasic= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevBasic? total + Number(worker.supportStructure?.prevBasic):total,
+          0,
+        );
+        const HRA= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.HRA? total + Number(worker.supportStructure?.HRA):total,
+          0,
+        );
+        const prevHRA= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevHRA? total + Number(worker.supportStructure?.prevHRA):total,
+          0,
+        );
+        const spouseAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.spouseAllowance? total + Number(worker.supportStructure?.spouseAllowance):total,
+          0,
+        );
+        const prevSpouseAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevSpouseAllowance? total + Number(worker.supportStructure?.prevSpouseAllowance):total,
+          0,
+        );
+        const positionalAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.positionalAllowance? total + Number(worker.supportStructure?.positionalAllowance):total,
+          0,
+        );
+        const prevPositionalAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevPositionalAllowance? total + Number(worker.supportStructure?.prevPositionalAllowance):total,
+          0,
+        );
+        const specialAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.specialAllowance? total + Number(worker.supportStructure?.specialAllowance):total,
+          0,
+        );
+        const prevSpecialAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevSpecialAllowance? total + Number(worker.supportStructure?.prevSpecialAllowance):total,
+          0,
+        );
+        const impactDeduction= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.impactDeduction? total + Number(worker.supportStructure?.impactDeduction):total,
+          0,
+        );
+        const prevImpactDeduction= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevImpactDeduction? total + Number(worker.supportStructure?.prevImpactDeduction):total,
+          0,
+        );
+        const telAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.telAllowance? total + Number(worker.supportStructure?.telAllowance):total,
+          0,
+        );
+        const prevTelAllowance= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevTelAllowance? total + Number(worker.supportStructure?.prevTelAllowance):total,
+          0,
+        );
+        const PIONMissionaryFund= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.PIONMissionaryFund? total + Number(worker.supportStructure?.PIONMissionaryFund):total,
+          0,
+        );
+        const prevPIONMissionaryFund= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevPIONMissionaryFund? total + Number(worker.supportStructure?.prevPIONMissionaryFund):total,
+          0,
+        );
+        const MUTDeduction= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.MUTDeduction? total + Number(worker.supportStructure?.MUTDeduction):total,
+          0,
+        );
+        const prevMUTDeduction= res.data.reduce(
+          (total, worker) =>worker.supportStructure?.prevMUTDeduction? total + Number(worker.supportStructure?.prevMUTDeduction):total,
+          0,
+        );
+        setTotal({
+          basic: basic,
+          prevBasic: prevBasic,
+          HRA: HRA,
+          prevHRA: prevHRA,
+          spouseAllowance: spouseAllowance,
+          prevSpouseAllowance: prevSpouseAllowance,
+          positionalAllowance: positionalAllowance,
+          prevPositionalAllowance: prevPositionalAllowance,
+          specialAllowance: specialAllowance,
+          prevSpecialAllowance: prevSpecialAllowance,
+          impactDeduction: impactDeduction,
+          prevImpactDeduction: prevImpactDeduction,
+          telAllowance: telAllowance,
+          prevTelAllowance: prevTelAllowance,
+          PIONMissionaryFund: PIONMissionaryFund,
+          prevPIONMissionaryFund: prevPIONMissionaryFund,
+          MUTDeduction: MUTDeduction,
+          prevMUTDeduction: prevMUTDeduction,
+          total: (basic ?? 0) +
+          (HRA ?? 0) +
+          (spouseAllowance ?? 0) +
+          (positionalAllowance ?? 0) +
+          (specialAllowance ?? 0) +
+          (telAllowance ?? 0),
+          deduction: (impactDeduction ?? 0) +
+          (PIONMissionaryFund ?? 0) +
+          (MUTDeduction ?? 0),
+          net: (basic ?? 0) +
+          (HRA ?? 0) +
+          (spouseAllowance ?? 0) +
+          (positionalAllowance ?? 0) +
+          (specialAllowance ?? 0) +
+          (telAllowance ?? 0) -
+          (
+            (impactDeduction ?? 0) +
+            (PIONMissionaryFund ?? 0) +
+            (MUTDeduction ?? 0)
+          ),
+        });
       })
       .catch((res) => {
         console.log(res);
       });
   }, []);
+
   const columns: GridColDef<IWorker>[] = [
     {
       field: 'actions',
       type: 'actions',
-      width: 5,
+      width: 50,
       getActions: (params: GridRowParams) =>
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
@@ -81,17 +253,8 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
     },
-
     {
-      field: 'basic',
-      width: 100,
-      headerClassName: 'super-app-theme--cell',
-      align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.basic,
-    }, {
-      field: 'prev_basic',
+      field: 'prevBasic',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -108,17 +271,19 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Updated At '}</b>,
       valueGetter: (params) =>params.row.supportStructure?.basicLastUpdatedAt?moment( params.row.supportStructure?.basicLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
-
     {
-      field: 'HRA',
+      field: 'basic',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.HRA,
-    }, {
-      field: 'prev_HRA',
+      valueGetter: (params) => params.row.supportStructure?.basic,
+    },
+
+
+    {
+      field: 'prevHRA',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -135,17 +300,18 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Updated At '}</b>,
       valueGetter: (params) =>params.row.supportStructure?.HRALastUpdatedAt?moment( params.row.supportStructure?.HRALastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
-
     {
-      field: 'spouseAllowance',
+      field: 'HRA',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
-    }, {
-      field: 'prev_spouseAllowance',
+      valueGetter: (params) => params.row.supportStructure?.HRA,
+    },
+
+    {
+      field: 'prevSpouseAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -163,17 +329,17 @@ const WorkerSupportPage = () => {
       valueGetter: (params) =>params.row.supportStructure?.spouseAllowanceLastUpdatedAt?moment( params.row.supportStructure?.spouseAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
-      field: 'positionalAllowance',
+      field: 'spouseAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.positionalAllowance,
+      valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
     },
+
     {
-      field: 'prev_positionalAllowance',
+      field: 'prevPositionalAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -191,16 +357,18 @@ const WorkerSupportPage = () => {
       valueGetter: (params) =>params.row.supportStructure?.positionalAllowanceLastUpdatedAt?moment( params.row.supportStructure?.positionalAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
-      field: 'specialAllowance',
+      field: 'positionalAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
 
-      valueGetter: (params) => params.row.supportStructure?.specialAllowance,
-    }, {
-      field: 'prev_specialAllowance',
+      valueGetter: (params) => params.row.supportStructure?.positionalAllowance,
+    },
+
+    {
+      field: 'prevSpecialAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -218,17 +386,19 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Updated At '}</b>,
       valueGetter: (params) =>params.row.supportStructure?.specialAllowanceLastUpdatedAt?moment( params.row.supportStructure?.specialAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
-
     {
-      field: 'impactDeduction',
+      field: 'specialAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.impactDeduction,
-    }, {
-      field: 'prev_impactDeduction',
+
+      valueGetter: (params) => params.row.supportStructure?.specialAllowance,
+    },
+
+    {
+      field: 'prevImpactDeduction',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -246,15 +416,17 @@ const WorkerSupportPage = () => {
       valueGetter: (params) =>params.row.supportStructure?.impactDeductionLastUpdatedAt?moment( params.row.supportStructure?.impactDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
-      field: 'telAllowance',
+      field: 'impactDeduction',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.telAllowance,
-    }, {
-      field: 'prev_telAllowance',
+      valueGetter: (params) => params.row.supportStructure?.impactDeduction,
+    },
+
+    {
+      field: 'prevTelAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -272,15 +444,17 @@ const WorkerSupportPage = () => {
       valueGetter: (params) =>params.row.supportStructure?.telAllowanceLastUpdatedAt?moment( params.row.supportStructure?.telAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
-      field: 'PIONMissionaryFund',
+      field: 'telAllowance',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
-    }, {
-      field: 'prev_PIONMissionaryFund',
+      valueGetter: (params) => params.row.supportStructure?.telAllowance,
+    },
+
+    {
+      field: 'prevPIONMissionaryFund',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -297,17 +471,18 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Updated At '}</b>,
       valueGetter: (params) =>params.row.supportStructure?.PIONMissionaryFundLastUpdatedAt?moment( params.row.supportStructure?.PIONMissionaryFundLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
-
     {
-      field: 'MUTDeduction',
+      field: 'PIONMissionaryFund',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
-    }, {
-      field: 'prev_MUTDeduction',
+      valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
+    },
+
+    {
+      field: 'prevMUTDeduction',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
@@ -325,12 +500,21 @@ const WorkerSupportPage = () => {
       valueGetter: (params) =>params.row.supportStructure?.MUTDeductionLastUpdatedAt?moment( params.row.supportStructure?.MUTDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
+      field: 'MUTDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
+    },
+    {
       field: 'total',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Total Amount'}</b>,
+      renderHeader: () => <b>{'Amount'}</b>,
       valueGetter: (params) => (params.row.supportStructure?.basic ?? 0) +
       (params.row.supportStructure?.HRA ?? 0) +
       (params.row.supportStructure?.spouseAllowance ?? 0) +
@@ -339,23 +523,23 @@ const WorkerSupportPage = () => {
       (params.row.supportStructure?.telAllowance ?? 0),
     },
     {
-      field: 'total_deduction',
+      field: 'deduction',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Total Deduction:'}</b>,
+      renderHeader: () => <b>{'Deduction'}</b>,
       valueGetter: (params) => (params.row.supportStructure?.impactDeduction ?? 0) +
       (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
       (params.row.supportStructure?.MUTDeduction ?? 0),
     },
     {
-      field: 'net_amount',
+      field: 'net',
       width: 100,
       headerClassName: 'super-app-theme--cell',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Net Amount:'}</b>,
+      renderHeader: () => <b>{'Net'}</b>,
       valueGetter: (params) => (params.row.supportStructure?.basic ?? 0) +
       (params.row.supportStructure?.HRA ?? 0) +
       (params.row.supportStructure?.spouseAllowance ?? 0) +
@@ -375,67 +559,68 @@ const WorkerSupportPage = () => {
       groupId: 'details',
       description: '',
       renderHeaderGroup: () => <b>{'Worker Details'}</b>,
-      children: [{ field: 'workerCode' }, { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }],
+      children: [{ field: 'workerCode' },
+        { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }],
     },
     {
       groupId: 'Basic',
       description: '',
       renderHeaderGroup: () => <b>{'Basic'}</b>,
-      children: [{ field: 'prev_basic' }, { field: 'basic' }, { field: 'last_updated_basic' }],
+      children: [{ field: 'prevBasic' }, { field: 'basic' }, { field: 'last_updated_basic' }],
     },
     {
       groupId: 'HRA',
       description: '',
       renderHeaderGroup: () => <b>{'HRA'}</b>,
-      children: [{ field: 'prev_HRA' }, { field: 'HRA' }, { field: 'last_updated_HRA' }],
+      children: [{ field: 'prevHRA' }, { field: 'HRA' }, { field: 'last_updated_HRA' }],
     },
     {
       groupId: 'spouseAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Spouse Allowance'}</b>,
-      children: [{ field: 'prev_spouseAllowance' }, { field: 'spouseAllowance' }, { field: 'last_updated_spouseAllowance' }],
+      children: [{ field: 'prevSpouseAllowance' }, { field: 'spouseAllowance' }, { field: 'last_updated_spouseAllowance' }],
     },
     {
       groupId: 'positionalAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Positional Allowance'}</b>,
-      children: [{ field: 'prev_positionalAllowance' }, { field: 'positionalAllowance' }, { field: 'last_updated_positionalAllowance' }],
+      children: [{ field: 'prevPositionalAllowance' }, { field: 'positionalAllowance' }, { field: 'last_updated_positionalAllowance' }],
     },
     {
       groupId: 'specialAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Special Allowance'}</b>,
-      children: [{ field: 'prev_specialAllowance' }, { field: 'specialAllowance' }, { field: 'last_updated_specialAllowance' }],
+      children: [{ field: 'prevSpecialAllowance' }, { field: 'specialAllowance' }, { field: 'last_updated_specialAllowance' }],
     },
     {
       groupId: 'impactDeduction',
       description: '',
       renderHeaderGroup: () => <b>{'Impact Deduction'}</b>,
-      children: [{ field: 'prev_impactDeduction' }, { field: 'impactDeduction' }, { field: 'last_updated_impactDeduction' }],
+      children: [{ field: 'prevImpactDeduction' }, { field: 'impactDeduction' }, { field: 'last_updated_impactDeduction' }],
     },
     {
       groupId: 'telAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Tel Allowance'}</b>,
-      children: [{ field: 'prev_telAllowance' }, { field: 'telAllowance' }, { field: 'last_updated_telAllowance' }],
+      children: [{ field: 'prevTelAllowance' }, { field: 'telAllowance' }, { field: 'last_updated_telAllowance' }],
     },
     {
       groupId: 'PNRMAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'PNRM Allowance'}</b>,
-      children: [{ field: 'prev_PIONMissionaryFund' }, { field: 'PIONMissionaryFund' }, { field: 'last_updated_PIONMissionaryFund' }],
+      children: [{ field: 'prevPIONMissionaryFund' }, { field: 'PIONMissionaryFund' }, { field: 'last_updated_PIONMissionaryFund' }],
     },
     {
       groupId: 'MUTDeduction',
       description: '',
       renderHeaderGroup: () => <b>{'WS Deduction'}</b>,
-      children: [{ field: 'prev_MUTDeduction' }, { field: 'MUTDeduction' }, { field: 'last_updated_MUTDeduction' }],
+      children: [{ field: 'prevMUTDeduction' }, { field: 'MUTDeduction' }, { field: 'last_updated_MUTDeduction' }],
     },
     {
       groupId: 'Total',
       description: '',
       renderHeaderGroup: () => <b>{'Total'}</b>,
-      children: [{ field: 'total' }, { field: 'total_deduction' }, { field: 'net_amount' }],
+      children: [{ field: 'total' }, { field: 'deduction' }, { field: 'net' }],
     },
 
   ];
@@ -443,7 +628,7 @@ const WorkerSupportPage = () => {
     <CommonPageLayout title="New Workers for Approval">
       <Card>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Button
               onClick={async () => {
                 const sheet = workers ?
@@ -512,7 +697,7 @@ const WorkerSupportPage = () => {
             >
               Export
             </Button>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <DataGrid rows={workers ?? []}
               columns={columns}
@@ -520,87 +705,16 @@ const WorkerSupportPage = () => {
               loading={workers === null}
               columnGroupingModel={columnGroupingModel}
               experimentalFeatures={{ columnGrouping: true }}
+              slots={{
+                footer: CustomFooter,
+              }}
+              slotProps={{
+                // footer: { 'fff' },
+              }}
             />
           </Grid>
         </Grid>
       </Card>
-      <Dialog open={openRemarks} fullWidth maxWidth="md">
-        <DialogTitle>Remarks</DialogTitle>
-        <DialogContent>
-          {remarks.length > 0 ?
-            remarks.map((remark) => (
-              // eslint-disable-next-line max-len
-              <MessageItem
-                key={remark._id}
-                sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
-                time={remark.updatedAt}
-                body={remark.remark}
-                isSent={true}
-              />
-            )) :
-            'No Data Found '}
-        </DialogContent>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (remark.remark) {
-              WorkersServices.addRemarks(remark)
-                .then((res) => {
-                  const x = [...remarks, res.data];
-                  console.log('user ', x);
-
-                  setRemarks((remarks) => [...remarks, res.data]);
-                  setRemark((remark) => ({
-                    ...remark,
-                    remark: '',
-                  }));
-                })
-                .catch((error) => {
-                  enqueueSnackbar({
-                    variant: 'error',
-                    message: error.message,
-                  });
-                });
-            }
-          }}
-        >
-          <DialogActions>
-            <TextField
-              id="remarkTextfield"
-              placeholder="Remarks"
-              multiline
-              value={remark?.remark}
-              onChange={(e) =>
-                setRemark((remark) => ({
-                  ...remark,
-                  user: selectedUser ?? '',
-                  remark: e.target.value,
-                }))
-              }
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton type="submit">
-                      <SendIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              fullWidth
-            />
-            <Button
-              variant="contained"
-              onClick={() => {
-                toggleOpenRemarks(false);
-                setSelectedUser(null);
-              }}
-              sx={{ mx: '1rem', py: 1.7 }}
-            >
-              close
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
     </CommonPageLayout>
   );
 };
