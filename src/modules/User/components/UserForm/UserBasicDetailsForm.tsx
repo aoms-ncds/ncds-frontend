@@ -217,7 +217,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
 
         />
@@ -303,7 +303,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
       </Grid>
@@ -319,7 +319,7 @@ const UserBasicDetailsForm = (
           InputLabelProps={{
 
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -340,7 +340,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           inputProps={{
             onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -355,7 +355,7 @@ const UserBasicDetailsForm = (
         <TextField label="PAN" value={props.value.PANNo} onChange={(e) => props.onChange({ ...props.value, PANNo: e.target.value })} variant={props.options?.textField?.variant} fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
 
@@ -390,7 +390,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
       </Grid>
@@ -425,7 +425,7 @@ const UserBasicDetailsForm = (
           fullWidth
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
         />
       </Grid>
@@ -443,7 +443,7 @@ const UserBasicDetailsForm = (
           }
           InputLabelProps={{
             shrink: true,
-            style: { fontSize: '20px' }
+            style: { fontSize: '20px' },
           }}
           variant={props.options?.textField?.variant}
           fullWidth

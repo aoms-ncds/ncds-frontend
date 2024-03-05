@@ -101,7 +101,7 @@ const ReconciliationIRO = () => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
@@ -272,7 +272,7 @@ const ReconciliationIRO = () => {
     { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center'
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
     },
     {
       field: 'divisionName',
@@ -329,11 +329,11 @@ const ReconciliationIRO = () => {
           0,
         );
         return <p>{particularAmount}</p>;
-      }
+      },
     },
     {
       field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center'
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
@@ -540,7 +540,7 @@ const ReconciliationIRO = () => {
             ...selectedIRO,
             billAttachment: selectedIRO?.billAttachment.map((file) =>
               file._id === fileId ? { ...file, filename: newName } : file,
-            )
+            ),
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}

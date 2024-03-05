@@ -19,7 +19,7 @@ const ButtonCard = (props: {
 }) => {
   return (
 
-    <Box sx={{ color: "red" }}>
+    <Box sx={{ color: 'red' }}>
 
       <Card
         onClick={props.onClick}
@@ -64,7 +64,7 @@ const ButtonCard = (props: {
             <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'start', color: 'black' }}>{props.icon}</Box>
           </CardContent>
 
-          {/* 
+          {/*
         {props.count !== undefined && (
           <Grid style={{ position: 'absolute', top: 0, right: 0 }}>
             <Badge

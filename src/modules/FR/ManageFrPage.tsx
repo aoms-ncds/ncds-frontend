@@ -428,7 +428,7 @@ const ManageFrPage = () => {
             <Grid item xs={12} lg={6}>
 
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}  >
+                <Card sx={{ maxWidth: '78vw', alignItems: 'center' }} >
                   <Grid container spacing={2} padding={2} >
                     <Grid item xs={6}>
                       <TextField
@@ -511,17 +511,15 @@ const ManageFrPage = () => {
                       />
 
 
-
                     </Grid>
-
 
 
                   </Grid>
 
                   <Box
                     sx={{
-                      height: 300,
-                      width: '100%',
+                      'height': 300,
+                      'width': '100%',
                       '& .super-app-theme--cell': {
                         backgroundColor: '#f1f5fa',
                         color: 'black',
@@ -549,7 +547,6 @@ const ManageFrPage = () => {
                       params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                     } />
                   </Box>
-
 
 
                 </Card>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, Divider, FormControlLabel, FormLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
-import moment from 'moment';
+
 
 const SpouseForm = (
   props: FormComponentProps<

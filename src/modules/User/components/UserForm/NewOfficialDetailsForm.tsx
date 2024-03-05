@@ -177,7 +177,7 @@ const NewOfficialDetailsForm = (
                     subDivision: undefined,
                     dateOfDivisionJoining: null,
                     dateOfDivisionLeaving: null,
-                  }]
+                  }],
               });
             }
 
@@ -422,7 +422,7 @@ const NewOfficialDetailsForm = (
                         subDivision: null,
                         dateOfDivisionJoining: null,
                         dateOfDivisionLeaving: null,
-                      }]
+                      }],
                   });
                   setIsDivisionChanged(true);
                 }
@@ -430,7 +430,7 @@ const NewOfficialDetailsForm = (
                 if (props.value.divisionHistory[props.value.divisionHistory.length - 2].division?._id === newDiv?._id) {
                   props.onChange({
                     ...props.value, divisionHistory: [
-                      ...props.value.divisionHistory.slice(0, -1)]
+                      ...props.value.divisionHistory.slice(0, -1)],
                   });
                   setIsDivisionChanged(false);
                 } else {
@@ -441,7 +441,7 @@ const NewOfficialDetailsForm = (
                         subDivision: null,
                         dateOfDivisionJoining: null,
                         dateOfDivisionLeaving: null,
-                      }]
+                      }],
                   });
                   setIsDivisionChanged(true);
                 }

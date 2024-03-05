@@ -158,7 +158,7 @@ const EditIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   const [newParticular, setNewParticular] = useState<Particular>({
@@ -753,7 +753,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>

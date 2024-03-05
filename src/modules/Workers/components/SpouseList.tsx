@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
   const navigate = useNavigate();
-  const [spousid, setId] = useState('')
+  const [spousid, setId] = useState('');
   const deactivateSpouse = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
@@ -76,7 +76,6 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   // }, [spouseList]);
 
 
-
   const handleClick = (params: any) => {
     WorkersServices.getUser(params.row._id)
       .then((res) => {
@@ -84,7 +83,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
         setId(res.data._id);
         navigate(`/users/worker/${res.data._id}/2`);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching user:', error);
       });
     console.log(params.row._id, 'ooo');
@@ -131,7 +130,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
             icon={<VisibilityIcon />}
             showInMenu
             onClick={() => handleClick(params)}
-          />
+          />,
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
@@ -147,7 +146,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>First Name</b>)
+      renderHeader: () => (<b>First Name</b>),
     },
     {
       field: 'lastName',
@@ -207,6 +206,5 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
 
 
 export default SpouseListPage;
-
 
 

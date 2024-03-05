@@ -16,18 +16,15 @@ declare global {
     occupation: string;
     qualification: string;
     gender?: Gender;
-    profileAddedOn?: Moment,
-    adharCardNo?: number,
-    phoneNumber?: number,
-    emailId?: string
-    higherEducation?: boolean,
-    courseName: string,
-    totalAmountforCourse: number,
-    startingYear: Moment,
-    endingYear: Moment
-
-
-
+    profileAddedOn?: Moment;
+    adharCardNo?: number;
+    phoneNumber?: number;
+    emailId?: string;
+    higherEducation?: boolean;
+    courseName: string;
+    totalAmountforCourse: number;
+    startingYear: Moment;
+    endingYear: Moment;
 
 
   }
@@ -42,15 +39,15 @@ declare global {
     occupation?: string;
     qualification?: string;
     gender?: Gender;
-    profileAddedOn?: Moment,
-    adharCardNo?: number,
-    phoneNumber?: number,
-    emailId?: string
-    higherEducation?: boolean,
-    courseName?: string,
-    totalAmountforCourse?: number,
-    startingYear?: Moment,
-    endingYear?: Moment
+    profileAddedOn?: Moment;
+    adharCardNo?: number;
+    phoneNumber?: number;
+    emailId?: string;
+    higherEducation?: boolean;
+    courseName?: string;
+    totalAmountforCourse?: number;
+    startingYear?: Moment;
+    endingYear?: Moment;
   }
 
   // interface IChildSupport extends MongooseDocument{

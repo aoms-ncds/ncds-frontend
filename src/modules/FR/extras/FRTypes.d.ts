@@ -104,7 +104,7 @@ declare global {
     sanctionedAmount: number;
     status: number;
     sanctionedAsPer: string;
-    specialsanction: string
+    specialsanction: string;
     sanctionedBank: string;
     mainCategory: string;
     createdBy: IWorker;

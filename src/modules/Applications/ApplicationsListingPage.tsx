@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
-  Attachment as AttachmentIcon
+  Attachment as AttachmentIcon,
 } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
@@ -321,11 +321,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     // { field: '_id', headerName: 'SI NO', width: 150 },
     {
       field: 'applicationCode', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150
+      headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150,
     },
     {
       field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150
+      headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150,
     },
     {
       field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
@@ -337,7 +337,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           wordBreak: 'break-word',
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3
+          WebkitLineClamp: 3,
         }}>
           {params.value}
         </p>),
@@ -539,11 +539,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             </Grid>
             <Grid item xs={12} >
               <Card sx={{
-                height: '66vh', width: '100%',
+                'height': '66vh', 'width': '100%',
                 '& .super-app-theme--header': {
                   backgroundColor: '#f1f5fa',
                   fontSize: '16px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 },
               }}>
 

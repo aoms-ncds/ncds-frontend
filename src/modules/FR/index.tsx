@@ -84,6 +84,9 @@ const frDashboard = () => {
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
               </Grid>
+              <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton primaryText="Manage" secondaryText="Workers Support" color="#fff" targetRoute="/iro" />
+              </Grid>
             </Grid>
 
           </>

@@ -102,7 +102,7 @@ const Profile = () => {
     } else if (tabNO == '3') {
       setCurrentTab(3);
     }
-  }, [])
+  }, []);
   useEffect(() => {
     if (userId && userKind === 'staff') {
       StaffServices.getById(userId)
@@ -403,7 +403,7 @@ const Profile = () => {
               <TabPanel value={currentTab} index={3}>
                 <Container>
                   <br />
-                  <Grid container spacing={5} width={'80vw'}  >
+                  <Grid container spacing={5} width={'80vw'} >
                     {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && (user as unknown as IWorker)?.children.map((child) => (
                       <Grid key={child._id} item xs={12} lg={4} sx={{ width: '80px' }}>
                         <Grid container spacing={3} sx={{ border: '1px dashed grey', borderRadius: 2, pb: 3 }}>

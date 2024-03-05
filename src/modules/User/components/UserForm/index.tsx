@@ -87,7 +87,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       gender: undefined,
       adharCardNo: 0,
       phoneNumber: 0,
-      emailId: ''
+      emailId: '',
     });
   };
   const deleteChild = (_index: number) => {
@@ -166,10 +166,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           )}
           {((props.options?.kind === 'worker' && props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
             props.options?.kind === 'staff') && (
-              <Step>
-                <StepLabel>Support Details</StepLabel>
-              </Step>
-            )}
+            <Step>
+              <StepLabel>Support Details</StepLabel>
+            </Step>
+          )}
         </Stepper>
       </Container>
       <br />

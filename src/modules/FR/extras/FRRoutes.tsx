@@ -58,8 +58,16 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
-      title: 'edit FR',
+      title: 'Edit FR',
       path: '/:frID/edit',
+      element: <FRFormPage action="edit" />,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Worker Support',
+      path: '/worker_support',
       element: <FRFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
