@@ -10,6 +10,7 @@ import GridLinkAction from '../../components/GridLinkAction';
 import { Edit as EditIcon, Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import WorkersServices from '../Workers/extras/WorkersServices';
+import moment from 'moment';
 
 const WorkerSupportPage = () => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
@@ -96,7 +97,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-      valueGetter: (params) => params.row.supportStructure?.basic,
+      valueGetter: (params) => params.row.supportStructure?.prevBasic,
+    },
+    {
+      field: 'last_updated_basic',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.basicLastUpdatedAt?moment( params.row.supportStructure?.basicLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
 
     {
@@ -114,8 +124,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.HRA,
+      valueGetter: (params) => params.row.supportStructure?.prevHRA,
+    },
+    {
+      field: 'last_updated_HRA',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.HRALastUpdatedAt?moment( params.row.supportStructure?.HRALastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
 
     {
@@ -125,7 +143,6 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-
       valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
     }, {
       field: 'prev_spouseAllowance',
@@ -134,8 +151,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
+      valueGetter: (params) => params.row.supportStructure?.prevSpouseAllowance,
+    },
+    {
+      field: 'last_updated_spouseAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.spouseAllowanceLastUpdatedAt?moment( params.row.supportStructure?.spouseAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
       field: 'positionalAllowance',
@@ -154,8 +179,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.positionalAllowance,
+      valueGetter: (params) => params.row.supportStructure?.prevPositionalAllowance,
+    },
+    {
+      field: 'last_updated_positionalAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.positionalAllowanceLastUpdatedAt?moment( params.row.supportStructure?.positionalAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
       field: 'specialAllowance',
@@ -174,7 +207,16 @@ const WorkerSupportPage = () => {
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
 
-      valueGetter: (params) => params.row.supportStructure?.specialAllowance,
+      valueGetter: (params) => params.row.supportStructure?.prevSpecialAllowance,
+    },
+    {
+      field: 'last_updated_specialAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.specialAllowanceLastUpdatedAt?moment( params.row.supportStructure?.specialAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
 
     {
@@ -184,7 +226,6 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-
       valueGetter: (params) => params.row.supportStructure?.impactDeduction,
     }, {
       field: 'prev_impactDeduction',
@@ -193,10 +234,17 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.impactDeduction,
+      valueGetter: (params) => params.row.supportStructure?.prevImpactDeduction,
     },
-
+    {
+      field: 'last_updated_impactDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.impactDeductionLastUpdatedAt?moment( params.row.supportStructure?.impactDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null,
+    },
     {
       field: 'telAllowance',
       width: 100,
@@ -204,7 +252,6 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-
       valueGetter: (params) => params.row.supportStructure?.telAllowance,
     }, {
       field: 'prev_telAllowance',
@@ -213,10 +260,17 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
-      valueGetter: (params) => params.row.supportStructure?.telAllowance,
+      valueGetter: (params) => params.row.supportStructure?.prevTelAllowance,
     },
-
+    {
+      field: 'last_updated_telAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.telAllowanceLastUpdatedAt?moment( params.row.supportStructure?.telAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null,
+    },
     {
       field: 'PIONMissionaryFund',
       width: 100,
@@ -224,7 +278,6 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
-
       valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
     }, {
       field: 'prev_PIONMissionaryFund',
@@ -233,7 +286,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-      valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
+      valueGetter: (params) => params.row.supportStructure?.prevPIONMissionaryFund,
+    },
+    {
+      field: 'last_updated_PIONMissionaryFund',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.PIONMissionaryFundLastUpdatedAt?moment( params.row.supportStructure?.PIONMissionaryFundLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
 
     {
@@ -251,7 +313,16 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-      valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
+      valueGetter: (params) => params.row.supportStructure?.prevMUTDeduction,
+    },
+    {
+      field: 'last_updated_MUTDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) =>params.row.supportStructure?.MUTDeductionLastUpdatedAt?moment( params.row.supportStructure?.MUTDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null,
     },
     {
       field: 'total',
@@ -301,58 +372,64 @@ const WorkerSupportPage = () => {
   ];
   const columnGroupingModel: GridColumnGroupingModel = [
     {
+      groupId: 'details',
+      description: '',
+      renderHeaderGroup: () => <b>{'Worker Details'}</b>,
+      children: [{ field: 'workerCode' }, { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }],
+    },
+    {
       groupId: 'Basic',
       description: '',
       renderHeaderGroup: () => <b>{'Basic'}</b>,
-      children: [{ field: 'prev_basic' }, { field: 'basic' }],
+      children: [{ field: 'prev_basic' }, { field: 'basic' }, { field: 'last_updated_basic' }],
     },
     {
       groupId: 'HRA',
       description: '',
       renderHeaderGroup: () => <b>{'HRA'}</b>,
-      children: [{ field: 'prev_HRA' }, { field: 'HRA' }],
+      children: [{ field: 'prev_HRA' }, { field: 'HRA' }, { field: 'last_updated_HRA' }],
     },
     {
       groupId: 'spouseAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Spouse Allowance'}</b>,
-      children: [{ field: 'prev_spouseAllowance' }, { field: 'spouseAllowance' }],
+      children: [{ field: 'prev_spouseAllowance' }, { field: 'spouseAllowance' }, { field: 'last_updated_spouseAllowance' }],
     },
     {
       groupId: 'positionalAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Positional Allowance'}</b>,
-      children: [{ field: 'prev_positionalAllowance' }, { field: 'positionalAllowance' }],
+      children: [{ field: 'prev_positionalAllowance' }, { field: 'positionalAllowance' }, { field: 'last_updated_positionalAllowance' }],
     },
     {
       groupId: 'specialAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Special Allowance'}</b>,
-      children: [{ field: 'prev_specialAllowance' }, { field: 'specialAllowance' }],
+      children: [{ field: 'prev_specialAllowance' }, { field: 'specialAllowance' }, { field: 'last_updated_specialAllowance' }],
     },
     {
       groupId: 'impactDeduction',
       description: '',
       renderHeaderGroup: () => <b>{'Impact Deduction'}</b>,
-      children: [{ field: 'prev_impactDeduction' }, { field: 'impactDeduction' }],
+      children: [{ field: 'prev_impactDeduction' }, { field: 'impactDeduction' }, { field: 'last_updated_impactDeduction' }],
     },
     {
       groupId: 'telAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Tel Allowance'}</b>,
-      children: [{ field: 'prev_telAllowance' }, { field: 'telAllowance' }],
+      children: [{ field: 'prev_telAllowance' }, { field: 'telAllowance' }, { field: 'last_updated_telAllowance' }],
     },
     {
-      groupId: 'PIONMissionaryFund',
+      groupId: 'PNRMAllowance',
       description: '',
-      renderHeaderGroup: () => <b>{'PION Missionary Fund'}</b>,
-      children: [{ field: 'prev_PIONMissionaryFund' }, { field: 'PIONMissionaryFund' }],
+      renderHeaderGroup: () => <b>{'PNRM Allowance'}</b>,
+      children: [{ field: 'prev_PIONMissionaryFund' }, { field: 'PIONMissionaryFund' }, { field: 'last_updated_PIONMissionaryFund' }],
     },
     {
       groupId: 'MUTDeduction',
       description: '',
-      renderHeaderGroup: () => <b>{'MUT Deduction'}</b>,
-      children: [{ field: 'prev_MUTDeduction' }, { field: 'MUTDeduction' }],
+      renderHeaderGroup: () => <b>{'WS Deduction'}</b>,
+      children: [{ field: 'prev_MUTDeduction' }, { field: 'MUTDeduction' }, { field: 'last_updated_MUTDeduction' }],
     },
     {
       groupId: 'Total',
