@@ -50,7 +50,7 @@ const WorkerSupportPage = () => {
       getActions: (params: GridRowParams) =>
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
-          <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
+          // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
