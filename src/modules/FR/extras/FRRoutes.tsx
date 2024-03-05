@@ -4,6 +4,7 @@ import FRFormPage from '../FRFormPage';
 import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
 import PresidentApproval from '../PresidentApproval';
+import WorkerSupportPage from '../WorkerSupport';
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
@@ -68,9 +69,9 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'Worker Support',
       path: '/worker_support',
-      element: <FRFormPage action="edit" />,
+      element: <WorkerSupportPage />,
       private: true,
-      requiredAccessRights: ['WRITE_FR'],
+      requiredAccessRights: [],
       icon: <RequestPageOutlinedIcon />,
     },
   ],

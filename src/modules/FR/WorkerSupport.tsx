@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
-import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import { enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import GridLinkAction from '../../components/GridLinkAction';
-import {
-  Edit as EditIcon,
-  Preview as PreviewIcon,
-  Download as DownloadIcon,
-} from '@mui/icons-material';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DoneIcon from '@mui/icons-material/Done';
-import ClearIcon from '@mui/icons-material/Clear';
+import { Edit as EditIcon, Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import WorkersServices from '../Workers/extras/WorkersServices';
 
@@ -38,64 +31,6 @@ const WorkerSupportPage = () => {
   //     });
   // }, []);
 
-  const approveWorker = (id: string) => {
-    WorkersServices.approve(id)
-      .then(() => {
-        if (workers) {
-          const newWorkers = workers.filter((workerRequests) => {
-            return workerRequests._id !== id;
-          });
-          setWorkers(newWorkers);
-        }
-        enqueueSnackbar({
-          message: 'Approved',
-          variant: 'success',
-        });
-      })
-      .catch((err: { message: any }) => {
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
-
-  const rejectWorker = (id: string) => {
-    WorkersServices.reject(id)
-      .then(() => {
-        if (workers) {
-          const newWorkers = workers.filter((workerRequests) => {
-            return workerRequests._id !== id;
-          });
-          setWorkers(newWorkers);
-        }
-        enqueueSnackbar({
-          message: 'Rejected',
-          variant: 'warning',
-        });
-      })
-      .catch((err) => {
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
-  };
-  const assignRemark = (id: string) => {
-    console.log('setremark', id);
-    toggleOpenRemarks(true);
-    setSelectedUser(id);
-    console.log({ selectedUser });
-    WorkersServices.getAllRemarksById(id)
-      .then((res) => setRemarks(res.data ?? []))
-      .catch((error) => {
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        });
-      });
-  };
-
   useEffect(() => {
     WorkersServices.getAll({ status: UserLifeCycleStates.CREATED })
       .then((res) => {
@@ -115,40 +50,13 @@ const WorkerSupportPage = () => {
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
           <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
-          <GridLinkAction
-            key={3}
-            label="Remark"
-            icon={<EditNoteIcon />}
-            showInMenu
-            onClick={() => {
-              assignRemark(params.row._id);
-            }}
-          />,
-          <GridLinkAction
-            key={4}
-            label="Approve"
-            icon={<DoneIcon />}
-            showInMenu
-            onClick={() => {
-              approveWorker(params.row._id);
-            }}
-          />,
-          <GridLinkAction
-            key={5}
-            label="Reject"
-            icon={<ClearIcon />}
-            showInMenu
-            onClick={() => {
-              rejectWorker(params.row._id);
-            }}
-          />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
-    { field: 'workerCode', width: 170, renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
+    { field: 'workerCode', width: 100, renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
-      width: 130,
+      width: 100,
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>First Name</b>,
@@ -158,12 +66,301 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       field: 'lastName',
-      width: 130,
+      width: 100,
       renderHeader: () => <b>Last Name</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
-    { field: 'phone', width: 130, align: 'center', headerAlign: 'center', renderHeader: () => <b>Phone</b>, valueGetter: (params) => params.row.basicDetails.phone },
-    { field: 'division', width: 130, align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details.name },
+    { field: 'division', width: 100, align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details.name },
+    {
+      field: 'sub_division',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Sub-Division'}</b>,
+      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+    },
+
+    {
+      field: 'basic',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.basic,
+    }, {
+      field: 'prev_basic',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+      valueGetter: (params) => params.row.supportStructure?.basic,
+    },
+
+    {
+      field: 'HRA',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.HRA,
+    }, {
+      field: 'prev_HRA',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.HRA,
+    },
+
+    {
+      field: 'spouseAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
+    }, {
+      field: 'prev_spouseAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
+    },
+    {
+      field: 'positionalAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.positionalAllowance,
+    },
+    {
+      field: 'prev_positionalAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.positionalAllowance,
+    },
+    {
+      field: 'specialAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.specialAllowance,
+    }, {
+      field: 'prev_specialAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.specialAllowance,
+    },
+
+    {
+      field: 'impactDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.impactDeduction,
+    }, {
+      field: 'prev_impactDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.impactDeduction,
+    },
+
+    {
+      field: 'telAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.telAllowance,
+    }, {
+      field: 'prev_telAllowance',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.telAllowance,
+    },
+
+    {
+      field: 'PIONMissionaryFund',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+
+      valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
+    }, {
+      field: 'prev_PIONMissionaryFund',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+      valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
+    },
+
+    {
+      field: 'MUTDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Current'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
+    }, {
+      field: 'prev_MUTDeduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+      valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
+    },
+    {
+      field: 'total',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Total Amount'}</b>,
+      valueGetter: (params) => (params.row.supportStructure?.basic ?? 0) +
+      (params.row.supportStructure?.HRA ?? 0) +
+      (params.row.supportStructure?.spouseAllowance ?? 0) +
+      (params.row.supportStructure?.positionalAllowance ?? 0) +
+      (params.row.supportStructure?.specialAllowance ?? 0) +
+      (params.row.supportStructure?.telAllowance ?? 0),
+    },
+    {
+      field: 'total_deduction',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Total Deduction:'}</b>,
+      valueGetter: (params) => (params.row.supportStructure?.impactDeduction ?? 0) +
+      (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
+      (params.row.supportStructure?.MUTDeduction ?? 0),
+    },
+    {
+      field: 'net_amount',
+      width: 100,
+      headerClassName: 'super-app-theme--cell',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Net Amount:'}</b>,
+      valueGetter: (params) => (params.row.supportStructure?.basic ?? 0) +
+      (params.row.supportStructure?.HRA ?? 0) +
+      (params.row.supportStructure?.spouseAllowance ?? 0) +
+      (params.row.supportStructure?.positionalAllowance ?? 0) +
+      (params.row.supportStructure?.specialAllowance ?? 0) +
+      (params.row.supportStructure?.telAllowance ?? 0) -
+      (
+        (params.row.supportStructure?.impactDeduction ?? 0) +
+        (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
+        (params.row.supportStructure?.MUTDeduction ?? 0)
+      ),
+    },
+
+  ];
+  const columnGroupingModel: GridColumnGroupingModel = [
+    {
+      groupId: 'Basic',
+      description: '',
+      renderHeaderGroup: () => <b>{'Basic'}</b>,
+      children: [{ field: 'prev_basic' }, { field: 'basic' }],
+    },
+    {
+      groupId: 'HRA',
+      description: '',
+      renderHeaderGroup: () => <b>{'HRA'}</b>,
+      children: [{ field: 'prev_HRA' }, { field: 'HRA' }],
+    },
+    {
+      groupId: 'spouseAllowance',
+      description: '',
+      renderHeaderGroup: () => <b>{'Spouse Allowance'}</b>,
+      children: [{ field: 'prev_spouseAllowance' }, { field: 'spouseAllowance' }],
+    },
+    {
+      groupId: 'positionalAllowance',
+      description: '',
+      renderHeaderGroup: () => <b>{'Positional Allowance'}</b>,
+      children: [{ field: 'prev_positionalAllowance' }, { field: 'positionalAllowance' }],
+    },
+    {
+      groupId: 'specialAllowance',
+      description: '',
+      renderHeaderGroup: () => <b>{'Special Allowance'}</b>,
+      children: [{ field: 'prev_specialAllowance' }, { field: 'specialAllowance' }],
+    },
+    {
+      groupId: 'impactDeduction',
+      description: '',
+      renderHeaderGroup: () => <b>{'Impact Deduction'}</b>,
+      children: [{ field: 'prev_impactDeduction' }, { field: 'impactDeduction' }],
+    },
+    {
+      groupId: 'telAllowance',
+      description: '',
+      renderHeaderGroup: () => <b>{'Tel Allowance'}</b>,
+      children: [{ field: 'prev_telAllowance' }, { field: 'telAllowance' }],
+    },
+    {
+      groupId: 'PIONMissionaryFund',
+      description: '',
+      renderHeaderGroup: () => <b>{'PION Missionary Fund'}</b>,
+      children: [{ field: 'prev_PIONMissionaryFund' }, { field: 'PIONMissionaryFund' }],
+    },
+    {
+      groupId: 'MUTDeduction',
+      description: '',
+      renderHeaderGroup: () => <b>{'MUT Deduction'}</b>,
+      children: [{ field: 'prev_MUTDeduction' }, { field: 'MUTDeduction' }],
+    },
+    {
+      groupId: 'Total',
+      description: '',
+      renderHeaderGroup: () => <b>{'Total'}</b>,
+      children: [{ field: 'total' }, { field: 'total_deduction' }, { field: 'net_amount' }],
+    },
+
   ];
   return (
     <CommonPageLayout title="New Workers for Approval">
@@ -195,11 +392,11 @@ const WorkerSupportPage = () => {
                     user.spouse?.spouseCode,
                     user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
                     (user.supportStructure?.basic ?? 0) +
-                    (user.supportStructure?.HRA ?? 0) +
-                    (user.supportStructure?.spouseAllowance ?? 0) +
-                    (user.supportStructure?.positionalAllowance ?? 0) +
-                    (user.supportStructure?.specialAllowance ?? 0) +
-                    (user.supportStructure?.telAllowance ?? 0),
+                        (user.supportStructure?.HRA ?? 0) +
+                        (user.supportStructure?.spouseAllowance ?? 0) +
+                        (user.supportStructure?.positionalAllowance ?? 0) +
+                        (user.supportStructure?.specialAllowance ?? 0) +
+                        (user.supportStructure?.telAllowance ?? 0),
                     user.insurance?.impactNo,
                   ]) :
                   [];
@@ -240,7 +437,13 @@ const WorkerSupportPage = () => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <DataGrid rows={workers ?? []} columns={columns} getRowId={(row) => row._id} loading={workers === null} />
+            <DataGrid rows={workers ?? []}
+              columns={columns}
+              getRowId={(row) => row._id}
+              loading={workers === null}
+              columnGroupingModel={columnGroupingModel}
+              experimentalFeatures={{ columnGrouping: true }}
+            />
           </Grid>
         </Grid>
       </Card>

@@ -88,25 +88,25 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   }, []);
 
-  const execDelete = (id: string) => {
-    const snackbarId = enqueueSnackbar({
-      message: `Removing ${props.options?.kind}`,
-      variant: 'info',
-    });
+  // const execDelete = (id: string) => {
+  //   const snackbarId = enqueueSnackbar({
+  //     message: `Removing ${props.options?.kind}`,
+  //     variant: 'info',
+  //   });
 
-    StaffOrWorkerServices.delete(id)
-      .then((res) => {
-        if (props.value) {
-          props.onChange(props.value.filter((user) => user._id !== id));
-        }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({ message: res.message, variant: 'success' });
-      })
-      .catch((err) => {
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({ message: err.message, variant: 'error' });
-      });
-  };
+  //   StaffOrWorkerServices.delete(id)
+  //     .then((res) => {
+  //       if (props.value) {
+  //         props.onChange(props.value.filter((user) => user._id !== id));
+  //       }
+  //       closeSnackbar(snackbarId);
+  //       enqueueSnackbar({ message: res.message, variant: 'success' });
+  //     })
+  //     .catch((err) => {
+  //       closeSnackbar(snackbarId);
+  //       enqueueSnackbar({ message: err.message, variant: 'error' });
+  //     });
+  // };
 
   // useEffect(()=>{
   //   UserServices.coordinatorOrNot()
