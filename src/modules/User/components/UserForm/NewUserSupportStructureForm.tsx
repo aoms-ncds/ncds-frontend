@@ -1,4 +1,5 @@
-import { Grid, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 
 const NewUserSupportStructureForm = (
@@ -17,12 +18,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.basic === 0 ? '' : props.value?.basic}
           onChange={(e) =>{
-            const prev=props.value.basic;
             props.onChange({
               ...props.value,
               basic: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevBasic: prev,
-              basicLastUpdatedAt: moment(),
             });
           }
 
@@ -44,12 +42,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.HRA === 0 ? '' : props.value?.HRA}
           onChange={(e) => {
-            const prev=props.value.HRA;
             props.onChange({
               ...props.value,
               HRA: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevHRA: prev,
-              HRALastUpdatedAt: moment(),
             });
           }}
           variant={props.options?.textField.variant}
@@ -69,12 +64,10 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.spouseAllowance === 0 ? '' : props.value?.spouseAllowance}
           onChange={(e) =>{
-            const prev=props.value.spouseAllowance;
             props.onChange({
               ...props.value,
               spouseAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevSpouseAllowance: prev,
-              spouseAllowanceLastUpdatedAt: moment(),
+
             });
           } }
           variant={props.options?.textField.variant}
@@ -94,12 +87,10 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.positionalAllowance === 0 ? '' : props.value?.positionalAllowance}
           onChange={(e) =>{
-            const prev=props.value.basic;
             props.onChange({
               ...props.value,
-              basic: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevBasic: prev,
-              basicLastUpdatedAt: moment(),
+              positionalAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
+
             });
           }}
           variant={props.options?.textField.variant}
@@ -120,12 +111,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.specialAllowance === 0 ? '' : props.value?.specialAllowance}
           onChange={(e) =>{
-            const prev=props.value.basic;
             props.onChange({
               ...props.value,
-              basic: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevBasic: prev,
-              basicLastUpdatedAt: moment(),
+              specialAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
             });
           }}
           variant={props.options?.textField.variant}
@@ -145,12 +133,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.impactDeduction === 0 ? '' : props.value?.impactDeduction}
           onChange={(e) =>{
-            const prev=props.value.impactDeduction;
             props.onChange({
               ...props.value,
               impactDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevImpactDeduction: prev,
-              impactDeductionLastUpdatedAt: moment(),
             });
           }}
           variant={props.options?.textField.variant}
@@ -170,12 +155,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.telAllowance === 0 ? '' : props.value?.telAllowance}
           onChange={(e) =>{
-            const prev=props.value.telAllowance;
             props.onChange({
               ...props.value,
               telAllowance: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevTelAllowance: prev,
-              telAllowanceLastUpdatedAt: moment(),
             });
           }}
           variant={props.options?.textField.variant}
@@ -196,12 +178,9 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.PIONMissionaryFund === 0 ? '' : props.value?.PIONMissionaryFund}
           onChange={(e) =>{
-            const prev=props.value.PIONMissionaryFund;
             props.onChange({
               ...props.value,
               PIONMissionaryFund: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevPIONMissionaryFund: prev,
-              PIONMissionaryFundLastUpdatedAt: moment(),
             });
           }}
           variant={props.options?.textField.variant}
@@ -221,12 +200,12 @@ const NewUserSupportStructureForm = (
           type="number"
           value={props.value?.MUTDeduction === 0 ? '' : props.value?.MUTDeduction}
           onChange={(e) =>{
-            const prev=props.value.MUTDeduction;
+            // const prev=props.value.MUTDeduction;
             props.onChange({
               ...props.value,
               MUTDeduction: Number.isNaN(e.target.value) ? 0 : Number(e.target.value),
-              prevMUTDeduction: prev,
-              MUTDeductionLastUpdatedAt: moment(),
+              // prevMUTDeduction: prev,
+              // MUTDeductionLastUpdatedAt: moment(),
             });
           }}
           variant={props.options?.textField.variant}
@@ -287,6 +266,82 @@ const NewUserSupportStructureForm = (
           disabled
         />
       </Grid>
+      <Grid item xs={12} >
+        <FormControlLabel
+          label="Support Enabled"
+          control={
+            <Checkbox
+              checked={props.value?.supportEnabled}
+              onChange={(e) =>
+                props.onChange({
+                  ...props.value,
+                  supportEnabled: e.target.checked,
+                })
+              }
+            />
+          }
+        />
+      </Grid>
+      {!props.value?.supportEnabled&&<>
+
+        <Grid item xs={12} md={6} lg={4}>
+          <TextField
+            label="Reason"
+            value={ props.value.reason }
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                reason: e.target.value,
+              })
+            }
+            variant={props.options?.textField.variant}
+            fullWidth
+            disabled={props.value.supportEnabled}
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <DatePicker
+            label="Disabled From"
+            value={props.value.disabledFrom}
+            onChange={(newDate) =>
+              props.onChange({
+                ...props.value,
+                disabledFrom: newDate,
+              })
+            }
+            format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                variant: props.options?.textField?.variant,
+                fullWidth: true,
+              },
+            }}
+            disabled={props.value.supportEnabled}
+
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <DatePicker
+            label="Disabled To"
+            value={props.value.disabledTo}
+            onChange={(newDate) =>
+              props.onChange({
+                ...props.value,
+                disabledTo: newDate,
+              })
+            }
+            format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                variant: props.options?.textField?.variant,
+                fullWidth: true,
+              },
+            }}
+            disabled={props.value.supportEnabled}
+
+          />
+        </Grid>
+      </>}
     </>
   );
 };

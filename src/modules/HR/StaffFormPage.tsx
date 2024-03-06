@@ -34,6 +34,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       // withChurch: true,
     },
     supportStructure: {
+      supportEnabled: true,
       // basic: 0,
       // HRA: 0,
       // spouseAllowance: 0,

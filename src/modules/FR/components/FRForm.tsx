@@ -391,7 +391,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           setSelectedSubCategory1(null);
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Choose Main Category" required />}
+                      renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length==0} />}
                       fullWidth
                     />
                   </Grid>

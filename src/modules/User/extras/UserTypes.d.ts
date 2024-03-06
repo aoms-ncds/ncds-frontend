@@ -165,6 +165,10 @@ declare global {
     prevMUTDeduction?: number;
     MUTDeductionLastUpdatedAt?:Moment ;
     supportEnabled?:boolean;
+    reason?:string;
+    disabledFrom?:Moment|null;
+    disabledTo?:Moment|null;
+
   }
   interface User extends MongooseDocument {
     kind: readonly 'staff'|'worker';
