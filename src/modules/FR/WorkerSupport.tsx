@@ -912,10 +912,10 @@ const WorkerSupportPage = () => {
           <Grid item xs={12}>
             <Box
               sx={{
-                '& .even': {
+                '& .yes': {
                   backgroundColor: '#fff',
                 },
-                '& .odd': {
+                '& .no': {
                   backgroundColor: 'rgb(230 8 0 / 55%)',
                 },
               }}
@@ -930,7 +930,7 @@ const WorkerSupportPage = () => {
                   footer: CustomFooter,
                 }}
                 getRowClassName={(params) =>
-                  params.row.supportStructure.supportEnabled ? 'even' : 'odd'
+                  params.row.supportStructure.supportEnabled ? 'yes' : 'no'
                 }
               /></Box>
           </Grid>
