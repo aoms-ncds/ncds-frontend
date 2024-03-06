@@ -12,8 +12,7 @@ const Languages = () => {
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [languageToDelete, setLanguageToDelete] = useState<ILanguage | null>(null);
   const [newLanguage, setNewLanguage] = useState<CreatableLanguage>({
-    name: '',
-  });
+    name: '',});
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
 
   const removeLanguage = (id: string) => {

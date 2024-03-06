@@ -48,12 +48,13 @@ declare global {
     coordinatorName: string | undefined;
   }
   interface MainCategory {
+    _id: string;
     name: string;
     subcategory1: {
       name: string;
       subcategory2: {
         name: string;
-        subcategory3: {
+        subcategory3:{
           name: string;
           narration: string;
         }[];

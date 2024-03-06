@@ -9,6 +9,7 @@ import Gender from '../Gender';
 import Relogion from '../Religion';
 import ReasonforDeactivation from '../ReasonforDeactivation';
 import SanctionedAsPer from '../SanctionedAsPer';
+import Particulars from '../Particulars';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -117,6 +118,15 @@ const settingsRoutes: ModuleRoute = {
     title: 'Santioned As Per',
     path: '/SanctionedAsPer',
     element: <SanctionedAsPer />,
+    private: true,
+    requiredAccessRights: ['ADMIN_ACCESS'],
+    showInDrawer: false,
+    icon: <Lang />,
+  },
+    {
+    title: 'Particulars',
+    path: '/Particulars',
+    element: <Particulars/>,
     private: true,
     requiredAccessRights: ['ADMIN_ACCESS'],
     showInDrawer: false,

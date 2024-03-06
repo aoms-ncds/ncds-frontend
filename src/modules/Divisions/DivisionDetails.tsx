@@ -105,6 +105,34 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
       IFSCCode: '',
       beneficiary: '',
     },
+    otherBankDetails1: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails2: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails3: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails4: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
     createdAt: moment(),
     updatedAt: moment(),
   });
@@ -235,7 +263,7 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'FCRA Bank Details' }}
+                  options={{ title: 'FCRA Bank Detailsss' }}
                 />
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
@@ -245,7 +273,7 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
                   action={props.action}
                   options={{ title: 'Local Bank Details' }}
                 />
-                <BankDetailsForm
+                <BankDetailsForm 
                   value={divisionDetails?.otherBankDetails}
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails: newbankDetails as BankDetails }));

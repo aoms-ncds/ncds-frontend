@@ -8,6 +8,10 @@ declare global {
     FCRABankDetails: BankDetails;
     localBankDetails: BankDetails;
     otherBankDetails: BankDetails;
+    otherBankDetails1: BankDetails;
+    otherBankDetails2: BankDetails;
+    otherBankDetails3: BankDetails;
+    otherBankDetails4: BankDetails;
     _id: string;
   }
   interface DivisionDetails {
