@@ -4,7 +4,7 @@ import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Gr
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
-import { Preview as PreviewIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, AttachFile as AttachIcon } from '@mui/icons-material';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
@@ -13,6 +13,9 @@ import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFTemplate from './components/PDFTemplate';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -45,7 +48,6 @@ const WorkerSupportPage = () => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<IWorker | null>(null);
-
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
     prevBasic: 0,
@@ -81,6 +83,9 @@ const WorkerSupportPage = () => {
     kind: 'FRs',
     particulars: [],
   });
+
+  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
+  const [fileObj, setFileObj] = useState<FileObject|null>(null);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -284,6 +289,9 @@ const WorkerSupportPage = () => {
       purpose: 'Division',
     }));
   }, []);
+  useEffect(() => {
+    setPdfProps({ divisionId: division?._id??null, workerId: selectedWorker?._id??null });
+  }, [division, selectedWorker]);
 
   const columns: GridColDef<IWorker>[] = [
     {
@@ -720,6 +728,8 @@ const WorkerSupportPage = () => {
     },
 
   ];
+
+
   return (
     <CommonPageLayout title="Workers Support">
       <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
@@ -742,7 +752,7 @@ const WorkerSupportPage = () => {
               narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
               requestedAmount: total.net,
               unitPrice: total.net,
-              attachment: [],
+              attachment: fileObj? [fileObj]:[],
             }],
           }));
         }}>
@@ -757,9 +767,12 @@ const WorkerSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setWorkers((workers)=>workers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
-                    } else setWorkers(allWorkers);
-                    setDivision(newVal);
+                      setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
+                      setDivision(newVal);
+                    } else {
+                      setWorkers(allWorkers);
+                      setDivision(null);
+                    }
                     setSelectedWorker(null);
                   }
                   }
@@ -779,6 +792,7 @@ const WorkerSupportPage = () => {
                     setSelectedWorker(newVal);
                     if (newVal) {
                       setWorkers((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
+                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
                     } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Worker" variant='standard' />}
@@ -817,6 +831,42 @@ const WorkerSupportPage = () => {
               </Grid>
               <Grid item xs={12}>
                 <div style={{ float: 'right' }}>
+                  {(selectedWorker || division) && (
+                    <PDFDownloadLink
+                      document={<PDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps.workerId} />}
+                      fileName="WorkerSupport.pdf"
+                      style={{ textDecoration: 'none', color: 'blue' }}
+                    >
+                      {({ blob, loading }) => (
+                        <> <Button
+                          endIcon={<AttachIcon />}
+                          variant="contained"
+                          color="info"
+                          onClick={async () => {
+                            if (blob) {
+                              if (selectedWorker || division) {
+                                const file=(blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
+                                file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                                  setFileObj(res.data); console.log(res.data, 'uploaded');
+                                });
+                              }
+                            }
+                          }} >
+                          {loading?'Loading...':'Attach File'}
+                        </Button>
+                        </>
+                      )}
+                    </PDFDownloadLink>
+                  )}
+                  {/* <Button
+                    variant="contained"
+                    color="info"
+                    onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                      setFileObj(res.data); console.log(res.data, 'uploaded');
+                    })}
+                  >
+                     Upload File
+                  </Button> */}
                   &nbsp;
                   <PermissionChecks
                     permissions={['WRITE_FR']}
@@ -839,76 +889,7 @@ const WorkerSupportPage = () => {
       <br />
       <Card>
         <Grid container spacing={2}>
-          {/* <Grid item xs={12}>
-            <Button
-              onClick={async () => {
-                const sheet = workers ?
-                  workers?.map((user: IWorker) => [
-                    user.workerCode,
-                    user.basicDetails.firstName,
-                    user.basicDetails.lastName,
-                    user.division?.details.name,
-                    user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
-                    user.basicDetails.phone,
-                    user.basicDetails.email,
-                    user.basicDetails.alternativePhone,
-                    user.basicDetails.dateOfBirth,
-                    user.basicDetails.field,
-                    user.basicDetails.martialStatus,
-                    user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                    user.basicDetails.highestQualification,
-                    user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                    user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                    user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
-                      user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
-                      user.officialDetails.dateOfJoining?.fromNow(true),
-                    user.spouse?.spouseCode,
-                    user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
-                    (user.supportStructure?.basic ?? 0) +
-                        (user.supportStructure?.HRA ?? 0) +
-                        (user.supportStructure?.spouseAllowance ?? 0) +
-                        (user.supportStructure?.positionalAllowance ?? 0) +
-                        (user.supportStructure?.specialAllowance ?? 0) +
-                        (user.supportStructure?.telAllowance ?? 0),
-                    user.insurance?.impactNo,
-                  ]) :
-                  [];
-                const headers = [
-                  'Workers Code',
-                  'First Name',
-                  'Last Name',
-                  'Division',
-                  'Sub Division',
-                  'Mobile No',
-                  'Email ID',
-                  'Alt Phone',
-                  'DOB',
-                  'Field',
-                  'Marital Status',
-                  'Known Languages',
-                  'Highest Qualifications',
-                  'Status',
-                  'Date of Joining',
-                  'No of year in Org',
-                  'Spouse Code',
-                  'Spouse Name',
-                  'Net Support',
-                  'Insurance No',
-                ];
-                const worksheet = XLSX.utils.json_to_sheet(sheet);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                XLSX.writeFile(workbook, 'Approve_Worker_Report.xlsx', { compression: true });
-              }}
-              startIcon={<DownloadIcon />}
-              color="primary"
-              sx={{ float: 'right', mt: 2, mr: 2 }}
-              variant="contained"
-            >
-              Export
-            </Button>
-          </Grid> */}
+
           <Grid item xs={12}>
             <Box
               sx={{

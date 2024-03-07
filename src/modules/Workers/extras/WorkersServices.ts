@@ -44,7 +44,7 @@ export default {
    * @param {number} conditions.status - The status of the workers.
    * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
    */
-  getAll: (conditions?: { status?: number }) =>
+  getAll: (conditions?: { status?: number;division?:string}) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
       workers.map((worker: IWorker) => ({
         ...worker,
