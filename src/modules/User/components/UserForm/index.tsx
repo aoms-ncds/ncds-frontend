@@ -880,7 +880,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       onChange={(e) =>
                         setNewChild((newchild) => ({
                           ...newchild,
-                          gender: (e.target.value as Gender | undefined),
+                          gender: (e.target.value as unknown as IGender | undefined),
                         }))
                       }
                       name="Gender"
