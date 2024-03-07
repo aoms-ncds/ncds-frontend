@@ -399,6 +399,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Personal Bank'}>Personal Bank</MenuItem>
+                        <MenuItem value={'Personal Bank1'}>Personal Bank1</MenuItem>
+                        <MenuItem value={'Personal Bank2'}>Personal Bank2</MenuItem>
+                        <MenuItem value={'Personal Bank3'}>Personal Bank3</MenuItem>
+                        <MenuItem value={'Personal Bank4'}>Personal Bank4</MenuItem>
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>

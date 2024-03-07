@@ -288,7 +288,7 @@ const Particulars = () => {
   const addSubcategory3 = (indexValue:number, _index:number) => {
     setNewCategory(prev => ({
       ...prev,
-      subcategory1: prev.(subcategory1 as unknown as MainCategory).map((item:SubCategory1, index:number) => {
+      subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
         if (_index === index) {
           return {
             ...item,

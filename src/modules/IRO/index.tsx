@@ -45,16 +45,16 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#fff" />
+          <FRCountCard  icon={<img src="/mod_icons/Approved IRO.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#fff" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Reconciliation on Process.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Closed .png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#fff'} />
         </Grid>
       </Grid>
       <br />

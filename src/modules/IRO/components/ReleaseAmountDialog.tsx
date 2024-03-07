@@ -68,6 +68,14 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             props.data[0]?.division?.FCRABankDetails :
             props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
               props.data[0]?.division?.localBankDetails :
+            props.data[0]?.sanctionedBank == 'Personal Bank1' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.otherBankDetails1 :
+            props.data[0]?.sanctionedBank == 'Personal Bank2' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.otherBankDetails2 :
+            props.data[0]?.sanctionedBank == 'Personal Bank4' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.otherBankDetails4 :
+            props.data[0]?.sanctionedBank == 'Personal Bank3' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.otherBankDetails3 :
               props.data[0]?.sanctionedBank == 'Personal Bank' && props.data[0]?.division?.otherBankDetails ? props.data[0]?.division?.otherBankDetails : {
                 bankName: '',
                 branchName: '',

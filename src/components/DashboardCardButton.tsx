@@ -1,5 +1,5 @@
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
-import { Button, Card, CardActionArea, CardActions, CardContent, Typography, styled } from '@mui/material';
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, Typography, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -8,7 +8,7 @@ const StyledLink = styled(Link)`
 // transform: translate(0, -2px);
 // cursor: pointer;
 
-const DashboardCardButton = (props: { primaryText: string; secondaryText?: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string }) => {
+const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode; secondaryText?: string; color: string; onClick?: React.MouseEventHandler<HTMLDivElement>; targetRoute?: string }) => {
   return (
     <Card
       onClick={props.onClick}
@@ -39,32 +39,34 @@ const DashboardCardButton = (props: { primaryText: string; secondaryText?: strin
           },
         }}
       >
-        <CardContent sx={{ padding: 1 }}>
-          <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black' }}>{props.primaryText}</Typography>
-          <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black' }} >{props.secondaryText ?? <>&nbsp;</>}</Typography>
-        </CardContent>
-        <CardActions>
-          {/* <Button variant='outlined' sx={{ ml: 'auto', color: 'white', borderColor: 'white' }}>Help</Button> */}
-          <Button
-            variant="contained"
-            endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
-            sx={{
-              'ml': 'auto',
-              'color': 'white',
-              'bgcolor': 'orange',
-              '&:hover': {
-                color: 'white',
-                bgcolor: 'black',
-              },
-              '&:active': {
-                color: 'white',
-                bgcolor: 'black',
-              },
-            }}
-          >
-            Go
-          </Button>
-        </CardActions>
+       <CardContent sx={{ padding: 1 }}>
+  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'black' }}>
+    <Typography variant="h6">{props.primaryText}</Typography>
+    <Typography variant="h6" sx={{ color: 'black' }}>{props.secondaryText ?? <>&nbsp;</>}</Typography>
+    <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', width: '100%' }}>
+      {/* <Box>{props.icon}</Box> */}
+      <Button
+        variant="contained"
+        endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
+        sx={{
+          'color': 'white',
+          'bgcolor': 'orange',
+          '&:hover': {
+            color: 'white',
+            bgcolor: 'black',
+          },
+          '&:active': {
+            color: 'white',
+            bgcolor: 'black',
+          },
+        }}
+      >
+        Go
+      </Button>
+    </Box>
+  </Box>
+</CardContent>
+
       </CardActionArea>
     </Card>
   );

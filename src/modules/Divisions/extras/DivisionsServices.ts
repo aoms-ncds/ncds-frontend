@@ -30,6 +30,7 @@ export default {
 
             },
             subDivisions: [],
+
           }, { headers: { ...getAuthHeader() } })
           .then(async (createdDivision) => {
             // Create subDivisions

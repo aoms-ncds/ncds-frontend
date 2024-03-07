@@ -101,7 +101,7 @@ const SettingsDashboard = () => {
           <DashboardCardButton primaryText=" Add Sanctioned as  per" color="#fff" targetRoute="/settings/SanctionedAsPer" />
         </Grid>
         <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Add Particulers" color="#fff" targetRoute="/settings/Particulars" />
+          <DashboardCardButton primaryText=" Add Particulars" color="#fff" targetRoute="/settings/Particulars" />
         </Grid>
       </Grid>
 

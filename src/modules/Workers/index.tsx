@@ -67,13 +67,13 @@ const WorkersDashboard = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={6} md={4} xl={3}>
-          <FRCountCard count={activeWorker?.toString()} secondaryText="Active Worker" color="#fff" />
+          <FRCountCard icon={<img src="/mod_icons/Total Active Workers Counter Card.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeWorker?.toString()} secondaryText="Active Worker" color="#fff" />
         </Grid>
         <Grid item xs={6} md={4} xl={3}>
-          <FRCountCard count={activeSpouse?.length.toString()} secondaryText={'Active Spouse'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Total Active Spouse Counter Card.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeSpouse?.length.toString()} secondaryText={'Active Spouse'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={4} xl={3}>
-          <FRCountCard count={activeChild?.length.toString()}
+          <FRCountCard icon={<img src="/mod_icons/Total Active Child Counter Cards.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeChild?.length.toString()}
             secondaryText={'Active Child'}
             color={'#fff'} />
         </Grid>
