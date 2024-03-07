@@ -8,7 +8,6 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import SanctionedAsPerService from './extras/SanctionedAsPerService';
 
 const SanctionedAsPer = () => {
-
   const [asPer, setAsPer] = useState<ISanctionedAsPer[] | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [languageToDelete, setLanguageToDelete] = useState<ISanctionedAsPer | null>(null);
@@ -16,7 +15,7 @@ const SanctionedAsPer = () => {
     asPer: '',
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
-console.log(newAsPer, 'newAsPer');
+  console.log(newAsPer, 'newAsPer');
 
   const removeReason = (id: string) => {
     const snackbarId = enqueueSnackbar({

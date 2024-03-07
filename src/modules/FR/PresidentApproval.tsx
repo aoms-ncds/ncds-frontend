@@ -305,7 +305,7 @@ const PresidentApproval = () => {
       ),
       width: 200,
       align: 'center',
-      headerAlign: 'center', 
+      headerAlign: 'center',
     },
     {
       field: 'status',

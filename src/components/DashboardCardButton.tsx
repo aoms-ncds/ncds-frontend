@@ -39,33 +39,33 @@ const DashboardCardButton = (props: { primaryText: string;icon?: React.ReactNode
           },
         }}
       >
-       <CardContent sx={{ padding: 1 }}>
-  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'black' }}>
-    <Typography variant="h6">{props.primaryText}</Typography>
-    <Typography variant="h6" sx={{ color: 'black' }}>{props.secondaryText ?? <>&nbsp;</>}</Typography>
-    <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', width: '100%' }}>
-      {/* <Box>{props.icon}</Box> */}
-      <Button
-        variant="contained"
-        endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
-        sx={{
-          'color': 'white',
-          'bgcolor': 'orange',
-          '&:hover': {
-            color: 'white',
-            bgcolor: 'black',
-          },
-          '&:active': {
-            color: 'white',
-            bgcolor: 'black',
-          },
-        }}
-      >
+        <CardContent sx={{ padding: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'black' }}>
+            <Typography variant="h6">{props.primaryText}</Typography>
+            <Typography variant="h6" sx={{ color: 'black' }}>{props.secondaryText ?? <>&nbsp;</>}</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', width: '100%' }}>
+              {/* <Box>{props.icon}</Box> */}
+              <Button
+                variant="contained"
+                endIcon={<KeyboardDoubleArrowRightOutlinedIcon />}
+                sx={{
+                  'color': 'white',
+                  'bgcolor': 'orange',
+                  '&:hover': {
+                    color: 'white',
+                    bgcolor: 'black',
+                  },
+                  '&:active': {
+                    color: 'white',
+                    bgcolor: 'black',
+                  },
+                }}
+              >
         Go
-      </Button>
-    </Box>
-  </Box>
-</CardContent>
+              </Button>
+            </Box>
+          </Box>
+        </CardContent>
 
       </CardActionArea>
     </Card>

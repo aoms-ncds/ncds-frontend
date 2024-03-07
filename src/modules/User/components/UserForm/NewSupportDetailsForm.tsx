@@ -155,7 +155,7 @@ const NewSupportDetailsForm = (
           control={
             <Checkbox
               checked={props?.value?.selfSupport}
-              onChange={(e: { target: { checked: any }; }) =>
+              onChange={(e: { target: { checked: any } }) =>
                 props.onChange({
                   ...props.value,
                   selfSupport: e.target.checked,

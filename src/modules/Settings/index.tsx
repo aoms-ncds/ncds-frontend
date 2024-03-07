@@ -3,11 +3,10 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import DashboardCardButton from '../../components/DashboardCardButton';
 import LanguagesService from './extras/LanguagesService';
 import DesignationService from './extras/DesignationService';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import ChildSupportService from './extras/ChildSupportService';
 import ButtonCard from '../../components/ButtonCard';
-import React from 'react';
 
 
 const SettingsDashboard = () => {
@@ -32,22 +31,18 @@ const SettingsDashboard = () => {
       .then((res) => {
         console.log(res.data);
         // setAge(res.data)
-
       })
       .catch((error) => {
         console.log(error);
       });
     setOpen(false);
-
-  }
+  };
   useEffect(() => {
-
     ChildSupportService.getAge()
       .then((res) => {
-        setAge(res.data?.age)
-
-      })
-  }, [])
+        setAge(res.data?.age);
+      });
+  }, []);
   useEffect(() => {
     LanguagesService.getCount({ status: CommonLifeCycleStates.ACTIVE })
       .then((res) => setLanguageCount(res.data))
@@ -109,11 +104,11 @@ const SettingsDashboard = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-      // PaperProps={{
-      //   component: 'form',
-      //   onSubmit: (event) => {
-      //     event.preventDefault();
-      //     console.log(age);
+        // PaperProps={{
+        //   component: 'form',
+        //   onSubmit: (event) => {
+        //     event.preventDefault();
+        //     console.log(age);
 
       //     handleClose();
       //   },
@@ -136,8 +131,7 @@ const SettingsDashboard = () => {
             variant="standard"
             value={age}
             onChange={(e: any) => {
-              setAge(e.target.value)
-
+              setAge(e.target.value);
             }}
           />
         </DialogContent>

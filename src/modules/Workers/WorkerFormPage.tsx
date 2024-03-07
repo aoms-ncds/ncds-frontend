@@ -93,7 +93,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
                     dateOfDivisionJoining: null,
                     dateOfDivisionLeaving: null,
                   }],
-              }
+              },
             }),
           );
         },
@@ -124,7 +124,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
 
           },
-          tab: tabNO
+          tab: tabNO,
         }}
 
         onSubmit={async (creatableWorker) => {
@@ -135,7 +135,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
             } else if (props.action === 'edit') {
               const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto, childPhoto);
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
-
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (error: any) {

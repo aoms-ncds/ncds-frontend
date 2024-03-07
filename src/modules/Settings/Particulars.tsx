@@ -11,7 +11,6 @@ import ParticularersService from './extras/ParticularersService';
 import { log } from 'console';
 
 const Particulars = () => {
-
   const [category, setCategory] = useState<MainCategory[] | null>([]);
   const [showAddParticularDialog, setShowAddParticularDialog] = React.useState<'add' | 'edit' | false>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -27,10 +26,10 @@ const Particulars = () => {
         subcategory3: [{
           name: '',
           narration: '',
-        }]
-      }]
-    }]
-  })
+        }],
+      }],
+    }],
+  });
 
 
   // const [newCategory, setNewCategory]=useState<MainCategory[]>([])
@@ -164,20 +163,20 @@ const Particulars = () => {
 
 
   useEffect(() => {
-    console.log({ newCategory })
+    console.log({ newCategory });
   }, [newCategory]);
 
 
   const addSubcategory1 = () => {
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
       subcategory1: [
         ...prev.subcategory1,
         {
           name: '',
-          subcategory2: []
-        }
-      ]
+          subcategory2: [],
+        },
+      ],
     }));
   };
 
@@ -186,7 +185,7 @@ const Particulars = () => {
   //   // console.log(index);
   //   newCategory.subcategory1.map((item, index) => {
   //     if(indexValue == index){
-  //       console.log(item.name,index)      
+  //       console.log(item.name,index)
   //     }
   //   })
 
@@ -234,9 +233,9 @@ const Particulars = () => {
   //   }));
   // };
   const addSubcategory2 = (indexValue:number) => {
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((item:SubCategory1 , index: number) => {
+      subcategory1: prev.subcategory1.map((item:SubCategory1, index: number) => {
         if (indexValue === index) {
           return {
             ...item,
@@ -244,13 +243,13 @@ const Particulars = () => {
               ...item.subcategory2,
               {
                 name: '',
-                subcategory3: []
-              }
-            ]
+                subcategory3: [],
+              },
+            ],
           };
         }
         return item;
-      })
+      }),
     }));
   };
 
@@ -286,7 +285,7 @@ const Particulars = () => {
 
 
   const addSubcategory3 = (indexValue:number, _index:number) => {
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
       subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
         if (_index === index) {
@@ -300,40 +299,40 @@ const Particulars = () => {
                     ...j.subcategory3,
                     {
                       name: '',
-                    }
-                  ]
+                    },
+                  ],
                 };
               }
               return j;
-            })
+            }),
           };
         }
         return item;
-      })
+      }),
     }));
   };
 
 
   const handleNameChange = (index:number, e:any) => {
     const { value } = e.target;
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
       subcategory1: prev.subcategory1.map((item:SubCategory1, i:number) =>
-        i === index
-          ? {
+        i === index ?
+          {
             ...item,
             name: value,
             // subcategory2: []
-          }
-          : item
-      )
+          } :
+          item,
+      ),
     }));
   };
 
 
   const handleNameChange2 = (indexValue:number, _index:number, e:any) => {
     const { value } = e.target;
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
       subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
         if (_index === index) {
@@ -343,30 +342,30 @@ const Particulars = () => {
               if (indexValue === subIndex) {
                 return {
                   ...j,
-                  name: value
+                  name: value,
                 };
               }
               return j;
-            })
+            }),
           };
         }
         return item;
-      })
+      }),
     }));
   };
 
 
-  const handleNameChange3 = (_index:number,__index:number,indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange3 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     console.log(value, 'Value');
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((i: { subcategory2: any[]; }, x: number) => {
+      subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
         if (_index === x) {
           return {
             ...i,
             subcategory2: i.subcategory2.map((j, y) => {
-              if (__index === y) {
+              if (_index2 === y) {
                 return {
                   ...j,
                   subcategory3: j.subcategory3.map((k: any, z: number) => {
@@ -377,47 +376,47 @@ const Particulars = () => {
                       };
                     }
                     return k;
-                  })
+                  }),
                 };
               }
               return j;
-            })
+            }),
           };
         }
         return i;
-      })
+      }),
     }));
   };
-  const handleNameChange4 = (_index:number,__index:number,indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange4 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     console.log(value, 'Value');
-    setNewCategory(prev => ({
+    setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((i: { subcategory2: any[]; }, x: number) => {
+      subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
         if (_index === x) {
           return {
             ...i,
             subcategory2: i.subcategory2.map((j, y) => {
-              if (__index === y) {
+              if (_index2 === y) {
                 return {
                   ...j,
                   subcategory3: j.subcategory3.map((k: any, z: number) => {
                     if (indexValue === z) {
                       return {
                         ...k,
-                        narration: value
+                        narration: value,
                       };
                     }
                     return k;
-                  })
+                  }),
                 };
               }
               return j;
-            })
+            }),
           };
         }
         return i;
-      })
+      }),
     }));
   };
 
@@ -450,9 +449,9 @@ const Particulars = () => {
                       subcategory3: [{
                         name: '',
                         narration: '',
-                      }]
-                    }]
-                  }]
+                      }],
+                    }],
+                  }],
                 });
               });
             } else {
@@ -469,21 +468,19 @@ const Particulars = () => {
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item md={12}>
-            {/* <Button  variant="contained" onClick={addSubcategory1}>ADD Category</Button> */}
-            <br />
-            <br />
+                {/* <Button  variant="contained" onClick={addSubcategory1}>ADD Category</Button> */}
+                <br />
+                <br />
                 <TextField
                   label="Main Category"
                   value={newCategory.name}
-                  onChange={(e) => setNewCategory(prevState => ({ ...prevState, name: e.target.value }))}
+                  onChange={(e) => setNewCategory((prevState) => ({ ...prevState, name: e.target.value }))}
                   fullWidth
                 />
               </Grid>
 
               <Grid item md={12}>
                 {/* <Button onClick={()=>setNewCategory([ ...newCategory ?? [],subcategory1:{...newCategory.subcategory1,name:'',subcategory2:[]}])}> add</Button> */}
-
-               
 
 
                 {/* <TextField
@@ -508,43 +505,43 @@ const Particulars = () => {
                     />
                     <br />
                     <br />
-                    <Button  variant="contained" onClick={() => addSubcategory2(_index)}>ADD Sub Cat 2</Button>
+                    <Button variant="contained" onClick={() => addSubcategory2(_index)}>ADD Sub Cat 2</Button>
                     <br />
                     <br />
-                    {item.subcategory2.map((item, __index) => (
-                      <div key={__index}>
+                    {item.subcategory2.map((item, _index2) => (
+                      <div key={_index2}>
                         <br />
                         <TextField
-                         label="Sub Category 2"
+                          label="Sub Category 2"
                           type="text"
                           value={item.name || ''}
-                          onChange={(e) => handleNameChange2(__index, _index, e)}
+                          onChange={(e) => handleNameChange2(_index2, _index, e)}
                           fullWidth
                         />
                         <br />
                         <br />
-                        <Button  variant="contained" onClick={() => addSubcategory3(__index, _index)}>ADD Sub Cat 3</Button>
+                        <Button variant="contained" onClick={() => addSubcategory3(_index2, _index)}>ADD Sub Cat 3</Button>
                         <br />
                         <br />
                         {item.subcategory3.map((item, index) => (
                           <div key={index}>
                             <TextField
-                             label="Sub Category 3"
+                              label="Sub Category 3"
                               type="text"
                               value={item.name || ''}
-                              onChange={(e) => handleNameChange3(_index,__index,index,e)}
+                              onChange={(e) => handleNameChange3(_index, _index2, index, e)}
                               fullWidth
                             />
                             <br />
                             <br />
                             <TextField
-                             label="Narration"
+                              label="Narration"
                               type="text"
                               value={item.narration || ''}
-                              onChange={(e) => handleNameChange4(_index,__index,index,e)}
+                              onChange={(e) => handleNameChange4(_index, _index2, index, e)}
                               fullWidth
                             />
-                           <br />
+                            <br />
                           </div>
                         ))}
                       </div>
@@ -635,7 +632,7 @@ const Particulars = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* 
+      {/*
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
@@ -705,7 +702,7 @@ const Particulars = () => {
               startIcon={<AddIcon />}
               onClick={() => {
                 // setDialogAction('add');
-                setShowAddParticularDialog('add')
+                setShowAddParticularDialog('add');
               }}
             >
               Add new

@@ -29,7 +29,6 @@ declare global {
     reasonForDeactivation?: DeactivationReason;
 
 
-
   }
   interface CreatableChild extends Creatable<Child> {
     childCode?: string;

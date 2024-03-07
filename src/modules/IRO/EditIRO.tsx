@@ -181,14 +181,13 @@ const EditIRO = () => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
   useEffect( ()=>{
-    const ddata=  SanctionedAsPerService.getAll().then((res)=>{
+    const ddata= SanctionedAsPerService.getAll().then((res)=>{
       console.log(ddata, 'fdfd');
-      
-      setSanctionedAsPer(res.data)
-    })
 
-  },[])
-  
+      setSanctionedAsPer(res.data);
+    });
+  }, []);
+
   const editParticular = (particular: Particular) => {
     // setParticularDialog('edit');
     setShowAddParticularDialog(true);
@@ -769,7 +768,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>

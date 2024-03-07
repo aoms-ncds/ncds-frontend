@@ -370,7 +370,7 @@ const ManageFrPage = () => {
         if (params.value == null) {
           return '';
         }
-  
+
         return clsx('super-app', {
           negative: params.value < 0,
           positive: params.value > 0,
@@ -384,19 +384,19 @@ const ManageFrPage = () => {
         console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
-          case 'SEND_BACK':
-            statusName = 'REVERTED';
-            break;
-          case 'FR_APPROVED':
-            statusName = 'FR VERIFIED'; // Change to whatever new name you want
-            break;
-          case 'FR_REJECTED':
-            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-            break;
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
           // Add more cases for other status names you want to change
-          default:
-            statusName = statusName.replaceAll('_', ' ');
-            break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
         }
         return statusName;
       },
@@ -445,7 +445,7 @@ const ManageFrPage = () => {
             <Grid item xs={12} lg={6}>
 
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw',height:'85vh', alignItems: 'center' }} >
+                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
                   <Grid container spacing={2} padding={2} >
                     <Grid item xs={6}>
                       <TextField
@@ -558,11 +558,11 @@ const ManageFrPage = () => {
                       '& .odd': {
                         backgroundColor: '#fff', // Change to blue for odd rows
                       },
-                      '&.red':{
-                        color: 'red'
+                      '&.red': {
+                        color: 'red',
 
                       },
-                      
+
                     }}
                   >
                     <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id}

@@ -38,16 +38,22 @@ const APPDashboard = () => {
     <CommonPageLayout title="Application Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={ApplicationCreatedCount?.toString()} secondaryText={'Created / Waiting for HR'} color="#fff" />
+          <FRCountCard icon={<img src="/mod_icons/Applied Application.png" alt="Logo"
+            style={{ width: '70px', height: '70px' }} />} count={ApplicationCreatedCount?.toString()}
+          secondaryText={'Created / Waiting for HR'} color="#fff" />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#fff'} />
-        </Grid>
-        <Grid item xs={6} md={3}  xl={2}>
-          <FRCountCard icon={<img src="/mod_icons/Completed.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Approved IRO.png"
+            alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
-          <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#fff'} />
+          <FRCountCard icon={<img src="/mod_icons/Completed.png" alt="Logo"
+            style={{ width: '70px', height: '70px' }} />} count={ApplicationApprovedCount?.toString()} secondaryText={'Approved'} color={'#fff'} />
+        </Grid>
+        <Grid item xs={6} md={3} xl={2}>
+          <FRCountCard icon={<img src="/mod_icons/Rejected.png" alt="Logo"
+            style={{ width: '70px', height: '70px' }} />} count={ApplicationRejectedCount?.toString()} secondaryText={'Rejected'} color={'#fff'} />
         </Grid>
       </Grid>
       <br />

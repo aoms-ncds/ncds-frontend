@@ -91,8 +91,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       .catch((error) => {
         console.error('Error fetching user:', error);
       });
-
-  }
+  };
 
   const columns: GridColDef<Child>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
@@ -114,7 +113,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
                 onClick={() => {
                   // deactivateChild(params.row._id);
                   setReasonDialog(true);
-                  setRowId(params.row._id)
+                  setRowId(params.row._id);
                 }
                 }
               />
@@ -147,10 +146,9 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
                 icon={<EditIcon />}
                 showInMenu
                 onClick={() => handleEdit(params)}
-              />
+              />,
             ] :
             []),
-
 
 
         ].filter((action) => action !== false) as JSX.Element[]

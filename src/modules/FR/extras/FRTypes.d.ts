@@ -11,7 +11,7 @@ declare global {
     sanction: string;
     purpose: FRPurpose;
     IRO?: string;
-    reasonForSentBack:string
+    reasonForSentBack:string;
 
   }
 
@@ -36,7 +36,7 @@ declare global {
     purposeOthers?: string; // Added missing property
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
-    reasonForSentBack:string
+    reasonForSentBack:string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 

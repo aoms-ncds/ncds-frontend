@@ -44,51 +44,61 @@ const frDashboard = () => {
 
             <Grid container spacing={3}>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
+                <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={approvedFrCount?.toString()} secondaryText={'Verified'} color={'#fff'} />
+                <FRCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  count={approvedFrCount?.toString()} secondaryText={'Verified'} color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={waitingForPresidentFrCount?.toString()}
+                <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  count={waitingForPresidentFrCount?.toString()}
                   secondaryText={'Waiting for President'}
                   color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
-                <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'} />
+                <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'} />
               </Grid>
             </Grid>
             <br />
             <br />
             <Grid container spacing={3}>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
               </Grid>
               <PermissionChecks
                 permissions={['WRITE_FR']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="Apply New" secondaryText="Finance Request" color="#fff" targetRoute="/fr/apply" />
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                      primaryText="Apply New" secondaryText="Finance Request" color="#fff" targetRoute="/fr/apply" />
                   </Grid>
                 )} />
               <PermissionChecks
                 permissions={['PRESIDENT_ACCESS']}
                 granted={(
                   <Grid item xs={12} md={4} xl={3}>
-                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="President" secondaryText="Approval" color="#fff" targetRoute="/fr/Approve" />
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="President"
+                      secondaryText="Approval" color="#fff" targetRoute="/fr/Approve" />
                   </Grid>
                 )} />
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="Closed" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  primaryText="Closed" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}  primaryText="Sent" secondaryText="Back FR" color="#fff" targetRoute="/fr/sentBack" />
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Sent"
+                  secondaryText="Back FR" color="#fff" targetRoute="/fr/sentBack" />
               </Grid>
             </Grid>
- 
+
           </>
         )}
         denied={(missingPermissions) => (

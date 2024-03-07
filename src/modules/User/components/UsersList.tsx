@@ -48,11 +48,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-useEffect(()=>{
-  ReasonforDeactivationService.getAll().then((res)=>{
-    setReason(res.data)
-  })
-},[])
+  useEffect(()=>{
+    ReasonforDeactivationService.getAll().then((res)=>{
+      setReason(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -117,7 +117,7 @@ useEffect(()=>{
   //   });
   // });
 
-  const deactivateWorker = (id: string, reason: string | [])  => {
+  const deactivateWorker = (id: string, reason: string | []) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',

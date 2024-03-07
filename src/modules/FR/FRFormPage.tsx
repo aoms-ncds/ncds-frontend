@@ -19,7 +19,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
-    reasonForSentBack:''
+    reasonForSentBack: '',
   });
   useEffect(() => {
     if (props.action !== 'add' && !frID) {

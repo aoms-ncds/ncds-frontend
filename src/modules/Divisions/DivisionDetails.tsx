@@ -21,7 +21,6 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
   const navigate = useNavigate();
 
 
-
   const addDivision = () => {
     // e.preventDefault();
     // event.preventDefault();
@@ -107,8 +106,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
-    }
-    ,
+    },
     otherBankDetails1: {
       bankName: '',
       branchName: '',
@@ -287,7 +285,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
                 />
                 {/* {newBanks.map((item, index) => (
                   <BankDetailsForm
-                    key={index} 
+                    key={index}
                     value={`${divisionDetails?.otherBankDetails}${index+1}`}
                     onChange={(newbankDetails) => {
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails1: newbankDetails as  BankDetails }));
@@ -296,10 +294,10 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
                     options={{ title: `Other Bank Details${index + 1}` }}
                   />
                  ))}  */}
-                {Array.from({ length: otherBankDetailsCount }).map((_, index) => (
+                {Array.from({ length: otherBankDetailsCount }).map((_, index: any) => (
                   <BankDetailsForm
                     key={index}
-                    value={divisionDetails[`otherBankDetails${index + 1}`] as any}
+                    value={divisionDetails[`otherBankDetails${index + 1}`]}
                     onChange={(newbankDetails) => {
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`otherBankDetails${index + 1}`]: newbankDetails as BankDetails }));
                     }}
@@ -307,6 +305,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
                     options={{ title: `Other Bank Details ${index + 1}` }}
                   />
                 ))}
+
                 <Grid item xs={12}>
 
                   <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>Add More Banks</Button>

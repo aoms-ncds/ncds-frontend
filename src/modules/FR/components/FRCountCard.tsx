@@ -42,7 +42,7 @@ const FRCountCard = (props: {
       <CardContent >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ marginRight: '1px' }}>{props.icon}</Box>
-          <Typography sx={{alignContent:'center'}} variant="h6" align="right">
+          <Typography sx={{ alignContent: 'center' }} variant="h6" align="right">
             {props.secondaryText}
           </Typography>
         </Box>

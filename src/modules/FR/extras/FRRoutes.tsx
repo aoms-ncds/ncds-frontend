@@ -5,7 +5,7 @@ import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
 import PresidentApproval from '../PresidentApproval';
 import SentBack from '../SendBack';
-         
+
 
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
@@ -26,7 +26,7 @@ const divisionsPageRoutes: ModuleRoute = {
       private: true,
       requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
-    },  
+    },
     {
       title: 'FR Verify',
       path: '/Approve',

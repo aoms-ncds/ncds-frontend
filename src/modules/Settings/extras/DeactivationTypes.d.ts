@@ -1,7 +1,5 @@
 
 
-
-
 interface IReason extends MongooseDocument{
     _id:string;
     reason?:string;

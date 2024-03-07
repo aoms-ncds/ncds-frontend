@@ -109,7 +109,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
                 showInMenu
                 onClick={() => {
                   // deactivateSpouse(params.row._id);
-                  setRowId(params.row._id)
+                  setRowId(params.row._id);
                   setReasonDialog(true);
                 }
                 }

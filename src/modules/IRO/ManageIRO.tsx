@@ -644,19 +644,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
-          case 'SEND_BACK':
-            statusName = 'REVERTED';
-            break;
-          case 'FR_APPROVED':
-            statusName = 'FR VERIFIED'; // Change to whatever new name you want
-            break;
-          case 'FR_REJECTED':
-            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-            break;
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
           // Add more cases for other status names you want to change
-          default:
-            statusName = statusName.replaceAll('_', ' ');
-            break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
         }
         return statusName;
       },
@@ -1284,7 +1284,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
                   return res;
                 });
               }}

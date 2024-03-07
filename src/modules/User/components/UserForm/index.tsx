@@ -54,7 +54,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         childPhoto?: File;
         setChildPhoto?: (newChildPhoto: File) => void;
       };
-      tab: any
+      tab: any;
 
     }
   >,
@@ -75,7 +75,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     higherEducation: false,
     courseName: '',
     totalAmountforCourse: 0,
-    childProfile: ''
+    childProfile: '',
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
@@ -95,14 +95,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       adharCardNo: 0,
       phoneNumber: 0,
       emailId: '',
-      childProfile: ''
+      childProfile: '',
     });
   };
   if (props?.options?.tab) {
-
     useEffect(() => {
-      setActiveStep(3)
-    }, [])
+      setActiveStep(3);
+    }, []);
   }
   const deleteChild = (_index: number) => {
     props.onChange({
@@ -180,10 +179,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           )}
           {((props.options?.kind === 'worker' && props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) ||
             props.options?.kind === 'staff') && (
-              <Step>
-                <StepLabel>Support Details</StepLabel>
-              </Step>
-            )}
+            <Step>
+              <StepLabel>Support Details</StepLabel>
+            </Step>
+          )}
         </Stepper>
       </Container>
       <br />

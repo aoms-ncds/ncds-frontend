@@ -11,7 +11,7 @@ export default {
   //   axios.post('/workers/editChaildAgeLimit', data, { headers: { ...getAuthHeader() } })),
 
   edithildAgeLimit: (data: number) => getStandardResponse<number>(
-    axios.patch('/workers/childSupport/editChaildAgeLimit', { age: data, }, { headers: { ...getAuthHeader() } }),
+    axios.patch('/workers/childSupport/editChaildAgeLimit', { age: data }, { headers: { ...getAuthHeader() } }),
   ),
   getAge: () => getStandardResponse<{ age: number }>(
     axios.get('/workers/childSupport/getAge', { headers: { ...getAuthHeader() } }),
@@ -28,7 +28,6 @@ export default {
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(
     axios.get('/workers/childSupport/count', { params: conditions, headers: { ...getAuthHeader() } })),
-
 
 
 };

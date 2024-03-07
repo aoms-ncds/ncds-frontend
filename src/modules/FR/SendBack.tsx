@@ -51,14 +51,14 @@ const SentBack = () => {
               icon: PreviewIcon,
             },
             ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ? [
-                {
-                  id: 'edit',
-                  text: 'Edit',
-                  component: Link,
-                  to: `/fr/${props.row._id}/edit`,
-                  icon: PreviewIcon,
-                },
-              ] : []),
+              {
+                id: 'edit',
+                text: 'Edit',
+                component: Link,
+                to: `/fr/${props.row._id}/edit`,
+                icon: PreviewIcon,
+              },
+            ] : []),
           ]}
         />
       ),
@@ -132,46 +132,46 @@ const SentBack = () => {
       headerAlign: 'center', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
         <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
       ) },
-      {
-        field: 'status',
-        renderHeader: () => (<b>Status</b>),
-        width: 250,
-        align: 'center',
-        headerAlign: 'center',
-        // renderCell: (props) => (
-        //   <p
-        //     style={{
-        //       maxWidth: 250,
-        //       whiteSpace: 'normal',
-        //       wordBreak: 'break-word',
-        //     }}
-        //   >
-        //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-        //   </p>
-        // ),
-        valueGetter: (params) => {
-          return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-        },
+    {
+      field: 'status',
+      renderHeader: () => (<b>Status</b>),
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      // renderCell: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 250,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
-      {
-        field: 'reasonForSentBack',
-        renderHeader: () => (<b>Reason For SentBack</b>),
-        width: 250,
-        align: 'center',
-        headerAlign: 'center',
-        // renderCell: (props) => (
-        //   <p
-        //     style={{
-        //       maxWidth: 250,
-        //       whiteSpace: 'normal',
-        //       wordBreak: 'break-word',
-        //     }}
-        //   >
-        //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-        //   </p>
-        // ),
-        valueGetter: (params) => params.row?.reasonForSentBack,
-      },
+    },
+    {
+      field: 'reasonForSentBack',
+      renderHeader: () => (<b>Reason For SentBack</b>),
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      // renderCell: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 250,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => params.row?.reasonForSentBack,
+    },
   ];
 
   useEffect(() => {
@@ -187,15 +187,15 @@ const SentBack = () => {
 
     <CommonPageLayout title="Sent Back  iro">
       <Card >
-      <Grid container spacing={2} >
+        <Grid container spacing={2} >
 
-<Grid item xs={12} sx={{ px: 2 }}>
-  <PermissionChecks
-    permissions={['MANAGE_FR']}
-    granted={(
-      <Button
-        onClick={async () => {
-          const sheet =
+          <Grid item xs={12} sx={{ px: 2 }}>
+            <PermissionChecks
+              permissions={['MANAGE_FR']}
+              granted={(
+                <Button
+                  onClick={async () => {
+                    const sheet =
               closedFRs ?
                 closedFRs.map((fr:FR) => ([
                   fr.FRno,
@@ -213,40 +213,40 @@ const SentBack = () => {
                   IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
                 ])) :
                 [];
-          const headers=[
-            'FR No',
-            'Date',
-            'Division',
-            'Sub Division',
-            'Main Category',
-            'Requested Amt',
-            'Sanctioned Amt',
-            'Sanctioned Bank',
-            'Sanctioned As per',
-            'Status',
-          ];
-          const worksheet = XLSX.utils.json_to_sheet(sheet);
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-          XLSX.writeFile(workbook, 'Closed_FR_Report.xlsx', { compression: true });
-        }}
-        startIcon={<DownloadIcon />}
-        color="primary" sx={{ float: 'right', mt: 2, mr: 2 }}
-        variant="contained"
-      >
+                    const headers=[
+                      'FR No',
+                      'Date',
+                      'Division',
+                      'Sub Division',
+                      'Main Category',
+                      'Requested Amt',
+                      'Sanctioned Amt',
+                      'Sanctioned Bank',
+                      'Sanctioned As per',
+                      'Status',
+                    ];
+                    const worksheet = XLSX.utils.json_to_sheet(sheet);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                    XLSX.writeFile(workbook, 'Closed_FR_Report.xlsx', { compression: true });
+                  }}
+                  startIcon={<DownloadIcon />}
+                  color="primary" sx={{ float: 'right', mt: 2, mr: 2 }}
+                  variant="contained"
+                >
                         Export
-      </Button>
-    )}/>
-</Grid>
-<Grid item xs={12} >
-  <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }}/>
-</Grid>
-</Grid>
+                </Button>
+              )}/>
+          </Grid>
+          <Grid item xs={12} >
+            <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }}/>
+          </Grid>
+        </Grid>
       </Card>
     </CommonPageLayout>
-   
+
   );
 };
 
-export default SentBack
+export default SentBack;

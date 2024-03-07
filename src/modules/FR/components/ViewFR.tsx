@@ -78,19 +78,16 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   };
   useEffect( ()=>{
     const ddata= SanctionedAsPerService.getAll().then((res)=>{
-     
-
       setSanctionedAsPer(res.data);
     });
   }, []);
 
   const sentBack=(()=>{
-
     setReasonDialog(true);
     console.log('fdfd');
     const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
     if (props.onSubmit) {
-      const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ??''}; 
+      const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ??'' };
       // Create a new object with updated status
       props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
     }
@@ -483,9 +480,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             variant="contained"
                             color="warning"
                             onClick={()=>{
-                               setReasonDialog(true)
+                              setReasonDialog(true);
                             }}
-                            
+
                           >
                             Revert
                           </Button>
@@ -522,7 +519,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             onClick={() => {
                               if (reasonForSentBack) {
                                 // deactivateSpouse(iroID, reasonForDeactivation);
-                                sentBack()
+                                sentBack();
                               }
                               setReasonDialog(false);
                             }}
