@@ -30,7 +30,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [rowID, setRowID] = useState<string>('');
-  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null |strin>();
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null |string>();
   const [users, setUsers] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
@@ -117,7 +117,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //   });
   // });
 
-  const deactivateWorker = (id: string, reason: string | []) => {
+  const deactivateWorker = (id: string, reason: any) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
@@ -728,9 +728,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <DialogTitle>Reason</DialogTitle>
         <DialogContent>
           <br />
-          <Autocomplete<IReason>
-            options={reason?? undefined}
-            value={reasonForDeactivation?? undefined}
+          <Autocomplete
+            options={reason?? null}
+            value={reasonForDeactivation as IReason}
             getOptionLabel={(option) => option.reason ?? ''}
             onChange={(e, selectedReason) => {
               setReasonForDeactivation(selectedReason ?? null);

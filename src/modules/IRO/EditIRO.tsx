@@ -155,6 +155,34 @@ const EditIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
+      otherBankDetails1: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails2: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails3: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -490,7 +518,7 @@ const EditIRO = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
-                      value={IRO?.sanctionedAsPer}
+                      value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                       options={sanctionedAsPer ?? []}
                       getOptionLabel={(option) => option.asPer ?? ''}
                       onChange={(_e, selectedSanction) => {

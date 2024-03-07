@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
-import { categories, purposes, sanctionedAsPers } from './FRConfig';
+import { categories, purposes } from './FRConfig';
 import axios from 'axios';
 export default {
 
@@ -43,7 +43,7 @@ export default {
 
   getSanctionedAsPer: () => getStandardResponse<SanctionedAsPer[]>(
     dummyRequest<SanctionedAsPer[]>({
-      data: sanctionedAsPers,
+      // data: sanctionedAsPers,
       // error: null,
       message: 'fetched data',
       result: 'success',

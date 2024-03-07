@@ -91,6 +91,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       // Create a new object with updated status
       props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
     }
+    console.log(props, 'PPPOP');
+
     setTimeout(() => {
       closeSnackbar(rejectionSnack);
       const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });

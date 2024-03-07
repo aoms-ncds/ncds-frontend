@@ -336,7 +336,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<DeactivationReason>
-          options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+          options={[]}
           disabled={props.value.status != 'Left'}
           value={props.value.reasonForDeactivation}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason ?? undefined })}
