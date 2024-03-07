@@ -160,6 +160,34 @@ const ViewIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
+      otherBankDetails1: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails2: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails3: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      otherBankDetails4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -420,7 +448,7 @@ const ViewIRO = () => {
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Autocomplete
-                          value={IRO?.sanctionedAsPer?? []}
+                          value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                           options={sanctionedAsPer ?? []}
                           getOptionLabel={(options) => options.asPer ?? ''}
                           onChange={(_e, selectedSanction) => {

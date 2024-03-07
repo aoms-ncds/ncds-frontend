@@ -10,9 +10,8 @@ import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
 interface DivisionFormPageProps {
   action: 'add' | 'edit' | 'view';
-  withCardContainer: BankDetails;
 }
-const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = []) => {
+const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   const { divisionIDs, editID } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
@@ -294,10 +293,10 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
                     options={{ title: `Other Bank Details${index + 1}` }}
                   />
                  ))}  */}
-                {Array.from({ length: otherBankDetailsCount }).map((_, index: any) => (
+                {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
-                    value={divisionDetails[`otherBankDetails${index + 1}`]}
+                    value={divisionDetails[`otherBankDetails${index + 1}` as keyof Division] as BankDetails | undefined}
                     onChange={(newbankDetails) => {
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`otherBankDetails${index + 1}`]: newbankDetails as BankDetails }));
                     }}
@@ -305,6 +304,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = [
                     options={{ title: `Other Bank Details ${index + 1}` }}
                   />
                 ))}
+
 
                 <Grid item xs={12}>
 

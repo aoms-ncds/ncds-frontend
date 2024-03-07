@@ -43,6 +43,7 @@ const UserBasicDetailsForm = (
     ReligionService.getAll().then((res) => setReligion(res.data));
   }, []);
 
+
   useEffect(() => {
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
     if (props.value.martialStatus == 'Married' && props.options?.kind === 'staff') {
@@ -182,8 +183,8 @@ const UserBasicDetailsForm = (
           id="gender"
           options={gender}
           getOptionLabel={(option) => option.gender}
-          value={props.value.gender ?? ''}
-          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue ?? '' })}
+          value={props.value.gender ?? null}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue ?? null })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props.options?.textField?.variant} />}
         />
       </Grid>

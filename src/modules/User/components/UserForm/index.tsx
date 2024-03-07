@@ -82,6 +82,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
 
   // const [userPhoto, setUserPhoto] = useState<File>();
   // const [userPhotoBlobURL, setUserPhotoBlobURL] = useState<string | null>(null);
+  console.log(newChild, 'cc');
 
   const [open, toggleOpen] = useState(false);
   const handleAddChild = () => {

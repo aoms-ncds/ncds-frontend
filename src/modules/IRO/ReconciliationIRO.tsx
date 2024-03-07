@@ -349,7 +349,7 @@ const ReconciliationIRO = () => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        }}> {props.row.sanctionedAsPer.toString()}</p>
       ),
       width: 200,
       align: 'center',
