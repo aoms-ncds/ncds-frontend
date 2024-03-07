@@ -76,18 +76,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     event.preventDefault();
     event.currentTarget.blur();
   };
-  useEffect( ()=>{
-    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+  useEffect(() => {
+    const ddata = SanctionedAsPerService.getAll().then((res) => {
       setSanctionedAsPer(res.data);
     });
   }, []);
 
-  const sentBack=(()=>{
+  const sentBack = (() => {
     setReasonDialog(true);
     console.log('fdfd');
     const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
     if (props.onSubmit) {
-      const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ??'' };
+      const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ?? '' };
       // Create a new object with updated status
       props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
     }
@@ -315,9 +315,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                               </IconButton>
                             </TableCell>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center"> {`${item.mainCategory == 'Select'? '' : item.mainCategory } 
-                            > ${item.subCategory1=='Select' ? '' : item.subCategory1} > 
-                            ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
+                            <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
+                            > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2 == 'Select' ? '' : item.subCategory2} > ${item.subCategory3 == 'Select' ? '' : item.subCategory3}`}</TableCell>
                             <TableCell align="center">{item.narration}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
@@ -409,9 +409,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete<ISanctionedAsPer>
-                      value={props.value.sanctionedAsPer ?? null}
+                      value={props.value.sanctionedAsPer as ISanctionedAsPer ?? undefined}
                       options={sanctionedAsPer ?? []}
-                      getOptionLabel={(option) => option.asPer}
+                      getOptionLabel={(option) => option.asPer ?? ''}
                       // getOptionLabel={(requisition) => requisition}
                       disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       onChange={(_e, selectedSanction) => {
@@ -422,7 +422,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                           });
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Sanctioned As Per" required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
+                      renderInput={(params) => <TextField {...params}
+                        label="Sanctioned As Per" required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
                       fullWidth
 
                     />
@@ -481,7 +482,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                           <Button
                             variant="contained"
                             color="warning"
-                            onClick={()=>{
+                            onClick={() => {
                               setReasonDialog(true);
                             }}
 
@@ -527,7 +528,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             }}
                             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
                           >
-            submit
+                            submit
                           </Button>
                         </DialogActions>
                       </Dialog>

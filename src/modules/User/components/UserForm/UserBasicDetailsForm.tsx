@@ -183,8 +183,8 @@ const UserBasicDetailsForm = (
           id="gender"
           options={gender}
           getOptionLabel={(option) => option.gender}
-          value={props.value.gender ?? null}
-          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue ?? null })}
+          value={props.value.gender as unknown as IGender}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props.options?.textField?.variant} />}
         />
       </Grid>

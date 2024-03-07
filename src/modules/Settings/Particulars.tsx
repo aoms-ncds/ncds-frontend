@@ -15,8 +15,57 @@ const Particulars = () => {
   const [showAddParticularDialog, setShowAddParticularDialog] = React.useState<'add' | 'edit' | false>(false);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [languageToDelete, setLanguageToDelete] = useState<MainCategory | null>(null);
-  const [newAsPer, setNewAsPer] = useState<MainCategory>();
-  const [newCategory, setNewCategory] = useState<MainCategory[]>({
+  // const [newCategory, setNewCategory] = useState<MainCategory[]>({
+  //   _id: '',
+  //   name: '',
+  //   subcategory1: [{
+  //     name: '',
+  //     subcategory2: [{
+  //       name: '',
+  //       subcategory3: [{
+  //         name: '',
+  //         narration: '',
+  //       }],
+  //     }],
+  //   }],
+  // });
+  interface SubCategory3 {
+    name: string;
+    narration: string; // Add the 'narration' property here
+  }
+
+  interface SubCategory2 {
+    name: string;
+    subcategory3: SubCategory3[];
+  }
+
+  interface SubCategory1 {
+    name: string;
+    subcategory2: SubCategory2[];
+  }
+
+  // interface MainCategory {
+  //   _id: string;
+  //   name: string;
+  //   subcategory1: SubCategory1[];
+  // }
+
+  interface MainCategory {
+    _id: string;
+    name: string;
+    subcategory1: {
+      name: string;
+      subcategory2: {
+        name: string;
+        subcategory3: {
+          name: string;
+          narration: string;
+        }[];
+      }[];
+    }[];
+  }
+
+  const initialCategoryState: MainCategory = {
     _id: '',
     name: '',
     subcategory1: [{
@@ -29,9 +78,9 @@ const Particulars = () => {
         }],
       }],
     }],
-  });
+  };
 
-
+  const [newCategory, setNewCategory] = useState<MainCategory>(initialCategoryState);
   // const [newCategory, setNewCategory]=useState<MainCategory[]>([])
   // const [newCategory, setNewCategory]=useState<MainCategory>({
   //   _id:'',
@@ -284,14 +333,41 @@ const Particulars = () => {
   //   };
 
 
-  const addSubcategory3 = (indexValue:number, _index:number) => {
+  // const addSubcategory3 = (indexValue:number, _index:number) => {
+  //   setNewCategory((prev) => ({
+  //     ...prev,
+  //     subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
+  //       if (_index === index) {
+  //         return {
+  //           ...item,
+  //           subcategory2: item.subcategory2.map((j, subIndex:number) => {
+  //             if (indexValue === subIndex) {
+  //               return {
+  //                 ...j,
+  //                 subcategory3: [
+  //                   ...j.subcategory3,
+  //                   {
+  //                     name: '',
+  //                   },
+  //                 ],
+  //               };
+  //             }
+  //             return j;
+  //           }),
+  //         };
+  //       }
+  //       return item;
+  //     }),
+  //   }));
+  // };
+  const addSubcategory3 = (indexValue: number, _index: number) => {
     setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
+      subcategory1: prev.subcategory1.map((item, index) => {
         if (_index === index) {
           return {
             ...item,
-            subcategory2: item.subcategory2.map((j, subIndex:number) => {
+            subcategory2: item.subcategory2.map((j, subIndex) => {
               if (indexValue === subIndex) {
                 return {
                   ...j,
@@ -299,6 +375,7 @@ const Particulars = () => {
                     ...j.subcategory3,
                     {
                       name: '',
+                      narration: '', // Ensure 'narration' property is included
                     },
                   ],
                 };
@@ -311,7 +388,6 @@ const Particulars = () => {
       }),
     }));
   };
-
 
   const handleNameChange = (index:number, e:any) => {
     const { value } = e.target;
@@ -355,76 +431,139 @@ const Particulars = () => {
   };
 
 
-  const handleNameChange3 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
+  // const handleNameChange3 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   console.log(value, 'Value');
+  //   setNewCategory((prev) => ({
+  //     ...prev,
+  //     subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
+  //       if (_index === x) {
+  //         return {
+  //           ...i,
+  //           subcategory2: i.subcategory2.map((j, y) => {
+  //             if (_index2 === y) {
+  //               return {
+  //                 ...j,
+  //                 subcategory3: j.subcategory3.map((k: any, z: number) => {
+  //                   if (indexValue === z) {
+  //                     return {
+  //                       ...k,
+  //                       name: value,
+  //                     };
+  //                   }
+  //                   return k;
+  //                 }),
+  //               };
+  //             }
+  //             return j;
+  //           }),
+  //         };
+  //       }
+  //       return i;
+  //     }),
+  //   }));
+  // };
+  const handleNameChange3 = (_index: number, _index2: number, indexValue: number, e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    console.log(value, 'Value');
     setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
+      subcategory1: prev.subcategory1.map((item, x) => {
         if (_index === x) {
           return {
-            ...i,
-            subcategory2: i.subcategory2.map((j, y) => {
+            ...item,
+            subcategory2: item.subcategory2.map((subItem, y) => {
               if (_index2 === y) {
                 return {
-                  ...j,
-                  subcategory3: j.subcategory3.map((k: any, z: number) => {
+                  ...subItem,
+                  subcategory3: subItem.subcategory3.map((subSubItem, z) => {
                     if (indexValue === z) {
                       return {
-                        ...k,
+                        ...subSubItem,
                         name: value,
                       };
                     }
-                    return k;
+                    return subSubItem;
                   }),
                 };
               }
-              return j;
+              return subItem;
             }),
           };
         }
-        return i;
-      }),
-    }));
-  };
-  const handleNameChange4 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    console.log(value, 'Value');
-    setNewCategory((prev) => ({
-      ...prev,
-      subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
-        if (_index === x) {
-          return {
-            ...i,
-            subcategory2: i.subcategory2.map((j, y) => {
-              if (_index2 === y) {
-                return {
-                  ...j,
-                  subcategory3: j.subcategory3.map((k: any, z: number) => {
-                    if (indexValue === z) {
-                      return {
-                        ...k,
-                        narration: value,
-                      };
-                    }
-                    return k;
-                  }),
-                };
-              }
-              return j;
-            }),
-          };
-        }
-        return i;
+        return item;
       }),
     }));
   };
 
+  // const handleNameChange4 = (_index:number, _index2:number, indexValue:number, e:ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   console.log(value, 'Value');
+  //   setNewCategory((prev) => ({
+  //     ...prev,
+  //     subcategory1: prev.subcategory1.map((i: { subcategory2: any[] }, x: number) => {
+  //       if (_index === x) {
+  //         return {
+  //           ...i,
+  //           subcategory2: i.subcategory2.map((j, y) => {
+  //             if (_index2 === y) {
+  //               return {
+  //                 ...j,
+  //                 subcategory3: j.subcategory3.map((k: any, z: number) => {
+  //                   if (indexValue === z) {
+  //                     return {
+  //                       ...k,
+  //                       narration: value,
+  //                     };
+  //                   }
+  //                   return k;
+  //                 }),
+  //               };
+  //             }
+  //             return j;
+  //           }),
+  //         };
+  //       }
+  //       return i;
+  //     }),
+  //   }));
+  // };
+
+  const handleNameChange4 = (_index: number, _index2: number, indexValue: number, e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setNewCategory((prev) => ({
+      ...prev,
+      subcategory1: prev.subcategory1.map((item, x) => {
+        if (_index === x) {
+          return {
+            ...item,
+            subcategory2: item.subcategory2.map((subItem, y) => {
+              if (_index2 === y) {
+                return {
+                  ...subItem,
+                  subcategory3: subItem.subcategory3.map((subSubItem, z) => {
+                    if (indexValue === z) {
+                      return {
+                        ...subSubItem,
+                        narration: value,
+                      };
+                    }
+                    return subSubItem;
+                  }),
+                };
+              }
+              return subItem;
+            }),
+          };
+        }
+        return item;
+      }),
+    }));
+  };
 
   return (
     <CommonPageLayout title="Particulars">
       <Dialog
-        open={showAddParticularDialog}
+        open={showAddParticularDialog as boolean}
         onClose={() => setShowAddParticularDialog(false)}
         PaperProps={{
           style: {
@@ -458,7 +597,20 @@ const Particulars = () => {
               ParticularersService.edit(newCategory).then((res) => {
                 setCategory((langs:any) => (langs === null ? null : langs?.map((lang:any):any => (lang._id === newCategory._id ? res.data : lang))));
 
-                setNewCategory([]);
+                setNewCategory({
+                  _id: '',
+                  name: '',
+                  subcategory1: [{
+                    name: '',
+                    subcategory2: [{
+                      name: '',
+                      subcategory3: [{
+                        name: '',
+                        narration: '',
+                      }],
+                    }],
+                  }],
+                });
               });
             }
             handleClose();
@@ -529,7 +681,7 @@ const Particulars = () => {
                               label="Sub Category 3"
                               type="text"
                               value={item.name || ''}
-                              onChange={(e) => handleNameChange3(_index, _index2, index, e)}
+                              onChange={(e) => handleNameChange3(_index, _index2, index, e as ChangeEvent<HTMLInputElement>)}
                               fullWidth
                             />
                             <br />
@@ -538,7 +690,7 @@ const Particulars = () => {
                               label="Narration"
                               type="text"
                               value={item.narration || ''}
-                              onChange={(e) => handleNameChange4(_index, _index2, index, e)}
+                              onChange={(e) => handleNameChange4(_index, _index2, index, e as ChangeEvent<HTMLInputElement>)}
                               fullWidth
                             />
                             <br />
