@@ -1,4 +1,8 @@
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts
+  as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Add as
+  AddIcon, Download as DownloadIcon,
+} from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -13,11 +17,12 @@ import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
 import * as XLSX from 'xlsx';
-import { Add as AddIcon, Download as DownloadIcon } from '@mui/icons-material';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ChildrenServices from '../../Workers/extras/ChildrenServices';
 import SpousesServices from '../../Workers/extras/SpousesServices';
+import ReasonforDeactivationService from '../../Settings/extras/ReasonforDeactivationService';
 
 const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOrWorker[], { kind: UserKind; status?: 'reject' | 'active'; showEditButton?: boolean }>) => {
   const StaffOrWorkerServices = props.options?.kind === 'staff' ? StaffServices : WorkersServices;
@@ -25,11 +30,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [rowID, setRowID] = useState<string>('');
-  const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null |strin>();
   const [users, setUsers] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
-
+  const [reason, setReason] = useState<IReason[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -43,8 +48,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-
-
+  useEffect(()=>{
+    ReasonforDeactivationService.getAll().then((res)=>{
+      setReason(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -109,7 +117,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   //   });
   // });
 
-  const deactivateWorker = (id: string, reason: string) => {
+  const deactivateWorker = (id: string, reason: string | []) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Worker',
       variant: 'info',
@@ -175,16 +183,17 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         });
       });
   };
-  const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (props.value ?? []).filter(row => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+  const filteredRows = (props.value ?? []).filter((row) => {
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-    return Object.values(row).some(value =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
 
@@ -604,8 +613,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
-              height: 300,
-              width: '100%',
+              'height': 300,
+              'width': '100%',
               '& .super-app-theme--cell': {
                 backgroundColor: '#f1f5fa',
                 color: 'black',
@@ -719,11 +728,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <DialogTitle>Reason</DialogTitle>
         <DialogContent>
           <br />
-          <Autocomplete<string>
-            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
-            value={reasonForDeactivation}
+          <Autocomplete<IReason>
+            options={reason?? undefined}
+            value={reasonForDeactivation?? undefined}
+            getOptionLabel={(option) => option.reason ?? ''}
             onChange={(e, selectedReason) => {
-              setReasonForDeactivation(selectedReason);
+              setReasonForDeactivation(selectedReason ?? null);
             }}
             renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
             fullWidth

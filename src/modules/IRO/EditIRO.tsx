@@ -34,7 +34,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../extras/CommonConfig';
-import { monthNames, purposes, sanctionedAsPers } from '../FR/extras/FRConfig';
+import { monthNames, purposes } from '../FR/extras/FRConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import FRServices from '../FR/extras/FRServices';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
@@ -44,6 +44,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
+import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -69,8 +70,10 @@ const EditIRO = () => {
       workerCode: '',
       kind: 'worker',
       tokens: [],
+
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -81,11 +84,12 @@ const EditIRO = () => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -158,7 +162,7 @@ const EditIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   const [newParticular, setNewParticular] = useState<Particular>({
@@ -175,7 +179,14 @@ const EditIRO = () => {
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
+  useEffect( ()=>{
+    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+      console.log(ddata, 'fdfd');
 
+      setSanctionedAsPer(res.data);
+    });
+  }, []);
 
   const editParticular = (particular: Particular) => {
     // setParticularDialog('edit');
@@ -468,6 +479,10 @@ const EditIRO = () => {
                         <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Personal Bank'}>Personal Bank</MenuItem>
+                        <MenuItem value={'Personal Bank1'}>Personal Bank1</MenuItem>
+                        <MenuItem value={'Personal Bank2'}>Personal Bank2</MenuItem>
+                        <MenuItem value={'Personal Bank3'}>Personal Bank3</MenuItem>
+                        <MenuItem value={'Personal Bank4'}>Personal Bank4</MenuItem>
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
@@ -476,13 +491,13 @@ const EditIRO = () => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={IRO?.sanctionedAsPer}
-                      options={sanctionedAsPers ?? []}
-                      getOptionLabel={(requisition) => requisition ?? ''}
+                      options={sanctionedAsPer ?? []}
+                      getOptionLabel={(option) => option.asPer ?? ''}
                       onChange={(_e, selectedSanction) => {
                         if (selectedSanction) {
                           setIRO({
                             ...IRO,
-                            sanctionedAsPer: selectedSanction as SanctionedAsPer,
+                            sanctionedAsPer: selectedSanction as ISanctionedAsPer,
                           });
                         }
                       }}
@@ -753,7 +768,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>
@@ -903,10 +918,7 @@ const EditIRO = () => {
           </DialogActions>
         </form>
       </Dialog>
-
     </>
-
-
   );
 };
 

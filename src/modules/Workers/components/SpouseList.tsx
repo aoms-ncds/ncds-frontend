@@ -1,4 +1,4 @@
-import { Card, Grid } from '@mui/material';
+import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
@@ -10,19 +10,21 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
   const navigate = useNavigate();
-  const [spousid, setId] = useState('')
-  const deactivateSpouse = (id: string) => {
+  const [spousid, setId] = useState('');
+  const [rowId, setRowId] = useState('');
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+
+  const deactivateSpouse = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
       variant: 'info',
     });
-    console.log(spousid, 'idid');
-
-    WorkersServices.deactivatespouse(id)
+    WorkersServices.deactivatespouse(id, reason)
       .then((res) => {
         if (props.value) {
           const newspouseRequests = props.value.filter((spouseRequests) => spouseRequests._id !== id);
@@ -76,7 +78,6 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   // }, [spouseList]);
 
 
-
   const handleClick = (params: any) => {
     WorkersServices.getUser(params.row._id)
       .then((res) => {
@@ -84,7 +85,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
         setId(res.data._id);
         navigate(`/users/worker/${res.data._id}/2`);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching user:', error);
       });
     console.log(params.row._id, 'ooo');
@@ -107,7 +108,9 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
                 icon={<NoAccountsIcon />}
                 showInMenu
                 onClick={() => {
-                  deactivateSpouse(params.row._id);
+                  // deactivateSpouse(params.row._id);
+                  setRowId(params.row._id);
+                  setReasonDialog(true);
                 }
                 }
               />
@@ -131,7 +134,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
             icon={<VisibilityIcon />}
             showInMenu
             onClick={() => handleClick(params)}
-          />
+          />,
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
@@ -147,7 +150,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       width: 120,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>First Name</b>)
+      renderHeader: () => (<b>First Name</b>),
     },
     {
       field: 'lastName',
@@ -192,9 +195,64 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       align: 'center',
       renderHeader: () => (<b>Email ID</b>),
     },
+    {
+      field: 'reasonForDeactivation',
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Reason for Deactive</b>),
+    },
+    {
+      field: 'updatedAt',
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
+      renderHeader: () => (<b> Deactive Date</b>),
+    },
   ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (
     <>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <Autocomplete<string>
+            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+            value={reasonForDeactivation}
+            onChange={(e, selectedReason) => {
+              setReasonForDeactivation(selectedReason);
+            }}
+            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (reasonForDeactivation) {
+                deactivateSpouse(rowId, reasonForDeactivation);
+              }
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
@@ -207,6 +265,5 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
 
 
 export default SpouseListPage;
-
 
 

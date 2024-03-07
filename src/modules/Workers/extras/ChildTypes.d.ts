@@ -7,6 +7,7 @@ declare global {
     childCode: string;
     firstName: string;
     lastName: string;
+    childProfile: string;
     dateOfBirth: Moment;
     childOf: IWorker | null;
     childSupport: IChildSupport;
@@ -16,18 +17,16 @@ declare global {
     occupation: string;
     qualification: string;
     gender?: Gender;
-    profileAddedOn?: Moment,
-    adharCardNo?: number,
-    phoneNumber?: number,
-    emailId?: string
-    higherEducation?: boolean,
-    courseName: string,
-    totalAmountforCourse: number,
-    startingYear: Moment,
-    endingYear: Moment
-
-
-
+    profileAddedOn?: Moment;
+    adharCardNo?: number;
+    phoneNumber?: number;
+    emailId?: string;
+    higherEducation?: boolean;
+    courseName: string;
+    totalAmountforCourse: number;
+    startingYear: Moment;
+    endingYear: Moment;
+    reasonForDeactivation?: DeactivationReason;
 
 
   }
@@ -35,6 +34,7 @@ declare global {
     childCode?: string;
     dateOfBirth?: Moment;
     childOf?: IWorker | null;
+    childProfile: string;
     childSupport?: IChildSupport;
     studying?: boolean;
     classOfStudy?: string;
@@ -42,15 +42,16 @@ declare global {
     occupation?: string;
     qualification?: string;
     gender?: Gender;
-    profileAddedOn?: Moment,
-    adharCardNo?: number,
-    phoneNumber?: number,
-    emailId?: string
-    higherEducation?: boolean,
-    courseName?: string,
-    totalAmountforCourse?: number,
-    startingYear?: Moment,
-    endingYear?: Moment
+    profileAddedOn?: Moment;
+    adharCardNo?: number;
+    phoneNumber?: number;
+    emailId?: string;
+    higherEducation?: boolean;
+    courseName?: string;
+    totalAmountforCourse?: number;
+    startingYear?: Moment;
+    endingYear?: Moment;
+    reasonForDeactivation?: DeactivationReason;
   }
 
   // interface IChildSupport extends MongooseDocument{

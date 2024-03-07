@@ -1,4 +1,4 @@
-import { Autocomplete, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import DesignationServices from '../../../HR/extras/DesignationServices';
@@ -127,8 +127,8 @@ const NewSupportDetailsForm = (
             name="TypeOfFamily"
             row
           >
-            <FormControlLabel value={'Single Missionary'} control={<Radio />} label="Single Missionary" />
-            <FormControlLabel value={'Family Missionary'} control={<Radio />} label="Family Missionary" />
+            <FormControlLabel value={'Single'} control={<Radio />} label="Single" />
+            <FormControlLabel value={'Family'} control={<Radio />} label="Family" />
           </RadioGroup>
         </FormControl>
       </Grid>
@@ -149,6 +149,38 @@ const NewSupportDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        {props.options?.kind === 'worker' && <FormControlLabel
+          label="Self Support"
+          control={
+            <Checkbox
+              checked={props?.value?.selfSupport}
+              onChange={(e: { target: { checked: any } }) =>
+                props.onChange({
+                  ...props.value,
+                  selfSupport: e.target.checked,
+                })
+              }
+            />
+          }
+        />}
+      </Grid>
+      {(props.value.selfSupport) && (
+        <Grid item xs={12} md={6} lg={4}>
+          <TextField
+            label="Percentage of Self Support"
+            value={props.value?.percentageofSelfSupport}
+            onChange={(e: any) =>
+              props.onChange({
+                ...props.value,
+                percentageofSelfSupport: e.target.value,
+              })
+            }
+            variant={props.options?.textField.variant}
+            fullWidth
+          />
+        </Grid>
+      )}
     </>
   );
 };

@@ -10,40 +10,42 @@ import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
 interface DivisionFormPageProps {
   action: 'add' | 'edit' | 'view';
+  withCardContainer: BankDetails;
 }
-const DivisionDetailsPage = (props:DivisionFormPageProps) => {
+const DivisionDetailsPage = (props: DivisionFormPageProps, withCardContainer = []) => {
   const { divisionIDs, editID } = useParams();
 
   const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
+  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(1);
   const navigate = useNavigate();
 
 
   const addDivision = () => {
     // e.preventDefault();
     // event.preventDefault();
-    if (props.action=='add') {
+    if (props.action == 'add') {
       DivisionsServices.create(divisionDetails)
-      .then((res) => {
-        enqueueSnackbar({
-          message: 'Added new Division',
-          variant: 'success',
+        .then((_res) => {
+          enqueueSnackbar({
+            message: 'Added new Division',
+            variant: 'success',
+          });
+        })
+        .catch((err) => {
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
         });
-      })
-      .catch((err) => {
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
     }
   };
 
   const editDivision = () => {
     // event.preventDefault();
-    if (editID && props.action=='edit') {
+    if (editID && props.action == 'edit') {
       DivisionsServices.editDivision(editID, divisionDetails)
-        .then((res) => {
+        .then((_res) => {
           enqueueSnackbar({
             message: 'Updated Division',
             variant: 'success',
@@ -99,6 +101,34 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
       beneficiary: '',
     },
     otherBankDetails: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails1: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails2: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails3: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    otherBankDetails4: {
       bankName: '',
       branchName: '',
       accountNumber: '',
@@ -224,7 +254,7 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                action === 'add' ? addDivision(): editDivision();
+                action === 'add' ? addDivision() : editDivision();
                 navigate('/divisions/');
               }}
             >
@@ -235,7 +265,7 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'FCRA Bank Details' }}
+                  options={{ title: 'FCRA Bank Detailsss' }}
                 />
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
@@ -253,7 +283,32 @@ const DivisionDetailsPage = (props:DivisionFormPageProps) => {
                   action={props.action}
                   options={{ title: 'Other Bank Details' }}
                 />
+                {/* {newBanks.map((item, index) => (
+                  <BankDetailsForm
+                    key={index}
+                    value={`${divisionDetails?.otherBankDetails}${index+1}`}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails1: newbankDetails as  BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: `Other Bank Details${index + 1}` }}
+                  />
+                 ))}  */}
+                {Array.from({ length: otherBankDetailsCount }).map((_, index: any) => (
+                  <BankDetailsForm
+                    key={index}
+                    value={divisionDetails[`otherBankDetails${index + 1}`]}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`otherBankDetails${index + 1}`]: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: `Other Bank Details ${index + 1}` }}
+                  />
+                ))}
+
                 <Grid item xs={12}>
+
+                  <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>Add More Banks</Button>
                   {action !== 'view' && (
                     <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
                       Submit

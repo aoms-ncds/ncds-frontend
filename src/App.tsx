@@ -30,7 +30,7 @@ const App = () => {
           },
         },
         typography: {
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: '\'Poppins\', sans-serif',
           fontSize: 14,
         },
         components: {
@@ -39,8 +39,8 @@ const App = () => {
               paper: {
                 // backgroundColor: prefersDarkMode ? '#1b253d' : '#ffffff',
                 backgroundColor: '#ffffff',
-                fontWeight: "bold",
-                lineHeight: "1.2em"
+                fontWeight: 'bold',
+                lineHeight: '1.2em',
               },
             },
           },

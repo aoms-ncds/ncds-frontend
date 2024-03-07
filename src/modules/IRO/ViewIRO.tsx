@@ -34,7 +34,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { useState, useEffect } from 'react';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
-import { purposes, sanctionedAsPers } from '../FR/extras/FRConfig';
+import { purposes } from '../FR/extras/FRConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROServices from './extras/IROServices';
@@ -43,6 +43,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { uncapitalizeObjectKeys } from '@mui/x-date-pickers/internals';
 import MessageItem from '../../components/MessageItem';
+import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 
 
 const ViewIRO = () => {
@@ -66,6 +67,7 @@ const ViewIRO = () => {
       tokens: [],
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -76,11 +78,12 @@ const ViewIRO = () => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -164,7 +167,7 @@ const ViewIRO = () => {
     createdAt: moment(),
     updatedAt: moment(),
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
 
 
@@ -179,7 +182,7 @@ const ViewIRO = () => {
 
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
-
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
     event.preventDefault();
     event.currentTarget.blur();
@@ -190,7 +193,13 @@ const ViewIRO = () => {
   //     event.preventDefault();
   //   }
   // };
+  useEffect( ()=>{
+    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+      console.log(ddata, 'fdfd');
 
+      setSanctionedAsPer(res.data);
+    });
+  }, []);
   useEffect(() => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
@@ -343,9 +352,9 @@ const ViewIRO = () => {
                                       </IconButton>
                                     </TableCell>
                                     <TableCell align="center">{index + 1}</TableCell>
-                                    <TableCell align="center"> {`${item.mainCategory == 'Select'? '' : item.mainCategory } 
-                            > ${item.subCategory1=='Select' ? '' : item.subCategory1} > 
-                            ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
+                                    <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
+                            > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2 == 'Select' ? '' : item.subCategory2} > ${item.subCategory3 == 'Select' ? '' : item.subCategory3}`}</TableCell>
                                     <TableCell align="center">{item.narration}</TableCell>
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
@@ -401,21 +410,24 @@ const ViewIRO = () => {
                             <MenuItem value={'FCRA'}>FCRA</MenuItem>
                             <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                             <MenuItem value={'Personal Bank'}>Personal Bank</MenuItem>
-
+                            <MenuItem value={'Personal Bank1'}>Personal Bank1</MenuItem>
+                            <MenuItem value={'Personal Bank2'}>Personal Bank2</MenuItem>
+                            <MenuItem value={'Personal Bank3'}>Personal Bank3</MenuItem>
+                            <MenuItem value={'Personal Bank4'}>Personal Bank4</MenuItem>
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
                         </FormControl>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <Autocomplete
-                          value={IRO?.sanctionedAsPer}
-                          options={sanctionedAsPers ?? []}
-                          getOptionLabel={(requisition) => requisition ?? ''}
+                          value={IRO?.sanctionedAsPer?? []}
+                          options={sanctionedAsPer ?? []}
+                          getOptionLabel={(options) => options.asPer ?? ''}
                           onChange={(_e, selectedSanction) => {
                             if (selectedSanction) {
                               setIRO({
                                 ...IRO,
-                                sanctionedAsPer: selectedSanction as SanctionedAsPer,
+                                sanctionedAsPer: selectedSanction as ISanctionedAsPer,
                               });
                             }
                           }}
@@ -519,12 +531,12 @@ const ViewIRO = () => {
                                         // }
                                         setTimeout(() => {
                                           closeSnackbar(rejectionSnack);
-                                          const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                          const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
                                           setTimeout(() => closeSnackbar(rejectedSnack), 500);
                                         }, 500);
                                       }}
                                     >
-                                      Reject
+                                      Revert
                                     </Button>
                                     &nbsp;
                                     <Button
@@ -543,12 +555,12 @@ const ViewIRO = () => {
                                         // }
                                         setTimeout(() => {
                                           closeSnackbar(approvalSnack);
-                                          const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                                          const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
                                           setTimeout(() => closeSnackbar(approvedSnack), 500);
                                         }, 500);
                                       }}
                                     >
-                                      Approve
+                                      Verify
                                     </Button>
                                   </>
                                 }
@@ -580,12 +592,12 @@ const ViewIRO = () => {
                                         // }
                                         setTimeout(() => {
                                           closeSnackbar(rejectionSnack);
-                                          const rejectedSnack = enqueueSnackbar({ message: 'Rejected!', variant: 'success' });
+                                          const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
                                           setTimeout(() => closeSnackbar(rejectedSnack), 500);
                                         }, 500);
                                       }}
                                     >
-                                      Reject
+                                      Revert
                                     </Button>
                                     &nbsp;
                                     <Button
@@ -605,12 +617,12 @@ const ViewIRO = () => {
                                         // }
                                         setTimeout(() => {
                                           closeSnackbar(approvalSnack);
-                                          const approvedSnack = enqueueSnackbar({ message: 'Approved!', variant: 'success' });
+                                          const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
                                           setTimeout(() => closeSnackbar(approvedSnack), 500);
                                         }, 500);
                                       }}
                                     >
-                                      Approve
+                                      Verify
                                     </Button>
                                   </>
                                 }

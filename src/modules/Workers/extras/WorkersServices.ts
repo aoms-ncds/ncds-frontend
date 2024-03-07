@@ -9,14 +9,16 @@ export default {
    */
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
+
   /**
    * Creates a new worker.
    * @param {CreatableIWorker} worker - The worker to be created.
    * @param {File|undefined} userPhoto - The worker to be created.
+   * @param {File|undefined} childPhoto - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the created worker.
    */
-  create: (worker: CreatableIWorker, userPhoto: File | undefined) =>
-    getStandardResponse<IWorker>(axios.post('/workers', { worker, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+  create: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: File | undefined) =>
+    getStandardResponse<IWorker>(axios.post('/workers', { worker, image: userPhoto, image1: childPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Edits a worker.
@@ -24,8 +26,10 @@ export default {
    * @param {File|undefined} userPhoto - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the edited worker.
    */
-  edit: (worker: CreatableIWorker, userPhoto: File | undefined) =>
-    getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`, { worker, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+
+
+  edit: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: File | undefined) =>
+    getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`, { worker, image: userPhoto, image1: childPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
   /**
    * Deletes a worker.
@@ -155,9 +159,9 @@ export default {
 
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
 
-  deactivatespouse: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
+  deactivatespouse: (id: string, reason: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
   activatespouse: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 
-  deactivatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
+  deactivatechild: (id: string, reason: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
   activatechild: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 };

@@ -177,7 +177,7 @@ const NewOfficialDetailsForm = (
                     subDivision: undefined,
                     dateOfDivisionJoining: null,
                     dateOfDivisionLeaving: null,
-                  }]
+                  }],
               });
             }
 
@@ -302,7 +302,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete<OfficialDetailsStatus>
-          options={['Ministering', 'Left', 'Education Leave', 'Sabbatical Leave']}
+          options={['Active', 'Left', 'Education Leave', 'Sabbatical Leave']}
           value={props.value.status}
           onChange={(e, selectedStatus) =>
             props.onChange({
@@ -374,7 +374,7 @@ const NewOfficialDetailsForm = (
 
         />}
       </Grid>
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         {props.options?.kind === 'worker' && <FormControlLabel
           label="Self Support"
           control={
@@ -388,7 +388,7 @@ const NewOfficialDetailsForm = (
             />
           }
         />}
-      </Grid>
+      </Grid> */}
       <Dialog open={openDivConfirm} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
@@ -422,7 +422,7 @@ const NewOfficialDetailsForm = (
                         subDivision: null,
                         dateOfDivisionJoining: null,
                         dateOfDivisionLeaving: null,
-                      }]
+                      }],
                   });
                   setIsDivisionChanged(true);
                 }
@@ -430,7 +430,7 @@ const NewOfficialDetailsForm = (
                 if (props.value.divisionHistory[props.value.divisionHistory.length - 2].division?._id === newDiv?._id) {
                   props.onChange({
                     ...props.value, divisionHistory: [
-                      ...props.value.divisionHistory.slice(0, -1)]
+                      ...props.value.divisionHistory.slice(0, -1)],
                   });
                   setIsDivisionChanged(false);
                 } else {
@@ -441,7 +441,7 @@ const NewOfficialDetailsForm = (
                         subDivision: null,
                         dateOfDivisionJoining: null,
                         dateOfDivisionLeaving: null,
-                      }]
+                      }],
                   });
                   setIsDivisionChanged(true);
                 }

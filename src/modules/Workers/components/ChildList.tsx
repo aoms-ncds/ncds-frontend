@@ -1,28 +1,31 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Card, Grid } from '@mui/material';
+import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
+import EditIcon from '@mui/icons-material/Edit';
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
-import { hasPermissions } from '../../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useNavigate } from 'react-router-dom';
 import ChildrenServices from '../extras/ChildrenServices';
-
+import CloseIcon from '@mui/icons-material/Close';
 const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 'active' }>) => {
   // const [childList, setChildList] = useState<Child[]>();
-
+  const [rowId, setRowId] = useState('');
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
   const navigate = useNavigate();
 
 
-  const deactivateChild = (id: string) => {
+  const deactivateChild = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Child',
       variant: 'info',
     });
-    WorkersServices.deactivatechild(id)
+    WorkersServices.deactivatechild(id, reason)
       .then((res) => {
         if (props.value) {
           const newchildRequests = props.value.filter((childRequests) => childRequests._id !== id);
@@ -75,7 +78,17 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       .then((res) => {
         navigate(`/users/worker/${res.data.childOf}/3`);
       })
-      .catch(error => {
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      });
+  };
+
+  const handleEdit = (rowId: any) => {
+    ChildrenServices.getById(rowId.id)
+      .then((res) => {
+        navigate(`/workers/edit/${res.data.childOf}/4`);
+      })
+      .catch((error) => {
         console.error('Error fetching user:', error);
       });
   };
@@ -98,7 +111,9 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
                 icon={<NoAccountsIcon />}
                 showInMenu
                 onClick={() => {
-                  deactivateChild(params.row._id);
+                  // deactivateChild(params.row._id);
+                  setReasonDialog(true);
+                  setRowId(params.row._id);
                 }
                 }
               />
@@ -121,7 +136,21 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
             icon={<PersonIcon />}
             showInMenu
             onClick={() => handleClick(params)}
-          />
+          />,
+
+          ...(hasPermissions(['HR_DPARTMENT_ACCESS']) ?
+            [
+              <GridLinkAction
+                key={5}
+                label="Edit"
+                icon={<EditIcon />}
+                showInMenu
+                onClick={() => handleEdit(params)}
+              />,
+            ] :
+            []),
+
+
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
@@ -170,10 +199,65 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       align: 'center',
       renderHeader: () => (<b>Child Of</b>),
     },
+    {
+      field: 'reasonForDeactivation',
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Reason for Deactive</b>),
+    },
+    {
+      field: 'createdAt',
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
+      renderHeader: () => (<b> Deactive Date</b>),
+    },
   ].filter((action) => action !== false) as GridColDef<Child>[];
 
   return (
     <>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <Autocomplete<string>
+            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+            value={reasonForDeactivation}
+            onChange={(e, selectedReason) => {
+              setReasonForDeactivation(selectedReason);
+            }}
+            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (reasonForDeactivation) {
+                deactivateChild(rowId, reasonForDeactivation);
+              }
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
       <br />
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>

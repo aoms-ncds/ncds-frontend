@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Checkbox, Divider, FormControlLabel, FormLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
-import moment from 'moment';
+
 
 const SpouseForm = (
   props: FormComponentProps<
@@ -212,13 +212,13 @@ const SpouseForm = (
       </Grid>
       <Grid item xs={12}>
         <br />
-        <Divider textAlign="left">Insurance Details</Divider>
+        <Divider textAlign="left">Welfare Scheme Details</Divider>
       </Grid>
 
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Impact No"
+          label="ID No"
           value={props.value.insurance?.impactNo}
           onChange={(e) =>
             props.onChange({
@@ -236,7 +236,7 @@ const SpouseForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date Of Joining Insurance"
+          label="Date Of Joining"
           value={props.value.insurance?.dojInsurance}
           onChange={(newDate) =>
             props.onChange({

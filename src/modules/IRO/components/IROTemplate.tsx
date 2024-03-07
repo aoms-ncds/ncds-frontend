@@ -201,7 +201,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On :{fr?.createdAt.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>FR Approved On :{fr?.updatedAt.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On :{fr?.updatedAt.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
@@ -226,7 +226,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <View style={{ ...styles.box4, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Approved On :{props?.rowData?.IRODate.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Verified On :{props?.rowData?.IRODate.format('DD/MM/YYYY')}
                 </Text></View>
               <View style={{ width: 180 }}>
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Reconciled On:{props.rowData.updatedAt?.format('DD/MM/YYYY')}

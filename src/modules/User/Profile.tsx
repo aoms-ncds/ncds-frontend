@@ -102,7 +102,7 @@ const Profile = () => {
     } else if (tabNO == '3') {
       setCurrentTab(3);
     }
-  }, [])
+  }, []);
   useEffect(() => {
     if (userId && userKind === 'staff') {
       StaffServices.getById(userId)
@@ -237,6 +237,7 @@ const Profile = () => {
                 <Grid container spacing={3}>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>{userKind === 'staff' ? 'Staff Code' : 'Worker Code'}:</Typography> {userKind === 'staff' ? (user as Staff | null)?.staffCode : (user as IWorker | null)?.workerCode} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name:</Typography> {user?.basicDetails.firstName} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Middle Name:</Typography> {user?.basicDetails.middleName} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {user?.basicDetails.lastName} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Date of Birth: </Typography> {user?.basicDetails.dateOfBirth.format('DD/MM/YYYY')} </Grid>
                   <Grid item xs={12} lg={4}>
@@ -323,7 +324,7 @@ const Profile = () => {
                   )}
 
 
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Self Support:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid>
+                  {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Self Support:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid> */}
 
                   {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Division:</Typography> {user?.officialDetails.division?.details.name} </Grid> */}
                   {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Sub Division:</Typography> {user?.officialDetails.subDivision?.name} </Grid> */}
@@ -390,7 +391,7 @@ const Profile = () => {
 
 
                   <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Insurance</Divider> </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.impactNo} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>ID No: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.impactNo} </Grid>
 
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography>{(user as unknown as IWorker)?.spouse?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
 
@@ -403,7 +404,7 @@ const Profile = () => {
               <TabPanel value={currentTab} index={3}>
                 <Container>
                   <br />
-                  <Grid container spacing={5} width={'80vw'}  >
+                  <Grid container spacing={5} width={'80vw'} >
                     {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && (user as unknown as IWorker)?.children.map((child) => (
                       <Grid key={child._id} item xs={12} lg={4} sx={{ width: '80px' }}>
                         <Grid container spacing={3} sx={{ border: '1px dashed grey', borderRadius: 2, pb: 3 }}>
@@ -451,6 +452,7 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total No of years in Ministry: </Typography> {user?.supportDetails?.totalNoOfYearsInMinistry} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Type of family: </Typography> {user?.supportDetails?.typeOfFamily ?? 'Not specified'} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>With Church: </Typography> {user?.supportDetails?.withChurch ? 'Yes' : (user?.supportDetails?.withChurch === false ? 'No' : 'Not specified')} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Percentage of Self Support: </Typography> {user?.supportDetails?.percentageofSelfSupport ?? ''} </Grid>
 
                   <Grid item xs={12}><br /><Divider textAlign="left" sx={{ fontWeight: 600, fontSize: 20 }}>Support Structure</Divider></Grid>
 
@@ -461,8 +463,8 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special Allowance: </Typography> {user?.supportStructure?.specialAllowance} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Miscellaneous Deduction: </Typography> {user?.supportStructure?.impactDeduction} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure?.telAllowance} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION Missionary Fund: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>MUT Deduction: </Typography> {user?.supportStructure?.MUTDeduction} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PNRM Allowance: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>WS Deduction: </Typography> {user?.supportStructure?.MUTDeduction} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Amount: </Typography>
                     {
                       (user?.supportStructure?.basic ?? 0) +
@@ -496,7 +498,7 @@ const Profile = () => {
                     }
                   </Grid>
                   <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Insurance</Divider> </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Impact No: </Typography> {user?.insurance?.impactNo} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>ID No: </Typography> {user?.insurance?.impactNo} </Grid>
 
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography> {user?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
 

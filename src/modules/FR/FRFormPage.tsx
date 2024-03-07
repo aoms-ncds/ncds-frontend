@@ -19,6 +19,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
+    reasonForSentBack: '',
   });
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
@@ -94,7 +95,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   const manageFR = async (requisition: CreatableFR) => {
     try {
       const operation =
-        requisition.status == FRLifeCycleStates.FR_APPROVED ? 'approve' :
+        requisition.status == FRLifeCycleStates.FR_APPROVED ? 'Approve' :
           requisition.status == FRLifeCycleStates.REJECTED ? 'reject' :
             requisition.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS ? 'sendToAccounts' :
               requisition.status == FRLifeCycleStates.WAITING_FOR_PRESIDENT ? 'sendToPresident' : 'sendBack'
@@ -103,10 +104,10 @@ const FRFormPage = (props: FRFormPageProps) => {
       enqueueSnackbar({
         // eslint-disable-next-line max-len
         message:
-          operation === 'approve' ?
-            'Approving' :
+          operation === 'Approve' ?
+            'Verifyng' :
             operation === 'reject' ?
-              'Rejecting' :
+              'Disapproving' :
               operation === 'sendToAccounts' ?
                 'Sending To Accounts' :
                 operation === 'sendToPresident' ?
@@ -122,7 +123,7 @@ const FRFormPage = (props: FRFormPageProps) => {
           message: res.message,
           variant: 'success',
         });
-        if (operation == 'approve') {
+        if (operation == 'Approve') {
           enqueueSnackbar({
             message: 'IRO  CREATED',
             variant: 'success',

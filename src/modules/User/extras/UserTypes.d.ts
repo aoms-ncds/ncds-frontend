@@ -8,11 +8,11 @@ declare global {
   interface IUserPermissions extends MongooseDocument {
 
     READ_ACCESS: boolean;// Basic access permission
-    ADMIN_ACCESS:boolean;// Admin access
+    ADMIN_ACCESS: boolean;// Admin access
 
     READ_WORKERS: boolean; // For reading workers
     WRITE_WORKERS: boolean; // For adding and editing worker details
-    MANAGE_WORKER:boolean;// For approving Workers
+    MANAGE_WORKER: boolean;// For approving Workers
 
     READ_STAFFS: boolean;// For reading staffs
     WRITE_STAFFS: boolean;// For adding and editing staff details
@@ -23,33 +23,35 @@ declare global {
 
     READ_FR: boolean; // For reading FRs
     WRITE_FR: boolean; // For adding and editing FR details
-    PRESIDENT_ACCESS:boolean;// President access
-    MANAGE_FR:boolean;// For Approving FR
+    PRESIDENT_ACCESS: boolean;// President access
+    MANAGE_FR: boolean;// For Approving FR
 
     READ_IRO: boolean; // For reading IROs
     WRITE_IRO: boolean; // For editing IRO details
-    OFFICE_MNGR_ACCESS :boolean;// For Office Mngr
-    ACCOUNTS_MNGR_ACCESS:boolean;// For Accounts Mngr access
-    MANAGE_IRO:boolean;//  For approving IRO
+    OFFICE_MNGR_ACCESS: boolean;// For Office Mngr
+    ACCOUNTS_MNGR_ACCESS: boolean;// For Accounts Mngr access
+    MANAGE_IRO: boolean;//  For approving IRO
 
-    READ_APPLICATION:boolean; // For reading applications
-    WRITE_APPLICATION:boolean; // For adding and editing application details
-    MANAGE_APPLICATION:boolean;// For approving Application
+    READ_APPLICATION: boolean; // For reading applications
+    WRITE_APPLICATION: boolean; // For adding and editing application details
+    MANAGE_APPLICATION: boolean;// For approving Application
 
-    FCRA_ACCOUNTS_ACCESS:boolean;
-    LOCAL_ACCOUNT_ACCESS:boolean;
-    PERSONAL_ACCOUNTS_ACCESS:boolean;
+    FCRA_ACCOUNTS_ACCESS: boolean;
+    LOCAL_ACCOUNT_ACCESS: boolean;
+    PERSONAL_ACCOUNTS_ACCESS: boolean;
+    HR_DPARTMENT_ACCESS: boolean;
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {
     firstName: string;
+    middleName: string;
     lastName: string;
     dateOfBirth: Moment;
-    gender?: Gender;
+    gender?: string;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
-    religion?:Religion;
+    religion?: Religion;
     highestQualification?: string;
     motherTongue?: ILanguage;
     communicationLanguage?: ILanguage;
@@ -89,34 +91,36 @@ declare global {
   }
   interface OfficialDetails {
     dateOfJoining?: Moment;
-    dateOfLeaving?: Moment|null;
+    dateOfLeaving?: Moment | null;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
-    divisionHistory:DivisionHistory[];
-    selfSupport: boolean;
+    divisionHistory: DivisionHistory[];
     status: OfficialDetailsStatus;
     noOfChurches: number;
+
+
   }
-  type DivisionHistory ={
-    _id:string;
+
+
+  type DivisionHistory = {
+    _id: string;
     division: Division;
     subDivision: SubDivision;
-    dateOfDivisionJoining?: Moment|null;
-    dateOfDivisionLeaving?: Moment|null;
+    dateOfDivisionJoining?: Moment | null;
+    dateOfDivisionLeaving?: Moment | null;
   };
-  type CreatableDivisionHistory ={
-    division?: Division|null;
-    subDivision?: SubDivision|null;
-    dateOfDivisionJoining?: Moment|null;
-    dateOfDivisionLeaving?: Moment|null;
+  type CreatableDivisionHistory = {
+    division?: Division | null;
+    subDivision?: SubDivision | null;
+    dateOfDivisionJoining?: Moment | null;
+    dateOfDivisionLeaving?: Moment | null;
   };
-  type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
-  type OfficialDetailsStatus = 'Ministering' | 'Left' | 'Education Leave' | 'Sabbatical Leave'|null;
-  type TypeOfFamily='Single Missionary'|'Family Missionary';
+  type DeactivationReason = [];
+  type OfficialDetailsStatus = 'Active' | 'Left' | 'Education Leave' | 'Sabbatical Leave' | null;
+  type TypeOfFamily = 'Single' | 'Family';
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {
     dateOfJoining?: Moment;
-    divisionHistory:CreatableDivisionHistory[];
-    selfSupport?: boolean;
+    divisionHistory: CreatableDivisionHistory[];
     status?: OfficialDetailsStatus;
     noOfChurches?: number;
   }
@@ -127,6 +131,8 @@ declare global {
     typeOfFamily?: TypeOfFamily;
     withChurch?: boolean;
     department?: Department;
+    selfSupport: boolean;
+    percentageofSelfSupport: number;
   }
 
   interface Insurance {
@@ -148,7 +154,7 @@ declare global {
     MUTDeduction?: number;
   }
   interface User extends MongooseDocument {
-    kind: readonly 'staff'|'worker';
+    kind: readonly 'staff' | 'worker';
     imageURL?: string;
     basicDetails: BasicDetails;
     officialDetails: OfficialDetails;
@@ -158,7 +164,7 @@ declare global {
     permissions?: IUserPermissions;
     tokens: string[];
     insurance?: Insurance;
-    division?:Division;
+    division?: Division;
 
   }
   interface CreatableUser extends Creatable<User> {
@@ -170,10 +176,10 @@ declare global {
 
   }
 
-  type Gender = 'Male' | 'Female' | 'Other';
+  // type Gender = 'Male' | 'Female' | 'Other';
   type MaritalStatus = 'Married' | 'Unmarried';
-  type WorkerField = 'Missionary' | 'Non-Missionary';
-type Religion='Hindu'| 'Muslim'| 'Christian'|'Sikh';
+  type WorkerField = 'Field' | 'Office Staff';
+  // type Religion = 'Hindu' | 'Muslim' | 'Christian' | 'Sikh';
   interface LoginCredentials {
     email: string;
     password: string;

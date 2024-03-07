@@ -23,7 +23,7 @@ import {
   Typography,
 } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { enqueueSnackbar } from 'notistack';
@@ -35,7 +35,7 @@ import * as XLSX from 'xlsx';
 import moment from 'moment';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-
+import clsx from 'clsx';
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
@@ -339,7 +339,7 @@ const ManageFrPage = () => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        }}> {props.row.sanctionedAsPer?.toString()}</p>
       ),
       width: 200,
       align: 'center',
@@ -366,22 +366,39 @@ const ManageFrPage = () => {
       field: 'status',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Status</b>),
+      cellClassName: (params: GridCellParams<any, number>) => {
+        if (params.value == null) {
+          return '';
+        }
+
+        return clsx('super-app', {
+          negative: params.value < 0,
+          positive: params.value > 0,
+        });
+      },
       width: 205,
       align: 'center',
       headerAlign: 'center',
-      // valueGetter: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 250,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        console.log(statusName, 'lolpß');
+        // Check if the status name needs to be changed
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
       },
     },
 
@@ -428,7 +445,7 @@ const ManageFrPage = () => {
             <Grid item xs={12} lg={6}>
 
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}  >
+                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
                   <Grid container spacing={2} padding={2} >
                     <Grid item xs={6}>
                       <TextField
@@ -511,17 +528,15 @@ const ManageFrPage = () => {
                       />
 
 
-
                     </Grid>
-
 
 
                   </Grid>
 
                   <Box
                     sx={{
-                      height: 300,
-                      width: '100%',
+                      'height': 300,
+                      'width': '100%',
                       '& .super-app-theme--cell': {
                         backgroundColor: '#f1f5fa',
                         color: 'black',
@@ -543,13 +558,18 @@ const ManageFrPage = () => {
                       '& .odd': {
                         backgroundColor: '#fff', // Change to blue for odd rows
                       },
+                      '&.red': {
+                        color: 'red',
+
+                      },
+
                     }}
                   >
-                    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
-                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    } />
+                    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id}
+                      loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
+                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                      } />
                   </Box>
-
 
 
                 </Card>

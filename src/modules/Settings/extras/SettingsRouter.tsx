@@ -5,6 +5,11 @@ import Designation from '../Designation';
 import ChildSupport from '../ChildSupport';
 import ESignature from '../ESignature';
 import Department from '../Department';
+import Gender from '../Gender';
+import Relogion from '../Religion';
+import ReasonforDeactivation from '../ReasonforDeactivation';
+import SanctionedAsPer from '../SanctionedAsPer';
+import Particulars from '../Particulars';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -31,7 +36,7 @@ const settingsRoutes: ModuleRoute = {
     {
       title: 'Designation',
       path: '/Designation',
-      element: <Designation/>,
+      element: <Designation />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
@@ -49,7 +54,7 @@ const settingsRoutes: ModuleRoute = {
     {
       title: 'Designation',
       path: '/Designation',
-      element: <Designation/>,
+      element: <Designation />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
@@ -67,7 +72,7 @@ const settingsRoutes: ModuleRoute = {
     {
       title: 'ESignature',
       path: '/Esignature',
-      element: <ESignature/>,
+      element: <ESignature />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
@@ -76,7 +81,52 @@ const settingsRoutes: ModuleRoute = {
     {
       title: 'Department',
       path: '/Department',
-      element: <Department/>,
+      element: <Department />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Gender',
+      path: '/Gander',
+      element: <Gender />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Relogion',
+      path: '/Relogion',
+      element: <Relogion />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Deactivarion Resaon',
+      path: '/ReasonforDeactivation',
+      element: <ReasonforDeactivation />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Santioned As Per',
+      path: '/SanctionedAsPer',
+      element: <SanctionedAsPer />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Particulars',
+      path: '/Particulars',
+      element: <Particulars/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

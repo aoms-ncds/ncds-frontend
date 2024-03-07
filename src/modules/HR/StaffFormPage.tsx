@@ -17,6 +17,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
     tokens: [],
     basicDetails: {
       firstName: '',
+      middleName: '',
       lastName: '',
       email: '',
 
@@ -25,11 +26,12 @@ const StaffFormPage = (props: StaffFormPageProps) => {
       residingAddress: {},
     },
     officialDetails: {
-      selfSupport: true,
       divisionHistory: [],
       // noOfChurches: 5,
     },
     supportDetails: {
+      selfSupport: true,
+      percentageofSelfSupport: 0,
       // totalNoOfYearsInMinistry: 10,
       // withChurch: true,
     },
@@ -47,6 +49,7 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   });
 
   const [userPhoto, setUserPhoto] = useState<File>();
+  const [childPhoto, setChildPhoto] = useState<File>();
 
   useEffect(() => {
     if (id) {
@@ -79,9 +82,15 @@ const StaffFormPage = (props: StaffFormPageProps) => {
           kind: 'staff',
           profilePic: {
             userPhoto: userPhoto,
-            setUserPhoto: ((newUserPhoto)=>setUserPhoto(newUserPhoto)),
+            setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
 
           },
+          childprofilePic: {
+            childPhoto: childPhoto,
+            setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
+
+          },
+          tab: 0,
         }}
         onSubmit={async (creatableStaff) => {
           try {

@@ -133,6 +133,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       tokens: [],
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -143,11 +144,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -171,7 +173,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -516,7 +518,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        }}> {props.row.sanctionedAsPer?.toString()}</p>
       ),
       width: 200,
       align: 'center',
@@ -547,7 +549,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Account Manager Approve'}>
+    <CommonPageLayout title={'Account Manager Verify'}>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
@@ -1065,7 +1067,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
 
                   return res;
                 });

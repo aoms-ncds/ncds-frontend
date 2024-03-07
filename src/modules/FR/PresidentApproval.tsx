@@ -301,7 +301,7 @@ const PresidentApproval = () => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer}</p>
+        }}> {props.row.sanctionedAsPer.toString()}</p>
       ),
       width: 200,
       align: 'center',
@@ -332,7 +332,7 @@ const PresidentApproval = () => {
   ];
 
   return (
-    <CommonPageLayout title="President Approve">
+    <CommonPageLayout title="President Verify">
       <PermissionChecks
         permissions={['READ_FR']}
         granted={(

@@ -39,7 +39,7 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
-  console.log(props, 'dd')
+  console.log(props, 'dd');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [fr, setFr] = useState<FR>();
@@ -139,6 +139,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       tokens: [],
       basicDetails: {
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         permanentAddress: {},
@@ -149,11 +150,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       officialDetails: {
         divisionHistory: [],
         remarks: '',
-        selfSupport: true,
         status: null,
         noOfChurches: 0,
       },
       supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
         // totalNoOfYearsInMinistry: 10,
         withChurch: true,
       },
@@ -177,7 +179,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     updatedAt: moment(),
     billAttachment: [],
     signature: {},
-    specialsanction: ''
+    specialsanction: '',
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
@@ -577,7 +579,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {' '}
-          {props.row.sanctionedAsPer}
+          {props.row.sanctionedAsPer.toString()}
         </p>
       ),
       width: 200,
@@ -634,8 +636,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
       //   </p>
       // ),
+      // valueGetter: (params) => {
+      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      // },
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        console.log(statusName, 'lolpß');
+        // Check if the status name needs to be changed
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
       },
     },
   ];
@@ -758,8 +781,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   >
                     <Box
                       sx={{
-                        height: 300,
-                        width: '100%',
+                        'height': 300,
+                        'width': '100%',
                         '& .super-app-theme--cell': {
                           backgroundColor: '#f1f5fa',
                           color: 'black',
@@ -1261,7 +1284,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
-                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data] }));
+                  setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
                   return res;
                 });
               }}
