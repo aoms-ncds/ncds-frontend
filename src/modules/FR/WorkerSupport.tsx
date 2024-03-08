@@ -916,7 +916,7 @@ const WorkerSupportPage = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <div style={{ float: 'right' }}>
+                <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
                       document={<PDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps.workerId} />}
@@ -925,6 +925,7 @@ const WorkerSupportPage = () => {
                     >
                       {({ blob, loading }) => (
                         <> <Button
+
                           endIcon={<AttachIcon />}
                           variant="contained"
                           color="info"
