@@ -311,8 +311,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 {
                   id: 'edit',
                   text: 'Edit',
-                  component: Link,
+                  component: Link ,
                   to: `/iro/${params.row._id}/edit`,
+                    onClick: () => {
+                      window.open(`/iro/${params.row._id}/edit`, '_blank');
+                    },
                   icon: EditIcon,
                 },
               ] :

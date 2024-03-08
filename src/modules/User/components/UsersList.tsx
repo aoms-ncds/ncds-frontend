@@ -222,7 +222,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/${props.options?.kind}/${params.row._id}`} />,
           (hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
-            <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`} />
+            <GridLinkAction 
+            key={2} 
+            label="Edit" 
+            icon={<EditIcon />}
+            onClick={() => {
+              window.open(`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`);
+            }}
+             showInMenu 
+             to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`} />
           ),
           (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (
             <GridLinkAction

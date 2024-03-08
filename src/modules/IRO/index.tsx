@@ -50,7 +50,7 @@ const IRODashboard = () => {
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={amountReleasedCount?.toString()} secondaryText={'Amount released'} color={'#fff'} />
+            style={{ width: '70px', height: '70px' }} />} count={amountReleasedCount?.toString()} secondaryText={'Amount Released'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Reconciliation on Process.png"
