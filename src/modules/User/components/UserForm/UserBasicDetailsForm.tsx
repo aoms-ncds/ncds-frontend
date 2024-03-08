@@ -94,7 +94,7 @@ const UserBasicDetailsForm = (
           required
         />
 
-        <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Name as per the Aadhar card )</Typography>
+        <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Name as per the Aadhaar card )</Typography>
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>

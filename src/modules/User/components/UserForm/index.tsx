@@ -825,7 +825,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <TextField
-                    label=" Adhaar ard No:"
+                    label=" Adhaar No:"
                     value={newChild?.adharCardNo}
                     onChange={(e) =>
                       setNewChild((newchild: any) => ({

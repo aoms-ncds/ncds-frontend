@@ -89,7 +89,7 @@ const settingsRoutes: ModuleRoute = {
     },
     {
       title: 'Gender',
-      path: '/Gander',
+      path: '/Gender',
       element: <Gender />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
