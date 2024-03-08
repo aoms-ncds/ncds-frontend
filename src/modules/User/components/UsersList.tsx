@@ -189,18 +189,13 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
-  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (props.value ?? []).filter((row) => {
-    if ((row.basicDetails.firstName &&
-       row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
-        (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+  const filteredRows = (props.value ?? []).filter(row => {
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     return Object.values(row).some((value) =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
@@ -624,8 +619,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
-              'height': 300,
-              'width': '100%',
               'height': 300,
               'width': '100%',
               '& .super-app-theme--cell': {

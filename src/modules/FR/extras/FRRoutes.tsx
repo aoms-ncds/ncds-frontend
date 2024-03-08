@@ -5,6 +5,7 @@ import ClosedFR from '../ClosedFR';
 import ManageFRPage from '../ManageFrPage';
 import PresidentApproval from '../PresidentApproval';
 import SentBack from '../SendBack';
+import WorkerSupportPage from '../WorkerSupport';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -71,6 +72,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Revert Fr',
       path: '/sentBack',
       element: <SentBack/>,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Support structure',
+      path: '/worker_support',
+      element: <WorkerSupportPage/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,
