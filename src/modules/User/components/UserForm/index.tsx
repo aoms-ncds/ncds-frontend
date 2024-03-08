@@ -141,7 +141,8 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         }),
       );
   }, []);
-  console.log(props.value, 'props.value.officialDetails');
+  // console.log(props.value, 'props.value.officialDetails');
+
   // const lastProgramNameField = useRef<HTMLInputElement>(null);
   // useEffect(() => {
   //   lastProgramNameField.current?.focus();
@@ -930,7 +931,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     color="primary"
                   />
-                </Grid>
+                </Grid> 
 
                 {newChild.higherEducation == true && (
                   <>

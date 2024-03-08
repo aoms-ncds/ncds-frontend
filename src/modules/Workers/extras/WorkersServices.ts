@@ -66,6 +66,11 @@ export default {
             dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
           })),
         },
+        supportStructure: {
+          ...worker.supportStructure,
+          disabledFrom: worker.supportStructure.disabledFrom ? moment(worker.supportStructure.disabledFrom) : undefined,
+          disabledTo: worker.supportStructure.disabledTo ? moment(worker.supportStructure.disabledTo) : undefined,
+        },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
       })),
@@ -106,6 +111,11 @@ export default {
           dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
           dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
         })),
+      },
+      supportStructure: {
+        ...data.supportStructure,
+        disabledFrom: data.supportStructure.disabledFrom ? moment(data.supportStructure.disabledFrom) : undefined,
+        disabledTo: data.supportStructure.disabledTo ? moment(data.supportStructure.disabledTo) : undefined,
       },
       spouse: !data.spouse ?
         undefined :
