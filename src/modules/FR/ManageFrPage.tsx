@@ -414,6 +414,28 @@ const ManageFrPage = () => {
         return statusName;
       },
     },
+    {
+      field: 'reasonForSentBack',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Reason For Revert</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.reasonForSentBack}
+        </p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);

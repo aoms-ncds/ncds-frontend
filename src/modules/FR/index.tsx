@@ -11,6 +11,7 @@ const frDashboard = () => {
   const [approvedFrCount, setApprovedFrCount] = useState<number | null>(null);
   const [waitingForPresidentFrCount, setWaitingForPresidentFrCount] = useState<number | null>(null);
   const [waitingForAccountFrCount, setWaitingForAccountFrCount] = useState<number | null>(null);
+  const [reverted, setReverted] = useState<number | null>(null);
 
   useEffect(() => {
     FRServices.getCount()
@@ -30,6 +31,11 @@ const frDashboard = () => {
       });
     FRServices.getCount({ status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS })
       .then((res) => setWaitingForAccountFrCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    FRServices.getCount({ status: FRLifeCycleStates.FR_SEND_BACK })
+      .then((res) => setReverted(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -60,6 +66,10 @@ const frDashboard = () => {
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'} />
+              </Grid>
+              <Grid item xs={6} md={3} xl={3}>
+                <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                  count={reverted?.toString()} secondaryText={'Reverted '} color={'#fff'} />
               </Grid>
             </Grid>
             <br />
@@ -94,8 +104,8 @@ const frDashboard = () => {
                   primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Sent"
-                  secondaryText="Back FR" color="#fff" targetRoute="/fr/sentBack" />
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Reverted"
+                  secondaryText="FR" color="#fff" targetRoute="/fr/sentBack" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton primaryText="Manage" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
