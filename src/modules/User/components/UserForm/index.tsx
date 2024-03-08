@@ -931,7 +931,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     }
                     color="primary"
                   />
-                </Grid> 
+                </Grid>
 
                 {newChild.higherEducation == true && (
                   <>

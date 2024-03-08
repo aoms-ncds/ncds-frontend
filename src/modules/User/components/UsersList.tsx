@@ -192,8 +192,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (props.value ?? []).filter(row => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) || (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+  const filteredRows = (props.value ?? []).filter((row) => {
+    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
     return Object.values(row).some((value) =>
