@@ -63,10 +63,10 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   const [open, setOpen] = useState(true);
   const [Division, setDivision] = useState('');
   const { userId, userKind } = useParams();
-  console.log(userId, 'ii');
+  // console.log(userId, 'ii');
   if (auth.user) {
     const divDi = auth?.user?.division?.toString();
-    console.log(divDi, 'divDi');
+    // console.log(divDi, 'divDi');
 
     useEffect(() => {
       if (divDi) {

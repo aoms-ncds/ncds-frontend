@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Grid, TextField, Tooltip, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
-import { Preview as PreviewIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, AttachFile as AttachIcon } from '@mui/icons-material';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
@@ -13,6 +13,9 @@ import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFTemplate from './components/PDFTemplate';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -45,7 +48,6 @@ const WorkerSupportPage = () => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<IWorker | null>(null);
-
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
     prevBasic: 0,
@@ -75,12 +77,16 @@ const WorkerSupportPage = () => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
 
+  const [open, setOpen] = useState<boolean>(false);
   const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
   });
+
+  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
+  const [fileObj, setFileObj] = useState<FileObject|null>(null);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -119,7 +125,7 @@ const WorkerSupportPage = () => {
 
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px' }}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
       {columns.map((column) => (
         <div key={column.field} style={{ width: column.width, textAlign: 'center' }}>
           {column.field=='division'&&<b>Total</b>}
@@ -284,12 +290,16 @@ const WorkerSupportPage = () => {
       purpose: 'Division',
     }));
   }, []);
+  useEffect(() => {
+    setPdfProps({ divisionId: division?._id??null, workerId: selectedWorker?._id??null });
+  }, [division, selectedWorker]);
 
-  const columns: GridColDef<IWorker>[] = [
+  const columns: GridColDef[] = [
     {
       field: 'actions',
       type: 'actions',
       width: 50,
+      headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
@@ -297,10 +307,11 @@ const WorkerSupportPage = () => {
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
-    { field: 'workerCode', width: 100, renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
+    { field: 'workerCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
       width: 100,
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>First Name</b>,
@@ -311,14 +322,16 @@ const WorkerSupportPage = () => {
       headerAlign: 'center',
       field: 'lastName',
       width: 100,
+      headerClassName: 'column-header',
       renderHeader: () => <b>Last Name</b>,
       valueGetter: (params) => params.row.basicDetails.lastName,
     },
-    { field: 'division', width: 100, align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name },
+    { field: 'division', width: 100,
+      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name },
     {
       field: 'sub_division',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
@@ -327,7 +340,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevBasic',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -336,7 +349,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_basic',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -345,9 +358,10 @@ const WorkerSupportPage = () => {
     {
       field: 'basic',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.basic,
     },
@@ -356,7 +370,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevHRA',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -365,7 +379,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_HRA',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -374,9 +388,10 @@ const WorkerSupportPage = () => {
     {
       field: 'HRA',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.HRA,
     },
@@ -384,7 +399,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevSpouseAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -393,7 +408,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_spouseAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -402,8 +417,9 @@ const WorkerSupportPage = () => {
     {
       field: 'spouseAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
+      cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.spouseAllowance,
@@ -412,7 +428,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevPositionalAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -421,7 +437,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_positionalAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -430,7 +446,8 @@ const WorkerSupportPage = () => {
     {
       field: 'positionalAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
+      cellClassName: 'row-current',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
@@ -441,17 +458,16 @@ const WorkerSupportPage = () => {
     {
       field: 'prevSpecialAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
-
       valueGetter: (params) => params.row.supportStructure?.prevSpecialAllowance,
     },
     {
       field: 'last_updated_specialAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -460,7 +476,8 @@ const WorkerSupportPage = () => {
     {
       field: 'specialAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
+      cellClassName: 'row-current',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Current'}</b>,
@@ -471,7 +488,8 @@ const WorkerSupportPage = () => {
     {
       field: 'prevImpactDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
+
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -480,7 +498,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_impactDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -489,9 +507,10 @@ const WorkerSupportPage = () => {
     {
       field: 'impactDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.impactDeduction,
     },
@@ -499,7 +518,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevTelAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -508,7 +527,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_telAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -517,9 +536,10 @@ const WorkerSupportPage = () => {
     {
       field: 'telAllowance',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.telAllowance,
     },
@@ -527,7 +547,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevPIONMissionaryFund',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -536,7 +556,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_PIONMissionaryFund',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -545,9 +565,10 @@ const WorkerSupportPage = () => {
     {
       field: 'PIONMissionaryFund',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
     },
@@ -555,7 +576,7 @@ const WorkerSupportPage = () => {
     {
       field: 'prevMUTDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Prev '}</b>,
@@ -564,7 +585,7 @@ const WorkerSupportPage = () => {
     {
       field: 'last_updated_MUTDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Updated At '}</b>,
@@ -573,17 +594,19 @@ const WorkerSupportPage = () => {
     {
       field: 'MUTDeduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
+      cellClassName: 'row-current',
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.MUTDeduction,
     },
     {
       field: 'total',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
+      cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'Amount'}</b>,
       valueGetter: (params) => params.row.supportStructure?.supportEnabled?(params.row.supportStructure?.basic ?? 0) +
@@ -596,7 +619,8 @@ const WorkerSupportPage = () => {
     {
       field: 'deduction',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
+      cellClassName: 'row-current',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Deduction'}</b>,
@@ -607,8 +631,9 @@ const WorkerSupportPage = () => {
     {
       field: 'net',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
+      cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'Net'}</b>,
       valueGetter: (params) => params.row.supportStructure?.supportEnabled?(params.row.supportStructure?.basic ?? 0) +
@@ -626,15 +651,15 @@ const WorkerSupportPage = () => {
     {
       field: 'supportEnabled',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Support Enabled'}</b>,
+      renderHeader: () => <b>{'Status'}</b>,
       valueGetter: (params) => params.row.supportStructure?.supportEnabled?'Yes':'No',
     }, {
       field: 'disabledFrom',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'From'}</b>,
@@ -642,7 +667,7 @@ const WorkerSupportPage = () => {
     }, {
       field: 'disabledTo',
       width: 100,
-      headerClassName: 'super-app-theme--cell',
+      headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'To'}</b>,
@@ -652,9 +677,16 @@ const WorkerSupportPage = () => {
   ];
   const columnGroupingModel: GridColumnGroupingModel = [
     {
+      groupId: '.',
+      description: '',
+      headerClassName: 'column-grp',
+      children: [{ field: 'actions' }],
+    },
+    {
       groupId: 'details',
       description: '',
       renderHeaderGroup: () => <b>{'Worker Details'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'workerCode' },
         { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }],
     },
@@ -662,89 +694,153 @@ const WorkerSupportPage = () => {
       groupId: 'Basic',
       description: '',
       renderHeaderGroup: () => <b>{'Basic'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevBasic' }, { field: 'basic' }, { field: 'last_updated_basic' }],
     },
     {
       groupId: 'HRA',
       description: '',
       renderHeaderGroup: () => <b>{'HRA'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevHRA' }, { field: 'HRA' }, { field: 'last_updated_HRA' }],
     },
     {
       groupId: 'spouseAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Spouse Allowance'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevSpouseAllowance' }, { field: 'spouseAllowance' }, { field: 'last_updated_spouseAllowance' }],
     },
     {
       groupId: 'positionalAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Positional Allowance'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevPositionalAllowance' }, { field: 'positionalAllowance' }, { field: 'last_updated_positionalAllowance' }],
     },
     {
       groupId: 'specialAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Special Allowance'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevSpecialAllowance' }, { field: 'specialAllowance' }, { field: 'last_updated_specialAllowance' }],
     },
     {
       groupId: 'impactDeduction',
       description: '',
       renderHeaderGroup: () => <b>{'Impact Deduction'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevImpactDeduction' }, { field: 'impactDeduction' }, { field: 'last_updated_impactDeduction' }],
     },
     {
       groupId: 'telAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'Tel Allowance'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevTelAllowance' }, { field: 'telAllowance' }, { field: 'last_updated_telAllowance' }],
     },
     {
       groupId: 'PNRMAllowance',
       description: '',
       renderHeaderGroup: () => <b>{'PNRM Allowance'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevPIONMissionaryFund' }, { field: 'PIONMissionaryFund' }, { field: 'last_updated_PIONMissionaryFund' }],
     },
     {
       groupId: 'MUTDeduction',
       description: '',
       renderHeaderGroup: () => <b>{'WS Deduction'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'prevMUTDeduction' }, { field: 'MUTDeduction' }, { field: 'last_updated_MUTDeduction' }],
     },
     {
       groupId: 'Total',
       description: '',
       renderHeaderGroup: () => <b>{'Total'}</b>,
+      headerClassName: 'column-grp',
       children: [{ field: 'total' }, { field: 'deduction' }, { field: 'net' }],
+    },
+    {
+      groupId: 'Support Status',
+      description: '',
+      renderHeaderGroup: () => <b>{'Support Status'}</b>,
+      headerClassName: 'column-grp',
+      children: [{ field: 'supportEnabled' }, { field: 'disabledFrom' }, { field: 'disabledTo' }],
     },
 
   ];
+  const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+    'border': 0,
+    'color':
+      theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.85)',
+    'fontFamily': [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    'WebkitFontSmoothing': 'auto',
+    'letterSpacing': 'normal',
+    '& .MuiDataGrid-columnsContainer': {
+      backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#1d1d1d',
+    },
+    '& .MuiDataGrid-iconSeparator': {
+      display: 'none',
+    },
+    '&  .MuiDataGrid-cell': {
+      borderRight: `1px solid ${
+        theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+      }`,
+      borderBottom: `1px solid ${
+        theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+      }`,
+      color:
+        theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
+    },
+    '& .MuiPaginationItem-root': {
+      borderRadius: 0,
+    },
+
+  }));
+
   return (
     <CommonPageLayout title="Workers Support">
       <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e)=>{
           e.preventDefault();
-          setToggleRaiseFR(true);
-          setRequisition((requisition)=>({
-            ...requisition,
-            purpose: selectedWorker?'Worker':'Division',
-            purposeWorker: selectedWorker??undefined,
-            division: division??undefined,
-            mainCategory: 'Maintenance Of Priest & Preachers',
-            particulars: [{
-              _id: '',
+          if (fileObj) {
+            setToggleRaiseFR(true);
+            setRequisition((requisition)=>({
+              ...requisition,
+              purpose: selectedWorker?'Worker':'Division',
+              purposeWorker: selectedWorker??undefined,
+              division: division??undefined,
               mainCategory: 'Maintenance Of Priest & Preachers',
-              subCategory1: 'Support',
-              subCategory2: 'Worker',
-              subCategory3: 'Select',
-              month: moment().format('MMMM'),
-              narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
-              requestedAmount: total.net,
-              unitPrice: total.net,
-              attachment: [],
-            }],
-          }));
+              particulars: [{
+                _id: '',
+                mainCategory: 'Maintenance Of Priest & Preachers',
+                subCategory1: 'Support',
+                subCategory2: 'Worker',
+                subCategory3: 'Select',
+                month: moment().format('MMMM'),
+                narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
+                requestedAmount: total.net,
+                unitPrice: total.net,
+                attachment: fileObj? [fileObj]:[],
+              }],
+            }));
+          } else {
+            enqueueSnackbar({
+              message: 'File Not Attached',
+              variant: 'info',
+            });
+          }
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -757,9 +853,12 @@ const WorkerSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setWorkers((workers)=>workers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
-                    } else setWorkers(allWorkers);
-                    setDivision(newVal);
+                      setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
+                      setDivision(newVal);
+                    } else {
+                      setWorkers(allWorkers);
+                      setDivision(null);
+                    }
                     setSelectedWorker(null);
                   }
                   }
@@ -779,6 +878,7 @@ const WorkerSupportPage = () => {
                     setSelectedWorker(newVal);
                     if (newVal) {
                       setWorkers((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
+                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
                     } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Worker" variant='standard' />}
@@ -817,17 +917,61 @@ const WorkerSupportPage = () => {
               </Grid>
               <Grid item xs={12}>
                 <div style={{ float: 'right' }}>
+                  {(selectedWorker || division) && (
+                    <PDFDownloadLink
+                      document={<PDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps.workerId} />}
+                      fileName="WorkerSupport.pdf"
+                      style={{ textDecoration: 'none', color: 'blue' }}
+                    >
+                      {({ blob, loading }) => (
+                        <> <Button
+                          endIcon={<AttachIcon />}
+                          variant="contained"
+                          color="info"
+                          onClick={async () => {
+                            if (blob) {
+                              if (selectedWorker || division) {
+                                const file=(blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
+                                file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                                  setFileObj(res.data); console.log(res.data, 'uploaded');
+                                  enqueueSnackbar({
+                                    message: 'File Attached',
+                                    variant: 'success',
+                                  });
+                                });
+                              }
+                            }
+                          }} >
+                          {loading?'Loading...':'Attach File'}
+                        </Button>
+                        </>
+                      )}
+                    </PDFDownloadLink>
+                  )}
+                  {/* <Button
+                    variant="contained"
+                    color="info"
+                    onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                      setFileObj(res.data); console.log(res.data, 'uploaded');
+                    })}
+                  >
+                     Upload File
+                  </Button> */}
                   &nbsp;
                   <PermissionChecks
                     permissions={['WRITE_FR']}
                     granted={
-                      <Button
-                        variant="contained"
-                        color="info"
-                        type='submit'
-                      >
+                      <Tooltip open={open&&!fileObj}
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
+                        title={'Please Attach the file'} >
+                        <Button
+                          variant="contained"
+                          color="info"
+                          type='submit'
+                        >
                         Raise FR
-                      </Button>
+                        </Button></Tooltip>
                     }
                   />
                 </div>
@@ -839,88 +983,37 @@ const WorkerSupportPage = () => {
       <br />
       <Card>
         <Grid container spacing={2}>
-          {/* <Grid item xs={12}>
-            <Button
-              onClick={async () => {
-                const sheet = workers ?
-                  workers?.map((user: IWorker) => [
-                    user.workerCode,
-                    user.basicDetails.firstName,
-                    user.basicDetails.lastName,
-                    user.division?.details.name,
-                    user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
-                    user.basicDetails.phone,
-                    user.basicDetails.email,
-                    user.basicDetails.alternativePhone,
-                    user.basicDetails.dateOfBirth,
-                    user.basicDetails.field,
-                    user.basicDetails.martialStatus,
-                    user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                    user.basicDetails.highestQualification,
-                    user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                    user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                    user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
-                      user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
-                      user.officialDetails.dateOfJoining?.fromNow(true),
-                    user.spouse?.spouseCode,
-                    user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
-                    (user.supportStructure?.basic ?? 0) +
-                        (user.supportStructure?.HRA ?? 0) +
-                        (user.supportStructure?.spouseAllowance ?? 0) +
-                        (user.supportStructure?.positionalAllowance ?? 0) +
-                        (user.supportStructure?.specialAllowance ?? 0) +
-                        (user.supportStructure?.telAllowance ?? 0),
-                    user.insurance?.impactNo,
-                  ]) :
-                  [];
-                const headers = [
-                  'Workers Code',
-                  'First Name',
-                  'Last Name',
-                  'Division',
-                  'Sub Division',
-                  'Mobile No',
-                  'Email ID',
-                  'Alt Phone',
-                  'DOB',
-                  'Field',
-                  'Marital Status',
-                  'Known Languages',
-                  'Highest Qualifications',
-                  'Status',
-                  'Date of Joining',
-                  'No of year in Org',
-                  'Spouse Code',
-                  'Spouse Name',
-                  'Net Support',
-                  'Insurance No',
-                ];
-                const worksheet = XLSX.utils.json_to_sheet(sheet);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                XLSX.writeFile(workbook, 'Approve_Worker_Report.xlsx', { compression: true });
-              }}
-              startIcon={<DownloadIcon />}
-              color="primary"
-              sx={{ float: 'right', mt: 2, mr: 2 }}
-              variant="contained"
-            >
-              Export
-            </Button>
-          </Grid> */}
+
           <Grid item xs={12}>
             <Box
               sx={{
+                '& .MuiCheckbox-root svg': {
+                  width: 16,
+                  height: 16,
+                  backgroundColor: 'transparent',
+                  border: '1px solid ',
+                  borderRadius: 2,
+                },
+                '& .column-grp': {
+                  backgroundColor: '#86B6F6',
+                  border: '1px solid #f0f0f0',
+                },
+                '& .column-header': {
+                  backgroundColor: '#B4D4FF',
+                },
+                '& .row-current': {
+                  backgroundColor: '#EEF5FF',
+                },
                 '& .yes': {
                   backgroundColor: '#fff',
                 },
                 '& .no': {
-                  backgroundColor: 'rgb(230 8 0 / 55%)',
+                  backgroundColor: 'rgb(230 8 0 / 55%) !important',
                 },
+
               }}
             >
-              <DataGrid rows={workers ?? []}
+              <StyledDataGrid rows={workers ?? []}
                 columns={columns}
                 getRowId={(row) => row._id}
                 loading={workers === null}
@@ -929,9 +1022,9 @@ const WorkerSupportPage = () => {
                 slots={{
                   footer: CustomFooter,
                 }}
-                getRowClassName={(params) =>
-                  params.row.supportStructure.supportEnabled ? 'yes' : 'no'
-                }
+                // getRowClassName={(params) =>
+                //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
+                // }
               /></Box>
           </Grid>
         </Grid>

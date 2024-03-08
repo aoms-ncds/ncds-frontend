@@ -4,7 +4,7 @@ import { getAuthHeader, getStandardResponse } from '../../../extras/CommonHelper
 
 export default {
 
-  uploadFile: (file: File, onProgress: (progress: AJAXProgress) => void, module?:string, filename?:string, iroId?:string) =>
+  uploadFile: (file: File, onProgress?: (progress: AJAXProgress) => void, module?:string, filename?:string, iroId?:string) =>
     getStandardResponse<FileObject>(
       axios.post(
         '/file/',
@@ -12,7 +12,7 @@ export default {
         {
           onUploadProgress: (progressEvent) => {
             if (progressEvent && progressEvent.total) {
-              onProgress({
+              onProgress && onProgress({
                 loaded: progressEvent.loaded,
                 total: progressEvent.total,
                 percentage: Math.round((progressEvent.loaded * 100) / progressEvent.total),
