@@ -97,6 +97,9 @@ const frDashboard = () => {
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Sent"
                   secondaryText="Back FR" color="#fff" targetRoute="/fr/sentBack" />
               </Grid>
+              <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton primaryText="Manage" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
+              </Grid>
             </Grid>
 
           </>

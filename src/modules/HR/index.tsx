@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import DashboardCardButton from '../../components/DashboardCardButton';
 import StaffServices from './extras/StaffServices';
 import WorkerServices from '../Workers/extras/WorkersServices';
 import WorkerLifeCycleStates from '../Workers/extras/WorkerLifeCycleStates';
@@ -10,6 +9,7 @@ import ButtonCard from '../../components/ButtonCard';
 const HRDashboard = () => {
   const [staffCount, setStaffCount] = useState<number | null>(null);
   const [workersCount, setWorkerCount] = useState<number | null>(null);
+  // eslint-disable-next-line no-unused-vars
   const [unapprovedWorkersCount, setUnapprovedWorkersCount] = useState<number | null>(null);
 
   useEffect(() => {

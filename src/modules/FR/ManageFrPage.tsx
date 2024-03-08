@@ -2,26 +2,18 @@ import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import {
-  Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Add as AddIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon, Print as PrintIcon,
+  Edit as EditIcon,
+  Message as MessageIcon,
+  Preview as PreviewIcon,
+  Add as AddIcon,
+  Send as SendIcon,
+  Close as CloseIcon,
+  Download as DownloadIcon,
+  Print as PrintIcon,
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -77,7 +69,7 @@ const ManageFrPage = () => {
       field: '_manage',
       headerClassName: 'super-app-theme--cell',
       headerName: '',
-      renderHeader: () => (<b>Action</b>),
+      renderHeader: () => <b>Action</b>,
       width: 80,
       align: 'center',
       headerAlign: 'center',
@@ -143,9 +135,7 @@ const ManageFrPage = () => {
           id="FR action"
           primaryText="Actions"
           key={'FR action'}
-
           items={[
-
             {
               id: 'View',
               text: 'View And Manage',
@@ -153,15 +143,17 @@ const ManageFrPage = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ? [
-              {
-                id: 'edit',
-                text: 'Edit',
-                component: Link,
-                to: `/fr/${props.row._id}/edit`,
-                icon: EditIcon,
-              },
-            ] : []),
+            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit',
+                  component: Link,
+                  to: `/fr/${props.row._id}/edit`,
+                  icon: EditIcon,
+                },
+              ] :
+              []),
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -210,7 +202,6 @@ const ManageFrPage = () => {
               },
               icon: MessageIcon,
             },
-
           ]}
         />
       ),
@@ -226,7 +217,7 @@ const ManageFrPage = () => {
     {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>FR No</b>),
+      renderHeader: () => <b>FR No</b>,
       width: 100,
       align: 'center',
 
@@ -285,7 +276,7 @@ const ManageFrPage = () => {
     {
       field: 'mainCategory',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Main Category</b>),
+      renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
@@ -306,15 +297,13 @@ const ManageFrPage = () => {
     {
       field: 'requestedAmount',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Requested Amount</b>),
+      renderHeader: () => <b>Requested Amount</b>,
       width: 150,
-      align: 'center', headerAlign: 'center',
+      align: 'center',
+      headerAlign: 'center',
       valueGetter(params) {
         const frRequest = params.row as FR;
-        const particularAmount = frRequest.particulars?.reduce(
-          (total, particular) => total + Number(particular.requestedAmount),
-          0,
-        );
+        const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
         return particularAmount;
       },
     },
@@ -322,7 +311,7 @@ const ManageFrPage = () => {
     {
       field: 'updatedAt',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Last Updated</b>),
+      renderHeader: () => <b>Last Updated</b>,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130,
       align: 'center',
@@ -331,15 +320,20 @@ const ManageFrPage = () => {
     {
       field: 'sanctionedAsPer',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b> Sanction as per</b>),
+      renderHeader: () => <b> Sanction as per</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer?.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedAsPer.toString()}
+        </p>
       ),
       width: 200,
       align: 'center',
@@ -348,15 +342,19 @@ const ManageFrPage = () => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Special Sanction</b>),
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}>{props.row.specialsanction}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',
@@ -401,99 +399,64 @@ const ManageFrPage = () => {
         return statusName;
       },
     },
-
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) || (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
 
   return (
-    <CommonPageLayout title="Manage FR"
+    <CommonPageLayout
+      title="Manage FR"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setFRRequests((fr) =>
-            fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : [],
-          );
+          setFRRequests((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
         },
-        rangeTypes: [
-          'weeks',
-          'months',
-          'quarter_years',
-          'years',
-          'customRange',
-          'customDay',
-        ],
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
         initialRange: 'years',
-      }}>
-
+      }}
+    >
       <PermissionChecks
         permissions={['READ_FR']}
-        granted={(
+        granted={
           <>
             <Grid item xs={12} lg={6}>
-
               <Grid item xs={12} md={12}>
                 <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
                   <Grid container spacing={2} padding={2} >
                     <Grid item xs={6}>
-                      <TextField
-                        label="Search"
-                        variant="outlined"
-                        value={searchText}
-                        onChange={handleSearchChange}
-                        fullWidth
-                        style={{ width: '25%' }}
-                      />
+                      <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
                     </Grid>
                     <Grid item xs={6} sx={{ px: 2 }}>
                       <br />
                       <PermissionChecks
                         permissions={['MANAGE_FR']}
-                        granted={(
+                        granted={
                           <Button
                             onClick={async () => {
-                              const sheet =
-                                FRRequests ?
-                                  FRRequests.map((fr: FR) => ([
-                                    fr.FRno,
-                                    fr.FRdate.format('DD/MM/YYYY'),
-                                    fr.division?.details.name,
-                                    fr.purposeSubdivision?.name,
-                                    fr.mainCategory,
-                                    fr.particulars?.reduce(
-                                      (total, particular) => total + Number(particular.requestedAmount),
-                                      0,
-                                    ),
-                                    fr.sanctionedAmount,
-                                    fr.sanctionedBank,
-                                    fr.sanctionedAsPer,
-                                    IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                                  ])) :
-                                  [];
-                              const headers = [
-                                'FR No',
-                                'Date',
-                                'Division',
-                                'Sub Division',
-                                'Main Category',
-                                'Requested Amt',
-                                'Sanctioned Amt',
-                                'Sanctioned Bank',
-                                'Sanctioned As per',
-                                'Status',
-                              ];
+                              const sheet = FRRequests ?
+                                FRRequests.map((fr: FR) => [
+                                  fr.FRno,
+                                  fr.FRdate.format('DD/MM/YYYY'),
+                                  fr.division?.details.name,
+                                  fr.purposeSubdivision?.name,
+                                  fr.mainCategory,
+                                  fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
+                                  fr.sanctionedAmount,
+                                  fr.sanctionedBank,
+                                  fr.sanctionedAsPer,
+                                  IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                                ]) :
+                                [];
+                              const headers = ['FR No', 'Date', 'Division', 'Sub Division', 'Main Category', 'Requested Amt', 'Sanctioned Amt', 'Sanctioned Bank', 'Sanctioned As per', 'Status'];
                               const worksheet = XLSX.utils.json_to_sheet(sheet);
                               const workbook = XLSX.utils.book_new();
                               XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
@@ -501,30 +464,32 @@ const ManageFrPage = () => {
                               XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
                             }}
                             startIcon={<DownloadIcon />}
-                            color="primary" sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                            color="primary"
+                            sx={{ float: 'right', marginBottom: 3, mr: 2 }}
                             variant="contained"
                           >
                             Export
-                          </Button>)} />
+                          </Button>
+                        }
+                      />
 
                       <PermissionChecks
                         permissions={['WRITE_FR']}
-                        granted={(
+                        granted={
                           <>
-
                             <Button
                               variant="contained"
                               sx={{ float: 'right', marginBottom: 3, mr: 2 }}
                               startIcon={<AddIcon />}
                               component={Link}
                               to="/fr/apply"
-                            // onClick={() => {
-                            // }}
+                              // onClick={() => {
+                              // }}
                             >
                               Add new
                             </Button>
                           </>
-                        )}
+                        }
                       />
 
 
@@ -575,69 +540,75 @@ const ManageFrPage = () => {
                 </Card>
               </Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
-
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
-
-
-                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }} >
-
+                  <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
                     <Grid item>
-                      <Typography variant='h6' fontWeight={700} sx={{ textAlign: 'center' }} >Send Notifications</Typography>
+                      <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Send Notifications
+                      </Typography>
                       <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                      <Button variant="contained" color='success'
+                      <Button
+                        variant="contained"
+                        color="success"
                         sx={{ width: 260 }}
-
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('president', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
+                        onClick={() => {
+                          FRServices.sendNotifications('president', selectedFR ?? '')
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      > Send to President</Button>
+                      >
+                        {' '}
+                        Send to President
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
-                      <Button variant="contained" color='info'
+                      <Button
+                        variant="contained"
+                        color="info"
                         sx={{ width: 260 }}
-
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('accounts', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
+                        onClick={() => {
+                          FRServices.sendNotifications('accounts', selectedFR ?? '')
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to accounts</Button>
+                      >
+                        {' '}
+                        Send to accounts
+                      </Button>
                     </Grid>
                     <Grid item xs={12}>
-                      <Button variant="contained" color='inherit'
+                      <Button
+                        variant="contained"
+                        color="inherit"
                         sx={{ width: 260 }}
-                        onClick={
-                          () => {
-                            FRServices.sendNotifications('division_head', selectedFR ?? '')
-                              .then((res) => {
-                                console.log(res);
-                              })
-                              .catch((res) => {
-                                console.log(res);
-                              });
-                          }
-                        }
+                        onClick={() => {
+                          FRServices.sendNotifications('division_head', selectedFR ?? '')
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                        }}
                         endIcon={<SendIcon />}
-                      >  Send to division head</Button>
-                      <br /><br />
+                      >
+                        {' '}
+                        Send to division head
+                      </Button>
+                      <br />
+                      <br />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -657,18 +628,24 @@ const ManageFrPage = () => {
                         <Button variant="contained" color='inherit'> Send to division head</Button>
 
                       </Grid> */}
-
                   </Grid>
                 </DialogContent>
-
               </Dialog>
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>
                 <DialogContent>
-                  {remarks.length > 0 ? remarks.map((remark) => (
-                    // eslint-disable-next-line max-len
-                    <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
-                  )) : 'No Data Found '}
+                  {remarks.length > 0 ?
+                    remarks.map((remark) => (
+                      // eslint-disable-next-line max-len
+                      <MessageItem
+                        key={remark._id}
+                        sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                        time={remark.updatedAt}
+                        body={remark.remark}
+                        isSent={true}
+                      />
+                    )) :
+                    'No Data Found '}
                 </DialogContent>
                 <form
                   onSubmit={(e) => {
@@ -711,8 +688,7 @@ const ManageFrPage = () => {
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            <IconButton type='submit'
-                            >
+                            <IconButton type="submit">
                               <SendIcon />
                             </IconButton>
                           </InputAdornment>
@@ -726,7 +702,7 @@ const ManageFrPage = () => {
                         toggleOpenRemarks(false);
                         setSelectedFR(null);
                       }}
-                    // sx={{ ml: 'auto' }}
+                      // sx={{ ml: 'auto' }}
                     >
                       close
                     </Button>
@@ -735,17 +711,15 @@ const ManageFrPage = () => {
               </Dialog>
             </Grid>
           </>
-        )}
+        }
         denied={(missingPermissions) => (
           <Grid item xs={12} lg={6}>
-            <Alert severity='error'>
+            <Alert severity="error">
               Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
         )}
       />
-
-
     </CommonPageLayout>
   );
 };

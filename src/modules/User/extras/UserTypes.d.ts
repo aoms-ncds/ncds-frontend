@@ -144,14 +144,33 @@ declare global {
 
   interface SupportStructure {
     basic?: number;
+    prevBasic?: number;
+    basicLastUpdatedAt?:Moment ;
     HRA?: number;
+    prevHRA?: number;
+    HRALastUpdatedAt?:Moment ;
     spouseAllowance?: number;
+    prevSpouseAllowance?: number;
+    spouseAllowanceLastUpdatedAt?:Moment ;
     positionalAllowance?: number;
+    prevPositionalAllowance?: number;
+    positionalAllowanceLastUpdatedAt?:Moment ;
     specialAllowance?: number;
+    prevSpecialAllowance?: number;
+    specialAllowanceLastUpdatedAt?:Moment ;
     impactDeduction?: number;
+    prevImpactDeduction?: number;
+    impactDeductionLastUpdatedAt?:Moment ;
     telAllowance?: number;
+    prevTelAllowance?: number;
+    telAllowanceLastUpdatedAt?:Moment ;
     PIONMissionaryFund?: number;
+    prevPIONMissionaryFund?: number;
+    PIONMissionaryFundLastUpdatedAt?:Moment ;
     MUTDeduction?: number;
+    prevMUTDeduction?: number;
+    MUTDeductionLastUpdatedAt?:Moment ;
+    supportEnabled?:boolean;
   }
   interface User extends MongooseDocument {
     kind: readonly 'staff' | 'worker';

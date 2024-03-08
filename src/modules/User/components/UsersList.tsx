@@ -1,8 +1,12 @@
 import {
-  Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts
-  as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Add as
-  AddIcon, Download as DownloadIcon,
-} from '@mui/icons-material';
+  Edit as EditIcon,
+  Preview as PreviewIcon,
+  Delete as DeleteIcon,
+  NoAccounts as NoAccountsIcon,
+  Person as PersonIcon,
+  Ballot as BallotIcon,
+  Add as AddIcon,
+  Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -17,6 +21,7 @@ import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
 import * as XLSX from 'xlsx';
+
 
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -89,25 +94,25 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   }, []);
 
-  const execDelete = (id: string) => {
-    const snackbarId = enqueueSnackbar({
-      message: `Removing ${props.options?.kind}`,
-      variant: 'info',
-    });
+  // const execDelete = (id: string) => {
+  //   const snackbarId = enqueueSnackbar({
+  //     message: `Removing ${props.options?.kind}`,
+  //     variant: 'info',
+  //   });
 
-    StaffOrWorkerServices.delete(id)
-      .then((res) => {
-        if (props.value) {
-          props.onChange(props.value.filter((user) => user._id !== id));
-        }
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({ message: res.message, variant: 'success' });
-      })
-      .catch((err) => {
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({ message: err.message, variant: 'error' });
-      });
-  };
+  //   StaffOrWorkerServices.delete(id)
+  //     .then((res) => {
+  //       if (props.value) {
+  //         props.onChange(props.value.filter((user) => user._id !== id));
+  //       }
+  //       closeSnackbar(snackbarId);
+  //       enqueueSnackbar({ message: res.message, variant: 'success' });
+  //     })
+  //     .catch((err) => {
+  //       closeSnackbar(snackbarId);
+  //       enqueueSnackbar({ message: err.message, variant: 'error' });
+  //     });
+  // };
 
   // useEffect(()=>{
   //   UserServices.coordinatorOrNot()
@@ -184,14 +189,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       });
   };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
 
   const filteredRows = (props.value ?? []).filter((row) => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.basicDetails.firstName &&
+       row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     return Object.values(row).some((value) =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
@@ -479,6 +488,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                               (user.supportStructure?.spouseAllowance ?? 0) +
                               (user.supportStructure?.positionalAllowance ?? 0) +
                               (user.supportStructure?.specialAllowance ?? 0) +
+                              (user.supportStructure?.PIONMissionaryFund ?? 0) +
                               (user.supportStructure?.telAllowance ?? 0)),
                             user.insurance?.impactNo,
                           ])) :
@@ -553,6 +563,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                               (user.supportStructure?.spouseAllowance ?? 0) +
                               (user.supportStructure?.positionalAllowance ?? 0) +
                               (user.supportStructure?.specialAllowance ?? 0) +
+                              (user.supportStructure?.PIONMissionaryFund ?? 0) +
                               (user.supportStructure?.telAllowance ?? 0)),
                             user.insurance?.impactNo,
                           ])) :
@@ -613,6 +624,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
+              'height': 300,
+              'width': '100%',
               'height': 300,
               'width': '100%',
               '& .super-app-theme--cell': {

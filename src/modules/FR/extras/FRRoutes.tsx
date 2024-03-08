@@ -60,7 +60,7 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
-      title: 'edit FR',
+      title: 'Edit FR',
       path: '/:frID/edit',
       element: <FRFormPage action="edit" />,
       private: true,

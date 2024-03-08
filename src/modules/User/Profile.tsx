@@ -463,7 +463,7 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Special Allowance: </Typography> {user?.supportStructure?.specialAllowance} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Miscellaneous Deduction: </Typography> {user?.supportStructure?.impactDeduction} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure?.telAllowance} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PNRM Allowance: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PION Missionary Fund: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>WS Deduction: </Typography> {user?.supportStructure?.MUTDeduction} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Amount: </Typography>
                     {
@@ -472,13 +472,13 @@ const Profile = () => {
                       (user?.supportStructure?.spouseAllowance ?? 0) +
                       (user?.supportStructure?.positionalAllowance ?? 0) +
                       (user?.supportStructure?.specialAllowance ?? 0) +
+                      (user?.supportStructure?.PIONMissionaryFund ?? 0) +
                       (user?.supportStructure?.telAllowance ?? 0)
                     }
                   </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Deduction: </Typography>
                     {
                       (user?.supportStructure?.impactDeduction ?? 0) +
-                      (user?.supportStructure?.PIONMissionaryFund ?? 0) +
                       (user?.supportStructure?.MUTDeduction ?? 0)
                     }
                   </Grid>
@@ -489,10 +489,10 @@ const Profile = () => {
                       (user?.supportStructure?.spouseAllowance ?? 0) +
                       (user?.supportStructure?.positionalAllowance ?? 0) +
                       (user?.supportStructure?.specialAllowance ?? 0) +
+                      (user?.supportStructure?.PIONMissionaryFund ?? 0) +
                       (user?.supportStructure?.telAllowance ?? 0) -
                       (
                         (user?.supportStructure?.impactDeduction ?? 0) +
-                        (user?.supportStructure?.PIONMissionaryFund ?? 0) +
                         (user?.supportStructure?.MUTDeduction ?? 0)
                       )
                     }
