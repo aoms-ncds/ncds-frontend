@@ -264,7 +264,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'FCRA Bank Detailsss' }}
+                  options={{ title: 'FCRA Bank Details' }}
                 />
                 <BankDetailsForm
                   value={divisionDetails?.localBankDetails}
