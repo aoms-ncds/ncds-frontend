@@ -127,7 +127,7 @@ const ReasonForDeactivation = () => {
 
 
   return (
-    <CommonPageLayout title="Languages">
+    <CommonPageLayout title="Reason For Deactivation ">
 
 
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>

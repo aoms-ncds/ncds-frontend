@@ -95,7 +95,7 @@ const WorkersDashboard = () => {
         }
         />
         <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="In Process workers" icon={<img src="/mod_icons/Process Worker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+          <ButtonCard secondaryText="In Process Workers" icon={<img src="/mod_icons/Process Worker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={rejectedWorkersCount?.toString()} color="#fff" targetRoute="/workers/reject" />
         </Grid>
 

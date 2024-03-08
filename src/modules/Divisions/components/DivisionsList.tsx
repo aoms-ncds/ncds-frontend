@@ -88,6 +88,9 @@ const DivisionsList = () => {
                 text: 'Edit',
                 component: Link,
                 to: `/divisions/edit/${props.row._id}`,
+                onClick: () => {
+                  window.open(`/divisions/edit/${props.row._id}`, '_blank');
+                },
                 icon: EditIcon,
               },
             ] : []

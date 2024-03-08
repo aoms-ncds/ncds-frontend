@@ -307,7 +307,6 @@ const ManageFrPage = () => {
         return particularAmount;
       },
     },
-
     {
       field: 'updatedAt',
       headerClassName: 'super-app-theme--cell',
@@ -332,7 +331,7 @@ const ManageFrPage = () => {
           }}
         >
           {' '}
-          {props.row.sanctionedAsPer.toString()}
+          {props.row?.sanctionedAsPer?.toString()}
         </p>
       ),
       width: 200,
@@ -364,16 +363,32 @@ const ManageFrPage = () => {
       field: 'status',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Status</b>),
-      cellClassName: (params: GridCellParams<any, number>) => {
+      cellClassName: (params) => {
+        console.log('CellClassName params:', params);
+        let statusName = params.formattedValue;
+        console.log('Status Name###:', statusName);
         if (params.value == null) {
-          return '';
+            return '';
         }
-
-        return clsx('super-app', {
-          negative: params.value < 0,
-          positive: params.value > 0,
-        });
-      },
+        switch(statusName) {
+            case 'REVERTED':
+                return clsx('orange');
+            case 'WAITING FOR ACCOUNTS':
+                return clsx('orange');
+            case 'IRO CLOSED':
+                return clsx('green');
+            case 'FR VERIFIED':
+                return clsx('green');
+            case 'FR CLOSED':
+                return clsx('green');
+            case ' FR DISAPPROVED':
+                return clsx('red');
+            default:
+                console.log('No class applied');
+                return '';
+        }
+      
+    },
       width: 205,
       align: 'center',
       headerAlign: 'center',
@@ -518,14 +533,19 @@ const ManageFrPage = () => {
                         fontWeight: '600',
                       },
                       '& .even': {
-                        backgroundColor: '#DEDAFF', // Change to red for even rows
+                        backgroundColor: '#DEDAFF',
                       },
                       '& .odd': {
-                        backgroundColor: '#fff', // Change to blue for odd rows
+                        backgroundColor: '#fff',
                       },
-                      '&.red': {
-                        color: 'red',
-
+                      '& .green': {
+                        backgroundColor: '#80f76a',
+                      },
+                      '& .orange': {
+                        backgroundColor: '#ffd35c',
+                      },
+                      '& .red': {
+                        backgroundColor: '#ff6166',
                       },
 
                     }}

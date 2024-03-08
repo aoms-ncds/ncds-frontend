@@ -36,6 +36,7 @@ import * as XLSX from 'xlsx';
 import IROTemplate from './components/IROTemplate';
 import UserServices from '../User/extras/UserServices';
 import FRServices from '../FR/extras/FRServices';
+import clsx from 'clsx';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
@@ -310,8 +311,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 {
                   id: 'edit',
                   text: 'Edit',
-                  component: Link,
+                  component: Link ,
                   to: `/iro/${params.row._id}/edit`,
+                    onClick: () => {
+                      window.open(`/iro/${params.row._id}/edit`, '_blank');
+                    },
                   icon: EditIcon,
                 },
               ] :
@@ -653,20 +657,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       width: 250,
       align: 'center',
       headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 250,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      // valueGetter: (params) => {
-      //   return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      // },
+      cellClassName: (params) => {
+        console.log('CellClassName params:', params);
+        let statusName = params.formattedValue;
+        console.log('Status Name:', statusName);
+        if (params.value == null) {
+            return '';
+        }
+        switch(statusName) {
+            case 'WAITING FOR OFFICE MNGR':
+                console.log('Applying class green');
+                return clsx('orange');
+            case 'WAITING FOR ACCOUNTS STATE':
+                console.log('Applying class green');
+                return clsx('orange');
+            case 'IRO CLOSED':
+                console.log('Applying class green');
+                return clsx('green');
+            case 'WAITING FOR ACCOUNTS MNGR':
+                console.log('Applying class green');
+                return clsx('green');
+            default:
+                console.log('No class applied');
+                return '';
+        }
+      
+    },
+    
       valueGetter: (params) => {
         let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
         console.log(statusName, 'lolpß');
@@ -688,6 +705,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         }
         return statusName;
       },
+      
     },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -827,13 +845,24 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           fontWeight: '600',
                         },
                         '& .even': {
-                          backgroundColor: '#DEDAFF', // Change to red for even rows
+                          backgroundColor: '#DEDAFF', 
                         },
                         '& .odd': {
-                          backgroundColor: '#fff', // Change to blue for odd rows
+                          backgroundColor: '#fff', 
+                        },
+                        '& .green': {
+                          backgroundColor: '#80f76a',
+                        },
+                        '& .orange': {
+                          backgroundColor: '#ffd35c',
+                        },
+                        '& .red': {
+                          backgroundColor: '#ff6166',
                         },
                       }}
                     >
+                  
+     
                       <DataGrid
                         rows={filteredRows ?? []}
                         columns={columns}
