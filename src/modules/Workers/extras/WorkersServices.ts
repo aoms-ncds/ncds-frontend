@@ -68,8 +68,8 @@ export default {
         },
         supportStructure: {
           ...worker.supportStructure,
-          disabledFrom: worker.supportStructure.disabledFrom ? moment(worker.supportStructure.disabledFrom) : undefined,
-          disabledTo: worker.supportStructure.disabledTo ? moment(worker.supportStructure.disabledTo) : undefined,
+          disabledFrom: worker.supportStructure?.disabledFrom ? moment(worker.supportStructure?.disabledFrom) : undefined,
+          disabledTo: worker.supportStructure?.disabledTo ? moment(worker.supportStructure?.disabledTo) : undefined,
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
@@ -114,8 +114,8 @@ export default {
       },
       supportStructure: {
         ...data.supportStructure,
-        disabledFrom: data.supportStructure.disabledFrom ? moment(data.supportStructure.disabledFrom) : undefined,
-        disabledTo: data.supportStructure.disabledTo ? moment(data.supportStructure.disabledTo) : undefined,
+        disabledFrom: data.supportStructure?.disabledFrom ? moment(data?.supportStructure?.disabledFrom) : undefined,
+        disabledTo: data.supportStructure?.disabledTo ? moment(data.supportStructure?.disabledTo) : undefined,
       },
       spouse: !data.spouse ?
         undefined :

@@ -433,7 +433,7 @@ const PDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?'Yes':'No'}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.disabledFrom? row.supportStructure?.disabledFrom?.format('DD/MM/YYYY'):'-'}</Text>
+              <Text style={styles.tableCell}>{row?.supportStructure?.disabledFrom? row?.supportStructure?.disabledFrom?.format('DD/MM/YYYY'):'-'}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.disabledTo? row.supportStructure?.disabledTo?.format('DD/MM/YYYY'):'-'}</Text>
               <div style={styles.grid}></div>
