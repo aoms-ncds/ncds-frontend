@@ -128,7 +128,7 @@ const SanctionedAsPer = () => {
 
 
   return (
-    <CommonPageLayout title="Languages">
+    <CommonPageLayout title="Sanctioned As Per">
 
 
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
