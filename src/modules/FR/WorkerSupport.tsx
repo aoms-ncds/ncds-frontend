@@ -973,12 +973,12 @@ const WorkerSupportPage = () => {
                         >
                         Raise FR
                         </Button></Tooltip>
-                        
+
                     }
-                    
+
                   />
                   <br />
-                   <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography>
+                  <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography>
                 </div>
               </Grid>
             </Grid>

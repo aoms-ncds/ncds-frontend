@@ -5,6 +5,7 @@ import StaffServices from './extras/StaffServices';
 import WorkerServices from '../Workers/extras/WorkersServices';
 // import WorkerLifeCycleStates from '../Workers/extras/WorkerLifeCycleStates';
 import ButtonCard from '../../components/ButtonCard';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 const HRDashboard = () => {
   const [staffCount, setStaffCount] = useState<number | null>(null);
@@ -39,10 +40,14 @@ const HRDashboard = () => {
           <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
         </Grid>
-        <Grid item xs={12} md={4} xl={3}>
-          <ButtonCard secondaryText="Login Logs" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            color="#fff" targetRoute="/hr/login_log" />
-        </Grid>
+        <PermissionChecks
+          permissions={['ADMIN_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3}>
+              <ButtonCard secondaryText="Login Logs" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                color="#fff" targetRoute="/hr/login_log" />
+            </Grid>)} />
+
         {/* <Grid item xs={12} md={6} xl={3}>
           <DashboardCardButton primaryText="Approve New Worker" secondaryText={unapprovedWorkersCount?.toString()} color="#f77f00" targetRoute="/workers/approve" />
         </Grid> */}
