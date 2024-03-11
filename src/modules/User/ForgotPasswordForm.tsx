@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Button, InputAdornment, Alert, CircularProgress, CssBaseline, Box, InputBase } from '@mui/material';
 import { Email as EmailIcon } from '@mui/icons-material';
 import UserServices from './extras/UserServices';
@@ -8,6 +8,17 @@ const ForgottenPasswordFormPage = () => {
   const [success, setSuccess] = useState<boolean | null>(null);
   const [unknownError, setUnknownError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
+
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get('email');
+
+  useEffect(()=>{
+    if (product) {
+      setEmail(product);
+    }
+  }, [product]);
 
   const execConfirmReset: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();

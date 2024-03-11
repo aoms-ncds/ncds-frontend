@@ -1,4 +1,5 @@
-import { Box, Button, CircularProgress, CssBaseline, Grid, IconButton, InputAdornment, InputBase, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText,
+  DialogTitle, Grid, IconButton, InputAdornment, InputBase, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Email as EmailIcon, Key as KeyIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -20,12 +21,14 @@ const LoginPage = () => {
   const [passwordError, setPasswordError] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [unknownError, setUnknownError] = useState<string>();
+  const [resetrequest, setResetRequest] = useState(false);
 
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setLoading(true);
     UserServices.login(loginCred)
       .then((res) => {
+        setResetRequest(true);
         setLoading(false);
         localStorage.setItem('userToken', res.data.token);
         localStorage.setItem('userData', JSON.stringify(res.data.user));
@@ -37,7 +40,7 @@ const LoginPage = () => {
       })
       .catch((err) => {
         console.log(err);
-
+        setResetRequest(true);
         setLoading(false);
         if (err.message !== 'Incorrect email' && err.message !== 'Incorrect password') {
           setEmailError(false);
@@ -52,6 +55,8 @@ const LoginPage = () => {
         }
         if (err.message === 'Incorrect password') {
           return setPasswordError(true);
+        } else if (err.message === 'Password Reset Required') {
+          setResetRequest(true);
         } else {
           setPasswordError(false);
           setUnknownError(undefined);
@@ -67,21 +72,30 @@ const LoginPage = () => {
   useEffect(() => {
     console.log('unknownError', unknownError);
   }, [unknownError]);
+
+
+  const handleClose = () => {
+    setResetRequest(false);
+  };
+
   return (
     <>
-      <Box sx={{
-        height: '100vh',
-        width: '100vw', paddingLeft: '0', paddingRight: '0',
-        paddingBottom: '0',
-        paddingTop: '0',
-        backgroundImage:
-          'url(/loginBg.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center', /* Center the background image */
-        backgroundAttachment: 'fixed',
-        // boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)','
-        filter: 'brightness(100%)',
-      }}></Box>
+      <Box
+        sx={{
+          height: '100vh',
+          width: '100vw',
+          paddingLeft: '0',
+          paddingRight: '0',
+          paddingBottom: '0',
+          paddingTop: '0',
+          backgroundImage: 'url(/loginBg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center' /* Center the background image */,
+          backgroundAttachment: 'fixed',
+          // boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)','
+          filter: 'brightness(100%)',
+        }}
+      ></Box>
       <CssBaseline />
       <Box
         sx={{
@@ -108,7 +122,7 @@ const LoginPage = () => {
             </Grid> */}
 
             <Grid item xs={12}>
-              <Box >
+              <Box>
                 <InputBase
                   value={loginCred.email}
                   onChange={(e) =>
@@ -133,13 +147,11 @@ const LoginPage = () => {
                   }
                   required
                 />
-                {emailError &&
-                  <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid email</Typography>
-                }
+                {emailError && <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid email</Typography>}
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <Box >
+              <Box>
                 <InputBase
                   value={loginCred.password}
                   onChange={(e) =>
@@ -166,28 +178,48 @@ const LoginPage = () => {
                   endAdornment={
                     <InputAdornment position="start">
                       <IconButton onClick={() => setPasswordVisibility((visible) => !visible)}>{!passwordVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}</IconButton>
-                    </InputAdornment>}
+                    </InputAdornment>
+                  }
                   required
                 />
 
-                {passwordError &&
-                  <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid password</Typography>
-                }
+                {passwordError && <Typography sx={{ color: 'red', ml: 5, textAlign: 'left' }}>Please enter a valid password</Typography>}
               </Box>
               <br />
               <br />
             </Grid>
-            <Grid item xs={12} >
-              <Button type="submit" variant="contained"
-                sx={{ p: 1, backgroundColor: 'gray', borderRadius: 40 }}
-                disabled={isLoading} startIcon={isLoading && <CircularProgress size={20} />} fullWidth>
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" sx={{ p: 1, backgroundColor: 'gray', borderRadius: 40 }} disabled={isLoading} startIcon={isLoading && <CircularProgress size={20} />} fullWidth>
                 {isLoading ? 'Login in...' : 'LOG IN'}
-              </Button><Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2, color: 'white' }} component={Link} to="/users/reset_password_form">
+              </Button>
+              <Button variant="text" sx={{ float: 'right', fontSize: 10, marginTop: 2, color: 'white' }} component={Link} to="/users/reset_password_form">
                 Forgot Password?
               </Button>
             </Grid>
           </Grid>
         </form>
+        <Dialog
+          open={resetrequest}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {'Password Reset Required'}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+            Your password is outdated and needs to be reset every three months!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+            Cancel
+            </Button>
+            <Button variant="text" component={Link} to={`/users/reset_password_form?email=${loginCred.email}`}>
+            Reset Password
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
       {/* </CardContent>
       </Card> */}
