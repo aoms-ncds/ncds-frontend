@@ -16,7 +16,6 @@ import {
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
-import IROReceiptTemplate from './components/IROReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
@@ -34,8 +33,6 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
 import IROTemplate from './components/IROTemplate';
-import UserServices from '../User/extras/UserServices';
-import FRServices from '../FR/extras/FRServices';
 import clsx from 'clsx';
 // import IROTemplate from './components/IROTemplate';
 
@@ -43,7 +40,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   console.log(props, 'dd');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
-  const [fr, setFr] = useState<FR>();
+  const [fr] = useState<FR>();
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -311,11 +308,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 {
                   id: 'edit',
                   text: 'Edit',
-                  component: Link ,
+                  component: Link,
                   to: `/iro/${params.row._id}/edit`,
-                    onClick: () => {
-                      window.open(`/iro/${params.row._id}/edit`, '_blank');
-                    },
+                  onClick: () => {
+                    window.open(`/iro/${params.row._id}/edit`, '_blank');
+                  },
                   icon: EditIcon,
                 },
               ] :
@@ -659,31 +656,30 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
       cellClassName: (params) => {
         console.log('CellClassName params:', params);
-        let statusName = params.formattedValue;
+        const statusName = params.formattedValue;
         console.log('Status Name:', statusName);
         if (params.value == null) {
-            return '';
+          return '';
         }
-        switch(statusName) {
-            case 'WAITING FOR OFFICE MNGR':
-                console.log('Applying class green');
-                return clsx('orange');
-            case 'WAITING FOR ACCOUNTS STATE':
-                console.log('Applying class green');
-                return clsx('orange');
-            case 'IRO CLOSED':
-                console.log('Applying class green');
-                return clsx('green');
-            case 'WAITING FOR ACCOUNTS MNGR':
-                console.log('Applying class green');
-                return clsx('green');
-            default:
-                console.log('No class applied');
-                return '';
+        switch (statusName) {
+        case 'WAITING FOR OFFICE MNGR':
+          console.log('Applying class green');
+          return clsx('orange');
+        case 'WAITING FOR ACCOUNTS STATE':
+          console.log('Applying class green');
+          return clsx('orange');
+        case 'IRO CLOSED':
+          console.log('Applying class green');
+          return clsx('green');
+        case 'WAITING FOR ACCOUNTS MNGR':
+          console.log('Applying class green');
+          return clsx('green');
+        default:
+          console.log('No class applied');
+          return '';
         }
-      
-    },
-    
+      },
+
       valueGetter: (params) => {
         let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
         console.log(statusName, 'lolpß');
@@ -705,7 +701,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         }
         return statusName;
       },
-      
+
     },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -845,10 +841,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           fontWeight: '600',
                         },
                         '& .even': {
-                          backgroundColor: '#DEDAFF', 
+                          backgroundColor: '#DEDAFF',
                         },
                         '& .odd': {
-                          backgroundColor: '#fff', 
+                          backgroundColor: '#fff',
                         },
                         '& .green': {
                           backgroundColor: '#80f76a',
@@ -861,8 +857,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         },
                       }}
                     >
-                  
-     
+
+
                       <DataGrid
                         rows={filteredRows ?? []}
                         columns={columns}
