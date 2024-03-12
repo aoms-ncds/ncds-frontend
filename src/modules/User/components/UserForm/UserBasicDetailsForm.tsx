@@ -178,7 +178,7 @@ const UserBasicDetailsForm = (
           </RadioGroup>
         </FormControl>
       </Grid> */}
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           id="gender"
           options={gender}
@@ -187,9 +187,18 @@ const UserBasicDetailsForm = (
           onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props.options?.textField?.variant} />}
         />
+      </Grid> */}
+
+      <Grid item xs={12} md={6}>
+        <Autocomplete
+          value={props?.value?.gender as unknown as IGender }
+          options={gender}
+          getOptionLabel={(g) => g.gender}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
+          renderInput={(params) => <TextField {...params} label="Gander" variant={props?.options?.textField?.variant} />}
+          fullWidth
+        />
       </Grid>
-
-
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
           <FormLabel id="martialStatus">Martial Status</FormLabel>
@@ -227,10 +236,10 @@ const UserBasicDetailsForm = (
         </Grid>
       )}
       <Grid item xs={12} md={6} lg={4}>
-        <Autocomplete<IReligion>
+        <Autocomplete
           options={religion}
-          value={props.value.religion ?? null}
-          getOptionLabel={(option) => option.religion}
+          value={props.value?.religion?.religion as unknown as IReligion}
+          getOptionLabel={(option :any) => option.religion}
           onChange={(e, selectedReligion) =>
             props.onChange({
               ...props.value,

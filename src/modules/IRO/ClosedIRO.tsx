@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box } from '@mui/material';
 import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -18,6 +18,7 @@ import FileUploader from '../../components/FileUploader/FileUploader';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import * as XLSX from 'xlsx';
 import { MB } from '../../extras/CommonConfig';
+import IROTemplate from './components/IROTemplate';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -26,9 +27,25 @@ const ClosedIRO = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [fr] = useState<FR>();
+  const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
+  });
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (IROrder ?? []).filter((row) => {
+    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
   });
 
   const columns: GridColDef<IROrder>[] = [
@@ -82,7 +99,8 @@ const ClosedIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               component: PDFDownloadLink,
-              document: <IROReceiptTemplate rowData={props.row} />,
+              // document: <IROReceiptTemplate rowData={props.row} />,
+              document: <IROTemplate rowData={props.row} fr={fr} />,
               fileName: 'IROReceipt.pdf',
             },
 
@@ -248,8 +266,20 @@ const ClosedIRO = () => {
   return (
     <CommonPageLayout title="Closed IRO">
       <Card >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Grid container spacing={2} padding={2}>
+        <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+          <Grid item xs={6}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -300,7 +330,38 @@ const ClosedIRO = () => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <DataGrid rows={IROrder ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }}/>
+            <Box
+             sx={{
+              'height': 450,
+              'width': '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+            >
+
+            <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            }/>
+            </Box>
           </Grid>
         </Grid>
       </Card>

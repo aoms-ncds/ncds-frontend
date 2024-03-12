@@ -108,6 +108,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
   const [fr, setFr] = useState<FR>();
   console.log(props.fr, 'FRR');
   console.log(props.rowData, 'IRO');
+  console.log(props.rowData?.releaseAmount, 'bnk');
 
 
   useEffect(() => {
@@ -119,6 +120,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
     }
   }, []);
   let totalAmount = 0;
+  let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
@@ -165,19 +167,19 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <View style={{ ...styles.box, marginTop: 15, padding: 10 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 300 }}>
-                <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>IRO No :{props.rowData?.IROno}</Text>
+                <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>IRO No: {props.rowData?.IROno}</Text>
               </View>
               <View>
-                <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>IRO DATE:{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
+                <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>IRO DATE: {props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
               </View>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 300 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Division Name:{props?.rowData?.division?.details.name ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Division Name: {props?.rowData?.division?.details.name ?? ''}
                 </Text>
               </View>
               <View>
-                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Co-Ordinator Name:{(props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ?? '') +
+                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Co-Ordinator Name: {(props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ?? '') +
                                     (props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? '')}
                 </Text>
               </View>
@@ -195,22 +197,24 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <View style={{ ...styles.box4, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR NO :{fr?.FRno}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR NO: {fr?.FRno}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On :{fr?.createdAt.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On: {fr?.createdAt.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On :{fr?.updatedAt.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {fr?.updatedAt.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For :{fr?.purpose}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For: {fr?.purpose}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested Amt :{fr?.particulars[0].requestedAmount}
-                </Text></View>
-              <View><Text style={{ ...styles.text, marginTop: 15 }}>If special sanctioned :</Text>
+              <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>
+    Requested Amt: {fr?.particulars[0].requestedAmount}
+</Text>
+</View>
+              <View><Text style={{ ...styles.text, marginTop: 15 }}>If special sanctioned: </Text>
               </View></View>
             <View style={{ flexDirection: 'row' }}>
             </View>
@@ -226,20 +230,20 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <View style={{ ...styles.box4, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Verified On :{props?.rowData?.IRODate.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Verified On: {props?.rowData?.IRODate.format('DD/MM/YYYY')}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Reconciled On:{props.rowData.updatedAt?.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Reconciled On: {props.rowData.updatedAt?.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On:{props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On: {props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Account:{props.rowData.sanctionedBank ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Account: {props.rowData.sanctionedBank ?? ''}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Amt:{props.rowData?.sanctionedAmount ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Amt: {props.rowData?.sanctionedAmount ?? ''}
                 </Text></View>
               <View><Text style={{ ...styles.text, marginTop: 15 }}>Fund Source: </Text>
               </View></View>
@@ -257,31 +261,31 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <View style={{ ...styles.box5, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData?.releaseAmount?.transferredBank?.bankName}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name: {props.rowData?.releaseAmount?.transferredBank?.bankName}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Branch Name :{props.rowData?.releaseAmount?.transferredBank?.branchName}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Branch Name: {props.rowData?.releaseAmount?.transferredBank?.branchName}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>Account No: {props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>IFSC Code :{props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>IFSC Code: {props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Beneficiary Name:{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Beneficiary Name: {props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}
                 </Text></View>
               <View>
               </View></View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transaction ID:{props.rowData?.releaseAmount?.transactionNumber ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transaction ID: {props.rowData?.releaseAmount?.transactionNumber ?? ''}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transfer Method:{props.rowData?.releaseAmount?.transferredBank.modeOfPayment ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Transfer Method: {props.rowData?.releaseAmount?.modeOfPayment ?? ''}
                 </Text></View>
-              <View><Text style={{ ...styles.text, marginTop: 15 }}>Amt Released on:{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
+              <View><Text style={{ ...styles.text, marginTop: 15 }}>Amt Released on: {props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
               </View></View>
           </View>
         </div>
@@ -302,22 +306,25 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
                                 Particulars
               </PDFCell>
               <PDFCell style={{
-                textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                textAlign: 'right', fontSize: 10, fontWeight: 'bold',
+                fontFamily: 'Oswald',
+                marginLeft: '20px',
+              }} width={'100%'}>
+                Narration
+              </PDFCell>
+              <PDFCell style={{
+                textAlign: 'right', fontSize: 10, fontWeight: 'bold',
+                marginLeft: '25px',
                 fontFamily: 'Oswald',
               }} width={'100%'}>
-                                Narration
+                                Qty
               </PDFCell>
               <PDFCell style={{
                 textAlign: 'center', fontSize: 10, fontWeight: 'bold',
                 fontFamily: 'Oswald',
+                marginLeft: '18px',
               }} width={'100%'}>
-                                Quantity
-              </PDFCell>
-              <PDFCell style={{
-                textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                fontFamily: 'Oswald',
-              }} width={'100%'}>
-                                Request
+                                Rqst
                                 Amt
               </PDFCell>
               <PDFCell style={{
@@ -337,26 +344,29 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
 
             {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
               totalAmount += item.requestedAmount ?? 0;
-              return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
+              totalAmount2 += props.rowData.sanctionedAmount ?? 0;
+             
+
+              return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10  }}  width={'20%'}>
                 {String(index + 1)}
               </PDFCell>
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'50%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'55%'}>
                 {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
               </PDFCell>
 
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'35%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10,}} width={'80%'}  >
                 {item.narration}
               </PDFCell>
               <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc', marginTop: 50 }}></div>
 
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'28%'}>
                 {String(item.quantity)}
               </PDFCell>
               <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
 
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
                 {String( item.requestedAmount)}
               </PDFCell>
               <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
@@ -377,13 +387,19 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
               {/* <PDFCell width={'100%'} ></PDFCell>
                             <PDFCell width={'100%'}></PDFCell> */}
               {/* <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div> */}
-              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
-                Grand Total : 5000
+              <PDFCell style={{ textAlign: 'center', paddingLeft:'20px', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                Grand Total
               </PDFCell>
               {/* <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div> */}
-              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-
+              <PDFCell width={'10%'} ></PDFCell>
+              <PDFCell width={'10%'} ></PDFCell>
+              <PDFCell style={{ paddingLeft: '30px', color:'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+              <br /> {totalAmount as any}
               </PDFCell>
+              <PDFCell style={{ textAlign: 'center', color:'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+                <br />{totalAmount2 as any}
+              </PDFCell>
+              <PDFCell width={'10%'} ></PDFCell>
             </PDFTableRow>
             <PDFTableRow key={props.rowData.particulars.length}>
               {/* <PDFCell width={'10%'} ></PDFCell> */}

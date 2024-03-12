@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -203,11 +203,24 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
+  const [searchText, setSearchText] = useState('');
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
 
+  const filteredRows = (IROrder ?? []).filter((row) => {
+    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
   // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
@@ -583,9 +596,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         granted={
           <>
             <Card>
-              <Grid container spacing={2}>
-
-                <Grid item xs={12}>
+              <Grid container spacing={2} padding={2}>
+              <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+                <Grid item xs={6}>
                   <Button
                     onClick={async () => {
                       const sheet =
@@ -639,8 +663,35 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 <br />
                 <br />
                 <Grid item xs={12}>
+                  <Box
+                   sx={{
+                    'height': 450,
+                    'width': '100%',
+                    '& .super-app-theme--cell': {
+                      backgroundColor: '#f1f5fa',
+                      color: 'black',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.negative': {
+                      backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.positive': {
+                      backgroundColor: '#d47483',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .even': {
+                      backgroundColor: '#DEDAFF', // Change to red for even rows
+                    },
+                    '& .odd': {
+                      backgroundColor: '#fff', // Change to blue for odd rows
+                    },
+                  }}
+                   >
                   <DataGrid
-                    rows={IROrder ?? []}
+                    rows={filteredRows ?? []}
                     columns={columns}
                     getRowId={(row) => row._id}
                     checkboxSelection={props.action == 'release'}
@@ -654,10 +705,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         return selectedIROs;
                       });
                     }}
+                    getRowClassName={(params) =>
+                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
                     style={{ height: '80vh', width: '100%' }}
                   // rowSelectionModel={selectedIROrelease}
                   //
                   />
+
+                  </Box>
                 </Grid>
               </Grid>
             </Card>
