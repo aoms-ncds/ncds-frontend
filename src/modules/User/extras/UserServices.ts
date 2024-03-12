@@ -37,6 +37,33 @@ export default {
           updatedAt: moment(user.updatedAt),
         })),
     ),
+  getAllLog: (): Promise<StandardResponse<ILog[]>> =>
+    getStandardResponse<ILog[]>(
+      axios.get('/users/log', {
+        // params: { filterQuery: JSON.stringify(conditions) },
+        headers: { ...getAuthHeader() },
+      }),
+      (logs) =>
+        logs.map((log:ILog) => ({
+          ...log,
+          user: {
+            ...log.user,
+            token: [],
+            basicDetails: {
+              ...log.user.basicDetails,
+              dateOfBirth: moment(log.user.basicDetails.dateOfBirth),
+            },
+            officialDetails: {
+              ...log.user.officialDetails,
+              dateOfJoining: moment(log.user.officialDetails.dateOfJoining),
+            },
+            createdAt: moment(log.user.createdAt),
+            updatedAt: moment(log.user.updatedAt),
+          },
+          createdAt: moment(log.user.createdAt),
+          updatedAt: moment(log.user.updatedAt),
+        })),
+    ),
   getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
       ...data,

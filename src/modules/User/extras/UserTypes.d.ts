@@ -25,6 +25,7 @@ declare global {
     WRITE_FR: boolean; // For adding and editing FR details
     PRESIDENT_ACCESS: boolean;// President access
     MANAGE_FR: boolean;// For Approving FR
+    RAISE_WORKERS_FR:boolean;// For RAISE WORKERS FR
 
     READ_IRO: boolean; // For reading IROs
     WRITE_IRO: boolean; // For editing IRO details

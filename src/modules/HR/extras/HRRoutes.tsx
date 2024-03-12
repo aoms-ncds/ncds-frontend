@@ -1,7 +1,7 @@
 import HRDashboard from '..';
-import { Diversity3 as Diversity3Icon } from '@mui/icons-material';
 import HRManagePage from '../ManagePage';
 import StaffFormPage from '../StaffFormPage';
+import Log from '../Log';
 
 const hrPageRoutes: ModuleRoute = {
   base: '/hr',
@@ -35,6 +35,12 @@ const hrPageRoutes: ModuleRoute = {
       element: <StaffFormPage action="edit" />,
       private: true,
       requiredAccessRights: ['WRITE_STAFFS'],
+    },
+    {
+      title: 'Login log',
+      path: '/login_log',
+      element: <Log />,
+      private: true,
     },
   ],
 };
