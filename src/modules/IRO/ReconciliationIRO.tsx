@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box } from '@mui/material';
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
@@ -24,6 +24,8 @@ const ReconciliationIRO = () => {
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+
+  const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
@@ -104,6 +106,20 @@ const ReconciliationIRO = () => {
     billAttachment: [],
     signature: {},
     specialsanction: '',
+  });
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (reconciliationIRO ?? []).filter((row) => {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
   });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
@@ -385,8 +401,20 @@ const ReconciliationIRO = () => {
   return (
     <CommonPageLayout title="Reconciliation IRO">
       <Card >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Grid container spacing={2} padding={2}>
+        <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+          <Grid item xs={6}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -437,8 +465,39 @@ const ReconciliationIRO = () => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <DataGrid rows={reconciliationIRO ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} />
-          </Grid>
+            <Box
+             sx={{
+              'height': 450,
+              'width': '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+            >
+            <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            }/>
+
+            </Box>
+          </Grid> 
         </Grid>
       </Card>
       <Dialog open={openRemarks} fullWidth maxWidth="md">

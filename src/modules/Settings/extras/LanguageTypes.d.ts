@@ -3,8 +3,7 @@ interface ILanguage extends MongooseDocument {
     name: string;
 }
 interface IReligion extends MongooseDocument {
-    _id: string;
-    religion: string;
+    religion?: string;
 }
 interface IGender extends MongooseDocument {
     _id: string;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
@@ -7,13 +7,28 @@ import DropdownButton from '../../../components/DropDownButton';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
-import { Button, Grid } from '@mui/material';
+import { Box, Button, Grid, TextField } from '@mui/material';
 import * as XLSX from 'xlsx';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import PermissionChecks from '../../User/components/PermissionChecks';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (closedFRs ?? []).filter((row) => {
+    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
 
   const columns:GridColDef<FR>[] = [
     {
@@ -135,9 +150,20 @@ const ClosedFRsTable = () => {
       });
   }, []);
   return (
-    <Grid container spacing={2} >
-
-      <Grid item xs={12} sx={{ px: 2 }}>
+    <Grid container spacing={2} padding={2} >
+ <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+      <Grid item xs={6} sx={{ px: 2 }}>
         <PermissionChecks
           permissions={['MANAGE_FR']}
           granted={(
@@ -188,7 +214,38 @@ const ClosedFRsTable = () => {
           )}/>
       </Grid>
       <Grid item xs={12} >
-        <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }}/>
+        <Box
+         sx={{
+          'height': 450,
+          'width': '100%',
+          '& .super-app-theme--cell': {
+            backgroundColor: '#f1f5fa',
+            color: 'black',
+            fontWeight: '600',
+          },
+          '& .super-app.negative': {
+            backgroundColor: 'rgba(157, 255, 118, 0.49)',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .super-app.positive': {
+            backgroundColor: '#d47483',
+            color: '#1a3e72',
+            fontWeight: '600',
+          },
+          '& .even': {
+            backgroundColor: '#DEDAFF', // Change to red for even rows
+          },
+          '& .odd': {
+            backgroundColor: '#fff', // Change to blue for odd rows
+          },
+        }}
+        >
+
+        <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            }/>
+        </Box>
       </Grid>
     </Grid>
   );

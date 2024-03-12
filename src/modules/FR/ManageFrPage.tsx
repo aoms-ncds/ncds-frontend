@@ -383,6 +383,8 @@ const ManageFrPage = () => {
                 return clsx('green');
             case ' FR DISAPPROVED':
                 return clsx('red');
+            case 'WAITING FOR PRESIDENT':
+                return clsx('orange');
             default:
                 console.log('No class applied');
                 return '';

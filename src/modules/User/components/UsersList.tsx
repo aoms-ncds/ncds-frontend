@@ -185,7 +185,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         enqueueSnackbar({
           variant: 'error',
           message: error.message,
-        });
+        }); 
       });
   };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -398,7 +398,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     //     <b>
     //       {'Alternative Mobile Number'}
     //     </b>
-    //   ),
+    //   ),ƒ
     //   valueGetter: (params) => params.row.basicDetails.alternativePhone,
     // },
     {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
 import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Send as SendIcon, Close as CloseIcon, Download as DownloadIcon } from '@mui/icons-material';
@@ -6,6 +6,7 @@ import { Edit as EditIcon, Message as MessageIcon, Preview as PreviewIcon, Send 
 import { Link } from 'react-router-dom';
 import {
   Alert,
+  Box,
   Button,
   Card,
   Dialog,
@@ -36,13 +37,25 @@ const PresidentApproval = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
-
+  const [searchText, setSearchText] = useState('');
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
+    const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+      setSearchText(event.target.value);
+    };
 
+    const filteredRows = (FRRequests ?? []).filter((row) => {
+      if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+        return true;
+      }
+      return Object.values(row).some((value) =>
+        value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
+      );
+    });
   useEffect(() => {
     FRServices.getAll({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT })
       .then((res) => {
@@ -203,6 +216,7 @@ const PresidentApproval = () => {
     // },
     {
       field: 'FRno',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>FR No</b>),
       width: 100,
       align: 'center',
@@ -216,6 +230,7 @@ const PresidentApproval = () => {
     // },
     {
       field: 'FRdate',
+      headerClassName: 'super-app-theme--cell',
       headerName: 'FRdate',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
@@ -225,6 +240,7 @@ const PresidentApproval = () => {
     },
     {
       field: 'divisionName',
+      headerClassName: 'super-app-theme--cell',
       renderHeader: () => (<b>Division Name</b>),
       // renderCell: (props) => (<p> {props.row.division?.details.name}</p>),
       valueGetter: (params) => params.row.division?.details.name,
@@ -244,6 +260,7 @@ const PresidentApproval = () => {
       field: 'sub_division',
       width: 130,
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
@@ -253,6 +270,7 @@ const PresidentApproval = () => {
       renderHeader: () => (<b>Main Category</b>),
       width: 240,
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderCell: (props) => (
         <p
@@ -272,6 +290,7 @@ const PresidentApproval = () => {
       field: 'requestedAmount',
       renderHeader: () => (<b>Requested Amount</b>),
       width: 150,
+      headerClassName: 'super-app-theme--cell',
       align: 'center', headerAlign: 'center',
       valueGetter(params) {
         const frRequest = params.row as FR;
@@ -289,6 +308,7 @@ const PresidentApproval = () => {
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       width: 130,
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
     },
     {
@@ -301,10 +321,11 @@ const PresidentApproval = () => {
           wordBreak: 'break-word',
           justifyContent: 'center',
           textAlign: 'center',
-        }}> {props.row.sanctionedAsPer.toString()}</p>
+        }}> {props.row.sanctionedAsPer?.toString()}</p>
       ),
       width: 200,
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
     },
     {
@@ -312,6 +333,7 @@ const PresidentApproval = () => {
       renderHeader: () => (<b>Status</b>),
       width: 250,
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       // renderCell: (props) => (
       //   <p
@@ -338,9 +360,20 @@ const PresidentApproval = () => {
         granted={(
           <>
             <Card >
-
-              <Grid container>
-                <Grid item xs={12} sx={{ px: 2 }}>
+              <Grid container padding={2}>
+              <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+                <Grid item xs={6} sx={{ px: 2 }}>
                   <PermissionChecks
                     permissions={['PRESIDENT_ACCESS']}
                     granted={(
@@ -391,7 +424,37 @@ const PresidentApproval = () => {
                     )}/>
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <DataGrid rows={FRRequests ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '80vh', width: '100%' }} />
+                  <Box  sx={{
+              'height': 400,
+              'width': '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+          >
+
+                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '80vh', width: '100%' }} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            } />
+                  </Box>
                 </Grid>
               </Grid>
             </Card>

@@ -25,7 +25,7 @@ import {
   // FormControlLabel,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
@@ -71,6 +71,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     attachment: [],
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
+console.log(reasonForSentBack, 'rr');
 
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -92,7 +93,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
     }
     console.log(props, 'PPPOP');
-
+   
     setTimeout(() => {
       closeSnackbar(rejectionSnack);
       const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });
@@ -100,7 +101,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     }, 500);
     navigate('/fr/manage');
   });
-
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setReasonForSentBack(e.target.value);
+  };
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
   //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -495,13 +498,21 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         <DialogTitle>Reason</DialogTitle>
                         <DialogContent>
                           <br />
-                          <Autocomplete<string>
+                          {/* <Autocomplete<string>
                             options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
                             value={reasonForSentBack}
                             onChange={(e, selectedReason) => {
                               setReasonForSentBack(selectedReason);
                             }}
                             renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+                          <TextField
+                            id="reasonForSentBack"
+                            placeholder="Reason"
+                            multiline
+                            value={reasonForSentBack}
+                            onChange={handleChange}
                             fullWidth
                           />
                         </DialogContent>
@@ -672,18 +683,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                  //                     setTimeout(() => {
-                  //                       closeSnackbar(processingSnack);
-                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                  //                     }, 500);
-                  //                     navigate('/fr/manage');
-                  //                   }}
-                  //                 >
-                  // Submit
-                  //                 </Button>
-                  //               }
-                  //             />
+                    //                     setTimeout(() => {
+                    //                       closeSnackbar(processingSnack);
+                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                    //                     }, 500);
+                    //                     navigate('/fr/manage');
+                    //                   }}
+                    //                 >
+                    // Submit
+                    //                 </Button>
+                    //               }
+                    //             />
                   ) : null}
 
 
