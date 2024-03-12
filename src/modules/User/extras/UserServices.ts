@@ -64,6 +64,17 @@ export default {
           updatedAt: moment(log.user.updatedAt),
         })),
     ),
+  getLastLog: (): Promise<StandardResponse<ILog|null>> =>
+    getStandardResponse<ILog|null>(
+      axios.get('/users/log/me', {
+        headers: { ...getAuthHeader() },
+      }),
+      (me) =>({
+        ...me,
+        _id: me._id,
+        createdAt: moment(me.createdAt),
+      }),
+    ),
   getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
