@@ -40,7 +40,6 @@ const LoginPage = () => {
       })
       .catch((err) => {
         console.log(err);
-        setResetRequest(true);
         setLoading(false);
         if (err.message !== 'Incorrect email' && err.message !== 'Incorrect password') {
           setEmailError(false);
