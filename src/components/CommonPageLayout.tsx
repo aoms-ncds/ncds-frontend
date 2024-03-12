@@ -39,6 +39,7 @@ import MomentFilter from './MomentFilter';
 import StaffServices from '../modules/HR/extras/StaffServices';
 import WorkersServices from '../modules/Workers/extras/WorkersServices';
 import DivisionsServices from '../modules/Divisions/extras/DivisionsServices';
+import UserServices from '../modules/User/extras/UserServices';
 
 const drawerWidth = 240;
 
@@ -121,6 +122,24 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   useEffect(() => {
     document.title = props.title ? `IET : ${props.title}` : 'Indian Evangelical Team';
   }, [props.title]);
+
+
+  const [logs, setLog] = useState<ILog |null>();
+
+  useEffect(() => {
+    UserServices.getLastLog()
+      .then((response) => {
+        if (response.data) {
+          setLog(response.data);
+        } else {
+          setLog(null);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching log:', err);
+      });
+  }, []);
+
 
 
   const drawer = (
@@ -242,10 +261,12 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           <Typography variant="h6" noWrap component="div" sx={{ fontSize: '13px' }}>
             {props.title}
           </Typography>
+          <Typography variant="h6" noWrap component="div" sx={{ ml: 'auto', fontSize: '13px' }}>
+            Last Login: {logs?.createdAt?.format('hh:mm A DD/MM/YYYY')}
+          </Typography>
           <Tooltip title="Notifications">
             <IconButton
               color="inherit"
-              sx={{ ml: 'auto' }}
               onClick={() => {
                 // subscribe();
               }}
