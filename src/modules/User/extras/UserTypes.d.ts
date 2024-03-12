@@ -54,7 +54,7 @@ declare global {
     martialStatus?: MaritalStatus;
     religion?: Religion;
     highestQualification?: string;
-    motherTongue?: ILanguage;
+    motherTongue?: z;
     communicationLanguage?: ILanguage;
     knownLanguages?: ILanguage[];
     email: string;
@@ -208,8 +208,17 @@ declare global {
     email: string;
     password: string;
   }
+
+  export interface IVerifyOTPRequest {
+    auth_process_id: string;
+    OTP: string;
+  }
   interface LoginResponse {
     token: string;
     user: User;
+  }
+  interface getOtpResponse {
+    auth_process_id: string;
+    status: number;
   }
 }

@@ -5,15 +5,14 @@ import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelper
 
 export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  login: (loginCred: LoginCredentials) => getStandardResponse<LoginResponse>(axios.post('/users/login', loginCred, { headers: { ...getAuthHeader() } })),
+  login: (loginCred: LoginCredentials) => getStandardResponse<getOtpResponse>(axios.post('/users/login', loginCred, { headers: { ...getAuthHeader() } })),
 
-  requestForgottenPasswordReset: (email: string) => getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password',
-    { email, redirect_url: window.location.origin + '/users/reset_password' }, { headers: { ...getAuthHeader() } })),
+  verifyOTP: (otpRequest: IVerifyOTPRequest) => getStandardResponse<LoginResponse>(axios.post('/users/verify_otp', otpRequest, { headers: { ...getAuthHeader() } })),
+  requestForgottenPasswordReset: (email: string) =>
+    getStandardResponse<LoginResponse>(axios.post('/users/request_forgotten_password', { email, redirect_url: window.location.origin + '/users/reset_password' }, { headers: { ...getAuthHeader() } })),
 
-  confirmPasswordReset: (args: { reset_token: string; new_password: string;
-    }): Promise<StandardResponse<boolean>> =>
+  confirmPasswordReset: (args: { reset_token: string; new_password: string }): Promise<StandardResponse<boolean>> =>
     getStandardResponse(axios.post('/users/confirm_password_reset', args, { headers: { ...getAuthHeader() } })),
-
 
   getAll: (conditions?: FilterQuery<User>): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[]>(
@@ -22,7 +21,7 @@ export default {
         headers: { ...getAuthHeader() },
       }),
       (users) =>
-        users.map((user:User) => ({
+        users.map((user: User) => ({
           ...user,
           token: [],
           basicDetails: {
@@ -35,7 +34,7 @@ export default {
           },
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),
-        })),
+        }))
     ),
   getAllLog: (): Promise<StandardResponse<ILog[]>> =>
     getStandardResponse<ILog[]>(
@@ -44,7 +43,7 @@ export default {
         headers: { ...getAuthHeader() },
       }),
       (logs) =>
-        logs.map((log:ILog) => ({
+        logs.map((log: ILog) => ({
           ...log,
           user: {
             ...log.user,
@@ -62,20 +61,20 @@ export default {
           },
           createdAt: moment(log.user.createdAt),
           updatedAt: moment(log.user.updatedAt),
-        })),
+        }))
     ),
-  getLastLog: (): Promise<StandardResponse<ILog|null>> =>
-    getStandardResponse<ILog|null>(
+  getLastLog: (): Promise<StandardResponse<ILog | null>> =>
+    getStandardResponse<ILog | null>(
       axios.get('/users/log/me', {
         headers: { ...getAuthHeader() },
       }),
-      (me) =>({
+      (me) => ({
         ...me,
         _id: me._id,
         createdAt: moment(me.createdAt),
-      }),
+      })
     ),
-  getById: (userID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<Staff | IWorker | null>> =>
+  getById: (userID: string, params?: { withPermissions: boolean }): Promise<StandardResponse<Staff | IWorker | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       token: [],
@@ -85,27 +84,27 @@ export default {
       },
       officialDetails: {
         ...data.officialDetails,
-        dateOfJoining: data.officialDetails.dateOfJoining? moment(data.officialDetails.dateOfJoining):undefined,
-        dateOfLeaving: data.officialDetails.dateOfLeaving?moment(data.officialDetails.dateOfLeaving):undefined,
-        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory)=>({
+        dateOfJoining: data.officialDetails.dateOfJoining ? moment(data.officialDetails.dateOfJoining) : undefined,
+        dateOfLeaving: data.officialDetails.dateOfLeaving ? moment(data.officialDetails.dateOfLeaving) : undefined,
+        divisionHistory: data.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
           ...divHis,
-          dateOfDivisionJoining: divHis.dateOfDivisionJoining? moment(divHis.dateOfDivisionJoining):undefined,
-          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving?moment(divHis.dateOfDivisionLeaving):undefined,
+          dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+          dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
         })),
       },
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
 
-  getMe: (conditions?: FilterQuery<User>): Promise<StandardResponse<IWorker|Staff>> =>
-    getStandardResponse<IWorker|Staff>(
+  getMe: (conditions?: FilterQuery<User>): Promise<StandardResponse<IWorker | Staff>> =>
+    getStandardResponse<IWorker | Staff>(
       axios.get('/users/me', {
         params: {
           filterQuery: JSON.stringify(conditions),
         },
         headers: { ...getAuthHeader() },
       }),
-      (me) =>({
+      (me) => ({
         ...me,
         token: [],
         basicDetails: {
@@ -118,12 +117,10 @@ export default {
         },
         createdAt: moment(me.createdAt),
         updatedAt: moment(me.updatedAt),
-      }),
+      })
     ),
-  editPermission: (userID: string, permission: {name: string; value: boolean}) =>
-    getStandardResponse<void>(
-      axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } }),
-    ),
+  editPermission: (userID: string, permission: { name: string; value: boolean }) =>
+    getStandardResponse<void>(axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } })),
 
   saveFCMToken: (token: string): Promise<StandardResponse<User | null>> =>
     getStandardResponse(
@@ -134,24 +131,24 @@ export default {
           headers: {
             ...getAuthHeader(),
           },
-        },
-      ),
+        }
+      )
     ),
 
   deleteFCMToken: (token: string): Promise<StandardResponse<User | null>> =>
     getStandardResponse(
       axios.delete(`/users/fcm_token/${token}`, {
         headers: { ...getAuthHeader() },
-      }),
+      })
     ),
-  getDivisionUser: (divisionID: string, params?: {withPermissions: boolean}): Promise<StandardResponse<User[]>> =>
-    getStandardResponse<User[] >(
+  getDivisionUser: (divisionID: string, params?: { withPermissions: boolean }): Promise<StandardResponse<User[]>> =>
+    getStandardResponse<User[]>(
       axios.get(`/users/user_division/${divisionID}`, {
         params: { ...params },
         headers: { ...getAuthHeader() },
       }),
       (users) =>
-        users.map((user:User) => ({
+        users.map((user: User) => ({
           ...user,
           token: [],
           basicDetails: {
@@ -164,16 +161,9 @@ export default {
           },
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),
-        })),
+        }))
     ),
 
-
-  checkDuplicationOfMail: (userId: string) =>
-    getStandardResponse(
-      axios.get(`/users/mail_duplicate/${userId}`, { headers: { ...getAuthHeader() } }),
-    ),
-  coordinatorOrNot: () =>
-    getStandardResponse<boolean>(
-      axios.get('/users/coordinator_or_not', { headers: { ...getAuthHeader() } }),
-    ),
+  checkDuplicationOfMail: (userId: string) => getStandardResponse(axios.get(`/users/mail_duplicate/${userId}`, { headers: { ...getAuthHeader() } })),
+  coordinatorOrNot: () => getStandardResponse<boolean>(axios.get('/users/coordinator_or_not', { headers: { ...getAuthHeader() } })),
 };
