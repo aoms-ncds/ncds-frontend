@@ -116,7 +116,7 @@ declare global {
     dateOfDivisionJoining?: Moment | null;
     dateOfDivisionLeaving?: Moment | null;
   };
-  type DeactivationReason = [];
+  type DeactivationReason = 'Voluntarily Left' | 'Retired' | 'Dismissed' | 'Death' | 'Other';
   type OfficialDetailsStatus = 'Active' | 'Left' | 'Education Leave' | 'Sabbatical Leave' | null;
   type TypeOfFamily = 'Single' | 'Family';
   interface CreatableOfficialDetails extends Creatable<OfficialDetails> {

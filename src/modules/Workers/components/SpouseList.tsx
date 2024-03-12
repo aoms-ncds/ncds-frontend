@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
@@ -8,7 +8,7 @@ import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import { hasPermissions } from '../../User/components/PermissionChecks';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -18,6 +18,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   const [rowId, setRowId] = useState('');
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+  const [searchText, setSearchText] = useState('');
+
 
   const deactivateSpouse = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
@@ -90,6 +92,33 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       });
     console.log(params.row._id, 'ooo');
   };
+
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (props.value ?? []).filter((row) => {
+    const spouseFullName = `${row.spouseOf?.basicDetails?.firstName || ''} ${row.spouseOf?.basicDetails?.lastName || ''}`.toLowerCase();
+
+    if ((row.firstName && row.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.lastName && row.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.email && row.email.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.phone && row.phone.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
+     (row.qualification && row.qualification.toLowerCase().includes(searchText.toLowerCase())) ||
+     (spouseFullName && spouseFullName.includes(searchText.toLowerCase())) ||
+     (row.reasonForDeactivation && row.reasonForDeactivation.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.updatedAt && moment(row.updatedAt).isValid() && moment(row.updatedAt).format('DD/MM/YYYY').includes(searchText.toLowerCase()))
+    ) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
+
+
   const columns: GridColDef<Spouse>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
     {
@@ -97,6 +126,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       type: 'actions',
       width: 5,
       // type: 'string',
+      headerClassName: 'super-app-theme--cell',
+
       getActions: (params: GridRowParams) => (
         [
           (props.options?.status != 'reject' && (
@@ -144,6 +175,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Spouse Code</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'firstName',
@@ -151,6 +184,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>First Name</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'lastName',
@@ -158,12 +193,16 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Last Name</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'phone',
       width: 120,
       headerAlign: 'center',
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
+
       renderHeader: () => (<b>Mobile No</b>),
     },
     {
@@ -172,6 +211,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => (<p>{moment(params.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b>DOB</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'qualification',
@@ -179,6 +220,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Qualification</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'spouseOf',
@@ -187,6 +230,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Spouse Of</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'email',
@@ -194,6 +239,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Email ID</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'reasonForDeactivation',
@@ -201,12 +248,15 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Reason for Deactive</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'updatedAt',
       width: 170,
       headerAlign: 'center',
       align: 'center',
+      headerClassName: 'super-app-theme--cell',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b> Deactive Date</b>),
     },
@@ -254,9 +304,52 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
         </DialogActions>
       </Dialog>
       <br />
+      <Grid item xs={6}>
+        <Grid sx={{ mb: 3, mt: 0, mx: 2 }}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+        </Grid>
+      </Grid>
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+        <Card style={{ height: '60vh', width: '100%' }}>
+          <Box
+            sx={{
+              'height': 300,
+              'width': '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+          >
+            <DataGrid
+              getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+              rows={filteredRows ?? []}
+              sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+          </Box>
         </Card>
       </Grid>
     </>

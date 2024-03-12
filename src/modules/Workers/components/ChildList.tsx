@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
   const [rowId, setRowId] = useState('');
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
+  const [searchText, setSearchText] = useState('');
+
   const navigate = useNavigate();
 
 
@@ -93,6 +95,34 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       });
   };
 
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+
+  const filteredRows = (props.value ?? []).filter((row) => {
+    const childOfFullName = `${row.childOf?.basicDetails?.firstName || ''} ${row.childOf?.basicDetails?.lastName || ''}`.toLowerCase();
+
+    const searchPattern = new RegExp(`${searchText.trim().replace(/\s+/g, '\\s+')}`, 'i');
+
+    if ((row.firstName && row.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.lastName && row.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
+        (row.childSupport.name && row.childSupport.name.toLowerCase().includes(searchText.toLowerCase())) ||
+        (searchPattern.test(childOfFullName)) ||
+        (row.reasonForDeactivation && row.reasonForDeactivation.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.createdAt && moment(row.createdAt).isValid() && moment(row.createdAt).format('DD/MM/YYYY').includes(searchText.toLowerCase()))
+    ) {
+      return true;
+    }
+
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
+
+
   const columns: GridColDef<Child>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
     {
@@ -100,6 +130,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       type: 'actions',
       width: 5,
       // type: 'string',
+      headerClassName: 'super-app-theme--cell',
+
       getActions: (params: GridRowParams) => (
         [
           (props.options?.status != 'reject' && (
@@ -160,6 +192,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Child Code</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'firstName',
@@ -167,6 +201,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>First Name</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'lastName',
@@ -174,6 +210,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Last Name</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'dateOfBirth',
@@ -182,6 +220,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       align: 'center',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b>DOB</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'childSupport',
@@ -190,6 +230,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       align: 'center',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => <p> {(props.value as IChildSupport)?.name}</p>,
       renderHeader: () => (<b>Child Support</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'childOf',
@@ -198,6 +240,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Child Of</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'reasonForDeactivation',
@@ -205,6 +249,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => (<b>Reason for Deactive</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
     {
       field: 'createdAt',
@@ -213,6 +259,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       align: 'center',
       renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
       renderHeader: () => (<b> Deactive Date</b>),
+      headerClassName: 'super-app-theme--cell',
+
     },
   ].filter((action) => action !== false) as GridColDef<Child>[];
 
@@ -259,9 +307,56 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
         </DialogActions>
       </Dialog>
       <br />
+      <Grid item xs={6}>
+        <Grid sx={{ mb: 3, mt: 0, mx: 2 }}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+        </Grid>
+      </Grid>
       <Grid item xs={12} md={12}>
-        <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+        <Card style={{ height: '60vh', width: '100%' }}>
+          <Box
+            sx={{
+              'height': 300,
+              'width': '100%',
+              '& .super-app-theme--cell': {
+                backgroundColor: '#f1f5fa',
+                color: 'black',
+                fontWeight: '600',
+              },
+              '& .super-app.negative': {
+                backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .super-app.positive': {
+                backgroundColor: '#d47483',
+                color: '#1a3e72',
+                fontWeight: '600',
+              },
+              '& .even': {
+                backgroundColor: '#DEDAFF', // Change to red for even rows
+              },
+              '& .odd': {
+                backgroundColor: '#fff', // Change to blue for odd rows
+              },
+            }}
+          >
+            <DataGrid
+              columns={columns} getRowId={(row) => row._id} loading={props.value === null}
+              sx={{ height: '55vh', width: '100%' }}
+              getRowClassName={(params) =>params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'}
+              rows={filteredRows ?? []}
+
+            />
+          </Box>
+
         </Card>
       </Grid>
     </>
