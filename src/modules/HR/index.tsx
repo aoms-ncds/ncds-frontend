@@ -44,7 +44,7 @@ const HRDashboard = () => {
           permissions={['ADMIN_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <ButtonCard secondaryText="Login Logs" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+              <ButtonCard secondaryText="Login Logs" dot={'.'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                 color="#fff" targetRoute="/hr/login_log" />
             </Grid>)} />
 

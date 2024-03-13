@@ -656,7 +656,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               },
             }}
           >
-
             <DataGrid rows={filteredRows ?? []} sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             } />
