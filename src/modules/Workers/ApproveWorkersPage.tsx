@@ -181,7 +181,7 @@ const ApproveWorkerPage = () => {
   ];
   return (
     <CommonPageLayout title="New Workers for Approval">
-      <Card sx={{height:'70vh'}}>
+      <Card sx={{ height: '90vh' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
             <TextField
@@ -192,81 +192,80 @@ const ApproveWorkerPage = () => {
               fullWidth
               style={{ width: '25%', alignItems: 'start' }}
             />
-             </Grid>
-            <Grid item xs={6}>
-              <Button
-                onClick={async () => {
-                  const sheet = workers ?
-                    workers.map((user: IWorker) => [
-                      user.workerCode,
-                      user.basicDetails.firstName,
-                      user.basicDetails.lastName,
-                      user.division?.details.name,
-                      user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
-                      user.basicDetails.phone,
-                      user.basicDetails.email,
-                      user.basicDetails.alternativePhone,
-                      user.basicDetails.dateOfBirth,
-                      user.basicDetails.field,
-                      user.basicDetails.martialStatus,
-                      user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                      user.basicDetails.highestQualification,
-                      user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                      user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                      user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
-                        user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
-                        user.officialDetails.dateOfJoining?.fromNow(true),
-                      user.spouse?.spouseCode,
-                      user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
-                      (user.supportStructure?.basic ?? 0) +
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              onClick={async () => {
+                const sheet = workers ?
+                  workers.map((user: IWorker) => [
+                    user.workerCode,
+                    user.basicDetails.firstName,
+                    user.basicDetails.lastName,
+                    user.division?.details.name,
+                    user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
+                    user.basicDetails.phone,
+                    user.basicDetails.email,
+                    user.basicDetails.alternativePhone,
+                    user.basicDetails.dateOfBirth,
+                    user.basicDetails.field,
+                    user.basicDetails.martialStatus,
+                    user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
+                    user.basicDetails.highestQualification,
+                    user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
+                    user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
+                    user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+                      user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
+                      user.officialDetails.dateOfJoining?.fromNow(true),
+                    user.spouse?.spouseCode,
+                    user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
+                    (user.supportStructure?.basic ?? 0) +
                       (user.supportStructure?.HRA ?? 0) +
                       (user.supportStructure?.spouseAllowance ?? 0) +
                       (user.supportStructure?.positionalAllowance ?? 0) +
                       (user.supportStructure?.specialAllowance ?? 0) +
                       (user.supportStructure?.PIONMissionaryFund ?? 0) +
                       (user.supportStructure?.telAllowance ?? 0),
-                      user.insurance?.impactNo,
-                    ]) :
-                    [];
-                  const headers = [
-                    'Workers Code',
-                    'First Name',
-                    'Last Name',
-                    'Division',
-                    'Sub Division',
-                    'Mobile No',
-                    'Email ID',
-                    'Alt Phone',
-                    'DOB',
-                    'Field',
-                    'Marital Status',
-                    'Known Languages',
-                    'Highest Qualifications',
-                    'Status',
-                    'Date of Joining',
-                    'No of year in Org',
-                    'Spouse Code',
-                    'Spouse Name',
-                    'Net Support',
-                    'Insurance No',
-                  ];
-                  const worksheet = XLSX.utils.json_to_sheet(sheet);
-                  const workbook = XLSX.utils.book_new();
-                  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                  XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                  XLSX.writeFile(workbook, 'Approve_Worker_Report.xlsx', { compression: true });
-                }}
-                startIcon={<DownloadIcon />}
-                color="primary"
-                sx={{ float: 'right', mt: 2, mr: 2 }}
-                variant="contained"
-              >
+                    user.insurance?.impactNo,
+                  ]) :
+                  [];
+                const headers = [
+                  'Workers Code',
+                  'First Name',
+                  'Last Name',
+                  'Division',
+                  'Sub Division',
+                  'Mobile No',
+                  'Email ID',
+                  'Alt Phone',
+                  'DOB',
+                  'Field',
+                  'Marital Status',
+                  'Known Languages',
+                  'Highest Qualifications',
+                  'Status',
+                  'Date of Joining',
+                  'No of year in Org',
+                  'Spouse Code',
+                  'Spouse Name',
+                  'Net Support',
+                  'Insurance No',
+                ];
+                const worksheet = XLSX.utils.json_to_sheet(sheet);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                XLSX.writeFile(workbook, 'Approve_Worker_Report.xlsx', { compression: true });
+              }}
+              startIcon={<DownloadIcon />}
+              color="primary"
+              sx={{ float: 'right', mt: 2, mr: 2 }}
+              variant="contained"
+            >
                 Export
-              </Button>
-            </Grid>
+            </Button>
+          </Grid>
 
 
-         
           <Grid item xs={12}>
             <Box sx={{
               'height': 500,
@@ -295,8 +294,8 @@ const ApproveWorkerPage = () => {
             }}
             >
               <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={workers === null} getRowClassName={(params) =>
-                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-              } />
+                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd' } 
+              />
 
             </Box>
           </Grid>

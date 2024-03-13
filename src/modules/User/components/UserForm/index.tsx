@@ -836,7 +836,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                     variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
-                    required
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -852,7 +852,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                     variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
-                    required
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -868,7 +868,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                     variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
-                    required
                   />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
