@@ -19,7 +19,6 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(1);
   const navigate = useNavigate();
 
-
   const addDivision = () => {
     // e.preventDefault();
     // event.preventDefault();
@@ -59,7 +58,6 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     }
   };
   const [divisionDetails, setDivisionDetails] = useState<Division>({
-
     _id: '',
     details: {
       name: '',
@@ -305,12 +303,16 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                   />
                 ))}
 
-
                 <Grid item xs={12}>
-                {action == 'view' ? (
-                  <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>View More Banks</Button>
-                  ):(
-                    <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>Add More Banks</Button>
+                  {action !== 'view' && (
+                    <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
+                      Add More Banks
+                    </Button>
+                  )}
+                  {action === 'view' && (
+                    <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
+                      View More Banks
+                    </Button>
                   )}
                   {action !== 'view' && (
                     <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
