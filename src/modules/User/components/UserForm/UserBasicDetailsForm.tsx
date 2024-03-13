@@ -195,8 +195,8 @@ const UserBasicDetailsForm = (
           options={gender}
           getOptionLabel={(g) => g.gender}
           onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
-          renderInput={(params) => <TextField {...params} label="Gander" variant={props?.options?.textField?.variant} />}
-          fullWidth
+          renderInput={(params) => <TextField {...params} label="Gender" variant={props?.options?.textField?.variant} />}
+        
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>

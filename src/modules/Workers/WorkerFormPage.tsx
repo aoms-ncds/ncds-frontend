@@ -127,7 +127,6 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           },
           tab: tabNO,
         }}
-
         onSubmit={async (creatableWorker) => {
           try {
             if (props.action === 'add') {
