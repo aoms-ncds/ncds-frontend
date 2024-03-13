@@ -120,7 +120,7 @@ const NewOfficialDetailsForm = (
       {/* {console.log({ abc: props.value.dateOfJoining })} */}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date of Joining in Organisation"
+          label="Date of Joining in Organization"
           value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({

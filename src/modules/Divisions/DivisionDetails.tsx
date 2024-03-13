@@ -307,8 +307,11 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
 
 
                 <Grid item xs={12}>
-
-                  <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>Add More Banks</Button>
+                {action == 'view' ? (
+                  <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>View More Banks</Button>
+                  ):(
+                    <Button variant='contained' onClick={() => setOtherBankDetailsCount((count) => count + 1)}>Add More Banks</Button>
+                  )}
                   {action !== 'view' && (
                     <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
                       Submit
