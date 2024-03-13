@@ -201,10 +201,10 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
     },
     {
       field: 'reasonForDeactivation',
-      width: 170,
+      width: 180,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Reason for Deactive</b>),
+      renderHeader: () => (<b>Reason for Deactivation</b>),
     },
     {
       field: 'createdAt',

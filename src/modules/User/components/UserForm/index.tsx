@@ -624,14 +624,32 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   {' '}
                   Review from first step{' '}
                 </Button>
-                <Button
-                  onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married' ? (step) => step - 3 : (step) => step - 1)}
-                  variant="outlined"
-                  sx={{ padding: '16px 64px', mr: 1 }}
-                >
-                  {' '}
-                  Go back{' '}
-                </Button>
+
+
+                {props.options?.kind == 'worker'?(
+                  <Button
+                    onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married'? (step) => step - 3 : (step) => step - 1)}
+
+                    variant="outlined"
+                    sx={{ padding: '16px 64px', mr: 1 }}
+                  >
+                    {' '}
+                   Go back
+                    {' '}
+                  </Button>
+
+                ):(
+                  <Button
+                    onClick={() => setActiveStep((step) => step - 3)}
+
+                    variant="outlined"
+                    sx={{ padding: '16px 64px', mr: 1 }}
+                  >
+                    {' '}
+                  Go back {' '}
+                  </Button>
+                )
+                }
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
                   {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */} Submit{' '}
@@ -825,7 +843,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <TextField
-                    label=" Adhaar No:"
+                    label=" Aadhaar No:"
                     value={newChild?.adharCardNo}
                     onChange={(e) =>
                       setNewChild((newchild: any) => ({

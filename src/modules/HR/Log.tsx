@@ -147,7 +147,7 @@ const Log = () => {
     //   align: 'center',
     //   renderHeader: () => (
     //     <b>
-    //       {'Alternative Mobile Number'}
+    //       {'Alternate Mobile Number'}
     //     </b>
     //   ),
     //   valueGetter: (params) => params.row.user.basicDetails.alternativePhone,

@@ -196,12 +196,11 @@ const UserBasicDetailsForm = (
           getOptionLabel={(g) => g.gender}
           onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props?.options?.textField?.variant} />}
-        
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <FormControl>
-          <FormLabel id="martialStatus">Martial Status</FormLabel>
+          <FormLabel id="martialStatus">Marital Status</FormLabel>
           <RadioGroup
             aria-labelledby="martialStatus"
             value={props.value.martialStatus ?? null}
@@ -373,7 +372,7 @@ const UserBasicDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="Alternative Phone"
+          label="Alternate Phone"
           type="number"
           value={props.value.alternativePhone}
           onChange={(e) => props.onChange({ ...props.value, alternativePhone: e.target.value })}
