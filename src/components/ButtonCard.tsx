@@ -9,6 +9,7 @@ const StyledLink = styled(Link)`
 const ButtonCard = (props: {
   count?: string;
   secondaryText: string;
+  dot?:string
   color: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   targetRoute?: string;
@@ -58,8 +59,10 @@ const ButtonCard = (props: {
             </Typography>
             <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#8833ff', fontWeight: 600 }}>
               {props.count}
+             
               {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
             </Typography>
+            <Typography color={'#fff'}>{props.dot}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'start', color: 'black' }}>{props.icon}</Box>
           </CardContent>
           {/*

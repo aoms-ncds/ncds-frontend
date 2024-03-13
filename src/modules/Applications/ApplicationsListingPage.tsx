@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import {
   Edit as EditIcon, Preview as PreviewIcon, Add as AddIcon, Download as DownloadIcon,
   Attachment as AttachmentIcon,
@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -182,7 +182,20 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         });
     }
   };
+  const [searchText, setSearchText] = useState('');
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
 
+  const filteredRows = (applications ?? []).filter((row) => {
+    if ((row.name && row.name.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.applicationCode && row.applicationCode.toLowerCase().includes(searchText.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
   const [showFileUploader, setShowFileUploader] = useState<boolean>(false);
   const AddApplication = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -503,8 +516,20 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
       <Grid item xs={12} md={12}>
         <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
-          <Grid container spacing={0} justifyContent="space-between">
-            <Grid item xs={12} >
+          <Grid container spacing={0} justifyContent="space-between" padding={2}>
+          <Grid item xs={6}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '25%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
+            <Grid item xs={6} >
               <>
                 <PermissionChecks
                   permissions={['MANAGE_APPLICATION']}
@@ -575,7 +600,38 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 },
               }}>
 
-                <DataGrid rows={applications ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} />
+                <Box
+                sx={{
+                  'height': 500,
+                  'width': '100%',
+                  '& .super-app-theme--cell': {
+                    backgroundColor: '#f1f5fa',
+                    color: 'black',
+                    fontWeight: '600',
+                  },
+                  '& .super-app.negative': {
+                    backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                    color: '#1a3e72',
+                    fontWeight: '600',
+                  },
+                  '& .super-app.positive': {
+                    backgroundColor: '#d47483',
+                    color: '#1a3e72',
+                    fontWeight: '600',
+                  },
+                  '& .even': {
+                    backgroundColor: '#DEDAFF', // Change to red for even rows
+                  },
+                  '& .odd': {
+                    backgroundColor: '#fff', // Change to blue for odd rows
+                  },
+                }}
+                >
+
+                <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            } />
+                </Box>
               </Card>
             </Grid>
           </Grid>
