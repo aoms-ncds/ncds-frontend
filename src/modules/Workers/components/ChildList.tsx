@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
@@ -153,6 +153,17 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
 
         ].filter((action) => action !== false) as JSX.Element[]
       ),
+    },
+    {
+      field: 'childProfile',
+      headerName: '',
+      headerClassName: 'super-app-theme--cell',
+      width: 25,
+      minWidth: 65,
+      type: 'string',
+      renderCell: (props:any) => {
+        return <Avatar src={props.value?.replace('uc', 'thumbnail')} />;
+      },
     },
     {
       field: 'childCode',
