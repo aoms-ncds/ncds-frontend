@@ -11,6 +11,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { hasPermissions } from '../../User/components/PermissionChecks';
 import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -24,6 +25,7 @@ interface ReleaseDialogProps {
 
 const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [iroStatus, setIroStatus] = useState(false);
+  const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
     _id: '',
     modeOfPayment: '',
@@ -59,6 +61,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
+  useEffect(()=>{
+PaymentMethodService.getAll().then((res)=>{
+  setPaymentMethod(res.data)
+ 
+})
+  },[])
   useEffect(() => {
     if (props.action == 'add') {
       setReleaseAmount(() => ({
@@ -379,14 +387,16 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 <Autocomplete
                   disablePortal
                   id="Payment_method"
-                  value={releaseAmount?.modeOfPayment ?? null}
-                  options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
-                  onChange={(_e, newValue) =>
+                  getOptionLabel={(method) => method.paymentMethod ?? ''}
+                  value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod }
+                  // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
+                  options={paymnetMethod?? []}
+                  onChange={(_e, newValue: any) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
-                    setReleaseAmount(() => ({
-                      ...releaseAmount,
-                      modeOfPayment: newValue ?? '',
-                    }))
+                      setReleaseAmount(() => ({
+                        ...releaseAmount,
+                        modeOfPayment: newValue ?? '',
+                      }))
                   }
                   renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                   disabled={props.action == 'view'}
