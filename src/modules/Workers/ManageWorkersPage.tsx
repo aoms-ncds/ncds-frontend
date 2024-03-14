@@ -14,6 +14,7 @@ import SpousesServices from './extras/SpousesServices';
 import ChildrenServices from './extras/ChildrenServices';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
+import WorkerList from './components/WorkerList';
 
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -25,16 +26,26 @@ const ManageWorkerPage = () => {
   const [users, setUsers] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
-
+  const [loading, setLoading] = useState(false);
+  const [skip, setSkip] = useState(0);
 
   useEffect(() => {
-    if (currentTab == 0) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    console.log(skip);
+    fetchData({});
+  }, [currentTab]);
+
+  const fetchData = (args: { skip?: number }) => {
+    setLoading(true);
+    if (currentTab === 0) {
+      WorkersServices.getWorkers({ status: UserLifeCycleStates.ACTIVE, skip: args.skip ?? skip, limit: 20 })
         .then((res) => {
-          setUsers(res.data);
+          setUsers((prevUsers) => [...prevUsers, ...res.data]);
         })
-        .catch((res) => {
-          console.log(res);
+        .catch((error) => {
+          console.error('Error fetching workers:', error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else if (currentTab == 1) {
       SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
@@ -53,13 +64,19 @@ const ManageWorkerPage = () => {
           console.log(res);
         });
     }
-  }, [currentTab]);
+  };
+
+  const handleScroll = () => {
+    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
+    if (bottom && !loading) {
+      setSkip((prevSkip) => prevSkip + 20); // Increment skip when reaching bottom
+      fetchData({ skip: skip + 20 }); // Fetch data with updated skip
+    }
+  };
   return (
     <CommonPageLayout title="Manage Workers">
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-
-        </Grid>
+        <Grid item xs={12}></Grid>
       </Grid>
       <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
         <Grid container spacing={0} justifyContent="space-between">
@@ -73,14 +90,7 @@ const ManageWorkerPage = () => {
           </Grid>
         </Grid>
         <TabPanel value={currentTab} index={0}>
-          <UsersList<IWorker>
-            value={users}
-            onChange={(newUsers) => {
-              setUsers(newUsers);
-            }}
-            action={'view'}
-            options={{ kind: 'worker' }}
-          />
+          <WorkerList users={users} onScroll={handleScroll}></WorkerList>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
           <SpouseListPage
@@ -102,7 +112,6 @@ const ManageWorkerPage = () => {
           />
         </TabPanel>
       </Card>
-
     </CommonPageLayout>
   );
 };
