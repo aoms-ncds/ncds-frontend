@@ -43,6 +43,9 @@ import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import Tooltip from '@mui/material/Tooltip';
+
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
   const navigate = useNavigate();
@@ -61,6 +64,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
+
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
     subCategory1: '',
@@ -69,10 +73,23 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     month: '',
     narration: '',
     attachment: [],
+    sanctionedAsPer: '',
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
-console.log(reasonForSentBack, 'rr');
+  console.log(reasonForSentBack, 'rr');
+  const [open, setOpen] = useState(false);
+  console.log(newParticular, 'dq');
+  console.log(props, 'wdqw');
 
+  const handleClickOpen = (particular: Particular, index: number) => {
+    setOpen(true);
+    setSelectedParticularIndex(index);
+    setNewParticular(particular);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
     event.preventDefault();
     event.currentTarget.blur();
@@ -93,7 +110,7 @@ console.log(reasonForSentBack, 'rr');
       props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
     }
     console.log(props, 'PPPOP');
-   
+
     setTimeout(() => {
       closeSnackbar(rejectionSnack);
       const rejectedSnack = enqueueSnackbar({ message: 'sendBack!', variant: 'success' });
@@ -295,6 +312,7 @@ console.log(reasonForSentBack, 'rr');
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
+                        <TableCell align="center"> Sanction As per</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -305,9 +323,15 @@ console.log(reasonForSentBack, 'rr');
                               {props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS && (<PermissionChecks
                                 permissions={['MANAGE_FR']}
                                 granted={
-                                  <IconButton>
+                                  <><IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
-                                  </IconButton>}
+                                  </IconButton>
+                                    <Tooltip title="Add Sacntion as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                    </Tooltip>
+                                   </>}
                               />
                               )}
                               <IconButton onClick={() => {
@@ -325,6 +349,7 @@ console.log(reasonForSentBack, 'rr');
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount}</TableCell>
+                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
@@ -410,7 +435,7 @@ console.log(reasonForSentBack, 'rr');
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <Autocomplete<ISanctionedAsPer>
                       value={props.value.sanctionedAsPer as ISanctionedAsPer ?? undefined}
                       options={sanctionedAsPer ?? []}
@@ -430,7 +455,7 @@ console.log(reasonForSentBack, 'rr');
                       fullWidth
 
                     />
-                  </Grid>
+                  </Grid> */}
                 </>
               ) : null}
               <Grid item xs={12}>
@@ -945,6 +970,65 @@ console.log(reasonForSentBack, 'rr');
           </DialogActions>
         </form>
       </Dialog>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        // PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+        // sx={{ width: '30%', textAlign: 'center' }}
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleClose();
+            props.onChange({
+              ...props.value,
+              particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+            });
+            // addParticulars();
+          }}
+        >
+
+          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+            Add Sanction as per
+          </DialogTitle>
+          <DialogContent>
+            <Grid item xs={12} md={6} width={'20rem'}>
+              <Autocomplete<ISanctionedAsPer>
+                value={newParticular.sanctionedAsPer as unknown as ISanctionedAsPer}
+                options={sanctionedAsPer ?? []}
+                getOptionLabel={(option) => option.asPer ?? ''}
+                // getOptionLabel={(requisition) => requisition}
+                disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(_e, selectedSanction) => {
+                  if (selectedSanction && props.action === 'view') {
+                    // setNewParticular({
+                    //   ...props.value,
+                    //   sanctionedAsPer: selectedSanction as ISanctionedAsPer,
+                    // });
+                    setNewParticular((asper: any) => ({
+                      ...asper,
+                      sanctionedAsPer: selectedSanction?.asPer,
+                    }))
+                  }
+                }}
+                renderInput={(params) => <TextField {...params}
+                  label="Sanctioned As Per" required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
+                fullWidth
+
+              />
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button type="submit">Add</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
     </div>
   );
 };

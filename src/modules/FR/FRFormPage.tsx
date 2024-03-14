@@ -20,7 +20,9 @@ const FRFormPage = (props: FRFormPageProps) => {
     kind: 'FRs',
     particulars: [],
     reasonForSentBack: '',
+    sanctionedAsPer:'',
   });
+  
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
       throw new Error('FR ID Missing in URL');

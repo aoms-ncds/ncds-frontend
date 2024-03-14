@@ -363,6 +363,7 @@ const ViewIRO = () => {
                                 <TableCell align="center">Quantity</TableCell>
                                 <TableCell align="center">For the Month of</TableCell>
                                 <TableCell align="center">Requested Amount</TableCell>
+                                <TableCell align="center">Sanctioned as per</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -387,6 +388,7 @@ const ViewIRO = () => {
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
                                     <TableCell align="center">{item.requestedAmount}</TableCell>
+                                    <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                   </TableRow>
                                 ))}
                             </TableBody>
@@ -446,7 +448,7 @@ const ViewIRO = () => {
                           </Select>
                         </FormControl>
                       </Grid>
-                      <Grid item xs={12} md={6}>
+                      {/* <Grid item xs={12} md={6}>
                         <Autocomplete
                           value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                           options={sanctionedAsPer ?? []}
@@ -463,7 +465,7 @@ const ViewIRO = () => {
                           renderInput={(params) => <TextField {...params} label="Sanctioned As Per" disabled />}
                           fullWidth
                         />
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={12}>
                         {/* {props.action === 'edit' && ( */}
                         {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
