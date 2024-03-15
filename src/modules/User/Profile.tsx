@@ -400,10 +400,22 @@ const Profile = () => {
               <TabPanel value={currentTab} index={3}>
                 <Container>
                   <br />
-                  <Grid container spacing={5} width={'80vw'} >
+                  <Grid container spacing={5}  >
                     {userKind === 'worker' && (user as unknown as IWorker)?.children.length > 0 && (user as unknown as IWorker)?.children.map((child) => (
-                      <Grid key={child._id} item xs={12} lg={4} sx={{ width: '80px' }}>
+                      <Grid key={child._id} item xs={12} lg={6} sx={{ width: '80px' }}>
                         <Grid container spacing={3} sx={{ border: '1px dashed grey', borderRadius: 2, pb: 3 }}>
+                          <Grid item xs={12}>
+                            <Avatar
+                              sx={{
+                                width: '100px',
+                                height: '100px',
+                                marginLeft: 'auto',
+                                marginRight: 'auto',
+                              }}
+                              src={`${child?.childProfile}`}
+                              alt={`${user?.basicDetails.firstName}`}
+                            />
+                          </Grid>
                           <Grid item xs={12}><br /><Typography textAlign="center"> <span style={{ fontWeight: 600 }}> CHILD CODE :</span> {child.childCode}</Typography></Grid>
                           {/* <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Code: </Typography> {child.childCode} </Grid> */}
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name: </Typography> {child.firstName} </Grid>
