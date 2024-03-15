@@ -22,10 +22,6 @@ import SendIcon from '@mui/icons-material/Send';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CloseIcon from '@mui/icons-material/Close';
 import * as XLSX from 'xlsx';
-<<<<<<< HEAD
-=======
-
->>>>>>> abhiraj-a-r/issue546
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ChildrenServices from '../../Workers/extras/ChildrenServices';
@@ -198,7 +194,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const filteredRows = (props.value ?? []).filter((row) => {
     if (
       (row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
-<<<<<<< HEAD
       (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.division?.details?.name && row.division?.details?.name.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.officialDetails.divisionHistory[row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name &&
@@ -210,14 +205,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     ) {
       return true;
     }
-=======
-      (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      console.log('oops');
-      return true;
-    }
-    console.log(Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase())));
->>>>>>> abhiraj-a-r/issue546
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
 
@@ -249,11 +236,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 window.open(`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`);
               }}
               showInMenu
-<<<<<<< HEAD
               // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
-=======
-              to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
->>>>>>> abhiraj-a-r/issue546
             />
           ),
           (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (
@@ -485,7 +468,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 <>
                   <Button
                     onClick={async () => {
-<<<<<<< HEAD
                       const sheet = staffs ?
                         staffs.map((user: Staff) => [
                           user.staffCode,
@@ -508,45 +490,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                             user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
                             user.officialDetails.dateOfJoining?.fromNow(true),
                           (user.supportStructure?.basic ?? 0) +
-=======
-                      const sheet = staffs
-                        ? staffs.map((user: Staff) => [
-                            user.staffCode,
-                            user.basicDetails.firstName,
-                            user.basicDetails.lastName,
-                            user.supportDetails.designation?.name,
-                            user.supportDetails.department?.name,
-                            user.officialDetails.divisionHistory[user.officialDetails.divisionHistory.length - 1].subDivision,
-                            user.basicDetails.phone,
-                            user.basicDetails.email,
-                            user.basicDetails.alternativePhone,
-                            user.basicDetails.dateOfBirth,
-                            user.basicDetails.field,
-                            user.basicDetails.martialStatus,
-                            user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                            user.basicDetails.highestQualification,
-                            user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                            user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                            user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving
-                              ? user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true)
-                              : user.officialDetails.dateOfJoining?.fromNow(true),
-                            (user.supportStructure?.basic ?? 0) +
->>>>>>> abhiraj-a-r/issue546
                               (user.supportStructure?.HRA ?? 0) +
                               (user.supportStructure?.spouseAllowance ?? 0) +
                               (user.supportStructure?.positionalAllowance ?? 0) +
                               (user.supportStructure?.specialAllowance ?? 0) +
                               (user.supportStructure?.PIONMissionaryFund ?? 0) +
                               (user.supportStructure?.telAllowance ?? 0),
-<<<<<<< HEAD
                           user.insurance?.impactNo,
                         ]) :
                         [];
-=======
-                            user.insurance?.impactNo,
-                          ])
-                        : [];
->>>>>>> abhiraj-a-r/issue546
                       const headers = [
                         'Staff Code',
                         'First Name',
@@ -592,7 +544,6 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                   <>
                     <Button
                       onClick={async () => {
-<<<<<<< HEAD
                         const sheet = users ?
                           users.map((user: IWorker) => [
                             user.workerCode,
@@ -616,46 +567,15 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                             user.spouse?.spouseCode,
                             user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
                             (user.supportStructure?.basic ?? 0) +
-=======
-                        const sheet = users
-                          ? users.map((user: IWorker) => [
-                              user.workerCode,
-                              user.basicDetails.firstName,
-                              user.basicDetails.lastName,
-                              user.division?.details.name,
-                              user?.officialDetails?.divisionHistory[user?.officialDetails?.divisionHistory?.length - 1]?.subDivision,
-                              user.basicDetails.phone,
-                              user.basicDetails.email,
-                              user.basicDetails.alternativePhone,
-                              user.basicDetails.dateOfBirth,
-                              user.basicDetails.field,
-                              user.basicDetails.martialStatus,
-                              user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                              user.basicDetails.highestQualification,
-                              user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                              user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                              user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving
-                                ? moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true)
-                                : moment(user.officialDetails.dateOfJoining)?.fromNow(true),
-                              user.spouse?.spouseCode,
-                              user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
-                              (user.supportStructure?.basic ?? 0) +
->>>>>>> abhiraj-a-r/issue546
                                 (user.supportStructure?.HRA ?? 0) +
                                 (user.supportStructure?.spouseAllowance ?? 0) +
                                 (user.supportStructure?.positionalAllowance ?? 0) +
                                 (user.supportStructure?.specialAllowance ?? 0) +
                                 (user.supportStructure?.PIONMissionaryFund ?? 0) +
                                 (user.supportStructure?.telAllowance ?? 0),
-<<<<<<< HEAD
                             user.insurance?.impactNo,
                           ]) :
                           [];
-=======
-                              user.insurance?.impactNo,
-                            ])
-                          : [];
->>>>>>> abhiraj-a-r/issue546
                         const headers = [
                           'Workers Code',
                           'First Name',
@@ -734,20 +654,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               },
             }}
           >
-<<<<<<< HEAD
             <DataGrid rows={filteredRows ?? []} sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             } />
-=======
-            <DataGrid
-              rows={filteredRows ?? []}
-              sx={{ height: '55vh', width: '100%' }}
-              columns={columns}
-              getRowId={(row) => row._id}
-              loading={props.value === null}
-              getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
-            />
->>>>>>> abhiraj-a-r/issue546
           </Box>
         </Card>
       </Grid>
