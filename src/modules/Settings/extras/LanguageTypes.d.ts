@@ -5,6 +5,9 @@ interface ILanguage extends MongooseDocument {
 interface IReligion extends MongooseDocument {
     religion?: string;
 }
+interface IPaymentMethod extends MongooseDocument {
+    paymentMethod?: string;
+}
 interface IGender extends MongooseDocument {
     _id: string;
     gender: string;
@@ -14,6 +17,8 @@ interface IChildSupport extends MongooseDocument {
     status: number;
     amount: number;
 }
+type CreatablePaymentMethod= Creatable<IPaymentMethod>;
+
 type MyCreatableChildSupport = Creatable<IChildSupport>;
 
 type CreatableLanguage = Creatable<ILanguage>;
