@@ -120,7 +120,7 @@ const NewOfficialDetailsForm = (
       {/* {console.log({ abc: props.value.dateOfJoining })} */}
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Date of Joining in Organization"
+          label="Date of Joining Organization"
           value={props.value.dateOfJoining}
           onChange={(newDate) => {
             props.onChange({
@@ -143,7 +143,7 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <TextField
-          label="No Of Years With The Organization"
+          label="No of years with the Organization"
           value={props.value.status == 'Left' && props.value.dateOfLeaving ? props.value.dateOfLeaving?.from(props.value.dateOfJoining, true) : (props.value.dateOfJoining?.fromNow(true))}
           variant={props.options?.textField.variant}
           fullWidth
@@ -316,7 +316,7 @@ const NewOfficialDetailsForm = (
 
       <Grid item xs={12} md={6} lg={4}>
         <DatePicker
-          label="Left Organization On"
+          label="Date of Leaving Organization"
           value={props.value.status != 'Left' ? null : props.value.dateOfLeaving}
           disabled={props.value.status != 'Left'}
           onChange={(newDate) =>

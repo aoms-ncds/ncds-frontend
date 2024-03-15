@@ -214,7 +214,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Reason for Deactive</b>),
+      renderHeader: () => (<b>Reason for Deactivation</b>),
     },
     {
       field: 'updatedAt',

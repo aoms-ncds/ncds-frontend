@@ -10,5 +10,8 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "files.eol": "\r\n"
+  "files.eol": "\r\n",
+  "cSpell.words": [
+    "Aadhaar"
+  ]
 }
