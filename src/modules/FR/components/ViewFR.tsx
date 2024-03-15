@@ -994,7 +994,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
             Add Sanction as per
           </DialogTitle>
           <DialogContent>
-            <Grid item xs={12} md={6} width={'20rem'}>
+            <Grid item xs={12} md={6} width={'20rem'} padding={1}>
               <Autocomplete<ISanctionedAsPer>
                 value={newParticular.sanctionedAsPer as unknown as ISanctionedAsPer}
                 options={sanctionedAsPer ?? []}
