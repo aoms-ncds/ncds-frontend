@@ -158,7 +158,7 @@ const LoginPage = () => {
                   type="number"
                   value={otpRequest.OTP}
                   onChange={(e) => {
-                    setotpRequest((otpRequest) => ({
+                    setotpRequest((otpRequest: any) => ({
                       ...otpRequest,
                       OTP: e.target.value,
                     }));

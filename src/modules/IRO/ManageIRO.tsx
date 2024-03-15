@@ -309,7 +309,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   id: 'edit',
                   text: 'Edit',
                   component: Link,
-                  to: `/iro/${params.row._id}/edit`,
+                  // to: `/iro/${params.row._id}/edit`,
                   onClick: () => {
                     window.open(`/iro/${params.row._id}/edit`, '_blank');
                   },
@@ -663,16 +663,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         }
         switch (statusName) {
         case 'WAITING FOR OFFICE MNGR':
-          console.log('Applying class green');
           return clsx('orange');
         case 'WAITING FOR ACCOUNTS STATE':
-          console.log('Applying class green');
           return clsx('orange');
         case 'IRO CLOSED':
-          console.log('Applying class green');
           return clsx('green');
         case 'WAITING FOR ACCOUNTS MNGR':
-          console.log('Applying class green');
+          return clsx('green');
+        case 'AMOUNT RELEASED':
           return clsx('green');
         default:
           console.log('No class applied');

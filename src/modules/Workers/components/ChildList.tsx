@@ -111,7 +111,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
         (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
         (row.childSupport.name && row.childSupport.name.toLowerCase().includes(searchText.toLowerCase())) ||
         (searchPattern.test(childOfFullName)) ||
-        (row.reasonForDeactivation && row.reasonForDeactivation.toLowerCase().includes(searchText.toLowerCase())) ||
+        (row.reasonForDeactivation && row.reasonForDeactivation.toString().toLowerCase().includes(searchText.toLowerCase())) ||
         (row.createdAt && moment(row.createdAt).isValid() && moment(row.createdAt).format('DD/MM/YYYY').includes(searchText.toLowerCase()))
     ) {
       return true;

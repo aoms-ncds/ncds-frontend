@@ -236,7 +236,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 window.open(`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`);
               }}
               showInMenu
-              to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+              // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
           ),
           (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (

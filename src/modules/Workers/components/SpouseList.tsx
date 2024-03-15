@@ -107,7 +107,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       (row.dateOfBirth && moment(row.dateOfBirth).isValid() && moment(row.dateOfBirth).format('DD/MM/YYYY').includes(searchText.toLowerCase())) ||
      (row.qualification && row.qualification.toLowerCase().includes(searchText.toLowerCase())) ||
      (spouseFullName && spouseFullName.includes(searchText.toLowerCase())) ||
-     (row.reasonForDeactivation && row.reasonForDeactivation.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.reasonForDeactivation && row.reasonForDeactivation.toString().toLowerCase().includes(searchText.toLowerCase())) ||
      (row.updatedAt && moment(row.updatedAt).isValid() && moment(row.updatedAt).format('DD/MM/YYYY').includes(searchText.toLowerCase()))
     ) {
       return true;
