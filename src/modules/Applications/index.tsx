@@ -65,7 +65,7 @@ const APPDashboard = () => {
           permissions={['MANAGE_APPLICATION']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application approval HR" color='#fff' secondaryText="" targetRoute="/application/hr_approve" />
+              <DashboardCardButton primaryText="Application Approval HR" color='#fff' secondaryText="" targetRoute="/application/hr_approve" />
             </Grid>)} />
         <PermissionChecks
           permissions={['PRESIDENT_ACCESS']}
