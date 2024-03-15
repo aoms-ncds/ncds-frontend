@@ -987,7 +987,7 @@ const EditIRO = () => {
             Edit Sanction as per
           </DialogTitle>
           <DialogContent>
-            <Grid item xs={12} md={6} width={'20rem'}>
+            <Grid item xs={12} md={6} width={'20rem'} padding={1}>
               <Autocomplete
                 value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                 options={sanctionedAsPer ?? []}

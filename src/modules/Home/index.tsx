@@ -17,19 +17,19 @@ import CHART7 from './components/chart7';
 
 const HomePage = () => {
   return (
-    <CommonPageLayout title="" appBarSx={{ backgroundColor: '#181D20' }} mainContentSx={{ p: 0 }}>
-      <Box sx={{ borderBottom: 1, borderColor: '#e1e0e0' }} />
+    <CommonPageLayout title="" appBarSx={{ backgroundColor: 'rgb(59, 50, 230)' }} mainContentSx={{ p: 0 }}>
+      <Box sx={{ borderBottom: 1, borderColor: '#fff' }} />
       {/* <Container> */}
-      <div style={{ backgroundColor: '#181D20', position: 'relative' }}>
+      <div style={{ backgroundColor: '#fff', position: 'relative' }}>
         <Grid container spacing={3} padding={1} height={300}>
           {/* Sessions */}
           <Grid item xs={12} md={6} lg={3} xl={3}>
-            <Card sx={{ backgroundColor: '#181D20', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
+            <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
-                <Typography variant="body2" align='center'>Divisions</Typography>
-                <Typography variant="h5" align='center'>89</Typography>
+                <Typography variant="body1" align='center' color={'black'}>Divisions</Typography>
+                <Typography variant="h5" align='center' color={'black'}>89</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> vs last 7 days
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> <span style={{color:'black'}}> vs last 7 days</span> 
                 </Typography>
                 <CHART1 />
               </CardContent>
@@ -37,12 +37,12 @@ const HomePage = () => {
           </Grid>
           {/* Other card components similar to Sessions */}
           <Grid item xs={12} md={6} lg={3} xl={3}>
-            <Card sx={{ backgroundColor: '#181D20', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
+            <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
-                <Typography variant="body2" align='center'>Workers</Typography>
-                <Typography variant="h5" align='center'>90</Typography>
+                <Typography variant="body2" align='center' color={'black'}>Workers</Typography>
+                <Typography variant="h5" align='center' color={'black'}>90</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />5.2%</span> vs last 7 days
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />5.2%</span> <span style={{color:'black'}}>vs last 7 days</span> 
                 </Typography>
                 <CHART2></CHART2>
               </CardContent>
@@ -50,12 +50,12 @@ const HomePage = () => {
           </Grid>
           {/* Other card components similar to Sessions */}
           <Grid item xs={12} md={6} lg={3} xl={3}>
-            <Card sx={{ backgroundColor: '#181D20', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
+            <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
-                <Typography variant="body2" align='center'>IR</Typography>
-                <Typography variant="h5" align='center'>80</Typography>
+                <Typography variant="body2" align='center' color={'black'}>IR</Typography>
+                <Typography variant="h5" align='center' color={'black'}>80</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> vs last 7 days
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> <span  style={{color:'black'}}>vs last 7 days </span> 
                 </Typography>
                 <CHART3></CHART3>
               </CardContent>
@@ -63,12 +63,12 @@ const HomePage = () => {
           </Grid>
           {/* Other card components similar to Sessions */}
           <Grid item xs={12} md={6} lg={3} xl={3}>
-            <Card sx={{ backgroundColor: '#181D20', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
+            <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
-                <Typography variant="body2" align='center'>FR</Typography>
-                <Typography variant="h5" align='center'>70</Typography>
+                <Typography variant="body2" align='center' color={'black'}>FR</Typography>
+                <Typography variant="h5" align='center' color={'black'}>70</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />4.3%</span> vs last 7 days
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />4.3%</span> <span style={{color:'black'}}> vs last 7 days</span> 
                 </Typography>
                 <CHART4></CHART4>
               </CardContent>
@@ -81,7 +81,7 @@ const HomePage = () => {
         <Grid container spacing={3}>
           {/* Sales Overview */}
           <Grid item xs={12} lg={12} xl={12}>
-            <Card sx={{ backgroundColor: '#e1e0e1' }}>
+            <Card sx={{ backgroundColor: '#fff' }}>
               <CardContent>
                 <Grid container spacing={3} sx={{ marginTop: '5px' }}>
                   <Grid item xs={12} lg={12}>
