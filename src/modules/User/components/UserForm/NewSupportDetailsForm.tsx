@@ -165,7 +165,7 @@ const NewSupportDetailsForm = (
           }
         />}
       </Grid>
-      {(props.value.selfSupport) && (
+      {(props?.value?.selfSupport) && (
         <Grid item xs={12} md={6} lg={4}>
           <TextField
             label="Percentage of Self Support"
