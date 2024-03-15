@@ -23,7 +23,7 @@ const App = () => {
           // mode: prefersDarkMode ? 'dark' : 'light',
           background: {
             // default: prefersDarkMode ? '#121212' : '#e1e0e0',
-            default: '#fff',
+            default: '#e1e0e1',
           },
           primary: {
             main: '#3b32e6',
