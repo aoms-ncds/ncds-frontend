@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
@@ -8,7 +8,7 @@ import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import { hasPermissions } from '../../User/components/PermissionChecks';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -18,7 +18,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   const [rowId, setRowId] = useState('');
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
-
+  const [searchText, setSearchText] = useState('');
   const deactivateSpouse = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Deactivating Spouse',
@@ -90,6 +90,20 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       });
     console.log(params.row._id, 'ooo');
   };
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredRows = (props.value ?? []).filter((row) => {
+    if ((row. firstName && row.  firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.  lastName && row.  lastName.toLowerCase().includes(searchText.toLowerCase()))) {
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
   const columns: GridColDef<Spouse>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
     {
@@ -253,10 +267,52 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
           </Button>
         </DialogActions>
       </Dialog>
-      <br />
+       <Grid item xs={6} padding={2}>
+          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchText}
+            onChange={handleSearchChange}
+            fullWidth
+            style={{ width: '12%', alignItems: 'start' }}
+          />
+          {/* </Grid> */}
+        </Grid>
       <Grid item xs={12} md={12}>
         <Card style={{ height: '80vh', width: '100%' }}>
-          <DataGrid rows={props.value ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
+          <Box
+          sx={{
+            'height': 600,
+            'width': '100%',
+            '& .super-app-theme--cell': {
+              backgroundColor: '#f1f5fa',
+              color: 'black',
+              fontWeight: '600',
+            },
+            '& .super-app.negative': {
+              backgroundColor: 'rgba(157, 255, 118, 0.49)',
+              color: '#1a3e72',
+              fontWeight: '600',
+            },
+            '& .super-app.positive': {
+              backgroundColor: '#d47483',
+              color: '#1a3e72',
+              fontWeight: '600',
+            },
+            '& .even': {
+              backgroundColor: '#DEDAFF', // Change to red for even rows
+            },
+            '& .odd': {
+              backgroundColor: '#fff', // Change to blue for odd rows
+            },
+          }}
+          >
+
+          <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={props.value === null} getRowClassName={(params) =>
+              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+            }  />
+          </Box>
         </Card>
       </Grid>
     </>
