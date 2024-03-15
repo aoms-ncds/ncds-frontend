@@ -593,28 +593,28 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'sanctionedAsPer',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Sanction As Per</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {' '}
-          {props.row.sanctionedAsPer.toString()}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'sanctionedAsPer',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Sanction As Per</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {' '}
+    //       {props.row.sanctionedAsPer.toString()}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
 
     {
       field: 'specialsanction',

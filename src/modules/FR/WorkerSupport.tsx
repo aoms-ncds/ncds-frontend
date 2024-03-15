@@ -83,6 +83,7 @@ const WorkerSupportPage = () => {
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
+    sanctionedAsPer:''
   });
 
   const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });

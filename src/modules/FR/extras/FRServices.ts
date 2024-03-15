@@ -191,7 +191,8 @@ export default {
                       unitPrice: particulars.unitPrice,
                       month: particulars.month,
                       requestedAmount: particulars.requestedAmount,
-                      narration: particulars.narration,
+                      narration: particulars?.narration,
+                      sanctionedAsPer: particulars.sanctionedAsPer,
                     }, { headers: { ...getAuthHeader() } });
                   } else {
                     await axios.post('/fr/particulars/', {
@@ -204,7 +205,8 @@ export default {
                       quantity: particulars.quantity,
                       month: particulars.month,
                       requestedAmount: particulars.requestedAmount,
-                      narration: particulars.narration,
+                      narration: particulars?.narration,
+                      sanctionedAsPer: particulars.sanctionedAsPer,
                     }, { headers: { ...getAuthHeader() } });
                   }
                 }
@@ -234,6 +236,7 @@ export default {
 
                   await axios.patch(`/fr/particulars/${particulars._id}`, {
                     narration: particulars.narration,
+                    sanctionedAsPer: particulars?.sanctionedAsPer,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }

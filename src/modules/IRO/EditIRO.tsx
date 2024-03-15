@@ -45,6 +45,7 @@ import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
+import AddIcon from '@mui/icons-material/Add';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -202,20 +203,33 @@ const EditIRO = () => {
     month: '',
     narration: '',
     attachment: [],
+    sanctionedAsPer: ''
   });
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
-  useEffect( ()=>{
-    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+  useEffect(() => {
+    const ddata = SanctionedAsPerService.getAll().then((res) => {
       console.log(ddata, 'fdfd');
 
       setSanctionedAsPer(res.data);
     });
   }, []);
+  const [open, setOpen] = useState(false);
+  console.log(newParticular, 'dq');
+  // console.log(props, 'wdqw');
 
+  const handleClickOpen = (particular: Particular) => {
+    setOpen(true);
+    // setSelectedParticularIndex(index);
+    setNewParticular(particular);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const editParticular = (particular: Particular) => {
     // setParticularDialog('edit');
     setShowAddParticularDialog(true);
@@ -419,6 +433,7 @@ const EditIRO = () => {
                             <TableCell align="center">Quantity</TableCell>
                             <TableCell align="center">For the Month of</TableCell>
                             <TableCell align="center">Requested Amount</TableCell>
+                            <TableCell align="center">Sanctioned as per</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -428,6 +443,9 @@ const EditIRO = () => {
                                 <TableCell component="th" sx={{ display: 'flex' }}>
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item)} />
+                                  </IconButton>
+                                  <IconButton>
+                                    <AddIcon onClick={() => handleClickOpen(item)} />
                                   </IconButton>
                                   <IconButton
                                     onClick={() => {
@@ -446,6 +464,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.quantity}</TableCell>
                                 <TableCell align="center">{item.month}</TableCell>
                                 <TableCell align="center">{item.requestedAmount}</TableCell>
+                                <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                               </TableRow>
                             ))}
                         </TableBody>
@@ -516,7 +535,7 @@ const EditIRO = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  {/* <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                       options={sanctionedAsPer ?? []}
@@ -533,7 +552,7 @@ const EditIRO = () => {
                       renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
                       fullWidth
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={12}>
                     {/* {props.action === 'edit' && ( */}
                     {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
@@ -796,7 +815,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>
@@ -943,6 +962,55 @@ const EditIRO = () => {
             <Button type="submit" variant="contained">
               Save
             </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        // PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleClose();
+            setIRO({
+              ...IRO,
+              particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
+            });
+            // addParticulars();
+          }}
+        >
+
+          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+            Edit Sanction as per
+          </DialogTitle>
+          <DialogContent>
+            <Grid item xs={12} md={6} width={'20rem'}>
+              <Autocomplete
+                value={IRO?.sanctionedAsPer as ISanctionedAsPer}
+                options={sanctionedAsPer ?? []}
+                getOptionLabel={(option) => option.asPer ?? ''}
+                onChange={(_e, selectedSanction) => {
+                  if (selectedSanction) {
+                    setNewParticular((asper: any) => ({
+                      ...asper,
+                      sanctionedAsPer: selectedSanction?.asPer,
+                    }))
+                  }
+                }}
+                disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
+                fullWidth
+              />
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button type="submit">Add</Button>
           </DialogActions>
         </form>
       </Dialog>
