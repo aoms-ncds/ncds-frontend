@@ -1,37 +1,300 @@
-import React, { useRef, useCallback } from 'react';
-import { Card, CardHeader, Avatar, CardContent, Typography, Grid } from '@mui/material';
+import React, { useRef, useCallback, useState } from 'react';
+import {
+  Card,
+  CardHeader,
+  Avatar,
+  CardContent,
+  Typography,
+  Grid,
+  Button,
+  Menu,
+  MenuItem,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
+import GridLinkAction from '../../../components/GridLinkAction';
+import { hasPermissions } from '../../User/components/PermissionChecks';
+import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Work, Handshake } from '@mui/icons-material';
+import StaffServices from '../../HR/extras/StaffServices';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import WorkersServices from '../extras/WorkersServices';
+import { useNavigate } from 'react-router-dom';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MessageItem from '../../../components/MessageItem';
+import SendIcon from '@mui/icons-material/Send';
 
 interface UserCardProps {
   user: IWorker;
-  key: string;
+  removeUser: (id: string) => void;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user, key }) => {
+const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
+  const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [rowID, setRowID] = useState<string>('');
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [remark, setRemark] = useState<CreatableRemark>({
+    remark: '',
+    transactionId: '',
+  });
+
+  const navigate = useNavigate();
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const assignRemark = (id: string) => {
+    toggleOpenRemarks(true);
+    setSelectedUser(id);
+
+    WorkersServices.getAllRemarksById(id)
+      .then((res) => setRemarks(res.data ?? []))
+      .catch((error) => {
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        });
+      });
+  };
+
+  const activateWorker = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Activating Worker',
+      variant: 'info',
+    });
+    WorkersServices.activate(id)
+      .then((res) => {
+        // if (props.value) {
+        //   const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
+        //   props.onChange(newWorkerRequests);
+        // }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+
+  const handleView = () => {
+    navigate(`/users/worker/${user._id}`);
+  };
+
   return (
-    <Card sx={{ maxWidth: 345 }} key={key}>
-      <CardHeader avatar={<Avatar alt={user.basicDetails.firstName} src={user.imageURL?.replace('uc', 'thumbnail')} />} title={user.basicDetails.firstName} />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {user.basicDetails.email}
-        </Typography>
-      </CardContent>
-    </Card>
+    <>
+      <Card sx={{ maxWidth: 345 }}>
+        <CardHeader avatar={<Avatar alt={user.basicDetails.firstName} src={user.imageURL?.replace('uc', 'thumbnail')} />} title={user.basicDetails.firstName + ' ' + user.basicDetails.lastName} />
+        <CardContent>
+          <Typography variant="body2" color="black">
+            Email: {user.basicDetails.email}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Worker Code: {user.workerCode}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Division: {user.division?.details.name}
+          </Typography>
+        </CardContent>
+        <Grid container spacing={2}>
+          <Button id="basic-button" aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick} sx={{ marginLeft: '85%' }}>
+            <MoreVertIcon />
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {[
+              <MenuItem onClick={handleView}>View</MenuItem>,
+              hasPermissions(['MANAGE_WORKER']) && (
+                <MenuItem
+                  onClick={() => {
+                    window.open(`/workers/edit/${user._id}`);
+                  }}
+                >
+                  Edit
+                </MenuItem>
+              ),
+              hasPermissions(['ADMIN_ACCESS']) && (
+                <MenuItem
+                  onClick={() => {
+                    WorkersServices.delete(user._id)
+                      .then((res) => {
+                        removeUser(user._id);
+                        enqueueSnackbar({ message: res.message, variant: 'success' });
+                      })
+                      .catch((err) => {
+                        enqueueSnackbar({ message: err.message, variant: 'error' });
+                      });
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              ),
+              <MenuItem
+                onClick={() => {
+                  assignRemark(user._id);
+                }}
+              >
+                Remarks
+              </MenuItem>,
+              hasPermissions(['MANAGE_WORKER']) &&
+                (user.status == UserLifeCycleStates.ACTIVE ? (
+                  <MenuItem
+                    onClick={() => {
+                      setRowID(user._id);
+                      setReasonDialog(true);
+                    }}
+                  >
+                    Deactivate
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    onClick={() => {
+                      activateWorker(user._id);
+                    }}
+                  >
+                    Activate
+                  </MenuItem>
+                )),
+              hasPermissions(['ADMIN_ACCESS']) && (
+                <MenuItem
+                  onClick={() => {
+                    navigate(`/users/${user._id}/permission_manager`);
+                  }}
+                ></MenuItem>
+              ),
+              false,
+            ].filter((action) => action !== false)}
+          </Menu>
+        </Grid>
+      </Card>
+      <Dialog open={openRemarks} fullWidth maxWidth="md">
+        <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0
+            ? remarks.map((remark) => (
+                // eslint-disable-next-line max-len
+                <MessageItem
+                  key={remark._id}
+                  sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                  time={remark.updatedAt}
+                  body={remark.remark}
+                  isSent={true}
+                />
+              ))
+            : 'No Data Found '}
+        </DialogContent>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (remark.remark) {
+              WorkersServices.addRemarks(remark)
+                .then((res) => {
+                  const x = [...remarks, res.data];
+
+                  setRemarks((remarks) => [...remarks, res.data]);
+                  setRemark((remark) => ({
+                    ...remark,
+                    remark: '',
+                  }));
+                })
+                .catch((error) => {
+                  enqueueSnackbar({
+                    variant: 'error',
+                    message: error.message,
+                  });
+                });
+            }
+          }}
+        >
+          <DialogActions>
+            <TextField
+              id="remarkTextfield"
+              placeholder="Remarks"
+              multiline
+              value={remark?.remark}
+              onChange={(e) =>
+                setRemark((remark) => ({
+                  ...remark,
+                  user: selectedUser ?? '',
+                  remark: e.target.value,
+                }))
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton type="submit">
+                      <SendIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              fullWidth
+            />
+            <Button
+              variant="contained"
+              onClick={() => {
+                toggleOpenRemarks(false);
+                setSelectedUser(null);
+              }}
+              sx={{ mx: '1rem', py: 1.7 }}
+            >
+              close
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
   );
 };
 
 interface UserListProps {
   users: IWorker[];
   onScroll: () => void; // Define onScroll function prop
+  deleteUser: (id: string) => void;
 }
 
 // eslint-disable-next-line react/no-multi-comp
-const WorkerList: React.FC<UserListProps> = ({ users, onScroll }) => {
+const WorkerList: React.FC<UserListProps> = ({ users, onScroll, deleteUser }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = useCallback(() => {
+    console.log('hi therw');
     if (!listRef.current) return;
+    console.log('eeeeee');
+    // const { scrollTop, clientHeight, scrollHeight } = listRef.current;
     const { scrollTop, clientHeight, scrollHeight } = listRef.current;
-    if (scrollHeight - scrollTop === clientHeight) {
+
+    // Calculate the threshold, e.g., 100 pixels from the bottom
+    const threshold = 100;
+    if (scrollTop + clientHeight >= scrollHeight - threshold) {
+      console.log('bottom reached');
       onScroll(); // Call the onScroll function when reaching the bottom of the list
     }
   }, [onScroll]);
@@ -46,11 +309,15 @@ const WorkerList: React.FC<UserListProps> = ({ users, onScroll }) => {
     };
   }, [handleScroll]);
 
+  const callDelete = (userId: string) => {
+    deleteUser(userId);
+  };
+
   return (
-    <Grid container spacing={2} ref={listRef} style={{ maxHeight: '650px', overflowY: 'auto' }}>
+    <Grid container spacing={2} ref={listRef} style={{ maxHeight: '550px', overflowY: 'auto' }}>
       {users.map((user) => (
         <Grid item key={user._id} xs={12} sm={6} md={4} lg={3}>
-          <UserCard user={user} key={user._id} />
+          <UserCard user={user} key={user._id} removeUser={callDelete} />
         </Grid>
       ))}
     </Grid>

@@ -100,6 +100,33 @@ export default {
         updatedAt: moment(worker.updatedAt),
       }))
     ),
+  getWorkerBySearch: (conditions?: { status?: number; division?: string; search: string }) =>
+    getStandardResponse<IWorker[]>(axios.get('/workers/searchWorker', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
+      workers.map((worker: IWorker) => ({
+        ...worker,
+        tokens: [],
+        basicDetails: {
+          ...worker.basicDetails,
+          dateOfBirth: moment(worker.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...worker.officialDetails,
+          dateOfJoining: worker.officialDetails.dateOfJoining ? moment(worker.officialDetails.dateOfJoining) : undefined,
+          divisionHistory: worker.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+            ...divHis,
+            dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+            dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+          })),
+        },
+        supportStructure: {
+          ...worker.supportStructure,
+          disabledFrom: worker.supportStructure?.disabledFrom ? moment(worker.supportStructure?.disabledFrom) : undefined,
+          disabledTo: worker.supportStructure?.disabledTo ? moment(worker.supportStructure?.disabledTo) : undefined,
+        },
+        createdAt: moment(worker.createdAt),
+        updatedAt: moment(worker.updatedAt),
+      }))
+    ),
   getAllRemarksById: (userId: string) =>
     getStandardResponse<Remark[]>(axios.get(`/workers/remarks/${userId}`, { headers: { ...getAuthHeader() } }), (remarks) =>
       remarks.map((remark: any) => ({
