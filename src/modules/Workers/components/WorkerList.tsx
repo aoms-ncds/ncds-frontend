@@ -187,7 +187,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
                   onClick={() => {
                     navigate(`/users/${user._id}/permission_manager`);
                   }}
-                ></MenuItem>
+                >Permission Manager</MenuItem>
               ),
               false,
             ].filter((action) => action !== false)}

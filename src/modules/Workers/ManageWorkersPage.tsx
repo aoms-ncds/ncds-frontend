@@ -115,11 +115,11 @@ const ManageWorkerPage = () => {
     <CommonPageLayout title="Manage Workers">
       <Grid container spacing={0}>
         <Grid item xs={12} sx={{ alignItems: 'center' }}>
-          {loading && (
+          {/* {loading && (
             <Box style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <CircularProgress />
             </Box>
-          )}
+          )} */}
         </Grid>
       </Grid>
       <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
