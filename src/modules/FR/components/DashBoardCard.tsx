@@ -9,6 +9,7 @@ const DashBoardCard = (props: {
   count?: string;
   secondaryText: string;
   color: string;
+  dot?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   targetRoute?: string;
   icon?: React.ReactNode; // Allow passing an icon as a prop
@@ -55,6 +56,10 @@ const DashBoardCard = (props: {
           </Typography>
           <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#8833ff', fontWeight: 600 }}>
             {props.count}
+            {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
+          </Typography>
+          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'end', justifyContent: 'end', color: '#fff', fontWeight: 600 }}>
+            {props.dot}
             {/* <Box sx={{ marginLeft: '10px' }}>{props.icon}</Box> Adjust the margin here */}
           </Typography>
         </CardContent>
