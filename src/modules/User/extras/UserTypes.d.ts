@@ -52,9 +52,9 @@ declare global {
     gender?: string;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
-    religion?: IReligion;
+    religion?: Religion;
     highestQualification?: string;
-    motherTongue?: z;
+    motherTongue?: ILanguage;
     communicationLanguage?: ILanguage;
     knownLanguages?: ILanguage[];
     email: string;
