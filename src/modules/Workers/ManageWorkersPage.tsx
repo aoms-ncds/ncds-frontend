@@ -137,8 +137,8 @@ const ManageWorkerPage = () => {
           <Grid container spacing={5} justifyContent="space-between">
             {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
             {/* </Grid> */}
-            <Grid item xs={12}>
-              <SearchComponent onSearch={handleSearchChange} />
+            <Grid item xs={12} padding={2}>
+              <SearchComponent onSearch={handleSearchChange}  />
               <PermissionChecks
                 permissions={['WRITE_WORKERS']}
                 granted={

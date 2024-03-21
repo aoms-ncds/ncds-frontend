@@ -675,6 +675,15 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'To'}</b>,
       valueGetter: (params) => params.row.supportStructure?.disabledTo?params.row.supportStructure?.disabledTo?.format('DD/MM/YYYY'):'-',
     },
+     {
+      field: 'reason',
+      width: 100,
+      headerClassName: 'column-header',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Reason'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.reason ?? '',
+    },
 
   ];
   const columnGroupingModel: GridColumnGroupingModel = [
@@ -767,7 +776,7 @@ const WorkerSupportPage = () => {
       description: '',
       renderHeaderGroup: () => <b>{'Support Status'}</b>,
       headerClassName: 'column-grp',
-      children: [{ field: 'supportEnabled' }, { field: 'disabledFrom' }, { field: 'disabledTo' }],
+      children: [{ field: 'supportEnabled' }, { field: 'disabledFrom' }, { field: 'disabledTo' },{ field: 'reason' }],
     },
 
   ];
