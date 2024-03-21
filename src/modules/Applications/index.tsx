@@ -71,7 +71,7 @@ const APPDashboard = () => {
           permissions={['PRESIDENT_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Application Approval President" color='#fff' secondaryText="" targetRoute="/application/president_approve" />
+              <DashboardCardButton primaryText="Application approval President" color='#fff' secondaryText="" targetRoute="/application/president_approve" />
             </Grid>)} />
       </Grid>
     </CommonPageLayout>

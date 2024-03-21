@@ -52,7 +52,7 @@ declare global {
     gender?: string;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
-    religion?: IReligion;
+    religion?: Religion;
     highestQualification?: string;
     motherTongue?: z;
     communicationLanguage?: ILanguage;
