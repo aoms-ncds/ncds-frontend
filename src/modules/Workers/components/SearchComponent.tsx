@@ -17,7 +17,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
   };
 
   return (
-    <Grid container spacing={2} justifyContent="flex-start" alignItems="center" padding={2}>
+    <Grid container spacing={2} justifyContent="flex-start" alignItems="center">
       <Grid item xs={6}>
         {/* Text field for entering search text */}
         <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth sx={{ marginTop: '10px' }} />
