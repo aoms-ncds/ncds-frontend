@@ -85,6 +85,7 @@ const WorkerSupportPage = () => {
     particulars: [],
     sanctionedAsPer:''
   });
+  const supportEnabledWorkers = workers?.filter(item => item.supportStructure.supportEnabled === true);
 
   const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
   const [fileObj, setFileObj] = useState<FileObject|null>(null);
@@ -843,6 +844,7 @@ const WorkerSupportPage = () => {
                 narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
                 requestedAmount: total.net,
                 unitPrice: total.net,
+                quantity: supportEnabledWorkers?.length,
                 attachment: fileObj? [fileObj]:[],
               }],
             }));
