@@ -644,10 +644,10 @@ const WorkerSupportPage = () => {
       (params.row.supportStructure?.spouseAllowance ?? 0) +
       (params.row.supportStructure?.positionalAllowance ?? 0) +
       (params.row.supportStructure?.specialAllowance ?? 0) +
+      (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
       (params.row.supportStructure?.telAllowance ?? 0) -
       (
         (params.row.supportStructure?.impactDeduction ?? 0) +
-        (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
         (params.row.supportStructure?.MUTDeduction ?? 0)
       ):0,
     },
