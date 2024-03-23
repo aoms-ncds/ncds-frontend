@@ -246,19 +246,25 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderHeader: () => (<b>Reason for Deactive</b>),
+      renderHeader: () => (<b>Reason for Deactivation</b>),
       headerClassName: 'super-app-theme--cell',
 
     },
     {
-      field: 'updatedAt',
+      field: 'deactivationDate',
       width: 170,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (props: GridRenderCellParams<Spouse, any, any, GridTreeNodeWithRender>) => {
+        const deactivationDate = props?.row?.deactivationDate;
+        if (!deactivationDate || !moment(deactivationDate).isValid()) {
+          return <p>-</p>;
+        }
+        return <p>{moment(deactivationDate).format('DD/MM/YYYY')}</p>;
+      },
+      renderHeader: () => (<b>Deactivation Date</b>),
       headerClassName: 'super-app-theme--cell',
-      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
-      renderHeader: () => (<b> Deactive Date</b>),
-    },
+    }
   ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (
     <>
