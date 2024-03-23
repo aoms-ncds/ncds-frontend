@@ -258,19 +258,27 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       field: 'reasonForDeactivation',
       width: 180,
       headerAlign: 'center',
+      headerClassName: 'super-app-theme--cell',
       align: 'center',
       renderHeader: () => (<b>Reason for Deactivation</b>),
     },
+
+
     {
-      field: 'createdAt',
+      field: 'deactivationDate',
       width: 170,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => (<p>{moment(props.value).format('DD/MM/YYYY')}</p>),
-      renderHeader: () => (<b> Deactive Date</b>),
+      renderCell: (props: GridRenderCellParams<Child, any, any, GridTreeNodeWithRender>) => {
+        const deactivationDate = props.row.deactivationDate;
+        if (!deactivationDate || !moment(deactivationDate).isValid()) {
+          return <p>-</p>;
+        }
+        return <p>{moment(deactivationDate).format('DD/MM/YYYY')}</p>;
+      },
+      renderHeader: () => (<b>Deactivation Date</b>),
       headerClassName: 'super-app-theme--cell',
-
-    },
+    }
   ].filter((action) => action !== false) as GridColDef<Child>[];
 
   return (

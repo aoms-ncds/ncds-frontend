@@ -17,6 +17,7 @@ declare global {
     knownLanguages?: ILanguage[];
     insurance?: Insurance;
     reasonForDeactivation?: DeactivationReason;
+    deactivationDate?:Moment;
   }
 
   interface CreatableSpouse extends Creatable<Spouse> {

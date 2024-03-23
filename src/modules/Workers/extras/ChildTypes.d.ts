@@ -27,6 +27,8 @@ declare global {
     startingYear: Moment;
     endingYear: Moment;
     reasonForDeactivation?: DeactivationReason;
+    deactivationDate?:Moment
+
 
 
   }
@@ -52,6 +54,7 @@ declare global {
     startingYear?: Moment;
     endingYear?: Moment;
     reasonForDeactivation?: DeactivationReason;
+    deactivationDate?:Moment
   }
 
   // interface IChildSupport extends MongooseDocument{
