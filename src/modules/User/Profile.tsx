@@ -256,6 +256,7 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Communication Language: </Typography> {user?.basicDetails.communicationLanguage?.name} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known Languages: </Typography> {user?.basicDetails.knownLanguages?.map((lang) => lang.name).join(', ')} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {user?.basicDetails.email} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Alternate Email: </Typography> {user?.basicDetails?.email2} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {user?.basicDetails.phone} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Alternate Phone: </Typography> {user?.basicDetails.alternativePhone} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PAN No: </Typography> {user?.basicDetails.PANNo} </Grid>
