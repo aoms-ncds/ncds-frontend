@@ -50,7 +50,7 @@ const Log = () => {
       minWidth: 65,
       type: 'string',
       renderCell: (props) => {
-        return <Avatar src={props.row.user?.imageURL&&props.row.user?.imageURL.replace('uc', 'thumbnail')} />;
+        return <Avatar src={props?.row?.user?.imageURL&&props?.row?.user?.imageURL.replace('uc', 'thumbnail')} />;
       },
     },
     // { field: '_id', headerName: 'SI No', width: 70 },
@@ -70,7 +70,7 @@ const Log = () => {
       headerAlign: 'center',
       width: 150,
       renderHeader: () => <b>{'First Name'}</b>,
-      valueGetter: (params) => params.row.user.basicDetails.firstName,
+      valueGetter: (params) => params?.row?.user?.basicDetails?.firstName,
     },
     {
       field: 'lastName',
@@ -79,7 +79,7 @@ const Log = () => {
       headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => <b>{'Last Name'}</b>,
-      valueGetter: (params) => params.row.user.basicDetails.lastName,
+      valueGetter: (params) => params?.row?.user?.basicDetails?.lastName,
     },
     {
       field: 'division',
@@ -88,7 +88,7 @@ const Log = () => {
       width: 150,
       headerAlign: 'center',
       renderHeader: () => <b>{'Division'}</b>,
-      valueGetter: (params) => params.row?.user.division?.details?.name,
+      valueGetter: (params) => params.row?.user?.division?.details?.name,
     },
     {
       field: 'sub_division',
@@ -97,7 +97,7 @@ const Log = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
-      valueGetter: (params) => params.row.user.officialDetails.divisionHistory[params.row.user.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+      valueGetter: (params) => params.row.user?.officialDetails?.divisionHistory[params?.row?.user?.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
     },
     //
     //   field: 'highestQualification',
@@ -139,7 +139,7 @@ const Log = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Mobile Number'}</b>,
-      valueGetter: (params) => params.row.user.basicDetails.phone,
+      valueGetter: (params) => params?.row?.user?.basicDetails?.phone,
     },
     // {
     //   field: 'alternativeMobileNumber',
@@ -159,7 +159,7 @@ const Log = () => {
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Email ID'}</b>,
-      valueGetter: (params) => params.row.user.basicDetails.email,
+      valueGetter: (params) => params?.row.user?.basicDetails?.email,
     },
     {
       field: 'loginAt',
