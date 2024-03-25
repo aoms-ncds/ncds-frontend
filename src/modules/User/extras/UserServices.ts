@@ -49,18 +49,18 @@ export default {
             ...log.user,
             token: [],
             basicDetails: {
-              ...log.user.basicDetails,
-              dateOfBirth: moment(log.user.basicDetails.dateOfBirth),
+              ...log?.user?.basicDetails,
+              dateOfBirth: moment(log?.user?.basicDetails?.dateOfBirth),
             },
             officialDetails: {
-              ...log.user.officialDetails,
-              dateOfJoining: moment(log.user.officialDetails.dateOfJoining),
+              ...log?.user?.officialDetails,
+              dateOfJoining: moment(log?.user?.officialDetails?.dateOfJoining),
             },
-            createdAt: moment(log.user.createdAt),
-            updatedAt: moment(log.user.updatedAt),
+            createdAt: moment(log.user?.createdAt),
+            updatedAt: moment(log.user?.updatedAt),
           },
-          createdAt: moment(log.user.createdAt),
-          updatedAt: moment(log.user.updatedAt),
+          createdAt: moment(log.user?.createdAt),
+          updatedAt: moment(log.user?.updatedAt),
         }))
     ),
   getLastLog: (): Promise<StandardResponse<ILog | null>> =>

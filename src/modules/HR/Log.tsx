@@ -18,6 +18,8 @@ const Log = () => {
         console.log(err);
       });
   }, []);
+  console.log(users,'dd');
+  
   const columns: GridColDef<ILog>[] = [
     {
       field: 'actions',
@@ -97,7 +99,17 @@ const Log = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
-      valueGetter: (params) => params.row.user?.officialDetails?.divisionHistory[params?.row?.user?.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+      // valueGetter: (params) => params.row.user?.officialDetails?.divisionHistory[params?.row?.user?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name,
+      valueGetter: (params) => {
+        const divisionHistory = params?.row?.user?.officialDetails?.divisionHistory;
+        if (divisionHistory && divisionHistory.length > 0) {
+          const lastDivision = divisionHistory[divisionHistory.length - 1];
+          if (lastDivision && lastDivision.subDivision) {
+            return lastDivision.subDivision.name;
+          }
+        }
+        return ''; 
+      }
     },
     //
     //   field: 'highestQualification',
