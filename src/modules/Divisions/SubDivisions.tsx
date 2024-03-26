@@ -135,7 +135,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
             }}
             inputRef={index === subDivisions.length - 1 ? lastProgramNameField : null}
             fullWidth
-            required
+            // required
             autoComplete="off"
             disabled={action=='view'}
             // disabled={action=='view'}
