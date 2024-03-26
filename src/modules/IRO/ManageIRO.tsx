@@ -672,6 +672,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('green');
         case 'AMOUNT RELEASED':
           return clsx('green');
+        case 'RECONCILIATION DONE':
+          return clsx('green');
         default:
           console.log('No class applied');
           return '';
