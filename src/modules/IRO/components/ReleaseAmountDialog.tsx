@@ -381,8 +381,22 @@ PaymentMethodService.getAll().then((res)=>{
                   }}
                 />
               </Grid>
-
+              {props.action =='view' && (
+              <Grid item xs={12} md={6} lg={4}>
+                <TextField
+                  label="Payment Method"
+                  value={releaseAmount?.modeOfPayment}
+                  variant="outlined"
+                  fullWidth
+                  disabled={props.action == 'view'}
+                  InputLabelProps={{
+                    shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                  }}
+                />
+              </Grid>
+              )}
               {/* </Grid> */}
+              {props.action !='view' && (
               <Grid item xs={12} md={6} lg={4}>
                 <Autocomplete
                   disablePortal
@@ -399,9 +413,10 @@ PaymentMethodService.getAll().then((res)=>{
                       }))
                   }
                   renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
-                  disabled={props.action == 'view'}
+                  // disabled={props.action == 'view'}
                 />
               </Grid>
+              )}
               {releaseAmount?.modeOfPayment == 'Other' && (
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
