@@ -8,6 +8,7 @@ import DivisionsServices from './extras/DivisionsServices';
 import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import DivisionsFormComponent from './components/DivisionsFormComponent';
+import DivisionsList from './components/DivisionsList';
 interface DivisionFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
@@ -40,10 +41,10 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   };
 
   const editDivision = () => {
-    // event.preventDefault();
-    if (editID && props.action == 'edit') {
+    if (editID && props.action === 'edit') {
       DivisionsServices.editDivision(editID, divisionDetails)
         .then((_res) => {
+
           enqueueSnackbar({
             message: 'Updated Division',
             variant: 'success',
@@ -57,6 +58,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
         });
     }
   };
+  
   const [divisionDetails, setDivisionDetails] = useState<Division>({
     _id: '',
     details: {
@@ -135,7 +137,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     createdAt: moment(),
     updatedAt: moment(),
   });
-
+DivisionsList(divisionDetails)
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
