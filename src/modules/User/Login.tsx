@@ -43,6 +43,7 @@ const LoginPage = () => {
   const [resetrequest, setResetRequest] = useState(false);
   const [verifyOTP, setverifyOTP] = useState(false);
 
+
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -83,8 +84,10 @@ const LoginPage = () => {
       });
   };
 
+
   useEffect(() => {
     if (user) {
+      
       navigate('/');
     }
   }, [user]);
@@ -172,14 +175,18 @@ const LoginPage = () => {
                         OTP: e.target.value,
                       })
                         .then((res) => {
+                          console.log(res, 'res');
+                          
                           setLoading(false);
                           localStorage.setItem('userToken', res.data.token);
                           localStorage.setItem('userData', JSON.stringify(res.data.user));
                           setUser(res.data.user as Staff | IWorker);
+                          console.log(user,'dd');
                           const urlParams = new URLSearchParams(window.location.search);
                           subscribe();
                           const redirectURL = urlParams.get('redirect');
-                          navigate(redirectURL ?? '/');
+                          // navigate(redirectURL ?? '/');
+                          navigate('/');
                         })
                         .catch((err) => {
                           console.log(err);
