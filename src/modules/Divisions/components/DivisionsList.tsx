@@ -10,7 +10,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 
 
-const DivisionsList = () => {
+const DivisionsList = (arg:any) => {
   const [loadCount, setLoadCount] = useState(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [searchText, setSearchText] = useState('');
@@ -24,6 +24,15 @@ const DivisionsList = () => {
         console.log({ err });
       });
   }, []);
+  useEffect(() => {
+    DivisionsServices.getDivisions()
+      .then((res) => {
+        setDivisions(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, [arg.details]);
   const removeDivisions = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Division',

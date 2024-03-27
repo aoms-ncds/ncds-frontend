@@ -13,7 +13,7 @@ const DivisionsDashboardPage = () => {
 
           <Grid item xs={12}>
 
-            <DivisionsList />
+            <DivisionsList/>
 
           </Grid>
         </Grid>

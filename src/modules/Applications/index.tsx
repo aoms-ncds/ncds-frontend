@@ -45,7 +45,7 @@ const APPDashboard = () => {
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png"
             alt="Logo" style={{ width: '70px', height: '70px' }} />}
-          count={ApplicationActiveCount?.toString()} secondaryText={'Active'} color={'#fff'} />
+          count={ApplicationActiveCount?.toString()} secondaryText={'Waiting for President'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={2}>
           <FRCountCard icon={<img src="/mod_icons/Completed.png" alt="Logo"
