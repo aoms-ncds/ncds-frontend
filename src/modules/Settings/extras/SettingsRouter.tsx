@@ -11,6 +11,7 @@ import ReasonforDeactivation from '../ReasonforDeactivation';
 import SanctionedAsPer from '../SanctionedAsPer';
 import Particulars from '../Particulars';
 import PaymentMethod from '../PaymentMethod';
+import DesignationParticulars from '../DesignationParticular';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -137,6 +138,15 @@ const settingsRoutes: ModuleRoute = {
       title: 'Payment Methods',
       path: '/PaymentMethods',
       element: <PaymentMethod/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Assign Particulars for Designation',
+      path: '/designationParticulars',
+      element: <DesignationParticulars/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

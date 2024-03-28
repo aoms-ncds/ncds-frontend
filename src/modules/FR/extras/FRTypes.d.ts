@@ -50,26 +50,20 @@ declare global {
   interface MainCategory {
     _id: string;
     name: string;
-    subcategory1: {
-      name: string;
-      subcategory2: {
-        name: string;
-        subcategory3:{
-          name: string;
-          narration: string;
-        }[];
-      }[];
-    }[];
+    subcategory1: SubCategory1[];
   }
   interface SubCategory1 {
+    _id:string;
     name: string;
     subcategory2: SubCategory2[];
   }
   interface SubCategory2 {
+    _id:string;
     name: string;
     subcategory3: SubCategory3[];
   }
   interface SubCategory3 {
+    _id:string;
     name: string;
     narration: string;
   }
@@ -115,4 +109,15 @@ declare global {
     createdBy: IWorker;
     particulars: Particular[];
   }
+
+  export interface IDesignationParticular extends MongooseDocument{
+    mainCategory: string;
+    subCategory1: string;
+    subCategory2: string;
+    subCategory3: string;
+    designations:string[];
+  }
+ export type CreatableDesignationParticular = Creatable<IDesignationParticular>;
+
+
 }
