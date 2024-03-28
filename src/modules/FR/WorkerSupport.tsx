@@ -16,6 +16,8 @@ import FRServices from './extras/FRServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import { purposes } from './extras/FRConfig';
+import DesignationParticularService from '../Settings/extras/DesignationParticularService';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -76,6 +78,7 @@ const WorkerSupportPage = () => {
   });
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
 
   const [open, setOpen] = useState<boolean>(false);
   const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
@@ -83,9 +86,15 @@ const WorkerSupportPage = () => {
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
-    sanctionedAsPer:''
+    sanctionedAsPer: '',
   });
-  const supportEnabledWorkers = workers?.filter(item => item.supportStructure.supportEnabled === true);
+  const supportEnabledWorkers = workers?.filter((item) => item.supportStructure?.supportEnabled === true);
+
+  const [designationParticulars, setDesignationParticulars] = useState<IDesignationParticular[]>([]);
+  const [designationParticular, setDesignationParticular] = useState<IDesignationParticular|null>(null);
+
+  const [mainCategories, setMainCategories] = useState<MainCategory[]>();
+
 
   const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
   const [fileObj, setFileObj] = useState<FileObject|null>(null);
@@ -114,16 +123,7 @@ const WorkerSupportPage = () => {
       // });
     }
   };
-  // useEffect(() => {
-  //   DivisionsServices.getDivisions()
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setDivisions(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log({ err });
-  //     });
-  // }, []);
+
 
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
@@ -137,6 +137,7 @@ const WorkerSupportPage = () => {
       ))}
     </div>
   );
+
   useEffect(() => {
     const basic=workers?.reduce(
       (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
@@ -253,6 +254,25 @@ const WorkerSupportPage = () => {
   }, [workers]);
 
   useEffect(() => {
+    DesignationParticularService.getAll()
+    .then((res) => {
+      setDesignationParticulars(res.data);
+    })
+    .catch((error) =>
+      enqueueSnackbar({
+        variant: 'error',
+        message: error.message,
+      }),
+    );
+    FRServices.getMainCategory()
+    .then((res) => {
+      setMainCategories(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
+
+
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
     .then((res) => {
       console.log(res);
@@ -288,14 +308,26 @@ const WorkerSupportPage = () => {
         }),
       );
     }
-    setRequisition((requisition)=>({ ...requisition,
-      purpose: 'Division',
-    }));
   }, []);
   useEffect(() => {
     setPdfProps({ divisionId: division?._id??null, workerId: selectedWorker?._id??null });
   }, [division, selectedWorker]);
-
+  useEffect(() => {
+    if (division) {
+      DivisionsServices.getSubDivisionsByDivisionId(division?._id as string)
+          // .then((res) => console.log(res.data, 'data'))
+          .then((res) => setSubDivisions(res.data))
+          .catch((error) =>
+            enqueueSnackbar({
+              variant: 'error',
+              message: error.message,
+            }),
+          );
+    } else {
+      setSubDivisions([]);
+    }
+    // console.log(props.value.divisionHistory);
+  }, [division]);
   const columns: GridColDef[] = [
     {
       field: 'actions',
@@ -338,6 +370,15 @@ const WorkerSupportPage = () => {
       headerAlign: 'center',
       renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+    },
+    {
+      field: 'designation',
+      width: 100,
+      headerClassName: 'column-header',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Designation'}</b>,
+      valueGetter: (params) => params.row.supportDetails?.designation?.name,
     },
     {
       field: 'prevBasic',
@@ -676,7 +717,7 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'To'}</b>,
       valueGetter: (params) => params.row.supportStructure?.disabledTo?params.row.supportStructure?.disabledTo?.format('DD/MM/YYYY'):'-',
     },
-     {
+    {
       field: 'reason',
       width: 100,
       headerClassName: 'column-header',
@@ -700,7 +741,7 @@ const WorkerSupportPage = () => {
       renderHeaderGroup: () => <b>{'Worker Details'}</b>,
       headerClassName: 'column-grp',
       children: [{ field: 'workerCode' },
-        { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }],
+        { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }, { field: 'designation' }],
     },
     {
       groupId: 'Basic',
@@ -777,7 +818,7 @@ const WorkerSupportPage = () => {
       description: '',
       renderHeaderGroup: () => <b>{'Support Status'}</b>,
       headerClassName: 'column-grp',
-      children: [{ field: 'supportEnabled' }, { field: 'disabledFrom' }, { field: 'disabledTo' },{ field: 'reason' }],
+      children: [{ field: 'supportEnabled' }, { field: 'disabledFrom' }, { field: 'disabledTo' }, { field: 'reason' }],
     },
 
   ];
@@ -823,7 +864,7 @@ const WorkerSupportPage = () => {
 
   return (
     <CommonPageLayout title="Workers Support">
-      <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
+      <Card sx={{ width: '40%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e)=>{
           e.preventDefault();
           if (fileObj) {
@@ -836,12 +877,12 @@ const WorkerSupportPage = () => {
               mainCategory: 'Maintenance Of Priest & Preachers',
               particulars: [{
                 _id: '',
-                mainCategory: 'Maintenance Of Priest & Preachers',
-                subCategory1: 'Support',
-                subCategory2: 'Worker',
-                subCategory3: 'Select',
+                mainCategory: requisition?.particulars?requisition?.particulars[0]?.mainCategory:'Maintenance Of Priest & Preachers',
+                subCategory1: requisition?.particulars?requisition?.particulars[0]?.subCategory1: 'Support',
+                subCategory2: requisition?.particulars?requisition?.particulars[0]?.subCategory2:'Worker',
+                subCategory3: requisition?.particulars?requisition?.particulars[0]?.subCategory3: 'Select',
                 month: moment().format('MMMM'),
-                narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
+                narration: requisition?.particulars?requisition?.particulars[0]?.narration:`Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
                 requestedAmount: total.net,
                 unitPrice: total.net,
                 quantity: supportEnabledWorkers?.length,
@@ -857,7 +898,36 @@ const WorkerSupportPage = () => {
         }}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Autocomplete
+                      value={requisition.purpose ?? null}
+                      options={purposes ?? []}
+                      getOptionLabel={(requisition) => requisition ?? ''}
+                      onChange={(_e, selectedPurpose) => {
+                        if (selectedPurpose) {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            purpose: selectedPurpose as FRPurpose,
+                          }));
+                        } else {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            purpose: undefined,
+                            purposeSubdivision: undefined,
+                          }));
+                        }
+                        setDivision(null);
+                        setWorkers(allWorkers);
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard'/>}
+                      fullWidth
+                      disabled={workers==null}
+                    />
+                  </Grid>
+                  {(requisition.purpose==='Division'||requisition.purpose==='Subdivision'||requisition.purpose==='Worker'||requisition.purpose==='Coordinator')&&
+              <Grid item xs={12} md={4} >
                 <Autocomplete
                 // disabled={props.kind=='worker'}
                   options={divisions ?? []}
@@ -866,9 +936,24 @@ const WorkerSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
+                      const coordinator=newVal.details.coordinator?.name;
+                      if (requisition.purpose==='Coordinator') {
+                        coordinator&&setWorkers([allWorkers?.find((worker)=>worker._id==coordinator._id) as IWorker]);
+                      } else {
+                        setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id&&worker._id!=newVal.details.coordinator?.name?._id)??[]);
+                      }
                       setDivision(newVal);
+                      setRequisition((requisition)=>({
+                        ...requisition,
+                        division: newVal,
+                        purposeSubdivision: undefined,
+                      }));
                     } else {
+                      setRequisition((requisition)=>({
+                        ...requisition,
+                        division: undefined,
+                        purposeSubdivision: undefined,
+                      }));
                       setWorkers(allWorkers);
                       setDivision(null);
                     }
@@ -881,8 +966,33 @@ const WorkerSupportPage = () => {
                   )}
                   disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Grid>}
+                  {requisition.purpose==='Subdivision'&&
+                               <Grid item xs={12} md={4}>
+                                 <Autocomplete
+                                   options={subDivisions ?? []}
+                                   value={requisition.purposeSubdivision ?? null}
+                                   getOptionLabel={(subDiv) => subDiv.name}
+                                   onChange={(event, newVal) =>{
+                                     if (newVal) {
+                                       setRequisition((requisition)=>({
+                                         ...requisition,
+                                         purposeSubdivision: newVal,
+                                       }));
+                                       setWorkers(()=>allWorkers?.filter((worker)=>
+                                         worker.officialDetails.divisionHistory[worker.officialDetails?.divisionHistory.length - 1]?.subDivision?._id==newVal?._id)??
+                                       []);
+                                     }
+                                   }}
+                                   renderInput={(params) => <TextField {...params}
+                                     label="Subdivision"
+                                     helperText={!subDivisions ? 'Loading sub-divisions...' : 'Select a sub-division'}
+                                     variant='standard' />}
+                                 />
+                               </Grid>
+                  }
+                  {requisition.purpose==='Worker'&&
+              <Grid item xs={12} md={4}>
                 <Autocomplete<IWorker>
                   value={selectedWorker ?? null}
                   options={(workers ?? [])}
@@ -897,6 +1007,83 @@ const WorkerSupportPage = () => {
                   renderInput={(params) => <TextField {...params} label="Choose Worker" variant='standard' />}
                   fullWidth
                 />
+              </Grid> }
+                  {requisition.purpose==='Others'&&
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      label="Others"
+      value={requisition.purposeOthers}
+      onChange={(e) =>
+        setRequisition((requisition)=>({
+          ...requisition,
+          purposeOthers: e.target.value,
+        }))}
+      variant="standard"
+      fullWidth
+    />
+  </Grid>
+                  }
+
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Autocomplete
+                      value={designationParticular ?? null}
+                      options={designationParticulars ?? []}
+                      getOptionLabel={(des) => des.title ?? ''}
+                      onChange={(_e, selectedDesignationParticular) => {
+                        if (selectedDesignationParticular&&division) {
+                          setDesignationParticular(selectedDesignationParticular);
+                          setWorkers(allWorkers?.filter((worker)=>
+                            worker.division?._id==division._id&&
+                            worker.supportDetails?.designation&&selectedDesignationParticular.designations.includes(worker.supportDetails?.designation?._id))??[]);
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            designationParticular: selectedDesignationParticular._id,
+                            particulars: [{
+                              _id: '',
+
+                              mainCategory: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.name??'',
+
+                              subCategory1: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.name??'',
+
+                              subCategory2: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.name??'',
+
+                              subCategory3: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.name??'',
+
+                              narration: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.narration??'',
+
+                              month: moment().format('MMMM'),
+                              requestedAmount: total.net,
+                              unitPrice: total.net,
+                              quantity: supportEnabledWorkers?.length,
+                              attachment: [],
+                            }],
+                          }));
+                        } else {
+                          setDesignationParticular(null);
+                          setWorkers(allWorkers?.filter((worker)=>
+                            worker.division?._id==division?._id)??[]);
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Designation Particulars" required variant='standard'/>}
+                      fullWidth
+                      disabled={!division}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
                 <TextField

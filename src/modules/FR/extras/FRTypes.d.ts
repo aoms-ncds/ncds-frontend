@@ -12,7 +12,7 @@ declare global {
     purpose: FRPurpose;
     IRO?: string;
     reasonForSentBack?:string;
-
+    designationParticular?:string;
   }
 
   interface CreatableFR extends Creatable<FR> {
@@ -37,6 +37,7 @@ declare global {
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
     reasonForSentBack?:string;
+    designationParticular?:string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
