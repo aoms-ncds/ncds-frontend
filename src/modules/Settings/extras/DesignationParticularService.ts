@@ -12,7 +12,7 @@ export default {
   edit: (designationParticulars: CreatableDesignationParticular) => getStandardResponse<IDesignationParticular>(
     axios.patch(`/settings/designationParticulars/${designationParticulars._id}`, designationParticulars, { headers: { ...getAuthHeader() } })),
 
-  delete: (designationParticularsId: string) => getStandardResponse<number>(
+  delete: (designationParticularsId: string) => getStandardResponse<IDesignationParticular>(
     axios.delete(`/settings/designationParticulars/${designationParticularsId}/force`, { headers: { ...getAuthHeader() } })),
 
   getCount: (conditions?: unknown) => getStandardResponse<number>(

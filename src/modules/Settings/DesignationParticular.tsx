@@ -16,6 +16,7 @@ const DesignationParticulars = () => {
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);
   const [designationParticular, setDesignationParticular] = useState<CreatableDesignationParticular>({
     designations: [''],
+    title: '',
     mainCategory: '',
     subCategory1: '',
     subCategory2: '',
@@ -27,8 +28,17 @@ const DesignationParticulars = () => {
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
-
+  const [designationParticularToDelete, setDesignationParticularToDelete] = useState<IDesignationParticular | null>(null);
   const columns: GridColDef<IDesignationParticular>[] = [
+    {
+      field: 'Title',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Title</b>,
+      width: 100,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => params.row.title,
+    },
     {
       field: 'Designation',
       renderHeader: () => (<b>Designation</b>),
@@ -157,33 +167,57 @@ const DesignationParticulars = () => {
         );
       },
     },
-    // {
-    //   field: 'delete',
-    //   headerName: 'Delete',
-    //   renderHeader: () => (<b>Delete</b>),
-    //   width: 100,
-    //   headerAlign: 'center',
-    //   renderCell: (params) => {
-    //     return (
-    //       <Button
-    //         variant="text"
-    //         color="error"
-    //         startIcon={<DeleteIcon />}
-    //         onClick={() => {
-    //           setConfirmDelete(true);
-    //           setLanguageToDelete(params.row);
-    //         }}
-    //       >
-    //                     Delete
-    //       </Button>
-    //     );
-    //   },
-    // },
+    {
+      field: 'delete',
+      headerName: 'Delete',
+      renderHeader: () => (<b>Delete</b>),
+      width: 100,
+      headerAlign: 'center',
+      renderCell: (params) => {
+        return (
+          <Button
+            variant="text"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() =>
+              setDesignationParticularToDelete(params.row)
+            }
+          >
+                        Delete
+          </Button>
+        );
+      },
+    },
   ];
 
 
   const handleClose = () => {
     setDialogAction(null);
+  };
+
+  const removeDesignationParticular = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing Designation Particular',
+      variant: 'info',
+    });
+    DesignationParticularService.delete(id)
+            .then((res) => {
+              if (designationParticulars) {
+                setDesignationParticulars(designationParticulars.filter((des) => des._id!=id));
+              }
+              enqueueSnackbar({
+                message: res.message,
+                variant: 'success',
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              closeSnackbar(snackbarId);
+              enqueueSnackbar({
+                message: err.message,
+                variant: 'error',
+              });
+            });
   };
 
   useEffect(() => {
@@ -242,29 +276,28 @@ const DesignationParticulars = () => {
 
   return (
     <CommonPageLayout title="Designation particulars">
-      {/* <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
+      <Dialog open={Boolean(designationParticularToDelete)} onClose={()=>setDesignationParticularToDelete(null)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
           <Container>Do you want to delete this Designation particulars?</Container>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => {
-            setConfirmDelete(false);
-            setLanguageToDelete(null);
+            setDesignationParticularToDelete(null);
           }} variant="text">
                         No, Cancel
           </Button>
           <Button onClick={() => {
-            if (languageToDelete) {
-              removeLanguage(languageToDelete._id);
+            if (designationParticularToDelete) {
+              removeDesignationParticular(designationParticularToDelete._id);
             }
-            setConfirmDelete(false);
-            setLanguageToDelete(null);
+
+            setDesignationParticularToDelete(null);
           }} variant="contained" color="error">
                         Yes, Delete
           </Button>
         </DialogActions>
-      </Dialog> */}
+      </Dialog>
 
       <Dialog open={Boolean(dialogAction)} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
@@ -275,6 +308,7 @@ const DesignationParticulars = () => {
                 setDesignationParticulars((designationParticulars) => (designationParticulars === null ? [res.data] : [...designationParticulars, res.data]));
                 setDesignationParticular({
                   designations: [''],
+                  title: '',
                   mainCategory: '',
                   subCategory1: '',
                   subCategory2: '',
@@ -286,6 +320,7 @@ const DesignationParticulars = () => {
                 setDesignationParticulars((designationParticulars) => (designationParticulars?.map((des) => (des._id === designationParticular._id ? res.data : des))));
                 setDesignationParticular({
                   designations: [''],
+                  title: '',
                   mainCategory: '',
                   subCategory1: '',
                   subCategory2: '',
@@ -299,6 +334,18 @@ const DesignationParticulars = () => {
           <DialogTitle>{dialogAction === 'add' ? 'Add' : 'Edit'} Designation particulars</DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
+              <Grid item md={12}>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Title"
+                  type="text"
+                  fullWidth
+                  value={designationParticular.title}
+                  onChange={(e) => setDesignationParticular((des) => ({ ...des, title: e.target.value }))}
+                  required
+                />
+              </Grid>
               <Grid item md={12}>
                 <Autocomplete
                   options={designations ?? []}

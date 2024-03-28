@@ -20,9 +20,9 @@ const FRFormPage = (props: FRFormPageProps) => {
     kind: 'FRs',
     particulars: [],
     reasonForSentBack: '',
-    sanctionedAsPer:'',
+    sanctionedAsPer: '',
   });
-  
+
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
       throw new Error('FR ID Missing in URL');
@@ -107,7 +107,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         // eslint-disable-next-line max-len
         message:
           operation === 'Approve' ?
-            'Verifyng' :
+            'Verifying' :
             operation === 'reject' ?
               'Disapproving' :
               operation === 'sendToAccounts' ?

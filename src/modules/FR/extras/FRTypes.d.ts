@@ -111,6 +111,7 @@ declare global {
   }
 
   export interface IDesignationParticular extends MongooseDocument{
+    title: string;
     mainCategory: string;
     subCategory1: string;
     subCategory2: string;

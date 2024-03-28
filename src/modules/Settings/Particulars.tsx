@@ -29,20 +29,7 @@ const Particulars = () => {
   //     }],
   //   }],
   // });
-  interface SubCategory3 {
-    name: string;
-    narration: string; // Add the 'narration' property here
-  }
 
-  interface SubCategory2 {
-    name: string;
-    subcategory3: SubCategory3[];
-  }
-
-  interface SubCategory1 {
-    name: string;
-    subcategory2: SubCategory2[];
-  }
 
   // interface MainCategory {
   //   _id: string;
@@ -50,29 +37,18 @@ const Particulars = () => {
   //   subcategory1: SubCategory1[];
   // }
 
-  interface MainCategory {
-    _id: string;
-    name: string;
-    subcategory1: {
-      name: string;
-      subcategory2: {
-        name: string;
-        subcategory3: {
-          name: string;
-          narration: string;
-        }[];
-      }[];
-    }[];
-  }
 
   const initialCategoryState: MainCategory = {
     _id: '',
     name: '',
     subcategory1: [{
+      _id: '',
       name: '',
       subcategory2: [{
+        _id: '',
         name: '',
         subcategory3: [{
+          _id: '',
           name: '',
           narration: '',
         }],
@@ -222,6 +198,7 @@ const Particulars = () => {
       subcategory1: [
         ...prev.subcategory1,
         {
+          _id: '',
           name: '',
           subcategory2: [],
         },
@@ -284,6 +261,7 @@ const Particulars = () => {
   const addSubcategory2 = (indexValue:number) => {
     setNewCategory((prev) => ({
       ...prev,
+      _id: '',
       subcategory1: prev.subcategory1.map((item:SubCategory1, index: number) => {
         if (indexValue === index) {
           return {
@@ -291,6 +269,7 @@ const Particulars = () => {
             subcategory2: [
               ...item.subcategory2,
               {
+                _id: '',
                 name: '',
                 subcategory3: [],
               },
@@ -374,6 +353,7 @@ const Particulars = () => {
                   subcategory3: [
                     ...j.subcategory3,
                     {
+                      _id: '',
                       name: '',
                       narration: '', // Ensure 'narration' property is included
                     },
@@ -389,7 +369,7 @@ const Particulars = () => {
     }));
   };
 
-  const handleNameChange = (index:number, e:any) => {
+  const handleNameChange = (index:number, e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewCategory((prev) => ({
       ...prev,
@@ -406,7 +386,7 @@ const Particulars = () => {
   };
 
 
-  const handleNameChange2 = (indexValue:number, _index:number, e:any) => {
+  const handleNameChange2 = (indexValue:number, _index:number, e:ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewCategory((prev) => ({
       ...prev,
@@ -582,10 +562,13 @@ const Particulars = () => {
                   _id: '',
                   name: '',
                   subcategory1: [{
+                    _id: '',
                     name: '',
                     subcategory2: [{
+                      _id: '',
                       name: '',
                       subcategory3: [{
+                        _id: '',
                         name: '',
                         narration: '',
                       }],
@@ -601,10 +584,13 @@ const Particulars = () => {
                   _id: '',
                   name: '',
                   subcategory1: [{
+                    _id: '',
                     name: '',
                     subcategory2: [{
+                      _id: '',
                       name: '',
                       subcategory3: [{
+                        _id: '',
                         name: '',
                         narration: '',
                       }],
@@ -651,7 +637,7 @@ const Particulars = () => {
                       type="text"
                       label="Sub Category 1"
                       value={item.name || ''}
-                      onChange={(e) => handleNameChange(_index, e)}
+                      onChange={(e) => handleNameChange(_index, e as ChangeEvent<HTMLInputElement>)}
                       fullWidth
 
                     />
@@ -667,7 +653,7 @@ const Particulars = () => {
                           label="Sub Category 2"
                           type="text"
                           value={item.name || ''}
-                          onChange={(e) => handleNameChange2(_index2, _index, e)}
+                          onChange={(e) => handleNameChange2(_index2, _index, e as ChangeEvent<HTMLInputElement>)}
                           fullWidth
                         />
                         <br />
