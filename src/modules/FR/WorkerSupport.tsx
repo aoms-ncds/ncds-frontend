@@ -96,7 +96,18 @@ const WorkerSupportPage = () => {
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
 
 
-  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
+  const [pdfProps, setPdfProps] =
+  useState<{purpose:FRPurpose|null;
+    divisionId:string|null;
+    workerId:string|null;
+    designationParticularID:string|null;
+    subDivisionId:string|null;}>({
+      purpose: 'Division',
+      divisionId: null,
+      workerId: null,
+      designationParticularID: null,
+      subDivisionId: null,
+    });
   const [fileObj, setFileObj] = useState<FileObject|null>(null);
   const addFR = async (requisition: CreatableFR) => {
     try {
@@ -276,7 +287,7 @@ const WorkerSupportPage = () => {
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
     .then((res) => {
       console.log(res);
-      setWorkers(res.data);
+      // setWorkers(res.data);
       setAllWorkers(res.data);
       // console.log( 'basic',workers?.reduce(
       //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
@@ -310,8 +321,15 @@ const WorkerSupportPage = () => {
     }
   }, []);
   useEffect(() => {
-    setPdfProps({ divisionId: division?._id??null, workerId: selectedWorker?._id??null });
-  }, [division, selectedWorker]);
+    setPdfProps({
+      purpose: requisition.purpose??'Division',
+      divisionId: division?._id??null,
+      workerId: requisition.purpose=='Coordinator'&&requisition.purposeCoordinator ?requisition.purposeCoordinator?._id:
+        requisition.purpose=='Worker'&&selectedWorker?._id?selectedWorker?._id:null,
+      subDivisionId: requisition.purposeSubdivision?._id??null,
+      designationParticularID: requisition.designationParticular??null,
+    });
+  }, [division, selectedWorker, requisition.purposeSubdivision, requisition.designationParticular]);
   useEffect(() => {
     if (division) {
       DivisionsServices.getSubDivisionsByDivisionId(division?._id as string)
@@ -871,7 +889,7 @@ const WorkerSupportPage = () => {
             setToggleRaiseFR(true);
             setRequisition((requisition)=>({
               ...requisition,
-              purposeWorker: selectedWorker??undefined,
+              purposeWorker: requisition.purpose=='Worker'&&selectedWorker?selectedWorker:undefined,
               division: division??undefined,
               mainCategory: requisition?.particulars?requisition?.particulars[0]?.mainCategory:'Maintenance Of Priest & Preachers',
               particulars: [{
@@ -902,7 +920,7 @@ const WorkerSupportPage = () => {
                   <Grid item xs={12} md={4}>
                     <Autocomplete
                       value={requisition.purpose ?? null}
-                      options={purposes ?? []}
+                      options={purposes.filter((pur)=>pur!='Others') ?? []}
                       getOptionLabel={(requisition) => requisition ?? ''}
                       onChange={(_e, selectedPurpose) => {
                         if (selectedPurpose) {
@@ -923,7 +941,7 @@ const WorkerSupportPage = () => {
                       }}
                       renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard'/>}
                       fullWidth
-                      disabled={workers==null}
+                      disabled={allWorkers==null}
                     />
                   </Grid>
                   {(requisition.purpose==='Division'||requisition.purpose==='Subdivision'||requisition.purpose==='Worker'||requisition.purpose==='Coordinator')&&
@@ -937,17 +955,23 @@ const WorkerSupportPage = () => {
                   onChange={(event, newVal) => {
                     if (newVal) {
                       const coordinator=newVal.details.coordinator?.name;
-                      if (requisition.purpose==='Coordinator') {
-                        coordinator&&setWorkers([allWorkers?.find((worker)=>worker._id==coordinator._id) as IWorker]);
+                      if (requisition.purpose==='Coordinator'&&coordinator) {
+                        setWorkers([allWorkers?.find((worker)=>worker._id==coordinator._id) as IWorker]);
+                        setRequisition((requisition)=>({
+                          ...requisition,
+                          division: newVal,
+                          purposeCoordinator: allWorkers?.find((worker)=>worker._id==coordinator._id),
+                          purposeSubdivision: undefined,
+                        }));
                       } else {
                         setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id&&worker._id!=newVal.details.coordinator?.name?._id)??[]);
+                        setRequisition((requisition)=>({
+                          ...requisition,
+                          division: newVal,
+                          purposeSubdivision: undefined,
+                        }));
                       }
                       setDivision(newVal);
-                      setRequisition((requisition)=>({
-                        ...requisition,
-                        division: newVal,
-                        purposeSubdivision: undefined,
-                      }));
                     } else {
                       setRequisition((requisition)=>({
                         ...requisition,
@@ -1060,11 +1084,11 @@ const WorkerSupportPage = () => {
                       setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
                     } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Worker" variant='standard' />}
+                  renderInput={(params) => <TextField {...params} label="Choose Worker" required={requisition.purpose==='Worker'} variant='standard' />}
                   fullWidth
                 />
               </Grid> }
-                  {requisition.purpose==='Others'&&
+                  {/* {requisition.purpose==='Others'&&
 
   <Grid item xs={12} md={4}>
     <TextField
@@ -1079,7 +1103,7 @@ const WorkerSupportPage = () => {
       fullWidth
     />
   </Grid>
-                  }
+                  } */}
 
                 </Grid>
               </Grid>
@@ -1118,7 +1142,12 @@ const WorkerSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<PDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps.workerId} />}
+                      document={<PDFTemplate
+                        divisionId={pdfProps.divisionId}
+                        workerId={pdfProps.workerId}
+                        purpose={pdfProps.purpose}
+                        designationParticularID={pdfProps.designationParticularID}
+                        subDivisionId={pdfProps.subDivisionId} />}
                       fileName="WorkerSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >

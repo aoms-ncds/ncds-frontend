@@ -38,7 +38,7 @@ export default {
 
   getWorkersByDivision: () => getStandardResponse<IWorker[]>(axios.get('/workers/division', { headers: { ...getAuthHeader() } })),
 
-  getSubDivisionsByDivisionId: () => getStandardResponse<SubDivision[]>(axios.get('/workers/sub_divisions/', { headers: { ...getAuthHeader() } })),
+  getWorkersBySubDivision: (id: string) => getStandardResponse<IWorker[]>(axios.get(`/workers/sub_divisions/${id}`, { headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all workers based on optional conditions.
@@ -46,7 +46,7 @@ export default {
    * @param {number} conditions.status - The status of the workers.
    * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
    */
-  getAll: (conditions?: { status?: number; division?: string }) =>
+  getAll: (conditions?: { status?: number; division?: string; withoutCoordinator?:boolean}): Promise<StandardResponse<IWorker[]>> =>
     getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
       workers.map((worker: IWorker) => ({
         ...worker,
@@ -71,7 +71,7 @@ export default {
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
-      }))
+      })),
     ),
   getWorkers: (conditions?: { status?: number; division?: string; skip?: number; limit?: number }) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/fetchWorker', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
@@ -98,7 +98,7 @@ export default {
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
-      }))
+      })),
     ),
   getWorkerBySearch: (conditions?: { status?: number; division?: string; search: string }) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/searchWorker', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
@@ -125,7 +125,7 @@ export default {
         },
         createdAt: moment(worker.createdAt),
         updatedAt: moment(worker.updatedAt),
-      }))
+      })),
     ),
   getAllRemarksById: (userId: string) =>
     getStandardResponse<Remark[]>(axios.get(`/workers/remarks/${userId}`, { headers: { ...getAuthHeader() } }), (remarks) =>
@@ -133,7 +133,7 @@ export default {
         ...remark,
         createdAt: moment(remark.createdAt),
         updatedAt: moment(remark.updatedAt),
-      }))
+      })),
     ),
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(axios.post('/workers/remarks', { ...remark }, { headers: { ...getAuthHeader() } }), (remark) => ({
@@ -169,29 +169,29 @@ export default {
         disabledFrom: data.supportStructure?.disabledFrom ? moment(data?.supportStructure?.disabledFrom) : undefined,
         disabledTo: data.supportStructure?.disabledTo ? moment(data.supportStructure?.disabledTo) : undefined,
       },
-      spouse: !data.spouse
-        ? undefined
-        : {
-            ...data.spouse,
-            dateOfBirth: data.spouse.dateOfBirth ? moment(data.spouse.dateOfBirth) : undefined,
-            createdAt: moment(data.createdAt),
-            updatedAt: moment(data.updatedAt),
+      spouse: !data.spouse ?
+        undefined :
+        {
+          ...data.spouse,
+          dateOfBirth: data.spouse.dateOfBirth ? moment(data.spouse.dateOfBirth) : undefined,
+          createdAt: moment(data.createdAt),
+          updatedAt: moment(data.updatedAt),
 
-            insurance: {
-              ...data.spouse.insurance,
-              dojInsurance: data.insurance?.dojInsurance ? moment(data.insurance.dojInsurance) : undefined,
-            },
+          insurance: {
+            ...data.spouse.insurance,
+            dojInsurance: data.insurance?.dojInsurance ? moment(data.insurance.dojInsurance) : undefined,
           },
+        },
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      children: !data.children
-        ? undefined
-        : data.children.map((child: Child) => ({
-            ...child,
-            dateOfBirth: child.dateOfBirth ? moment(child.dateOfBirth) : undefined,
-            createdAt: moment(data.createdAt),
-            updatedAt: moment(data.updatedAt),
-          })),
+      children: !data.children ?
+        undefined :
+        data.children.map((child: Child) => ({
+          ...child,
+          dateOfBirth: child.dateOfBirth ? moment(child.dateOfBirth) : undefined,
+          createdAt: moment(data.createdAt),
+          updatedAt: moment(data.updatedAt),
+        })),
       insurance: {
         ...data.insurance,
         dojInsurance: data.insurance?.dojInsurance ? moment(data.insurance.dojInsurance) : undefined,

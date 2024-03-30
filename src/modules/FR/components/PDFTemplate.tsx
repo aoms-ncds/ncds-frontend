@@ -89,7 +89,7 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
+const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -119,9 +119,9 @@ const PDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
   });
   useEffect(() => {
     console.log(props, 'props');
-    if (props.workerId) {
+    if ((props.purpose=='Coordinator'||props.purpose=='Worker')&&props.workerId) {
       WorkersServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
-    } else if (props.divisionId) {
+    } else if (props.purpose=='Subdivision'&&props.divisionId&&props.subDivisionId) {
       WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
     .then((res) => {
       console.log(res);
@@ -130,6 +130,20 @@ const PDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
       .catch((res) => {
         console.log(res);
       });
+    } else {
+      if (props.divisionId) {
+        WorkersServices.getAll({
+          status: UserLifeCycleStates.ACTIVE,
+          division: props.divisionId,
+          withoutCoordinator: true })
+          .then((res) => {
+            console.log(res);
+            setWorkers(res.data);
+          })
+         .catch((res) => {
+           console.log(res);
+         });
+      }
     }
   }, [props]);
   useEffect(() => {
@@ -337,7 +351,7 @@ const PDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
           {workers?.map((row, index) => (<>
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{index}</Text>
+              <Text style={styles.tableCell}>{index+1}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.workerCode}</Text>
               <div style={styles.grid}></div>
