@@ -38,7 +38,15 @@ export default {
 
   getWorkersByDivision: () => getStandardResponse<IWorker[]>(axios.get('/workers/division', { headers: { ...getAuthHeader() } })),
 
-  getWorkersBySubDivision: (id: string) => getStandardResponse<IWorker[]>(axios.get(`/workers/sub_divisions/${id}`, { headers: { ...getAuthHeader() } })),
+  getSubDivisionsByDivisionId: () => getStandardResponse<SubDivision[]>(axios.get('/workers/sub_divisions/', { headers: { ...getAuthHeader() } })),
+
+  getWorkersBySubDivision: (conditions?: { division: string; subDiv:string}) =>
+    getStandardResponse<IWorker[]>(axios.get(`/workers/sub_divisions/${conditions?.subDiv}`,
+      { params: conditions, headers: { ...getAuthHeader() } })),
+
+  getWorkersByDesignation: (conditions?: { division: string; designationParticular:string}) =>
+    getStandardResponse<IWorker[]>(axios.get('/workers/designation_particular',
+      { params: conditions, headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all workers based on optional conditions.

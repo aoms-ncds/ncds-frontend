@@ -1038,6 +1038,10 @@ const WorkerSupportPage = () => {
                             }));
                           } else {
                             setDesignationParticular(null);
+                            setRequisition((requisition)=>({
+                              ...requisition,
+                              designationParticular: undefined,
+                            }));
                             setWorkers(allWorkers?.filter((worker)=>
                               worker.division?._id==division?._id)??[]);
                           }

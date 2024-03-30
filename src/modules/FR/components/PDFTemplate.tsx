@@ -122,7 +122,7 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
     if ((props.purpose=='Coordinator'||props.purpose=='Worker')&&props.workerId) {
       WorkersServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
     } else if (props.purpose=='Subdivision'&&props.divisionId&&props.subDivisionId) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
+      WorkersServices.getWorkersBySubDivision( { division: props.divisionId, subDiv: props.subDivisionId })
     .then((res) => {
       console.log(res);
       setWorkers(res.data);
@@ -131,7 +131,19 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
         console.log(res);
       });
     } else {
-      if (props.divisionId) {
+      if (props.divisionId&&props.designationParticularID) {
+        console.log('');
+        WorkersServices.getWorkersByDesignation({
+          division: props.divisionId,
+          designationParticular: props.designationParticularID })
+          .then((res) => {
+            console.log(res);
+            setWorkers(res.data);
+          })
+         .catch((res) => {
+           console.log(res);
+         });
+      } else if (props.divisionId) {
         WorkersServices.getAll({
           status: UserLifeCycleStates.ACTIVE,
           division: props.divisionId,
