@@ -15,7 +15,7 @@ const DesignationParticulars = () => {
   const [selectedDesignation, setSelectedDesignation] = useState<IDesignation[] | null>(null);
   const [designationsFetchError, setDesignationsFetchError] = useState<string | false>(false);
   const [designationParticular, setDesignationParticular] = useState<CreatableDesignationParticular>({
-    designations: [''],
+    designations: [],
     title: '',
     mainCategory: '',
     subCategory1: '',

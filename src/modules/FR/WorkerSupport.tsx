@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Grid, TextField, Tooltip, Typography, styled } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
@@ -9,7 +9,6 @@ import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
-import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
@@ -18,6 +17,7 @@ import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { purposes } from './extras/FRConfig';
 import DesignationParticularService from '../Settings/extras/DesignationParticularService';
+import { useNavigate } from 'react-router-dom';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -46,9 +46,9 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 const WorkerSupportPage = () => {
-  const user = useAuth();
+  const navigate = useNavigate();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
-  const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
+  // const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<IWorker | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -79,36 +79,35 @@ const WorkerSupportPage = () => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
+  const [subDivision, setSubDivision] = useState<SubDivision| null>(null);
+  const [purpose, setPurpose] = useState<FRPurpose|null>(null);
 
-  const [open, setOpen] = useState<boolean>(false);
-  const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
+  const [frAction, setFrAction] = useState<'add'|'view'|null>(null);
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
     sanctionedAsPer: '',
   });
+  const [requisition2, setRequisition2] = useState<FR|null>(null);
   const supportEnabledWorkers = workers?.filter((item) => item.supportStructure?.supportEnabled === true);
 
   const [designationParticulars, setDesignationParticulars] = useState<IDesignationParticular[]>([]);
   const [designationParticular, setDesignationParticular] = useState<IDesignationParticular|null>(null);
 
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
-
+  const [confirmAttach, setConfirmAttach] = useState(false);
 
   const [pdfProps, setPdfProps] =
   useState<{purpose:FRPurpose|null;
     divisionId:string|null;
     workerId:string|null;
     designationParticularID:string|null;
-    subDivisionId:string|null;}>({
-      purpose: 'Division',
-      divisionId: null,
-      workerId: null,
-      designationParticularID: null,
-      subDivisionId: null,
-    });
+    subDivisionId:string|null;
+    FrNo:string|null;
+    FrMonth:string|null;}|null>(null);
   const [fileObj, setFileObj] = useState<FileObject|null>(null);
+
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -118,12 +117,20 @@ const WorkerSupportPage = () => {
       });
 
       const res = await FRServices.createFRRequests(requisition);
-
+      setRequisition2((await FRServices.getById(res.data._id)).data);
       enqueueSnackbar({
         message: res.message,
         variant: 'success',
       });
-      setToggleRaiseFR(false);
+      setConfirmAttach(true);
+      setPdfProps(({ purpose: purpose??'Division',
+        divisionId: division?._id??null,
+        workerId: purpose=='Coordinator'&&res.data.purposeCoordinator ?res.data.purposeCoordinator?._id:
+          requisition.purpose=='Worker'&&selectedWorker?._id?selectedWorker?._id:null,
+        subDivisionId: subDivision?._id??null,
+        designationParticularID: designationParticular?._id??null,
+        FrNo: res.data.FRno,
+        FrMonth: moment(res.data.FRdate).format('MMMM') }));
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -135,6 +142,33 @@ const WorkerSupportPage = () => {
     }
   };
 
+  const attach=async (blob:Blob)=>{
+    if (selectedWorker || division) {
+      const file=(blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
+      file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then(async (res) => {
+        if (requisition2) {
+          ( await FRServices.updateFRRequests(requisition2._id, {
+            ...requisition2,
+            particulars: requisition2?.particulars ? requisition2.particulars.map((particular, index) => {
+              return index === 0 ? { ...particular, attachment: [...particular.attachment, res.data]} : particular;
+            }) : [],
+          }));
+          setRequisition2((await FRServices.getById(requisition2._id)).data);
+          setFileObj(res.data);
+          enqueueSnackbar({
+            message: 'File Attached',
+            variant: 'success',
+          });
+          enqueueSnackbar({
+            message: 'FR updated',
+            variant: 'success',
+          });
+          setConfirmAttach(false);
+          setFrAction('view');
+        }
+      });
+    }
+  };
 
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
@@ -148,6 +182,68 @@ const WorkerSupportPage = () => {
       ))}
     </div>
   );
+  useEffect(() => {
+    if (!confirmAttach) {
+      if (purpose=='Coordinator'&&division?.details.coordinator?.name) {
+        const workerID=division?.details.coordinator?.name?._id;
+        WorkersServices.getById(workerID as string).then((res)=>res?.data && setWorkers([res?.data]));
+      } else if (purpose=='Subdivision'&&division&&requisition.purposeSubdivision) {
+        WorkersServices.getWorkersBySubDivision( { division: division._id, subDiv: requisition.purposeSubdivision._id as string, designationParticular: requisition.designationParticular??null })
+    .then((res) => {
+      console.log(res);
+      setWorkers(res.data);
+    })
+      .catch((res) => {
+        console.log(res);
+      });
+      } else if (purpose=='Worker'&&division) {
+        if (selectedWorker) {
+          setWorkers([selectedWorker]);
+        } else {
+          WorkersServices.getAll({
+            status: UserLifeCycleStates.ACTIVE,
+            division: division?._id,
+            withoutCoordinator: true })
+        .then((res) => {
+          console.log(res);
+          setWorkers(res.data);
+        })
+       .catch((res) => {
+         console.log(res);
+       });
+        }
+      } else if (purpose=='Division'&&division) {
+        if (requisition.designationParticular) {
+          console.log('');
+          WorkersServices.getWorkersByDesignation({
+            division: division._id,
+            designationParticular: requisition.designationParticular })
+          .then((res) => {
+            console.log(res);
+            setWorkers(res.data);
+          })
+         .catch((res) => {
+           console.log(res);
+         });
+        } else {
+          WorkersServices.getAll({
+            status: UserLifeCycleStates.ACTIVE,
+            division: division?._id,
+            withoutCoordinator: true })
+          .then((res) => {
+            console.log(res);
+            setWorkers(res.data);
+          })
+         .catch((res) => {
+           console.log(res);
+         });
+        }
+      } else {
+        setWorkers([]);
+      }
+    }
+    console.log(division, selectedWorker, subDivision, designationParticular);
+  }, [division, selectedWorker, subDivision, designationParticular]);
 
   useEffect(() => {
     const basic=workers?.reduce(
@@ -282,35 +378,7 @@ const WorkerSupportPage = () => {
     .catch((res) => {
       console.log(res);
     });
-
-
-    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-    .then((res) => {
-      console.log(res);
-      // setWorkers(res.data);
-      setAllWorkers(res.data);
-      // console.log( 'basic',workers?.reduce(
-      //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
-      //   0,
-      // ));
-    })
-      .catch((res) => {
-        console.log(res);
-      });
-    if (user.user && user.user?.kind=='worker') {
-      DivisionsServices.getDivisionById(user.user?.division as unknown as string)
-        .then((res) => {
-          setDivision(res.data);
-          setDivisions([res.data]);
-        })
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-      );
-    } else {
-      DivisionsServices.getDivisions()
+    DivisionsServices.getDivisions()
       .then((res) => setDivisions(res.data))
       .catch((error) =>
         enqueueSnackbar({
@@ -318,18 +386,8 @@ const WorkerSupportPage = () => {
           message: error.message,
         }),
       );
-    }
   }, []);
-  useEffect(() => {
-    setPdfProps({
-      purpose: requisition.purpose??'Division',
-      divisionId: division?._id??null,
-      workerId: requisition.purpose=='Coordinator'&&requisition.purposeCoordinator ?requisition.purposeCoordinator?._id:
-        requisition.purpose=='Worker'&&selectedWorker?._id?selectedWorker?._id:null,
-      subDivisionId: requisition.purposeSubdivision?._id??null,
-      designationParticularID: requisition.designationParticular??null,
-    });
-  }, [division, selectedWorker, requisition.purposeSubdivision, requisition.designationParticular]);
+
   useEffect(() => {
     if (division) {
       DivisionsServices.getSubDivisionsByDivisionId(division?._id as string)
@@ -346,6 +404,7 @@ const WorkerSupportPage = () => {
     }
     // console.log(props.value.divisionHistory);
   }, [division]);
+
   const columns: GridColDef[] = [
     {
       field: 'actions',
@@ -885,33 +944,26 @@ const WorkerSupportPage = () => {
       <Card sx={{ width: '40%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e)=>{
           e.preventDefault();
-          if (fileObj) {
-            setToggleRaiseFR(true);
-            setRequisition((requisition)=>({
-              ...requisition,
-              purposeWorker: requisition.purpose=='Worker'&&selectedWorker?selectedWorker:undefined,
-              division: division??undefined,
-              mainCategory: requisition?.particulars?requisition?.particulars[0]?.mainCategory:'Maintenance Of Priest & Preachers',
-              particulars: [{
-                _id: '',
-                mainCategory: requisition?.particulars?requisition?.particulars[0]?.mainCategory:'Maintenance Of Priest & Preachers',
-                subCategory1: requisition?.particulars?requisition?.particulars[0]?.subCategory1: 'Support',
-                subCategory2: requisition?.particulars?requisition?.particulars[0]?.subCategory2:'Worker',
-                subCategory3: requisition?.particulars?requisition?.particulars[0]?.subCategory3: 'Select',
-                month: moment().format('MMMM'),
-                narration: requisition?.particulars?requisition?.particulars[0]?.narration:`Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
-                requestedAmount: total.net,
-                unitPrice: total.net,
-                quantity: supportEnabledWorkers?.length,
-                attachment: fileObj? [fileObj]:[],
-              }],
-            }));
-          } else {
-            enqueueSnackbar({
-              message: 'File Not Attached',
-              variant: 'info',
-            });
-          }
+          setFrAction('add');
+          setRequisition((requisition)=>({
+            ...requisition,
+            purposeWorker: requisition.purpose=='Worker'&&selectedWorker?selectedWorker:undefined,
+            division: division??undefined,
+            mainCategory: requisition?.particulars?requisition?.particulars[0]?.mainCategory:'Maintenance Of Priest & Preachers',
+            particulars: requisition?.particulars&&requisition?.particulars?.length>0?[{
+              _id: '',
+              mainCategory: requisition?.particulars[0]?.mainCategory,
+              subCategory1: requisition?.particulars[0]?.subCategory1,
+              subCategory2: requisition?.particulars[0]?.subCategory2,
+              subCategory3: requisition?.particulars[0]?.subCategory3,
+              month: moment().format('MMMM'),
+              narration: requisition?.particulars[0]?.narration,
+              requestedAmount: total.net,
+              unitPrice: total.net,
+              quantity: supportEnabledWorkers?.length,
+              attachment: fileObj? [fileObj]:[],
+            }]:[],
+          }));
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -919,7 +971,7 @@ const WorkerSupportPage = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={4}>
                     <Autocomplete
-                      value={requisition.purpose ?? null}
+                      value={purpose ?? null}
                       options={purposes.filter((pur)=>pur!='Others') ?? []}
                       getOptionLabel={(requisition) => requisition ?? ''}
                       onChange={(_e, selectedPurpose) => {
@@ -935,127 +987,113 @@ const WorkerSupportPage = () => {
                             purposeSubdivision: undefined,
                           }));
                         }
+                        setPurpose(selectedPurpose);
                         setDivision(null);
                         setDesignationParticular(null);
-                        setWorkers(allWorkers);
                       }}
                       renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard'/>}
                       fullWidth
-                      disabled={allWorkers==null}
                     />
                   </Grid>
-                  {(requisition.purpose==='Division'||requisition.purpose==='Subdivision'||requisition.purpose==='Worker'||requisition.purpose==='Coordinator')&&
-              <Grid item xs={12} md={4} >
-                <Autocomplete
-                // disabled={props.kind=='worker'}
-                  options={divisions ?? []}
-                  // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
-                  value={division}
-                  getOptionLabel={(div) => div.details?.name}
-                  onChange={(event, newVal) => {
-                    if (newVal) {
-                      const coordinator=newVal.details.coordinator?.name;
-                      if (requisition.purpose==='Coordinator'&&coordinator) {
-                        setWorkers([allWorkers?.find((worker)=>worker._id==coordinator._id) as IWorker]);
-                        setRequisition((requisition)=>({
-                          ...requisition,
-                          division: newVal,
-                          purposeCoordinator: allWorkers?.find((worker)=>worker._id==coordinator._id),
-                          purposeSubdivision: undefined,
-                        }));
-                      } else {
-                        setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id&&worker._id!=newVal.details.coordinator?.name?._id)??[]);
-                        setRequisition((requisition)=>({
-                          ...requisition,
-                          division: newVal,
-                          purposeSubdivision: undefined,
-                        }));
-                      }
-                      setDivision(newVal);
-                    } else {
-                      setRequisition((requisition)=>({
-                        ...requisition,
-                        division: undefined,
-                        purposeSubdivision: undefined,
-                      }));
-                      setWorkers(allWorkers);
-                      setDivision(null);
-                    }
-                    setSelectedWorker(null);
-                    setDesignationParticular(null);
-                  }
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
-                      required />
-                  )}
-                  disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
-                />
-              </Grid>}
-                  {requisition.purpose==='Division'&&
-                    <Grid item xs={12} md={4}>
-                      <Autocomplete
-                        value={designationParticular ?? null}
-                        options={designationParticulars ?? []}
-                        getOptionLabel={(des) => des.title ?? ''}
-                        onChange={(_e, selectedDesignationParticular) => {
-                          if (selectedDesignationParticular&&division) {
-                            setDesignationParticular(selectedDesignationParticular);
-                            setWorkers(allWorkers?.filter((worker)=>
-                              worker.division?._id==division._id&&
-                            worker.supportDetails?.designation&&selectedDesignationParticular.designations.includes(worker.supportDetails?.designation?._id))??[]);
+                  <Grid item xs={12} md={4} >
+                    <Autocomplete
+                      // disabled={props.kind=='worker'}
+                      options={divisions ?? []}
+                      // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
+                      value={division}
+                      getOptionLabel={(div) => div.details?.name}
+                      onChange={(event, newVal) => {
+                        if (newVal) {
+                          const coordinator=newVal.details.coordinator?.name;
+                          if (requisition.purpose==='Coordinator'&&coordinator) {
                             setRequisition((requisition)=>({
                               ...requisition,
-                              designationParticular: selectedDesignationParticular._id,
-                              particulars: [{
-                                _id: '',
+                              division: newVal,
+                              purposeCoordinator: workers?workers[0]:undefined,
+                              purposeSubdivision: undefined,
+                            }));
+                          } else {
+                            setRequisition((requisition)=>({
+                              ...requisition,
+                              division: newVal,
+                              purposeSubdivision: undefined,
+                            }));
+                          }
+                          setDivision(newVal);
+                        } else {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            division: undefined,
+                            purposeSubdivision: undefined,
+                          }));
+                          setDivision(null);
+                        }
+                        setSelectedWorker(null);
+                        setDesignationParticular(null);
+                      }
+                      }
+                      renderInput={(params) => (
+                        <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
+                          required />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Autocomplete
+                      value={designationParticular ?? null}
+                      options={designationParticulars ?? []}
+                      getOptionLabel={(des) => des.title ?? ''}
+                      onChange={(_e, selectedDesignationParticular) => {
+                        setDesignationParticular(selectedDesignationParticular);
+                        if (selectedDesignationParticular&&division) {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            designationParticular: selectedDesignationParticular._id,
+                            particulars: [{
+                              _id: '',
 
-                                mainCategory: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.name??'',
+                              mainCategory: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.name??'',
 
-                                subCategory1: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                              subCategory1: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.name??'',
 
-                                subCategory2: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                              subCategory2: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.name??'',
 
-                                subCategory3: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                              subCategory3: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.name??'',
 
-                                narration: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                              narration: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
                                 .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.narration??'',
 
-                                month: moment().format('MMMM'),
-                                requestedAmount: total.net,
-                                unitPrice: total.net,
-                                quantity: supportEnabledWorkers?.length,
-                                attachment: [],
-                              }],
-                            }));
-                          } else {
-                            setDesignationParticular(null);
-                            setRequisition((requisition)=>({
-                              ...requisition,
-                              designationParticular: undefined,
-                            }));
-                            setWorkers(allWorkers?.filter((worker)=>
-                              worker.division?._id==division?._id)??[]);
-                          }
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Designation Particulars" variant='standard'/>}
-                        fullWidth
-                        disabled={!division}
-                      />
-                    </Grid>}
+                              month: moment().format('MMMM'),
+                              requestedAmount: total.net,
+                              unitPrice: total.net,
+                              quantity: supportEnabledWorkers?.length,
+                              attachment: [],
+                            }],
+                          }));
+                        } else {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            designationParticular: undefined,
+                          }));
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Designation Particulars" variant='standard'/>}
+                      fullWidth
+                    />
+                  </Grid>
                   {requisition.purpose==='Subdivision'&&
                                <Grid item xs={12} md={4}>
                                  <Autocomplete
                                    options={subDivisions ?? []}
-                                   value={requisition.purposeSubdivision ?? null}
+                                   value={subDivision ?? null}
                                    getOptionLabel={(subDiv) => subDiv.name}
                                    onChange={(event, newVal) =>{
                                      if (newVal) {
@@ -1063,10 +1101,14 @@ const WorkerSupportPage = () => {
                                          ...requisition,
                                          purposeSubdivision: newVal,
                                        }));
-                                       setWorkers(()=>allWorkers?.filter((worker)=>
-                                         worker.officialDetails.divisionHistory[worker.officialDetails?.divisionHistory.length - 1]?.subDivision?._id==newVal?._id)??
-                                       []);
+                                     } else {
+                                       setRequisition((requisition)=>({
+                                         ...requisition,
+                                         purposeSubdivision: undefined,
+                                       }
+                                       ));
                                      }
+                                     setSubDivision(newVal);
                                    }}
                                    renderInput={(params) => <TextField {...params}
                                      label="Subdivision"
@@ -1084,9 +1126,17 @@ const WorkerSupportPage = () => {
                   onChange={(_e, newVal) => {
                     setSelectedWorker(newVal);
                     if (newVal) {
-                      setWorkers((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
-                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
-                    } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
+                      setWorkers([newVal]);
+                      setRequisition((requisition)=>({
+                        ...requisition,
+                        purposeWorker: newVal,
+                      }));
+                    } else {
+                      setRequisition((requisition)=>({
+                        ...requisition,
+                        purposeWorker: undefined,
+                      }));
+                    }
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Worker" required={requisition.purpose==='Worker'} variant='standard' />}
                   fullWidth
@@ -1144,43 +1194,7 @@ const WorkerSupportPage = () => {
               </Grid>
               <Grid item xs={12}>
                 <div style={{ float: 'left' }}>
-                  {(selectedWorker || division) && (
-                    <PDFDownloadLink
-                      document={<PDFTemplate
-                        divisionId={pdfProps.divisionId}
-                        workerId={pdfProps.workerId}
-                        purpose={pdfProps.purpose}
-                        designationParticularID={pdfProps.designationParticularID}
-                        subDivisionId={pdfProps.subDivisionId} />}
-                      fileName="WorkerSupport.pdf"
-                      style={{ textDecoration: 'none', color: 'blue' }}
-                    >
-                      {({ blob, loading }) => (
-                        <> <Button
 
-                          endIcon={<AttachIcon />}
-                          variant="contained"
-                          color="info"
-                          onClick={async () => {
-                            if (blob) {
-                              if (selectedWorker || division) {
-                                const file=(blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
-                                file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
-                                  setFileObj(res.data); console.log(res.data, 'uploaded');
-                                  enqueueSnackbar({
-                                    message: 'File Attached',
-                                    variant: 'success',
-                                  });
-                                });
-                              }
-                            }
-                          }} >
-                          {loading?'Loading...':'Attach File'}
-                        </Button>
-                        </>
-                      )}
-                    </PDFDownloadLink>
-                  )}
                   {/* <Button
                     variant="contained"
                     color="info"
@@ -1194,23 +1208,20 @@ const WorkerSupportPage = () => {
                   <PermissionChecks
                     permissions={['WRITE_FR']}
                     granted={
-                      <Tooltip open={open&&!fileObj}
-                        onClose={() => setOpen(false)}
-                        onOpen={() => setOpen(true)}
-                        title={'Please Attach the file'} >
-                        <Button
-                          variant="contained"
-                          color="info"
-                          type='submit'
-                        >
+
+                      <Button
+                        variant="contained"
+                        color="info"
+                        type='submit'
+                      >
                         Raise FR
-                        </Button></Tooltip>
+                      </Button>
 
                     }
 
                   />
-                  <br />
-                  <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography>
+                  {/* <br /> */}
+                  {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
                 </div>
               </Grid>
             </Grid>
@@ -1266,15 +1277,75 @@ const WorkerSupportPage = () => {
           </Grid>
         </Grid>
       </Card>
-      <Dialog open={toggleRaiseFR} onClose={()=>setToggleRaiseFR(false)} >
+      <Dialog open={Boolean(frAction)} onClose={()=>setFrAction(null)} >
         <DialogContent >
           <FRForm
-            value={requisition}
+            value={frAction=='view'?requisition2 as CreatableFR:requisition}
             onChange={(newReq) => setRequisition(newReq)}
-            action={'add'}
+            action={frAction??'view'}
             onSubmit={addFR} // Pass the addFR function to the onSubmit prop
           />
         </DialogContent>
+        { frAction=='view'&&
+          <DialogActions>
+            <Button
+              variant="contained"
+              color="info"
+              type="submit"
+              onClick={() => navigate(-1)}
+            // disabled={particulars.length==0}
+            >
+                        Ok
+            </Button>
+          </DialogActions>
+        }
+      </Dialog>
+      <Dialog open={confirmAttach} onClose={()=>setConfirmAttach(false)} maxWidth="xs" fullWidth>
+        <DialogTitle> Add attachment?</DialogTitle>
+        <DialogContent>
+          <Container>FR created. Do you want to add attachment?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConfirmAttach(false);
+            }}
+            variant="text"
+          >
+            No, Cancel
+          </Button>
+          {(selectedWorker || division)&&pdfProps && (
+            <PDFDownloadLink
+              document={<PDFTemplate
+                divisionId={pdfProps?.divisionId}
+                workerId={pdfProps?.workerId}
+                purpose={pdfProps?.purpose}
+                designationParticularID={pdfProps?.designationParticularID}
+                subDivisionId={pdfProps?.subDivisionId}
+                FrNo={pdfProps?.FrNo}
+                FrMonth={pdfProps?.FrMonth}/>}
+              fileName="WorkerSupport.pdf"
+              style={{ textDecoration: 'none', color: 'blue' }}
+            >
+              {({ blob, loading }) => (
+                <> <Button
+
+                  endIcon={<AttachIcon />}
+                  variant="contained"
+                  color="info"
+                  onClick={async () => {
+                    if (blob) {
+                      attach(blob);
+                    }
+                  }}
+                  disabled={loading} >
+                  {loading?'Loading...':'Yes, Attach'}
+                </Button>
+                </>
+              )}
+            </PDFDownloadLink>
+          )}
+        </DialogActions>
       </Dialog>
     </CommonPageLayout>
   );

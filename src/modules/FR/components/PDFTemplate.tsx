@@ -1,4 +1,4 @@
-import ReactPDF, { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
@@ -12,6 +12,37 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     backgroundColor: 'white',
+  },
+  image: {
+    position: 'absolute',
+    left: 825,
+    height: 50,
+    width: 50,
+    marginTop: 20,
+  },
+  title: {
+    marginTop: 70,
+    fontSize: 12,
+    position: 'absolute',
+    left: 720,
+    color: 'darkblue',
+  },
+
+  frno: {
+    marginTop: 83,
+    fontSize: 10,
+    position: 'absolute',
+    left: 820,
+    color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  month: {
+    marginTop: 95,
+    fontSize: 10,
+    position: 'absolute',
+    left: 790,
+    color: 'black',
   },
   heading: {
     position: 'absolute',
@@ -31,14 +62,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '20',
     right: 15,
-    top: 90,
+    top: 106,
     borderBottom: 1,
     borderColor: 'black',
   },
   tableContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 91, // Adjust this value to set the table's position
+    marginTop: 107, // Adjust this value to set the table's position
     width: 1650,
   },
   tableRow: {
@@ -56,6 +87,11 @@ const styles = StyleSheet.create({
     fontSize: 6,
     padding: 2,
     textAlign: 'center',
+  },
+  bottomTableCell: {
+    flex: 1,
+    fontSize: 6,
+    padding: 2,
   },
   grid: {
     borderRight: 1,
@@ -89,7 +125,7 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null}) => {
+const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null;FrNo:string|null;FrMonth:string|null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -117,21 +153,24 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
     net: 0,
     prevNet: 0,
   });
+  const [purpose, setPurpose] = useState('Division');
   useEffect(() => {
     console.log(props, 'props');
     if ((props.purpose=='Coordinator'||props.purpose=='Worker')&&props.workerId) {
       WorkersServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
+      props.purpose=='Coordinator'? setPurpose('Coordinator'):setPurpose('Individual');
     } else if (props.purpose=='Subdivision'&&props.divisionId&&props.subDivisionId) {
-      WorkersServices.getWorkersBySubDivision( { division: props.divisionId, subDiv: props.subDivisionId })
+      WorkersServices.getWorkersBySubDivision( { division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID??null })
     .then((res) => {
       console.log(res);
       setWorkers(res.data);
+      setPurpose(res.data[0].division?.details.name??'Division');
     })
       .catch((res) => {
         console.log(res);
       });
-    } else {
-      if (props.divisionId&&props.designationParticularID) {
+    } else if (props.purpose=='Division'&&props.divisionId) {
+      if (props.designationParticularID) {
         console.log('');
         WorkersServices.getWorkersByDesignation({
           division: props.divisionId,
@@ -139,11 +178,12 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
           .then((res) => {
             console.log(res);
             setWorkers(res.data);
+            setPurpose(res.data[0].division?.details.name??'Division');
           })
          .catch((res) => {
            console.log(res);
          });
-      } else if (props.divisionId) {
+      } else {
         WorkersServices.getAll({
           status: UserLifeCycleStates.ACTIVE,
           division: props.divisionId,
@@ -151,13 +191,16 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
           .then((res) => {
             console.log(res);
             setWorkers(res.data);
+            setPurpose(res.data[0].division?.details.name??'Division');
           })
          .catch((res) => {
            console.log(res);
          });
       }
+    } else {
+      setWorkers([]);
     }
-  }, [props]);
+  }, [props.FrNo]);
   useEffect(() => {
     const basic=workers?.reduce(
       (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
@@ -274,8 +317,15 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
   }, [workers]);
   return (
     <Document>
-      <Page size={'A1'} style={styles.page}>
-        <Text style={styles.heading}>REPORT</Text>
+      <Page size={'A2'} style={styles.page} orientation='landscape'>
+        <div>
+          <Image src="/3D Logo.png" style={styles.image} />
+          <Text style={styles.title}>
+            {`WORKER SUPPORT- UPDATION DETAILS OF ${purpose}`}
+          </Text>
+          <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
+          <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text>
+        </div>
         <View style={styles.line} />
         <View style={styles.tableContainer} >
           <View style={styles.tableRow} key={0}>
@@ -550,6 +600,173 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={styles.grid}></div>
           </View>
+
+          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={2} >
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total No of Workers: </Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.length??0}</Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={styles.grid}></div>
+          </View>
+
+          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={3} >
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total Net Amount: </Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{total.net}</Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={styles.grid}></div>
+          </View>
+
 
         </View>
       </Page>

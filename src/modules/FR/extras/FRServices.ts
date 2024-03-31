@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
-import { categories, purposes } from './FRConfig';
+import { purposes } from './FRConfig';
 import axios from 'axios';
 export default {
 
@@ -21,7 +21,7 @@ export default {
   getAllRemarksById: (fRId: string) =>
     getStandardResponse<Remark[]>(
       axios.get(`/fr/remarks/${fRId}`, { headers: { ...getAuthHeader() } }),
-      (remarks) => remarks.map((remark:any) => ({
+      (remarks) => remarks.map((remark:Remark) => ({
         ...remark,
         createdAt: moment(remark.createdAt),
         updatedAt: moment(remark.updatedAt),
@@ -95,7 +95,6 @@ export default {
               if (frRequest.particulars) {
                 for (let i = 0; i < frRequest.particulars.length; i++) {
                   const particulars = frRequest.particulars[i];
-
                   await axios.post('/fr/particulars/', {
                     FR: createdFR.data.data._id,
                     mainCategory: particulars.mainCategory,
@@ -193,6 +192,8 @@ export default {
                       requestedAmount: particulars.requestedAmount,
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
+                      attachment: particulars.attachment,
+
                     }, { headers: { ...getAuthHeader() } });
                   } else {
                     await axios.post('/fr/particulars/', {
@@ -207,6 +208,8 @@ export default {
                       requestedAmount: particulars.requestedAmount,
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
+                      attachment: particulars.attachment,
+
                     }, { headers: { ...getAuthHeader() } });
                   }
                 }
@@ -217,6 +220,12 @@ export default {
             }
           })
           .catch(reject);
+      }),
+      (data) =>({
+        ...data,
+        FRdate: moment(data.FRdate ),
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
       }),
     );
   },

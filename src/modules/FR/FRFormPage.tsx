@@ -4,7 +4,7 @@ import { Card, Grid, Alert } from '@mui/material';
 import FRForm from './components/FRForm';
 import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import PermissionChecks from '../User/components/PermissionChecks';
@@ -13,6 +13,7 @@ interface FRFormPageProps {
   action: 'add' | 'edit' | 'view';
 }
 const FRFormPage = (props: FRFormPageProps) => {
+  const navigate = useNavigate();
   const { frID } = useParams();
   const [FRLoaded, setFRLoaded] = useState(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
@@ -49,6 +50,8 @@ const FRFormPage = (props: FRFormPageProps) => {
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
+      navigate('/fr/');
+
       enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
@@ -72,6 +75,8 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
+      navigate('/fr/');
+
       enqueueSnackbar({
         message: 'Updating FR Request',
         variant: 'info',

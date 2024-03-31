@@ -40,7 +40,7 @@ export default {
 
   getSubDivisionsByDivisionId: () => getStandardResponse<SubDivision[]>(axios.get('/workers/sub_divisions/', { headers: { ...getAuthHeader() } })),
 
-  getWorkersBySubDivision: (conditions?: { division: string; subDiv:string}) =>
+  getWorkersBySubDivision: (conditions?: { division: string; subDiv:string;designationParticular?:string|null}) =>
     getStandardResponse<IWorker[]>(axios.get(`/workers/sub_divisions/${conditions?.subDiv}`,
       { params: conditions, headers: { ...getAuthHeader() } })),
 
