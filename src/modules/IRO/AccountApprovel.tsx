@@ -54,7 +54,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-    purpose: '',
+  purpose: 'Division',
     status: CommonLifeCycleStates.ACTIVE,
     kind: 'IRO',
     sanctionedAmount: 0,

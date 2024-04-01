@@ -59,7 +59,7 @@ const EditIRO = () => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-    purpose: '',
+  purpose: 'Division',
     status: FRLifeCycleStates.FR_APPROVED,
     kind: 'IRO',
     sanctionedAmount: 0,

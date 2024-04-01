@@ -35,7 +35,7 @@ const ReconciliationIRO = () => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-    purpose: '',
+    purpose: 'Division',
     status: CommonLifeCycleStates.ACTIVE,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -402,18 +402,18 @@ const ReconciliationIRO = () => {
     <CommonPageLayout title="Reconciliation IRO">
       <Card >
         <Grid container spacing={2} padding={2}>
-        <Grid item xs={6}>
-          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchChange}
-            fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
-          />
-          {/* </Grid> */}
-        </Grid>
+          <Grid item xs={6}>
+            {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchText}
+              onChange={handleSearchChange}
+              fullWidth
+              style={{ width: '25%', alignItems: 'start' }}
+            />
+            {/* </Grid> */}
+          </Grid>
           <Grid item xs={6}>
             <Button
               onClick={async () => {
@@ -466,38 +466,38 @@ const ReconciliationIRO = () => {
           </Grid>
           <Grid item xs={12}>
             <Box
-             sx={{
-              'height': 450,
-              'width': '100%',
-              '& .super-app-theme--cell': {
-                backgroundColor: '#f1f5fa',
-                color: 'black',
-                fontWeight: '600',
-              },
-              '& .super-app.negative': {
-                backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .super-app.positive': {
-                backgroundColor: '#d47483',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .even': {
-                backgroundColor: '#DEDAFF', // Change to red for even rows
-              },
-              '& .odd': {
-                backgroundColor: '#fff', // Change to blue for odd rows
-              },
-            }}
+              sx={{
+                'height': 450,
+                'width': '100%',
+                '& .super-app-theme--cell': {
+                  backgroundColor: '#f1f5fa',
+                  color: 'black',
+                  fontWeight: '600',
+                },
+                '& .super-app.negative': {
+                  backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                  color: '#1a3e72',
+                  fontWeight: '600',
+                },
+                '& .super-app.positive': {
+                  backgroundColor: '#d47483',
+                  color: '#1a3e72',
+                  fontWeight: '600',
+                },
+                '& .even': {
+                  backgroundColor: '#DEDAFF', // Change to red for even rows
+                },
+                '& .odd': {
+                  backgroundColor: '#fff', // Change to blue for odd rows
+                },
+              }}
             >
-            <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
-              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-            }/>
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
+                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+              }/>
 
             </Box>
-          </Grid> 
+          </Grid>
         </Grid>
       </Card>
       <Dialog open={openRemarks} fullWidth maxWidth="md">

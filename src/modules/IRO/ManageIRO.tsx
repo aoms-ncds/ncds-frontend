@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -34,10 +34,10 @@ import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
 import IROTemplate from './components/IROTemplate';
 import clsx from 'clsx';
+import IROReconciliationPdf from './components/IROReconciliationPdf';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
-  console.log(props, 'dd');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [fr] = useState<FR>();
@@ -49,6 +49,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
   const [showAccountManagerFileUploader, setShowAccountManagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
+  const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
@@ -58,7 +59,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-    purpose: '',
+    purpose: 'Division',
     status: CommonLifeCycleStates.ACTIVE,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -217,8 +218,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     endDate: moment().endOf('y'),
     rangeType: 'years',
   });
-  console.log(selectedIRO, 'selectedIRO');
-
+  const [pdfProps, setPdfProps] =
+  useState<{purpose:FRPurpose|null;
+    divisionId:string|null;
+    workerId:string|null;
+    designationParticularID:string|null;
+    subDivisionId:string|null;
+    IRONo:string|null;
+    month:string|null;
+    date:string|null;}|null>(null);
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
@@ -453,6 +461,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     setAttachment(true);
                     setFileUploaderAction('add');
                     setSelectedIRO(params.row);
+                    if (params.row.workerSupport) {
+                      setPdfProps({ purpose: params.row.purpose??'Division',
+                        divisionId: params.row.division?._id??null,
+                        workerId: params.row.purpose=='Coordinator'&&params.row.purposeCoordinator ?params.row.purposeCoordinator?._id:
+                          params.row.purpose=='Worker'&&params.row.purposeWorker?._id?params.row.purposeWorker?._id:null,
+                        subDivisionId: params.row.purposeSubdivision?._id??null,
+                        designationParticularID: params.row.designationParticular??null,
+                        IRONo: params.row.IROno,
+                        month: params.row.particulars[0].month,
+                        date: moment(params.row.IRODate).format('DD/MM/YYYY') });
+                      setSupportAttachment(true);
+                    }
                   },
                 },
               ] :
@@ -655,9 +675,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       cellClassName: (params) => {
-        console.log('CellClassName params:', params);
         const statusName = params.formattedValue;
-        console.log('Status Name:', statusName);
         if (params.value == null) {
           return '';
         }
@@ -682,7 +700,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
       valueGetter: (params) => {
         let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
         case 'SEND_BACK':
@@ -1377,6 +1394,35 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
+      <Dialog open={supportAttachment} onClose={()=>setSupportAttachment(false)} maxWidth="xs" fullWidth>
+        <DialogTitle> Signature Attachment  </DialogTitle>
+        <DialogContent>
+          <Container>Please download and attach the signature sheet: &nbsp;
+            {pdfProps&&
+            <>
+              <PDFDownloadLink
+                document={<IROReconciliationPdf
+                  data={pdfProps}
+                />}
+                fileName="WorkersSignatureSheet.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
+              </PDFDownloadLink><br/>
+            NB: Ignore if already attached
+            </>} </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setSupportAttachment(false);
+            }}
+            variant="text"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };
