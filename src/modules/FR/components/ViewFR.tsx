@@ -326,12 +326,12 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                   <><IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sacntion as per">
+                                  <Tooltip title="Add Sanction as per">
                                     <IconButton>
                                       <AddIcon onClick={() => handleClickOpen(item, index)} />
                                     </IconButton>
-                                    </Tooltip>
-                                   </>}
+                                  </Tooltip>
+                                  </>}
                               />
                               )}
                               <IconButton onClick={() => {
@@ -708,18 +708,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                    //                     setTimeout(() => {
-                    //                       closeSnackbar(processingSnack);
-                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                    //                     }, 500);
-                    //                     navigate('/fr/manage');
-                    //                   }}
-                    //                 >
-                    // Submit
-                    //                 </Button>
-                    //               }
-                    //             />
+                  //                     setTimeout(() => {
+                  //                       closeSnackbar(processingSnack);
+                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                  //                     }, 500);
+                  //                     navigate('/fr/manage');
+                  //                   }}
+                  //                 >
+                  // Submit
+                  //                 </Button>
+                  //               }
+                  //             />
                   ) : null}
 
 
@@ -1010,7 +1010,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     setNewParticular((asper: any) => ({
                       ...asper,
                       sanctionedAsPer: selectedSanction?.asPer,
-                    }))
+                    }));
                   }
                 }}
                 renderInput={(params) => <TextField {...params}
