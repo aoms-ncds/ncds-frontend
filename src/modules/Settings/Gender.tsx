@@ -43,6 +43,7 @@ const Gender = () => {
               });
             });
   };
+
   const handleClose = () => {
     setDialogAction(false);
   };

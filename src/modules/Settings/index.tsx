@@ -101,6 +101,9 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText="Add Payment methods" color="#fff" targetRoute="/settings/PaymentMethods" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="Designation Category" color="#fff" targetRoute="/settings/designationParticulars" />
+        </Grid>
       </Grid>
 
 

@@ -38,8 +38,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/Authentication';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
-  const navigate = useNavigate();
-
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
@@ -248,7 +246,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 }; // Create a new object with updated status
                 props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
               }
-              navigate('/fr/');
             }}
           >
             <Grid container spacing={3}>
@@ -444,17 +441,21 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         {particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th" sx={{ display: 'flex' }}>
-                              <PermissionChecks
-                                permissions={['WRITE_FR']}
-                                granted={
+                              {props.action !== 'view' && (
+                                <>
+                                  <PermissionChecks
+                                    permissions={['WRITE_FR']}
+                                    granted={
+                                      <IconButton>
+                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                      </IconButton>
+                                    }
+                                  />
                                   <IconButton>
-                                    <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                    <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                }
-                              />
-                              <IconButton>
-                                <EditIcon onClick={() => editParticular(item, index)} />
-                              </IconButton>
+                                </>
+                              )}
                               <IconButton
                                 // sx={{ px: 10 }}
                                 onClick={() => {
@@ -601,23 +602,24 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                           </Button>
                         }
                       />
+                  &nbsp;
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={
+                          <Button
+                            variant="contained"
+                            color="info"
+                            type="submit"
+                            onClick={() => setSubmit(1)}
+                            // disabled={particulars.length==0}
+                          >
+                        Submit{' '}
+                          </Button>
+                        }
+
+                      />
                     </>
                   ) : null}
-                  &nbsp;
-                  <PermissionChecks
-                    permissions={['WRITE_FR']}
-                    granted={
-                      <Button
-                        variant="contained"
-                        color="info"
-                        type="submit"
-                        onClick={() => setSubmit(1)}
-                      // disabled={particulars.length==0}
-                      >
-                        Submit{' '}
-                      </Button>
-                    }
-                  />
                 </div>
               </Grid>
             </Grid>
