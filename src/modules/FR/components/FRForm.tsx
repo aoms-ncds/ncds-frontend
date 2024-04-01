@@ -88,7 +88,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           setWorkers(res.data);
         })
         .catch((res) => {
-
+          console.log(res);
         });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
