@@ -52,32 +52,7 @@ const ChildeSupportPage = () => {
   const [coordinators, setCoordinatrs] = useState<any[]| undefined>([]);
   const [allWorkers, setAllWorkers] = useState<Child[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<Child | null>(null);
-  const [total, setTotal] = useState<TotalSupportStructure>({
-    basic: 0,
-    prevBasic: 0,
-    HRA: 0,
-    prevHRA: 0,
-    spouseAllowance: 0,
-    prevSpouseAllowance: 0,
-    positionalAllowance: 0,
-    prevPositionalAllowance: 0,
-    specialAllowance: 0,
-    prevSpecialAllowance: 0,
-    impactDeduction: 0,
-    prevImpactDeduction: 0,
-    telAllowance: 0,
-    prevTelAllowance: 0,
-    PIONMissionaryFund: 0,
-    prevPIONMissionaryFund: 0,
-    MUTDeduction: 0,
-    prevMUTDeduction: 0,
-    total: 0,
-    prevTotal: 0,
-    deduction: 0,
-    prevDeduction: 0,
-    net: 0,
-    prevNet: 0,
-  });
+  const [total, setTotal] = useState<number>(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
 
@@ -129,133 +104,40 @@ console.log(coordinators,'coordinators');
   //       console.log({ err });
   //     });
   // }, []);
-
+ 
   // eslint-disable-next-line react/no-multi-comp
+
+    // Function to calculate the total CEA amount
+    const calculateTotalCEAAmount = (tableData: { childSupport: { amount: any; }; }[]) => {
+      let totalAmount = 0;
+      tableData.forEach((row: { childSupport: { amount: any; }; }) => {
+        totalAmount += row.childSupport?.amount || 0;
+      });
+      return totalAmount;
+    };
+  
+    calculateTotalCEAAmount(childList)
+  console.log(calculateTotalCEAAmount, 'totalAmount');
+  
   const CustomFooter = () => (
     <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
-      {columns.map((column) => (
-        <div key={column.field} style={{ width: column.width, textAlign: 'center' }}>
-          {column.field=='division'&&<b>Total</b>}
-          <b> { typeof total[column.field as keyof TotalSupportStructure] ==='number'?total[column.field as keyof TotalSupportStructure]:null}
+      {/* {columns.map((column) => ( */}
+        <div  style={{  textAlign: 'center' }}>
+          <b>Total: </b>
+          <b>{total?? null}
           </b>
         </div>
-      ))}
+      {/* ))} */}
     </div>
   );
   useEffect(() => {
-    const basic=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
-      0,
-    );
-    const prevBasic=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevBasic? total + Number(worker.supportStructure?.prevBasic):total,
-      0,
-    );
-    const HRA=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA? total + Number(worker.supportStructure?.HRA):total,
-      0,
-    );
-    const prevHRA=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevHRA? total + Number(worker.supportStructure?.prevHRA):total,
-      0,
-    );
-    const spouseAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance? total + Number(worker.supportStructure?.spouseAllowance):total,
-      0,
-    );
-    const prevSpouseAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpouseAllowance? total + Number(worker.supportStructure?.prevSpouseAllowance):total,
-      0,
-    );
-    const positionalAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance? total + Number(worker.supportStructure?.positionalAllowance):total,
-      0,
-    );
-    const prevPositionalAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPositionalAllowance? total + Number(worker.supportStructure?.prevPositionalAllowance):total,
-      0,
-    );
-    const specialAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance? total + Number(worker.supportStructure?.specialAllowance):total,
-      0,
-    );
-    const prevSpecialAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpecialAllowance? total + Number(worker.supportStructure?.prevSpecialAllowance):total,
-      0,
-    );
-    const impactDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction? total + Number(worker.supportStructure?.impactDeduction):total,
-      0,
-    );
-    const prevImpactDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevImpactDeduction? total + Number(worker.supportStructure?.prevImpactDeduction):total,
-      0,
-    );
-    const telAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance? total + Number(worker.supportStructure?.telAllowance):total,
-      0,
-    );
-    const prevTelAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevTelAllowance? total + Number(worker.supportStructure?.prevTelAllowance):total,
-      0,
-    );
-    const PIONMissionaryFund=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund? total + Number(worker.supportStructure?.PIONMissionaryFund):total,
-      0,
-    );
-    const prevPIONMissionaryFund=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPIONMissionaryFund? total + Number(worker.supportStructure?.prevPIONMissionaryFund):total,
-      0,
-    );
-    const MUTDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction? total + Number(worker.supportStructure?.MUTDeduction):total,
-      0,
-    );
-    const prevMUTDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction? total + Number(worker.supportStructure?.prevMUTDeduction):total,
-      0,
-    );
-    setTotal({
-      basic: basic,
-      prevBasic: prevBasic,
-      HRA: HRA,
-      prevHRA: prevHRA,
-      spouseAllowance: spouseAllowance,
-      prevSpouseAllowance: prevSpouseAllowance,
-      positionalAllowance: positionalAllowance,
-      prevPositionalAllowance: prevPositionalAllowance,
-      specialAllowance: specialAllowance,
-      prevSpecialAllowance: prevSpecialAllowance,
-      impactDeduction: impactDeduction,
-      prevImpactDeduction: prevImpactDeduction,
-      telAllowance: telAllowance,
-      prevTelAllowance: prevTelAllowance,
-      PIONMissionaryFund: PIONMissionaryFund,
-      prevPIONMissionaryFund: prevPIONMissionaryFund,
-      MUTDeduction: MUTDeduction,
-      prevMUTDeduction: prevMUTDeduction,
-      total: (basic ?? 0) +
-    (HRA ?? 0) +
-    (spouseAllowance ?? 0) +
-    (positionalAllowance ?? 0) +
-    (specialAllowance ?? 0) +
-    (PIONMissionaryFund ?? 0) +
-    (telAllowance ?? 0),
-      deduction: (impactDeduction ?? 0) +
-    (MUTDeduction ?? 0),
-      net: (basic ?? 0) +
-    (HRA ?? 0) +
-    (spouseAllowance ?? 0) +
-    (positionalAllowance ?? 0) +
-    (specialAllowance ?? 0) +
-    (PIONMissionaryFund ?? 0) +
-    (telAllowance ?? 0) -
-    (
-      (impactDeduction ?? 0) +
-      (MUTDeduction ?? 0)
-    ),
-    });
-  }, [workers]);
+    let tot = 0; 
+  childList.map((i) => {
+    tot += i.childSupport.amount;
+    setTotal(tot)
+  });
+  console.log(tot, 'tot');
+  }, [childList]);
 
   useEffect(() => {
     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
@@ -282,6 +164,15 @@ console.log(coordinators,'coordinators');
       //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
       //   0,
       // ));
+    })
+      .catch((res) => {
+        console.log(res);
+      });
+    DivisionsServices.getcoordinators()
+    .then((res) => {
+      console.log(res);
+      setCoordinatrs(res.data);
+
     })
       .catch((res) => {
         console.log(res);
@@ -332,7 +223,12 @@ console.log(coordinators,'coordinators');
   //     )
   //     .map((worker: any) => worker.name) ?? []
   // );
-  const coordinators= workers?.filter((it)=>it._id == divisions?.map((r)=>r.details.coordinator?.name?._id))
+  const coordinators = workers?.filter((worker) =>
+  divisions?.some((division) =>
+    division.details.coordinator?.name?._id === worker._id
+  )
+);
+
   console.log(coordinators,'setCoordinatrssd');
   
   }, []);
@@ -501,34 +397,34 @@ console.log(coordinators,'coordinators');
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e)=>{
           e.preventDefault();
-          // if (fileObj) {
-          //   setToggleRaiseFR(true);
-          //   setRequisition((requisition)=>({
-          //     ...requisition,
-          //     purpose: selectedWorker?'Worker':'Division',
-          //     purposeWorker: selectedWorker??undefined,
-          //     division: division??undefined,
-          //     mainCategory: 'Maintenance Of Priest & Preachers',
-          //     particulars: [{
-          //       _id: '',
-          //       mainCategory: 'Maintenance Of Priest & Preachers',
-          //       subCategory1: 'Support',
-          //       subCategory2: 'Worker',
-          //       subCategory3: 'Select',
-          //       month: moment().format('MMMM'),
-          //       narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
-          //       requestedAmount: total.net,
-          //       unitPrice: total.net,
-          //       // quantity: supportEnabledWorkers?.length,
-          //       attachment: fileObj? [fileObj]:[],
-          //     }],
-          //   }));
-          // } else {
-          //   enqueueSnackbar({
-          //     message: 'File Not Attached',
-          //     variant: 'info',
-          //   });
-          // }
+          if (fileObj) {
+            setToggleRaiseFR(true);
+            setRequisition((requisition)=>({
+              ...requisition,
+              // purpose: selectedWorker?'Worker':'Division',
+              // purposeWorker: selectedWorker??undefined,
+              division: division??undefined,
+              mainCategory: 'Welfare of Children',
+              particulars: [{
+                _id: '',
+                mainCategory: 'Welfare of Children',
+                subCategory1: 'Children Welfare',
+                subCategory2: 'Child Education Assistance',
+                subCategory3: 'Select',
+                month: moment().format('MMMM'),
+                narration: `Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>`,
+                requestedAmount: total,
+                unitPrice: total,
+                // quantity: supportEnabledWorkers?.length,
+                attachment: fileObj? [fileObj]:[],
+              }],
+            }));
+          } else {
+            enqueueSnackbar({
+              message: 'File Not Attached',
+              variant: 'info',
+            });
+          }
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -541,7 +437,7 @@ console.log(coordinators,'coordinators');
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setChildList(()=>allWorkers?.filter((child)=>child.division?._id==newVal?._id && child.childOf != newVal?.details.coordinator?.name )??[]);
+                      setChildList(()=>allWorkers?.filter((child)=>(child.division as unknown as Division | undefined)?._id==newVal?._id && child.childOf?._id != newVal?.details.coordinator?.name?._id )??[]);
                       setDivision(newVal);
                     } else {
                       setChildList(allWorkers?? []);
@@ -566,8 +462,12 @@ console.log(coordinators,'coordinators');
                     setSelectedWorker(newVal);
                     if (newVal) {
                       setChildList((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
-                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
-                    } else setChildList(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
+                      setDivision(() =>
+                      newVal && 'division' in newVal && newVal.division
+                        ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                        : null
+                    );
+                      } else setChildList(()=>(division?allWorkers?.filter((worker)=>(worker.division as Division | undefined)?._id==division?._id):allWorkers)??[]);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
                   fullWidth
@@ -575,15 +475,19 @@ console.log(coordinators,'coordinators');
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete<IWorker>
-                  value={selectedWorker ?? null}
+                  value={selectedWorker ?? ''}
                   options={(coordinators ?? [])}
                   getOptionLabel={(workers) => `${workers?.basicDetails?.firstName} ${workers.basicDetails?.lastName}`}
                   onChange={(_e, newVal) => {
-                    setSelectedWorker(newVal);
+                    setSelectedWorker(newVal); 
                     if (newVal) {
-                      setWorkers((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
+                      setChildList((workers) =>
+                      workers?.filter((worker) => worker.childOf === newVal.division?.details?.coordinator?.name?._id) ?? []
+                    );
+                       console.log(childList,'o[');
+                      
                       setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
-                    } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
+                    } else setChildList(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant='standard' />}
                   fullWidth
@@ -613,7 +517,7 @@ console.log(coordinators,'coordinators');
               <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Net Amount"
-                  value={total.net}
+                  value={total}
                   variant='standard'
                   fullWidth
                   disabled

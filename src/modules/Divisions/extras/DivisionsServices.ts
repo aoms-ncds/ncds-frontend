@@ -11,6 +11,7 @@ export default {
   // })),
 
   getCount: () => getStandardResponse<number>(axios.get('/divisions/count', { headers: { ...getAuthHeader() } })),
+  getcoordinators: () => getStandardResponse<IWorker[]>(axios.get('/divisions/coordinators', { headers: { ...getAuthHeader() } })),
   getSubDivisionsCount: () => getStandardResponse<number>(axios.get('/divisions/sub_divisions/count', { headers: { ...getAuthHeader() } })),
 
   getDivisions: () => getStandardResponse<Division[]>(axios.get('/divisions/', { headers: { ...getAuthHeader() } })),
