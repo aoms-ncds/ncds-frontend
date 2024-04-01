@@ -88,6 +88,7 @@ const WorkerSupportPage = () => {
     kind: 'FRs',
     particulars: [],
     sanctionedAsPer: '',
+    workerSupport: true,
   });
   const [requisition2, setRequisition2] = useState<FR|null>(null);
   const supportEnabledWorkers = workers?.filter((item) => item.supportStructure?.supportEnabled === true);
@@ -130,7 +131,7 @@ const WorkerSupportPage = () => {
         subDivisionId: subDivision?._id??null,
         designationParticularID: designationParticular?._id??null,
         FrNo: res.data.FRno,
-        FrMonth: moment(res.data.FRdate).format('MMMM') }));
+        FrMonth: res.data.particulars[0].month }));
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -1303,7 +1304,23 @@ const WorkerSupportPage = () => {
       <Dialog open={confirmAttach} onClose={()=>setConfirmAttach(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Add attachment?</DialogTitle>
         <DialogContent>
-          <Container>FR created. Do you want to add attachment?</Container>
+          <Container>FR created. Do you want to add attachment &nbsp;
+            {pdfProps&&
+            <PDFDownloadLink
+              document={<PDFTemplate
+                divisionId={pdfProps?.divisionId}
+                workerId={pdfProps?.workerId}
+                purpose={pdfProps?.purpose}
+                designationParticularID={pdfProps?.designationParticularID}
+                subDivisionId={pdfProps?.subDivisionId}
+                FrNo={pdfProps?.FrNo}
+                FrMonth={pdfProps?.FrMonth}/>}
+              fileName="WorkerSupport.pdf"
+              style={{ color: 'blue' }}
+            >
+              {({ loading }) => loading?'....':'WorkerSupport.pdf'}
+
+            </PDFDownloadLink>} ?</Container>
         </DialogContent>
         <DialogActions>
           <Button

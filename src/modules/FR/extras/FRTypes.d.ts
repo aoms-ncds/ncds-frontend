@@ -9,7 +9,6 @@ declare global {
     FRdate: Moment;
     // requestAmount: string;
     sanction: string;
-    purpose: FRPurpose;
     IRO?: string;
     reasonForSentBack?:string;
     designationParticular?:string;
@@ -37,7 +36,6 @@ declare global {
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
     reasonForSentBack?:string;
-    designationParticular?:string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
@@ -98,6 +96,7 @@ declare global {
     kind: 'FRs' | 'IRO';
     purposeWorker?: IWorker | Staff;
     purposeSubdivision?: SubDivision;
+    purpose: FRPurpose;
     division?: Division;
     purposeCoordinator?: User;
     purposeOthers?: string;
@@ -109,6 +108,9 @@ declare global {
     mainCategory: string;
     createdBy: IWorker;
     particulars: Particular[];
+    workerSupport?:boolean;
+    designationParticular?:string;
+
   }
 
   export interface IDesignationParticular extends MongooseDocument{

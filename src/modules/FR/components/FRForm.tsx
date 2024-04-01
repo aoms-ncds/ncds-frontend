@@ -34,8 +34,8 @@ import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/Authentication';
+import MessageItem from '../../../components/MessageItem';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
@@ -50,7 +50,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const { user } = useAuth();
-  const [action, setAction] = useState<'add' | 'edit'>('add');
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
@@ -75,7 +74,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
-    setAction('add');
+    ('add');
   };
 
   useEffect(() => {
@@ -89,7 +88,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           setWorkers(res.data);
         })
         .catch((res) => {
-
+          console.log(res);
         });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
@@ -97,7 +96,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           setSubDivisions(res.data);
         })
         .catch((res) => {
-
+          console.log(res);
         });
     }
   }, [props.value.purpose]);
@@ -240,11 +239,19 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               if (props.onSubmit) {
-                const updatedValue = {
-                  ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
-                    FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
-                }; // Create a new object with updated status
-                props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
+                if (totalRequestedAmount>0) {
+                  const updatedValue = {
+                    ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
+                      FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
+                  };
+                  // Create a new object with updated status
+                  props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
+                } else {
+                  enqueueSnackbar({
+                    message: 'Total requested Amount can\'t be 0',
+                    variant: 'warning',
+                  });
+                }
               }
             }}
           >
@@ -415,7 +422,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       setSelectedSubCategory1(null);
                       setSelectedSubCategory2(null);
                       setSelectedSubCategory3(null);
-                      setAction('add');
                     }}
                     disabled={!selectedMainCategory}
                   >
@@ -485,10 +491,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   label="Requested Amount"
                   InputLabelProps={{ shrink: true }}
                   value={totalRequestedAmount}
-                  // onChange={(e) =>
-                  //   // eslint-disable-next-line @typescript-eslint/naming-convention
-
-                  // }
                   fullWidth
                   disabled
                 />
@@ -578,6 +580,14 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       color="info"
                       onClick={() => {
                         toggleOpenRemarks(true);
+                        FRServices.getAllRemarksById(props.value._id ?? '')
+                        .then((res) => setRemarks(res.data ?? []))
+                        .catch((error) => {
+                          enqueueSnackbar({
+                            variant: 'error',
+                            message: error.message,
+                          });
+                        });
                       }}
                     >
                       Remark
@@ -832,6 +842,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       <br />
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
+        <DialogContent>
+          {remarks.length > 0 ? remarks.map((remark) => (
+            // eslint-disable-next-line max-len
+            <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
+          )) : 'No Data Found '}
+        </DialogContent>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -871,7 +887,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton type="submit">
+                    <IconButton type="submit" >
                       <SendIcon />
                     </IconButton>
                   </InputAdornment>

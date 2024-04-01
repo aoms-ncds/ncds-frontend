@@ -18,7 +18,6 @@ declare global{
     _id: string;
     IROno: string;
     IRODate: Moment;
-    purpose: string;
     status: number;
     releaseAmount?:IReleaseAmount;
     billAttachment:FileObject[];
