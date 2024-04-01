@@ -26,6 +26,7 @@ const ManageWorkerPage = () => {
   };
 
   const [users, setUsers] = useState<IWorker[]>([]);
+  const [allusers, setUsersAll] = useState<IWorker[]>([]);
   const [spouseList, setSpouseList] = useState<Spouse[]>([]);
   const [childList, setChildList] = useState<Child[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,8 +41,21 @@ const ManageWorkerPage = () => {
   const fetchData = (args: { skip?: number }) => {
     setLoading(true);
     if (currentTab === 0) {
+      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE})
+      .then((res) => {
+        console.log("sso");
+        console.log(res.data, 'pores');
+        setUsersAll(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching workers:', error);
+      })
+
+      
       WorkersServices.getWorkers({ status: UserLifeCycleStates.ACTIVE, skip: args.skip ?? skip, limit: 300 })
         .then((res) => {
+          console.log("OLD USER");
+          
           setUsers((prevUsers) => [...prevUsers, ...res.data]);
         })
         .catch((error) => {
@@ -50,6 +64,8 @@ const ManageWorkerPage = () => {
         .finally(() => {
           setLoading(false);
         });
+     
+      
     } else if (currentTab == 1) {
       SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
@@ -146,8 +162,8 @@ const ManageWorkerPage = () => {
                     <>
                       <Button
                         onClick={async () => {
-                          const sheet = users
-                            ? users.map((user: IWorker) => [
+                          const sheet = allusers
+                            ? allusers.map((user: IWorker) => [
                                 user.workerCode,
                                 user.basicDetails.firstName,
                                 user.basicDetails.lastName,
