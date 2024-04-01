@@ -16,6 +16,8 @@ import FRServices from './extras/FRServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import ChildrenServices from '../Workers/extras/ChildrenServices';
+import ChildePDFTemplate from './components/ChildePDFTemplate';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -46,8 +48,10 @@ interface TotalSupportStructure {
 const ChildeSupportPage = () => {
   const user = useAuth();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
-  const [allWorkers, setAllWorkers] = useState<IWorker[] | null>(null);
-  const [selectedWorker, setSelectedWorker] = useState<IWorker | null>(null);
+  const [childList, setChildList] = useState<Child[]>([]);
+  const [coordinators, setCoordinatrs] = useState<any[]| undefined>([]);
+  const [allWorkers, setAllWorkers] = useState<Child[] | null>(null);
+  const [selectedWorker, setSelectedWorker] = useState<Child | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
     prevBasic: 0,
@@ -85,9 +89,10 @@ const ChildeSupportPage = () => {
     particulars: [],
     sanctionedAsPer:''
   });
-  const supportEnabledWorkers = workers?.filter(item => item.supportStructure.supportEnabled === true);
+  // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
+console.log(coordinators,'coordinators');
 
-  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;workerId:string|null}>({ divisionId: null, workerId: null });
+  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;childId:string|null}>({ divisionId: null, childId: null });
   const [fileObj, setFileObj] = useState<FileObject|null>(null);
   const addFR = async (requisition: CreatableFR) => {
     try {
@@ -253,10 +258,25 @@ const ChildeSupportPage = () => {
   }, [workers]);
 
   useEffect(() => {
-    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
     .then((res) => {
       console.log(res);
       // setWorkers(res.data);
+      setChildList(res.data)
+      setAllWorkers(res.data);
+      // console.log( 'basic',workers?.reduce(
+      //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
+      //   0,
+      // ));
+    })
+      .catch((res) => {
+        console.log(res);
+      });
+    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    .then((res) => {
+      console.log(res);
+      setWorkers(res.data);
+      // setChildList(res.data)
       // setAllWorkers(res.data);
       // console.log( 'basic',workers?.reduce(
       //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
@@ -266,6 +286,8 @@ const ChildeSupportPage = () => {
       .catch((res) => {
         console.log(res);
       });
+
+
     if (user.user && user.user?.kind=='worker') {
       DivisionsServices.getDivisionById(user.user?.division as unknown as string)
         .then((res) => {
@@ -291,12 +313,31 @@ const ChildeSupportPage = () => {
     setRequisition((requisition)=>({ ...requisition,
       purpose: 'Division',
     }));
-  }, []);
-  useEffect(() => {
-    setPdfProps({ divisionId: division?._id??null, workerId: selectedWorker?._id??null });
-  }, [division, selectedWorker]);
 
-  const columns: GridColDef[] = [
+    
+    
+  }, []);
+  // console.log(divisions?.map((e)=>e.details.coordinator?.name?._id), 'ddf');
+  // console.log(childList.map((r)=>r.childOf?._id),'cc');
+  useEffect(() => {
+    setPdfProps({ divisionId: division?._id??null, childId: selectedWorker?._id??null });
+  }, [division, selectedWorker]);
+  useEffect(() => {
+  //  setCoordinatrs(() =>
+  //   workers
+  //     ?.filter((worker: any) =>
+  //       divisions?.some((division: any) =>
+  //         division.details.coordinator?.name?._id === worker._id
+  //       )
+  //     )
+  //     .map((worker: any) => worker.name) ?? []
+  // );
+  const coordinators= workers?.filter((it)=>it._id == divisions?.map((r)=>r.details.coordinator?.name?._id))
+  console.log(coordinators,'setCoordinatrssd');
+  
+  }, []);
+
+  const columns: GridColDef[] = [ 
     {
       field: 'actions',
       type: 'actions',
@@ -309,7 +350,7 @@ const ChildeSupportPage = () => {
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
-    { field: 'childeCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Childe Code'}</b>, align: 'center', headerAlign: 'center' },
+    { field: 'childeCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Childe Code'}</b>, valueGetter: (params) => params.row?.childCode, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
       width: 120,
@@ -317,7 +358,7 @@ const ChildeSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>First Name</b>,
-      valueGetter: (params) => params.row.basicDetails.firstName,
+      valueGetter: (params) => params.row?.firstName,
     },
     {
       align: 'center',
@@ -326,27 +367,27 @@ const ChildeSupportPage = () => {
       width: 120,
       headerClassName: 'column-header',
       renderHeader: () => <b>Last Name</b>,
-      valueGetter: (params) => params.row.basicDetails.lastName,
+      valueGetter: (params) => params.row?.lastName,
     },
     { field: 'division', width: 130,
       headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name },
+    // {
+    //   field: 'sub_division',
+    //   width: 150,
+    //   headerClassName: 'column-header',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   renderHeader: () => <b>{'Sub-Division'}</b>,
+    //   valueGetter: (params) => params.row.officialDetails?.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+    // },
     {
-      field: 'sub_division',
+      field: 'dateOfbirth',
       width: 150,
       headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Sub-Division'}</b>,
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
-    },
-    {
-      field: 'dateOfbirth',
-      width: 100,
-      headerClassName: 'column-header',
-      align: 'center',
-      headerAlign: 'center',
       renderHeader: () => <b>{'DOB'}</b>,
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+      valueGetter: (params) => params.row.dateOfBirth,
     },
     {
       field: 'age',
@@ -355,7 +396,7 @@ const ChildeSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Age'}</b>,
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+      valueGetter: (params) => (params.row.dateOfBirth?.fromNow() || '').replace(' ago', ''),
     },
     {
       field: 'gender',
@@ -364,7 +405,7 @@ const ChildeSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'Gender'}</b>,
-      valueGetter: (params) => params.row.officialDetails.divisionHistory[params.row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name,
+      valueGetter: (params) => params.row?.gender,
     },
     {
       field: 'CEA Amount',
@@ -374,13 +415,7 @@ const ChildeSupportPage = () => {
       cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'CEA Amount'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.supportEnabled?(params.row.supportStructure?.basic ?? 0) +
-      (params.row.supportStructure?.HRA ?? 0) +
-      (params.row.supportStructure?.spouseAllowance ?? 0) +
-      (params.row.supportStructure?.positionalAllowance ?? 0) +
-      (params.row.supportStructure?.specialAllowance ?? 0) +
-      (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
-      (params.row.supportStructure?.telAllowance ?? 0):0,
+      valueGetter: (params) => params.row.childSupport?.amount
     },
     // {
     //   field: 'supportEnabled',
@@ -463,37 +498,37 @@ const ChildeSupportPage = () => {
 
   return (
     <CommonPageLayout title="Workers Support">
-      <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
+      <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e)=>{
           e.preventDefault();
-          if (fileObj) {
-            setToggleRaiseFR(true);
-            setRequisition((requisition)=>({
-              ...requisition,
-              purpose: selectedWorker?'Worker':'Division',
-              purposeWorker: selectedWorker??undefined,
-              division: division??undefined,
-              mainCategory: 'Maintenance Of Priest & Preachers',
-              particulars: [{
-                _id: '',
-                mainCategory: 'Maintenance Of Priest & Preachers',
-                subCategory1: 'Support',
-                subCategory2: 'Worker',
-                subCategory3: 'Select',
-                month: moment().format('MMMM'),
-                narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
-                requestedAmount: total.net,
-                unitPrice: total.net,
-                quantity: supportEnabledWorkers?.length,
-                attachment: fileObj? [fileObj]:[],
-              }],
-            }));
-          } else {
-            enqueueSnackbar({
-              message: 'File Not Attached',
-              variant: 'info',
-            });
-          }
+          // if (fileObj) {
+          //   setToggleRaiseFR(true);
+          //   setRequisition((requisition)=>({
+          //     ...requisition,
+          //     purpose: selectedWorker?'Worker':'Division',
+          //     purposeWorker: selectedWorker??undefined,
+          //     division: division??undefined,
+          //     mainCategory: 'Maintenance Of Priest & Preachers',
+          //     particulars: [{
+          //       _id: '',
+          //       mainCategory: 'Maintenance Of Priest & Preachers',
+          //       subCategory1: 'Support',
+          //       subCategory2: 'Worker',
+          //       subCategory3: 'Select',
+          //       month: moment().format('MMMM'),
+          //       narration: `Towards the support of (No: of workers) of ${division?.details.name} for the month of (mon, year)`,
+          //       requestedAmount: total.net,
+          //       unitPrice: total.net,
+          //       // quantity: supportEnabledWorkers?.length,
+          //       attachment: fileObj? [fileObj]:[],
+          //     }],
+          //   }));
+          // } else {
+          //   enqueueSnackbar({
+          //     message: 'File Not Attached',
+          //     variant: 'info',
+          //   });
+          // }
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -506,10 +541,10 @@ const ChildeSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setWorkers(()=>allWorkers?.filter((worker)=>worker.division?._id==newVal?._id)??[]);
+                      setChildList(()=>allWorkers?.filter((child)=>child.division?._id==newVal?._id && child.childOf != newVal?.details.coordinator?.name )??[]);
                       setDivision(newVal);
                     } else {
-                      setWorkers(allWorkers);
+                      setChildList(allWorkers?? []);
                       setDivision(null);
                     }
                     setSelectedWorker(null);
@@ -523,10 +558,26 @@ const ChildeSupportPage = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
+                <Autocomplete
+                  value={selectedWorker ?? null}
+                  options={(childList ?? [])}
+                  getOptionLabel={(workers) => `${workers?.firstName} ${workers.lastName}`}
+                  onChange={(_e, newVal) => {
+                    setSelectedWorker(newVal);
+                    if (newVal) {
+                      setChildList((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
+                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
+                    } else setChildList(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <Autocomplete<IWorker>
                   value={selectedWorker ?? null}
-                  options={(workers ?? [])}
-                  getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
+                  options={(coordinators ?? [])}
+                  getOptionLabel={(workers) => `${workers?.basicDetails?.firstName} ${workers.basicDetails?.lastName}`}
                   onChange={(_e, newVal) => {
                     setSelectedWorker(newVal);
                     if (newVal) {
@@ -534,11 +585,11 @@ const ChildeSupportPage = () => {
                       setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
                     } else setWorkers(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Worker" variant='standard' />}
+                  renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant='standard' />}
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12} md={6} lg={4}>
+              {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Total Amount"
                   value={total.total }
@@ -547,9 +598,9 @@ const ChildeSupportPage = () => {
                   disabled
 
                 />
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} md={6} lg={4}>
+              {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Total Deduction"
                   value={total.deduction}
@@ -557,7 +608,7 @@ const ChildeSupportPage = () => {
                   fullWidth
                   disabled
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} md={6} lg={4}>
                 <TextField
@@ -572,8 +623,8 @@ const ChildeSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<PDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps.workerId} />}
-                      fileName="WorkerSupport.pdf"
+                      document={<ChildePDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps?.childId} />}
+                      fileName="ChildeSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob, loading }) => (
@@ -585,7 +636,7 @@ const ChildeSupportPage = () => {
                           onClick={async () => {
                             if (blob) {
                               if (selectedWorker || division) {
-                                const file=(blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
+                                const file=(blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
                                 file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
                                   setFileObj(res.data); console.log(res.data, 'uploaded');
                                   enqueueSnackbar({
@@ -671,10 +722,10 @@ const ChildeSupportPage = () => {
 
               }}
             >
-              <StyledDataGrid rows={workers ?? []}
+              <StyledDataGrid rows={childList ?? []}
                 columns={columns}
                 getRowId={(row) => row._id}
-                loading={workers === null}
+                loading={childList === null}
                 columnGroupingModel={columnGroupingModel}
                 experimentalFeatures={{ columnGrouping: true }}
                 slots={{
