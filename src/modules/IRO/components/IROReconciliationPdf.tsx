@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   line: {
     position: 'absolute',
     left: '20',
-    right: 20,
+    right: 25,
     top: 113,
     borderBottom: 1,
     borderColor: 'black',

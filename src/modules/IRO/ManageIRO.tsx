@@ -470,7 +470,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         designationParticularID: params.row.designationParticular??null,
                         IRONo: params.row.IROno,
                         month: params.row.particulars[0].month,
-                        date: moment(params.row.IRODate).format('DD/MM/YYYY') });
+                        date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY') });
                       setSupportAttachment(true);
                     }
                   },
