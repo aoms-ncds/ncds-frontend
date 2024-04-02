@@ -9,7 +9,7 @@ export default {
    */
   // getAll: (): Promise<StandardResponse<Child[]>> => getStandardResponse<Child[]>(axios.get('/workers/children/', { headers: { ...getAuthHeader() } })),
 
-  getAll: (conditions?: { status?: number }) =>
+  getAll: (conditions?: { status?: number,division?:string }) =>
     getStandardResponse<Child[]>(axios.get('/workers/children/', { params: conditions, headers: { ...getAuthHeader() } }), (children) =>
       children.map((children: Child) => ({
         ...children,
