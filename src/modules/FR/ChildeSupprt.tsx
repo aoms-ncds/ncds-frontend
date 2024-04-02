@@ -55,7 +55,7 @@ const ChildeSupportPage = () => {
   const [selectedWorker, setSelectedWorker] = useState<Child | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
-  const [division, setDivision] = useState<Division | null>(null);
+  const [division, setDivision] = useState<any | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
@@ -66,7 +66,10 @@ const ChildeSupportPage = () => {
   });
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
   console.log(childList, 'childList');
-
+  type NewValType = {
+    division?: Division; // Assuming Division is a known type
+    // Other properties of newVal if any
+  };
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
   const addFR = async (requisition: CreatableFR) => {
@@ -429,7 +432,7 @@ const ChildeSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setChildList(() => allChild?.filter((child:any) => child.division?._id == newVal?._id) ?? []);
+                      setChildList(() => allChild?.filter((child: any) => child.division?._id == newVal?._id) ?? []);
                       setDivision(newVal);
                     } else {
                       setChildList(allChild ?? []);
@@ -450,16 +453,16 @@ const ChildeSupportPage = () => {
                   value={selectedWorker ?? null}
                   options={(childList ?? [])}
                   getOptionLabel={(childe) => `${childe?.firstName} ${childe.lastName}`}
-                  onChange={(_e, newVal) => {
-                    setSelectedWorker(newVal);
+                  onChange={(_e, newVal:any) => {
+                    setSelectedWorker(newVal ?? null);
                     if (newVal) {
                       setChildList((childe) => childe?.filter((child) => child._id == newVal?._id) ?? []);
                       setDivision(() =>
-                        newVal && 'division' in newVal && newVal.division 
-                          ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                        newVal && 'division' in newVal && newVal.division
+                          ? divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null
                           : null
                       );
-                    } else setChildList(() => (division ? allChild?.filter((child:any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
+                    } else setChildList(() => (division ? allChild?.filter((child: any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
                   fullWidth
@@ -474,18 +477,18 @@ const ChildeSupportPage = () => {
                     setSelectedCoordinatrs(newVal ?? null)
                     if (newVal) {
                       const coordinatorId = newVal.division?.details?.coordinator?.name
-                      console.log(coordinatorId,'coordinatorId');
+                      console.log(coordinatorId, 'coordinatorId');
                       if (coordinatorId) {
-                        setChildList(() => allChild?.filter((child:any) => child.childOf?._id === coordinatorId) ?? []);
-                         setDivision(() =>
-                        newVal && 'division' in newVal && newVal.division
-                          ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
-                          : null
-                      );
+                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId) ?? []);
+                        setDivision(() =>
+                          newVal && 'division' in newVal && newVal.division
+                            ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                            : null
+                        );
                       }
                     } else {
                       setSelectedCoordinatrs(null);
-                      setChildList(() => (division ? allChild?.filter((child:any) => child.division?._id === division._id) : allChild) ?? []);
+                      setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
                     }
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant="standard" />}
@@ -527,9 +530,9 @@ const ChildeSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate  total={total} divisionId={pdfProps.divisionId} workerId={pdfProps?.childId} />}
+                      document={<ChildePDFTemplate total={total} divisionId={pdfProps.divisionId} workerId={pdfProps?.childId} />}
                       fileName="ChildeSupport.pdf"
-                     
+
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob, loading }) => (
