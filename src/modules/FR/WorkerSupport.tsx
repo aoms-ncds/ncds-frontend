@@ -451,7 +451,7 @@ const WorkerSupportPage = () => {
     },
     {
       field: 'designation',
-      width: 100,
+      width: 140,
       headerClassName: 'column-header',
       align: 'center',
       headerAlign: 'center',
@@ -1039,57 +1039,6 @@ const WorkerSupportPage = () => {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <Autocomplete
-                      value={designationParticular ?? null}
-                      options={designationParticulars ?? []}
-                      getOptionLabel={(des) => des.title ?? ''}
-                      onChange={(_e, selectedDesignationParticular) => {
-                        setDesignationParticular(selectedDesignationParticular);
-                        if (selectedDesignationParticular&&division) {
-                          setRequisition((requisition)=>({
-                            ...requisition,
-                            designationParticular: selectedDesignationParticular._id,
-                            particulars: [{
-                              _id: '',
-
-                              mainCategory: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.name??'',
-
-                              subCategory1: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.name??'',
-
-                              subCategory2: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.name??'',
-
-                              subCategory3: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.name??'',
-
-                              narration: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
-                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.narration??'',
-
-                              month: moment().format('MMMM'),
-                              requestedAmount: total.net,
-                              unitPrice: total.net,
-                              quantity: supportEnabledWorkers?.length,
-                              attachment: [],
-                            }],
-                          }));
-                        } else {
-                          setRequisition((requisition)=>({
-                            ...requisition,
-                            designationParticular: undefined,
-                          }));
-                        }
-                      }}
-                      renderInput={(params) => <TextField {...params} label="Designation Particulars" variant='standard'/>}
-                      fullWidth
-                    />
-                  </Grid>
                   {requisition.purpose==='Subdivision'&&
                                <Grid item xs={12} md={4}>
                                  <Autocomplete
@@ -1143,23 +1092,57 @@ const WorkerSupportPage = () => {
                   fullWidth
                 />
               </Grid> }
-                  {/* {requisition.purpose==='Others'&&
+                  <Grid item xs={12} md={4}>
+                    <Autocomplete
+                      value={designationParticular ?? null}
+                      options={designationParticulars ?? []}
+                      getOptionLabel={(des) => des.title ?? ''}
+                      onChange={(_e, selectedDesignationParticular) => {
+                        setDesignationParticular(selectedDesignationParticular);
+                        if (selectedDesignationParticular&&division) {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            designationParticular: selectedDesignationParticular._id,
+                            particulars: [{
+                              _id: '',
 
-  <Grid item xs={12} md={4}>
-    <TextField
-      label="Others"
-      value={requisition.purposeOthers}
-      onChange={(e) =>
-        setRequisition((requisition)=>({
-          ...requisition,
-          purposeOthers: e.target.value,
-        }))}
-      variant="standard"
-      fullWidth
-    />
-  </Grid>
-                  } */}
+                              mainCategory: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.name??'',
 
+                              subCategory1: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.name??'',
+
+                              subCategory2: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.name??'',
+
+                              subCategory3: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.name??'',
+
+                              narration: mainCategories?.find((mainCat)=>mainCat._id==selectedDesignationParticular.mainCategory)?.subcategory1
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory1)?.subcategory2
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory2)?.subcategory3
+                                .find((subCat)=>subCat._id==selectedDesignationParticular.subCategory3)?.narration??'',
+
+                              month: moment().format('MMMM'),
+                              requestedAmount: total.net,
+                              unitPrice: total.net,
+                              quantity: supportEnabledWorkers?.length,
+                              attachment: [],
+                            }],
+                          }));
+                        } else {
+                          setRequisition((requisition)=>({
+                            ...requisition,
+                            designationParticular: undefined,
+                          }));
+                        }
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Designation Particulars" variant='standard'/>}
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
 
