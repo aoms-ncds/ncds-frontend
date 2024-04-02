@@ -455,10 +455,10 @@ const ChildeSupportPage = () => {
                     if (newVal) {
                       setChildList((childe) => childe?.filter((child) => child._id == newVal?._id) ?? []);
                       setDivision(() =>
-                      newVal && typeof newVal === 'object' && 'division' in newVal && newVal.division
-                        ? divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null
-                        : null 
-                    );
+                        newVal && 'division' in newVal && newVal.division 
+                          ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                          : null
+                      );
                     } else setChildList(() => (division ? allChild?.filter((child:any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
