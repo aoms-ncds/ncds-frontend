@@ -49,26 +49,26 @@ const ChildeSupportPage = () => {
   const user = useAuth();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [childList, setChildList] = useState<Child[]>([]);
-  const [coordinators, setCoordinatrs] = useState<any[]| undefined>([]);
-  const [allWorkers, setAllWorkers] = useState<Child[] | null>(null);
+  const [coordinators, setCoordinatrs] = useState<IWorker[] | null>([]);
+  const [selectedcoordinators, setSelectedCoordinatrs] = useState<IWorker | null>(null);
+  const [allChild, setAllChilde] = useState<Child[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<Child | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
-
   const [open, setOpen] = useState<boolean>(false);
   const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
-    sanctionedAsPer:''
+    sanctionedAsPer: ''
   });
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
-console.log(coordinators,'coordinators');
+  console.log(childList, 'childList');
 
-  const [pdfProps, setPdfProps] = useState<{divisionId:string|null;childId:string|null}>({ divisionId: null, childId: null });
-  const [fileObj, setFileObj] = useState<FileObject|null>(null);
+  const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
+  const [fileObj, setFileObj] = useState<FileObject | null>(null);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -104,136 +104,128 @@ console.log(coordinators,'coordinators');
   //       console.log({ err });
   //     });
   // }, []);
- 
+
   // eslint-disable-next-line react/no-multi-comp
 
-    // Function to calculate the total CEA amount
-    const calculateTotalCEAAmount = (tableData: { childSupport: { amount: any; }; }[]) => {
-      let totalAmount = 0;
-      tableData.forEach((row: { childSupport: { amount: any; }; }) => {
-        totalAmount += row.childSupport?.amount || 0;
-      });
-      return totalAmount;
-    };
-  
-    calculateTotalCEAAmount(childList)
-  console.log(calculateTotalCEAAmount, 'totalAmount');
-  
+  // const calculateTotalCEAAmount = (tableData: { childSupport: { amount: any; }; }[]) => {
+  //   let totalAmount = 0;
+  //   tableData.forEach((row: { childSupport: { amount: any; }; }) => {
+  //     totalAmount += row.childSupport?.amount || 0;
+  //   });
+  //   return totalAmount;
+  // };
+
+  // calculateTotalCEAAmount(childList)
   const CustomFooter = () => (
     <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
       {/* {columns.map((column) => ( */}
-        <div  style={{  textAlign: 'center' }}>
-          <b>Total: </b>
-          <b>{total?? null}
-          </b>
-        </div>
+      <div style={{ textAlign: 'center' }}>
+        <b>Total: </b>
+        <b>{total ?? null}
+        </b>
+      </div>
       {/* ))} */}
     </div>
   );
   useEffect(() => {
-    let tot = 0; 
-  childList.map((i) => {
-    tot += i.childSupport.amount;
-    setTotal(tot)
-  });
-  console.log(tot, 'tot');
+    let tot = 0;
+    childList.map((i) => {
+      tot += i.childSupport.amount;
+      setTotal(tot)
+    });
+    console.log(tot, 'tot');
   }, [childList]);
 
   useEffect(() => {
     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-    .then((res) => {
-      console.log(res);
-      // setWorkers(res.data);
-      setChildList(res.data)
-      setAllWorkers(res.data);
-      // console.log( 'basic',workers?.reduce(
-      //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
-      //   0,
-      // ));
-    })
+      .then((res) => {
+        console.log(res);
+        // setWorkers(res.data);
+        setChildList(res.data)
+        setAllChilde(res.data);
+        // console.log( 'basic',workers?.reduce(
+        //   (total, child) => child.supportStructure?.supportEnabled && child.supportStructure?.basic? total + Number(child.supportStructure?.basic):total,
+        //   0,
+        // ));
+      })
       .catch((res) => {
         console.log(res);
       });
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-    .then((res) => {
-      console.log(res);
-      setWorkers(res.data);
-      // setChildList(res.data)
-      // setAllWorkers(res.data);
-      // console.log( 'basic',workers?.reduce(
-      //   (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
-      //   0,
-      // ));
-    })
+      .then((res) => {
+        console.log(res);
+        setWorkers(res.data);
+      })
       .catch((res) => {
         console.log(res);
       });
     DivisionsServices.getcoordinators()
-    .then((res) => {
-      console.log(res);
-      setCoordinatrs(res.data);
+      .then((res) => {
+        console.log(res);
+        setCoordinatrs(res.data);
 
-    })
+      })
       .catch((res) => {
         console.log(res);
       });
 
 
-    if (user.user && user.user?.kind=='worker') {
+    if (user.user && user.user?.kind == 'worker') {
       DivisionsServices.getDivisionById(user.user?.division as unknown as string)
         .then((res) => {
           setDivision(res.data);
           setDivisions([res.data]);
         })
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-      );
+        .catch((error) =>
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          }),
+        );
     } else {
       DivisionsServices.getDivisions()
-      .then((res) => setDivisions(res.data))
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-      );
+        .then((res) => setDivisions(res.data))
+        .catch((error) =>
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          }),
+        );
     }
-    setRequisition((requisition)=>({ ...requisition,
+    setRequisition((requisition) => ({
+      ...requisition,
       purpose: 'Division',
     }));
 
-    
-    
+
+
   }, []);
   // console.log(divisions?.map((e)=>e.details.coordinator?.name?._id), 'ddf');
   // console.log(childList.map((r)=>r.childOf?._id),'cc');
   useEffect(() => {
-    setPdfProps({ divisionId: division?._id??null, childId: selectedWorker?._id??null });
+    setPdfProps({ divisionId: division?._id ?? null, childId: selectedWorker?._id ?? null });
   }, [division, selectedWorker]);
   useEffect(() => {
-  //  setCoordinatrs(() =>
-  //   workers
-  //     ?.filter((worker: any) =>
-  //       divisions?.some((division: any) =>
-  //         division.details.coordinator?.name?._id === worker._id
-  //       )
-  //     )
-  //     .map((worker: any) => worker.name) ?? []
-  // );
-  const coordinators = workers?.filter((worker) =>
-  divisions?.some((division) =>
-    division.details.coordinator?.name?._id === worker._id
-  )
-);
+    //  setCoordinatrs(() =>
+    //   workers
+    //     ?.filter((child: any) =>
+    //       divisions?.some((division: any) =>
+    //         division.details.coordinator?.name?._id === child._id
+    //       )
+    //     )
+    //     .map((child: any) => child.name) ?? []
+    // );
+    const coordinators = workers?.filter((child) =>
+      divisions?.some((division) =>
+        division.details.coordinator?.name?._id === child._id
+      )
+    );
 
-  console.log(coordinators,'setCoordinatrssd');
-  
+    console.log(coordinators, 'setCoordinatrssd');
+
   }, []);
 
-  const columns: GridColDef[] = [ 
+  const columns: GridColDef[] = [
     {
       field: 'actions',
       type: 'actions',
@@ -241,7 +233,7 @@ console.log(coordinators,'coordinators');
       headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
-          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
+          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/child/${params.row._id}`} />,
           // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -265,8 +257,10 @@ console.log(coordinators,'coordinators');
       renderHeader: () => <b>Last Name</b>,
       valueGetter: (params) => params.row?.lastName,
     },
-    { field: 'division', width: 130,
-      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name },
+    {
+      field: 'division', width: 130,
+      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name
+    },
     // {
     //   field: 'sub_division',
     //   width: 150,
@@ -377,12 +371,10 @@ console.log(coordinators,'coordinators');
       display: 'none',
     },
     '&  .MuiDataGrid-cell': {
-      borderRight: `1px solid ${
-        theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-      }`,
-      borderBottom: `1px solid ${
-        theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-      }`,
+      borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+        }`,
+      borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
+        }`,
       color:
         theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
     },
@@ -395,15 +387,15 @@ console.log(coordinators,'coordinators');
   return (
     <CommonPageLayout title="Workers Support">
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
-        <form onSubmit={(e)=>{
+        <form onSubmit={(e) => {
           e.preventDefault();
           if (fileObj) {
             setToggleRaiseFR(true);
-            setRequisition((requisition)=>({
+            setRequisition((requisition) => ({
               ...requisition,
-              // purpose: selectedWorker?'Worker':'Division',
+              // purpose: selectedWorker?'child':'Division',
               // purposeWorker: selectedWorker??undefined,
-              division: division??undefined,
+              division: division ?? undefined,
               mainCategory: 'Welfare of Children',
               particulars: [{
                 _id: '',
@@ -416,7 +408,7 @@ console.log(coordinators,'coordinators');
                 requestedAmount: total,
                 unitPrice: total,
                 // quantity: supportEnabledWorkers?.length,
-                attachment: fileObj? [fileObj]:[],
+                attachment: fileObj ? [fileObj] : [],
               }],
             }));
           } else {
@@ -430,17 +422,17 @@ console.log(coordinators,'coordinators');
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} >
                 <Autocomplete
-                // disabled={props.kind=='worker'}
+                  // disabled={props.kind=='child'}
                   options={divisions ?? []}
                   // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
                   value={division}
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setChildList(()=>allWorkers?.filter((child)=>(child.division as unknown as Division | undefined)?._id==newVal?._id && child.childOf?._id != newVal?.details.coordinator?.name?._id )??[]);
+                      setChildList(() => allChild?.filter((child:any) => child.division?._id == newVal?._id) ?? []);
                       setDivision(newVal);
                     } else {
-                      setChildList(allWorkers?? []);
+                      setChildList(allChild ?? []);
                       setDivision(null);
                     }
                     setSelectedWorker(null);
@@ -457,17 +449,17 @@ console.log(coordinators,'coordinators');
                 <Autocomplete
                   value={selectedWorker ?? null}
                   options={(childList ?? [])}
-                  getOptionLabel={(workers) => `${workers?.firstName} ${workers.lastName}`}
+                  getOptionLabel={(childe) => `${childe?.firstName} ${childe.lastName}`}
                   onChange={(_e, newVal) => {
                     setSelectedWorker(newVal);
                     if (newVal) {
-                      setChildList((workers)=>workers?.filter((worker)=>worker._id==newVal?._id)??[]);
+                      setChildList((childe) => childe?.filter((child) => child._id == newVal?._id) ?? []);
                       setDivision(() =>
-                      newVal && 'division' in newVal && newVal.division
-                        ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
-                        : null
+                      newVal && typeof newVal === 'object' && 'division' in newVal && newVal.division
+                        ? divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null
+                        : null 
                     );
-                      } else setChildList(()=>(division?allWorkers?.filter((worker)=>(worker.division as Division | undefined)?._id==division?._id):allWorkers)??[]);
+                    } else setChildList(() => (division ? allChild?.filter((child:any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
                   fullWidth
@@ -475,24 +467,32 @@ console.log(coordinators,'coordinators');
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete<IWorker>
-                  value={selectedWorker ?? ''}
+                  value={selectedcoordinators ?? null}
                   options={(coordinators ?? [])}
-                  getOptionLabel={(workers) => `${workers?.basicDetails?.firstName} ${workers.basicDetails?.lastName}`}
+                  getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
                   onChange={(_e, newVal) => {
-                    setSelectedWorker(newVal); 
+                    setSelectedCoordinatrs(newVal ?? null)
                     if (newVal) {
-                      setChildList((workers) =>
-                      workers?.filter((worker) => worker.childOf === newVal.division?.details?.coordinator?.name?._id) ?? []
-                    );
-                       console.log(childList,'o[');
-                      
-                      setDivision(()=>divisions?.find((div)=>div._id==newVal.division?._id)??null);
-                    } else setChildList(()=>(division?allWorkers?.filter((worker)=>worker.division?._id==division?._id):allWorkers)??[]);
+                      const coordinatorId = newVal.division?.details?.coordinator?.name
+                      console.log(coordinatorId,'coordinatorId');
+                      if (coordinatorId) {
+                        setChildList(() => allChild?.filter((child:any) => child.childOf?._id === coordinatorId) ?? []);
+                         setDivision(() =>
+                        newVal && 'division' in newVal && newVal.division
+                          ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                          : null
+                      );
+                      }
+                    } else {
+                      setSelectedCoordinatrs(null);
+                      setChildList(() => (division ? allChild?.filter((child:any) => child.division?._id === division._id) : allChild) ?? []);
+                    }
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant='standard' />}
+                  renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant="standard" />}
                   fullWidth
                 />
               </Grid>
+
               {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Total Amount"
@@ -527,8 +527,9 @@ console.log(coordinators,'coordinators');
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate divisionId={pdfProps.divisionId} workerId={pdfProps?.childId} />}
+                      document={<ChildePDFTemplate  total={total} divisionId={pdfProps.divisionId} workerId={pdfProps?.childId} />}
                       fileName="ChildeSupport.pdf"
+                     
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob, loading }) => (
@@ -540,7 +541,7 @@ console.log(coordinators,'coordinators');
                           onClick={async () => {
                             if (blob) {
                               if (selectedWorker || division) {
-                                const file=(blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
+                                const file = (blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
                                 file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
                                   setFileObj(res.data); console.log(res.data, 'uploaded');
                                   enqueueSnackbar({
@@ -551,7 +552,7 @@ console.log(coordinators,'coordinators');
                               }
                             }
                           }} >
-                          {loading?'Loading...':'Attach File'}
+                          {loading ? 'Loading...' : 'Attach File'}
                         </Button>
                         </>
                       )}
@@ -570,7 +571,7 @@ console.log(coordinators,'coordinators');
                   <PermissionChecks
                     permissions={['WRITE_FR']}
                     granted={
-                      <Tooltip open={open&&!fileObj}
+                      <Tooltip open={open && !fileObj}
                         onClose={() => setOpen(false)}
                         onOpen={() => setOpen(true)}
                         title={'Please Attach the file'} >
@@ -579,7 +580,7 @@ console.log(coordinators,'coordinators');
                           color="info"
                           type='submit'
                         >
-                        Raise FR
+                          Raise FR
                         </Button></Tooltip>
 
                     }
@@ -635,14 +636,14 @@ console.log(coordinators,'coordinators');
                 slots={{
                   footer: CustomFooter,
                 }}
-                // getRowClassName={(params) =>
-                //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
-                // }
+              // getRowClassName={(params) =>
+              //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
+              // }
               /></Box>
           </Grid>
         </Grid>
       </Card>
-      <Dialog open={toggleRaiseFR} onClose={()=>setToggleRaiseFR(false)} >
+      <Dialog open={toggleRaiseFR} onClose={() => setToggleRaiseFR(false)} >
         <DialogContent >
           <FRForm
             value={requisition}

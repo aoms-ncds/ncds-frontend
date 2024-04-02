@@ -18,9 +18,9 @@ const styles = StyleSheet.create({
     width: 490,
     height: 80,
     border: '1px solid #333',
-    // left: 50,
+    left: 50,
     position: 'absolute',
-    right: '1600',
+    right: '100',
     transform: 'rotate(-90deg)'
   },
   heading: {
@@ -85,6 +85,12 @@ const styles = StyleSheet.create({
     padding: 2,
     textAlign: 'center',
   },
+  tableCell2: {
+    flex: 1,
+    fontSize: 8,
+    padding: 4,
+    textAlign: 'right',
+  },
   grid: {
     borderRight: 1,
     height: 30,
@@ -93,12 +99,22 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null}) => {
+const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null; total:number}) => {
     console.log(props, '√poprosp');
     
   const [workers, setWorkers] = useState<Child[] | null>(null);
+  const [total, setTotal] = useState<number>(0);
+console.log(props.total, 'prop.ttt');
 
   console.log(workers, 'pop');
+  useEffect(() => {
+    let tot = 0;
+    workers?.map((i) => {
+      tot += i.childSupport.amount;
+      setTotal(tot)
+    });
+    console.log(tot, 'tot');
+  }, [props]);
   
   useEffect(() => {
     console.log(props, 'props');
@@ -121,6 +137,15 @@ const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null}) 
       <Page size={'A1'}  style={styles.page}>
         <Text style={styles.heading}>REPORT</Text>
         {/* <View style={styles.line} /> */}
+        <View
+              style={{ ...styles.box5, marginTop: 15, left: 300,top:300, width: 130 }}>
+              {/* <Image style={{
+                height: 78,
+                width: 128,
+              }}
+              src={`data:`} /> */}
+              {props?.total}
+            </View>
         <View style={styles.tableContainer} >
           <View style={styles.tableRow} key={0}>
             <div style={styles.grid}></div>
@@ -146,7 +171,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null}) 
             <div style={styles.grid}></div>
           </View>
 
-          {workers?.map((row, index) => (<>
+          {workers?.map((row:any, index) => (<>
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{index}</Text>
@@ -157,7 +182,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null}) 
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.lastName}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{(row.division as unknown as Division | undefined)?.details?.name}</Text>
+              <Text style={styles.tableCell}>{row.division?.details?.name}</Text>
               <div style={styles.grid}></div> 
               {/* <Text style={styles.tableCell}>{row.lastName}</Text> */}
               {/* <div style={styles.grid}></div> */}
@@ -174,20 +199,13 @@ const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null}) 
           ))}
 
           <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={1} >
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <Text style={{ ...styles.tableCell2, fontWeight: 'bold' }}>Total: {props.total}</Text>
             <div style={styles.grid}></div>
           </View>
-
         </View>
+         
 
-        <View
-              style={{ ...styles.box5, marginTop: 15, left: 1200, width: 130 }}>
-              {/* <Image style={{
-                height: 78,
-                width: 128,
-              }}
-              src={`data:`} /> */}
-            </View>
+       
       </Page>
     </Document>
   );

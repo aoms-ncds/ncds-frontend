@@ -87,7 +87,7 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Support structure',
-      path: '/childe_support',
+      path: '/child_support',
       element: <ChildeSupportPage/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
