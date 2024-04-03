@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@mui/icons-material/Done'; 
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
@@ -189,7 +189,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
   const filteredRows = (applications ?? []).filter((row) => {
     if ((row.name && row.name.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.applicationCode && row.applicationCode.toLowerCase().includes(searchText.toLowerCase()))) {
+     (row.applicationCode && row.applicationCode.toLowerCase().includes(searchText.toLowerCase()))||
+     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))||
+     (row.createdBy?.basicDetails.firstName && row.createdBy?.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase()))||
+     (row.createdBy?.basicDetails.lastName && row.createdBy?.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))
+
+     ) {
       return true;
     }
     return Object.values(row).some((value) =>
