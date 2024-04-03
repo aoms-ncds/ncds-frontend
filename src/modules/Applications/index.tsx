@@ -6,30 +6,40 @@ import { useEffect, useState } from 'react';
 import ApplicationServices from './extras/ApplicationServices';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import FRCountCard from '../FR/components/FRCountCard';
+import { useAuth } from '../../hooks/Authentication';
+
+
 
 const APPDashboard = () => {
   const [ApplicationCreatedCount, setApplicationCreatedCount] = useState<number | null>(null);
   const [ApplicationActiveCount, setApplicationActiveCount] = useState<number | null>(null);
   const [ApplicationApprovedCount, setApplicationApprovedCount] = useState<number | null>(null);
   const [ApplicationRejectedCount, setApplicationRejectedCount] = useState<number | null>(null);
+  const auth :any = useAuth();
   useEffect(() => {
-    ApplicationServices.getCount({ status: UserLifeCycleStates.CREATED })
-      .then((res) => setApplicationCreatedCount(res.data))
+        
+    ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
+      .then((res) =>{
+        console.log(res?.data);
+        setApplicationCreatedCount(()=>res.data.filter((dd)=>dd.division?._id==auth?.user?.division ).length)
+      })
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getCount({ status: UserLifeCycleStates.ACTIVE })
-      .then((res) => setApplicationActiveCount(res.data))
+    ApplicationServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      .then((res) =>setApplicationActiveCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
+
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getCount({ status: UserLifeCycleStates.APPROVED })
-      .then((res) => setApplicationApprovedCount(res.data))
+    ApplicationServices.getAll({ status: UserLifeCycleStates.APPROVED })
+      .then((res) =>setApplicationApprovedCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
+
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getCount({ status: UserLifeCycleStates.REJECTED })
-      .then((res) => setApplicationRejectedCount(res.data))
+    ApplicationServices.getAll({ status: UserLifeCycleStates.REJECTED })
+      .then((res) =>setApplicationRejectedCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
       .catch((error) => {
         console.log(error);
       });

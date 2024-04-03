@@ -207,7 +207,8 @@ const DivisionsList = (arg:any) => {
   };
 
   const filteredRows = (divisions ?? []).filter((row) => {
-    if ((row.details.name && row.details.name.toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.details.name && row.details?.name.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.details?.coordinator?.name?.basicDetails.firstName && row.details?.coordinator?.name?.basicDetails.firstName .toLowerCase().includes(searchText.toLowerCase())) ) {
       return true;
     }
     return Object.values(row).some((value) =>
