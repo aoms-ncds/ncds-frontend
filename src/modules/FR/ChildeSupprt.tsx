@@ -18,6 +18,7 @@ import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import ChildrenServices from '../Workers/extras/ChildrenServices';
 import ChildePDFTemplate from './components/ChildePDFTemplate';
+import { AnyARecord } from 'dns';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -432,7 +433,15 @@ const ChildeSupportPage = () => {
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
                     if (newVal) {
-                      setChildList(() => allChild?.filter((child: any) => child.division?._id == newVal?._id) ?? []);
+                      const coordinatorId :any = newVal.details?.coordinator?.name?._id;
+                      console.log(coordinatorId,'roro');
+                      
+
+                      setChildList(() => allChild?.filter((child:any) => 
+                      child.division?._id == newVal?._id  &&
+                       child.childOf?._id != coordinatorId) ?? []);
+                      
+                      
                       setDivision(newVal);
                     } else {
                       setChildList(allChild ?? []);
