@@ -18,6 +18,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import { purposes } from './extras/FRConfig';
 import DesignationParticularService from '../Settings/extras/DesignationParticularService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/Authentication';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -98,6 +99,7 @@ const WorkerSupportPage = () => {
 
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [confirmAttach, setConfirmAttach] = useState(false);
+  const user = useAuth();
 
   const [pdfProps, setPdfProps] =
   useState<{purpose:FRPurpose|null;
@@ -118,7 +120,8 @@ const WorkerSupportPage = () => {
       });
 
       const res = await FRServices.createFRRequests(requisition);
-      setRequisition2((await FRServices.getById(res.data._id)).data);
+      const res2=(await FRServices.getById(res.data._id));
+      setRequisition2(res2.data);
       enqueueSnackbar({
         message: res.message,
         variant: 'success',
@@ -130,8 +133,8 @@ const WorkerSupportPage = () => {
           requisition.purpose=='Worker'&&selectedWorker?._id?selectedWorker?._id:null,
         subDivisionId: subDivision?._id??null,
         designationParticularID: designationParticular?._id??null,
-        FrNo: res.data.FRno,
-        FrMonth: res.data.particulars[0].month }));
+        FrNo: res2.data.FRno,
+        FrMonth: res2.data.particulars[0]?.month??'' }));
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -243,8 +246,9 @@ const WorkerSupportPage = () => {
         setWorkers([]);
       }
     }
-    console.log(division, selectedWorker, subDivision, designationParticular);
-  }, [division, selectedWorker, subDivision, designationParticular]);
+    // console.log(division, selectedWorker, subDivision, designationParticular);
+  }, [purpose, division, selectedWorker, subDivision, designationParticular]);
+
 
   useEffect(() => {
     const basic=workers?.reduce(
@@ -379,14 +383,49 @@ const WorkerSupportPage = () => {
     .catch((res) => {
       console.log(res);
     });
-    DivisionsServices.getDivisions()
-      .then((res) => setDivisions(res.data))
+    // if (user.user && (user.user as User).kind == 'worker'&&(user.user as User).division) {
+    DivisionsServices.getDivisionById((user.user as User).division as unknown as string).then((res)=>{
+      setDivision(res.data ?? null);
+      setDivisions(res.data ? [res.data] : null);
+      // WorkersServices.getAll({
+      //   status: UserLifeCycleStates.ACTIVE,
+      //   division: res.data._id,
+      //   withoutCoordinator: true })
+      // .then((res) => {
+      //   console.log(res);
+      //   setWorkers(res.data);
+      // })
+      //  .catch((res) => {
+      //    console.log(res);
+      //  });
+      DivisionsServices.getSubDivisionsByDivisionId(res.data?._id??'' )
+       .then((res2) => setSubDivisions(res2.data))
+       // .then((res) => console.log(res.data, 'sec'))
+       .catch((error) =>
+         enqueueSnackbar({
+           variant: 'error',
+           message: error.message,
+         }),
+       );
+    })
       .catch((error) =>
         enqueueSnackbar({
           variant: 'error',
           message: error.message,
         }),
+
       );
+    // } else {
+    //   DivisionsServices.getDivisions()
+    //   .then((res) =>
+    //     setDivisions(res.data))
+    //   .catch((error) =>
+    //     enqueueSnackbar({
+    //       variant: 'error',
+    //       message: error.message,
+    //     }),
+    //   );
+    // }
   }, []);
 
   useEffect(() => {
@@ -989,7 +1028,7 @@ const WorkerSupportPage = () => {
                           }));
                         }
                         setPurpose(selectedPurpose);
-                        setDivision(null);
+                        // setDivision(null);
                         setDesignationParticular(null);
                       }}
                       renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard'/>}
@@ -1037,6 +1076,8 @@ const WorkerSupportPage = () => {
                         <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                           required />
                       )}
+                      disabled
+
                     />
                   </Grid>
                   {requisition.purpose==='Subdivision'&&
