@@ -172,7 +172,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     }
                   }}
                   disabled={props.action == 'view'}
-                  label={'Senior Leader Name'}
+                  label={'Junior Leader 1'}
                   required={false}
                 />
               </FormControl>
@@ -202,7 +202,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                       });
                     }
                   }}
-                  label={'Junior Leader Name'}
+                  label={'Junior Leader 2'}
                   required={false}
                 />
               </FormControl>
