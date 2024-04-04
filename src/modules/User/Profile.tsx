@@ -419,9 +419,9 @@ const Profile = () => {
                           </Grid>
                           <Grid item xs={12}><br /><Typography textAlign="center"> <span style={{ fontWeight: 600 }}> CHILD CODE :</span> {child.childCode}</Typography></Grid>
                           {/* <Grid key={child._id} item xs={12} lg={6}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Code: </Typography> {child.childCode} </Grid> */}
-                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name: </Typography> {child.firstName} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>First Name: </Typography> {child?.firstName} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}> </Typography> </Grid>
-                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {child.lastName} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Last Name: </Typography> {child?.lastName} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>DOB: </Typography> {child.dateOfBirth?.format('DD/MM/YYYY')} </Grid>
                           <Grid item xs={12} lg={4}><Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Age:</Typography>{(child.dateOfBirth?.fromNow() || '').replace(' ago', '')}</Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {child?.gender} </Grid>
@@ -432,8 +432,8 @@ const Profile = () => {
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {child.occupation} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {child.qualification} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Level: </Typography> </Grid>
-                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}></Typography> {child.childSupport.name} </Grid>
-                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Amount: </Typography> {child.childSupport.amount} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}></Typography> {child.childSupport?.name} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Amount: </Typography> {child.childSupport?.amount} </Grid>
 
                           {/* <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Profile Added On: </Typography> {child?.profileAddedOn?.format('DD/MM/YYYY')} </Grid> */}
                           <Grid item xs={12} lg={4}>

@@ -143,7 +143,7 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
           <Grid>
             <br/>
           </Grid>
-          {users && users.length > 0 && (
+          {subDivision && subDivision && (
             <UsersDropdown
               users={users??[]}
               value={subDivision.leader??null}
@@ -170,7 +170,6 @@ const SubDivisionsPage: React.FC<SubDivisionsPageProps> = ({ withCardContainer =
               required={false}
               disabled={action=='view'}
             />
-
           )}
         </Grid>
       ))}
