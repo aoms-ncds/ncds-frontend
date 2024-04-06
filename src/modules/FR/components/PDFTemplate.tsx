@@ -319,7 +319,7 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
     <Document>
       <Page size={'A2'} style={styles.page} orientation='landscape'>
         <div>
-          <Image src="/3D Logo.png" style={styles.image} />
+          <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
             {`WORKER SUPPORT- UPDATION DETAILS OF ${purpose}`}
           </Text>
