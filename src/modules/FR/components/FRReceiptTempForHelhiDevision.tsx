@@ -175,13 +175,13 @@ console.log(props,'props');
             <Text style={styles.datetitle}>
             Place: 
             </Text>
-            <Text style={styles.date}> {moment(props.rowData.FRdate).format('DD-MM-yyyy')}</Text>
+            <Text style={styles.date}>Delhi</Text>
           </div>
           <div>
             <Text style={styles.divisiontitle1 }>Name of the Bank:</Text>
             <Text style={styles.bank}>{props?.rowData?.sanctionedBank}</Text>
             <Text style={styles.divisiontitle2}>Account No:</Text>
-            <Text style={styles.date1 }>{props?.rowData.sanctionedBank}</Text>
+            <Text style={styles.date1 }>0</Text>
           </div>
         </div>
         <div style={{ marginTop: 220, width: 560, left: 20, right: 20 }}>
@@ -235,11 +235,11 @@ console.log(props,'props');
               <PDFCell width={'80%'}></PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
-              Total amount :
+          
               </PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
-                {totalAmount.toString()}
+                {/* {totalAmount.toString()} */}
               </PDFCell>
             </PDFTableRow>
           </PDFTable>
@@ -268,16 +268,40 @@ console.log(props,'props');
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
           <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
+          <Text style={{ left: 115,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Co-Ordinator</Text>
           <Text style={{ left: 260,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
+          <Text style={{ left: 290,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} </Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
-
+           <Image style={{ left: 480,top:20,
+            position: 'absolute',
+            height: 20,
+            width: 50 }}
+          src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
+          
           <Text style={{ left: 60,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
+          <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
+
           <Text style={{ left: 260,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
+          <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader.name?.basicDetails?.firstName} </Text>
+
           <Text style={{ left: 460,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
+          <Image style={{ left: 480,top:40,
+            position: 'absolute',
+            height: 20,
+            width: 50 }}
+            src={`data:${props.rowData.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData.division?.details.seniorLeader?.sign?.base64} `}/>
 
           <Text style={{ left: 60,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
+          <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
+
           <Text style={{ left: 260,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
+          <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader.name?.basicDetails.firstName} </Text>
           <Text style={{ left: 460,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
+          <Image style={{ left: 480,top:60,
+            position: 'absolute',
+            height: 20,
+            width: 50 }}
+            src={`data:${props.rowData.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData.division?.details.juniorLeader?.sign?.base64} `}/>
 
 
         </div>
@@ -287,7 +311,7 @@ console.log(props,'props');
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Date:</Text>
         </div> */}
 
-        <div style={{ marginTop: 100 }}>
+        {/* <div style={{ marginTop: 100 }}>
           <Text style={{ fontSize: 12, paddingLeft: 25, paddingRight: 70, marginLeft: 55 }}>
             * The Original requisition must reach Delhi Office by 15 of the previous month for which money is requested. If it is not received in Delhi Office by that date, it will be presumed that
             there is no needs of finance in your area for the month of you have balance of money with you
@@ -303,7 +327,7 @@ console.log(props,'props');
           >
             * All Disputes are subjected to Delhi jurisdiction
           </Text>
-        </div>
+        </div> */}
 
       </Page>
     </Document>
