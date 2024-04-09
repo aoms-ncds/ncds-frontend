@@ -12,6 +12,7 @@ import SanctionedAsPer from '../SanctionedAsPer';
 import Particulars from '../Particulars';
 import PaymentMethod from '../PaymentMethod';
 import DesignationParticulars from '../DesignationParticular';
+import LeaderDetails from '../LeaderDetails';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -147,6 +148,15 @@ const settingsRoutes: ModuleRoute = {
       title: 'Assign Particulars for Designation',
       path: '/designationParticulars',
       element: <DesignationParticulars/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Leader Details',
+      path: '/leaderDetails',
+      element: <LeaderDetails/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
