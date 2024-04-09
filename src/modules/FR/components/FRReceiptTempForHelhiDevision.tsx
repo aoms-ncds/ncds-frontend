@@ -3,7 +3,8 @@ import moment from 'moment';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from '../../IRO/components/PDFTable';
 import { Page, Text, Document, StyleSheet, Font, Image, View } from '@react-pdf/renderer';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import LeaderDetailsService from '../../Settings/extras/LeaderDetailsService';
 
 Font.register({ family: 'Oswald', fonts: [
   { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf' },
@@ -147,11 +148,12 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTempForDelhiDivision = (props:{rowData:FR}) => {
+const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-console.log(props,'props');
+  console.log(props.label[0]?.name,'prop');
+  
 
   let totalAmount=0;
   return (
@@ -268,7 +270,7 @@ console.log(props,'props');
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
           <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
-          <Text style={{ left: 115,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Co-Ordinator</Text>
+          <Text style={{ left: 115,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[0]?.name}</Text>
           <Text style={{ left: 260,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
           <Text style={{ left: 290,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} </Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
@@ -279,7 +281,7 @@ console.log(props,'props');
           src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
           
           <Text style={{ left: 60,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
-          <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
+          <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[1]?.name}</Text>
 
           <Text style={{ left: 260,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
           <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader.name?.basicDetails?.firstName} </Text>
@@ -292,7 +294,7 @@ console.log(props,'props');
             src={`data:${props.rowData.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData.division?.details.seniorLeader?.sign?.base64} `}/>
 
           <Text style={{ left: 60,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
-          <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
+          <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[2]?.name}</Text>
 
           <Text style={{ left: 260,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
           <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader.name?.basicDetails.firstName} </Text>

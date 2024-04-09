@@ -29,6 +29,7 @@ import FRReceiptTemplate from './components/FRReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import clsx from 'clsx';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
+import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -46,12 +47,21 @@ const ManageFrPage = () => {
     remark: '',
     transactionId: '',
   });
+  
+  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
         // console.log(res, 'rr');
         setFRRequests(res.data.filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+      LeaderDetailsService.getAll()
+      .then((res) => {
+        setLeaderHeading(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -201,7 +211,7 @@ const ManageFrPage = () => {
                     id: 'print',
                     text: 'Print FR HQ DELHI',
                     component: PDFDownloadLink,
-                    document: <FRReceiptTempForDelhiDivision rowData={props.row as FR} />,
+                    document: <FRReceiptTempForDelhiDivision label={Label} rowData={props.row as FR} />,
                     fileName: 'FRReceiptDelhi.pdf',
                     icon: PrintIcon,
                 },

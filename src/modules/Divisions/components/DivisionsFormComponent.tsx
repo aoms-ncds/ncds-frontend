@@ -10,11 +10,14 @@ import UsersDropdown from '../../User/components/UsersDropdown';
 import UserServices from '../../User/extras/UserServices';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
+import LeaderDetailsService from '../../Settings/extras/LeaderDetailsService';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
   const [showFileUploader2, setShowFileUploader2] = useState(false);
   const [showFileUploader3, setShowFileUploader3] = useState(false);
+  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
+
   const [users, setUsers] = useState<User[] | null>(null);
   const { editID } = useParams();
   useEffect(() => {
@@ -30,6 +33,17 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           });
         });
     }
+    LeaderDetailsService.getAll()
+    .then((res) => {
+      setLeaderHeading(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+      enqueueSnackbar({
+        variant: 'error',
+        message: res.message,
+      });
+    });
   }, []);
 
   return (
@@ -142,7 +156,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     }
                   }}
                   disabled={props.action === 'view'}
-                  label={'Co-ordinator Name'}
+                  label={(props?.value?.name === 'HQ DELHI' && Label?.[0]?.name) || 'Co-ordinator Name'}
                   required={false}
                 />
               </FormControl>
@@ -172,7 +186,9 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     }
                   }}
                   disabled={props.action == 'view'}
-                  label={'Junior Leader 1'}
+                  // label={'Junior Leader 1'}
+                  label={(props?.value?.name === 'HQ DELHI' && Label?.[1]?.name) || 'Junior Leader 1'}
+
                   required={false}
                 />
               </FormControl>
@@ -202,7 +218,9 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                       });
                     }
                   }}
-                  label={'Junior Leader 2'}
+                  // label={'Junior Leader 2'}
+                  label={(props?.value?.name === 'HQ DELHI' && Label?.[2]?.name) || 'Junior Leader 2'}
+
                   required={false}
                 />
               </FormControl>
