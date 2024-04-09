@@ -156,7 +156,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     }
                   }}
                   disabled={props.action === 'view'}
-                  label={(props?.value?.name === 'HQ DELHI' && Label?.[0]?.name) || 'Co-ordinator Name'}
+                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[0]?.name) || 'Co-ordinator Name'}
                   required={false}
                 />
               </FormControl>
@@ -187,7 +187,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   }}
                   disabled={props.action == 'view'}
                   // label={'Junior Leader 1'}
-                  label={(props?.value?.name === 'HQ DELHI' && Label?.[1]?.name) || 'Junior Leader 1'}
+                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[1]?.name) || 'Junior Leader 1'}
 
                   required={false}
                 />
@@ -219,7 +219,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     }
                   }}
                   // label={'Junior Leader 2'}
-                  label={(props?.value?.name === 'HQ DELHI' && Label?.[2]?.name) || 'Junior Leader 2'}
+                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[2]?.name) || 'Junior Leader 2'}
 
                   required={false}
                 />

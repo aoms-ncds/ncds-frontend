@@ -205,7 +205,7 @@ const ManageFrPage = () => {
             //   fileName: 'FRReceipt.pdf',
             //   icon: PrintIcon,
             // },
-            ...(props.row.division?.details?.name == "HQ DELHI" ?
+            ...(props.row.division?.details?.name == "DELHI OFFICE" ?
               [
                 {
                     id: 'print',
