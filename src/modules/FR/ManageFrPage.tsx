@@ -28,6 +28,8 @@ import moment from 'moment';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import clsx from 'clsx';
+import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
+
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
@@ -185,14 +187,35 @@ const ManageFrPage = () => {
               icon: EditNoteIcon,
             },
 
-            {
-              id: 'print',
-              text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row as FR} />,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
-            },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   document: <FRReceiptTemplate rowData={props.row as FR} />,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
+            ...(props.row.division?.details?.name == "HQ DELHI" ?
+              [
+                {
+                    id: 'print',
+                    text: 'Print FR HQ DELHI',
+                    component: PDFDownloadLink,
+                    document: <FRReceiptTempForDelhiDivision rowData={props.row as FR} />,
+                    fileName: 'FRReceiptDelhi.pdf',
+                    icon: PrintIcon,
+                },
+              ] :
+              [
+                {
+                  id: 'print',
+                  text: 'Print FR',
+                  component: PDFDownloadLink,
+                  document: <FRReceiptTemplate rowData={props.row as FR} />,
+                  fileName: 'FRReceipt.pdf',
+                  icon: PrintIcon,
+                }
+              ]),
             {
               id: 'notification',
               text: 'Send notification',
