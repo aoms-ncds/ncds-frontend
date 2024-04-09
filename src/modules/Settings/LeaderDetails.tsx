@@ -214,7 +214,7 @@ const LeaderDetails = () => {
       </Dialog>
 
       <Card>
-        {Label?.length ==2 && (
+        {Label?.length !=3  && (
         <Grid container spacing={2} >
           <Grid item xs={12} sx={{ px: 2 }}>
             <br />
