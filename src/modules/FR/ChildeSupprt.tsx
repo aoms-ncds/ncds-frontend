@@ -10,7 +10,7 @@ import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { useAuth } from '../../hooks/Authentication';
-import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -134,7 +134,7 @@ const ChildeSupportPage = () => {
   useEffect(() => {
     let tot = 0;
     childList.map((i) => {
-      tot += i.childSupport?.amount;
+      tot += i.childSupport.amount;
       setTotal(tot)
     });
     console.log(tot, 'tot');
@@ -454,7 +454,7 @@ const ChildeSupportPage = () => {
                     <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                       required />
                   )}
-                  disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                  disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
                 />
               </Grid>
               <Grid item xs={12} md={6}>

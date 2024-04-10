@@ -1077,7 +1077,7 @@ const WorkerSupportPage = () => {
                         <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                           required />
                       )}
-                      disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                      disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
 
                     />
                   </Grid>
