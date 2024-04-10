@@ -16,6 +16,8 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const [showFileUploader1, setShowFileUploader1] = useState(false);
   const [showFileUploader2, setShowFileUploader2] = useState(false);
   const [showFileUploader3, setShowFileUploader3] = useState(false);
+  const [showFileUploader4, setShowFileUploader4] = useState(false);
+  const [showFileUploader5, setShowFileUploader5] = useState(false);
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
   const [users, setUsers] = useState<User[] | null>(null);
@@ -231,6 +233,69 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               </Button>
             </Grid>
           </Grid>
+
+          {props?.value?.name === 'DELHI OFFICE' && (
+
+          <><Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.president?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          president: {
+                            ...props.value.president,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    } }
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' && Label?.[3]?.name) || 'Junior Leader 2'}
+
+                    required={false} />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader4(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid><Grid item xs={12} md={4}>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <UsersDropdown
+                      users={users ?? []}
+                      disabled={props.action == 'view'}
+                      value={props.value.officeManager?.name ?? null}
+                      onChange={(e, newValue) => {
+                        if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            officeManager: {
+                              ...props.value.officeManager,
+                              name: newValue,
+                            },
+                          });
+                        }
+                      } }
+                      // label={'Junior Leader 2'}
+                      label={(props?.value?.name === 'DELHI OFFICE' && Label?.[4]?.name) || 'Junior Leader 2'}
+
+                      required={false} />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader5(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                    E-signature
+                  </Button>
+                </Grid>
+              </Grid></>
+          )}
         </>
       )}
       {/* </Grid>
@@ -394,6 +459,116 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               ...props.value,
               juniorLeader: {
                 ...props.value.juniorLeader,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+      <FileUploader
+        title=" President "
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader4}
+        onClose={() => setShowFileUploader4(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.president?.sign ? [props.value.president?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              president: {
+                ...props.value.president,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            president: {
+              ...props.value.president,
+              sign: props.value.president?.sign ?
+                {
+                  ...props.value.president?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              president: {
+                ...props.value.president,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+      <FileUploader
+        title=" Office Manger "
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader5}
+        onClose={() => setShowFileUploader5(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.officeManager?.sign ? [props.value.officeManager?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              officeManager: {
+                ...props.value.officeManager,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            officeManager: {
+              ...props.value.officeManager,
+              sign: props.value.officeManager?.sign ?
+                {
+                  ...props.value.officeManager?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              officeManager: {
+                ...props.value.officeManager,
                 sign: undefined,
               },
             });

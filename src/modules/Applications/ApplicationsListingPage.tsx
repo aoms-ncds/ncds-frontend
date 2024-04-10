@@ -53,6 +53,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         coordinator: {},
         seniorLeader: {},
         juniorLeader: {},
+        president: {},
+        officeManager: {},
       },
       subDivisions: [
         {

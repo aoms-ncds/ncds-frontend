@@ -43,6 +43,14 @@ declare global {
       name?:User;
       sign?:FileObject;
     };
+    president?:{
+      name?:User;
+      sign?:FileObject;
+    };
+    officeManager?:{
+      name?:User;
+      sign?:FileObject;
+    };
   }
 
 

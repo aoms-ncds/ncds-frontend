@@ -132,6 +132,8 @@ const ViewIRO = () => {
         coordinator: {},
         seniorLeader: {},
         juniorLeader: {},
+        president: {},
+        officeManager: {},
       },
       subDivisions: [
         {

@@ -96,6 +96,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         coordinator: {},
         seniorLeader: {},
         juniorLeader: {},
+        president: {},
+        officeManager: {},
       },
       subDivisions: [
         {

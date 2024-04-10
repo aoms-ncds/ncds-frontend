@@ -128,6 +128,8 @@ const EditIRO = () => {
         coordinator: {},
         seniorLeader: {},
         juniorLeader: {},
+        president: {},
+        officeManager: {},
       },
       subDivisions: [
         {
