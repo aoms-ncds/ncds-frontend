@@ -384,38 +384,47 @@ const WorkerSupportPage = () => {
       console.log(res);
     });
     // if (user.user && (user.user as User).kind == 'worker'&&(user.user as User).division) {
-    DivisionsServices.getDivisions().then((res)=>{
-      // setDivision(res.data ?? null);
-      setDivisions(res.data);
-      // WorkersServices.getAll({
-      //   status: UserLifeCycleStates.ACTIVE,
-      //   division: res.data._id,
-      //   withoutCoordinator: true })
-      // .then((res) => {
-      //   console.log(res);
-      //   setWorkers(res.data);
-      // })
-      //  .catch((res) => {
-      //    console.log(res);
-      //  });'
-      
-      DivisionsServices.getSubDivisionsByDivisionId(division?._id??'' )
-       .then((res2) => setSubDivisions(res2.data))
-       // .then((res) => console.log(res.data, 'sec'))
-       .catch((error) =>
-         enqueueSnackbar({
-           variant: 'error',
-           message: error.message,
-         }),
-       );
-    })
-      .catch((error) =>
-        enqueueSnackbar({
-          variant: 'error',
-          message: error.message,
-        }),
-
-      );
+      if(Boolean(user.user && (user.user as User).kind == 'worker')){
+        DivisionsServices.getDivisionById((user.user as User).division as unknown as string).then((res)=>{
+          setDivision(res.data ?? null);
+          setDivisions(res.data ? [res.data] : null);
+        })
+          
+      }else{
+        DivisionsServices.getDivisions().then((res)=>{
+          // setDivision(res.data ?? null);
+          setDivisions(res.data);
+          // WorkersServices.getAll({
+          //   status: UserLifeCycleStates.ACTIVE,
+          //   division: res.data._id,
+          //   withoutCoordinator: true })
+          // .then((res) => {
+          //   console.log(res);
+          //   setWorkers(res.data);
+          // })
+          //  .catch((res) => {
+           
+          //    console.log(res);
+          //  });'
+          
+          DivisionsServices.getSubDivisionsByDivisionId(division?._id??'' )
+           .then((res2) => setSubDivisions(res2.data))
+           // .then((res) => console.log(res.data, 'sec'))
+           .catch((error) =>
+             enqueueSnackbar({
+               variant: 'error',
+               message: error.message,
+             }),
+           );
+        })
+          .catch((error) =>
+            enqueueSnackbar({
+              variant: 'error',
+              message: error.message,
+            }),
+    
+          );
+      }
     // } else {
       // DivisionsServices.getDivisions()
       // .then((res) =>
