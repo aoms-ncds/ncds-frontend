@@ -9,7 +9,7 @@ import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -384,9 +384,9 @@ const WorkerSupportPage = () => {
       console.log(res);
     });
     // if (user.user && (user.user as User).kind == 'worker'&&(user.user as User).division) {
-    DivisionsServices.getDivisionById((user.user as User).division as unknown as string).then((res)=>{
-      setDivision(res.data ?? null);
-      setDivisions(res.data ? [res.data] : null);
+    DivisionsServices.getDivisions().then((res)=>{
+      // setDivision(res.data ?? null);
+      setDivisions(res.data);
       // WorkersServices.getAll({
       //   status: UserLifeCycleStates.ACTIVE,
       //   division: res.data._id,
@@ -397,8 +397,9 @@ const WorkerSupportPage = () => {
       // })
       //  .catch((res) => {
       //    console.log(res);
-      //  });
-      DivisionsServices.getSubDivisionsByDivisionId(res.data?._id??'' )
+      //  });'
+      
+      DivisionsServices.getSubDivisionsByDivisionId(division?._id??'' )
        .then((res2) => setSubDivisions(res2.data))
        // .then((res) => console.log(res.data, 'sec'))
        .catch((error) =>
@@ -416,15 +417,15 @@ const WorkerSupportPage = () => {
 
       );
     // } else {
-    //   DivisionsServices.getDivisions()
-    //   .then((res) =>
-    //     setDivisions(res.data))
-    //   .catch((error) =>
-    //     enqueueSnackbar({
-    //       variant: 'error',
-    //       message: error.message,
-    //     }),
-    //   );
+      // DivisionsServices.getDivisions()
+      // .then((res) =>
+      //   setDivisions(res.data))
+      // .catch((error) =>
+      //   enqueueSnackbar({
+      //     variant: 'error',
+      //     message: error.message,
+      //   }),
+      // );
     // }
   }, []);
 
@@ -1076,7 +1077,7 @@ const WorkerSupportPage = () => {
                         <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                           required />
                       )}
-                      disabled
+                      disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                     />
                   </Grid>
