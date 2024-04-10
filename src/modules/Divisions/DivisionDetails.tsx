@@ -78,6 +78,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       coordinator: {},
       seniorLeader: {},
       juniorLeader: {},
+      president: {},
+        officeManager: {},
     },
     subDivisions: [
       {
