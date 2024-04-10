@@ -254,7 +254,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Date:</Text>
         </div> */}
 
-        <div style={{ marginTop: 80 }}>
+        {/* <div style={{ marginTop: 80 }}>
           <Text style={{ fontSize: 12, paddingLeft: 25, paddingRight: 70, marginLeft: 55 }}>
             * The Original requisition must reach Delhi Office by 15 of the previous month for which money is requested. If it is not received in Delhi Office by that date, it will be presumed that
             there is no needs of finance in your area for the month of you have balance of money with you
@@ -270,7 +270,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           >
             * All Disputes are subjected to Delhi jurisdiction
           </Text>
-        </div>
+        </div> */}
 
       </Page>
     </Document>
