@@ -284,7 +284,7 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
           <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[1]?.name}</Text>
 
           <Text style={{ left: 260,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails?.lastName} </Text>
 
           <Text style={{ left: 460,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:40,
@@ -297,7 +297,7 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
           <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[2]?.name}</Text>
 
           <Text style={{ left: 260,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:60,
             position: 'absolute',
