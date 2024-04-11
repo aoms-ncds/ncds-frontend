@@ -248,9 +248,9 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           
           <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 260,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails.lastName}</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails.lastName}</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text> 
