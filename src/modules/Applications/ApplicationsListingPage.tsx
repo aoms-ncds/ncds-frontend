@@ -393,7 +393,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     {
       field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
-        <p> {props.row.createdBy?.basicDetails.firstName + ' ' + props.row.createdBy?.basicDetails.lastName}</p>,
+        // <p> {props.row.createdBy?.basicDetails.firstName  + ' ' + props.row.createdBy?.basicDetails?.middleName + ' ' + props.row.createdBy?.basicDetails.lastName} </p>,
+        <p> 
+        {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
+        {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
+        {props.row.createdBy?.basicDetails?.lastName || ''} 
+      </p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
