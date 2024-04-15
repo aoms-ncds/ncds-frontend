@@ -298,7 +298,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                 onClick={handleOpenUserMenu} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography sx={{ paddingLeft: '5px', fontSize: '15px', fontWeight: '600' }} variant="h6" component='span'>
-                  {`${auth.user?.basicDetails.firstName} ${auth.user?.basicDetails.lastName}`}
+                  {`${auth.user?.basicDetails.firstName} ${auth.user?.basicDetails.middleName ?? ''} ${auth.user?.basicDetails.lastName ?? ''}`}
                 </Typography>
                 <Typography sx={{ paddingLeft: '8px', fontSize: '13px', fontWeight: '500' }} variant="body1" component='span'>
                   {Division}
