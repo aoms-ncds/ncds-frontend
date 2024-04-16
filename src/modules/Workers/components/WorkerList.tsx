@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import {
   Card,
   CardHeader,
@@ -16,6 +16,7 @@ import {
   DialogTitle,
   IconButton,
   InputAdornment,
+  Autocomplete,
 } from '@mui/material';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../../components/GridLinkAction';
@@ -29,6 +30,8 @@ import { useNavigate } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
+import ReasonforDeactivationService from '../../Settings/extras/ReasonforDeactivationService';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface UserCardProps {
   user: IWorker;
@@ -40,12 +43,14 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [rowID, setRowID] = useState<string>('');
-  const [reasonDialog, setReasonDialog] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
+  const [reason, setReason] = useState<IReason[]>([]);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
+  const [reasonDialog, setReasonDialog] = useState(false);
 
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
@@ -55,7 +60,11 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  useEffect(() => {
+    ReasonforDeactivationService.getAll().then((res) => {
+      setReason(res.data);
+    });
+  }, []);
   const assignRemark = (id: string) => {
     toggleOpenRemarks(true);
     setSelectedUser(id);
@@ -69,7 +78,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
         });
       });
   };
-
+ 
   const activateWorker = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Activating Worker',
@@ -77,6 +86,35 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
     });
     WorkersServices.activate(id)
       .then((res) => {
+        if (res.success) {
+          window.location.reload();
+        //   const newWorkerRequests = user.value.filter((workerRequests: { _id: string; }) => workerRequests._id !== id);
+        //   user.onChange(newWorkerRequests);
+        }
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+  const deactivateWorker = (id: string, reason: any) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Deactivating Worker',
+      variant: 'info',
+    });
+    WorkersServices.deactivate(id, reason)
+      .then((res) => {
+        console.log(reason);
+        window.location.reload();
         // if (props.value) {
         //   const newWorkerRequests = props.value.filter((workerRequests) => workerRequests._id !== id);
         //   props.onChange(newWorkerRequests);
@@ -270,6 +308,46 @@ const UserCard: React.FC<UserCardProps> = ({ user, removeUser }) => {
           </DialogActions>
         </form>
       </Dialog>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <Autocomplete
+            options={reason ?? null}
+            value={reasonForDeactivation as IReason}
+            getOptionLabel={(option) => option.reason ?? ''}
+            onChange={(e, selectedReason) => {
+              setReasonForDeactivation(selectedReason ?? null);
+            } }
+            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+            fullWidth />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            } }
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (reasonForDeactivation) {
+                deactivateWorker(rowID, reasonForDeactivation);
+              }
+              setReasonDialog(false);
+            } }
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
@@ -283,7 +361,7 @@ interface UserListProps {
 // eslint-disable-next-line react/no-multi-comp
 const WorkerList: React.FC<UserListProps> = ({ users, onScroll, deleteUser }) => {
   const listRef = useRef<HTMLDivElement>(null);
-
+ 
   const handleScroll = useCallback(() => {
     console.log('hi therw');
     if (!listRef.current) return;
@@ -313,14 +391,18 @@ const WorkerList: React.FC<UserListProps> = ({ users, onScroll, deleteUser }) =>
     deleteUser(userId);
   };
 
+
+  
   return (
-    <Grid container spacing={2} ref={listRef} style={{ maxHeight: '550px', overflowY: 'auto' }}>
+    <><Grid container spacing={2} ref={listRef} style={{ maxHeight: '550px', overflowY: 'auto' }}>
       {users.map((user) => (
         <Grid item key={user._id} xs={12} sm={6} md={4} lg={3}>
           <UserCard user={user} key={user._id} removeUser={callDelete} />
         </Grid>
       ))}
     </Grid>
+  </>
+    
   );
 };
 
