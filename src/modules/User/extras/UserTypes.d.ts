@@ -41,6 +41,7 @@ declare global {
     LOCAL_ACCOUNT_ACCESS: boolean;
     PERSONAL_ACCOUNTS_ACCESS: boolean;
     HR_DPARTMENT_ACCESS: boolean;
+    DELHI_DIVISION_ACCESS: boolean;
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
