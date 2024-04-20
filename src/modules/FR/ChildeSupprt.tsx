@@ -19,6 +19,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import ChildrenServices from '../Workers/extras/ChildrenServices';
 import ChildePDFTemplate from './components/ChildePDFTemplate';
 import { AnyARecord } from 'dns';
+import { useNavigate } from 'react-router-dom';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -60,11 +61,13 @@ const ChildeSupportPage = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [toggleRaiseFR, setToggleRaiseFR] = useState<boolean>(false);
   const [requisition, setRequisition] = useState<CreatableFR>({
+
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
     sanctionedAsPer: ''
   });
+  const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
   console.log(childList, 'childList');
   type NewValType = {
@@ -134,7 +137,7 @@ const ChildeSupportPage = () => {
   useEffect(() => {
     let tot = 0;
     childList.map((i) => {
-      tot += i.childSupport.amount;
+      tot += i.childSupport?.amount;
       setTotal(tot)
     });
     console.log(tot, 'tot');
@@ -229,6 +232,15 @@ const ChildeSupportPage = () => {
 
   }, []);
 
+  const handleClick = (rowId: any) => {
+    ChildrenServices.getById(rowId.id)
+      .then((res) => {
+        navigate(`/users/worker/${res.data.childOf}/3`);
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      })
+    }
   const columns: GridColDef[] = [
     {
       field: 'actions',
@@ -237,7 +249,7 @@ const ChildeSupportPage = () => {
       headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
-          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/child/${params.row._id}`} />,
+          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu  onClick={() => handleClick(params)} />,
           // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
