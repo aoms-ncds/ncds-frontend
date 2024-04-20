@@ -344,7 +344,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
 
             {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
               totalAmount += item.requestedAmount ?? 0;
-              totalAmount2 += props.rowData.sanctionedAmount ?? 0;
+              // totalAmount2 += props.rowData.sanctionedAmount ?? 0;
              
 
               return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10  }}  width={'20%'}>
@@ -397,7 +397,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
               <br /> {totalAmount as any}
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', color:'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-                <br />{totalAmount2 as any}
+                <br />{props.rowData.sanctionedAmount ?? 0 as any}
               </PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
             </PDFTableRow>

@@ -75,6 +75,16 @@ const frDashboard = () => {
             <br />
             <br />
             <Grid container spacing={3}>
+            <PermissionChecks
+                permissions={['RAISE_WORKERS_FR']}
+                granted={( <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton primaryText="Add" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
+                </Grid>)}/>
+              <PermissionChecks
+                permissions={['RAISE_WORKERS_FR']}
+                granted={( <Grid item xs={12} md={4} xl={3}>
+                  <DashboardCardButton primaryText="Add" secondaryText="Child Support" color="#fff" targetRoute="/fr/child_support" />
+                </Grid>)}/>
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
@@ -107,16 +117,7 @@ const frDashboard = () => {
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Reverted"
                   secondaryText="FR" color="#fff" targetRoute="/fr/sentBack" />
               </Grid>
-              <PermissionChecks
-                permissions={['RAISE_WORKERS_FR']}
-                granted={( <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton primaryText="Manage" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
-                </Grid>)}/>
-              <PermissionChecks
-                permissions={['RAISE_WORKERS_FR']}
-                granted={( <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton primaryText="Manage" secondaryText="Child Support" color="#fff" targetRoute="/fr/child_support" />
-                </Grid>)}/>
+             
             </Grid>
 
           </>
