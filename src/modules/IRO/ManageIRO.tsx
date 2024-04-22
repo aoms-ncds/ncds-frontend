@@ -240,7 +240,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           .catch((error) => {
             console.error(error);
           });
-      }
+      } 
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
           .then((res) => {
@@ -250,18 +250,66 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             console.error(error);
           });
       }
-      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Personal Bank' })
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank'})
           .then((res) => {
+            console.log(res.data, 'UIOP');
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+          
+      }
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
+          .then((res) => {
+            console.log(res.data, 'UIOP');
+            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
             console.error(error);
           });
       }
-      if (userPermissions?.PERSONAL_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
+          .then((res) => {
+            console.log(res.data, 'UIOP');
+            
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
+          .then((res) => {
+            console.log(res.data, 'UIOP');
+            
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
+          .then((res) => {
+            console.log(res.data, 'UIOP');
+            
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      if (userPermissions?.OTHER_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
+          console.log(res.data, 'datgajdfj');
+          
         });
       }
     } else {

@@ -308,9 +308,15 @@ DivisionsList(divisionDetails)
                 ))}
 
                 <Grid item xs={12}>
-                  {action !== 'view' && (
+                  {action !== 'view' && otherBankDetailsCount !=4 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       Add More Banks
+                    </Button>
+                  )}
+                  
+                  {action !== 'view'  && (
+                    <Button style={{marginLeft:"2px"}} variant="contained" onClick={() => setOtherBankDetailsCount((count) => count - 1)}>
+                      Remove
                     </Button>
                   )}
                   {action === 'view' && (

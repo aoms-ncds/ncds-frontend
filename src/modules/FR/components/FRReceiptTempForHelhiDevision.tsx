@@ -186,7 +186,7 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
             <Text style={styles.date1 }>0</Text>
           </div>
         </div>
-        <div style={{ marginTop: 220, width: 560, left: 20, right: 20 }}>
+        <div style={{ marginTop: 230, width: 560, left: 20, right: 20 }}>
           <PDFTable>
             <PDFTableHeader>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60'}>
@@ -195,13 +195,19 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
                 FR particulars
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'20%'}>
-              Requested Amount
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
+                Sub Division Name
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'20%'}>
-              Sanction Amount
+                Quantity
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'20%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'80%'}>
+                Description
+              </PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
+                 Month
+              </PDFCell>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
                 Total
               </PDFCell>
             </PDFTableHeader>
@@ -216,15 +222,23 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
                   {item.mainCategory}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
-                {String(item.requestedAmount)}
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
+                  {props?.rowData.purposeSubdivision?.name}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
-                  {String(props.rowData.sanctionedAmount)}
+                  {String(item.quantity)}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
+                <PDFCell style={{ textAlign: 'center', fontSize: 9 }} width={'80%'}>
+                  {item.narration}
+                </PDFCell>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'} >
+                  {item?.month}
+                </PDFCell>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'25%'}>
                   {String(item.requestedAmount)}
                 </PDFCell>
               </PDFTableRow>;
@@ -237,11 +251,11 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
               <PDFCell width={'80%'}></PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
-          
+              Total amount :
               </PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
-                {/* {totalAmount.toString()} */}
+                {totalAmount.toString()}
               </PDFCell>
             </PDFTableRow>
           </PDFTable>

@@ -844,7 +844,6 @@ const WorkerSupportPage = () => {
       headerAlign: 'center',
       renderHeader: () => <b>{'To'}</b>,
       valueGetter: (params) => params.row.supportStructure?.disabledFrom? moment( params.row.supportStructure?.disabledTo)?.format('DD/MM/YYYY'):null,
-
     },
     {
       field: 'reason',

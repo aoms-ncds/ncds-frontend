@@ -143,8 +143,8 @@ const ReconciliationIRO = () => {
           console.error(error);
         });
     }
-    if (permissions?.PERSONAL_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ sanctionedBank: 'Personal Bank' })
+    if (permissions?.OTHER_ACCOUNTS_ACCESS) {
+      IROServices.getReconciliation({ sanctionedBank: 'Other Bank' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -152,7 +152,7 @@ const ReconciliationIRO = () => {
           console.error(error);
         });
     }
-    if (permissions?.PERSONAL_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
+    if (permissions?.OTHER_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation()
         .then((res) => {
           setReconcilationIRO(res.data);
