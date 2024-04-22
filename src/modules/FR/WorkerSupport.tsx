@@ -834,7 +834,8 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'From'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.disabledFrom? params.row.supportStructure?.disabledFrom?.format('DD/MM/YYYY'):'-',
+      valueGetter: (params) => params.row.supportStructure?.disabledFrom? moment( params.row.supportStructure?.disabledFrom)?.format('DD/MM/YYYY'):null,
+
     }, {
       field: 'disabledTo',
       width: 100,
@@ -842,7 +843,8 @@ const WorkerSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'To'}</b>,
-      valueGetter: (params) => params.row.supportStructure?.disabledTo?params.row.supportStructure?.disabledTo?.format('DD/MM/YYYY'):'-',
+      valueGetter: (params) => params.row.supportStructure?.disabledFrom? moment( params.row.supportStructure?.disabledTo)?.format('DD/MM/YYYY'):null,
+
     },
     {
       field: 'reason',
