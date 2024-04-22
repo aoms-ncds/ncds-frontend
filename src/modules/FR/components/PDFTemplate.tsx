@@ -509,9 +509,9 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?'Yes':'No'}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row?.supportStructure?.disabledFrom? row?.supportStructure?.disabledFrom?.format('DD/MM/YYYY'):'-'}</Text>
+              <Text style={styles.tableCell}>{row?.supportStructure?.disabledFrom? moment( row?.supportStructure?.disabledFrom)?.format('DD/MM/YYYY'):null}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.disabledTo? row.supportStructure?.disabledTo?.format('DD/MM/YYYY'):'-'}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.disabledTo? moment( row?.supportStructure?.disabledTo)?.format('DD/MM/YYYY'):null}</Text>
               <div style={styles.grid}></div>
             </View>
           </>
