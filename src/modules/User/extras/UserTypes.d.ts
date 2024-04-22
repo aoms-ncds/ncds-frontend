@@ -39,9 +39,15 @@ declare global {
 
     FCRA_ACCOUNTS_ACCESS: boolean;
     LOCAL_ACCOUNT_ACCESS: boolean;
-    PERSONAL_ACCOUNTS_ACCESS: boolean;
+    OTHER_ACCOUNTS_ACCESS: boolean;
     HR_DPARTMENT_ACCESS: boolean;
     DELHI_DIVISION_ACCESS: boolean;
+
+    OTHER_ACCOUNTS_ACCESS_1: boolean;
+    OTHER_ACCOUNTS_ACCESS_2: boolean;
+    OTHER_ACCOUNTS_ACCESS_3: boolean;
+    OTHER_ACCOUNTS_ACCESS_4: boolean;
+
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
