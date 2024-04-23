@@ -58,7 +58,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForSentBack, setReasonForSentBack] = useState<string | null>('');
-  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
+  const [sanctionedAsPers, setSanctionedAsPers] = useState<ISanctionedAsPer[]>([]);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   // const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -76,10 +76,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     sanctionedAsPer: '',
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
-  console.log(reasonForSentBack, 'rr');
   const [open, setOpen] = useState(false);
-  console.log(newParticular, 'dq');
-  console.log(props, 'wdqw');
 
   const handleClickOpen = (particular: Particular, index: number) => {
     setOpen(true);
@@ -96,7 +93,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   };
   useEffect(() => {
     const ddata = SanctionedAsPerService.getAll().then((res) => {
-      setSanctionedAsPer(res.data);
+      setSanctionedAsPers(res.data);
     });
   }, []);
 
@@ -986,7 +983,6 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               ...props.value,
               particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
             });
-            // addParticulars();
           }}
         >
 
@@ -996,8 +992,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
           <DialogContent>
             <Grid item xs={12} md={6} width={'20rem'} padding={1}>
               <Autocomplete<ISanctionedAsPer>
-                value={newParticular.sanctionedAsPer as unknown as ISanctionedAsPer}
-                options={sanctionedAsPer ?? []}
+                value={newParticular?.sanctionedAsPer as unknown as ISanctionedAsPer}
+                options={sanctionedAsPers ?? []}
                 getOptionLabel={(option) => option.asPer ?? ''}
                 // getOptionLabel={(requisition) => requisition}
                 disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
@@ -1014,9 +1010,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }
                 }}
                 renderInput={(params) => <TextField {...params}
-                  label="Sanctioned As Per" required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS} />}
+                label="Sanctioned As Per" 
+                // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                 />}
                 fullWidth
-
               />
             </Grid>
           </DialogContent>
