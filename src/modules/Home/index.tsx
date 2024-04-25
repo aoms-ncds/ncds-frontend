@@ -13,9 +13,54 @@ import CHART4 from './components/chart4';
 import CHART5 from './components/chart5';
 import CHART6 from './components/chart6';
 import CHART7 from './components/chart7';
+import { useEffect, useState } from 'react';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import WorkersServices from '../Workers/extras/WorkersServices';
+import FRServices from '../FR/extras/FRServices';
+import IROServices from '../IRO/extras/IROServices';
 
 
 const HomePage = () => {
+  const [divisionsCount, setDivisionsCount] = useState<string | null>(null);
+  const [workersCount, setWorkersCount] = useState<string | null>(null);
+  const [frCount, setFrCount] = useState<string | null>(null);
+  const [iroCount, setIroCount] = useState<string | null>(null);
+  useEffect(()=>{
+    DivisionsServices.getCount()
+    .then((res) => {
+      setDivisionsCount(res.data.toString());
+    })
+    .catch((error) => {
+      setDivisionsCount('Unable to load!');
+    });
+
+    WorkersServices.getCount()
+    .then((res) => {
+      setWorkersCount(res.data.toString());
+    })
+    .catch((error) => {
+      setWorkersCount('Unable to load!');
+    });
+
+     // Get FR count
+     FRServices.getCount()
+     .then((res) => {
+       setFrCount(res.data.toString());
+     })
+     .catch((error) => {
+       setFrCount('Unable to load!');
+     });
+
+   // Get IRO count
+   IROServices.getCount()
+     .then((res) => {
+       setIroCount(res.data.toString());
+     })
+     .catch((error) => {
+       setIroCount('Unable to load!');
+     });
+
+  },[])
   return (
     <CommonPageLayout title="" appBarSx={{ backgroundColor: 'rgb(59, 50, 230)' }} mainContentSx={{ p: 0 }}>
       <Box sx={{ borderBottom: 1, borderColor: '#fff' }} />
@@ -27,7 +72,7 @@ const HomePage = () => {
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
                 <Typography variant="body1" align='center' color={'black'}>Divisions</Typography>
-                <Typography variant="h5" align='center' color={'black'}>89</Typography>
+                <Typography variant="h5" align='center' color={'black'}>{divisionsCount}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> <span style={{color:'black'}}> vs last 7 days</span> 
                 </Typography>
@@ -40,7 +85,7 @@ const HomePage = () => {
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
                 <Typography variant="body2" align='center' color={'black'}>Workers</Typography>
-                <Typography variant="h5" align='center' color={'black'}>90</Typography>
+                <Typography variant="h5" align='center' color={'black'}>{workersCount}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />5.2%</span> <span style={{color:'black'}}>vs last 7 days</span> 
                 </Typography>
@@ -53,7 +98,7 @@ const HomePage = () => {
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
                 <Typography variant="body2" align='center' color={'black'}>IR</Typography>
-                <Typography variant="h5" align='center' color={'black'}>80</Typography>
+                <Typography variant="h5" align='center' color={'black'}>{iroCount}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> <span  style={{color:'black'}}>vs last 7 days </span> 
                 </Typography>
@@ -66,7 +111,7 @@ const HomePage = () => {
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
                 <Typography variant="body2" align='center' color={'black'}>FR</Typography>
-                <Typography variant="h5" align='center' color={'black'}>70</Typography>
+                <Typography variant="h5" align='center' color={'black'}>{frCount}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />4.3%</span> <span style={{color:'black'}}> vs last 7 days</span> 
                 </Typography>
@@ -109,84 +154,6 @@ const HomePage = () => {
           </Grid>
         </Grid>
       </div>
-      <Grid container spacing={3} padding={1} height={300}>
-        <Grid item xs={12} md={6} lg={4} xl={4}>
-          <Card>
-            <CardContent>
-              <Grid container alignItems="center">
-                <Grid item>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Expenses
-                  </Typography>
-                  <Typography variant="h5" component="h5" gutterBottom>
-                    38.5%
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm="auto">
-                  <Box
-                    className="widgets-icons bg-light-danger text-danger"
-                    sx={{ borderRadius: '50%', width: '36px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  >
-                    <BookmarkAddIcon />
-                  </Box>
-                </Grid>
-              </Grid>
-              <CHART5></CHART5>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4} xl={4}>
-          <Card>
-            <CardContent>
-              <Grid container alignItems="center">
-                <Grid item>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    IR
-                  </Typography>
-                  <Typography variant="h5" component="h5" gutterBottom>
-                    42.5%
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm="auto">
-                  <Box
-                    className="widgets-icons bg-light-danger text-danger"
-                    sx={{ borderRadius: '50%', width: '36px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  >
-                    <BookmarkAddIcon /> {/* MUI BookmarkAddIcon */}
-                  </Box>
-                </Grid>
-              </Grid>
-              <CHART7></CHART7>
-
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4} xl={4}>
-          <Card>
-            <CardContent>
-              <Grid container alignItems="center">
-                <Grid item>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    FR
-                  </Typography>
-                  <Typography variant="h5" component="h5" gutterBottom>
-                    48%
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm="auto">
-                  <Box
-                    className="widgets-icons bg-light-danger text-danger"
-                    sx={{ borderRadius: '50%', width: '36px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  >
-                    <BookmarkAddIcon /> {/* MUI BookmarkAddIcon */}
-                  </Box>
-                </Grid>
-              </Grid>
-              <CHART6></CHART6>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
 
 
       {/* </Container> */}
