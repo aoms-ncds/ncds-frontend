@@ -152,6 +152,42 @@ const ReconciliationIRO = () => {
           console.error(error);
         });
     }
+    if (permissions?.OTHER_ACCOUNTS_ACCESS_1) {
+      IROServices.getReconciliation({ sanctionedBank: 'Other Bank 1' })
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    if (permissions?.OTHER_ACCOUNTS_ACCESS_2) {
+      IROServices.getReconciliation({ sanctionedBank: 'Other Bank 2' })
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    if (permissions?.OTHER_ACCOUNTS_ACCESS_3) {
+      IROServices.getReconciliation({ sanctionedBank: 'Other Bank 3' })
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    if (permissions?.OTHER_ACCOUNTS_ACCESS_4) {
+      IROServices.getReconciliation({ sanctionedBank: 'Other Bank 4' })
+        .then((res) => {
+          setReconcilationIRO(() => [...res.data]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
     if (permissions?.OTHER_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation()
         .then((res) => {
