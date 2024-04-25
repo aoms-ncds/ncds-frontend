@@ -16,7 +16,6 @@ const Particulars = () => {
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [languageToDelete, setLanguageToDelete] = useState<MainCategory | null>(null);
   // const [newCategory, setNewCategory] = useState<MainCategory[]>({
-  //   _id: '',
   //   name: '',
   //   subcategory1: [{
   //     name: '',
@@ -39,16 +38,12 @@ const Particulars = () => {
 
 
   const initialCategoryState: MainCategory = {
-    _id: '',
     name: '',
     subcategory1: [{
-      _id: '',
       name: '',
       subcategory2: [{
-        _id: '',
         name: '',
         subcategory3: [{
-          _id: '',
           name: '',
           narration: '',
         }],
@@ -84,8 +79,8 @@ const Particulars = () => {
     ParticularersService.delete(id)
       .then((res) => {
         if (category) {
-          const newLanguage = category.filter((cat) => {
-            return cat._id !== id;
+          const newLanguage = category.filter((cat:any) => {
+            return cat._id  !== id;
           });
           setCategory(newLanguage);
         }
@@ -198,7 +193,6 @@ const Particulars = () => {
       subcategory1: [
         ...prev.subcategory1,
         {
-          _id: '',
           name: '',
           subcategory2: [],
         },
@@ -261,7 +255,6 @@ const Particulars = () => {
   const addSubcategory2 = (indexValue:number) => {
     setNewCategory((prev) => ({
       ...prev,
-      _id: '',
       subcategory1: prev.subcategory1.map((item:SubCategory1, index: number) => {
         if (indexValue === index) {
           return {
@@ -269,7 +262,6 @@ const Particulars = () => {
             subcategory2: [
               ...item.subcategory2,
               {
-                _id: '',
                 name: '',
                 subcategory3: [],
               },
@@ -353,7 +345,6 @@ const Particulars = () => {
                   subcategory3: [
                     ...j.subcategory3,
                     {
-                      _id: '',
                       name: '',
                       narration: '', // Ensure 'narration' property is included
                     },
@@ -559,16 +550,12 @@ const Particulars = () => {
               ParticularersService.create(newCategory).then((res) => {
                 setCategory((langs) => (langs === null ? [res.data] : [...langs, res.data]));
                 setNewCategory({
-                  _id: '',
                   name: '',
                   subcategory1: [{
-                    _id: '',
                     name: '',
                     subcategory2: [{
-                      _id: '',
                       name: '',
                       subcategory3: [{
-                        _id: '',
                         name: '',
                         narration: '',
                       }],
@@ -578,19 +565,15 @@ const Particulars = () => {
               });
             } else {
               ParticularersService.edit(newCategory).then((res) => {
-                setCategory((langs:any) => (langs === null ? null : langs?.map((lang:any):any => (lang._id === newCategory._id ? res.data : lang))));
+                setCategory((langs:any) => (langs === null ? null : langs?.map((lang:any):any => (lang._id === newCategory ? res.data : lang))));
 
                 setNewCategory({
-                  _id: '',
                   name: '',
                   subcategory1: [{
-                    _id: '',
                     name: '',
                     subcategory2: [{
-                      _id: '',
                       name: '',
                       subcategory3: [{
-                        _id: '',
                         name: '',
                         narration: '',
                       }],
@@ -761,7 +744,7 @@ const Particulars = () => {
           </Button>
           <Button onClick={() => {
             if (languageToDelete) {
-              removeReason(languageToDelete._id);
+              removeReason((languageToDelete as any)._id);
             }
             setConfirmDelete(false);
             setLanguageToDelete(null);
@@ -851,7 +834,7 @@ const Particulars = () => {
         <DataGrid
           sx={{ height: '80vh', width: '100%' }}
           // style={{ height: '80vh', width: '100%' }}
-          rows={category ?? []} columns={columns} getRowId={(row) => row._id} loading={category === null} />
+          rows={category ?? []} columns={columns} getRowId={(row:any) => row._id} loading={category === null} />
       </Card>
     </CommonPageLayout>
   );

@@ -54,7 +54,7 @@ const DesignationParticulars = () => {
             justifyContent: 'center',
             textAlign: 'center',
           }}
-        >{ designations?.filter((des)=>props.row.designations.includes(des._id)).map((des)=>des.name).join(', ')}</p>),
+        >{ designations?.filter((des)=>props?.row?.designations?.includes(des._id)).map((des)=>des.name).join(', ')}</p>),
     },
     {
       field: 'Main Category',
@@ -223,7 +223,7 @@ const DesignationParticulars = () => {
   useEffect(() => {
     setSelectedDesignation(() =>
       designations?.filter((item) =>
-        designationParticular.designations.includes(item._id),
+        designationParticular?.designations?.includes(item._id),
       ) ?? [],
     );
     setSelectedMainCategory(() => mainCategories?.find((item) => item._id == designationParticular.mainCategory));
