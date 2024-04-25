@@ -359,7 +359,7 @@ const PresidentApproval = () => {
         permissions={['READ_FR']}
         granted={(
           <>
-            <Card >
+            <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
               <Grid container padding={2}>
               <Grid item xs={6}>
           {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
@@ -451,7 +451,7 @@ const PresidentApproval = () => {
             }}
           >
 
-                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '80vh', width: '100%' }} getRowClassName={(params) =>
+                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             } />
                   </Box>

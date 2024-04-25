@@ -265,7 +265,7 @@ const ClosedIRO = () => {
   }, []);
   return (
     <CommonPageLayout title="Closed IRO">
-      <Card >
+      <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
         <Grid item xs={6}>
           {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
