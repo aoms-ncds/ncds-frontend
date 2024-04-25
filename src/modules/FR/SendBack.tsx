@@ -199,7 +199,7 @@ const SentBack = () => {
   return (
 
     <CommonPageLayout title="Sent Back iro">
-      <Card >
+      <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2} >
         <Grid item xs={6}>
           {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
@@ -293,7 +293,7 @@ const SentBack = () => {
           >
             
 
-            <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
+            <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
             }/>
             </Box>

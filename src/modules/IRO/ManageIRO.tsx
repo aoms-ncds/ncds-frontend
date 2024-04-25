@@ -802,7 +802,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
+           
+              <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
                   <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
@@ -944,7 +945,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         getRowClassName={(params) =>
                           params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                         }
-                        style={{ height: '80vh', width: '100%' }}
+                        style={{ height: '65vh', width: '100%' }}
                       // rowSelectionModel={selectedIROrelease}
                       //
                       />
@@ -971,7 +972,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   </Card>
                 </Grid>
               </Grid>
-            </Card>
+              </Card>
+            
             <Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
