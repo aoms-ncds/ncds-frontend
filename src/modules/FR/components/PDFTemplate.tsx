@@ -496,10 +496,10 @@ const PDFTemplate = (props: {
                 (row.supportStructure?.spouseAllowance ?? 0) +
                 (row.supportStructure?.positionalAllowance ?? 0) +
                 (row.supportStructure?.specialAllowance ?? 0) +
+              (row.supportStructure?.PIONMissionaryFund ?? 0) +
                 (row.supportStructure?.telAllowance ?? 0) : 0}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.impactDeduction ?? 0) +
-                (row.supportStructure?.PIONMissionaryFund ?? 0) +
                 (row.supportStructure?.MUTDeduction ?? 0) : 0}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.basic ?? 0) +
@@ -507,10 +507,10 @@ const PDFTemplate = (props: {
                 (row.supportStructure?.spouseAllowance ?? 0) +
                 (row.supportStructure?.positionalAllowance ?? 0) +
                 (row.supportStructure?.specialAllowance ?? 0) +
+                (row.supportStructure?.PIONMissionaryFund ?? 0) +
                 (row.supportStructure?.telAllowance ?? 0) -
                 (
                   (row.supportStructure?.impactDeduction ?? 0) +
-                  (row.supportStructure?.PIONMissionaryFund ?? 0) +
                   (row.supportStructure?.MUTDeduction ?? 0)
                 ) : 0}</Text>
               <div style={styles.grid}></div>
