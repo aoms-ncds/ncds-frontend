@@ -132,8 +132,8 @@ const WorkerSupportPage = () => {
       setPdfProps(({
         purpose: purpose ?? 'Division',
         divisionId: division?._id ?? null,
-        workerId: purpose == 'Coordinator' && res.data.purposeCoordinator ? res.data.purposeCoordinator?._id :
-          requisition.purpose == 'Worker' && selectedWorker?._id ? selectedWorker?._id : null,
+        workerId: res2.data.purpose == 'Coordinator' && res2.data.purposeCoordinator ? res2.data.purposeCoordinator?._id :
+          res2.data.purpose == 'Worker' && selectedWorker?._id ? selectedWorker?._id : null,
         subDivisionId: subDivision?._id ?? null,
         designationParticularID: designationParticular?._id ?? null,
         FrNo: res2.data.FRno,
@@ -1075,7 +1075,7 @@ const WorkerSupportPage = () => {
                             setRequisition((requisition) => ({
                               ...requisition,
                               division: newVal,
-                              purposeCoordinator: workers ? workers[0] : undefined,
+                              purposeCoordinator: newVal.details.coordinator?.name,
                               purposeSubdivision: undefined,
                               purposeWorker: undefined,
                             }));
