@@ -40,11 +40,11 @@ export default {
 
   getSubDivisionsByDivisionId: () => getStandardResponse<SubDivision[]>(axios.get('/workers/sub_divisions/', { headers: { ...getAuthHeader() } })),
 
-  getWorkersBySubDivision: (conditions?: { division: string; subDiv:string;designationParticular?:string|null}) =>
+  getWorkersBySubDivision: (conditions?: { division: string; subDiv: string; designationParticular?: string | null }) =>
     getStandardResponse<IWorker[]>(axios.get(`/workers/sub_divisions/${conditions?.subDiv}`,
       { params: conditions, headers: { ...getAuthHeader() } })),
 
-  getWorkersByDesignation: (conditions?: { division: string; designationParticular:string}) =>
+  getWorkersByDesignation: (conditions?: { division: string; designationParticular: string }) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/designation_particular',
       { params: conditions, headers: { ...getAuthHeader() } })),
 
@@ -54,32 +54,34 @@ export default {
    * @param {number} conditions.status - The status of the workers.
    * @return {Promise<StandardResponse<IWorker[]>>} A promise that resolves to the response containing the list of all workers.
    */
-  getAll: (conditions?: { status?: number; division?: string; withoutCoordinator?:boolean}): Promise<StandardResponse<IWorker[]>> =>
+  getAll: (conditions?: { status?: number; division?: string; withoutCoordinator?: boolean; withoutSubDivision?: boolean }): Promise<StandardResponse<IWorker[]>> =>
     getStandardResponse<IWorker[]>(axios.get('/workers/', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>
-      workers.map((worker: IWorker) => ({
-        ...worker,
-        tokens: [],
-        basicDetails: {
-          ...worker.basicDetails,
-          dateOfBirth: moment(worker.basicDetails.dateOfBirth),
-        },
-        officialDetails: {
-          ...worker.officialDetails,
-          dateOfJoining: worker.officialDetails.dateOfJoining ? moment(worker.officialDetails.dateOfJoining) : undefined,
-          divisionHistory: worker.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
-            ...divHis,
-            dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
-            dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
-          })),
-        },
-        supportStructure: {
-          ...worker.supportStructure,
-          disabledFrom: worker.supportStructure?.disabledFrom ? moment(worker.supportStructure?.disabledFrom) : undefined,
-          disabledTo: worker.supportStructure?.disabledTo ? moment(worker.supportStructure?.disabledTo) : undefined,
-        },
-        createdAt: moment(worker.createdAt),
-        updatedAt: moment(worker.updatedAt),
-      })),
+      workers.map((worker: IWorker) => {
+        return ({
+          ...worker,
+          tokens: [],
+          basicDetails: {
+            ...worker.basicDetails,
+            dateOfBirth: moment(worker.basicDetails.dateOfBirth),
+          },
+          officialDetails: {
+            ...worker.officialDetails,
+            dateOfJoining: worker.officialDetails.dateOfJoining ? moment(worker.officialDetails.dateOfJoining) : undefined,
+            divisionHistory: worker.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+              ...divHis,
+              dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+              dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+            })),
+          },
+          supportStructure: {
+            ...worker.supportStructure,
+            disabledFrom: worker.supportStructure?.disabledFrom ? moment(worker.supportStructure?.disabledFrom) : undefined,
+            disabledTo: worker.supportStructure?.disabledTo ? moment(worker.supportStructure?.disabledTo) : undefined,
+          },
+          createdAt: moment(worker.createdAt),
+          updatedAt: moment(worker.updatedAt),
+        });
+      }),
     ),
   getWorkers: (conditions?: { status?: number; division?: string; skip?: number; limit?: number }) =>
     getStandardResponse<IWorker[]>(axios.get('/workers/fetchWorker', { params: conditions, headers: { ...getAuthHeader() } }), (workers) =>

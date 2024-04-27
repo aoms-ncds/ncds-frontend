@@ -125,7 +125,11 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null;FrNo:string|null;FrMonth:string|null}) => {
+const PDFTemplate = (props: {
+  purpose: FRPurpose | null; divisionId: string | null;
+  workerId: string | null; designationParticularID: string | null;
+  subDivisionId: string | null; FrNo: string | null; FrMonth: string | null;
+}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -156,122 +160,125 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
   const [purpose, setPurpose] = useState('Division');
   useEffect(() => {
     console.log(props, 'props');
-    if ((props.purpose=='Coordinator'||props.purpose=='Worker')&&props.workerId) {
-      WorkersServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
-      props.purpose=='Coordinator'? setPurpose('Coordinator'):setPurpose('Individual');
-    } else if (props.purpose=='Subdivision'&&props.divisionId&&props.subDivisionId) {
-      WorkersServices.getWorkersBySubDivision( { division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID??null })
-    .then((res) => {
-      console.log(res);
-      setWorkers(res.data);
-      setPurpose(res.data[0].division?.details.name??'Division');
-    })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if (props.purpose=='Division'&&props.divisionId) {
+    if ((props.purpose == 'Coordinator' || props.purpose == 'Worker') && props.workerId) {
+      WorkersServices.getById(props.workerId).then((res) => res?.data && setWorkers([res?.data]));
+      props.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
+    } else if (props.purpose == 'Subdivision' && props.divisionId && props.subDivisionId) {
+      WorkersServices.getWorkersBySubDivision({ division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID ?? null })
+        .then((res) => {
+          console.log(res);
+          setWorkers(res.data);
+          setPurpose(res.data[0].division?.details.name ?? 'Division');
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (props.purpose == 'Division' && props.divisionId) {
       if (props.designationParticularID) {
         console.log('');
         WorkersServices.getWorkersByDesignation({
           division: props.divisionId,
-          designationParticular: props.designationParticularID })
+          designationParticular: props.designationParticularID,
+        })
           .then((res) => {
             console.log(res);
             setWorkers(res.data);
-            setPurpose(res.data[0].division?.details.name??'Division');
+            setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
-         .catch((res) => {
-           console.log(res);
-         });
+          .catch((res) => {
+            console.log(res);
+          });
       } else {
         WorkersServices.getAll({
           status: UserLifeCycleStates.ACTIVE,
           division: props.divisionId,
-          withoutCoordinator: true })
+          withoutCoordinator: true,
+          withoutSubDivision: true,
+        })
           .then((res) => {
             console.log(res);
             setWorkers(res.data);
-            setPurpose(res.data[0].division?.details.name??'Division');
+            setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
-         .catch((res) => {
-           console.log(res);
-         });
+          .catch((res) => {
+            console.log(res);
+          });
       }
     } else {
       setWorkers([]);
     }
   }, [props.FrNo]);
   useEffect(() => {
-    const basic=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
+    const basic = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
       0,
     );
-    const prevBasic=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevBasic? total + Number(worker.supportStructure?.prevBasic):total,
+    const prevBasic = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevBasic ? total + Number(worker.supportStructure?.prevBasic) : total,
       0,
     );
-    const HRA=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA? total + Number(worker.supportStructure?.HRA):total,
+    const HRA = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA ? total + Number(worker.supportStructure?.HRA) : total,
       0,
     );
-    const prevHRA=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevHRA? total + Number(worker.supportStructure?.prevHRA):total,
+    const prevHRA = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevHRA ? total + Number(worker.supportStructure?.prevHRA) : total,
       0,
     );
-    const spouseAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance? total + Number(worker.supportStructure?.spouseAllowance):total,
+    const spouseAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance ? total + Number(worker.supportStructure?.spouseAllowance) : total,
       0,
     );
-    const prevSpouseAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpouseAllowance? total + Number(worker.supportStructure?.prevSpouseAllowance):total,
+    const prevSpouseAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpouseAllowance ? total + Number(worker.supportStructure?.prevSpouseAllowance) : total,
       0,
     );
-    const positionalAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance? total + Number(worker.supportStructure?.positionalAllowance):total,
+    const positionalAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance ? total + Number(worker.supportStructure?.positionalAllowance) : total,
       0,
     );
-    const prevPositionalAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPositionalAllowance? total + Number(worker.supportStructure?.prevPositionalAllowance):total,
+    const prevPositionalAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPositionalAllowance ? total + Number(worker.supportStructure?.prevPositionalAllowance) : total,
       0,
     );
-    const specialAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance? total + Number(worker.supportStructure?.specialAllowance):total,
+    const specialAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance ? total + Number(worker.supportStructure?.specialAllowance) : total,
       0,
     );
-    const prevSpecialAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpecialAllowance? total + Number(worker.supportStructure?.prevSpecialAllowance):total,
+    const prevSpecialAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpecialAllowance ? total + Number(worker.supportStructure?.prevSpecialAllowance) : total,
       0,
     );
-    const impactDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction? total + Number(worker.supportStructure?.impactDeduction):total,
+    const impactDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction ? total + Number(worker.supportStructure?.impactDeduction) : total,
       0,
     );
-    const prevImpactDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevImpactDeduction? total + Number(worker.supportStructure?.prevImpactDeduction):total,
+    const prevImpactDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevImpactDeduction ? total + Number(worker.supportStructure?.prevImpactDeduction) : total,
       0,
     );
-    const telAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance? total + Number(worker.supportStructure?.telAllowance):total,
+    const telAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance ? total + Number(worker.supportStructure?.telAllowance) : total,
       0,
     );
-    const prevTelAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevTelAllowance? total + Number(worker.supportStructure?.prevTelAllowance):total,
+    const prevTelAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevTelAllowance ? total + Number(worker.supportStructure?.prevTelAllowance) : total,
       0,
     );
-    const PIONMissionaryFund=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund? total + Number(worker.supportStructure?.PIONMissionaryFund):total,
+    const PIONMissionaryFund = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund ? total + Number(worker.supportStructure?.PIONMissionaryFund) : total,
       0,
     );
-    const prevPIONMissionaryFund=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPIONMissionaryFund? total + Number(worker.supportStructure?.prevPIONMissionaryFund):total,
+    const prevPIONMissionaryFund = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPIONMissionaryFund ? total + Number(worker.supportStructure?.prevPIONMissionaryFund) : total,
       0,
     );
-    const MUTDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction? total + Number(worker.supportStructure?.MUTDeduction):total,
+    const MUTDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction ? total + Number(worker.supportStructure?.MUTDeduction) : total,
       0,
     );
-    const prevMUTDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction? total + Number(worker.supportStructure?.prevMUTDeduction):total,
+    const prevMUTDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction ? total + Number(worker.supportStructure?.prevMUTDeduction) : total,
       0,
     );
     setTotal({
@@ -294,25 +301,25 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
       MUTDeduction: MUTDeduction,
       prevMUTDeduction: prevMUTDeduction,
       total: (basic ?? 0) +
-    (HRA ?? 0) +
-    (spouseAllowance ?? 0) +
-    (positionalAllowance ?? 0) +
-    (specialAllowance ?? 0) +
-    (PIONMissionaryFund ?? 0) +
-    (telAllowance ?? 0),
+        (HRA ?? 0) +
+        (spouseAllowance ?? 0) +
+        (positionalAllowance ?? 0) +
+        (specialAllowance ?? 0) +
+        (PIONMissionaryFund ?? 0) +
+        (telAllowance ?? 0),
       deduction: (impactDeduction ?? 0) +
-    (MUTDeduction ?? 0),
+        (MUTDeduction ?? 0),
       net: (basic ?? 0) +
-    (HRA ?? 0) +
-    (spouseAllowance ?? 0) +
-    (positionalAllowance ?? 0) +
-    (specialAllowance ?? 0) +
-    (PIONMissionaryFund ?? 0) +
-    (telAllowance ?? 0) -
-    (
-      (impactDeduction ?? 0) +
-      (MUTDeduction ?? 0)
-    ),
+        (HRA ?? 0) +
+        (spouseAllowance ?? 0) +
+        (positionalAllowance ?? 0) +
+        (specialAllowance ?? 0) +
+        (PIONMissionaryFund ?? 0) +
+        (telAllowance ?? 0) -
+        (
+          (impactDeduction ?? 0) +
+          (MUTDeduction ?? 0)
+        ),
     });
   }, [workers]);
   return (
@@ -413,7 +420,7 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
           {workers?.map((row, index) => (<>
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{index+1}</Text>
+              <Text style={styles.tableCell}>{index + 1}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.workerCode}</Text>
               <div style={styles.grid}></div>
@@ -427,91 +434,91 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevBasic}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.basicLastUpdatedAt?moment( row.supportStructure?.basicLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.basicLastUpdatedAt ? moment(row.supportStructure?.basicLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.basic}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevHRA}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.HRALastUpdatedAt?moment( row.supportStructure?.HRALastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.HRALastUpdatedAt ? moment(row.supportStructure?.HRALastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.HRA}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevSpouseAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>
-                {row.supportStructure?.spouseAllowanceLastUpdatedAt?moment( row.supportStructure?.spouseAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+                {row.supportStructure?.spouseAllowanceLastUpdatedAt ? moment(row.supportStructure?.spouseAllowanceLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.spouseAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevPositionalAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>
-                {row.supportStructure?.positionalAllowanceLastUpdatedAt?moment( row.supportStructure?.positionalAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+                {row.supportStructure?.positionalAllowanceLastUpdatedAt ? moment(row.supportStructure?.positionalAllowanceLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.positionalAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevSpecialAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>
-                {row.supportStructure?.specialAllowanceLastUpdatedAt?moment( row.supportStructure?.specialAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+                {row.supportStructure?.specialAllowanceLastUpdatedAt ? moment(row.supportStructure?.specialAllowanceLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.specialAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevImpactDeduction}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>
-                {row.supportStructure?.impactDeductionLastUpdatedAt?moment( row.supportStructure?.impactDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+                {row.supportStructure?.impactDeductionLastUpdatedAt ? moment(row.supportStructure?.impactDeductionLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.impactDeduction}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevTelAllowance}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.telAllowanceLastUpdatedAt?moment( row.supportStructure?.telAllowanceLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.telAllowanceLastUpdatedAt ? moment(row.supportStructure?.telAllowanceLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.telAllowance}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevPIONMissionaryFund}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>
-                {row.supportStructure?.PIONMissionaryFundLastUpdatedAt?moment( row.supportStructure?.PIONMissionaryFundLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+                {row.supportStructure?.PIONMissionaryFundLastUpdatedAt ? moment(row.supportStructure?.PIONMissionaryFundLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.PIONMissionaryFund}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.prevMUTDeduction}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.MUTDeductionLastUpdatedAt?moment( row.supportStructure?.MUTDeductionLastUpdatedAt)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.MUTDeductionLastUpdatedAt ? moment(row.supportStructure?.MUTDeductionLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.MUTDeduction}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?(row.supportStructure?.basic ?? 0) +
-      (row.supportStructure?.HRA ?? 0) +
-      (row.supportStructure?.spouseAllowance ?? 0) +
-      (row.supportStructure?.positionalAllowance ?? 0) +
-      (row.supportStructure?.specialAllowance ?? 0) +
-      (row.supportStructure?.telAllowance ?? 0):0}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.basic ?? 0) +
+                (row.supportStructure?.HRA ?? 0) +
+                (row.supportStructure?.spouseAllowance ?? 0) +
+                (row.supportStructure?.positionalAllowance ?? 0) +
+                (row.supportStructure?.specialAllowance ?? 0) +
+                (row.supportStructure?.telAllowance ?? 0) : 0}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?(row.supportStructure?.impactDeduction ?? 0) +
-      (row.supportStructure?.PIONMissionaryFund ?? 0) +
-      (row.supportStructure?.MUTDeduction ?? 0):0}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.impactDeduction ?? 0) +
+                (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                (row.supportStructure?.MUTDeduction ?? 0) : 0}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?(row.supportStructure?.basic ?? 0) +
-      (row.supportStructure?.HRA ?? 0) +
-      (row.supportStructure?.spouseAllowance ?? 0) +
-      (row.supportStructure?.positionalAllowance ?? 0) +
-      (row.supportStructure?.specialAllowance ?? 0) +
-      (row.supportStructure?.telAllowance ?? 0) -
-      (
-        (row.supportStructure?.impactDeduction ?? 0) +
-        (row.supportStructure?.PIONMissionaryFund ?? 0) +
-        (row.supportStructure?.MUTDeduction ?? 0)
-      ):0}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.basic ?? 0) +
+                (row.supportStructure?.HRA ?? 0) +
+                (row.supportStructure?.spouseAllowance ?? 0) +
+                (row.supportStructure?.positionalAllowance ?? 0) +
+                (row.supportStructure?.specialAllowance ?? 0) +
+                (row.supportStructure?.telAllowance ?? 0) -
+                (
+                  (row.supportStructure?.impactDeduction ?? 0) +
+                  (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                  (row.supportStructure?.MUTDeduction ?? 0)
+                ) : 0}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?'Yes':'No'}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? 'Yes' : 'No'}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row?.supportStructure?.disabledFrom? moment( row?.supportStructure?.disabledFrom)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row?.supportStructure?.disabledFrom ? moment(row?.supportStructure?.disabledFrom)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.disabledTo? moment( row?.supportStructure?.disabledTo)?.format('DD/MM/YYYY'):null}</Text>
+              <Text style={styles.tableCell}>{row.supportStructure?.disabledTo ? moment(row?.supportStructure?.disabledTo)?.format('DD/MM/YYYY') : null}</Text>
               <div style={styles.grid}></div>
             </View>
           </>
@@ -615,7 +622,7 @@ const PDFTemplate = (props:{purpose:FRPurpose|null;divisionId:string|null;worker
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.length??0}</Text>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.length ?? 0}</Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
