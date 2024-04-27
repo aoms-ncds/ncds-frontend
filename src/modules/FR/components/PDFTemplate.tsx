@@ -622,7 +622,7 @@ const PDFTemplate = (props: {
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.length ?? 0}</Text>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.filter((worker)=>worker.supportStructure?.supportEnabled).length ?? 0}</Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
