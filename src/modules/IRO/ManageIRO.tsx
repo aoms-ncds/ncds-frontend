@@ -240,7 +240,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           .catch((error) => {
             console.error(error);
           });
-      } 
+      }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
           .then((res) => {
@@ -251,7 +251,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank'})
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
           .then((res) => {
             console.log(res.data, 'UIOP');
             setIROrder(() => [...res.data]);
@@ -259,13 +259,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           .catch((error) => {
             console.error(error);
           });
-          
       }
       if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
           .then((res) => {
             console.log(res.data, 'UIOP');
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -276,7 +275,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
           .then((res) => {
             console.log(res.data, 'UIOP');
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -287,7 +286,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
           .then((res) => {
             console.log(res.data, 'UIOP');
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -298,7 +297,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
           .then((res) => {
             console.log(res.data, 'UIOP');
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -309,7 +308,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           console.log(res.data, 'datgajdfj');
-          
         });
       }
     } else {
@@ -802,8 +800,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-           
-              <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+
+            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
                   <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
@@ -972,8 +970,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   </Card>
                 </Grid>
               </Grid>
-              </Card>
-            
+            </Card>
+
             <Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>

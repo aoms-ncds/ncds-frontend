@@ -134,10 +134,12 @@ const IROReconciliationPdf = (props:{data:
         WorkersServices.getAll({
           status: UserLifeCycleStates.ACTIVE,
           division: props.data.divisionId,
-          withoutCoordinator: true })
+          withoutCoordinator: true,
+          withoutSubDivision: true,
+        })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data);
+            setWorkers(res.data.filter((worker)=>worker.supportStructure.supportEnabled));
             setPurpose(res.data[0].division?.details.name??'Division');
           })
          .catch((res) => {
@@ -149,54 +151,54 @@ const IROReconciliationPdf = (props:{data:
     }
   }, [props.data.IRONo]);
   useEffect(() => {
-    const basic=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.basic? total + Number(worker.supportStructure?.basic):total,
+    const basic = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
       0,
     );
-    const HRA=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA? total + Number(worker.supportStructure?.HRA):total,
+    const HRA = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA ? total + Number(worker.supportStructure?.HRA) : total,
       0,
     );
-    const spouseAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance? total + Number(worker.supportStructure?.spouseAllowance):total,
+    const spouseAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance ? total + Number(worker.supportStructure?.spouseAllowance) : total,
       0,
     );
-    const positionalAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance? total + Number(worker.supportStructure?.positionalAllowance):total,
+    const positionalAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance ? total + Number(worker.supportStructure?.positionalAllowance) : total,
       0,
     );
-    const specialAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance? total + Number(worker.supportStructure?.specialAllowance):total,
+    const specialAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance ? total + Number(worker.supportStructure?.specialAllowance) : total,
       0,
     );
-    const impactDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction? total + Number(worker.supportStructure?.impactDeduction):total,
+    const impactDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction ? total + Number(worker.supportStructure?.impactDeduction) : total,
       0,
     );
-    const telAllowance=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance? total + Number(worker.supportStructure?.telAllowance):total,
+    const telAllowance = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance ? total + Number(worker.supportStructure?.telAllowance) : total,
       0,
     );
-    const PIONMissionaryFund=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund? total + Number(worker.supportStructure?.PIONMissionaryFund):total,
+    const PIONMissionaryFund = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund ? total + Number(worker.supportStructure?.PIONMissionaryFund) : total,
       0,
     );
-    const MUTDeduction=workers?.reduce(
-      (total, worker) =>worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction? total + Number(worker.supportStructure?.MUTDeduction):total,
+    const MUTDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction ? total + Number(worker.supportStructure?.MUTDeduction) : total,
       0,
     );
     setTotal(
       (basic ?? 0) +
-    (HRA ?? 0) +
-    (spouseAllowance ?? 0) +
-    (positionalAllowance ?? 0) +
-    (specialAllowance ?? 0) +
-    (PIONMissionaryFund ?? 0) +
-    (telAllowance ?? 0) -
-    (
-      (impactDeduction ?? 0) +
-      (MUTDeduction ?? 0)
-    ),
+        (HRA ?? 0) +
+        (spouseAllowance ?? 0) +
+        (positionalAllowance ?? 0) +
+        (specialAllowance ?? 0) +
+        (PIONMissionaryFund ?? 0) +
+        (telAllowance ?? 0) -
+        (
+          (impactDeduction ?? 0) +
+          (MUTDeduction ?? 0)
+        ),
     );
   }, [workers]);
   return (
@@ -209,7 +211,7 @@ const IROReconciliationPdf = (props:{data:
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
-          <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text>
+          {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
         <View style={styles.line} />
         <View style={styles.tableContainer} >
@@ -253,10 +255,10 @@ const IROReconciliationPdf = (props:{data:
       (row.supportStructure?.spouseAllowance ?? 0) +
       (row.supportStructure?.positionalAllowance ?? 0) +
       (row.supportStructure?.specialAllowance ?? 0) +
+      (row.supportStructure?.PIONMissionaryFund ?? 0) +
       (row.supportStructure?.telAllowance ?? 0) -
       (
         (row.supportStructure?.impactDeduction ?? 0) +
-        (row.supportStructure?.PIONMissionaryFund ?? 0) +
         (row.supportStructure?.MUTDeduction ?? 0)
       ):0}</Text>
               <div style={styles.cellGrid}></div>
