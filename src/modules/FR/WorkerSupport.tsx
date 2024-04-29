@@ -1007,6 +1007,7 @@ const WorkerSupportPage = () => {
           setRequisition((requisition) => ({
             ...requisition,
             purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
+            purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
             division: division ?? undefined,
             mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
             particulars: requisition?.particulars && requisition?.particulars?.length > 0 ? [{
@@ -1077,7 +1078,7 @@ const WorkerSupportPage = () => {
                             setRequisition((requisition) => ({
                               ...requisition,
                               division: newVal,
-                              purposeCoordinator: newVal.details.coordinator?.name,
+                              purposeCoordinator: coordinator,
                               purposeSubdivision: undefined,
                               purposeWorker: undefined,
                               purpose: undefined,
