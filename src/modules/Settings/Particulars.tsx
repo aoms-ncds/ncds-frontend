@@ -79,8 +79,8 @@ const Particulars = () => {
     ParticularersService.delete(id)
       .then((res) => {
         if (category) {
-          const newLanguage = category.filter((cat:any) => {
-            return cat._id  !== id;
+          const newLanguage = category.filter((cat: any) => {
+            return cat._id !== id;
           });
           setCategory(newLanguage);
         }
@@ -252,10 +252,10 @@ const Particulars = () => {
   //     ]
   //   }));
   // };
-  const addSubcategory2 = (indexValue:number) => {
+  const addSubcategory2 = (indexValue: number) => {
     setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((item:SubCategory1, index: number) => {
+      subcategory1: prev.subcategory1.map((item: SubCategory1, index: number) => {
         if (indexValue === index) {
           return {
             ...item,
@@ -360,11 +360,11 @@ const Particulars = () => {
     }));
   };
 
-  const handleNameChange = (index:number, e:ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((item:SubCategory1, i:number) =>
+      subcategory1: prev.subcategory1.map((item: SubCategory1, i: number) =>
         i === index ?
           {
             ...item,
@@ -377,11 +377,11 @@ const Particulars = () => {
   };
 
 
-  const handleNameChange2 = (indexValue:number, _index:number, e:ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange2 = (indexValue: number, _index: number, e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setNewCategory((prev) => ({
       ...prev,
-      subcategory1: prev.subcategory1.map((item:SubCategory1, index:number) => {
+      subcategory1: prev.subcategory1.map((item: SubCategory1, index: number) => {
         if (_index === index) {
           return {
             ...item,
@@ -565,7 +565,7 @@ const Particulars = () => {
               });
             } else {
               ParticularersService.edit(newCategory).then((res) => {
-                setCategory((langs:any) => (langs === null ? null : langs?.map((lang:any):any => (lang._id === newCategory ? res.data : lang))));
+                setCategory((langs: any) => (langs === null ? null : langs?.map((lang: any): any => (lang._id === newCategory ? res.data : lang))));
 
                 setNewCategory({
                   name: '',
@@ -583,9 +583,15 @@ const Particulars = () => {
               });
             }
             handleClose();
+            window.location.reload()
           }}
         >
-
+          <DialogActions>
+            <Button onClick={() => setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </DialogActions>
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item md={12}>
@@ -614,7 +620,7 @@ const Particulars = () => {
                   fullWidth
                 /> */}
 
-                {newCategory.subcategory1?.map((item: SubCategory1, _index:number) => (
+                {newCategory.subcategory1?.map((item: SubCategory1, _index: number) => (
                   <div key={_index}>
                     <TextField
                       type="text"
@@ -721,12 +727,7 @@ const Particulars = () => {
               </Grid> */}
             </Grid>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setShowAddParticularDialog(false)}>Cancel</Button>
-            <Button type="submit" variant="contained">
-              Save
-            </Button>
-          </DialogActions>
+
         </form>
       </Dialog>
 
@@ -834,7 +835,7 @@ const Particulars = () => {
         <DataGrid
           sx={{ height: '80vh', width: '100%' }}
           // style={{ height: '80vh', width: '100%' }}
-          rows={category ?? []} columns={columns} getRowId={(row:any) => row._id} loading={category === null} />
+          rows={category ?? []} columns={columns} getRowId={(row: any) => row._id} loading={category === null} />
       </Card>
     </CommonPageLayout>
   );

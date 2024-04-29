@@ -590,8 +590,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'divisionName',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Division Name</b>,
+      headerClassName: 'super-app-theme--cell',
       valueGetter: (params) => params.row.division?.details.name,
       width: 130,
       align: 'center',
@@ -652,15 +652,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
-    {
-      field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'Sanctioned Amount',
-      width: 150,
-      renderHeader: () => <b>Sanctioned Amount</b>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'sanctionedAmount',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerName: 'Sanctioned Amount',
+    //   width: 150,
+    //   renderHeader: () => <b>Sanctioned Amount</b>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    { field: 'sanctionedAmount', headerClassName: 'super-app-theme--cell', headerName: 'Sanctioned Amount', width: 180, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+
     // {
     //   field: 'sanctionedAsPer',
     //   headerClassName: 'super-app-theme--cell',

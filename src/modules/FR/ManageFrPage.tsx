@@ -13,7 +13,7 @@ import {
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -37,17 +37,21 @@ const ManageFrPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
+  const [data, setData] = useState<FR | null>(null);
+  const [data2, setData2] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('y'),
     endDate: moment().endOf('y'),
     rangeType: 'years',
   });
+
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
-  
+  const [open, setOpen] = useState(false);
+
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const ManageFrPage = () => {
       .catch((res) => {
         console.log(res);
       });
-      LeaderDetailsService.getAll()
+    LeaderDetailsService.getAll()
       .then((res) => {
         setLeaderHeading(res.data);
       })
@@ -77,11 +81,13 @@ const ManageFrPage = () => {
       });
   }, [dateRange]);
   const columns: GridColDef<FR>[] = [
+
     {
+
       field: '_manage',
       headerClassName: 'super-app-theme--cell',
       headerName: '',
-      renderHeader: () => <b>Action</b>,
+      renderHeader: () =>  <b>Action</b>,
       width: 80,
       align: 'center',
       headerAlign: 'center',
@@ -141,7 +147,9 @@ const ManageFrPage = () => {
       //         false,
       //       ].filter((action) => action !== false) as JSX.Element[]
       // ),
+
       renderCell: (props) => (
+
         <DropdownButton
           useIconButton={true}
           id="FR action"
@@ -208,24 +216,35 @@ const ManageFrPage = () => {
             ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
               [
                 {
-                    id: 'print',
-                    text: 'Print FR HQ DELHI',
-                    component: PDFDownloadLink,
-                    document: <FRReceiptTempForDelhiDivision label={Label} rowData={props.row as FR} />,
-                    fileName: 'FRReceiptDelhi.pdf',
-                    icon: PrintIcon,
+                  id: 'print',
+                  text: 'Print FR HQ DELHI',
+                  component: PDFDownloadLink,
+                  document: <FRReceiptTempForDelhiDivision label={Label} rowData={data as unknown as FR} />,
+                  fileName: 'FRReceiptDelhi.pdf',
+                  icon: PrintIcon,
+                  onClick: () => {
+                    setData(props.row)
+                    // setOpen(true)
+                    setTimeout(() => {
+                      setOpen(false)
+                    }, 3000)
+                  },
+
                 },
               ] :
               []),
 
-              {
-                id: 'print',
-                text: 'Print FR',
-                component: PDFDownloadLink,
-                document: <FRReceiptTemplate rowData={props.row as FR} />,
-                fileName: 'FRReceipt.pdf',
-                icon: PrintIcon,
+            {
+              id: 'print',
+              text: 'Print FR',
+              component: PDFDownloadLink,
+              document: <FRReceiptTemplate rowData={data2 as FR} />,
+              fileName: 'FRReceipt.pdf',
+              icon: PrintIcon,
+              onClick: () => {
+                setData2(props.row)
               },
+            },
             {
               id: 'notification',
               text: 'Send notification',
@@ -401,29 +420,29 @@ const ManageFrPage = () => {
         let statusName = params.formattedValue;
         console.log('Status Name###:', statusName);
         if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+          case 'REVERTED':
+            return clsx('orange');
+          case 'WAITING FOR ACCOUNTS':
+            return clsx('orange');
+          case 'IRO CLOSED':
+            return clsx('green');
+          case 'FR VERIFIED':
+            return clsx('green');
+          case 'FR CLOSED':
+            return clsx('green');
+          case ' FR DISAPPROVED':
+            return clsx('red');
+          case 'WAITING FOR PRESIDENT':
+            return clsx('orange');
+          default:
+            console.log('No class applied');
             return '';
         }
-        switch(statusName) {
-            case 'REVERTED':
-                return clsx('orange');
-            case 'WAITING FOR ACCOUNTS':
-                return clsx('orange');
-            case 'IRO CLOSED':
-                return clsx('green');
-            case 'FR VERIFIED':
-                return clsx('green');
-            case 'FR CLOSED':
-                return clsx('green');
-            case ' FR DISAPPROVED':
-                return clsx('red');
-            case 'WAITING FOR PRESIDENT':
-                return clsx('orange');
-            default:
-                console.log('No class applied');
-                return '';
-        }
-      
-    },
+
+      },
       width: 205,
       align: 'center',
       headerAlign: 'center',
@@ -432,19 +451,19 @@ const ManageFrPage = () => {
         console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
+          case 'SEND_BACK':
+            statusName = 'REVERTED';
+            break;
+          case 'FR_APPROVED':
+            statusName = 'FR VERIFIED'; // Change to whatever new name you want
+            break;
+          case 'FR_REJECTED':
+            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+            break;
           // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
+          default:
+            statusName = statusName.replaceAll('_', ' ');
+            break;
         }
         return statusName;
       },
@@ -470,7 +489,7 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    
+
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -496,6 +515,7 @@ const ManageFrPage = () => {
         initialRange: 'years',
       }}
     >
+
       <PermissionChecks
         permissions={['READ_FR']}
         granted={
@@ -555,8 +575,8 @@ const ManageFrPage = () => {
                               startIcon={<AddIcon />}
                               component={Link}
                               to="/fr/apply"
-                              // onClick={() => {
-                              // }}
+                            // onClick={() => {
+                            // }}
                             >
                               Add new
                             </Button>
@@ -779,7 +799,7 @@ const ManageFrPage = () => {
                         toggleOpenRemarks(false);
                         setSelectedFR(null);
                       }}
-                      // sx={{ ml: 'auto' }}
+                    // sx={{ ml: 'auto' }}
                     >
                       close
                     </Button>
@@ -787,6 +807,25 @@ const ManageFrPage = () => {
                 </form>
               </Dialog>
             </Grid>
+            <Dialog
+              open={open}
+              // TransitionComponent={Transition}
+              keepMounted
+              // onClose={handleClose}
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+              <DialogContent>
+                {/* <DialogContentText id="alert-dialog-slide-description"> */}
+                  Let Google help apps determine location. This means sending anonymous
+                  location data to Google, even when no apps are running.
+                {/* </DialogContentText> */}
+              </DialogContent>
+              <DialogActions>
+                {/* <Button onClick={handleClose}>Disagree</Button>
+                <Button onClick={handleClose}>Agree</Button> */}
+              </DialogActions>
+            </Dialog>
           </>
         }
         denied={(missingPermissions) => (
@@ -795,8 +834,11 @@ const ManageFrPage = () => {
               Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
+
         )}
+
       />
+
     </CommonPageLayout>
   );
 };
