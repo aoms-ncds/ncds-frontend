@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   division: {
-    marginTop: 173,
+    marginTop: 173, 
     fontSize: 10,
     position: 'absolute',
     left: 180,
@@ -134,17 +134,17 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
-          <Text style={styles.frno}>{props.rowData.FRno}</Text>
+          <Text style={styles.frno}>{props.rowData?.FRno}</Text>
 
-          <Text style={styles.month}>For the Month of {props.rowData.particulars[0]?.month}</Text>
+          <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>
-            <Text style={styles.divisiontitle }>Name of the Division:</Text>
-            <Text style={styles.division }>{props?.rowData.division?.details?.name}</Text>
+            <Text style={styles?.divisiontitle }>Name of the Division:</Text>
+            <Text style={styles?.division }>{props?.rowData?.division?.details?.name}</Text>
             {/* <Text style={styles.datetitle}>Date:  </Text> */}
             <Text style={styles.datetitle}>
               {/* {console.log({ theParticulars: props.rowData })} */}
             </Text>
-            <Text style={styles.date}> {moment(props.rowData.FRdate).format('DD-MM-yyyy')}</Text>
+            <Text style={styles.date}> {moment(props.rowData?.FRdate).format('DD-MM-yyyy')}</Text>
           </div>
         </div>
         <div style={{ marginTop: 200, width: 560, left: 20, right: 20 }}>
@@ -172,7 +172,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
+            {props.rowData?.particulars && props.rowData?.particulars.map((item: Particular, index: number) => {
               totalAmount += item.requestedAmount??0;
               return <PDFTableRow key={index} height='50'>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
@@ -204,7 +204,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
                 </PDFCell>
               </PDFTableRow>;
             })}
-            <PDFTableRow key={props.rowData.particulars.length}>
+            <PDFTableRow key={props.rowData?.particulars.length}>
               <PDFCell width={'60'} ></PDFCell>
               <PDFCell width={'30%'} ></PDFCell>
               <PDFCell width={'30%'}></PDFCell>
@@ -226,17 +226,17 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `}/>
           <Image style={{ left: 260,
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData.division?.details.seniorLeader?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
             position: 'absolute',
             width: 50 }}
-          src={`data:${props.rowData.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData.division?.details.juniorLeader?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64} `}/>
         </div>
 
         {/* <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
@@ -246,11 +246,11 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
         <div style={{ marginTop: 50, fontSize: 10 }}>
           <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
           
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 260,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text> 

@@ -168,12 +168,12 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
-          <Text style={styles.frno}>{props.rowData.FRno}</Text>
+          <Text style={styles.frno}>{props.rowData?.FRno}</Text>
 
-          <Text style={styles.month}>For the Month of {props.rowData.particulars[0]?.month}</Text>
+          <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>
             <Text style={styles.divisiontitle }>Name of the Divisions:</Text>
-            <Text style={styles.division }>{props?.rowData.division?.details?.name}</Text>
+            <Text style={styles.division }>{props?.rowData?.division?.details?.name}</Text>
             <Text style={styles.datetitle}>
             Place: 
             </Text>
@@ -211,7 +211,7 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
                 Total
               </PDFCell>
             </PDFTableHeader>
-            {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
+            {props.rowData?.particulars && props.rowData?.particulars.map((item: Particular, index: number) => {
               totalAmount += item.requestedAmount??0;
               return <PDFTableRow key={index} height='50'>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
@@ -243,7 +243,7 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
                 </PDFCell>
               </PDFTableRow>;
             })}
-            <PDFTableRow key={props.rowData.particulars.length}>
+            <PDFTableRow key={props.rowData?.particulars?.length}>
               <PDFCell width={'60'} ></PDFCell>
               <PDFCell width={'30%'} ></PDFCell>
               <PDFCell width={'30%'}></PDFCell>
@@ -284,64 +284,64 @@ const FRReceiptTempForDelhiDivision = (props:{rowData:FR,label:any}) => {
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
           <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
-          <Text style={{ left: 115,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[0]?.name}</Text>
+          <Text style={{ left: 115,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[0]?.name}</Text>
           <Text style={{ left: 260,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData.division?.details.coordinator?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:20,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
            <Image style={{ left: 480,top:20,
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData.division?.details.coordinator?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `}/>
           
           <Text style={{ left: 60,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
-          <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[1]?.name}</Text>
+          <Text style={{ left: 115,top:40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name}</Text>
 
           <Text style={{ left: 260,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.seniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:40,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName} </Text>
 
           <Text style={{ left: 460,top:40,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:40,
             position: 'absolute',
             height: 20,
             width: 50 }}
-            src={`data:${props.rowData.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData.division?.details.seniorLeader?.sign?.base64} `}/>
+            src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
 
           <Text style={{ left: 60,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
-          <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[2]?.name}</Text>
+          <Text style={{ left: 115,top:60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[2]?.name}</Text>
 
           <Text style={{ left: 260,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData.division?.details.juniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:60,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460,top:60,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:60,
             position: 'absolute',
             height: 20,
             width: 50 }}
-            src={`data:${props.rowData.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData.division?.details.juniorLeader?.sign?.base64} `}/>
+            src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64} `}/>
 
           <Text style={{ left: 60,top:80,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
           <Text style={{ left: 115,top:80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[3]?.name}</Text>
 
           <Text style={{ left: 260,top:80,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:80,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.president?.name?.basicDetails?.firstName} {props.rowData.division?.details.president?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:80,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460,top:80,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:80,
             position: 'absolute',
             height: 20,
             width: 50 }}
-            src={`data:${props.rowData.division?.details.president?.sign?.type};base64, ${props.rowData.division?.details.president?.sign?.base64} `}/>
+            src={`data:${props.rowData?.division?.details.president?.sign?.type};base64, ${props.rowData?.division?.details.president?.sign?.base64} `}/>
 
           <Text style={{ left: 60,top:100,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
           <Text style={{ left: 115,top:100, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[4]?.name}</Text>
 
           <Text style={{ left: 260,top:100,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290,top:100,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData.division?.details.officeManager?.name?.basicDetails?.firstName} {props.rowData.division?.details.officeManager?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290,top:100,   position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.officeManager?.name?.basicDetails?.firstName} {props.rowData?.division?.details.officeManager?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460,top:100,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480,top:100,
             position: 'absolute',
             height: 20,
             width: 50 }}
-            src={`data:${props.rowData.division?.details.officeManager?.sign?.type};base64, ${props.rowData.division?.details.officeManager?.sign?.base64} `}/>
+            src={`data:${props.rowData?.division?.details.officeManager?.sign?.type};base64, ${props.rowData?.division?.details.officeManager?.sign?.base64} `}/>
 
 
         </div>

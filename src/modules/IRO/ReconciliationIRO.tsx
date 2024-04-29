@@ -373,15 +373,29 @@ const ReconciliationIRO = () => {
         </p>
       ),
     },
+    // {
+    //   field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
+    //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+    //   renderCell: (params: GridCellParams) => {
+    //     const frRequest = params.row as IROrder;
+    //     const particularAmount = frRequest.particulars?.reduce(
+    //       (total, particular) => total + Number(particular.requestedAmount),
+    //       0,
+    //     );
+    //     return <p>{particularAmount}</p>;
+    //   },
+    // },
     {
-      field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
+      field: 'requestAmount',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Requested Amount',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as IROrder;
-        const particularAmount = frRequest.particulars?.reduce(
-          (total, particular) => total + Number(particular.requestedAmount),
-          0,
-        );
+        const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
         return <p>{particularAmount}</p>;
       },
     },
