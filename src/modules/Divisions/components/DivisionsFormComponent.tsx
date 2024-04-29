@@ -36,16 +36,16 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         });
     }
     LeaderDetailsService.getAll()
-    .then((res) => {
-      setLeaderHeading(res.data);
-    })
-    .catch((res) => {
-      console.log(res);
-      enqueueSnackbar({
-        variant: 'error',
-        message: res.message,
+      .then((res) => {
+        setLeaderHeading(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          variant: 'error',
+          message: res.message,
+        });
       });
-    });
   }, []);
 
   return (
@@ -140,103 +140,200 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             <Divider textAlign="left">Leaders Details</Divider>
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Grid item xs={12}>
-              <FormControl variant="outlined" fullWidth>
-                <UsersDropdown
-                  users={users ?? []}
-                  value={props.value.coordinator?.name ?? null}
-                  onChange={(_e, newValue) => {
-                    if (newValue) {
-                      props.onChange({
-                        ...props.value,
-                        coordinator: {
-                          ...props.value.coordinator,
-                          name: newValue,
-                        },
-                      });
-                    }
-                  }}
-                  disabled={props.action === 'view'}
-                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[0]?.name) || 'Co-ordinator Name'}
-                  required={false}
-                />
-              </FormControl>
+          {Label?.[0]?.name && props.value.name == 'DELHI OFFICE' && (
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    value={props.value.coordinator?.name ?? null}
+                    onChange={(_e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          coordinator: {
+                            ...props.value.coordinator,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    disabled={props.action === 'view'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[0]?.name : '')}
+                    required={false}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                E-signature
-              </Button>
+          )}
+          {props.value.name != 'DELHI OFFICE' && (
+            <>
+              <Grid item xs={12} md={4}>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <UsersDropdown
+                      users={users ?? []}
+                      value={props.value.coordinator?.name ?? null}
+                      onChange={(_e, newValue) => {
+                        if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            coordinator: {
+                              ...props.value.coordinator,
+                              name: newValue,
+                            },
+                          });
+                        }
+                      }}
+                      disabled={props.action === 'view'}
+                      label={'Co-ordinator Name'}
+                      required={false} />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                    E-signature
+                  </Button>
+                </Grid>
+              </Grid><Grid item xs={12} md={4}>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <UsersDropdown
+                      users={users ?? []}
+                      value={props.value.seniorLeader?.name ?? null}
+                      onChange={(e, newValue) => {
+                        if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            seniorLeader: {
+                              ...props.value.seniorLeader,
+                              name: newValue,
+                            },
+                          });
+                        }
+                      }}
+                      disabled={props.action == 'view'}
+                      // label={'Junior Leader 1'}
+                      label={'Junior Leader 1'}
+
+                      required={false} />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                    E-signature
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <UsersDropdown
+                      users={users ?? []}
+                      disabled={props.action == 'view'}
+                      value={props.value.juniorLeader?.name ?? null}
+                      onChange={(e, newValue) => {
+                        if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            juniorLeader: {
+                              ...props.value.juniorLeader,
+                              name: newValue,
+                            },
+                          });
+                        }
+                      }}
+                      // label={'Junior Leader 2'}
+                      label={'Junior Leader 2'}
+                      required={false}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                    E-signature
+                  </Button>
+                </Grid>
+              </Grid>
+            </>
+
+          )}
+          {Label?.[1]?.name && props.value.name == 'DELHI OFFICE' && (
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    value={props.value.seniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          seniorLeader: {
+                            ...props.value.seniorLeader,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    disabled={props.action == 'view'}
+                    // label={'Junior Leader 1'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[1]?.name || '' : '')}
+
+                    required={false}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
 
-          <Grid item xs={12} md={4}>
-            <Grid item xs={12}>
-              <FormControl variant="outlined" fullWidth>
-                <UsersDropdown
-                  users={users ?? []}
-                  value={props.value.seniorLeader?.name ?? null}
-                  onChange={(e, newValue) => {
-                    if (newValue) {
-                      props.onChange({
-                        ...props.value,
-                        seniorLeader: {
-                          ...props.value.seniorLeader,
-                          name: newValue,
-                        },
-                      });
-                    }
-                  }}
-                  disabled={props.action == 'view'}
-                  // label={'Junior Leader 1'}
-                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[1]?.name) || 'Junior Leader 1'}
+          {Label?.[2]?.name && props.value.name == 'DELHI OFFICE' && (
 
-                  required={false}
-                />
-              </FormControl>
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.juniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          juniorLeader: {
+                            ...props.value.juniorLeader,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[2]?.name || '' : '')}
+                    required={false}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                E-signature
-              </Button>
-            </Grid>
-          </Grid>
+          )}
 
-          <Grid item xs={12} md={4}>
-            <Grid item xs={12}>
-              <FormControl variant="outlined" fullWidth>
-                <UsersDropdown
-                  users={users ?? []}
-                  disabled={props.action == 'view'}
-                  value={props.value.juniorLeader?.name ?? null}
-                  onChange={(e, newValue) => {
-                    if (newValue) {
-                      props.onChange({
-                        ...props.value,
-                        juniorLeader: {
-                          ...props.value.juniorLeader,
-                          name: newValue,
-                        },
-                      });
-                    }
-                  }}
-                  // label={'Junior Leader 2'}
-                  label={(props?.value?.name === 'DELHI OFFICE' && Label?.[2]?.name) || 'Junior Leader 2'}
+          {Label?.[3]?.name && props.value.name == 'DELHI OFFICE' &&  (
 
-                  required={false}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                E-signature
-              </Button>
-            </Grid>
-          </Grid>
-
-          {props?.value?.name === 'DELHI OFFICE' && (
-
-          <><Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4}>
               <Grid item xs={12}>
                 <FormControl variant="outlined" fullWidth>
                   <UsersDropdown
@@ -253,9 +350,9 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                           },
                         });
                       }
-                    } }
+                    }}
                     // label={'Junior Leader 2'}
-                    label={(props?.value?.name === 'DELHI OFFICE' && Label?.[3]?.name) || 'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[3]?.name || '' : '')}
 
                     required={false} />
                 </FormControl>
@@ -265,37 +362,43 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   E-signature
                 </Button>
               </Grid>
-            </Grid><Grid item xs={12} md={4}>
-                <Grid item xs={12}>
-                  <FormControl variant="outlined" fullWidth>
-                    <UsersDropdown
-                      users={users ?? []}
-                      disabled={props.action == 'view'}
-                      value={props.value.officeManager?.name ?? null}
-                      onChange={(e, newValue) => {
-                        if (newValue) {
-                          props.onChange({
-                            ...props.value,
-                            officeManager: {
-                              ...props.value.officeManager,
-                              name: newValue,
-                            },
-                          });
-                        }
-                      } }
-                      // label={'Junior Leader 2'}
-                      label={(props?.value?.name === 'DELHI OFFICE' && Label?.[4]?.name) || 'Junior Leader 2'}
-
-                      required={false} />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button variant="contained" onClick={() => setShowFileUploader5(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                    E-signature
-                  </Button>
-                </Grid>
-              </Grid></>
+            </Grid>
           )}
+          {Label?.[4]?.name && props.value.name == 'DELHI OFFICE' && (
+              <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.officeManager?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          officeManager: {
+                            ...props.value.officeManager,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[4]?.name || '' : '')}
+                    required={false} />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader5(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid>
+            )}
+          {/* {props?.value?.name === 'DELHI OFFICE' && (
+
+        
+          )} */}
         </>
       )}
       {/* </Grid>
