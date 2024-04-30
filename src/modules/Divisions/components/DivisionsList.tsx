@@ -17,7 +17,7 @@ const DivisionsList = (arg:any) => {
   const [searchText, setSearchText] = useState('');
   const auth = useAuth();
 
-  // useEffect(() => {
+  // useEffect(() => {e
   //   DivisionsServices.getDivisions()
   //     .then((res) => {
   //       setDivisions(res.data);
@@ -27,20 +27,31 @@ const DivisionsList = (arg:any) => {
   //     });
 
   //   }, []);
-    // console.log("HAVE PERMSON");
 
-
-    let myArray: React.SetStateAction<Division[] | null> = []
+    let myArray: any = []
     useEffect(()=>{
-      DivisionsServices.getDivisionById(auth?.user?.division).then((res)=>(
-        myArray?.push(res.data);
-        setDivisions(myArray)
-        )
-      )
-
+      
+      if((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS==true){
+        const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
+        console.log(divisionId,'divisionId');
+        
+        if (divisionId) {
+          DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
+            myArray?.push(res.data);
+            setDivisions(myArray);
+          });
+        } 
+      }else{
+        DivisionsServices.getDivisions()
+            .then((res) => {
+              setDivisions(res.data);
+            })
+            .catch((err) => {
+              console.log({ err });
+            });
+        
+      }
 },[])
-
- 
   // useEffect(() => {
   //   DivisionsServices.getDivisions()
   //     .then((res) => {
@@ -49,7 +60,7 @@ const DivisionsList = (arg:any) => {
   //     .catch((err) => {
   //       console.log({ err });
   //     });
-  // }, [arg.details]);
+  // }, []);
   const removeDivisions = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Division',

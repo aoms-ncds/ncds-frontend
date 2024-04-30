@@ -181,4 +181,7 @@ export default {
   accountManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/accountManagerApprove`, null, { headers: { ...getAuthHeader() } })),
   reject: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/rejected`, null, { headers: { ...getAuthHeader() } })),
   // submit: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/submit`, null, { headers: { ...getAuthHeader() } })),
+
+  DeleteIRO: (IroId: string) => getStandardResponse<number>(axios.delete('/iro/' + IroId+ '/force', { headers: { ...getAuthHeader() } })),
+
 };

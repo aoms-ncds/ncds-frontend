@@ -38,5 +38,5 @@ const divisionsPageRoutes: ModuleRoute = {
       requiredAccessRights: ['WRITE_DIVISIONS'],
     },
   ],
-}
+};
 export default divisionsPageRoutes;

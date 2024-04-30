@@ -10,6 +10,7 @@ import {
   Close as CloseIcon,
   Download as DownloadIcon,
   Print as PrintIcon,
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
@@ -18,7 +19,7 @@ import FRServices from './extras/FRServices';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
-import { enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
@@ -53,6 +54,35 @@ const ManageFrPage = () => {
   const [open, setOpen] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
+
+  const deleteFR = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing FR',
+      variant: 'info',
+    });
+    FRServices.DeleteFr(id)
+      .then((res) => {
+        if (FRRequests) {
+          const fr = FRRequests.filter((FRRequests) => {
+            return FRRequests._id !== id;
+          });
+          setFRRequests(fr);
+        }
+        // closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
 
   useEffect(() => {
     FRServices.getAll()
@@ -174,6 +204,17 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
+              ...(hasPermissions(['ADMIN_ACCESS']) ? [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    deleteFR(props.row._id);
+                  },
+                },
+              ] : []),
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
