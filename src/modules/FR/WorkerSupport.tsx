@@ -1081,13 +1081,15 @@ const WorkerSupportPage = () => {
                               purposeCoordinator: coordinator,
                               purposeSubdivision: undefined,
                               purposeWorker: undefined,
-                              purpose: undefined,
+                              // purpose: undefined,
                             }));
                           } else {
                             setRequisition((requisition) => ({
                               ...requisition,
                               division: newVal,
                               purposeSubdivision: undefined,
+                              purposeCoordinator: undefined,
+                              purposeWorker: undefined,
                             }));
                           }
                           setDivision(newVal);
@@ -1096,6 +1098,8 @@ const WorkerSupportPage = () => {
                             ...requisition,
                             division: undefined,
                             purposeSubdivision: undefined,
+                            purposeCoordinator: undefined,
+                            purposeWorker: undefined,
                           }));
                           setDivision(null);
                         }
