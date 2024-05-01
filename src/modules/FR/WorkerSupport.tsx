@@ -9,7 +9,7 @@ import WorkersServices from '../Workers/extras/WorkersServices';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
-import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
+import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -96,7 +96,7 @@ const WorkerSupportPage = () => {
 
   const [designationParticulars, setDesignationParticulars] = useState<IDesignationParticular[]>([]);
   const [designationParticular, setDesignationParticular] = useState<IDesignationParticular | null>(null);
-
+  const [disableAttach, setDisableAttach] = useState(true);
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [confirmAttach, setConfirmAttach] = useState(false);
   const user = useAuth();
@@ -129,6 +129,10 @@ const WorkerSupportPage = () => {
         variant: 'success',
       });
       setConfirmAttach(true);
+      setDisableAttach(true);
+      setTimeout(() => {
+        setDisableAttach(false);
+      }, 2000); // 2 seconds
       setPdfProps(({
         purpose: purpose ?? 'Division',
         divisionId: division?._id ?? null,
@@ -1377,7 +1381,7 @@ const WorkerSupportPage = () => {
                 fileName="WorkerSupport.pdf"
                 style={{ color: 'blue' }}
               >
-                {({ loading }) => loading ? '....' : 'WorkerSupport.pdf'}
+                {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
 
               </PDFDownloadLink>} ?</Container>
         </DialogContent>
@@ -1414,8 +1418,8 @@ const WorkerSupportPage = () => {
                       attach(blob);
                     }
                   }}
-                  disabled={loading} >
-                  {loading ? 'Loading...' : 'Yes, Attach'}
+                  disabled={loading||disableAttach} >
+                  {loading||disableAttach ? 'Loading...' : 'Yes, Attach'}
                 </Button>
                 </>
               )}
