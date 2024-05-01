@@ -132,6 +132,19 @@ const DivisionsList = (arg:any) => {
               },
             ] : []
             ),
+            ...(hasPermissions(['EDIT_DIVISION_ACCESS']) ? [
+              {
+                id: 'edit',
+                text: 'Edit',
+                component: Link,
+
+                onClick: () => {
+                  window.open(`/divisions/editcoordinator/${props.row._id}`, '_blank');
+                },
+                icon: EditIcon,
+              },
+            ] : []
+            ),
             ...(hasPermissions(['ADMIN_ACCESS']) ? [
               {
                 id: 'delete',

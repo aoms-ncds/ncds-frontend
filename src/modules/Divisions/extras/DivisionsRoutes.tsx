@@ -18,6 +18,16 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Divisions',
+      path: '/view',
+      element: <DivisionsPage />,
+      private: true,
+      requiredAccessRights: ['EDIT_DIVISION_ACCESS'],
+      showInDrawer: true,
+      // icon: <ExtensionIcon />,
+      icon: <img src="/mod_icons/division.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Divisions',
       path: '/add',
       element: <DivisionDetailsPage action="add" />,
       private: true,
@@ -36,6 +46,13 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <DivisionDetailsPage action="edit"/>,
       private: true,
       requiredAccessRights: ['WRITE_DIVISIONS'],
+    },
+    {
+      title: 'Divisions',
+      path: '/editcoordinator/:editID',
+      element: <DivisionDetailsPage action="edit"/>,
+      private: true,
+      requiredAccessRights: ['EDIT_DIVISION_ACCESS'],
     },
   ],
 };
