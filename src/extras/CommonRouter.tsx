@@ -47,11 +47,13 @@ const Router = () => {
       setUser(false);
     });
   }, []);
+console.log(...allModuleRoutes.map((s)=>s.pages.map((e)=>e.requiredAccessRights)),"HEHE");
 
   const router = createBrowserRouter(
     ([] as RouteObject[]).concat(
       ...allModuleRoutes.map((moduleRoute) =>
         moduleRoute.pages.map((page) => ({
+          
           path: moduleRoute.base + page.path,
           element: !page.private ?
             page.element :

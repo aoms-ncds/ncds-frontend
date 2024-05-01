@@ -8,31 +8,59 @@ import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as 
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
+import { useAuth } from '../../../hooks/Authentication';
 
 
 const DivisionsList = (arg:any) => {
   const [loadCount, setLoadCount] = useState(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [searchText, setSearchText] = useState('');
+  const auth = useAuth();
 
-  useEffect(() => {
-    DivisionsServices.getDivisions()
-      .then((res) => {
-        setDivisions(res.data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
-  }, []);
-  useEffect(() => {
-    DivisionsServices.getDivisions()
-      .then((res) => {
-        setDivisions(res.data);
-      })
-      .catch((err) => {
-        console.log({ err });
-      });
-  }, [arg.details]);
+  // useEffect(() => {e
+  //   DivisionsServices.getDivisions()
+  //     .then((res) => {
+  //       setDivisions(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log({ err });
+  //     });
+
+  //   }, []);
+
+    let myArray: any = []
+    useEffect(()=>{
+      
+      if((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS==true){
+        const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
+        console.log(divisionId,'divisionId');
+        
+        if (divisionId) {
+          DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
+            myArray?.push(res.data);
+            setDivisions(myArray);
+          });
+        } 
+      }else{
+        DivisionsServices.getDivisions()
+            .then((res) => {
+              setDivisions(res.data);
+            })
+            .catch((err) => {
+              console.log({ err });
+            });
+        
+      }
+},[])
+  // useEffect(() => {
+  //   DivisionsServices.getDivisions()
+  //     .then((res) => {
+  //       setDivisions(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log({ err });
+  //     });
+  // }, []);
   const removeDivisions = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing Division',
@@ -91,7 +119,7 @@ const DivisionsList = (arg:any) => {
             //   to: `/divisions/edit/${props.row._id}`,
             //   icon: EditIcon,
             // },
-            ...(hasPermissions(['WRITE_DIVISIONS']) ? [
+            ...(hasPermissions(['WRITE_DIVISIONS']) || hasPermissions(['EDIT_DIVISION_ACCESS']) ? [
               {
                 id: 'edit',
                 text: 'Edit',
@@ -205,16 +233,16 @@ const DivisionsList = (arg:any) => {
   const handleSearchChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-
-  const filteredRows = (divisions ?? []).filter((row) => {
-    if ((row.details.name && row.details?.name.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.details?.coordinator?.name?.basicDetails.firstName && row.details?.coordinator?.name?.basicDetails.firstName .toLowerCase().includes(searchText.toLowerCase())) ) {
+  const filteredRows = (Array.isArray(divisions) ? divisions : []).filter((row) => {
+    if ((row.details?.name && row.details.name.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.details?.coordinator?.name?.basicDetails?.firstName && row.details.coordinator.name.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase()))) {
       return true;
     }
     return Object.values(row).some((value) =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
+  
   return (
     <>
       <Grid container spacing={2} padding={2}>

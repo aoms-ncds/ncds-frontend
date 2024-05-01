@@ -12,12 +12,14 @@ import {
   CurrencyRupee as CurrencyRupeeIcon,
   Close as CloseIcon,
   Message as MessageIcon,
+  Delete as DeleteIcon
+
 } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { enqueueSnackbar } from 'notistack';
+import { SnackbarKey, enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -317,6 +319,34 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [openRelease, attachment, addSignature, dateRange]);
 
+  const deleteIRO = (id: string) => {
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing IRO',
+      variant: 'info',
+    });
+    IROServices.DeleteIRO(id)
+      .then((res) => {
+        if (IROrder) {
+          const IRO = IROrder.filter((IROrder) => {
+            return IROrder._id !== id;
+          });
+          setIROrder(IRO);
+        }
+        // closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
   // Rest of your component code...
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -373,6 +403,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
+
+              ...(hasPermissions(['ADMIN_ACCESS']) ? [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    deleteIRO(params.row._id);
+                  },
+                },
+              ] : []),
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [
                 {
@@ -1480,3 +1522,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 };
 
 export default ManageIRO;
+function closeSnackbar(snackbarId: SnackbarKey) {
+  throw new Error('Function not implemented.');
+}
+

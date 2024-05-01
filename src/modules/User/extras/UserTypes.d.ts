@@ -48,6 +48,8 @@ declare global {
     OTHER_ACCOUNTS_ACCESS_3: boolean;
     OTHER_ACCOUNTS_ACCESS_4: boolean;
 
+    EDIT_DIVISION_ACCESS: boolean;
+
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
