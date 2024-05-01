@@ -119,7 +119,7 @@ const DivisionsList = (arg:any) => {
             //   to: `/divisions/edit/${props.row._id}`,
             //   icon: EditIcon,
             // },
-            ...(hasPermissions(['WRITE_DIVISIONS']) || hasPermissions(['EDIT_DIVISION_ACCESS']) ? [
+            ...(hasPermissions(['WRITE_DIVISIONS']) ? [
               {
                 id: 'edit',
                 text: 'Edit',
