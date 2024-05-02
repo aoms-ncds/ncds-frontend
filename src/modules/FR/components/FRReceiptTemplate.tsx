@@ -5,10 +5,12 @@ import { Page, Text, Document, StyleSheet, Font, Image, View } from '@react-pdf/
 import axios from 'axios';
 import React, { useState } from 'react';
 
-Font.register({ family: 'Oswald', fonts: [
-  { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf' },
-  { src: 'https://fonts.googleapis.com/css2?family=Oswald:wght@200;700&display=swap' },
-]});
+Font.register({
+  family: 'Oswald', fonts: [
+    { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf' },
+    { src: 'https://fonts.googleapis.com/css2?family=Oswald:wght@200;700&display=swap' },
+  ]
+});
 // Font.register({
 //   family: 'Oswald',
 //   src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf',
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   division: {
-    marginTop: 173, 
+    marginTop: 173,
     fontSize: 10,
     position: 'absolute',
     left: 180,
@@ -115,12 +117,12 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTemplate = (props:{rowData:FR}) => {
+const FRReceiptTemplate = (props: { rowData: FR }) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
 
-  let totalAmount=0;
+  let totalAmount = 0;
   return (
     <Document>
       <Page size="A4">
@@ -138,8 +140,8 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
 
           <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>
-            <Text style={styles?.divisiontitle }>Name of the Division:</Text>
-            <Text style={styles?.division }>{props?.rowData?.division?.details?.name}</Text>
+            <Text style={styles?.divisiontitle}>Name of the Division:</Text>
+            <Text style={styles?.division}>{props?.rowData?.division?.details?.name}</Text>
             {/* <Text style={styles.datetitle}>Date:  </Text> */}
             <Text style={styles.datetitle}>
               {/* {console.log({ theParticulars: props.rowData })} */}
@@ -166,14 +168,14 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
                 Description
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
-                 Month
+                Month
               </PDFCell>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
                 Total
               </PDFCell>
             </PDFTableHeader>
             {props.rowData?.particulars && props.rowData?.particulars.map((item: Particular, index: number) => {
-              totalAmount += item.requestedAmount??0;
+              totalAmount += item.requestedAmount ?? 0;
               return <PDFTableRow key={index} height='50'>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60'}>
                   {String(index + 1)}
@@ -212,7 +214,7 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
               <PDFCell width={'80%'}></PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'30%'}>
-              Total amount :
+                Total amount :
               </PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
@@ -222,21 +224,35 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           </PDFTable>
         </div>
         <div style={{ marginTop: 20, fontSize: 10 }}>
-          <Image style={{ left: 60,
+          <Image style={{
+            left: 60,
             position: 'absolute',
             height: 50,
-            width: 50 }}
-          src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `}/>
-          <Image style={{ left: 260,
+            width: 50
+          }}
+            src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `} />
+          <Image style={{
+            left: 60,
             position: 'absolute',
             height: 50,
-            width: 50 }}
-          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
-          <Image style={{ left: 460,
-            height: 50,
+            width: 50
+          }}
+            src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `} />
+          <Image style={{
+            left: 260,
             position: 'absolute',
-            width: 50 }}
-          src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64} `}/>
+            height: 50,
+            width: 50
+          }}
+            src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `} />
+         <Image style={{
+            left: 60,
+            top:90,
+            position: 'absolute',
+            height: 50,
+            width: 50
+          }}
+            src={`data:${props.rowData?.division?.details.president?.sign?.type};base64, ${props.rowData?.division?.details.president?.sign?.base64} `} />
         </div>
 
         {/* <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
@@ -244,13 +260,18 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text> */}
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
-          <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
-          
+          <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
+
           <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
-          <Text style={{ left: 260,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
+          <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
-          <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
+          <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
+          {props.rowData?.specialsanction == 'Yes' ? (
+            <><Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text><Text style={{ left: 60,top: 70, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails.firstName} {props.rowData?.division?.details.president?.name?.basicDetails.lastName}</Text></>
+          ) : (
+            []
+          )}
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text> 
