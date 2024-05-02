@@ -258,7 +258,5 @@ export default {
       }),
     );
   },
-  DeleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId+ '/force', { headers: { ...getAuthHeader() } })),
-
-
+  deleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId+ '/force', { headers: { ...getAuthHeader() } })),
 };
