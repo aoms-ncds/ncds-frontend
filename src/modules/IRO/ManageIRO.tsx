@@ -12,14 +12,14 @@ import {
   CurrencyRupee as CurrencyRupeeIcon,
   Close as CloseIcon,
   Message as MessageIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
 
 } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { SnackbarKey, enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
@@ -259,6 +259,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     endDate: moment().endOf('y'),
     rangeType: 'years',
   });
+  const [iroData, setIroData] = useState<IROrder | null>(null);
+  const [openPrintIro, setOpenPrintIro] = useState(false);
+
   const [pdfProps, setPdfProps] =
   useState<{purpose:FRPurpose|null;
     divisionId:string|null;
@@ -388,6 +391,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     IROServices.DeleteIRO(id)
       .then((res) => {
         if (IROrder) {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           const IRO = IROrder.filter((IROrder) => {
             return IROrder._id !== id;
           });
@@ -472,17 +476,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               ] :
               []),
 
-              ...(hasPermissions(['ADMIN_ACCESS']) ? [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    deleteIRO(params.row._id);
-                  },
+            ...(hasPermissions(['ADMIN_ACCESS']) ? [
+              {
+                id: 'delete',
+                text: 'Delete',
+                component: Link,
+                icon: DeleteIcon,
+                onClick: () => {
+                  deleteIRO(params.row._id);
                 },
               ] : []),
+              
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release' ?
               [
                 {
@@ -575,18 +579,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   id: 'print',
                   text: 'Print IRO',
                   icon: PrintIcon,
-                  component: PDFDownloadLink,
-                  // document: <IROReceiptTemplate rowData={params.row} />,
-                  document: <IROTemplate rowData={params.row} fr={fr} mngrName={mngrName} />,
-                  fileName: 'IROReceipt.pdf',
-                  // onClick: () => {
-                  //   if (params.row.FR) {
-                  //     FRServices.getById(params.row.FR).then((res) => {
-                  //       setFr(res.data);
-                  //       console.log(res.data, 'frsss');
-                  //     });
-                  //   }
-                  // },
+                  onClick: () => {
+                    setIroData(params.row);
+                    setOpenPrintIro(true);
+                    setTimeout(() => {
+                      setOpenPrintIro(false);
+                    }, 2000);
+                  },
                 },
               ] :
               []),
@@ -809,7 +808,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    { field: 'sanctionedAmount', headerClassName: 'super-app-theme--cell', headerName: 'Sanctioned Amount', width: 180, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerClassName: 'super-app-theme--cell', headerName: 'Sanctioned Amount', width: 180,
+      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
 
     // {
     //   field: 'sanctionedAsPer',
@@ -1625,12 +1625,35 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
+        <DialogContent>
+          <Container>Download the IRO for {iroData?.IROno}<br/>
+            {iroData &&
+              <PDFDownloadLink
+                document={<IROTemplate rowData={iroData} fr={fr} />}
+                fileName='IROReceipt.pdf'
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading ||openPrintIro? '....' : 'IROReceipt.pdf'}
+
+              </PDFDownloadLink>} </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setIroData(null);
+            }}
+            variant="text"
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };
 
 export default ManageIRO;
-function closeSnackbar(snackbarId: SnackbarKey) {
-  throw new Error('Function not implemented.');
-}
+
 
