@@ -19,6 +19,7 @@ import { purposes } from './extras/FRConfig';
 import DesignationParticularService from '../Settings/extras/DesignationParticularService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
+import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -111,6 +112,15 @@ const WorkerSupportPage = () => {
       FrNo: string | null;
       FrMonth: string | null;
     } | null>(null);
+  const [signPdfProps, setSignPdfProps] =
+    useState<{purpose:FRPurpose|null;
+      divisionId:string|null;
+      workerId:string|null;
+      designationParticularID:string|null;
+      subDivisionId:string|null;
+      IRONo:string|null;
+      month:string|null;
+    }|null>(null);
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
 
   const addFR = async (requisition: CreatableFR) => {
@@ -143,6 +153,15 @@ const WorkerSupportPage = () => {
         FrNo: res2.data.FRno,
         FrMonth: res2.data.particulars[0]?.month ?? '',
       }));
+      setSignPdfProps({ purpose: purpose??'Division',
+        divisionId: division?._id??null,
+        workerId: res2.data.purpose=='Coordinator'&&res2.data.purposeCoordinator ?res2.data.purposeCoordinator?._id:
+          res2.data.purpose=='Worker'&&res2.data.purposeWorker?._id?res2.data.purposeWorker?._id:null,
+        subDivisionId: subDivision?._id ?? null,
+        designationParticularID: designationParticular?._id ?? null,
+        IRONo: 'IRO'+res2.data.FRno.slice(-4),
+        month: res2.data.particulars[0].month,
+      });
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -1383,7 +1402,17 @@ const WorkerSupportPage = () => {
               >
                 {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
 
-              </PDFDownloadLink>} ?</Container>
+              </PDFDownloadLink>} and
+            {signPdfProps&&<PDFDownloadLink
+              document={<IROReconciliationPdf
+                data={signPdfProps}
+              />}
+              fileName="WorkersSignatureSheet.pdf"
+              style={{ color: 'blue' }}
+            >
+              {({ loading }) => loading||disableAttach?'....':'WorkersSignatureSheet.pdf'}
+            </PDFDownloadLink>}
+              ?</Container>
         </DialogContent>
         <DialogActions>
           <Button
