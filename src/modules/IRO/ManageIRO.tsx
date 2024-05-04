@@ -560,7 +560,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         IRONo: params.row.IROno,
                         month: params.row.particulars[0].month,
                         date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY') });
-                      setSupportAttachment(true);
+                      params.row.signatureSheet&& setSupportAttachment(true);
                     }
                   },
                 },
@@ -1492,19 +1492,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle> Signature Attachment  </DialogTitle>
         <DialogContent>
           <Container>Please download and attach the signature sheet: &nbsp;
-            {pdfProps&&
-            <>
-              <PDFDownloadLink
-                document={<IROReconciliationPdf
-                  data={pdfProps}
-                />}
-                fileName="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
-              </PDFDownloadLink><br/>
-            NB: Ignore if already attached
-            </>} </Container>
+            <Button onClick={async ()=>{
+              const file=(await FileUploaderServices.getFile(selectedIRO?.signatureSheet??'')).data;
+              if (file.downloadURL) {
+                const link = document.createElement('a');
+                link.href = file.downloadURL;
+                link.download = ''; // You can specify a custom file name here
+                link.click();
+              }
+            }} >WorkersSignatureSheet.pdf</Button> </Container>
         </DialogContent>
         <DialogActions>
           <Button
