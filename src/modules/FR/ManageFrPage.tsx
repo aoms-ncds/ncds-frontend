@@ -10,13 +10,14 @@ import {
   Close as CloseIcon,
   Download as DownloadIcon,
   Print as PrintIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card,
+  Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
-import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
 import MessageItem from '../../components/MessageItem';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -52,6 +53,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
@@ -60,9 +62,10 @@ const ManageFrPage = () => {
       message: 'Removing FR',
       variant: 'info',
     });
-    FRServices.DeleteFr(id)
+    FRServices.deleteFr(id)
       .then((res) => {
         if (FRRequests) {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           const fr = FRRequests.filter((FRRequests) => {
             return FRRequests._id !== id;
           });
@@ -117,7 +120,7 @@ const ManageFrPage = () => {
       field: '_manage',
       headerClassName: 'super-app-theme--cell',
       headerName: '',
-      renderHeader: () =>  <b>Action</b>,
+      renderHeader: () => <b>Action</b>,
       width: 80,
       align: 'center',
       headerAlign: 'center',
@@ -204,17 +207,17 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-              ...(hasPermissions(['ADMIN_ACCESS']) ? [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    deleteFR(props.row._id);
-                  },
+            ...(hasPermissions(['ADMIN_ACCESS']) ? [
+              {
+                id: 'delete',
+                text: 'Delete',
+                component: Link,
+                icon: DeleteIcon,
+                onClick: () => {
+                  deleteFR(props.row._id);
                 },
-              ] : []),
+              },
+            ] : []),
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -259,16 +262,13 @@ const ManageFrPage = () => {
                 {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
-                  component: PDFDownloadLink,
-                  document: <FRReceiptTempForDelhiDivision label={Label} rowData={data as unknown as FR} />,
-                  fileName: 'FRReceiptDelhi.pdf',
                   icon: PrintIcon,
                   onClick: () => {
-                    setData(props.row)
-                    // setOpen(true)
+                    setData(props.row);
+                    setOpenPrintFr(true);
                     setTimeout(() => {
-                      setOpen(false)
-                    }, 3000)
+                      setOpenPrintFr(false);
+                    }, 2000);
                   },
 
                 },
@@ -278,12 +278,13 @@ const ManageFrPage = () => {
             {
               id: 'print',
               text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={data2 as FR} />,
-              fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
               onClick: () => {
-                setData2(props.row)
+                setData2(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
               },
             },
             {
@@ -458,31 +459,30 @@ const ManageFrPage = () => {
       renderHeader: () => (<b>Status</b>),
       cellClassName: (params) => {
         console.log('CellClassName params:', params);
-        let statusName = params.formattedValue;
+        const statusName = params.formattedValue;
         console.log('Status Name###:', statusName);
         if (params.value == null) {
           return '';
         }
         switch (statusName) {
-          case 'REVERTED':
-            return clsx('orange');
-          case 'WAITING FOR ACCOUNTS':
-            return clsx('orange');
-          case 'IRO CLOSED':
-            return clsx('green');
-          case 'FR VERIFIED':
-            return clsx('green');
-          case 'FR CLOSED':
-            return clsx('green');
-          case ' FR DISAPPROVED':
-            return clsx('red');
-          case 'WAITING FOR PRESIDENT':
-            return clsx('orange');
-          default:
-            console.log('No class applied');
-            return '';
+        case 'REVERTED':
+          return clsx('orange');
+        case 'WAITING FOR ACCOUNTS':
+          return clsx('orange');
+        case 'IRO CLOSED':
+          return clsx('green');
+        case 'FR VERIFIED':
+          return clsx('green');
+        case 'FR CLOSED':
+          return clsx('green');
+        case ' FR DISAPPROVED':
+          return clsx('red');
+        case 'WAITING FOR PRESIDENT':
+          return clsx('orange');
+        default:
+          console.log('No class applied');
+          return '';
         }
-
       },
       width: 205,
       align: 'center',
@@ -492,19 +492,19 @@ const ManageFrPage = () => {
         console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
-          case 'SEND_BACK':
-            statusName = 'REVERTED';
-            break;
-          case 'FR_APPROVED':
-            statusName = 'FR VERIFIED'; // Change to whatever new name you want
-            break;
-          case 'FR_REJECTED':
-            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-            break;
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
           // Add more cases for other status names you want to change
-          default:
-            statusName = statusName.replaceAll('_', ' ');
-            break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
         }
         return statusName;
       },
@@ -855,7 +855,7 @@ const ManageFrPage = () => {
               // onClose={handleClose}
               aria-describedby="alert-dialog-slide-description"
             >
-              <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+              <DialogTitle>{'Use Google\'s location service?'}</DialogTitle>
               <DialogContent>
                 {/* <DialogContentText id="alert-dialog-slide-description"> */}
                   Let Google help apps determine location. This means sending anonymous
@@ -865,6 +865,56 @@ const ManageFrPage = () => {
               <DialogActions>
                 {/* <Button onClick={handleClose}>Disagree</Button>
                 <Button onClick={handleClose}>Agree</Button> */}
+              </DialogActions>
+            </Dialog>
+            <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Fr</DialogTitle>
+              <DialogContent>
+                <Container>Download the FRReceipt,Delhi for {data?.FRno} <br/>
+                  {data &&
+              <PDFDownloadLink
+                document={<FRReceiptTempForDelhiDivision label={Label} rowData={data as unknown as FR} />}
+                fileName='FRReceiptDelhi.pdf'
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading ||openPrintFr? '....' : 'FRReceiptDelhi.pdf'}
+
+              </PDFDownloadLink>} </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData(null);
+                  }}
+                  variant="text"
+                >
+            Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Fr</DialogTitle>
+              <DialogContent>
+                <Container>Download the FRReceipt for {data2?.FRno}<br/>
+                  {data2 &&
+              <PDFDownloadLink
+                document={<FRReceiptTemplate rowData={data2 as FR} />}
+                fileName='FRReceipt.pdf'
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading ||openPrintFr? '....' : 'FRReceipt.pdf'}
+
+              </PDFDownloadLink>} </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData2(null);
+                  }}
+                  variant="text"
+                >
+            Cancel
+                </Button>
               </DialogActions>
             </Dialog>
           </>
