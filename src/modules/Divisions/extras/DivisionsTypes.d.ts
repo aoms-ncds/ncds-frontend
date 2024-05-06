@@ -59,7 +59,7 @@ declare global {
   }
 
 
-  interface BankDetails {
+  interface   BankDetails {
     bankName: string;
     branchName: string;
     accountNumber: string;

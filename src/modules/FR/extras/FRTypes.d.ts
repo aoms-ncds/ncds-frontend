@@ -36,6 +36,7 @@ declare global {
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
     reasonForSentBack?:string;
+    sourceOfAccount?:string
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
@@ -112,6 +113,7 @@ declare global {
     particulars: Particular[];
     workerSupport?:boolean;
     designationParticular?:string;
+    sourceOfAccount?:string
 
   }
 
