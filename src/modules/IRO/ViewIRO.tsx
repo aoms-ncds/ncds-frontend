@@ -59,6 +59,7 @@ const ViewIRO = () => {
     sanctionedAmount: 0,
     sanctionedAsPer: '',
     sanctionedBank: '',
+    sourceOfAccount:'',
     mainCategory: '',
     particulars: [],
     createdBy: {
@@ -141,49 +142,84 @@ const ViewIRO = () => {
           name: '',
         },
       ],
-      FCRABankDetails: {
+      DivisionBankFCRA: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      localBankDetails: {
+      DivisionBankLocal: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails: {
+      BeneficiaryBank: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails1: {
+      BeneficiaryBank1: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails2: {
+      BeneficiaryBank2: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails3: {
+      BeneficiaryBank3: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails4: {
+      BeneficiaryBank4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank5: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank6: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank7: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank8: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank9: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -439,13 +475,40 @@ const ViewIRO = () => {
                               })
                             }
                           >
-                            <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                            <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
-                            <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
-                            <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
-                            <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
-                            <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                            <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem>
+                            <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA</MenuItem>
+                        <MenuItem value={'Division Bank Local'}>Division Bank Local</MenuItem>
+                        <MenuItem value={'Beneficiary Bank'}>Beneficiary Bank</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank1</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank2</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank3</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank4</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank5</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank6</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank7</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank8</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank9</MenuItem>
+                            {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <FormControl fullWidth>
+                          <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
+                          <Select
+                            labelId="sourceOfAccount"
+                            label="sourceOfAccount"
+                            value={IRO?.sourceOfAccount ?? null}
+                            disabled
+
+                            onChange={(e) =>
+                              setIRO({
+                                ...IRO,
+                                sourceOfAccount: e.target.value ?? '',
+                              })
+                            }
+                          >
+                            <MenuItem value={'FRCA'}>FRCA</MenuItem>
+                           <MenuItem value={'Local'}>Local</MenuItem>
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
                         </FormControl>

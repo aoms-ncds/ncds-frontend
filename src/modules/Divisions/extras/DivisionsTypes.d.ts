@@ -5,13 +5,18 @@ declare global {
     // _id: GridRowId;
     details: DivisionDetails;
     subDivisions: SubDivision[];
-    FCRABankDetails: BankDetails;
-    localBankDetails: BankDetails;
-    otherBankDetails: BankDetails;
-    otherBankDetails1: BankDetails;
-    otherBankDetails2: BankDetails;
-    otherBankDetails3: BankDetails;
-    otherBankDetails4: BankDetails;
+    DivisionBankFCRA: BankDetails;
+    DivisionBankLocal: BankDetails;
+    BeneficiaryBank: BankDetails;
+    BeneficiaryBank1: BankDetails;
+    BeneficiaryBank2: BankDetails;
+    BeneficiaryBank3: BankDetails;
+    BeneficiaryBank4: BankDetails;
+    BeneficiaryBank5: BankDetails;
+    BeneficiaryBank6: BankDetails;
+    BeneficiaryBank7: BankDetails;
+    BeneficiaryBank8: BankDetails;
+    BeneficiaryBank9: BankDetails;
     _id: string;
   }
   interface DivisionDetails {
@@ -54,7 +59,7 @@ declare global {
   }
 
 
-  interface BankDetails {
+  interface   BankDetails {
     bankName: string;
     branchName: string;
     accountNumber: string;

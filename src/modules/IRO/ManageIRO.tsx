@@ -114,49 +114,84 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           name: '',
         },
       ],
-      FCRABankDetails: {
+      DivisionBankFCRA: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      localBankDetails: {
+      DivisionBankLocal: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails: {
+      BeneficiaryBank: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails1: {
+      BeneficiaryBank1: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails2: {
+      BeneficiaryBank2: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails3: {
+      BeneficiaryBank3: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails4: {
+      BeneficiaryBank4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank5: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank6: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank7: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank8: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank9: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -237,7 +272,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     if (props.action === 'release') {
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'FCRA' })
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Division Bank FCRA' })
           .then((res) => {
             setIROrder(() => [...res.data]);
           })
@@ -246,7 +281,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Division Bank Local' })
           .then((res) => {
             setIROrder(() => [...res.data]);
           })
@@ -254,60 +289,60 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             console.error(error);
           });
       }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
-          .then((res) => {
-            console.log(res.data, 'UIOP');
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
-          .then((res) => {
-            console.log(res.data, 'UIOP');
+      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
+      //     .then((res) => {
+      //       console.log(res.data, 'UIOP');
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
+      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
+      //     .then((res) => {
+      //       console.log(res.data, 'UIOP');
 
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
-          .then((res) => {
-            console.log(res.data, 'UIOP');
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
+      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
+      //     .then((res) => {
+      //       console.log(res.data, 'UIOP');
 
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
-          .then((res) => {
-            console.log(res.data, 'UIOP');
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
+      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
+      //     .then((res) => {
+      //       console.log(res.data, 'UIOP');
 
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
-          .then((res) => {
-            console.log(res.data, 'UIOP');
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
+      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
+      //     .then((res) => {
+      //       console.log(res.data, 'UIOP');
 
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
       if (userPermissions?.OTHER_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
@@ -323,7 +358,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
   useEffect(()=>{
     const sig= ESignatureService.getESignature().then((res)=>{
-      console.log(res.data.officeManagerName);
+      // console.log(res.data.officeManagerName);
       setMngrName(res.data.officeManagerName)
       
     })

@@ -431,6 +431,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     {/* </Tooltip> */}
                   </Grid>
 
+                 
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                       <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
@@ -447,13 +448,42 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         }
 
                       >
-                        <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                        <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
-                        <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
-                        <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
-                        <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
-                        <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem>
+                        <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA</MenuItem>
+                        <MenuItem value={'Division Bank Local'}>Division Bank Local</MenuItem>
+                        <MenuItem value={'Beneficiary Bank'}>Beneficiary Bank</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank1</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank2</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank3</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank4</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank5</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank6</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank7</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank8</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank9</MenuItem>
+
+                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                      <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
+                      <Select
+                        labelId="sourceOfAccount"
+                        label="Source Of Account"
+                        value={props.value.sourceOfAccount || ''}
+                        disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                        onChange={(e) =>
+                          props.onChange({
+                            ...props.value,
+                            sourceOfAccount: e.target.value,
+                          })
+                        }
+
+                      >
+                        <MenuItem value={'FRCA'}>FCRA</MenuItem>
+                        <MenuItem value={'Local'}>Local</MenuItem>
+                       
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>

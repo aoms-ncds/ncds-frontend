@@ -87,49 +87,84 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
         name: '',
       },
     ],
-    FCRABankDetails: {
+    DivisionBankFCRA: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    localBankDetails: {
+    DivisionBankLocal: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails: {
+    BeneficiaryBank: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails1: {
+    BeneficiaryBank1: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails2: {
+    BeneficiaryBank2: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails3: {
+    BeneficiaryBank3: {
       bankName: '',
       branchName: '',
       accountNumber: '',
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails4: {
+    BeneficiaryBank4: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank5: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank6: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank7: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank8: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank9: {
       bankName: '',
       branchName: '',
       accountNumber: '',
@@ -261,28 +296,28 @@ DivisionsList(divisionDetails)
             >
               <Grid container spacing={2}>
                 <BankDetailsForm
-                  value={divisionDetails?.FCRABankDetails}
+                  value={divisionDetails?.DivisionBankFCRA}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, FCRABankDetails: newbankDetails as BankDetails }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankFCRA: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'FCRA Bank Details' }}
+                  options={{ title: 'Division Bank FCRA' }}
                 />
                 <BankDetailsForm
-                  value={divisionDetails?.localBankDetails}
+                  value={divisionDetails?.DivisionBankLocal}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, localBankDetails: newbankDetails as BankDetails }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankLocal: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'Local Bank Details' }}
+                  options={{ title: 'Division Bank Local' }}
                 />
                 <BankDetailsForm
-                  value={divisionDetails?.otherBankDetails}
+                  value={divisionDetails?.BeneficiaryBank}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails: newbankDetails as BankDetails }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'Other Bank Details' }}
+                  options={{ title: 'Beneficiary Bank' }}
                 />
                 {/* {newBanks.map((item, index) => (
                   <BankDetailsForm
@@ -303,12 +338,12 @@ DivisionsList(divisionDetails)
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`otherBankDetails${index + 1}`]: newbankDetails as BankDetails }));
                     }}
                     action={props.action}
-                    options={{ title: `Other Bank Details ${index + 1}` }}
+                    options={{ title: `Beneficiary Bank ${index + 1}` }}
                   />
                 ))}
 
                 <Grid item xs={12}>
-                  {action !== 'view' && otherBankDetailsCount !=4 && (
+                  {action !== 'view' && otherBankDetailsCount !=9 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       Add More Banks
                     </Button>

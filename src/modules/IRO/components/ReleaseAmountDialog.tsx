@@ -61,36 +61,46 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       closeSnackbar(approvalSnack);
     }, 500);
   };
-  useEffect(()=>{
-PaymentMethodService.getAll().then((res)=>{
-  setPaymentMethod(res.data)
- 
-})
-  },[])
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data)
+
+    })
+  }, [])
   useEffect(() => {
     if (props.action == 'add') {
       setReleaseAmount(() => ({
         ...releaseAmount,
         transferredBank:
-          props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
-            props.data[0]?.division?.FCRABankDetails :
-            props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
-              props.data[0]?.division?.localBankDetails :
-              props.data[0]?.sanctionedBank == 'Other Bank 1' && props.data[0]?.division?.localBankDetails ?
-                props.data[0]?.division?.otherBankDetails1 :
-                props.data[0]?.sanctionedBank == 'Other Bank 2' && props.data[0]?.division?.localBankDetails ?
-                  props.data[0]?.division?.otherBankDetails2 :
-                  props.data[0]?.sanctionedBank == 'Other Bank 4' && props.data[0]?.division?.localBankDetails ?
-                    props.data[0]?.division?.otherBankDetails4 :
-                    props.data[0]?.sanctionedBank == 'Other Bank 3' && props.data[0]?.division?.localBankDetails ?
-                      props.data[0]?.division?.otherBankDetails3 :
-                      props.data[0]?.sanctionedBank == 'Other Bank' && props.data[0]?.division?.otherBankDetails ? props.data[0]?.division?.otherBankDetails : {
-                        bankName: '',
-                        branchName: '',
-                        accountNumber: '',
-                        IFSCCode: '',
-                        beneficiary: '',
-                      },
+          props.data[0]?.sanctionedBank == 'Division Bank FCRA' && props.data[0]?.division?.DivisionBankFCRA ?
+            props.data[0]?.division?.DivisionBankFCRA :
+            props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
+              props.data[0]?.division?.DivisionBankLocal :
+              props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.DivisionBankLocal ?
+                props.data[0]?.division?.BeneficiaryBank1 :
+                props.data[0]?.sanctionedBank == 'Beneficiary Bank2' && props.data[0]?.division?.DivisionBankLocal ?
+                  props.data[0]?.division?.BeneficiaryBank2 :
+                  props.data[0]?.sanctionedBank == 'Beneficiary Bank4' && props.data[0]?.division?.DivisionBankLocal ?
+                    props.data[0]?.division?.BeneficiaryBank4 :
+                    props.data[0]?.sanctionedBank == 'Beneficiary Bank5' && props.data[0]?.division?.DivisionBankLocal ?
+                      props.data[0]?.division?.BeneficiaryBank5 :
+                      props.data[0]?.sanctionedBank == 'Beneficiary Bank6' && props.data[0]?.division?.DivisionBankLocal ?
+                        props.data[0]?.division?.BeneficiaryBank6 :
+                        props.data[0]?.sanctionedBank == 'Beneficiary Bank7' && props.data[0]?.division?.DivisionBankLocal ?
+                          props.data[0]?.division?.BeneficiaryBank7:
+                          props.data[0]?.sanctionedBank == 'Beneficiary Bank8' && props.data[0]?.division?.DivisionBankLocal ?
+                            props.data[0]?.division?.BeneficiaryBank8 :
+                            props.data[0]?.sanctionedBank == 'Beneficiary Bank9' && props.data[0]?.division?.DivisionBankLocal ?
+                              props.data[0]?.division?.BeneficiaryBank9 :
+                              props.data[0]?.sanctionedBank == 'Beneficiary Bank3' && props.data[0]?.division?.DivisionBankLocal ?
+                                props.data[0]?.division?.BeneficiaryBank3 :
+                                props.data[0]?.sanctionedBank == 'Beneficiary Bank' && props.data[0]?.division?.BeneficiaryBank ? props.data[0]?.division?.BeneficiaryBank : {
+                                  bankName: '',
+                                  branchName: '',
+                                  accountNumber: '',
+                                  IFSCCode: '',
+                                  beneficiary: '',
+                                },
         releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
         IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
@@ -234,10 +244,12 @@ PaymentMethodService.getAll().then((res)=>{
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                    event.preventDefault();
-                    event.currentTarget.blur();
-                  } }}
+                  inputProps={{
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    }
+                  }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required
@@ -381,41 +393,41 @@ PaymentMethodService.getAll().then((res)=>{
                   }}
                 />
               </Grid>
-              {props.action =='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <TextField
-                  label="Payment Method"
-                  value={releaseAmount?.modeOfPayment}
-                  variant="outlined"
-                  fullWidth
-                  disabled={props.action == 'view'}
-                  InputLabelProps={{
-                    shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
-                  }}
-                />
-              </Grid>
+              {props.action == 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Payment Method"
+                    value={releaseAmount?.modeOfPayment}
+                    variant="outlined"
+                    fullWidth
+                    disabled={props.action == 'view'}
+                    InputLabelProps={{
+                      shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                    }}
+                  />
+                </Grid>
               )}
               {/* </Grid> */}
-              {props.action !='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <Autocomplete
-                  disablePortal
-                  id="Payment_method"
-                  getOptionLabel={(method) => method.paymentMethod ?? ''}
-                  value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod }
-                  // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
-                  options={paymnetMethod?? []}
-                  onChange={(_e, newValue: any) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+              {props.action != 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
+                    getOptionLabel={(method) => method.paymentMethod ?? ''}
+                    value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod}
+                    // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
+                    options={paymnetMethod ?? []}
+                    onChange={(_e, newValue: any) =>
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setReleaseAmount(() => ({
                         ...releaseAmount,
                         modeOfPayment: newValue ?? '',
                       }))
-                  }
-                  renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                    }
+                    renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                   // disabled={props.action == 'view'}
-                />
-              </Grid>
+                  />
+                </Grid>
               )}
               {releaseAmount?.modeOfPayment == 'Other' && (
                 <Grid item xs={12} md={6} lg={4}>
