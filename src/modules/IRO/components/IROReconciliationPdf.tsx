@@ -21,38 +21,28 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 65,
-    fontSize: 12,
+    fontSize: 14,
     position: 'absolute',
-    left: 160,
+    left: 150,
     color: 'darkblue',
   },
 
   month: {
     marginTop: 80,
-    fontSize: 10,
+    fontSize: 12,
     position: 'absolute',
     left: 230,
     color: 'black',
   },
   IRONo: {
     marginTop: 90,
-    fontSize: 10,
+    fontSize: 12,
     position: 'absolute',
     left: 240,
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
-  paymentDate: {
-    marginTop: 100,
-    fontSize: 10,
-    position: 'absolute',
-    left: 225,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-  },
-
   line: {
     position: 'absolute',
     left: '20',
@@ -77,9 +67,18 @@ const styles = StyleSheet.create({
     height: 50,
     left: 20,
   },
+  tableHead: {
+    flex: 1,
+    fontSize: 12,
+    padding: 2,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+
+  },
   tableCell: {
     flex: 1,
-    fontSize: 6,
+    fontSize: 12,
     padding: 2,
     textAlign: 'center',
   },
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const IROReconciliationPdf = (props:{data:
-  {purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null;IRONo:string|null;month:string|null;date:string|null};
+  {purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null;IRONo:string|null;month:string|null};
 },
 ) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
@@ -217,21 +216,21 @@ const IROReconciliationPdf = (props:{data:
         <View style={styles.tableContainer} >
           <View style={{ ...styles.tableRow, height: 30 }} key={0}>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sl No.</Text>
+            <Text style={styles.tableHead}>Sl No.</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Worker Code</Text>
+            <Text style={styles.tableHead}>Worker Code</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>First Name</Text>
+            <Text style={styles.tableHead}>First Name</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Last Name</Text>
+            <Text style={styles.tableHead}>Last Name</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Division</Text>
+            <Text style={styles.tableHead}>Division</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sub-Division</Text>
+            <Text style={styles.tableHead}>Sub-Division</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Net Amount</Text>
+            <Text style={styles.tableHead}>Net Amount</Text>
             <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Signature</Text>
+            <Text style={styles.tableHead}>Signature</Text>
             <div style={styles.headGrid}></div>
           </View>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, styled } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
@@ -19,7 +19,9 @@ import { purposes } from './extras/FRConfig';
 import DesignationParticularService from '../Settings/extras/DesignationParticularService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
-
+import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
+import Lottie from 'react-lottie';
+import Animations from '../../Animations';
 interface TotalSupportStructure {
   basic?: number;
   prevBasic?: number;
@@ -99,6 +101,7 @@ const WorkerSupportPage = () => {
   const [disableAttach, setDisableAttach] = useState(true);
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [confirmAttach, setConfirmAttach] = useState(false);
+  const [loading, setLoading] = useState(false);
   const user = useAuth();
 
   const [pdfProps, setPdfProps] =
@@ -111,7 +114,15 @@ const WorkerSupportPage = () => {
       FrNo: string | null;
       FrMonth: string | null;
     } | null>(null);
-  const [fileObj, setFileObj] = useState<FileObject | null>(null);
+  const [signPdfProps, setSignPdfProps] =
+    useState<{purpose:FRPurpose|null;
+      divisionId:string|null;
+      workerId:string|null;
+      designationParticularID:string|null;
+      subDivisionId:string|null;
+      IRONo:string|null;
+      month:string|null;
+    }|null>(null);
 
   const addFR = async (requisition: CreatableFR) => {
     try {
@@ -143,6 +154,16 @@ const WorkerSupportPage = () => {
         FrNo: res2.data.FRno,
         FrMonth: res2.data.particulars[0]?.month ?? '',
       }));
+      setSignPdfProps({ purpose: purpose??'Division',
+        divisionId: division?._id??null,
+        workerId: res2.data.purpose=='Coordinator'&&res2.data.purposeCoordinator ?res2.data.purposeCoordinator?._id:
+          res2.data.purpose=='Worker'&&res2.data.purposeWorker?._id?res2.data.purposeWorker?._id:null,
+        subDivisionId: subDivision?._id ?? null,
+        designationParticularID: designationParticular?._id ?? null,
+        IRONo: 'IRO'+res2.data.FRno.slice(-4),
+        month: res2.data.particulars[0].month,
+      });
+      setFrAction(null);
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -154,19 +175,22 @@ const WorkerSupportPage = () => {
     }
   };
 
-  const attach = async (blob: Blob) => {
+  const attach = async (signBlob: Blob, supportBlob: Blob) => {
     if (selectedWorker || division) {
-      const file = (blob instanceof Blob ? new File([blob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
-      file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then(async (res) => {
-        if (requisition2) {
+      const signFileBlob = (signBlob instanceof Blob ? new File([signBlob], 'WorkersSignatureSheet.pdf', { type: 'application/pdf' }) : null);
+      const supportFileBlob = (supportBlob instanceof Blob ? new File([supportBlob], 'WorkerSupport.pdf', { type: 'application/pdf' }) : null);
+      if ( supportFileBlob&&signFileBlob) {
+        const supportFile=await FileUploaderServices.uploadFile(supportFileBlob, undefined, 'FR', supportFileBlob.name);
+        const signFile=await FileUploaderServices.uploadFile(signFileBlob, undefined, 'FR', signFileBlob.name);
+        if (requisition2 &&signFile.success&&supportFile.success) {
           (await FRServices.updateFRRequests(requisition2._id, {
             ...requisition2,
             particulars: requisition2?.particulars ? requisition2.particulars.map((particular, index) => {
-              return index === 0 ? { ...particular, attachment: [...particular.attachment, res.data]} : particular;
+              return index === 0 ? { ...particular, attachment: [...particular.attachment, supportFile.data]} : particular;
             }) : [],
+            signatureSheet: signFile.data._id,
           }));
           setRequisition2((await FRServices.getById(requisition2._id)).data);
-          setFileObj(res.data);
           enqueueSnackbar({
             message: 'File Attached',
             variant: 'success',
@@ -177,10 +201,12 @@ const WorkerSupportPage = () => {
           });
           setConfirmAttach(false);
           setFrAction('view');
+          setLoading(false);
         }
-      });
+      }
     }
   };
+
 
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
@@ -1025,7 +1051,7 @@ const WorkerSupportPage = () => {
               requestedAmount: total.net,
               unitPrice: total.net,
               quantity: supportEnabledWorkers?.length,
-              attachment: fileObj ? [fileObj] : [],
+              attachment: [],
             }] : [],
           }));
         }}>
@@ -1263,7 +1289,6 @@ const WorkerSupportPage = () => {
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
-                      setFileObj(res.data); console.log(res.data, 'uploaded');
                     })}
                   >
                      Upload File
@@ -1383,7 +1408,17 @@ const WorkerSupportPage = () => {
               >
                 {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
 
-              </PDFDownloadLink>} ?</Container>
+              </PDFDownloadLink>} and &nbsp;
+            {signPdfProps&&<PDFDownloadLink
+              document={<IROReconciliationPdf
+                data={signPdfProps}
+              />}
+              fileName="WorkersSignatureSheet.pdf"
+              style={{ color: 'blue' }}
+            >
+              {({ loading }) => loading||disableAttach?'....':'WorkersSignatureSheet.pdf'}
+            </PDFDownloadLink>}
+              ?</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1394,39 +1429,70 @@ const WorkerSupportPage = () => {
           >
             No, Cancel
           </Button>
-          {(selectedWorker || division) && pdfProps && (
-            <PDFDownloadLink
-              document={<PDFTemplate
-                divisionId={pdfProps?.divisionId}
-                workerId={pdfProps?.workerId}
-                purpose={pdfProps?.purpose}
-                designationParticularID={pdfProps?.designationParticularID}
-                subDivisionId={pdfProps?.subDivisionId}
-                FrNo={pdfProps?.FrNo}
-                FrMonth={pdfProps?.FrMonth} />}
-              fileName="WorkerSupport.pdf"
-              style={{ textDecoration: 'none', color: 'blue' }}
-            >
-              {({ blob, loading }) => (
-                <> <Button
-
-                  endIcon={<AttachIcon />}
-                  variant="contained"
-                  color="info"
-                  onClick={async () => {
-                    if (blob) {
-                      attach(blob);
-                    }
-                  }}
-                  disabled={loading||disableAttach} >
-                  {loading||disableAttach ? 'Loading...' : 'Yes, Attach'}
-                </Button>
-                </>
-              )}
-            </PDFDownloadLink>
-          )}
+          <>
+            {(selectedWorker || division) && signPdfProps && pdfProps && (
+              <>
+                <PDFDownloadLink
+                  document={<IROReconciliationPdf data={signPdfProps} />}
+                  fileName="WorkersSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {({ blob: signBlob, loading: loading1 }) => (
+                    <PDFDownloadLink
+                      document={<PDFTemplate
+                        divisionId={pdfProps?.divisionId}
+                        workerId={pdfProps?.workerId}
+                        purpose={pdfProps?.purpose}
+                        designationParticularID={pdfProps?.designationParticularID}
+                        subDivisionId={pdfProps?.subDivisionId}
+                        FrNo={pdfProps?.FrNo}
+                        FrMonth={pdfProps?.FrMonth}
+                      />}
+                      fileName="WorkerSupport.pdf"
+                      style={{ textDecoration: 'none', color: 'blue' }}
+                    >
+                      {({ blob: supportBlob, loading: loading2 }) => (
+                        <Button
+                          endIcon={<AttachIcon />}
+                          variant="contained"
+                          color="info"
+                          onClick={async () => {
+                            if (signBlob && supportBlob) {
+                              attach(signBlob, supportBlob);
+                              setLoading(true);
+                            }
+                          }}
+                          disabled={loading1 || loading2 || disableAttach||loading}
+                        >
+                          {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
+                        </Button>
+                      )}
+                    </PDFDownloadLink>
+                  )}
+                </PDFDownloadLink>
+              </>
+            )}
+          </>
         </DialogActions>
       </Dialog>
+
+      {loading&&
+      <Lottie
+        options={{
+          loop: true,
+          autoplay: true,
+          animationData: Animations.loading,
+          rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+          },
+        }}
+        height={200}
+        width={200}
+        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        // isStopped={.state.isStopped}
+        // isPaused={.state.isPaused}
+      />}
+
     </CommonPageLayout>
   );
 };

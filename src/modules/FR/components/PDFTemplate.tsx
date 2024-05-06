@@ -82,6 +82,15 @@ const styles = StyleSheet.create({
     height: 30,
     left: 20,
   },
+  tableHead: {
+    flex: 1,
+    fontSize: 6,
+    padding: 2,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+
+  },
   tableCell: {
     flex: 1,
     fontSize: 6,
@@ -337,83 +346,83 @@ const PDFTemplate = (props: {
         <View style={styles.tableContainer} >
           <View style={styles.tableRow} key={0}>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sl No.</Text>
+            <Text style={styles.tableHead}>Sl No.</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Worker Code</Text>
+            <Text style={styles.tableHead}>Worker Code</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>First Name</Text>
+            <Text style={styles.tableHead}>First Name</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Last Name</Text>
+            <Text style={styles.tableHead}>Last Name</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Division</Text>
+            <Text style={styles.tableHead}>Division</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sub-Division</Text>
+            <Text style={styles.tableHead}>Sub-Division</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Basic</Text>
+            <Text style={styles.tableHead}>Prev Basic</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Basic</Text>
+            <Text style={styles.tableHead}>Basic</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev HRA</Text>
+            <Text style={styles.tableHead}>Prev HRA</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>HRA</Text>
+            <Text style={styles.tableHead}>HRA</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Spouse Allowance</Text>
+            <Text style={styles.tableHead}>Prev Spouse Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Spouse Allowance</Text>
+            <Text style={styles.tableHead}>Spouse Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Positional Allowance</Text>
+            <Text style={styles.tableHead}>Prev Positional Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Positional Allowance</Text>
+            <Text style={styles.tableHead}>Positional Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Special Allowance</Text>
+            <Text style={styles.tableHead}>Prev Special Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Special Allowance</Text>
+            <Text style={styles.tableHead}>Special Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Impact Deduction</Text>
+            <Text style={styles.tableHead}>Prev Impact Deduction</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Impact Deduction</Text>
+            <Text style={styles.tableHead}>Impact Deduction</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev Tel Allowance</Text>
+            <Text style={styles.tableHead}>Prev Tel Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Tel Allowance</Text>
+            <Text style={styles.tableHead}>Tel Allowance</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev PION Missionary Fund</Text>
+            <Text style={styles.tableHead}>Prev PION Missionary Fund</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>PION Missionary Fund</Text>
+            <Text style={styles.tableHead}>PION Missionary Fund</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Prev MUT Deduction</Text>
+            <Text style={styles.tableHead}>Prev MUT Deduction</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Updated At</Text>
+            <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>MUT Deduction</Text>
+            <Text style={styles.tableHead}>MUT Deduction</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total Amount</Text>
+            <Text style={styles.tableHead}>Total Amount</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total Deduction</Text>
+            <Text style={styles.tableHead}>Total Deduction</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Net Amount</Text>
+            <Text style={styles.tableHead}>Net Amount</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Support Enabled</Text>
+            <Text style={styles.tableHead}>Support Enabled</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Disabled From</Text>
+            <Text style={styles.tableHead}>Disabled From</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Disabled To</Text>
+            <Text style={styles.tableHead}>Disabled To</Text>
             <div style={styles.grid}></div>
           </View>
 
