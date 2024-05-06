@@ -276,9 +276,13 @@ const IROReconciliationPdf = (props:{data:
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ flex: 2,
+              fontSize: 12,
+              padding: 2,
+              textAlign: 'center', fontWeight: 'bold' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total}</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
