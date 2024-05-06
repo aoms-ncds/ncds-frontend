@@ -12,6 +12,8 @@ import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import FRServices from './extras/FRServices';
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
+import ESignatureService from '../Settings/extras/ESignatureService';
+import moment from 'moment';
 const SentBack = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
@@ -19,6 +21,33 @@ const SentBack = () => {
     setSearchText(event.target.value);
   };
 
+  const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
     if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) ||
      (row.IRO && row.IRO.toLowerCase().includes(searchText.toLowerCase()))) {
@@ -52,7 +81,7 @@ const SentBack = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row as FR}/>,
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },

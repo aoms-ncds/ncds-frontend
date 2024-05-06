@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 
 export default {};
 
@@ -30,6 +30,7 @@ declare global {
     purposeCoordinator?: FR['purposeCoordinator'];
     // sanctionedAsPer?: FR['sanctionedAsPer'];
     specialsanction?: FR['specialsanction'];
+    presidentApproveDate?: FR['presidentApproveDate'];
     sanctionedBank?: FR['sanctionedBank'];
     status?: number;
     purposeOthers?: string; // Added missing property
@@ -104,6 +105,7 @@ declare global {
     status: number;
     sanctionedAsPer: string | ISanctionedAsPer;
     specialsanction: string;
+    presidentApproveDate?: Moment;
     sanctionedBank: string;
     mainCategory: string;
     createdBy: IWorker;

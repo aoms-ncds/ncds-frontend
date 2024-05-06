@@ -31,6 +31,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import clsx from 'clsx';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
+import ESignatureService from '../Settings/extras/ESignatureService';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -54,7 +55,33 @@ const ManageFrPage = () => {
   const [open, setOpen] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
-
+  const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   const deleteFR = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing FR',
@@ -260,15 +287,11 @@ const ManageFrPage = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   component: PDFDownloadLink,
-                  document: <FRReceiptTempForDelhiDivision label={Label} rowData={data as unknown as FR} />,
+                  document: <FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />,
                   fileName: 'FRReceiptDelhi.pdf',
                   icon: PrintIcon,
                   onClick: () => {
                     setData(props.row)
-                    // setOpen(true)
-                    setTimeout(() => {
-                      setOpen(false)
-                    }, 3000)
                   },
 
                 },
@@ -279,7 +302,7 @@ const ManageFrPage = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={data2 as FR} />,
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR} />,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
               onClick: () => {

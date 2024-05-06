@@ -29,6 +29,7 @@ const UserBasicDetailsForm = (
 ) => {
   const [duplicateCurrentAddress, setDuplicateCurrentAddress] = useState(false);
   const [spouseList, setSpouseList] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [showAadhaarUploader, setShowAadhaarUploader] = useState(false);
   const [showVoterIdUploader, setShowVoterIdUploader] = useState(false);
 
@@ -41,8 +42,10 @@ const UserBasicDetailsForm = (
     LanguagesService.getAll({ status: CommonLifeCycleStates.ACTIVE }).then((res) => setLanguages(res.data));
     GenderService.getAll().then((res) => setGender(res.data));
     ReligionService.getAll().then((res) => setReligion(res.data));
+    UserServices.getAll({$and: [{ kind: 'worker'}]}).then((res) => setUsers(res.data));
   }, []);
 
+console.log(spouseList,'spouseList');
 
   useEffect(() => {
     // UserServices.getAll({ basicDetails: { gender: props.value.gender=='Male'?'Female':'Male' } })
@@ -59,6 +62,7 @@ const UserBasicDetailsForm = (
     }
   }, [props.value.martialStatus]);
 
+console.log(props?.value?.spouseOf, 'props?.value?.spouseOf');
 
   return (
     <>
@@ -189,13 +193,22 @@ const UserBasicDetailsForm = (
         />
       </Grid> */}
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           value={props?.value?.gender as unknown as IGender }
           options={gender}
           getOptionLabel={(g) => g.gender}
           onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props?.options?.textField?.variant} />}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
+          value={props?.value?.spouseOf as User}
+          options={users}
+          getOptionLabel={(g) => g.basicDetails.firstName + g.basicDetails.lastName}
+          onChange={(e, newValue) => props.onChange({ ...props.value, spouseOf: newValue as unknown as User })}
+          renderInput={(params) => <TextField {...params} label="Spouse Of" variant={props?.options?.textField?.variant} />}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>

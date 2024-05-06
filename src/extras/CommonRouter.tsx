@@ -47,7 +47,6 @@ const Router = () => {
       setUser(false);
     });
   }, []);
-console.log(...allModuleRoutes.map((s)=>s.pages.map((e)=>e.requiredAccessRights)),"HEHE");
 
   const router = createBrowserRouter(
     ([] as RouteObject[]).concat(

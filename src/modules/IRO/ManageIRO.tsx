@@ -37,6 +37,7 @@ import * as XLSX from 'xlsx';
 import IROTemplate from './components/IROTemplate';
 import clsx from 'clsx';
 import IROReconciliationPdf from './components/IROReconciliationPdf';
+import ESignatureService from '../Settings/extras/ESignatureService';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
@@ -57,6 +58,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [addSignature, toggleAddSignature] = useState(false);
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
+  const [mngrName, setMngrName] = useState('');
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -319,6 +321,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [openRelease, attachment, addSignature, dateRange]);
 
+  useEffect(()=>{
+    const sig= ESignatureService.getESignature().then((res)=>{
+      console.log(res.data.officeManagerName);
+      setMngrName(res.data.officeManagerName)
+      
+    })
+
+  },[])
+
   const deleteIRO = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing IRO',
@@ -387,6 +398,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               text: 'View Details ',
               component: Link,
               to: `/iro/${params.row._id}`,
+              icon: PreviewIcon,
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              component: Link,
+              to: `/fr/${params.row.FR}/view`,
               icon: PreviewIcon,
             },
             ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
@@ -509,7 +527,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   icon: PrintIcon,
                   component: PDFDownloadLink,
                   // document: <IROReceiptTemplate rowData={params.row} />,
-                  document: <IROTemplate rowData={params.row} fr={fr} />,
+                  document: <IROTemplate rowData={params.row} fr={fr} mngrName={mngrName} />,
                   fileName: 'IROReceipt.pdf',
                   // onClick: () => {
                   //   if (params.row.FR) {
@@ -693,6 +711,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
+    {
+      field: 'Amount Release Date',
+      headerName: 'Amount Release Date',
+      headerClassName: 'super-app-theme--cell',
+      width: 200,
+      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',  
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+ 
+      align: 'center',
+      headerAlign: 'center',
+    },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
@@ -823,6 +852,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  console.log(filteredRows, 'filteredRows');
+  
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}

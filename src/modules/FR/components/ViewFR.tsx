@@ -45,6 +45,7 @@ import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
+import ESignatureService from '../../Settings/extras/ESignatureService';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -83,7 +84,33 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     setSelectedParticularIndex(index);
     setNewParticular(particular);
   };
-
+  const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   const handleClose = () => {
     setOpen(false);
   };
@@ -468,7 +495,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 // }}
                 >
                   <PDFDownloadLink
-                    document={<FRReceiptTemplate rowData={props.value as FR} />}
+                    document={<FRReceiptTemplate president={selectedSignaturePresident} rowData={props.value as FR} />}
                     fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >
