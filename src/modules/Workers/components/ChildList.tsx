@@ -225,6 +225,15 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
 
     },
     {
+      field: 'division',
+      renderCell: (props:any) => <p> {props?.row?.division?.details?.name}</p>,
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Division</b>),
+      headerClassName: 'super-app-theme--cell',
+    },
+    {
       field: 'dateOfBirth',
       width: 90,
       headerAlign: 'center',

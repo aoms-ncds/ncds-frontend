@@ -226,6 +226,15 @@ const ClosedIRO = () => {
       ),
     },
     {
+      field: 'Amount Release Date',
+      headerName: 'Amount Release Date',
+      width: 200,
+      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',  
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'sanctionedAmount', align: 'center',
       headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },

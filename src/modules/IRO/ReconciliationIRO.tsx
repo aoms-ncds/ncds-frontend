@@ -403,6 +403,24 @@ const ReconciliationIRO = () => {
       field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
     },
+    {
+      field: 'Amount Release Date',
+      headerName: 'Amount Release Date',
+      width: 200,
+      valueGetter: (params) => {
+        const transferredDate = params.row.releaseAmount?.transferredDate;
+        if (transferredDate) {
+            const formattedDate = moment(transferredDate).format("YYYY-MM-DD"); // Adjust the format as needed
+            return formattedDate;
+        } else {
+            return 'N/A';
+        }
+    } 
+    ,    renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+ 
+      align: 'center',
+      headerAlign: 'center',
+    },
     // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {

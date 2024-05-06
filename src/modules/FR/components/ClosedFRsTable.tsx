@@ -11,6 +11,8 @@ import { Box, Button, Grid, TextField } from '@mui/material';
 import * as XLSX from 'xlsx';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import PermissionChecks from '../../User/components/PermissionChecks';
+import ESignatureService from '../../Settings/extras/ESignatureService';
+import moment from 'moment';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -19,7 +21,33 @@ const ClosedFRsTable = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-
+  const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
     if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
     (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
@@ -29,6 +57,18 @@ const ClosedFRsTable = () => {
       value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
+
+ 
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
 
   const columns:GridColDef<FR>[] = [
     {
@@ -54,7 +94,7 @@ const ClosedFRsTable = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate rowData={props.row as FR}/>,
+              document: <FRReceiptTemplate president={selectedSignaturePresident}  rowData={props.row as FR }/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },

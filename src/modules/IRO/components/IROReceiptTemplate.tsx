@@ -340,7 +340,8 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
             <View
               style={{ ...styles.text2, marginTop: 15, left: 400, width: 130 }}
             >
-              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>Office Manager</Text>
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 15 }}>Office Manager</Text>
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>{props.rowData?.signature?.officeManagerSignature?.filename}</Text>
             </View>
           </View>
           {/* <View style={{ flexDirection: 'row', textAlign: 'right', width: 410 }} >
