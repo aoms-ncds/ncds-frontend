@@ -128,13 +128,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
-      BeneficiaryBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
       BeneficiaryBank1: {
         bankName: '',
         branchName: '',
@@ -192,6 +185,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         beneficiary: '',
       },
       BeneficiaryBank9: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -272,8 +272,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     if (props.action === 'release') {
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Division Bank FCRA' })
-          .then((res) => {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'FCRA'})
+        .then((res) => {
+            console.log(res.data,'KKK');
+            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -281,8 +283,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Division Bank Local' })
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'Local'})
           .then((res) => {
+            // console.log(res?.data, 'KKK');;
+            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {

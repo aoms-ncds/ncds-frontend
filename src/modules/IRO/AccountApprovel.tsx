@@ -120,13 +120,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
-      BeneficiaryBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
       BeneficiaryBank1: {
         bankName: '',
         branchName: '',
@@ -184,6 +177,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         beneficiary: '',
       },
       BeneficiaryBank9: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',

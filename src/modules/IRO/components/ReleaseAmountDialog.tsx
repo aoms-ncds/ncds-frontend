@@ -94,7 +94,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                               props.data[0]?.division?.BeneficiaryBank9 :
                               props.data[0]?.sanctionedBank == 'Beneficiary Bank3' && props.data[0]?.division?.DivisionBankLocal ?
                                 props.data[0]?.division?.BeneficiaryBank3 :
-                                props.data[0]?.sanctionedBank == 'Beneficiary Bank' && props.data[0]?.division?.BeneficiaryBank ? props.data[0]?.division?.BeneficiaryBank : {
+                                props.data[0]?.sanctionedBank == 'Beneficiary Bank' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
                                   bankName: '',
                                   branchName: '',
                                   accountNumber: '',

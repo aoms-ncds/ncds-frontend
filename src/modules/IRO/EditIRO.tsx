@@ -151,13 +151,6 @@ const EditIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-      BeneficiaryBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
       BeneficiaryBank1: {
         bankName: '',
         branchName: '',
@@ -215,6 +208,13 @@ const EditIRO = () => {
         beneficiary: '',
       },
       BeneficiaryBank9: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',

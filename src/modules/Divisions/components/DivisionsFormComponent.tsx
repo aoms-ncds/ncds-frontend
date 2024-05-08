@@ -227,7 +227,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   </FormControl>
                 </Grid>
                 
-                <Autocomplete
+                {/* <Autocomplete
                     options={users ?? []}
 
                     value={props.value.seniorLeader?.name ?? null}
@@ -256,7 +256,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         }}
                       />
                     )}
-                  />
+                  /> */}
                 <Grid item xs={12}>
                   <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                     E-signature

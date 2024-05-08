@@ -125,9 +125,9 @@ const ReconciliationIRO = () => {
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ sourceOfAccount: 'Division Bank FCRA' })
+      console.log('FRDD');
+      IROServices.getReconciliation({ sourceOfAccount: 'FCRA' })
         .then((res) => {
-          console.log(res, 'FRDD');
           setReconcilationIRO(() => [...res.data]);
         })
         .catch((error) => {
@@ -135,7 +135,7 @@ const ReconciliationIRO = () => {
         });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getReconciliation({ sourceOfAccount: 'Division Bank Local' })
+      IROServices.getReconciliation({ sourceOfAccount: 'Local' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })

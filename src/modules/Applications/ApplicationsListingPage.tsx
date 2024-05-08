@@ -76,13 +76,6 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         IFSCCode: '',
         beneficiary: '',
       },
-      BeneficiaryBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
       BeneficiaryBank1: {
         bankName: '',
         branchName: '',
@@ -140,6 +133,13 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         beneficiary: '',
       },
       BeneficiaryBank9: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',

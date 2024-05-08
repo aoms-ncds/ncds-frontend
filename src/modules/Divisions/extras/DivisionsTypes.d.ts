@@ -7,7 +7,6 @@ declare global {
     subDivisions: SubDivision[];
     DivisionBankFCRA: BankDetails;
     DivisionBankLocal: BankDetails;
-    BeneficiaryBank: BankDetails;
     BeneficiaryBank1: BankDetails;
     BeneficiaryBank2: BankDetails;
     BeneficiaryBank3: BankDetails;
@@ -17,6 +16,7 @@ declare global {
     BeneficiaryBank7: BankDetails;
     BeneficiaryBank8: BankDetails;
     BeneficiaryBank9: BankDetails;
+    BeneficiaryBank10: BankDetails;
     _id: string;
   }
   interface DivisionDetails {
