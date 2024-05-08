@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
@@ -12,6 +12,7 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
+import React from 'react';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -25,6 +26,7 @@ interface ReleaseDialogProps {
 
 const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [iroStatus, setIroStatus] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
     _id: '',
@@ -42,25 +44,37 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     attachment: [],
     division: '',
   });
-
+  console.log(iroStatus, 'iroStatus');
+  const model=(e: { preventDefault: () => void; })=>{
+    e.preventDefault();
+    setOpen(true)
+  }
+  let saveReleaseAmount;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
+  // if(iroStatus){
+   
+        saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
+          e.preventDefault();
+          const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
+      
+          IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+            props.onClose();
+          });
+          setTimeout(() => {
+            closeSnackbar(approvalSnack);
+          }, 500);
+        };
+      
+    
+  // }else{
 
-  const saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
-    e.preventDefault();
-    const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
+  // }
 
-    IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
-      enqueueSnackbar({
-        message: res.message,
-        variant: 'success',
-      });
-      props.onClose();
-    });
-    setTimeout(() => {
-      closeSnackbar(approvalSnack);
-    }, 500);
-  };
   useEffect(() => {
     PaymentMethodService.getAll().then((res) => {
       setPaymentMethod(res.data)
@@ -87,7 +101,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                       props.data[0]?.sanctionedBank == 'Beneficiary Bank6' && props.data[0]?.division?.DivisionBankLocal ?
                         props.data[0]?.division?.BeneficiaryBank6 :
                         props.data[0]?.sanctionedBank == 'Beneficiary Bank7' && props.data[0]?.division?.DivisionBankLocal ?
-                          props.data[0]?.division?.BeneficiaryBank7:
+                          props.data[0]?.division?.BeneficiaryBank7 :
                           props.data[0]?.sanctionedBank == 'Beneficiary Bank8' && props.data[0]?.division?.DivisionBankLocal ?
                             props.data[0]?.division?.BeneficiaryBank8 :
                             props.data[0]?.sanctionedBank == 'Beneficiary Bank9' && props.data[0]?.division?.DivisionBankLocal ?
@@ -201,7 +215,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     //       <CardContent>
     <>
       <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
-        <form onSubmit={saveReleaseAmount}>
+        <form onSubmit={model}>
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item xs={15}>
@@ -498,16 +512,32 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             >
               Close
             </Button>
-            {hasPermissions(['MANAGE_IRO']) && iroStatus ? (
+            {hasPermissions(['MANAGE_IRO']) ? (
               <>
                 <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
-                  Release Amount
+                  {iroStatus ? 'Sent to accounts manager' : 'Release Amount'}
                 </Button>
                 <br />
               </>
             ) : null}
           </DialogActions>
         </form>
+          <Dialog
+            open={open}
+            keepMounted
+            onClose={()=>setOpen(false)}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle> {iroStatus? 'Are you sure you want to Sent account manager?' :'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
+            <DialogContent>
+
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={()=>setOpen(false)}>Close</Button>
+              <Button onClick={saveReleaseAmount}>Conform</Button>
+            </DialogActions>
+          </Dialog>
+
       </Dialog>
       {/* <FileUploader
         title="Attachments"

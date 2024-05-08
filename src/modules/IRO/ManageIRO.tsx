@@ -271,11 +271,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
+      if(userPermissions?.ACCOUNTS_MNGR_ACCESS){
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR})
+        .then((res) => {
+         
+            setIROrder(() => [...res.data]);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+      }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'FCRA'})
         .then((res) => {
-            console.log(res.data,'KKK');
-            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -472,7 +481,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   },
                 },
               ] : []),
-            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
+            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release' ?
               [
                 {
                   id: 'Release',
