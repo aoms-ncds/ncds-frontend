@@ -193,6 +193,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      sanctionedAmount: particulars.sanctionedAmount,
 
                     }, { headers: { ...getAuthHeader() } });
                   } else {
@@ -209,6 +210,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      sanctionedAmount: particulars.sanctionedAmount,
 
                     }, { headers: { ...getAuthHeader() } });
                   }
@@ -246,6 +248,7 @@ export default {
                   await axios.patch(`/fr/particulars/${particulars._id}`, {
                     narration: particulars.narration,
                     sanctionedAsPer: particulars?.sanctionedAsPer,
+                    sanctionedAmount: particulars?.sanctionedAmount,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }

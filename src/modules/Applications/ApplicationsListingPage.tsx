@@ -76,14 +76,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
-      otherBankDetails1: {
+      BeneficiaryBank1: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -105,6 +98,20 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         beneficiary: '',
       },
       otherBankDetails4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',
