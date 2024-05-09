@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   tableHead: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 10,
     padding: 2,
     textAlign: 'center',
     fontWeight: 'bold',
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   tableCell: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 10,
     padding: 2,
     textAlign: 'center',
   },
