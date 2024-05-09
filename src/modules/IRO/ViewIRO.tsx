@@ -61,6 +61,7 @@ const ViewIRO = () => {
     sanctionedAmount: 0,
     sanctionedAsPer: '',
     sanctionedBank: '',
+    sourceOfAccount:'',
     mainCategory: '',
     particulars: [],
     createdBy: {
@@ -143,14 +144,14 @@ const ViewIRO = () => {
           name: '',
         },
       ],
-      FCRABankDetails: {
+      DivisionBankFCRA: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      localBankDetails: {
+      DivisionBankLocal: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -164,21 +165,56 @@ const ViewIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails2: {
+      BeneficiaryBank2: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails3: {
+      BeneficiaryBank3: {
         bankName: '',
         branchName: '',
         accountNumber: '',
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails4: {
+      BeneficiaryBank4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank5: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank6: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank7: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank8: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank9: {
         bankName: '',
         branchName: '',
         accountNumber: '',

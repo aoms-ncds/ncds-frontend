@@ -210,11 +210,12 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
                 <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For: {fr?.purpose}
                 </Text></View>
               <View style={{ width: 180 }}>
-              <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>
-    Requested Amt: {fr?.particulars[0].requestedAmount}
-</Text>
-</View>
-              <View><Text style={{ ...styles.text, marginTop: 15 }}>If special sanctioned: </Text>
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>
+                  Requested Amt: {fr?.particulars[0].requestedAmount}
+                </Text>
+              </View>
+              <View>
+                {/* <Text style={{ ...styles.text, marginTop: 15 }}>If special sanctioned: </Text> */}
               </View></View>
             <View style={{ flexDirection: 'row' }}>
             </View>
@@ -256,7 +257,7 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
           <Text style={{
             ...styles.h1, fontWeight: 'bold',
             fontFamily: 'Oswald',
-          }}>Deposit Bank Details</Text>
+          }}>Beneficiary Bank Details</Text>
         </div>
         <div style={{ marginTop: 0 }}>
           <View style={{ ...styles.box5, marginTop: 2 }}>

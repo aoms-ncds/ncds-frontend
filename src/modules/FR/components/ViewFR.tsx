@@ -458,6 +458,7 @@ console.log(total, 'total');
                     {/* </Tooltip> */}
                   </Grid>
 
+                 
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                       <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
