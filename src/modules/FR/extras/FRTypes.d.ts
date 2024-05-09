@@ -110,6 +110,7 @@ declare global {
     particulars: Particular[];
     workerSupport?:boolean;
     designationParticular?:string;
+    signatureSheet?:string;
 
   }
 
