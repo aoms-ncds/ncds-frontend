@@ -2,8 +2,12 @@ import { TypeObject } from '@mui/material/styles/createPalette';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
 export default {
-  addESignature: ( signature: Esignature ) => getStandardResponse(
-    axios.patch('/settings/esignature/', signature, { headers: { ...getAuthHeader() } },
+  addESignatureS1: ( signature: Esignature ) => getStandardResponse(
+    axios.patch('/settings/esignature/', {s1:signature}, { headers: { ...getAuthHeader() } },
+    ),
+  ),
+  addESignatureS2: ( signature: Esignature ) => getStandardResponse(
+    axios.patch('/settings/esignature/', {s2:signature}, { headers: { ...getAuthHeader() } },
     ),
   ),
   addOfficeMnrName: ( data:string ) => getStandardResponse(

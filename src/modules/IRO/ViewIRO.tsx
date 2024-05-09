@@ -411,6 +411,7 @@ const ViewIRO = () => {
                                 <TableCell align="center">Quantity</TableCell>
                                 <TableCell align="center">For the Month of</TableCell>
                                 <TableCell align="center">Requested Amount</TableCell>
+                                <TableCell align="center">Sanctioned Amount</TableCell>
                                 <TableCell align="center">Sanctioned as per</TableCell>
                               </TableRow>
                             </TableHead>
@@ -436,6 +437,7 @@ const ViewIRO = () => {
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
                                     <TableCell align="center">{item.requestedAmount}</TableCell>
+                                    <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                   </TableRow>
                                 ))}

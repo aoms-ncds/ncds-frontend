@@ -38,6 +38,7 @@ import IROTemplate from './components/IROTemplate';
 import clsx from 'clsx';
 import IROReconciliationPdf from './components/IROReconciliationPdf';
 import ESignatureService from '../Settings/extras/ESignatureService';
+import { IfAny } from 'mongoose';
 // import IROTemplate from './components/IROTemplate';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
@@ -376,19 +377,46 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
   useEffect(()=>{
     const sig= ESignatureService.getESignature().then((res)=>{
-      console.log(res.data.officeManagerName);
-      setMngrName(res.data.officeManagerName)
+      setMngrName((res.data as { officeManagerName: string }).officeManagerName);
       
     })
 
   },[])
+  const [selectedSignature, setSignature] = useState<Esignature>({
+    _id: '',
+    officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res});
+        setSignature(res.data as Esignature);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    console.log(selectedSignature);
+  }, []);
 
   const deleteIRO = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing IRO',
       variant: 'info',
     });
-    IROServices.DeleteIRO(id)
+    IROServices.deleteIRO(id)
       .then((res) => {
         if (IROrder) {
           // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -458,7 +486,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               id: 'View',
               text: 'View Fr ',
               component: Link,
-              to: `/fr/${params.row.FR}/view`,
+              to: `/fr/${(params.row as any).FR}/view`,
               icon: PreviewIcon,
             },
             ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
@@ -485,8 +513,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 onClick: () => {
                   deleteIRO(params.row._id);
                 },
+              }
               ] : []),
-              
+            
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release' ?
               [
                 {
@@ -1631,7 +1660,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           <Container>Download the IRO for {iroData?.IROno}<br/>
             {iroData &&
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} fr={fr} />}
+                document={<IROTemplate rowData={iroData} fr={fr} mngrName={mngrName} officeMngrsig={selectedSignature} />}
                 fileName='IROReceipt.pdf'
                 style={{ color: 'blue' }}
               >

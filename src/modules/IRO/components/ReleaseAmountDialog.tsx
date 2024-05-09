@@ -44,7 +44,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     attachment: [],
     division: '',
   });
-  console.log(iroStatus, 'iroStatus');
+  console.log(releaseAmount, 'iroStatus');
   const model=(e: { preventDefault: () => void; })=>{
     e.preventDefault();
     setOpen(true)
@@ -81,47 +81,60 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
     })
   }, [])
+  console.log(props.action,' props.data[0]?.sanctionedBank');
+  
   useEffect(() => {
-    if (props.action == 'add') {
+    if (props.data[0]?.status ==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
       setReleaseAmount(() => ({
         ...releaseAmount,
         transferredBank:
           props.data[0]?.sanctionedBank == 'Division Bank FCRA' && props.data[0]?.division?.DivisionBankFCRA ?
             props.data[0]?.division?.DivisionBankFCRA :
-            props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
-              props.data[0]?.division?.DivisionBankLocal :
-              props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.DivisionBankLocal ?
+            // props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
+            //   props.data[0]?.division?.DivisionBankLocal :
+              props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
                 props.data[0]?.division?.BeneficiaryBank1 :
-                props.data[0]?.sanctionedBank == 'Beneficiary Bank2' && props.data[0]?.division?.DivisionBankLocal ?
+                props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
                   props.data[0]?.division?.BeneficiaryBank2 :
-                  props.data[0]?.sanctionedBank == 'Beneficiary Bank4' && props.data[0]?.division?.DivisionBankLocal ?
+                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
                     props.data[0]?.division?.BeneficiaryBank4 :
-                    props.data[0]?.sanctionedBank == 'Beneficiary Bank5' && props.data[0]?.division?.DivisionBankLocal ?
+                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
                       props.data[0]?.division?.BeneficiaryBank5 :
-                      props.data[0]?.sanctionedBank == 'Beneficiary Bank6' && props.data[0]?.division?.DivisionBankLocal ?
+                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
                         props.data[0]?.division?.BeneficiaryBank6 :
-                        props.data[0]?.sanctionedBank == 'Beneficiary Bank7' && props.data[0]?.division?.DivisionBankLocal ?
+                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
                           props.data[0]?.division?.BeneficiaryBank7 :
-                          props.data[0]?.sanctionedBank == 'Beneficiary Bank8' && props.data[0]?.division?.DivisionBankLocal ?
+                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
                             props.data[0]?.division?.BeneficiaryBank8 :
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank9' && props.data[0]?.division?.DivisionBankLocal ?
+                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
                               props.data[0]?.division?.BeneficiaryBank9 :
-                              props.data[0]?.sanctionedBank == 'Beneficiary Bank3' && props.data[0]?.division?.DivisionBankLocal ?
+                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
+                              props.data[0]?.division?.BeneficiaryBank10 :
+                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 ?
                                 props.data[0]?.division?.BeneficiaryBank3 :
-                                props.data[0]?.sanctionedBank == 'Beneficiary Bank' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
+                                props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
                                   bankName: '',
                                   branchName: '',
                                   accountNumber: '',
                                   IFSCCode: '',
                                   beneficiary: '',
                                 },
-        releaseAmount: props.data.reduce((tot, iro) => tot + iro?.sanctionedAmount, 0),
-        IRO: props.data,
+                                releaseAmount: props.data.reduce((tot, iro) => {
+
+                                  if (!iro?.particulars) return tot; 
+                                
+                                  // Use `reduce` to sum the sanctioned amounts within the array
+                                  const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
+                                
+                                  return tot + totalSanctioned;
+                                }, 0),                                IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
       }));
     } else {
-      if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED && props.data[0]?.releaseAmount) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id).then((res) => {
+      if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id?? '').then((res) => {
+          console.log(res.data, 'upd');
+          
           setReleaseAmount(res.data);
         });
       }

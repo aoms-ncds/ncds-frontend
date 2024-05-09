@@ -253,7 +253,7 @@ const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident 
           )}
            <Image style={{
               left: 60,
-              top: 90,
+              top: 120,
               position: 'absolute',
               height: 35,
               width: 50

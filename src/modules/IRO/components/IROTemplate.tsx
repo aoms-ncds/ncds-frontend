@@ -104,9 +104,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any }) => {
+const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig:any }) => {
   const [fr, setFr] = useState<FR>();
-  console.log(props.fr, 'FRR');
+  console.log(props.officeMngrsig, 'FRR');
   console.log(props.rowData, 'IRO');
   console.log(props.rowData?.releaseAmount, 'bnk');
   const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
@@ -461,7 +461,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any }) => {
                 height: 78,
                 width: 128,
               }}
-                src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
+                src={`data:${props.officeMngrsig?.officeManagerSignature?.type};base64, ${props.officeMngrsig?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>

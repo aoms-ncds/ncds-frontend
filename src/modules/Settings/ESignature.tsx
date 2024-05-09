@@ -86,7 +86,7 @@ const submitData= ()=>{
   useEffect(() => {
     if (selectedSignature?.officeManagerSignature && selectedSignature?.officeManagerSignature._id) {
       console.log('is here', selectedSignature.officeManagerSignature?._id);
-      ESignatureService.addESignature(selectedSignature)
+      ESignatureService.addESignatureS1(selectedSignature.officeManagerSignature)
         .then(() => {
           console.log('ESignature added successfully');
         })
@@ -99,7 +99,7 @@ const submitData= ()=>{
   }, [selectedSignature]);
   useEffect(() => {
     if(selectedSignaturePresident?.presidentSignature && selectedSignaturePresident?.presidentSignature._id){
-      ESignatureService.addESignature(selectedSignaturePresident)
+      ESignatureService.addESignatureS2(selectedSignaturePresident.presidentSignature)
       .then(() => {
         console.log('ESignature added successfully');
       })
@@ -123,8 +123,8 @@ const submitData= ()=>{
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
-        const name= res.data
-        setName(name.officeManagerName);
+        // const name : {name:string}= res.data
+        setName((res.data as {officeManagerName:string }).officeManagerName);
       })
       .catch((res) => {
         console.log(res);

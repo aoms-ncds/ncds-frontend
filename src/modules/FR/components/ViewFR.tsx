@@ -155,7 +155,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
   const handleClick=(e:any)=>{
     e.preventDefault();
-    navigate('/fr/manage');
+   
     if (props.onSubmit) {
       {
         const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
@@ -170,6 +170,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         }, 500);
       }
     } // Invoke props.onSubmit with the value as the argument
+    navigate('/fr/manage');
   }
   const handleClose = () => {
     setOpen(false);
@@ -1210,7 +1211,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               <Button
                 variant="contained"
                 onClick={(e) => {
-                  handleClick(e)
+                  // handleClick(e)
+                  toggleAddSignature(false)
+
+
                 }}
                 sx={{ marginBottom: 3, width: 260 }}
                 endIcon={<CloseIcon />}
@@ -1248,7 +1252,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen2(false)}>Close</Button>
-          <Button onClick={handleClick}>Verify</Button>
+          <Button onClick={(e)=>handleClick(e)}>Verify</Button>
           <Button onClick={() => { toggleAddSignature(true), setOpen2(false) }}>Conform</Button>
         </DialogActions>
       </Dialog>

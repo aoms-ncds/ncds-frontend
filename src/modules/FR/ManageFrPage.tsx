@@ -922,7 +922,7 @@ const ManageFrPage = () => {
                 <Container>Download the FRReceipt,Delhi for {data?.FRno} <br/>
                   {data &&
               <PDFDownloadLink
-                document={<FRReceiptTempForDelhiDivision label={Label} rowData={data as unknown as FR} />}
+                document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident}  rowData={data as unknown as FR} />}
                 fileName='FRReceiptDelhi.pdf'
                 style={{ color: 'blue' }}
               >
@@ -947,7 +947,7 @@ const ManageFrPage = () => {
                 <Container>Download the FRReceipt for {data2?.FRno}<br/>
                   {data2 &&
               <PDFDownloadLink
-                document={<FRReceiptTemplate rowData={data2 as FR} />}
+                document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident}  />}
                 fileName='FRReceipt.pdf'
                 style={{ color: 'blue' }}
               >
