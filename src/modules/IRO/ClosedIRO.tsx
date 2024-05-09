@@ -108,6 +108,10 @@ const ClosedIRO = () => {
                   setOpenPrintIro(false);
                 }, 2000);
               },
+              component: PDFDownloadLink,
+              // document: <IROReceiptTemplate rowData={props.row} />,
+              document: <IROTemplate rowData={props.row} fr={fr} />,
+              fileName: 'IROReceipt.pdf',
             },
 
             // {
