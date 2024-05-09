@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-const IROTemplate = (props: { rowData: any; fr: any; mngrName:any }) => {
+const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any }) => {
   const [fr, setFr] = useState<FR>();
   console.log(props.fr, 'FRR');
   console.log(props.rowData, 'IRO');

@@ -373,6 +373,34 @@ const ReconciliationIRO = () => {
         </p>
       ),
     },
+    {
+      field: 'submainCategory',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sub Category</b>,
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
+          {
+          props.row.particulars[0].subCategory3 =='Select'
+          ? props.row.particulars[0].subCategory2
+          : props.row.particulars[0].subCategory2 == 'Select' ?
+           props.row.particulars[0].subCategory1 : ''
+
+          }
+        </p>
+      ),
+    },
     // {
     //   field: 'requestAmount', headerName: 'Requested Amount', width: 150, align: 'center', headerAlign: 'center',
     //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -387,7 +415,6 @@ const ReconciliationIRO = () => {
     // },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',

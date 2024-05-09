@@ -115,7 +115,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                                   IFSCCode: '',
                                   beneficiary: '',
                                 },
-        releaseAmount: props.data.reduce((tot, iro) => tot + iro.sanctionedAmount, 0),
+        releaseAmount: props.data.reduce((tot, iro) => tot + iro?.sanctionedAmount, 0),
         IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
       }));
