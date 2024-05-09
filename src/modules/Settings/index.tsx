@@ -113,15 +113,7 @@ const SettingsDashboard = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        // PaperProps={{
-        //   component: 'form',
-        //   onSubmit: (event) => {
-        //     event.preventDefault();
-        //     console.log(age);
-
-      //     handleClose();
-      //   },
-      // }}
+    
       >
         <DialogTitle>Edit Age</DialogTitle>
         <DialogContent>

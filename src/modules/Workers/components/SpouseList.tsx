@@ -117,6 +117,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
     );
   });
 
+console.log(filteredRows,'filteredRows');
 
   const columns: GridColDef<Spouse>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
@@ -194,6 +195,15 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       renderHeader: () => (<b>Last Name</b>),
       headerClassName: 'super-app-theme--cell',
 
+    },
+    {
+      field: 'division',
+      renderCell: (props:any) => <p> {props?.row?.division?.details?.name}</p>,
+      width: 170,
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Division</b>),
+      headerClassName: 'super-app-theme--cell',
     },
     {
       field: 'phone',

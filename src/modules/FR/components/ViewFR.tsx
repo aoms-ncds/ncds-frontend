@@ -552,7 +552,7 @@ console.log(total, 'total');
                 // }}
                 >
                   <PDFDownloadLink
-                    document={<FRReceiptTemplate rowData={props.value as FR} />}
+                    document={<FRReceiptTemplate president={selectedSignaturePresident} rowData={props.value as FR} />}
                     fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >

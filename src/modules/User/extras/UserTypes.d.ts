@@ -85,6 +85,7 @@ declare global {
     currentOfficialAddress: Address;
     residingAddress: Address;
     spouseOfAnother?: User;
+    spouseOf?:User;
   }
   interface CreatableBasicDetails extends Creatable<BasicDetails> {
     gender?: BasicDetails['gender'];

@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTemplate = (props:{rowData:FR}) => {
+const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident }) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
@@ -234,9 +234,21 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
-            position: 'absolute',
-            width: 50 }}
-          src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64} `}/>
+            width: 50
+          }}
+            src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `} />
+          {props.rowData?.specialsanction == 'Yes' ? (
+            <Image style={{
+              left: 60,
+              top: 90,
+              position: 'absolute',
+              height: 35,
+              width: 50
+            }}
+              src={`data:${props.president.presidentSignature?.type};base64, ${props.president.presidentSignature?.base64} `} />
+          ) : (
+            []
+          )}
         </div>
 
         {/* <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
@@ -251,6 +263,22 @@ const FRReceiptTemplate = (props:{rowData:FR}) => {
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
+          {props.rowData?.specialsanction == 'Yes' ? (
+            <>
+              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
+              <Text style={{ left: 60, top: 70, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName}</Text>
+
+              <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President Approved Date :</Text>
+              <Text style={{ left: 165, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+                {props?.rowData?.presidentApproveDate ? moment(props?.rowData?.presidentApproveDate).format('DD-MM-yyyy') : ''}
+              </Text>
+              <Text style={{ left: 60, top: 140, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Special Sanction: Yes</Text>
+
+
+            </>
+          ) : (
+            []
+          )}
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text> 
