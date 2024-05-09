@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
     fontSize: 14,
     position: 'absolute',
-    left: 150,
+    left: 160,
     color: 'darkblue',
   },
 
@@ -73,8 +73,6 @@ const styles = StyleSheet.create({
     padding: 2,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
-
   },
   tableCell: {
     flex: 1,
