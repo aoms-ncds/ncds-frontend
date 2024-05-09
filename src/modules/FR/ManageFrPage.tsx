@@ -411,6 +411,28 @@ const ManageFrPage = () => {
       ),
     },
     {
+      field: 'submainCategory',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sub Category</b>,
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
+          {props.row?.particulars[0]?.subCategory3 =='Select'? props.row?.particulars[0]?.subCategory2: props.row?.particulars[0]?.subCategory3 }
+        </p>
+      ),
+    },
+    {
       field: 'requestedAmount',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Requested Amount</b>,
