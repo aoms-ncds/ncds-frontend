@@ -21,11 +21,13 @@ import {
   InputAdornment,
   FormControl,
   DialogContent,
+  Divider,
+  Typography,
   // Checkbox,
   // FormControlLabel,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { SetStateAction, useEffect, useState } from 'react';
+import { MouseEvent, SetStateAction, useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
@@ -48,6 +50,8 @@ import Tooltip from '@mui/material/Tooltip';
 import ESignatureService from '../../Settings/extras/ESignatureService';
 import { useAuth } from '../../../hooks/Authentication';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
+import { setSyntheticLeadingComments } from 'typescript';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -58,6 +62,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     remark: '',
     transactionId: '',
   });
+  const [showFileUploader, setShowFileUploader] = useState(false);
+  const [showName, setShowName] = useState(false);
+
+  const [addSignature, toggleAddSignature] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForSentBack, setReasonForSentBack] = useState<string | null>('');
@@ -77,20 +85,23 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     narration: '',
     attachment: [],
     sanctionedAsPer: '',
-    sanctionedAmount:0,
+    sanctionedAmount: 0,
+
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
   console.log(newParticular, 'newParticular');
 
+
   let total = 0;
   props.value?.particulars?.forEach((particular) => {
-    if(particular?.sanctionedAmount){
+    if (particular?.sanctionedAmount) {
       total += particular?.sanctionedAmount;
     }
   });
-console.log(total, 'total');
+  console.log(total, 'total');
 
   const user = useAuth()
   const handleClickOpen = (particular: Particular, index: number) => {
@@ -136,6 +147,30 @@ console.log(total, 'total');
     }
 
   }, []);
+  const openDilog=()=>{
+    // e.preventDefault();
+    setOpen2(true)
+
+  }
+
+  const handleClick=(e:any)=>{
+    e.preventDefault();
+    navigate('/fr/manage');
+    if (props.onSubmit) {
+      {
+        const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
+        if (props.onSubmit) {
+          const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_APPROVED }; // Create a new object with updated status
+          props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+        }
+        setTimeout(() => {
+          closeSnackbar(approvalSnack);
+          const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
+          setTimeout(() => closeSnackbar(approvedSnack), 500);
+        }, 500);
+      }
+    } // Invoke props.onSubmit with the value as the argument
+  }
   const handleClose = () => {
     setOpen(false);
   };
@@ -188,24 +223,7 @@ console.log(total, 'total');
       <Container>
         <CardContent>
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate('/fr/manage');
-              if (props.onSubmit) {
-                {
-                  const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
-                  if (props.onSubmit) {
-                    const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_APPROVED }; // Create a new object with updated status
-                    props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                  }
-                  setTimeout(() => {
-                    closeSnackbar(approvalSnack);
-                    const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
-                    setTimeout(() => closeSnackbar(approvedSnack), 500);
-                  }, 500);
-                }
-              } // Invoke props.onSubmit with the value as the argument
-            }}
+            onSubmit={handleClick}
           >
 
             <Grid container spacing={3}>
@@ -683,8 +701,12 @@ console.log(total, 'total');
                               &nbsp;<Button
                                 variant="contained"
                                 color="success"
-                                type='submit'
+                                // type='submit'
+                                onClick={()=>{
+                             openDilog()
+                                }}
                               >
+
                                 Verify
                               </Button>
                             </>
@@ -1097,7 +1119,7 @@ console.log(total, 'total');
                         sanctionedAmount: Number(e.target.value),
                       }));
                     }
-                    }
+                  }
                   }
                   // onFocus={() => setFocused(true)}
                   // onBlur={() => setFocused(false)}
@@ -1147,6 +1169,188 @@ console.log(total, 'total');
             <Button type="submit">Add</Button>
           </DialogActions>
         </form>
+      </Dialog>
+
+      <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }} >
+        <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+            <Grid item>
+              <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                Add Signatures
+              </Typography>
+              <Divider />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setShowFileUploader(true);
+                }}
+              >
+                {' '}
+                Extra Signature
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setShowName(true)
+                }}
+              >
+                {' '}
+                Name and Designation
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={(e) => {
+                  handleClick(e)
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+                endIcon={<CloseIcon />}
+              >
+                Close
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                handleClick(e)
+              }}
+              sx={{ marginBottom: 3, width: 260 }}
+            >
+              Verify
+            </Button>
+
+            </Grid>
+
+
+          </Grid>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={open2}
+        keepMounted
+        onClose={() => setOpen2(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle> {'Are you sure you want to Add Extra signature?'}</DialogTitle>
+        <DialogContent>
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen2(false)}>Close</Button>
+          <Button onClick={handleClick}>Verify</Button>
+          <Button onClick={() => { toggleAddSignature(true), setOpen2(false) }}>Conform</Button>
+        </DialogActions>
+      </Dialog>
+
+      <FileUploader
+        title="Signature"
+        action={'add'}
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploader}
+        onClose={() => setShowFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.additionalSignature ? [props.value.additionalSignature]: []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'Settings/eSignature', file.name).then((res) => {
+            console.log(res.data, 'poo');
+            // props.onChange(() => ({
+            //   ...props.value, // Include existing properties
+            //   additionalSignature: [...(props.value.additionalSignature || []), res.data], // Update additionalSignature
+            // }));
+
+              props.onChange({
+                ...props.value,
+                additionalSignature: res.data,
+              })
+            
+            return res;
+          });
+        } }
+        renameFile={(fileId: string, newName: string) => {
+          // setReleaseAmount(() => ({
+          //   ...releaseAmount,
+          //   attachment: releaseAmount.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+          // }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        } } 
+        // getFiles={[]}        //  action={'view'} getFiles={[]}        // deleteFile={props.action == 'add' ?
+      //   (fileId: string) => {
+      //     props.onChange(() => ({
+      //       ...props.value,
+      //       attachment: releaseAmount.attachment.filter((file) => file._id !== fileId),
+      //     }));
+      //     return FileUploaderServices.deleteFile(fileId);
+      //   } :
+      //   undefined} action={'add'}  
+      />
+
+<Dialog
+        open={showName}
+        onClose={() => setShowName(false)}    
+      >
+        <DialogTitle> Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.additionalName}
+            onChange={(e: any) => {
+              props.onChange({
+                ...props.value,
+                additionalName: e.target.value,
+              })
+            }}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Designation"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.additionalDesignation}
+            onChange={(e: any) => {
+              props.onChange({
+                ...props.value,
+                additionalDesignation: e.target.value,
+              })
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setShowName(false)}>Cancel</Button>
+          <Button onClick={()=>setShowName(false)}>Add</Button>
+        </DialogActions>
       </Dialog>
 
     </div>

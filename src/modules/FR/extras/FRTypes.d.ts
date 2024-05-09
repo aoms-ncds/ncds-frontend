@@ -38,6 +38,9 @@ declare global {
     particulars?: Particular[]; // Added missing property
     reasonForSentBack?:string;
     sourceOfAccount?:string
+    additionalSignature?:FileObject,
+    additionalDesignation?:string,
+    additionalName?:string,
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
@@ -82,6 +85,7 @@ declare global {
     attachment: FileObject[];
     sanctionedAsPer?:string,
     sanctionedAmount?: number;
+    
 
   }
   type CreatableParticular = Creatable<Particular>;
@@ -104,18 +108,22 @@ declare global {
     division?: Division;
     purposeCoordinator?: User;
     purposeOthers?: string;
-    sanctionedAmount: number;
+    sanctionedAmount?: number;
     status: number;
     sanctionedAsPer: string | ISanctionedAsPer;
     specialsanction: string;
     presidentApproveDate?: Moment;
     sanctionedBank: string;
-    mainCategory: string;
+    mainCategory?: string;
     createdBy: IWorker;
     particulars: Particular[];
     workerSupport?:boolean;
     designationParticular?:string;
     sourceOfAccount?:string
+    additionalSignature?:FileObject,
+    additionalDesignation?:string,
+    additionalName?:string,
+
 
   }
 

@@ -200,7 +200,35 @@ const ClosedIRO = () => {
           {props.row.mainCategory}
         </p>
       ),
-    }, {
+    },
+    {
+      field: 'submainCategory',
+      renderHeader: () => <b>Sub Category</b>,
+      width: 240,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 240,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
+          {
+          props.row.particulars[0].subCategory3 =='Select'
+          ? props.row.particulars[0].subCategory2
+          : props.row.particulars[0].subCategory2 == 'Select' ?
+           props.row.particulars[0].subCategory1 : ''
+
+          }
+        </p>
+      ),
+    },
+     {
       field: 'requestAmount',
       align: 'center',
       headerAlign: 'center',
