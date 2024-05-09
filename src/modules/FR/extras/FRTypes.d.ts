@@ -22,7 +22,7 @@ declare global {
     purpose?: FR['purpose'];
     sanction?: FR['sanction'];
     requestAmount?: ['requestedAmount'];
-    sanctionedAmount?: FR['sanctionedAmount'];
+    // sanctionedAmount?: FR['sanctionedAmount'];
     mainCategory?: FR['mainCategory'];
     purposeWorker?: FR['purposeWorker'];
     purposeSubdivision?: FR['purposeSubdivision'];
@@ -79,6 +79,8 @@ declare global {
     narration: string;
     attachment: FileObject[];
     sanctionedAsPer?:string,
+    sanctionedAmount?: number;
+
   }
   type CreatableParticular = Creatable<Particular>;
 

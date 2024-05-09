@@ -126,14 +126,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
-      otherBankDetails: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
-      otherBankDetails1: {
+      BeneficiaryBank1: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -155,6 +148,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         beneficiary: '',
       },
       otherBankDetails4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
         bankName: '',
         branchName: '',
         accountNumber: '',
@@ -248,6 +248,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'FCRA'})
         .then((res) => {
+            console.log(res.data,'KKK');
+            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -255,8 +257,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Local Bank' })
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'Local'})
           .then((res) => {
+            // console.log(res?.data, 'KKK');;
+            
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {

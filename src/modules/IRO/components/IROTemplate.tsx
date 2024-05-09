@@ -240,12 +240,13 @@ const IROTemplate = (props: { rowData: any; fr: any }) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Account: {props.rowData.sanctionedBank ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Source Of Fund: {props.rowData?.sourceOfAccount ?? ''}
                 </Text></View>
               <View style={{ width: 180 }}>
                 <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Amt: {props.rowData?.sanctionedAmount ?? ''}
                 </Text></View>
-              <View><Text style={{ ...styles.text, marginTop: 15 }}>Fund Source: </Text>
+              <View>
+                {/* <Text style={{ ...styles.text, marginTop: 15 }}>Fund Source: </Text> */}
               </View></View>
             <View style={{ flexDirection: 'row' }}>
             </View>

@@ -101,14 +101,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       IFSCCode: '',
       beneficiary: '',
     },
-    otherBankDetails: {
-      bankName: '',
-      branchName: '',
-      accountNumber: '',
-      IFSCCode: '',
-      beneficiary: '',
-    },
-    otherBankDetails1: {
+    BeneficiaryBank1: {
       bankName: '',
       branchName: '',
       accountNumber: '',
@@ -130,6 +123,13 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       beneficiary: '',
     },
     otherBankDetails4: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank10: {
       bankName: '',
       branchName: '',
       accountNumber: '',
@@ -277,12 +277,12 @@ DivisionsList(divisionDetails)
                   options={{ title: 'Local Bank Details' }}
                 />
                 <BankDetailsForm
-                  value={divisionDetails?.otherBankDetails}
+                  value={divisionDetails?.BeneficiaryBank1}
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, otherBankDetails: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
-                  options={{ title: 'Other Bank Details' }}
+                  options={{ title: 'Beneficiary Bank 1' }}
                 />
                 {/* {newBanks.map((item, index) => (
                   <BankDetailsForm
@@ -298,12 +298,12 @@ DivisionsList(divisionDetails)
                 {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
-                    value={divisionDetails[`otherBankDetails${index + 1}` as keyof Division] as BankDetails | undefined}
+                    value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
                     onChange={(newbankDetails) => {
-                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`otherBankDetails${index + 1}`]: newbankDetails as BankDetails }));
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`BeneficiaryBank${index + 2}`]: newbankDetails as BankDetails }));
                     }}
                     action={props.action}
-                    options={{ title: `Other Bank Details ${index + 1}` }}
+                    options={{ title: `Beneficiary Bank ${index + 2}` }}
                   />
                 ))}
 

@@ -224,6 +224,37 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                       required={false} />
                   </FormControl>
                 </Grid>
+                
+                {/* <Autocomplete
+                    options={users ?? []}
+
+                    value={props.value.seniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          seniorLeader: {
+                            ...props.value.seniorLeader,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    getOptionLabel={(user) => user.basicDetails.firstName}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="J"
+                        variant="standard"
+                        required
+                        sx={{
+                          background: '#f4f5f4',
+                          borderRadius: 50,
+                          padding: 2,
+                        }}
+                      />
+                    )}
+                  /> */}
                 <Grid item xs={12}>
                   <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                     E-signature

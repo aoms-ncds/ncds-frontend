@@ -45,6 +45,9 @@ import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
+import ESignatureService from '../../Settings/extras/ESignatureService';
+import { useAuth } from '../../../hooks/Authentication';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -74,16 +77,65 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     narration: '',
     attachment: [],
     sanctionedAsPer: '',
+    sanctionedAmount:0,
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
+  const [divisions, setDivisions] = useState<Division | null>(null);
+  console.log(newParticular, 'newParticular');
 
+  let total = 0;
+  props.value?.particulars?.forEach((particular) => {
+    if(particular?.sanctionedAmount){
+      total += particular?.sanctionedAmount;
+    }
+  });
+console.log(total, 'total');
+
+  const user = useAuth()
   const handleClickOpen = (particular: Particular, index: number) => {
     setOpen(true);
     setSelectedParticularIndex(index);
     setNewParticular(particular);
   };
+  const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res });
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
 
+
+    const divisionId = user?.user && user.user.division ? user.user.division : null;
+    console.log(divisionId, 'divisionId');
+
+    if (divisionId) {
+      DivisionsServices.getDivisionById(divisionId?.toString()).then((res) => {
+        setDivisions(res.data);
+      });
+    }
+
+  }, []);
   const handleClose = () => {
     setOpen(false);
   };
@@ -309,6 +361,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         <TableCell align="center">Quantity</TableCell>
                         <TableCell align="center">For the Month of</TableCell>
                         <TableCell align="center">Requested Amount</TableCell>
+                        <TableCell align="center">Sanctioned Amount</TableCell>
                         <TableCell align="center"> Sanction As per</TableCell>
                       </TableRow>
                     </TableHead>
@@ -323,11 +376,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                   <><IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                  <Tooltip title="Add Sanction as per">
-                                    <IconButton>
-                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                    </IconButton>
-                                  </Tooltip>
+                                    <Tooltip title="Add Sanction as per">
+                                      <IconButton>
+                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                      </IconButton>
+                                    </Tooltip>
                                   </>}
                               />
                               )}
@@ -346,6 +399,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount}</TableCell>
+                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
                             <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                           </TableRow>
                         ))}
@@ -376,11 +430,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={props.value.sanctionedAmount}
+                      value={total}
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
-                      disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                      disabled
                       onChange={(e) => {
                         if (totalRequestedAmount) {
                           props.onChange({
@@ -420,13 +474,42 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         }
 
                       >
+                        <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
+                        <MenuItem value={'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem>
+
+                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                      <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
+                      <Select
+                        labelId="sourceOfAccount"
+                        label="Source Of Account"
+                        value={props.value.sourceOfAccount || ''}
+                        disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                        onChange={(e) =>
+                          props.onChange({
+                            ...props.value,
+                            sourceOfAccount: e.target.value,
+                          })
+                        }
+
+                      >
                         <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                        <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
-                        <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
-                        <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
-                        <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
-                        <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem>
+                        <MenuItem value={'Local'}>Local</MenuItem>
+
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
@@ -705,18 +788,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                  //                     setTimeout(() => {
-                  //                       closeSnackbar(processingSnack);
-                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                  //                     }, 500);
-                  //                     navigate('/fr/manage');
-                  //                   }}
-                  //                 >
-                  // Submit
-                  //                 </Button>
-                  //               }
-                  //             />
+                    //                     setTimeout(() => {
+                    //                       closeSnackbar(processingSnack);
+                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                    //                     }, 500);
+                    //                     navigate('/fr/manage');
+                    //                   }}
+                    //                 >
+                    // Submit
+                    //                 </Button>
+                    //               }
+                    //             />
                   ) : null}
 
 
@@ -973,7 +1056,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         onClose={handleClose}
         // PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
-        // sx={{ width: '30%', textAlign: 'center' }}
+      // sx={{ width: '30%', textAlign: 'center' }}
       >
         <form
           onSubmit={(e) => {
@@ -987,10 +1070,48 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         >
 
           <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-            Add Sanction as per
+            Sanctioned Amount
           </DialogTitle>
           <DialogContent>
+
+
             <Grid item xs={12} md={6} width={'20rem'} padding={1}>
+              <Grid item xs={12} md={6}>
+                {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                <TextField
+                  label="Sanctioned Amount"
+                  type={'number'}
+                  value={newParticular.sanctionedAmount}
+                  required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                  autoComplete='off'
+                  disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  onChange={(e) => {
+                    if (totalRequestedAmount) {
+                      setNewParticular((amount: any) => ({
+                        ...amount,
+                        sanctionedAmount: Number(e.target.value),
+                      }));
+                    }
+                    }
+                  }
+                  // onFocus={() => setFocused(true)}
+                  // onBlur={() => setFocused(false)}
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  inputProps={{
+                    max: totalRequestedAmount, min: 0,
+                    onWheel: handleWheel,
+                  }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                />
+                {/* </Tooltip> */}
+              </Grid>
+              <br />
               <Autocomplete<ISanctionedAsPer>
                 value={newParticular?.sanctionedAsPer as unknown as ISanctionedAsPer}
                 options={sanctionedAsPers ?? []}
@@ -1010,12 +1131,13 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }
                 }}
                 renderInput={(params) => <TextField {...params}
-                label="Sanctioned As Per" 
+                  label="Sanctioned As Per"
                 // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
-                 />}
+                />}
                 fullWidth
               />
             </Grid>
+
           </DialogContent>
           <DialogActions>
             <Button autoFocus onClick={handleClose}>
