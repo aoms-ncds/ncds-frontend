@@ -1402,7 +1402,7 @@ const WorkerSupportPage = () => {
               >
                 {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
 
-              </PDFDownloadLink>} and
+              </PDFDownloadLink>} and &nbsp;
             {signPdfProps&&<PDFDownloadLink
               document={<IROReconciliationPdf
                 data={signPdfProps}
