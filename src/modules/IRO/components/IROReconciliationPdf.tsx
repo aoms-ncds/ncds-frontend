@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   line: {
     position: 'absolute',
     left: '20',
-    right: 25,
+    right: 22,
     top: 113,
     borderBottom: 1,
     borderColor: 'black',
