@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute',
-    left: 260,
+    left: 385,
     height: 50,
     width: 50,
     marginTop: 15,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginTop: 65,
     fontSize: 14,
     position: 'absolute',
-    left: 160,
+    left: 270,
     color: 'darkblue',
   },
 
@@ -31,14 +31,14 @@ const styles = StyleSheet.create({
     marginTop: 80,
     fontSize: 12,
     position: 'absolute',
-    left: 230,
+    left: 350,
     color: 'black',
   },
   IRONo: {
     marginTop: 90,
     fontSize: 12,
     position: 'absolute',
-    left: 240,
+    left: 365,
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
@@ -55,7 +55,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 114, // Adjust this value to set the table's position
-    width: 550,
+    width: 800,
+    flex: 1, // This will make the table fill the width of the page
+    flexShrink: 0,
   },
   tableRow: {
     display: 'flex',
@@ -69,14 +71,15 @@ const styles = StyleSheet.create({
   },
   tableHead: {
     flex: 1,
-    fontSize: 10,
+    fontSize: 12,
     padding: 2,
     textAlign: 'center',
     fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   tableCell: {
     flex: 1,
-    fontSize: 10,
+    fontSize: 12,
     padding: 2,
     textAlign: 'center',
   },
@@ -200,7 +203,7 @@ const IROReconciliationPdf = (props:{data:
   }, [workers]);
   return (
     <Document>
-      <Page size={'A4'} style={styles.page} >
+      <Page size={'A4'} style={styles.page} orientation='landscape'>
         <div>
           <Image src="/3D Logo.png" style={styles.image} />
           <Text style={styles.title}>
@@ -274,9 +277,13 @@ const IROReconciliationPdf = (props:{data:
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ flex: 2,
+              fontSize: 12,
+              padding: 2,
+              textAlign: 'center', fontWeight: 'bold' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total}</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
