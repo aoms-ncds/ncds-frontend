@@ -31,6 +31,7 @@ export default {
     getStandardResponse<void>(axios.patch('/file/' + fileId, { newName }, { headers: { ...getAuthHeader() } })),
 
   deleteFile: (fileId:string)=>getStandardResponse<void>(axios.delete('/file/' + fileId, { headers: { ...getAuthHeader() } })),
+  getFile: (fileId:string)=>getStandardResponse<FileObject>(axios.get('/file/' + fileId, { headers: { ...getAuthHeader() } })),
 
   manageFile: (fileId: string, operation:string)=>getStandardResponse<void>(axios.patch(`/file/${fileId}/${operation}`, null, { headers: { ...getAuthHeader() } })),
 };

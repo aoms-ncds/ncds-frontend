@@ -275,33 +275,31 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
-      if(userPermissions?.ACCOUNTS_MNGR_ACCESS){
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR})
+      if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
         .then((res) => {
-         
-            setIROrder(() => [...res.data]);
-          })
+          setIROrder(() => [...res.data]);
+        })
           .catch((error) => {
             console.error(error);
           });
-
       }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'FCRA'})
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
         .then((res) => {
-            console.log(res.data,'KKK');
-            
-            setIROrder(() => [...res.data]);
-          })
+          console.log(res.data, 'KKK');
+
+          setIROrder(() => [...res.data]);
+        })
           .catch((error) => {
             console.error(error);
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'Local'})
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -378,10 +376,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(()=>{
     const sig= ESignatureService.getESignature().then((res)=>{
       setMngrName((res.data as { officeManagerName: string }).officeManagerName);
-      
-    })
-
-  },[])
+    });
+  }, []);
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -402,7 +398,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
-        console.log({ res});
+        console.log({ res });
         setSignature(res.data as Esignature);
       })
       .catch((res) => {
@@ -513,9 +509,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 onClick: () => {
                   deleteIRO(params.row._id);
                 },
-              }
-              ] : []),
-            
+              },
+            ] : []),
+
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release' ?
               [
                 {
@@ -784,10 +780,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
+            props.row.particulars[0].subCategory3 =='Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
           }
         </p>
       ),
@@ -821,9 +817,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Amount Release Date',
       headerClassName: 'super-app-theme--cell',
       width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',  
+      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
- 
+
       align: 'center',
       headerAlign: 'center',
     },
@@ -959,7 +955,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
   console.log(filteredRows, 'filteredRows');
-  
+
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
@@ -1629,7 +1625,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle> Signature Attachment  </DialogTitle>
         <DialogContent>
           <Container>Please download and attach the signature sheet: &nbsp;
-            {pdfProps&&
+            {selectedIRO.signatureSheet?<a href="#" onClick={async () => {
+              const file = (await FileUploaderServices.getFile(selectedIRO?.signatureSheet ?? '')).data;
+              if (file.downloadURL) {
+                const link = document.createElement('a');
+                link.href = file.downloadURL;
+                link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
+                link.click();
+              }
+            }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
             <>
               <PDFDownloadLink
                 document={<IROReconciliationPdf
@@ -1640,8 +1644,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               >
                 {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
               </PDFDownloadLink><br/>
-            NB: Ignore if already attached
-            </>} </Container>
+            </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
           <Button
