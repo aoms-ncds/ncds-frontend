@@ -461,7 +461,7 @@ const ViewIRO = () => {
                         <TextField
                           label="Sanctioned Amount"
                           type={'number'}
-                          value={total}
+                          value={IRO.sanctionedAmount ?? total}
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention

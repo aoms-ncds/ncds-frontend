@@ -45,7 +45,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     division: '',
   });
   console.log(releaseAmount, 'iroStatus');
-  const model=(e: { preventDefault: () => void; })=>{
+  const model = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setOpen(true)
   }
@@ -53,24 +53,24 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
   // if(iroStatus){
-   
-        saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
-          e.preventDefault();
-          const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
-      
-          IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
-            enqueueSnackbar({
-              message: res.message,
-              variant: 'success',
-            });
-            props.onClose();
-          });
-          setTimeout(() => {
-            closeSnackbar(approvalSnack);
-          }, 500);
-        };
-      
-    
+
+  saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
+    e.preventDefault();
+    const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
+
+    IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'success',
+      });
+      props.onClose();
+    });
+    setTimeout(() => {
+      closeSnackbar(approvalSnack);
+    }, 500);
+  };
+
+
   // }else{
 
   // }
@@ -81,10 +81,10 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
     })
   }, [])
-  console.log(props.action,' props.data[0]?.sanctionedBank');
-  
+  console.log(props.action, ' props.data[0]?.sanctionedBank');
+
   useEffect(() => {
-    if (props.data[0]?.status ==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
+    if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
       setReleaseAmount(() => ({
         ...releaseAmount,
         transferredBank:
@@ -92,22 +92,22 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             props.data[0]?.division?.DivisionBankFCRA :
             // props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
             //   props.data[0]?.division?.DivisionBankLocal :
-              props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
-                props.data[0]?.division?.BeneficiaryBank1 :
-                props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
-                  props.data[0]?.division?.BeneficiaryBank2 :
-                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
-                    props.data[0]?.division?.BeneficiaryBank4 :
-                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
-                      props.data[0]?.division?.BeneficiaryBank5 :
-                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
-                        props.data[0]?.division?.BeneficiaryBank6 :
-                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
-                          props.data[0]?.division?.BeneficiaryBank7 :
-                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
-                            props.data[0]?.division?.BeneficiaryBank8 :
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
-                              props.data[0]?.division?.BeneficiaryBank9 :
+            props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
+              props.data[0]?.division?.BeneficiaryBank1 :
+              props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
+                props.data[0]?.division?.BeneficiaryBank2 :
+                props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
+                  props.data[0]?.division?.BeneficiaryBank4 :
+                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
+                    props.data[0]?.division?.BeneficiaryBank5 :
+                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
+                      props.data[0]?.division?.BeneficiaryBank6 :
+                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
+                        props.data[0]?.division?.BeneficiaryBank7 :
+                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
+                          props.data[0]?.division?.BeneficiaryBank8 :
+                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
+                            props.data[0]?.division?.BeneficiaryBank9 :
                             props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
                               props.data[0]?.division?.BeneficiaryBank10 :
                               props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 ?
@@ -119,22 +119,22 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                                   IFSCCode: '',
                                   beneficiary: '',
                                 },
-                                releaseAmount: props.data.reduce((tot, iro) => {
+        releaseAmount: props.data.reduce((tot, iro) => {
 
-                                  if (!iro?.particulars) return tot; 
-                                
-                                  // Use `reduce` to sum the sanctioned amounts within the array
-                                  const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
-                                
-                                  return tot + totalSanctioned;
-                                }, 0),                                IRO: props.data,
+          if (!iro?.particulars) return tot;
+
+          // Use `reduce` to sum the sanctioned amounts within the array
+          const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
+
+          return iro.sanctionedAmount ?? tot + totalSanctioned;
+        }, 0), IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
       }));
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id?? '').then((res) => {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id ?? '').then((res) => {
           console.log(res.data, 'upd');
-          
+
           setReleaseAmount(res.data);
         });
       }
@@ -271,10 +271,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                    event.preventDefault();
-                    event.currentTarget.blur();
-                  } }}
+                  inputProps={{
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    }
+                  }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required
@@ -418,41 +420,41 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }}
                 />
               </Grid>
-              {props.action =='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <TextField
-                  label="Payment Method"
-                  value={releaseAmount?.modeOfPayment}
-                  variant="outlined"
-                  fullWidth
-                  disabled={props.action == 'view'}
-                  InputLabelProps={{
-                    shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
-                  }}
-                />
-              </Grid>
+              {props.action == 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Payment Method"
+                    value={releaseAmount?.modeOfPayment}
+                    variant="outlined"
+                    fullWidth
+                    disabled={props.action == 'view'}
+                    InputLabelProps={{
+                      shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                    }}
+                  />
+                </Grid>
               )}
               {/* </Grid> */}
-              {props.action !='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <Autocomplete
-                  disablePortal
-                  id="Payment_method"
-                  getOptionLabel={(method) => method.paymentMethod ?? ''}
-                  value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod }
-                  // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
-                  options={paymnetMethod?? []}
-                  onChange={(_e, newValue: any) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+              {props.action != 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
+                    getOptionLabel={(method) => method.paymentMethod ?? ''}
+                    value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod}
+                    // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
+                    options={paymnetMethod ?? []}
+                    onChange={(_e, newValue: any) =>
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setReleaseAmount(() => ({
                         ...releaseAmount,
                         modeOfPayment: newValue ?? '',
                       }))
-                  }
-                  renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                    }
+                    renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                   // disabled={props.action == 'view'}
-                />
-              </Grid>
+                  />
+                </Grid>
               )}
               {releaseAmount?.modeOfPayment == 'Other' && (
                 <Grid item xs={12} md={6} lg={4}>
@@ -533,21 +535,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             ) : null}
           </DialogActions>
         </form>
-          <Dialog
-            open={open}
-            keepMounted
-            onClose={()=>setOpen(false)}
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle> {iroStatus? 'Are you sure you want to Sent account manager?' :'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
-            <DialogContent>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={() => setOpen(false)}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle> {iroStatus ? 'Are you sure you want to Sent account manager?' : 'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
+          <DialogContent>
 
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={()=>setOpen(false)}>Close</Button>
-              <Button onClick={saveReleaseAmount}>Conform</Button>
-            </DialogActions>
-          </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Close</Button>
+            <Button onClick={saveReleaseAmount}>Conform</Button>
+          </DialogActions>
+        </Dialog>
 
       </Dialog>
       {/* <FileUploader
