@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done'; 
+import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
@@ -146,18 +146,14 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         IFSCCode: '',
         beneficiary: '',
       },
-      BeneficiaryBank10: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-        beneficiary: '',
-      },
+
       createdAt: moment(),
       updatedAt: moment(),
     },
     attachment: [],
   });
+
+
   const showLinkAction = props.action === 'manage';
   useEffect(() => {
     if (props.action == 'hr') {
@@ -233,12 +229,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
   const filteredRows = (applications ?? []).filter((row) => {
     if ((row.name && row.name.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.applicationCode && row.applicationCode.toLowerCase().includes(searchText.toLowerCase()))||
-     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))||
-     (row.createdBy?.basicDetails.firstName && row.createdBy?.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase()))||
-     (row.createdBy?.basicDetails.lastName && row.createdBy?.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))
+      (row.applicationCode && row.applicationCode.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.createdBy?.basicDetails.firstName && row.createdBy?.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.createdBy?.basicDetails.lastName && row.createdBy?.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))
 
-     ) {
+    ) {
       return true;
     }
     return Object.values(row).some((value) =>
@@ -436,11 +432,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         // <p> {props.row.createdBy?.basicDetails.firstName  + ' ' + props.row.createdBy?.basicDetails?.middleName + ' ' + props.row.createdBy?.basicDetails.lastName} </p>,
-        <p> 
-        {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
-        {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
-        {props.row.createdBy?.basicDetails?.lastName || ''} 
-      </p>,
+        <p>
+          {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
+          {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
+          {props.row.createdBy?.basicDetails?.lastName || ''}
+        </p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
@@ -571,18 +567,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       <Grid item xs={12} md={12}>
         <Card sx={{ maxWidth: '78vw', alignItems: 'center' }}>
           <Grid container spacing={0} justifyContent="space-between" padding={2}>
-          <Grid item xs={6}>
-          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchChange}
-            fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
-          />
-          {/* </Grid> */}
-        </Grid>
+            <Grid item xs={6}>
+              {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+              <TextField
+                label="Search"
+                variant="outlined"
+                value={searchText}
+                onChange={handleSearchChange}
+                fullWidth
+                style={{ width: '25%', alignItems: 'start' }}
+              />
+              {/* </Grid> */}
+            </Grid>
             <Grid item xs={6} >
               <>
                 <PermissionChecks
@@ -655,36 +651,36 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               }}>
 
                 <Box
-                sx={{
-                  'height': 500,
-                  'width': '100%',
-                  '& .super-app-theme--cell': {
-                    backgroundColor: '#f1f5fa',
-                    color: 'black',
-                    fontWeight: '600',
-                  },
-                  '& .super-app.negative': {
-                    backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                    color: '#1a3e72',
-                    fontWeight: '600',
-                  },
-                  '& .super-app.positive': {
-                    backgroundColor: '#d47483',
-                    color: '#1a3e72',
-                    fontWeight: '600',
-                  },
-                  '& .even': {
-                    backgroundColor: '#DEDAFF', // Change to red for even rows
-                  },
-                  '& .odd': {
-                    backgroundColor: '#fff', // Change to blue for odd rows
-                  },
-                }}
+                  sx={{
+                    'height': 500,
+                    'width': '100%',
+                    '& .super-app-theme--cell': {
+                      backgroundColor: '#f1f5fa',
+                      color: 'black',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.negative': {
+                      backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.positive': {
+                      backgroundColor: '#d47483',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .even': {
+                      backgroundColor: '#DEDAFF', // Change to red for even rows
+                    },
+                    '& .odd': {
+                      backgroundColor: '#fff', // Change to blue for odd rows
+                    },
+                  }}
                 >
 
-                <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} getRowClassName={(params) =>
-              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-            } />
+                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  } />
                 </Box>
               </Card>
             </Grid>

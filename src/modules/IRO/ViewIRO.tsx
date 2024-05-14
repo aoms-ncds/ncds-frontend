@@ -61,7 +61,7 @@ const ViewIRO = () => {
     sanctionedAmount: 0,
     sanctionedAsPer: '',
     sanctionedBank: '',
-    sourceOfAccount:'',
+    sourceOfAccount: '',
     mainCategory: '',
     particulars: [],
     createdBy: {
@@ -238,7 +238,7 @@ const ViewIRO = () => {
     specialsanction: '',
   });
 
-  const user =useAuth()
+  const user = useAuth()
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -247,8 +247,16 @@ const ViewIRO = () => {
   });
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
-  const [divisions, setDivisions] = useState<Division| null>(null);
+  const [divisions, setDivisions] = useState<Division | null>(null);
 
+
+
+  let total = 0;
+  IRO?.particulars?.forEach((particular) => {
+    if (particular?.sanctionedAmount) {
+      total += particular?.sanctionedAmount;
+    }
+  });
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -263,18 +271,18 @@ const ViewIRO = () => {
   //   }
   // };
 
-  useEffect( ()=>{
-    const ddata= SanctionedAsPerService.getAll().then((res)=>{
+  useEffect(() => {
+    const ddata = SanctionedAsPerService.getAll().then((res) => {
       setSanctionedAsPer(res.data);
     });
     const divisionId = user?.user && user.user.division ? user.user.division : null;
-        console.log(divisionId,'divisionId');
-        
-        if (divisionId) {
-          DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
-            setDivisions(res.data);
-          });
-        } 
+    console.log(divisionId, 'divisionId');
+
+    if (divisionId) {
+      DivisionsServices.getDivisionById(divisionId?.toString()).then((res) => {
+        setDivisions(res.data);
+      });
+    }
   }, []);
   useEffect(() => {
     if (!iroID) {
@@ -453,7 +461,7 @@ const ViewIRO = () => {
                         <TextField
                           label="Sanctioned Amount"
                           type={'number'}
-                          value={IRO?.sanctionedAmount}
+                          value={total}
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -487,18 +495,18 @@ const ViewIRO = () => {
                               })
                             }
                           >
-                             <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
-                        <MenuItem value={'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem>
+                            <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
+                            <MenuItem value={'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
+                            <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem>
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
                         </FormControl>
@@ -520,7 +528,7 @@ const ViewIRO = () => {
                             }
                           >
                             <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                           <MenuItem value={'Local'}>Local</MenuItem>
+                            <MenuItem value={'Local'}>Local</MenuItem>
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
                         </FormControl>
