@@ -197,11 +197,11 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Bank Name :{props.rowData.releaseAmount?.transferredBank.branchName}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData.createdBy.division?.otherBankDetails?.accountNumber ?? ''}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>Account No :{props.rowData.createdBy.division?.BeneficiaryBank1?.accountNumber ?? ''}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.otherBankDetails?.branchName ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Bank Branch :{props.rowData.createdBy.division?.BeneficiaryBank1?.branchName ?? ''}
                 </Text></View>
               <View><Text style={{ ...styles.text, marginTop: 15 }}>Fund Source :{props.rowData.releaseAmount?.transferredBank.bankName}</Text>
               </View></View>
@@ -253,22 +253,22 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
               return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'50%'}>
                 {String(index + 1)}
               </PDFCell>
-              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                {item.mainCategory}
-              </PDFCell>
-              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                  {item.mainCategory}
+                </PDFCell>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                {item.narration}
-              </PDFCell>
-              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                  {item.narration}
+                </PDFCell>
+                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                {String(item.requestedAmount)}
-              </PDFCell>
-              {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                  {String(item.requestedAmount)}
+                </PDFCell>
+                {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                     {item.sanctionedAmount?.toString()}
                   </PDFCell> */}
               </PDFTableRow>);
@@ -331,7 +331,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
                 height: 78,
                 width: 128,
               }}
-              src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
+                src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>

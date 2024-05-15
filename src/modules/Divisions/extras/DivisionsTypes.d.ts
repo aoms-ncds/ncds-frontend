@@ -17,6 +17,13 @@ declare global {
     BeneficiaryBank8: BankDetails;
     BeneficiaryBank9: BankDetails;
     BeneficiaryBank10: BankDetails;
+    FCRABankDetails?: BankDetails;
+    localBankDetails?: BankDetails;
+    otherBankDetails?: BankDetails;
+    otherBankDetails1?: BankDetails;
+    otherBankDetails2?: BankDetails;
+    otherBankDetails3?: BankDetails;
+    otherBankDetails4?: BankDetails;
     _id: string;
   }
   interface DivisionDetails {
@@ -59,7 +66,7 @@ declare global {
   }
 
 
-  interface   BankDetails {
+  interface BankDetails {
     bankName: string;
     branchName: string;
     accountNumber: string;

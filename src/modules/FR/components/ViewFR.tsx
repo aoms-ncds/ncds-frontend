@@ -103,7 +103,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   });
   console.log(total, 'total');
 
-  const user = useAuth()
+  const user = useAuth();
   const handleClickOpen = (particular: Particular, index: number) => {
     setOpen(true);
     setSelectedParticularIndex(index);
@@ -145,17 +145,15 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         setDivisions(res.data);
       });
     }
-
   }, []);
-  const openDilog=()=>{
+  const openDilog = () => {
     // e.preventDefault();
-    setOpen2(true)
+    setOpen2(true);
+  };
 
-  }
-
-  const handleClick=(e:any)=>{
+  const handleClick = (e: any) => {
     e.preventDefault();
-   
+
     if (props.onSubmit) {
       {
         const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
@@ -171,7 +169,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       }
     } // Invoke props.onSubmit with the value as the argument
     navigate('/fr/manage');
-  }
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -395,11 +393,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                   <><IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
                                   </>}
                               />
                               )}
@@ -449,7 +447,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={total}
+                      value={props.value?.sanctionedAmount ?? total}
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
@@ -477,7 +475,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     {/* </Tooltip> */}
                   </Grid>
 
-                 
+
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                       <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
@@ -703,8 +701,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                 variant="contained"
                                 color="success"
                                 // type='submit'
-                                onClick={()=>{
-                             openDilog()
+                                onClick={(e) => {
+                                  // openDilog();
+                                  handleClick(e);
                                 }}
                               >
 
@@ -812,18 +811,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                    //                     setTimeout(() => {
-                    //                       closeSnackbar(processingSnack);
-                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                    //                     }, 500);
-                    //                     navigate('/fr/manage');
-                    //                   }}
-                    //                 >
-                    // Submit
-                    //                 </Button>
-                    //               }
-                    //             />
+                  //                     setTimeout(() => {
+                  //                       closeSnackbar(processingSnack);
+                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                  //                     }, 500);
+                  //                     navigate('/fr/manage');
+                  //                   }}
+                  //                 >
+                  // Submit
+                  //                 </Button>
+                  //               }
+                  //             />
                   ) : null}
 
 
@@ -1108,7 +1107,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
-                  value={newParticular.sanctionedAmount}
+                  value={newParticular.sanctionedAmount ?? total}
                   required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
@@ -1200,7 +1199,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 color="info"
                 sx={{ width: 260 }}
                 onClick={() => {
-                  setShowName(true)
+                  setShowName(true);
                 }}
               >
                 {' '}
@@ -1212,9 +1211,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 variant="contained"
                 onClick={(e) => {
                   // handleClick(e)
-                  toggleAddSignature(false)
-
-
+                  toggleAddSignature(false);
                 }}
                 sx={{ marginBottom: 3, width: 260 }}
                 endIcon={<CloseIcon />}
@@ -1223,15 +1220,15 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               </Button>
             </Grid>
             <Grid item xs={12}>
-            <Button
-              variant="contained"
-              onClick={(e) => {
-                handleClick(e)
-              }}
-              sx={{ marginBottom: 3, width: 260 }}
-            >
-              Verify
-            </Button>
+              <Button
+                variant="contained"
+                onClick={(e) => {
+                  handleClick(e);
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+              >
+                Verify
+              </Button>
 
             </Grid>
 
@@ -1252,8 +1249,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen2(false)}>Close</Button>
-          <Button onClick={(e)=>handleClick(e)}>Verify</Button>
-          <Button onClick={() => { toggleAddSignature(true), setOpen2(false) }}>Conform</Button>
+          <Button onClick={(e) => handleClick(e)}>Verify</Button>
+          <Button onClick={() => {
+            toggleAddSignature(true), setOpen2(false);
+          }}>Conform</Button>
         </DialogActions>
       </Dialog>
 
@@ -1271,7 +1270,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={props.value.additionalSignature ? [props.value.additionalSignature]: []}
+        getFiles={props.value.additionalSignature ? [props.value.additionalSignature] : []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'Settings/eSignature', file.name).then((res) => {
             console.log(res.data, 'poo');
@@ -1280,22 +1279,22 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
             //   additionalSignature: [...(props.value.additionalSignature || []), res.data], // Update additionalSignature
             // }));
 
-              props.onChange({
-                ...props.value,
-                additionalSignature: res.data,
-              })
-            
+            props.onChange({
+              ...props.value,
+              additionalSignature: res.data,
+            });
+
             return res;
           });
-        } }
+        }}
         renameFile={(fileId: string, newName: string) => {
           // setReleaseAmount(() => ({
           //   ...releaseAmount,
           //   attachment: releaseAmount.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
           // }));
           return FileUploaderServices.renameFile(fileId, newName);
-        } } 
-        // getFiles={[]}        //  action={'view'} getFiles={[]}        // deleteFile={props.action == 'add' ?
+        }}
+      // getFiles={[]}        //  action={'view'} getFiles={[]}        // deleteFile={props.action == 'add' ?
       //   (fileId: string) => {
       //     props.onChange(() => ({
       //       ...props.value,
@@ -1303,12 +1302,12 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       //     }));
       //     return FileUploaderServices.deleteFile(fileId);
       //   } :
-      //   undefined} action={'add'}  
+      //   undefined} action={'add'}
       />
 
-<Dialog
+      <Dialog
         open={showName}
-        onClose={() => setShowName(false)}    
+        onClose={() => setShowName(false)}
       >
         <DialogTitle> Name</DialogTitle>
         <DialogContent>
@@ -1330,7 +1329,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               props.onChange({
                 ...props.value,
                 additionalName: e.target.value,
-              })
+              });
             }}
           />
           <TextField
@@ -1347,13 +1346,13 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               props.onChange({
                 ...props.value,
                 additionalDesignation: e.target.value,
-              })
+              });
             }}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>setShowName(false)}>Cancel</Button>
-          <Button onClick={()=>setShowName(false)}>Add</Button>
+          <Button onClick={() => setShowName(false)}>Cancel</Button>
+          <Button onClick={() => setShowName(false)}>Add</Button>
         </DialogActions>
       </Dialog>
 

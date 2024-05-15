@@ -54,7 +54,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-  purpose: 'Division',
+    purpose: 'Division',
     status: CommonLifeCycleStates.ACTIVE,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -105,7 +105,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           name: '',
         },
       ],
-      
+
       DivisionBankFCRA: {
         bankName: '',
         branchName: '',
@@ -581,10 +581,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
+            props.row.particulars[0].subCategory3 =='Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
 
           }
         </p>
@@ -613,7 +613,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150,
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
+      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
@@ -660,20 +662,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-              <Grid item xs={6}>
-          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchChange}
-            fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
-          />
-          {/* </Grid> */}
-        </Grid>
+                <Grid item xs={6}>
+                  {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+                  <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchText}
+                    onChange={handleSearchChange}
+                    fullWidth
+                    style={{ width: '25%', alignItems: 'start' }}
+                  />
+                  {/* </Grid> */}
+                </Grid>
                 <Grid item xs={6}>
                   <Button
                     onClick={async () => {
@@ -729,54 +731,54 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 <br />
                 <Grid item xs={12}>
                   <Box
-                   sx={{
-                    'height': 450,
-                    'width': '100%',
-                    '& .super-app-theme--cell': {
-                      backgroundColor: '#f1f5fa',
-                      color: 'black',
-                      fontWeight: '600',
-                    },
-                    '& .super-app.negative': {
-                      backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                      color: '#1a3e72',
-                      fontWeight: '600',
-                    },
-                    '& .super-app.positive': {
-                      backgroundColor: '#d47483',
-                      color: '#1a3e72',
-                      fontWeight: '600',
-                    },
-                    '& .even': {
-                      backgroundColor: '#DEDAFF', // Change to red for even rows
-                    },
-                    '& .odd': {
-                      backgroundColor: '#fff', // Change to blue for odd rows
-                    },
-                  }}
-                   >
-                  <DataGrid
-                    rows={filteredRows ?? []}
-                    columns={columns}
-                    getRowId={(row) => row._id}
-                    checkboxSelection={props.action == 'release'}
-                    disableRowSelectionOnClick={props.action == 'release'}
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                    sx={{
+                      'height': 450,
+                      'width': '100%',
+                      '& .super-app-theme--cell': {
+                        backgroundColor: '#f1f5fa',
+                        color: 'black',
+                        fontWeight: '600',
+                      },
+                      '& .super-app.negative': {
+                        backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                        color: '#1a3e72',
+                        fontWeight: '600',
+                      },
+                      '& .super-app.positive': {
+                        backgroundColor: '#d47483',
+                        color: '#1a3e72',
+                        fontWeight: '600',
+                      },
+                      '& .even': {
+                        backgroundColor: '#DEDAFF', // Change to red for even rows
+                      },
+                      '& .odd': {
+                        backgroundColor: '#fff', // Change to blue for odd rows
+                      },
+                    }}
+                  >
+                    <DataGrid
+                      rows={filteredRows ?? []}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      checkboxSelection={props.action == 'release'}
+                      disableRowSelectionOnClick={props.action == 'release'}
+                      onRowSelectionModelChange={(newRowSelectionModel) => {
                       // setSelectedIROrelease(newRowSelectionModel);
 
-                      setReleaseAmountIROs(() => {
-                        const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
+                        setReleaseAmountIROs(() => {
+                          const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
 
-                        return selectedIROs;
-                      });
-                    }}
-                    getRowClassName={(params) =>
-                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    }
-                    style={{ height: '80vh', width: '100%' }}
-                  // rowSelectionModel={selectedIROrelease}
-                  //
-                  />
+                          return selectedIROs;
+                        });
+                      }}
+                      getRowClassName={(params) =>
+                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                      }
+                      style={{ height: '80vh', width: '100%' }}
+                      // rowSelectionModel={selectedIROrelease}
+                      //
+                    />
 
                   </Box>
                 </Grid>

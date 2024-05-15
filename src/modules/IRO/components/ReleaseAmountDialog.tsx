@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../../components/FileUploader/FileUploader';
@@ -12,7 +12,7 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
-import React from 'react';
+
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 // import { MB } from '../../extras/CommonConfig';
@@ -23,7 +23,15 @@ interface ReleaseDialogProps {
   open: boolean;
   onClose: () => void;
 }
-
+interface optioinalBank{
+  FCRABankDetails?: BankDetails;
+    localBankDetails?: BankDetails;
+    otherBankDetails?: BankDetails;
+    otherBankDetails1?: BankDetails;
+    otherBankDetails2?: BankDetails;
+    otherBankDetails3?: BankDetails;
+    otherBankDetails4?: BankDetails;
+}
 const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [iroStatus, setIroStatus] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -45,96 +53,112 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     division: '',
   });
   console.log(releaseAmount, 'iroStatus');
-  const model=(e: { preventDefault: () => void; })=>{
+  const model = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setOpen(true)
-  }
+    setOpen(true);
+  };
   let saveReleaseAmount;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
   // if(iroStatus){
-   
-        saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
-          e.preventDefault();
-          const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
-      
-          IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
-            enqueueSnackbar({
-              message: res.message,
-              variant: 'success',
-            });
-            props.onClose();
-          });
-          setTimeout(() => {
-            closeSnackbar(approvalSnack);
-          }, 500);
-        };
-      
-    
+  console.log(props, 'propssa');
+
+  // eslint-disable-next-line prefer-const
+  saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
+    e.preventDefault();
+    const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
+
+    IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'success',
+      });
+      props.onClose();
+    });
+    setTimeout(() => {
+      closeSnackbar(approvalSnack);
+    }, 500);
+  };
+
+
   // }else{
 
   // }
 
   useEffect(() => {
     PaymentMethodService.getAll().then((res) => {
-      setPaymentMethod(res.data)
+      setPaymentMethod(res.data);
+    });
+  }, []);
+  console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
+  console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
 
-    })
-  }, [])
-  console.log(props.action,' props.data[0]?.sanctionedBank');
-  
   useEffect(() => {
-    if (props.data[0]?.status ==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
+    if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
       setReleaseAmount(() => ({
         ...releaseAmount,
         transferredBank:
           props.data[0]?.sanctionedBank == 'Division Bank FCRA' && props.data[0]?.division?.DivisionBankFCRA ?
             props.data[0]?.division?.DivisionBankFCRA :
-            // props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
-            //   props.data[0]?.division?.DivisionBankLocal :
-              props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
-                props.data[0]?.division?.BeneficiaryBank1 :
-                props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
-                  props.data[0]?.division?.BeneficiaryBank2 :
-                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
-                    props.data[0]?.division?.BeneficiaryBank4 :
-                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
-                      props.data[0]?.division?.BeneficiaryBank5 :
-                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
-                        props.data[0]?.division?.BeneficiaryBank6 :
-                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
-                          props.data[0]?.division?.BeneficiaryBank7 :
-                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
-                            props.data[0]?.division?.BeneficiaryBank8 :
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
-                              props.data[0]?.division?.BeneficiaryBank9 :
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
-                              props.data[0]?.division?.BeneficiaryBank10 :
-                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 ?
-                                props.data[0]?.division?.BeneficiaryBank3 :
-                                props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
-                                  bankName: '',
-                                  branchName: '',
-                                  accountNumber: '',
-                                  IFSCCode: '',
-                                  beneficiary: '',
-                                },
-                                releaseAmount: props.data.reduce((tot, iro) => {
+            props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
+              props.data[0]?.division?.localBankDetails :
+              props.data[0]?.sanctionedBank == 'Other Bank' && props.data[0]?.division?.otherBankDetails ?
+                props.data[0]?.division?.otherBankDetails :
+                props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
+                  props.data[0]?.division?.FCRABankDetails :
+                  props.data[0]?.sanctionedBank == 'Other Bank 1' && props.data[0]?.division?.otherBankDetails1 ?
+                    props.data[0]?.division?.otherBankDetails1 :
+                    props.data[0]?.sanctionedBank == 'Other Bank 2' && props.data[0]?.division?.otherBankDetails2 ?
+                      props.data[0]?.division?.otherBankDetails2 :
+                      props.data[0]?.sanctionedBank == 'Other Bank 3' && props.data[0]?.division?.otherBankDetails3 ?
+                        props.data[0]?.division?.otherBankDetails3 :
+                        props.data[0]?.sanctionedBank == 'Other Bank 4' && props.data[0]?.division?.otherBankDetails4 ?
+                          props.data[0]?.division?.otherBankDetails4 :
+                          props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
+                            props.data[0]?.division?.DivisionBankLocal :
+                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
+                              props.data[0]?.division?.BeneficiaryBank1 :
+                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
+                                props.data[0]?.division?.BeneficiaryBank2 :
+                                props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
+                                  props.data[0]?.division?.BeneficiaryBank4 :
+                                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
+                                    props.data[0]?.division?.BeneficiaryBank5 :
+                                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
+                                      props.data[0]?.division?.BeneficiaryBank6 :
+                                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
+                                        props.data[0]?.division?.BeneficiaryBank7 :
+                                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
+                                          props.data[0]?.division?.BeneficiaryBank8 :
+                                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
+                                            props.data[0]?.division?.BeneficiaryBank9 :
+                                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
+                                              props.data[0]?.division?.BeneficiaryBank10 :
+                                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 ?
+                                                props.data[0]?.division?.BeneficiaryBank3 :
+                                                props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
+                                                  bankName: '',
+                                                  branchName: '',
+                                                  accountNumber: '',
+                                                  IFSCCode: '',
+                                                  beneficiary: '',
+                                                },
 
-                                  if (!iro?.particulars) return tot; 
-                                
-                                  // Use `reduce` to sum the sanctioned amounts within the array
-                                  const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
-                                
-                                  return tot + totalSanctioned;
-                                }, 0),                                IRO: props.data,
+        releaseAmount: props.data.reduce((tot, iro) => {
+          if (!iro?.particulars) return tot;
+
+          // Use `reduce` to sum the sanctioned amounts within the array
+          const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
+
+          return iro.sanctionedAmount ?? tot + totalSanctioned;
+        }, 0), IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
       }));
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id?? '').then((res) => {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id ?? '').then((res) => {
           console.log(res.data, 'upd');
-          
+
           setReleaseAmount(res.data);
         });
       }
@@ -208,7 +232,11 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180,
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
+
+      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 180, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'status',
@@ -271,10 +299,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     }))
                   }
                   fullWidth
-                  inputProps={{ max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-                    event.preventDefault();
-                    event.currentTarget.blur();
-                  } }}
+                  inputProps={{
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    },
+                  }}
                   variant="outlined"
                   disabled={props.action == 'view'}
                   required
@@ -418,41 +448,41 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }}
                 />
               </Grid>
-              {props.action =='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <TextField
-                  label="Payment Method"
-                  value={releaseAmount?.modeOfPayment}
-                  variant="outlined"
-                  fullWidth
-                  disabled={props.action == 'view'}
-                  InputLabelProps={{
-                    shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
-                  }}
-                />
-              </Grid>
+              {props.action == 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Payment Method"
+                    value={releaseAmount?.modeOfPayment}
+                    variant="outlined"
+                    fullWidth
+                    disabled={props.action == 'view'}
+                    InputLabelProps={{
+                      shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                    }}
+                  />
+                </Grid>
               )}
               {/* </Grid> */}
-              {props.action !='view' && (
-              <Grid item xs={12} md={6} lg={4}>
-                <Autocomplete
-                  disablePortal
-                  id="Payment_method"
-                  getOptionLabel={(method) => method.paymentMethod ?? ''}
-                  value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod }
-                  // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
-                  options={paymnetMethod?? []}
-                  onChange={(_e, newValue: any) =>
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
+              {props.action != 'view' && (
+                <Grid item xs={12} md={6} lg={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
+                    getOptionLabel={(method) => method.paymentMethod ?? ''}
+                    value={releaseAmount?.modeOfPayment as unknown as IPaymentMethod}
+                    // options={['Cash', 'Cheque', 'UPI', 'Credit Card', 'Debit Card', 'NetBanking', 'Other']}
+                    options={paymnetMethod ?? []}
+                    onChange={(_e, newValue: any) =>
+                      // eslint-disable-next-line @typescript-eslint/naming-convention
                       setReleaseAmount(() => ({
                         ...releaseAmount,
                         modeOfPayment: newValue ?? '',
                       }))
-                  }
-                  renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                    }
+                    renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                   // disabled={props.action == 'view'}
-                />
-              </Grid>
+                  />
+                </Grid>
               )}
               {releaseAmount?.modeOfPayment == 'Other' && (
                 <Grid item xs={12} md={6} lg={4}>
@@ -533,21 +563,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             ) : null}
           </DialogActions>
         </form>
-          <Dialog
-            open={open}
-            keepMounted
-            onClose={()=>setOpen(false)}
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle> {iroStatus? 'Are you sure you want to Sent account manager?' :'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
-            <DialogContent>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={() => setOpen(false)}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle> {iroStatus ? 'Are you sure you want to send account manager?' : 'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
+          <DialogContent>
 
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={()=>setOpen(false)}>Close</Button>
-              <Button onClick={saveReleaseAmount}>Conform</Button>
-            </DialogActions>
-          </Dialog>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Close</Button>
+            <Button onClick={saveReleaseAmount}>Confiorm</Button>
+          </DialogActions>
+        </Dialog>
 
       </Dialog>
       {/* <FileUploader

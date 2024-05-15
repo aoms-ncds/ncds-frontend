@@ -19,6 +19,8 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import * as XLSX from 'xlsx';
 import { MB } from '../../extras/CommonConfig';
 import IROTemplate from './components/IROTemplate';
+import ESignatureService from '../Settings/extras/ESignatureService';
+import moment from 'moment';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -40,10 +42,38 @@ const ClosedIRO = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
+  const [selectedSignature, setSignature] = useState<Esignature>({
+    _id: '',
+    officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res });
+        setSignature(res.data as Esignature);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    console.log(selectedSignature);
+  }, []);
 
   const filteredRows = (IROrder ?? []).filter((row) => {
     if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
       return true;
     }
     return Object.values(row).some((value) =>
@@ -110,7 +140,7 @@ const ClosedIRO = () => {
               },
               component: PDFDownloadLink,
               // document: <IROReceiptTemplate rowData={props.row} />,
-              document: <IROTemplate rowData={props.row} fr={fr} />,
+              document: <IROTemplate rowData={props.row} fr={fr} officeMngrsig={selectedSignature} />,
               fileName: 'IROReceipt.pdf',
             },
 
@@ -136,7 +166,7 @@ const ClosedIRO = () => {
               id: 'Attachments',
               text: 'Attachments',
               icon: AttachFileIcon,
-              onClick: ()=>{
+              onClick: () => {
                 setAttachments(props.row.billAttachment);
                 setViewFileUploader(true);
               },
@@ -229,16 +259,16 @@ const ClosedIRO = () => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
+            props.row.particulars[0].subCategory3 == 'Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
 
           }
         </p>
       ),
     },
-     {
+    {
       field: 'requestAmount',
       align: 'center',
       headerAlign: 'center',
@@ -267,13 +297,14 @@ const ClosedIRO = () => {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
       width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',  
+      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'sanctionedAmount', align: 'center',
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
       headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },
     {
@@ -330,26 +361,26 @@ const ClosedIRO = () => {
             <Button
               onClick={async () => {
                 const sheet =
-                        IROrder ?
-                          IROrder.map((iro:IROrder) => ([
-                            iro.IROno,
-                            iro.IRODate.format('DD/MM/YYYY'),
-                            iro.division?.details.name,
-                            iro.purposeSubdivision?.name,
-                            iro.mainCategory,
-                            iro.particulars?.reduce(
-                              (total, particular) => total + Number(particular.requestedAmount),
-                              0,
-                            ),
-                            iro.sanctionedAmount,
-                            iro.sanctionedBank,
-                            iro.sanctionedAsPer,
-                            iro.releaseAmount?.releaseAmount,
-                            iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          ])) :
-                          [];
-                const headers=[
+                  IROrder ?
+                    IROrder.map((iro: IROrder) => ([
+                      iro.IROno,
+                      iro.IRODate.format('DD/MM/YYYY'),
+                      iro.division?.details.name,
+                      iro.purposeSubdivision?.name,
+                      iro.mainCategory,
+                      iro.particulars?.reduce(
+                        (total, particular) => total + Number(particular.requestedAmount),
+                        0,
+                      ),
+                      iro.sanctionedAmount,
+                      iro.sanctionedBank,
+                      iro.sanctionedAsPer,
+                      iro.releaseAmount?.releaseAmount,
+                      iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                      IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                    ])) :
+                    [];
+                const headers = [
                   'IRO No',
                   'Date',
                   'Division',
@@ -373,7 +404,7 @@ const ClosedIRO = () => {
               color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
               variant="contained"
             >
-                              Export
+              Export
             </Button>
           </Grid>
           <Grid item xs={12}>
@@ -407,7 +438,7 @@ const ClosedIRO = () => {
 
               <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-              }/>
+              } />
             </Box>
           </Grid>
         </Grid>
@@ -478,14 +509,14 @@ const ClosedIRO = () => {
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-          <Container>Download the IRO for {iroData?.IROno}<br/>
+          <Container>Download the IRO for {iroData?.IROno}<br />
             {iroData &&
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} fr={fr} />}
+                document={<IROTemplate rowData={iroData} fr={fr} officeMngrsig={undefined} />}
                 fileName='IROReceipt.pdf'
                 style={{ color: 'blue' }}
               >
-                {({ loading }) => loading ||openPrintIro? '....' : 'IROReceipt.pdf'}
+                {({ loading }) => loading || openPrintIro ? '....' : 'IROReceipt.pdf'}
 
               </PDFDownloadLink>} </Container>
         </DialogContent>

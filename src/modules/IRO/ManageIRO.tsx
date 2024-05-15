@@ -13,7 +13,6 @@ import {
   Close as CloseIcon,
   Message as MessageIcon,
   Delete as DeleteIcon,
-
 } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
@@ -263,34 +262,34 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [openPrintIro, setOpenPrintIro] = useState(false);
 
-  const [pdfProps, setPdfProps] =
-  useState<{purpose:FRPurpose|null;
-    divisionId:string|null;
-    workerId:string|null;
-    designationParticularID:string|null;
-    subDivisionId:string|null;
-    IRONo:string|null;
-    month:string|null;
-    date:string|null;}|null>(null);
+  const [pdfProps, setPdfProps] = useState<{
+    purpose: FRPurpose | null;
+    divisionId: string | null;
+    workerId: string | null;
+    designationParticularID: string | null;
+    subDivisionId: string | null;
+    IRONo: string | null;
+    month: string | null;
+    date: string | null;
+  } | null>(null);
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
-      if(userPermissions?.ACCOUNTS_MNGR_ACCESS){
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR})
-        .then((res) => {
-         
+      if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
+          .then((res) => {
+            console.log(res.data, 'sds');
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
             console.error(error);
           });
-
       }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'FCRA'})
-        .then((res) => {
-            console.log(res.data,'KKK');
-            
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
+          .then((res) => {
+            console.log(res.data, 'KKK');
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -298,10 +297,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount:'Local'})
+        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
-            
+
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -375,13 +374,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [openRelease, attachment, addSignature, dateRange]);
 
-  useEffect(()=>{
-    const sig= ESignatureService.getESignature().then((res)=>{
+  useEffect(() => {
+    const sig = ESignatureService.getESignature().then((res) => {
       setMngrName((res.data as { officeManagerName: string }).officeManagerName);
-      
-    })
-
-  },[])
+    });
+  }, []);
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -402,7 +399,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
-        console.log({ res});
+        console.log({ res });
         setSignature(res.data as Esignature);
       })
       .catch((res) => {
@@ -504,19 +501,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               ] :
               []),
 
-            ...(hasPermissions(['ADMIN_ACCESS']) ? [
-              {
-                id: 'delete',
-                text: 'Delete',
-                component: Link,
-                icon: DeleteIcon,
-                onClick: () => {
-                  deleteIRO(params.row._id);
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    deleteIRO(params.row._id);
+                  },
                 },
-              }
-              ] : []),
-            
-            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release' ?
+              ] :
+              []),
+
+            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
               [
                 {
                   id: 'Release',
@@ -531,27 +530,27 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   icon: PreviewIcon,
                   onClick: () => {
                     IROServices.close(params.row._id)
-                      .then((res) => {
-                        // if (IROrder) {
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        const filterIRO = IROrder?.filter((iro) => {
-                          return iro._id !== params.row._id;
-                        });
-                        setIROrder(filterIRO);
-                        // }
+                        .then((res) => {
+                          // if (IROrder) {
+                          // eslint-disable-next-line @typescript-eslint/naming-convention
+                          const filterIRO = IROrder?.filter((iro) => {
+                            return iro._id !== params.row._id;
+                          });
+                          setIROrder(filterIRO);
+                          // }
 
-                        enqueueSnackbar({
-                          message: res.message,
-                          variant: 'success',
-                        });
-                      })
+                          enqueueSnackbar({
+                            message: res.message,
+                            variant: 'success',
+                          });
+                        })
 
-                      .catch((err) => {
-                        enqueueSnackbar({
-                          message: err.message,
-                          variant: 'error',
+                        .catch((err) => {
+                          enqueueSnackbar({
+                            message: err.message,
+                            variant: 'error',
+                          });
                         });
-                      });
                   },
                 },
               ] :
@@ -648,15 +647,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     setFileUploaderAction('add');
                     setSelectedIRO(params.row);
                     if (params.row.workerSupport) {
-                      setPdfProps({ purpose: params.row.purpose??'Division',
-                        divisionId: params.row.division?._id??null,
-                        workerId: params.row.purpose=='Coordinator'&&params.row.purposeCoordinator ?params.row.purposeCoordinator?._id:
-                          params.row.purpose=='Worker'&&params.row.purposeWorker?._id?params.row.purposeWorker?._id:null,
-                        subDivisionId: params.row.purposeSubdivision?._id??null,
-                        designationParticularID: params.row.designationParticular??null,
+                      setPdfProps({
+                        purpose: params.row.purpose ?? 'Division',
+                        divisionId: params.row.division?._id ?? null,
+                        workerId:
+                            params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
+                              params.row.purposeCoordinator?._id :
+                              params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
+                                params.row.purposeWorker?._id :
+                                null,
+                        subDivisionId: params.row.purposeSubdivision?._id ?? null,
+                        designationParticularID: params.row.designationParticular ?? null,
                         IRONo: params.row.IROno,
                         month: params.row.particulars[0].month,
-                        date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY') });
+                        date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY'),
+                      });
                       setSupportAttachment(true);
                     }
                   },
@@ -783,12 +788,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
-          }
+          {props.row.particulars[0]?.subCategory3 == 'Select' ? props.row.particulars[0].subCategory2 : props.row.particulars[0].subCategory2 == 'Select' ? props.row.particulars[0].subCategory1 : ''}
         </p>
       ),
     },
@@ -821,9 +821,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Amount Release Date',
       headerClassName: 'super-app-theme--cell',
       width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',  
+      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
- 
+
       align: 'center',
       headerAlign: 'center',
     },
@@ -837,8 +837,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    { field: 'sanctionedAmount', headerClassName: 'super-app-theme--cell', headerName: 'Sanctioned Amount', width: 180,
-      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'sanctionedAmount',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Sanctioned Amount',
+      width: 180,
+      renderHeader: () => <b>Sanctioned Amount</b>,
+      valueGetter: (params) =>params.row.sanctionedAmount?? params.row.sanctionedAmountTotal,
+      align: 'center',
+      headerAlign: 'center',
+    },
 
     // {
     //   field: 'sanctionedAsPer',
@@ -919,8 +927,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('green');
         case 'RECONCILIATION DONE':
           return clsx('green');
+        case 'WAITTING FOR RELEASE AMOUNT':
+          return clsx('orange');
         default:
-          console.log('No class applied');
+          // console.log('No class applied');
           return '';
         }
       },
@@ -938,6 +948,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
           break;
+        case 'WAITING_FOR_ACCOUNTS_MNGR':
+          statusName = 'WAITING FOR ACCOUNTS MNGR';
+          if (props.action === 'release') {
+            statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          }
+          break;
           // Add more cases for other status names you want to change
         default:
           statusName = statusName.replaceAll('_', ' ');
@@ -945,7 +961,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         }
         return statusName;
       },
-
     },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -959,7 +974,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
   console.log(filteredRows, 'filteredRows');
-  
+
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
@@ -981,7 +996,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
@@ -1104,8 +1118,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         },
                       }}
                     >
-
-
                       <DataGrid
                         rows={filteredRows ?? []}
                         columns={columns}
@@ -1121,12 +1133,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             return selectedIROs;
                           });
                         }}
-                        getRowClassName={(params) =>
-                          params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                        }
+                        getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
                         style={{ height: '65vh', width: '100%' }}
-                      // rowSelectionModel={selectedIROrelease}
-                      //
+                        // rowSelectionModel={selectedIROrelease}
+                        //
                       />
                     </Box>
                     {/* <DataGrid
@@ -1416,19 +1426,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           onClick={() => {
                             remark.remark ?
                               IROServices.addRemarks(remark)
-                                .then((res) => {
-                                  setRemarks((remarks) => [...remarks, res.data]);
-                                  setRemark((remark) => ({
-                                    ...remark,
-                                    remark: '',
-                                  }));
-                                })
-                                .catch((error) => {
-                                  enqueueSnackbar({
-                                    variant: 'error',
-                                    message: error.message,
-                                  });
-                                }) :
+                                  .then((res) => {
+                                    setRemarks((remarks) => [...remarks, res.data]);
+                                    setRemark((remark) => ({
+                                      ...remark,
+                                      remark: '',
+                                    }));
+                                  })
+                                  .catch((error) => {
+                                    enqueueSnackbar({
+                                      variant: 'error',
+                                      message: error.message,
+                                    });
+                                  }) :
                               '';
                           }}
                         >
@@ -1445,7 +1455,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     toggleOpenRemarks(false);
                     setSelectedIROId(null);
                   }}
-                // sx={{ ml: 'auto' }}
+                  // sx={{ ml: 'auto' }}
                 >
                   Close
                 </Button>
@@ -1625,23 +1635,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
-      <Dialog open={supportAttachment} onClose={()=>setSupportAttachment(false)} maxWidth="xs" fullWidth>
-        <DialogTitle> Signature Attachment  </DialogTitle>
+      <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
+        <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
-          <Container>Please download and attach the signature sheet: &nbsp;
-            {pdfProps&&
-            <>
-              <PDFDownloadLink
-                document={<IROReconciliationPdf
-                  data={pdfProps}
-                />}
-                fileName="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
-              </PDFDownloadLink><br/>
-            NB: Ignore if already attached
-            </>} </Container>
+          <Container>
+            Please download and attach the signature sheet: &nbsp;
+            {pdfProps && (
+              <>
+                <PDFDownloadLink document={<IROReconciliationPdf data={pdfProps} />} fileName="WorkersSignatureSheet.pdf" style={{ color: 'blue' }}>
+                  {({ loading }) => (loading ? '....' : 'WorkersSignatureSheet.pdf')}
+                </PDFDownloadLink>
+                <br />
+                NB: Ignore if already attached
+              </>
+            )}{' '}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1657,16 +1665,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-          <Container>Download the IRO for {iroData?.IROno}<br/>
-            {iroData &&
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} fr={fr} mngrName={mngrName} officeMngrsig={selectedSignature} />}
-                fileName='IROReceipt.pdf'
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading ||openPrintIro? '....' : 'IROReceipt.pdf'}
-
-              </PDFDownloadLink>} </Container>
+          <Container>
+            Download the IRO for {iroData?.IROno}
+            <br />
+            {iroData && (
+              <PDFDownloadLink document={<IROTemplate rowData={iroData} fr={fr} mngrName={mngrName} officeMngrsig={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintIro ? '....' : 'IROReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1684,5 +1691,3 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 };
 
 export default ManageIRO;
-
-
