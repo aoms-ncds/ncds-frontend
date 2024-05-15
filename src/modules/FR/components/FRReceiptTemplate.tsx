@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   division: {
-    marginTop: 173, 
+    marginTop: 173,
     fontSize: 10,
     position: 'absolute',
     left: 180,
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident }) => {
+const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident }) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
   console.log(props, 'pro');
-  
+
 
   let totalAmount=0;
   return (
@@ -236,29 +236,29 @@ const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident 
           src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
-            width: 50
+            width: 50,
           }}
-            src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `} />
+          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `} />
           {props.rowData?.specialsanction == 'Yes' ? (
             <Image style={{
               left: 60,
               top: 90,
               position: 'absolute',
               height: 35,
-              width: 50
+              width: 50,
             }}
-              src={`data:${props.president.presidentSignature?.type};base64, ${props.president.presidentSignature?.base64} `} />
+            src={`data:${props.president.presidentSignature?.type};base64, ${props.president.presidentSignature?.base64} `} />
           ) : (
             []
           )}
-           <Image style={{
-              left: 60,
-              top: 120,
-              position: 'absolute',
-              height: 35,
-              width: 50
-            }}
-              src={`data:${props.rowData?.additionalSignature?.type};base64, ${props.rowData?.additionalSignature?.base64} `} />
+          <Image style={{
+            left: 60,
+            top: 120,
+            position: 'absolute',
+            height: 35,
+            width: 50,
+          }}
+          src={`data:${props.rowData?.additionalSignature?.type};base64, ${props.rowData?.additionalSignature?.base64} `} />
         </div>
 
         {/* <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Coordinator Leader Sign</Text>
@@ -266,12 +266,12 @@ const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident 
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Junior Leader Sign</Text> */}
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
-          <Text style={{ left: 60,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
-          
+          <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
+
           <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
-          <Text style={{ left: 260,top:20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
+          <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
-          <Text style={{ left: 460, top:20,position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
+          <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
           {props.rowData?.specialsanction == 'Yes' ? (
             <>
@@ -289,11 +289,11 @@ const FRReceiptTemplate = (props: { rowData: FR, president: EsignaturePresident 
           ) : (
             []
           )}
-          <Text style={{ left: 60, top: 95,  position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalName}</Text>
+          <Text style={{ left: 60, top: 95, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalName}</Text>
           <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalDesignation}</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text> 
+          <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10 }}>Date:</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10 }}>Date:</Text>
         </div> */}

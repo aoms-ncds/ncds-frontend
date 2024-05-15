@@ -112,12 +112,12 @@ const MinimalModuleDataAnalytics = () => {
           <Grid item xs={6} md={3} xl={4}>
 
             <DashBoardCard secondaryText='Division'
-              icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} 
+              icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               // count={divisionsCount?.toString()}
               dot={'.'}
-                count={divisionsCount?.toString()}
+              count={divisionsCount?.toString()}
               color="#fff" targetRoute={`/divisions/details/${(user.user as User).division}`} />
-          </Grid> 
+          </Grid>
         }
         />
       }
@@ -131,13 +131,13 @@ const MinimalModuleDataAnalytics = () => {
                 <DashBoardCard secondaryText='Sub-Divisions'
                   icon={<img src="/mod_icons/sub_division.png" alt="Logo"
                     style={{ width: '70px', height: '70px' }} />}
-                    // dot={'.'}
-                  count={subDivisionsCount?.toString()} 
+                  // dot={'.'}
+                  count={subDivisionsCount?.toString()}
                   color={'#fff'} targetRoute="/divisions/" />
 
               </Grid> : <Grid item xs={6} md={3} xl={4}>
                 <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/mod_icons/sub_division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  // count={subDivisionsCount?.toString()} 
+                  // count={subDivisionsCount?.toString()}
                   dot={'.'}
                   color="#fff" targetRoute={`/divisions/details/${(user.user as User).division}`} />
               </Grid>

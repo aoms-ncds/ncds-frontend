@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
 });
 const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig:any }) => {
   const [fr, setFr] = useState<FR>();
-  console.log(props.officeMngrsig, 'FRR');
-  console.log(props.rowData, 'IRO');
+  console.log(props, 'ssds');
+  console.log(props.mngrName, 'IRO');
   console.log(props.rowData?.releaseAmount, 'bnk');
   const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
   console.log(contentPerPage, 'contentPerPage');
@@ -473,7 +473,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
               style={{ ...styles.text2, marginTop: 5, left: 400, width: 130 }}
             >
               <Text style={{ ...styles.text1, fontSize: 10, marginTop: 15 }}>Office Manager</Text>
-              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>{props.mngrName} </Text>            </View>
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>{props.officeMngrsig?.officeManagerName} </Text>            </View>
           </View>
           <div style={{ marginTop: '15', marginBottom: '20' }}>
             <Text style={{ fontSize: 8, color: 'grey', left: 30 }} >

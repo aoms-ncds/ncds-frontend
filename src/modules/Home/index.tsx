@@ -42,8 +42,8 @@ const HomePage = () => {
       setWorkersCount('Unable to load!');
     });
 
-     // Get FR count
-     FRServices.getCount()
+    // Get FR count
+    FRServices.getCount()
      .then((res) => {
        setFrCount(res.data.toString());
      })
@@ -51,16 +51,15 @@ const HomePage = () => {
        setFrCount('Unable to load!');
      });
 
-   // Get IRO count
-   IROServices.getCount()
+    // Get IRO count
+    IROServices.getCount()
      .then((res) => {
        setIroCount(res.data.toString());
      })
      .catch((error) => {
        setIroCount('Unable to load!');
      });
-
-  },[])
+  }, []);
   return (
     <CommonPageLayout title="" appBarSx={{ backgroundColor: 'rgb(59, 50, 230)' }} mainContentSx={{ p: 0 }}>
       <Box sx={{ borderBottom: 1, borderColor: '#fff' }} />
@@ -74,7 +73,7 @@ const HomePage = () => {
                 <Typography variant="body1" align='center' color={'black'}>Divisions</Typography>
                 <Typography variant="h5" align='center' color={'black'}>{divisionsCount}</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> <span style={{color:'black'}}> vs last 7 days</span> 
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> <span style={{ color: 'black' }}> vs last 7 days</span>
                 </Typography>
                 <CHART1 />
               </CardContent>
@@ -87,7 +86,7 @@ const HomePage = () => {
                 <Typography variant="body2" align='center' color={'black'}>Workers</Typography>
                 <Typography variant="h5" align='center' color={'black'}>{workersCount}</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />5.2%</span> <span style={{color:'black'}}>vs last 7 days</span> 
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />5.2%</span> <span style={{ color: 'black' }}>vs last 7 days</span>
                 </Typography>
                 <CHART2></CHART2>
               </CardContent>
@@ -100,7 +99,7 @@ const HomePage = () => {
                 <Typography variant="body2" align='center' color={'black'}>IR</Typography>
                 <Typography variant="h5" align='center' color={'black'}>{iroCount}</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> <span  style={{color:'black'}}>vs last 7 days </span> 
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> <span style={{ color: 'black' }}>vs last 7 days </span>
                 </Typography>
                 <CHART3></CHART3>
               </CardContent>
@@ -113,7 +112,7 @@ const HomePage = () => {
                 <Typography variant="body2" align='center' color={'black'}>FR</Typography>
                 <Typography variant="h5" align='center' color={'black'}>{frCount}</Typography>
                 <Typography variant="body2" align='center'>
-                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />4.3%</span> <span style={{color:'black'}}> vs last 7 days</span> 
+                  <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />4.3%</span> <span style={{ color: 'black' }}> vs last 7 days</span>
                 </Typography>
                 <CHART4></CHART4>
               </CardContent>
