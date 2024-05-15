@@ -276,7 +276,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     if (props.action === 'release') {
       if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
+        IROServices.getAll({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
           .then((res) => {
             console.log(res.data, 'sds');
             setIROrder(() => [...res.data]);
@@ -948,11 +948,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
           break;
-        case 'WAITING_FOR_ACCOUNTS_MNGR':
-          statusName = 'WAITING FOR ACCOUNTS MNGR';
-          if (props.action === 'release') {
-            statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          }
+          // case 'WAITING_FOR_ACCOUNTS_MNGR':
+          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+          //   if (props.action === 'release') {
+          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          //   }
           break;
           // Add more cases for other status names you want to change
         default:

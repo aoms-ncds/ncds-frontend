@@ -380,11 +380,11 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
               </PDFCell>
               <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                {String(item?.sanctionedAmount)}
+                {String( props.rowData.sanctionedAmount?? item?.sanctionedAmount )}
               </PDFCell>
               <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                {String(item?.sanctionedAsPer)}
+                {String(item?.sanctionedAsPer ?? '')}
               </PDFCell>
               {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
                     {item.sanctionedAmount?.toString()}
