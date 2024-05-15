@@ -37,6 +37,7 @@ const ClosedIRO = () => {
   });
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [openPrintIro, setOpenPrintIro] = useState(false);
+  const [mngrName, setMngrName] = useState('');
 
 
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -69,6 +70,9 @@ const ClosedIRO = () => {
         console.log(res);
       });
     console.log(selectedSignature);
+    const sig = ESignatureService.getESignature().then((res) => {
+      setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+    });
   }, []);
 
   const filteredRows = (IROrder ?? []).filter((row) => {
@@ -512,7 +516,7 @@ const ClosedIRO = () => {
           <Container>Download the IRO for {iroData?.IROno}<br />
             {iroData &&
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} fr={fr} officeMngrsig={undefined} />}
+                document={<IROTemplate rowData={iroData} fr={fr} mngrName={mngrName} officeMngrsig={selectedSignature} />}
                 fileName='IROReceipt.pdf'
                 style={{ color: 'blue' }}
               >

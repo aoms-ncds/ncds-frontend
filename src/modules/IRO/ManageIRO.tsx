@@ -361,7 +361,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //       console.error(error);
       //     });
       // }
-      if (userPermissions?.OTHER_ACCOUNTS_ACCESS && userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS && userPermissions.ACCOUNTS_MNGR_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           console.log(res.data, 'datgajdfj');
@@ -373,6 +373,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       });
     }
   }, [openRelease, attachment, addSignature, dateRange]);
+  console.log(mngrName, 'mngrName');
 
   useEffect(() => {
     const sig = ESignatureService.getESignature().then((res) => {

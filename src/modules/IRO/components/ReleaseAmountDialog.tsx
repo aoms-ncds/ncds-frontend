@@ -256,7 +256,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     //       <CardContent>
     <>
       <Dialog open={props.open} onClose={props.onClose} maxWidth="lg" fullWidth={true}>
-        <form onSubmit={model}>
+        <form onSubmit={saveReleaseAmount}>
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item xs={15}>
@@ -555,8 +555,11 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             </Button>
             {hasPermissions(['MANAGE_IRO']) ? (
               <>
+                {/* <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
+                  {iroStatus ? 'Send To Acc Mgr For Approval' : 'Release Amount'}
+                </Button> */}
                 <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
-                  {iroStatus ? 'Sent to accounts manager' : 'Release Amount'}
+                  Release Amount
                 </Button>
                 <br />
               </>
@@ -569,13 +572,13 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           onClose={() => setOpen(false)}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle> {iroStatus ? 'Are you sure you want to send account manager?' : 'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
+          <DialogTitle> {iroStatus ? 'Are you sure you want to send to Accounts Manager for approval ?' : 'Are you sure you want to release amount for this IRO ?'}</DialogTitle>
           <DialogContent>
 
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpen(false)}>Close</Button>
-            <Button onClick={saveReleaseAmount}>Confiorm</Button>
+            <Button onClick={saveReleaseAmount}>Confirm</Button>
           </DialogActions>
         </Dialog>
 

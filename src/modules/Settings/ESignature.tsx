@@ -36,7 +36,7 @@ const ESignature = () => {
     },
   });
   console.log(name, 'shibinc');
-  
+
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -56,18 +56,18 @@ const ESignature = () => {
   });
   const [users, setUsers] = useState<User[] | null>(null);
 
-console.log(selectedSignaturePresident,'selectedSignaturePresident');
+  console.log(selectedSignaturePresident, 'selectedSignaturePresident');
 
-const submitData= ()=>{
-  ESignatureService.addOfficeMnrName(name)
-        .then(() => {
+  const submitData= ()=>{
+    ESignatureService.addOfficeMnrName(name)
+        .then((res) => {
+          setShowOfficeManagerName(false);
           console.log('ESignature added successfully');
         })
         .catch((error) => {
           console.error('Error adding eSignature:', error);
         });
-
-}
+  };
   useEffect(()=>{
     StaffServices.getAll()
   .then((res) => {
@@ -93,12 +93,10 @@ const submitData= ()=>{
         .catch((error) => {
           console.error('Error adding eSignature:', error);
         });
-    } else {
-
     }
   }, [selectedSignature]);
   useEffect(() => {
-    if(selectedSignaturePresident?.presidentSignature && selectedSignaturePresident?.presidentSignature._id){
+    if (selectedSignaturePresident?.presidentSignature && selectedSignaturePresident?.presidentSignature._id) {
       ESignatureService.addESignatureS2(selectedSignaturePresident.presidentSignature)
       .then(() => {
         console.log('ESignature added successfully');
@@ -134,7 +132,7 @@ const submitData= ()=>{
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
-        console.log({ res});
+        console.log({ res });
         setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
@@ -283,36 +281,36 @@ const submitData= ()=>{
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
- <Dialog
-        open={showOfficeManagerName}
-        onClose={() => setShowOfficeManagerName(false)}    
-      >
-        <DialogTitle>President Name</DialogTitle>
-        <DialogContent>
-          {/* <DialogContentText>
+            <Dialog
+              open={showOfficeManagerName}
+              onClose={() => setShowOfficeManagerName(false)}
+            >
+              <DialogTitle>President Name</DialogTitle>
+              <DialogContent>
+                {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
             will send updates occasionally.
           </DialogContentText> */}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            name="name"
-            label="Name"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={name}
-            onChange={(e: any) => {
-              setName(e.target.value);
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>setShowOfficeManagerName(false)}>Cancel</Button>
-          <Button onClick={submitData}>Add</Button>
-        </DialogActions>
-      </Dialog>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  name="name"
+                  label="Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  value={name}
+                  onChange={(e: any) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=>setShowOfficeManagerName(false)}>Cancel</Button>
+                <Button onClick={submitData}>Add</Button>
+              </DialogActions>
+            </Dialog>
             <FileUploader
               title="Signature1"
               action="add"
