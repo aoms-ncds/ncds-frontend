@@ -577,10 +577,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
+            props.row.particulars[0].subCategory3 =='Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
 
           }
         </p>
@@ -609,7 +609,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150,
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
+      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
@@ -656,7 +658,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
                   {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}

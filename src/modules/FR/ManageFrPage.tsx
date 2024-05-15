@@ -14,10 +14,7 @@ import {
 } from '@mui/icons-material';
 
 import { Link } from 'react-router-dom';
-import {
-  Alert, Box, Button, Card,
-  Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography
-} from '@mui/material';
+import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -143,9 +140,7 @@ const ManageFrPage = () => {
       });
   }, [dateRange]);
   const columns: GridColDef<FR>[] = [
-
     {
-
       field: '_manage',
       headerClassName: 'super-app-theme--cell',
       headerName: '',
@@ -211,7 +206,6 @@ const ManageFrPage = () => {
       // ),
 
       renderCell: (props) => (
-
         <DropdownButton
           useIconButton={true}
           id="FR action"
@@ -236,17 +230,19 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-            ...(hasPermissions(['ADMIN_ACCESS']) ? [
-              {
-                id: 'delete',
-                text: 'Delete',
-                component: Link,
-                icon: DeleteIcon,
-                onClick: () => {
-                  deleteFR(props.row._id);
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    deleteFR(props.row._id);
+                  },
                 },
-              },
-            ] : []),
+              ] :
+              []),
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -299,7 +295,6 @@ const ManageFrPage = () => {
                       setOpenPrintFr(false);
                     }, 2000);
                   },
-
                 },
               ] :
               []),
@@ -436,11 +431,8 @@ const ManageFrPage = () => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {/* {props.row?.particulars[0]?.subCategory3 =='Select'? props.row?.particulars[0]?.subCategory2: props.row?.particulars[0]?.subCategory3 } */}
-          {props.row.particulars[0].subCategory3 == 'Select'
-            ? props.row.particulars[0].subCategory2
-            : props.row.particulars[0].subCategory2 == 'Select' ?
-              props.row.particulars[0].subCategory1 : ''
-          }
+          {props.row.particulars[0]?.subCategory3 == 'Select' ? props.row.particulars[0]?.subCategory2 :
+            props.row.particulars[0]?.subCategory2 == 'Select' ? props.row.particulars[0]?.subCategory1 : ''}
         </p>
       ),
     },
@@ -512,7 +504,7 @@ const ManageFrPage = () => {
     {
       field: 'status',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => (<b>Status</b>),
+      renderHeader: () => <b>Status</b>,
       cellClassName: (params) => {
         console.log('CellClassName params:', params);
         const statusName = params.formattedValue;
@@ -521,23 +513,23 @@ const ManageFrPage = () => {
           return '';
         }
         switch (statusName) {
-          case 'REVERTED':
-            return clsx('orange');
-          case 'WAITING FOR ACCOUNTS':
-            return clsx('orange');
-          case 'IRO CLOSED':
-            return clsx('green');
-          case 'FR VERIFIED':
-            return clsx('green');
-          case 'FR CLOSED':
-            return clsx('green');
-          case ' FR DISAPPROVED':
-            return clsx('red');
-          case 'WAITING FOR PRESIDENT':
-            return clsx('orange');
-          default:
-            console.log('No class applied');
-            return '';
+        case 'REVERTED':
+          return clsx('orange');
+        case 'WAITING FOR ACCOUNTS':
+          return clsx('orange');
+        case 'IRO CLOSED':
+          return clsx('green');
+        case 'FR VERIFIED':
+          return clsx('green');
+        case 'FR CLOSED':
+          return clsx('green');
+        case ' FR DISAPPROVED':
+          return clsx('red');
+        case 'WAITING FOR PRESIDENT':
+          return clsx('orange');
+        default:
+          console.log('No class applied');
+          return '';
         }
       },
       width: 205,
@@ -548,19 +540,19 @@ const ManageFrPage = () => {
         console.log(statusName, 'lolpß');
         // Check if the status name needs to be changed
         switch (statusName) {
-          case 'SEND_BACK':
-            statusName = 'REVERTED';
-            break;
-          case 'FR_APPROVED':
-            statusName = 'FR VERIFIED'; // Change to whatever new name you want
-            break;
-          case 'FR_REJECTED':
-            statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-            break;
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
           // Add more cases for other status names you want to change
-          default:
-            statusName = statusName.replaceAll('_', ' ');
-            break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
         }
         return statusName;
       },
@@ -586,7 +578,6 @@ const ManageFrPage = () => {
       align: 'center',
       headerAlign: 'center',
     },
-
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -612,15 +603,14 @@ const ManageFrPage = () => {
         initialRange: 'years',
       }}
     >
-
       <PermissionChecks
         permissions={['READ_FR']}
         granted={
           <>
             <Grid item xs={12} lg={6}>
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
-                  <Grid container spacing={2} padding={2} >
+                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+                  <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
                       <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
                     </Grid>
@@ -672,19 +662,15 @@ const ManageFrPage = () => {
                               startIcon={<AddIcon />}
                               component={Link}
                               to="/fr/apply"
-                            // onClick={() => {
-                            // }}
+                              // onClick={() => {
+                              // }}
                             >
                               Add new
                             </Button>
                           </>
                         }
                       />
-
-
                     </Grid>
-
-
                   </Grid>
 
                   <Box
@@ -721,16 +707,17 @@ const ManageFrPage = () => {
                       '& .red': {
                         backgroundColor: '#ff6166',
                       },
-
                     }}
                   >
-                    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id}
-                      loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
-                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                      } />
+                    <DataGrid
+                      rows={filteredRows ?? []}
+                      columns={columns}
+                      getRowId={(row) => row._id}
+                      loading={FRRequests === null}
+                      style={{ height: '70vh', width: '100%' }}
+                      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
+                    />
                   </Box>
-
-
                 </Card>
               </Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
@@ -896,7 +883,7 @@ const ManageFrPage = () => {
                         toggleOpenRemarks(false);
                         setSelectedFR(null);
                       }}
-                    // sx={{ ml: 'auto' }}
+                      // sx={{ ml: 'auto' }}
                     >
                       close
                     </Button>
@@ -914,8 +901,7 @@ const ManageFrPage = () => {
               <DialogTitle>{'Use Google\'s location service?'}</DialogTitle>
               <DialogContent>
                 {/* <DialogContentText id="alert-dialog-slide-description"> */}
-                Let Google help apps determine location. This means sending anonymous
-                location data to Google, even when no apps are running.
+                Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
                 {/* </DialogContentText> */}
               </DialogContent>
               <DialogActions>
@@ -926,16 +912,18 @@ const ManageFrPage = () => {
             <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-                <Container>Download the FRReceipt,Delhi for {data?.FRno} <br />
-                  {data &&
+                <Container>
+                  Download the FRReceipt,Delhi for {data?.FRno} <br />
+                  {data && (
                     <PDFDownloadLink
                       document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
-                      fileName='FRReceiptDelhi.pdf'
+                      fileName="FRReceiptDelhi.pdf"
                       style={{ color: 'blue' }}
                     >
-                      {({ loading }) => loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf'}
-
-                    </PDFDownloadLink>} </Container>
+                      {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -951,16 +939,15 @@ const ManageFrPage = () => {
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-                <Container>Download the FRReceipt for {data2?.FRno}<br />
-                  {data2 &&
-                    <PDFDownloadLink
-                      document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />}
-                      fileName='FRReceipt.pdf'
-                      style={{ color: 'blue' }}
-                    >
-                      {({ loading }) => loading || openPrintFr ? '....' : 'FRReceipt.pdf'}
-
-                    </PDFDownloadLink>} </Container>
+                <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+                  <br />
+                  {data2 && (
+                    <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                      {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -981,11 +968,8 @@ const ManageFrPage = () => {
               Missing permissions: <b>{missingPermissions.join(', ').replaceAll('_', ' ')}</b>
             </Alert>
           </Grid>
-
         )}
-
       />
-
     </CommonPageLayout>
   );
 };

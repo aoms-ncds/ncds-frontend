@@ -126,7 +126,10 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const sanctionedAmount = props.rowData && props.rowData?.sanctionedAmount;
+  const totalSacntion =fr?.particulars.forEach((e)=>{
+    totalAmount2 += e?.sanctionedAmount !=undefined ? e?.sanctionedAmount : 0;
+  });
+  const sanctionedAmount = totalAmount2;
   let sanctionedAmountWords = '';
 
   if (typeof sanctionedAmount !== 'undefined') {
@@ -134,7 +137,6 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
   } else {
     sanctionedAmountWords = 'N/A';
   }
-
   // const dateString = props?.rowData?.releaseAmount?.transferredDate?? '';
   // console.log(dateString, 'dateString');
 
@@ -167,7 +169,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
                         fontFamily: 'Oswald'
                     }}>Financial Request Details</Text> */}
           <View style={{ ...styles.box, marginTop: 15, padding: 10 }}>
-            
+
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 300 }}>
                 <Text style={{ ...styles.text, marginTop: 1, left: 50 }}>IRO No: {props.rowData?.IROno}</Text>
@@ -247,7 +249,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
                 <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Source Of Fund: {props.rowData?.sourceOfAccount ?? ''}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Amt: {props.rowData?.sanctionedAmount ?? ''}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Sanctioned Amt: {props.rowData?.sanctionedAmount ?? props.rowData.sanctionedAmountTotal}
                 </Text></View>
               <View>
                 {/* <Text style={{ ...styles.text, marginTop: 15 }}>Fund Source: </Text> */}
@@ -357,34 +359,34 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
               return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
                 {String(index + 1)}
               </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'55%'}>
-                  {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
-                </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'55%'}>
+                {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
+              </PDFCell>
 
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10, }} width={'80%'}  >
-                  {item.narration}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc', marginTop: 50 }}></div>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'80%'} >
+                {item.narration}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc', marginTop: 50 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'28%'}>
-                  {String(item.quantity)}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'28%'}>
+                {String(item.quantity)}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
-                  {String(item.requestedAmount)}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                  {String(props?.rowData?.sanctionedAmount)}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                  {String(item?.sanctionedAsPer)}
-                </PDFCell>
-                {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
+                {String(item.requestedAmount)}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                {String(item?.sanctionedAmount)}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                {String(item?.sanctionedAsPer)}
+              </PDFCell>
+              {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
                     {item.sanctionedAmount?.toString()}
                   </PDFCell> */}
               </PDFTableRow>);
@@ -403,8 +405,8 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
               <PDFCell style={{ paddingLeft: '30px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
                 <br /> {totalAmount as any}
               </PDFCell>
-              <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-                <br />{props.rowData.sanctionedAmount ?? 0 as any}
+              <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+                <br />{totalAmount2 as any}
               </PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
             </PDFTableRow>
@@ -461,7 +463,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
                 height: 78,
                 width: 128,
               }}
-                src={`data:${props.officeMngrsig?.officeManagerSignature?.type};base64, ${props.officeMngrsig?.officeManagerSignature?.base64} `} />
+              src={`data:${props.officeMngrsig?.officeManagerSignature?.type};base64, ${props.officeMngrsig?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>
@@ -487,7 +489,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
           </View> */}
         </div>
       </Page>
-     
+
     </Document>
   );
 };

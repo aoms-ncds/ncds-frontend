@@ -259,9 +259,9 @@ const ClosedIRO = () => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-            props.row.particulars[0].subCategory3 == 'Select'
-              ? props.row.particulars[0].subCategory2
-              : props.row.particulars[0].subCategory2 == 'Select' ?
+            props.row.particulars[0].subCategory3 == 'Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
                 props.row.particulars[0].subCategory1 : ''
 
           }
@@ -304,6 +304,7 @@ const ClosedIRO = () => {
     },
     {
       field: 'sanctionedAmount', align: 'center',
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
       headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },
     {

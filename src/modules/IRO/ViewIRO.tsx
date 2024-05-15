@@ -238,7 +238,7 @@ const ViewIRO = () => {
     specialsanction: '',
   });
 
-  const user = useAuth()
+  const user = useAuth();
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -248,7 +248,6 @@ const ViewIRO = () => {
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [divisions, setDivisions] = useState<Division | null>(null);
-
 
 
   let total = 0;
@@ -698,7 +697,9 @@ const ViewIRO = () => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
                                         IROServices.reject(iroID as string)
                                           .then((res) => {
-
+                                            if (res.data) {
+                                              navigate('/iro');
+                                            }
                                           });
 
                                         // if (props.onSubmit) {
@@ -723,7 +724,10 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.accountManagerApprove(iroID as string)
                                           .then((res) => {
-                                            navigate('/iro');
+                                            console.log('new heh');
+                                            if (res.data) {
+                                              navigate('/iro');
+                                            }
                                           });
 
                                         // if (props.onSubmit) {

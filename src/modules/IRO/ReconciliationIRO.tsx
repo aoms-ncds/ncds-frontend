@@ -392,10 +392,10 @@ const ReconciliationIRO = () => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-          props.row.particulars[0].subCategory3 =='Select'
-          ? props.row.particulars[0].subCategory2
-          : props.row.particulars[0].subCategory2 == 'Select' ?
-           props.row.particulars[0].subCategory1 : ''
+            props.row.particulars[0].subCategory3 =='Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
 
           }
         </p>
@@ -437,19 +437,21 @@ const ReconciliationIRO = () => {
       valueGetter: (params) => {
         const transferredDate = params.row.releaseAmount?.transferredDate;
         if (transferredDate) {
-            const formattedDate = moment(transferredDate).format("YYYY-MM-DD"); // Adjust the format as needed
-            return formattedDate;
+          const formattedDate = moment(transferredDate).format('YYYY-MM-DD'); // Adjust the format as needed
+          return formattedDate;
         } else {
-            return 'N/A';
+          return 'N/A';
         }
-    } 
-    ,    renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
- 
+      },
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+
       align: 'center',
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
+    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130,
+      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
+      renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
@@ -495,7 +497,7 @@ const ReconciliationIRO = () => {
   ];
   return (
     <CommonPageLayout title="Reconciliation IRO">
-      <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
             {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
