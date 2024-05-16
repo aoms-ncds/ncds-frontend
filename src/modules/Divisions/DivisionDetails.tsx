@@ -334,7 +334,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                 {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
-                    value={ divisionDetails.otherBankDetails1? divisionDetails.otherBankDetails1: divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
+                    value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
                     onChange={(newbankDetails) => {
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`BeneficiaryBank${index + 2}`]: newbankDetails as BankDetails }));
                     }}
