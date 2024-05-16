@@ -18,7 +18,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
-  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(0);
+  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(1);
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
 
@@ -335,7 +335,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     options={{ title: `Other Bank Details${index + 1}` }}
                   />
                  ))}  */}
-                {Array.from({ length: count }).map((_, index: number) => (
+                {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
                     value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
