@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Button, Card, CardContent, Container, Grid, Step, StepLabel, Stepper } from '@mui/material';
@@ -44,7 +45,6 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     if (editID && props.action === 'edit') {
       DivisionsServices.editDivision(editID, divisionDetails)
         .then((_res) => {
-
           enqueueSnackbar({
             message: 'Updated Division',
             variant: 'success',
@@ -58,7 +58,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
         });
     }
   };
-  
+
   const [divisionDetails, setDivisionDetails] = useState<Division>({
     _id: '',
     details: {
@@ -79,7 +79,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       seniorLeader: {},
       juniorLeader: {},
       president: {},
-        officeManager: {},
+      officeManager: {},
     },
     subDivisions: [
       {
@@ -174,7 +174,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     createdAt: moment(),
     updatedAt: moment(),
   });
-DivisionsList(divisionDetails)
+  // eslint-disable-next-line new-cap
+  DivisionsList(divisionDetails);
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
@@ -296,7 +297,7 @@ DivisionsList(divisionDetails)
             >
               <Grid container spacing={2}>
                 <BankDetailsForm
-                  value={divisionDetails?.DivisionBankFCRA}
+                  value={divisionDetails?.FCRABankDetails ?? divisionDetails.DivisionBankFCRA}
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankFCRA: newbankDetails as BankDetails }));
                   }}
@@ -304,7 +305,7 @@ DivisionsList(divisionDetails)
                   options={{ title: 'Division Bank FCRA' }}
                 />
                 <BankDetailsForm
-                  value={divisionDetails?.DivisionBankLocal}
+                  value={divisionDetails?.localBankDetails ?? divisionDetails.DivisionBankLocal}
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankLocal: newbankDetails as BankDetails }));
                   }}
@@ -312,7 +313,7 @@ DivisionsList(divisionDetails)
                   options={{ title: 'Division Bank Local' }}
                 />
                 <BankDetailsForm
-                  value={divisionDetails?.BeneficiaryBank1}
+                  value={divisionDetails?.otherBankDetails ?? divisionDetails.BeneficiaryBank1}
                   onChange={(newbankDetails) => {
                     setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank: newbankDetails as BankDetails }));
                   }}
@@ -333,7 +334,7 @@ DivisionsList(divisionDetails)
                 {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
-                    value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
+                    value={ divisionDetails.otherBankDetails1? divisionDetails.otherBankDetails1: divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
                     onChange={(newbankDetails) => {
                       setDivisionDetails((divisionDetails) => ({ ...divisionDetails, [`BeneficiaryBank${index + 2}`]: newbankDetails as BankDetails }));
                     }}
@@ -348,9 +349,9 @@ DivisionsList(divisionDetails)
                       Add More Banks
                     </Button>
                   )}
-                  
-                  {action !== 'view'  && (
-                    <Button style={{marginLeft:"2px"}} variant="contained" onClick={() => setOtherBankDetailsCount((count) => count - 1)}>
+
+                  {action !== 'view' && (
+                    <Button style={{ marginLeft: '2px' }} variant="contained" onClick={() => setOtherBankDetailsCount((count) => count - 1)}>
                       Remove
                     </Button>
                   )}
