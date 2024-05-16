@@ -5,7 +5,7 @@ import { Card } from '@mui/material';
 const ClosedFR = () => {
   return (
     <CommonPageLayout title="Closed FR">
-      <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }} >
+      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
         <ClosedFRsTable />
       </Card>
     </CommonPageLayout>
