@@ -18,7 +18,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
-  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(1);
+  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(0);
+  const [count, setCount] = useState(0);
   const navigate = useNavigate();
 
   const addDivision = () => {
@@ -176,6 +177,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   });
   // eslint-disable-next-line new-cap
   DivisionsList(divisionDetails);
+  console.log(count, '  setCount(1)');
+
   useEffect(() => {
     if (divisionIDs) {
       setAction('view');
@@ -198,6 +201,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
         });
     }
   }, []);
+  console.log(divisionDetails, 'divisionDetails');
   return (
     <CommonPageLayout title={action === 'add' ? 'Add Division' : action === 'edit' ? 'Edit Division' : 'Division Details'}>
       {/* <Box sx={{ width: '100%' }}> */}
@@ -315,7 +319,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                 <BankDetailsForm
                   value={divisionDetails?.otherBankDetails ?? divisionDetails.BeneficiaryBank1}
                   onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank: newbankDetails as BankDetails }));
+                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank1: newbankDetails as BankDetails }));
                   }}
                   action={props.action}
                   options={{ title: 'Beneficiary Bank 1' }}
@@ -331,7 +335,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     options={{ title: `Other Bank Details${index + 1}` }}
                   />
                  ))}  */}
-                {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
+                {Array.from({ length: count }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
                     value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
@@ -350,12 +354,12 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     </Button>
                   )}
 
-                  {action !== 'view' && (
+                  {action !== 'view' && otherBankDetailsCount !=9 && (
                     <Button style={{ marginLeft: '2px' }} variant="contained" onClick={() => setOtherBankDetailsCount((count) => count - 1)}>
                       Remove
                     </Button>
                   )}
-                  {action === 'view' && (
+                  {action === 'view' && otherBankDetailsCount !=9 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       View More Banks
                     </Button>

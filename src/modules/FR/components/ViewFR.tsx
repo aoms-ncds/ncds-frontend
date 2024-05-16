@@ -492,10 +492,20 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         }
 
                       >
-                        <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
-                        <MenuItem value={'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
+                        {divisions?.DivisionBankFCRA?.bankName? <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem> : '' }
+                        {divisions?.DivisionBankLocal?.bankName? <MenuItem value={'Division Bank Local'}>Division Bank Local - {divisions?.DivisionBankLocal?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank1?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank3?.bankName? <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank4?.bankName? <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank5?.bankName? <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank6?.bankName? <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank7?.bankName? <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank8?.bankName? <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank9?.bankName? <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank10?.bankName? <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem> :'' }
+
+                        {/* <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
@@ -503,7 +513,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem> */}
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
