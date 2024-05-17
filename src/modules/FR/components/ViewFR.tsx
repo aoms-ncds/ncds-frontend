@@ -106,9 +106,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
   const user = useAuth();
   const handleClickOpen = (particular: Particular, index: number) => {
+    setNewParticular((prev: any) => ({
+      ...prev,
+      ...particular,
+      sanctionedAmount: 0,
+    }));
     setOpen(true);
     setSelectedParticularIndex(index);
-    setNewParticular(particular);
+    // setNewParticular(particular);
   };
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -1373,3 +1378,4 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 };
 
 export default ViewFRRequests;
+

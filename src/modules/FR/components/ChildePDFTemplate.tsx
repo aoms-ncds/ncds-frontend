@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     left: 50,
     position: 'absolute',
     right: '100',
-    transform: 'rotate(-90deg)'
+    transform: 'rotate(-90deg)',
   },
   heading: {
     position: 'absolute',
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginTop: 1000,
     // marginTop: 60,
     fontWeight: 100,
-    transform: 'rotate(-90deg)'
+    transform: 'rotate(-90deg)',
   },
   headingLine: {
     position: 'absolute',
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     marginTop: 1000,
     borderBottom: 1,
     borderColor: 'black',
-    transform: 'rotate(-90deg)'
+    transform: 'rotate(-90deg)',
   },
   line1: {
     position: 'absolute',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     right: '800',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 1100,// Adjust this value to set the table's position
+    marginTop: 1100, // Adjust this value to set the table's position
     width: 2000,
     transform: 'rotate(-90deg)', // Rotate the table by 90 degrees clockwise
   },
@@ -95,33 +95,33 @@ const styles = StyleSheet.create({
     borderRight: 1,
     height: 30,
   },
-  
+
 });
 
 // Create Document Component
 const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null; total:number}) => {
-    console.log(props, '√poprosp');
-    
+  console.log(props, '√poprosp');
+
   const [workers, setWorkers] = useState<Child[] | null>(null);
   const [total, setTotal] = useState<number>(0);
-console.log(props.total, 'prop.ttt');
+  console.log(props.total, 'prop.ttt');
 
   console.log(workers, 'pop');
   useEffect(() => {
     let tot = 0;
     workers?.map((i) => {
       tot += i.childSupport.amount;
-      setTotal(tot)
+      setTotal(tot);
     });
     console.log(tot, 'tot');
   }, [props]);
-  
+
   useEffect(() => {
     console.log(props, 'props');
     if (props.workerId) {
       ChildrenServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
     } else if (props.divisionId) {
-        ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
+      ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
     .then((res) => {
       console.log(res);
       setWorkers(res.data);
@@ -130,22 +130,22 @@ console.log(props.total, 'prop.ttt');
         console.log(res);
       });
     }
-  }, [props]);
+  }, [props.total]);
 
   return (
     <Document>
-      <Page size={'A1'}  style={styles.page}>
+      <Page size={'A1'} style={styles.page}>
         <Text style={styles.heading}>REPORT</Text>
         {/* <View style={styles.line} /> */}
         <View
-              style={{ ...styles.box5, marginTop: 15, left: 300,top:300, width: 130 }}>
-              {/* <Image style={{
+          style={{ ...styles.box5, marginTop: 15, left: 300, top: 300, width: 130 }}>
+          {/* <Image style={{
                 height: 78,
                 width: 128,
               }}
               src={`data:`} /> */}
-              {props?.total}
-            </View>
+          {props?.total}
+        </View>
         <View style={styles.tableContainer} >
           <View style={styles.tableRow} key={0}>
             <div style={styles.grid}></div>
@@ -183,7 +183,7 @@ console.log(props.total, 'prop.ttt');
               <Text style={styles.tableCell}>{row.lastName}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.division?.details?.name}</Text>
-              <div style={styles.grid}></div> 
+              <div style={styles.grid}></div>
               {/* <Text style={styles.tableCell}>{row.lastName}</Text> */}
               {/* <div style={styles.grid}></div> */}
               <Text style={styles.tableCell}>{row.dateOfBirth instanceof Date ? row.dateOfBirth?.toLocaleDateString('en-GB') : ''}</Text>
@@ -203,9 +203,8 @@ console.log(props.total, 'prop.ttt');
             <div style={styles.grid}></div>
           </View>
         </View>
-         
 
-       
+
       </Page>
     </Document>
   );
