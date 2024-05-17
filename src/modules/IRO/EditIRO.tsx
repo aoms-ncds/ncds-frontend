@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Container,
   CardContent,
@@ -59,7 +60,7 @@ const EditIRO = () => {
     _id: '',
     IROno: '',
     IRODate: moment(),
-  purpose: 'Division',
+    purpose: 'Division',
     status: FRLifeCycleStates.FR_APPROVED,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -240,7 +241,7 @@ const EditIRO = () => {
     month: '',
     narration: '',
     attachment: [],
-    sanctionedAsPer: ''
+    sanctionedAsPer: '',
   });
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
@@ -475,7 +476,7 @@ const EditIRO = () => {
                         </TableHead>
                         <TableBody>
                           {IRO?.particulars &&
-                            IRO?.particulars.map((item, index) => (
+                            IRO?.particulars?.map((item, index) => (
                               <TableRow key={item._id} >
                                 <TableCell component="th" sx={{ display: 'flex' }}>
                                   <IconButton>
@@ -560,13 +561,25 @@ const EditIRO = () => {
                           })
                         }
                       >
-                        <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                        {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
                         <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
                         <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
                         <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem>
+                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem> */}
+                        {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
+                        {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? <MenuItem value={IRO?.division?.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank1?.bankName ||IRO?.division?.otherBankDetails?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank3?.bankName? <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {IRO?.division?.BeneficiaryBank3?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank4?.bankName? <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {IRO?.division?.BeneficiaryBank4?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank5?.bankName? <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {IRO?.division?.BeneficiaryBank5?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank6?.bankName? <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {IRO?.division?.BeneficiaryBank6?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank7?.bankName? <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {IRO?.division?.BeneficiaryBank7?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank8?.bankName? <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank9?.bankName? <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank10?.bankName? <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}</MenuItem> :'' }
 
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
@@ -590,6 +603,27 @@ const EditIRO = () => {
                       fullWidth
                     />
                   </Grid> */}
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
+                      <Select
+                        labelId="sourceOfAccount"
+                        label="sourceOfAccount"
+                        value={IRO?.sourceOfAccount ?? null}
+
+                        onChange={(e) =>
+                          setIRO({
+                            ...IRO,
+                            sourceOfAccount: e.target.value ?? '',
+                          })
+                        }
+                      >
+                        <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                        <MenuItem value={'Local'}>Local</MenuItem>
+                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                   <Grid item xs={12}>
                     {/* {props.action === 'edit' && ( */}
                     {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
@@ -651,7 +685,7 @@ const EditIRO = () => {
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
-          {remarks.length > 0 ? remarks.map((remark) => (
+          {remarks.length > 0 ? remarks?.map((remark) => (
             // eslint-disable-next-line max-len
             <MessageItem key={remark._id} sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName} time={remark.updatedAt} body={remark.remark} isSent={true} />
           )) : 'No Data Found '}
@@ -740,7 +774,7 @@ const EditIRO = () => {
         renameFile={(fileId: string, newName: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+            attachment: particularDetails.attachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
@@ -780,7 +814,7 @@ const EditIRO = () => {
         renameFile={(fileId: string, newName: string) => {
           setNewParticular((particularDetails) => ({
             ...particularDetails,
-            attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+            attachment: particularDetails.attachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
@@ -852,7 +886,7 @@ const EditIRO = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                  // disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
 
                   />
                 </Grid>
@@ -1034,7 +1068,7 @@ const EditIRO = () => {
                     setNewParticular((asper: any) => ({
                       ...asper,
                       sanctionedAsPer: selectedSanction?.asPer,
-                    }))
+                    }));
                   }
                 }}
                 disabled={!hasPermissions(['ADMIN_ACCESS'])}
