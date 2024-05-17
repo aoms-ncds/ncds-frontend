@@ -259,6 +259,13 @@ const EditIRO = () => {
   console.log(newParticular, 'dq');
   // console.log(props, 'wdqw');
 
+  let total = 0;
+  IRO?.particulars?.forEach((particular) => {
+    if (particular?.sanctionedAmount) {
+      total += particular?.sanctionedAmount;
+    }
+  });
+  console.log(total, 'total');
   const handleClickOpen = (particular: Particular) => {
     setOpen(true);
     // setSelectedParticularIndex(index);
@@ -471,6 +478,7 @@ const EditIRO = () => {
                             <TableCell align="center">Quantity</TableCell>
                             <TableCell align="center">For the Month of</TableCell>
                             <TableCell align="center">Requested Amount</TableCell>
+                            <TableCell align="center">Sanctioned Amount</TableCell>
                             <TableCell align="center">Sanctioned as per</TableCell>
                           </TableRow>
                         </TableHead>
@@ -502,6 +510,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.quantity}</TableCell>
                                 <TableCell align="center">{item.month}</TableCell>
                                 <TableCell align="center">{item.requestedAmount}</TableCell>
+                                <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                               </TableRow>
                             ))}
@@ -520,7 +529,7 @@ const EditIRO = () => {
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={IRO?.sanctionedAmount}
+                      value={IRO?.sanctionedAmount ?? total}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       onChange={(e) => {
@@ -540,7 +549,7 @@ const EditIRO = () => {
                       inputProps={{
                         max: totalRequestedAmount, min: 0, onWheel: handleWheel,
                       }}
-                      disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                      disabled
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
                     {/* </Tooltip> */}
@@ -605,12 +614,12 @@ const EditIRO = () => {
                   </Grid> */}
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth>
-                      <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
+                      {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
+                      <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
                       <Select
                         labelId="sourceOfAccount"
                         label="sourceOfAccount"
                         value={IRO?.sourceOfAccount ?? null}
-
                         onChange={(e) =>
                           setIRO({
                             ...IRO,
@@ -1059,6 +1068,42 @@ const EditIRO = () => {
           </DialogTitle>
           <DialogContent>
             <Grid item xs={12} md={6} width={'20rem'} padding={1}>
+              <Grid item xs={12} md={6}>
+                {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                <TextField
+                  label="Sanctioned Amount"
+                  type={'number'}
+                  value={newParticular.sanctionedAmount ?? total}
+                  // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                  autoComplete='off'
+                  // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  onChange={(e) => {
+                    if (totalRequestedAmount) {
+                      setNewParticular((amount: any) => ({
+                        ...amount,
+                        sanctionedAmount: Number(e.target.value),
+                      }));
+                    }
+                  }
+                  }
+                  // onFocus={() => setFocused(true)}
+                  // onBlur={() => setFocused(false)}
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  inputProps={{
+                    max: totalRequestedAmount, min: 0,
+                    onWheel: handleWheel,
+                  }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                />
+                {/* </Tooltip> */}
+              </Grid>
+              <br />
               <Autocomplete
                 value={IRO?.sanctionedAsPer as ISanctionedAsPer}
                 options={sanctionedAsPer ?? []}
