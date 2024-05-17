@@ -278,7 +278,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
           .then((res) => {
-            console.log(res.data, 'sds');
+            // console.log(res.data, 'sds');
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -288,8 +288,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
           .then((res) => {
-            console.log(res.data, 'KKK');
-
+            // console.log(res.data, 'KKK');
             setIROrder(() => [...res.data]);
           })
           .catch((error) => {
@@ -789,7 +788,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {props.row.particulars[0]?.subCategory3 == 'Select' ? props.row.particulars[0].subCategory2 : props.row.particulars[0].subCategory2 == 'Select' ? props.row.particulars[0].subCategory1 : ''}
+          {
+            props.row.particulars[0].subCategory3 =='Select' ?
+              props.row.particulars[0].subCategory2 :
+              props.row.particulars[0].subCategory2 == 'Select' ?
+                props.row.particulars[0].subCategory1 : ''
+          }
         </p>
       ),
     },
@@ -1639,18 +1643,27 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
-          <Container>
-            Please download and attach the signature sheet: &nbsp;
-            {pdfProps && (
-              <>
-                <PDFDownloadLink document={<IROReconciliationPdf data={pdfProps} />} fileName="WorkersSignatureSheet.pdf" style={{ color: 'blue' }}>
-                  {({ loading }) => (loading ? '....' : 'WorkersSignatureSheet.pdf')}
-                </PDFDownloadLink>
-                <br />
-                NB: Ignore if already attached
-              </>
-            )}{' '}
-          </Container>
+          <Container>Please download and attach the signature sheet: &nbsp;
+            {selectedIRO.signatureSheet?<a href="#" onClick={async () => {
+              const file = (await FileUploaderServices.getFile(selectedIRO?.signatureSheet ?? '')).data;
+              if (file.downloadURL) {
+                const link = document.createElement('a');
+                link.href = file.downloadURL;
+                link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
+                link.click();
+              }
+            }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
+            <>
+              <PDFDownloadLink
+                document={<IROReconciliationPdf
+                  data={pdfProps}
+                />}
+                fileName="WorkersSignatureSheet.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
+              </PDFDownloadLink><br/>
+            </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
           <Button
