@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Container,
   CardContent,
@@ -492,9 +493,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         }
 
                       >
-                        {divisions?.DivisionBankFCRA?.bankName? <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem> : '' }
-                        {divisions?.DivisionBankLocal?.bankName? <MenuItem value={'Division Bank Local'}>Division Bank Local - {divisions?.DivisionBankLocal?.beneficiary}</MenuItem> :'' }
-                        {divisions?.BeneficiaryBank1?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem> :'' }
+                        {divisions?.DivisionBankFCRA?.bankName? <MenuItem value={divisions?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem> : '' }
+                        {divisions?.DivisionBankLocal?.bankName? <MenuItem value={divisions.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {divisions?.DivisionBankLocal?.beneficiary}</MenuItem> :'' }
+                        {divisions?.BeneficiaryBank1?.bankName? <MenuItem value={ 'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem> :'' }
                         {divisions?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
                         {divisions?.BeneficiaryBank3?.bankName? <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem> :'' }
                         {divisions?.BeneficiaryBank4?.bankName? <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem> :'' }
@@ -1100,6 +1101,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
               particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
             });
           }}
+
         >
 
           <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">

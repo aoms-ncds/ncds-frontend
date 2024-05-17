@@ -494,8 +494,8 @@ const ViewIRO = () => {
                               })
                             }
                           >
-                            <MenuItem value={'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
-                            <MenuItem value={'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
+                            <MenuItem value={divisions?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {divisions?.DivisionBankFCRA?.beneficiary}</MenuItem>
+                            <MenuItem value={divisions?.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local -  {divisions?.DivisionBankLocal?.beneficiary}</MenuItem>
                             <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {divisions?.BeneficiaryBank1?.beneficiary}</MenuItem>
                             <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {divisions?.BeneficiaryBank2?.beneficiary}</MenuItem>
                             <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
