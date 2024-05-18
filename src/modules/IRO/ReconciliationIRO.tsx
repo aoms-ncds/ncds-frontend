@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container } from '@mui/material';
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
@@ -16,6 +16,12 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import Lottie from 'react-lottie';
+import Animations from '../../Animations';
+import IROTemplate from './components/IROTemplate';
+import ESignatureService from '../Settings/extras/ESignatureService';
+import FRServices from '../FR/extras/FRServices';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -107,7 +113,84 @@ const ReconciliationIRO = () => {
     signature: {},
     specialsanction: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [iroData, setIroData] = useState<IROrder | null>(null);
+  const [FrData, setFrData] = useState<FR | null>(null);
+  const [printIroLoading, setPrintIroLoading] = useState(false);
+  const [mngrName, setMngrName] = useState('');
+  // const [openPrintIro, setOpenPrintIro] = useState(false);
 
+  const [selectedSignature, setSignature] = useState<Esignature>({
+    _id: '',
+    officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res });
+        setSignature(res.data as Esignature);
+        setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    console.log(selectedSignature);
+  }, []);
+
+  const attach = async (blob: Blob) => {
+    try {
+      if (iroData) {
+        // File Blob creation
+        const fileBlob = blob instanceof Blob ? new File([blob], `${iroData?.IROno}_Receipt.pdf`, { type: 'application/pdf' }) : null;
+        if ( fileBlob) {
+          // File upload
+          const file = await FileUploaderServices.uploadFile(fileBlob, undefined, 'FR', fileBlob.name);
+
+          if (file.success) {
+            // Update FR request
+            const res= await IROServices.close(iroData._id, file.data._id);
+            const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
+              return reconciliationIROs._id !== res.data.iro._id;
+            });
+            setReconcilationIRO(filterIRO);
+            // Update local state and UI
+            setIroData(null);
+            enqueueSnackbar({
+              message: 'File Attached',
+              variant: 'success',
+            });
+            enqueueSnackbar({
+              message: 'IRO updated',
+              variant: 'success',
+            });
+          }
+        }
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error attaching files:', error);
+      enqueueSnackbar({
+        message: 'Error attaching files',
+        variant: 'error',
+      });
+    } finally {
+      // Reset loading state
+      setLoading(false);
+    }
+  };
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -264,28 +347,39 @@ const ReconciliationIRO = () => {
               text: 'Close IRO',
               icon: PreviewIcon,
               onClick: () => {
-                IROServices.close(props.row._id)
-                  .then((res) => {
-                    if (reconciliationIRO) {
-                      // eslint-disable-next-line @typescript-eslint/naming-convention
-                      const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
-                        return reconciliationIROs._id !== props.row._id;
-                      });
-                      setReconcilationIRO(filterIRO);
-                    }
-
-                    enqueueSnackbar({
-                      message: res.message,
-                      variant: 'success',
-                    });
-                  })
-
-                  .catch((err) => {
-                    enqueueSnackbar({
-                      message: err.message,
-                      variant: 'error',
-                    });
+                setIroData(props.row);
+                if (props?.row.FR) {
+                  FRServices.getById(props.row.FR).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
                   });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+                //   IROServices.close(props.row._id)
+                //     .then((res) => {
+                //       if (reconciliationIRO) {
+                //         // eslint-disable-next-line @typescript-eslint/naming-convention
+                //         const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
+                //           return reconciliationIROs._id !== props.row._id;
+                //         });
+                //         setReconcilationIRO(filterIRO);
+                //       }
+
+                //       enqueueSnackbar({
+                //         message: res.message,
+                //         variant: 'success',
+                //       });
+                //     })
+
+              //     .catch((err) => {
+              //       enqueueSnackbar({
+              //         message: err.message,
+              //         variant: 'error',
+              //       });
+              //     });
               },
             },
             // {
@@ -751,6 +845,99 @@ const ReconciliationIRO = () => {
       //   return FileUploaderServices.deleteFile(fileId);
       // }}
       />
+      {/* <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO Receipt </DialogTitle>
+        <DialogContent>
+          <Container>  Download the IRO for {selectedIRO?.IROno} &nbsp;
+            {selectedIRO.closedIroPdf&&<a href="#" onClick={async () => {
+              const file = (await FileUploaderServices.getFile(selectedIRO?.closedIroPdf ?? '')).data;
+              if (file.downloadURL) {
+                const link = document.createElement('a');
+                link.href = file.downloadURL;
+                link.download = file.filename; // You can specify a custom file name here
+                link.click();
+              }
+            }}>{`${selectedIRO.IROno}_Receipt.pdf`}</a>}</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenPrintIro(false);
+            }}
+            variant="text"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog> */}
+      <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure</DialogTitle>
+        <DialogContent>
+          <Container>
+          Do you want to close {iroData?.IROno}?
+            <br />
+            {iroData && mngrName&&selectedSignature&&FrData&& (
+              <PDFDownloadLink
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setIroData(null);
+            }}
+            variant="text"
+          >
+            Cancel
+          </Button>
+          <>
+            {iroData && mngrName&&selectedSignature&&FrData&& (
+
+              <>
+                <PDFDownloadLink document={<IROTemplate
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                  {({ blob, loading }) =>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button> }
+                </PDFDownloadLink>
+
+              </>
+            )}
+          </>
+        </DialogActions>
+      </Dialog>
+      {loading&&
+      <Lottie
+        options={{
+          loop: true,
+          autoplay: true,
+          animationData: Animations.loading,
+          rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+          },
+        }}
+        height={200}
+        width={200}
+        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        // isStopped={.state.isStopped}
+        // isPaused={.state.isPaused}
+      />}
     </CommonPageLayout>
   );
 };
