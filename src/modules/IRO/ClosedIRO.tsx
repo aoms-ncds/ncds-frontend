@@ -308,8 +308,15 @@ const ClosedIRO = () => {
     },
     {
       field: 'sanctionedAmount', align: 'center',
-      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
-      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return params.row.sanctionedAmount;
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0);
+        }
+        return 0; // or return a suitable default value
+      }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },
     {
       field: 'sanctionedAsPer',

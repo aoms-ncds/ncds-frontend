@@ -450,8 +450,15 @@ const ReconciliationIRO = () => {
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 130, renderHeader: () => (<b>Special Sanction</b>), align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 130,
-      valueGetter: (params) => params.row.sanctionedAmount ?? params.row.sanctionedAmountTotal,
-      renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return params.row.sanctionedAmount;
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0);
+        }
+        return 0; // or return a suitable default value
+      }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),

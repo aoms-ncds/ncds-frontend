@@ -261,7 +261,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   });
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [openPrintIro, setOpenPrintIro] = useState(false);
-
+  let total = 0;
+  selectedIRO?.particulars?.forEach((particular) => {
+    if (particular?.sanctionedAmount) {
+      total += particular?.sanctionedAmount;
+    }
+  });
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -844,8 +849,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Amount',
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
-      valueGetter: (params) =>params.row.sanctionedAmount?? params.row.sanctionedAmountTotal,
-      align: 'center',
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return params.row.sanctionedAmount;
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0);
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
       headerAlign: 'center',
     },
 
