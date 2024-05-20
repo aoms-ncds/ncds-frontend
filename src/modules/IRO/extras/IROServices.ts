@@ -90,10 +90,6 @@ export default {
     { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,
-      releaseAmount: IRO.releaseAmount ? {
-        ...IRO.releaseAmount,
-        transferredDate: moment(IRO.releaseAmount?.transferredDate),
-      }:undefined,
       IRODate: moment(IRO.IRODate),
       createdAt: moment(IRO.createdAt),
       updatedAt: moment(IRO.updatedAt),
@@ -111,7 +107,7 @@ export default {
     ),
 
   reconciliationCompleted: (IROId: string) => getStandardResponse<void>(axios.patch(`/iro/${IROId}/reconciliation_complete`, null, { headers: { ...getAuthHeader() } })),
-  close: (IROId: string, fileId?:string) => getStandardResponse<{fr:FR;iro:IROrder}>(axios.patch(`/iro/${IROId}/close`, { fileId: fileId }, { headers: { ...getAuthHeader() } })),
+  close: (IROId: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IROId}/close`, null, { headers: { ...getAuthHeader() } })),
   sendBack: (IROId: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IROId}/sendBack`, null, { headers: { ...getAuthHeader() } })),
   getPrintDetails: (IROId: string) => getStandardResponse<IROrder>(axios.get(`/iro/printDetails/${IROId}`)),
 

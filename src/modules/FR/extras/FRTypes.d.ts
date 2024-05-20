@@ -124,7 +124,6 @@ declare global {
     additionalSignature?:FileObject;
     additionalDesignation?:string;
     additionalName?:string;
-    signatureSheet?:string;
 
 
   }

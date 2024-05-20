@@ -12,18 +12,15 @@ import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import IROReceiptTemplate from './components/IROReceiptTemplate';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import * as XLSX from 'xlsx';
 import { MB } from '../../extras/CommonConfig';
+import IROTemplate from './components/IROTemplate';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
-import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import Lottie from 'react-lottie';
-import Animations from '../../Animations';
-import IROTemplate from './components/IROTemplate';
-import FRServices from '../FR/extras/FRServices';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -32,19 +29,20 @@ const ClosedIRO = () => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [fr] = useState<FR>();
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
   });
-  const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
-  const [FrData, setFrData] = useState<FR | null>(null);
-  const [printIroLoading, setPrintIroLoading] = useState(false);
-  const [mngrName, setMngrName] = useState('');
   const [openPrintIro, setOpenPrintIro] = useState(false);
-  const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
+  const [mngrName, setMngrName] = useState('');
 
+
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -67,64 +65,15 @@ const ClosedIRO = () => {
       .then((res) => {
         console.log({ res });
         setSignature(res.data as Esignature);
-        setMngrName((res.data as { officeManagerName: string }).officeManagerName);
       })
       .catch((res) => {
         console.log(res);
       });
     console.log(selectedSignature);
+    const sig = ESignatureService.getESignature().then((res) => {
+      setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+    });
   }, []);
-
-  const attach = async (blob: Blob) => {
-    try {
-      if (iroData) {
-        // File Blob creation
-        const fileBlob = blob instanceof Blob ? new File([blob], `${iroData?.IROno}_Receipt.pdf`, { type: 'application/pdf' }) : null;
-        if ( fileBlob) {
-          // File upload
-          const file = await FileUploaderServices.uploadFile(fileBlob, undefined, 'FR', fileBlob.name);
-
-          if (file.success) {
-            // Update FR request
-            await IROServices.close(iroData._id, file.data._id);
-
-            // Update local state and UI
-            enqueueSnackbar({
-              message: 'File Attached',
-              variant: 'success',
-            });
-            enqueueSnackbar({
-              message: 'IRO updated',
-              variant: 'success',
-            });
-          }
-        }
-      }
-    } catch (error) {
-      // Handle error
-      console.error('Error attaching files:', error);
-      enqueueSnackbar({
-        message: 'Error attaching files',
-        variant: 'error',
-      });
-    } finally {
-      IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })
-      .then((res) => {
-        setIROrder(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-      // Reset loading state
-      setLoading(false);
-      setIroData(null);
-      setOpenAttachReceipt(false);
-    }
-  };
-
-  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
-    setSearchText(event.target.value);
-  };
 
   const filteredRows = (IROrder ?? []).filter((row) => {
     if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
@@ -182,19 +131,23 @@ const ClosedIRO = () => {
                   });
               },
             },
-            ...(props.row.closedIroPdf?
-              [
-                {
-                  id: 'print',
-                  text: 'Print IRO',
-                  icon: PrintIcon,
-                  onClick: () => {
-                    setIroData(props.row);
-                    setOpenPrintIro(true);
-                  },
-                },
-              ] :
-              []),
+            {
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
+              onClick: () => {
+                setIroData(props.row);
+                setOpenPrintIro(true);
+                setTimeout(() => {
+                  setOpenPrintIro(false);
+                }, 2000);
+              },
+              component: PDFDownloadLink,
+              // document: <IROReceiptTemplate rowData={props.row} />,
+              document: <IROTemplate rowData={props.row} fr={fr} officeMngrsig={selectedSignature} />,
+              fileName: 'IROReceipt.pdf',
+            },
+
             // {
             //   id: 'View',
             //   text: 'View Details ',
@@ -208,27 +161,11 @@ const ClosedIRO = () => {
             //   text: 'Reconciliation',
             //   icon: EditIcon,
             // },
-            ...(!props.row.closedIroPdf?
-              [
-                {
-                  id: 'Attach IRO receipt',
-                  text: 'Attach IRO reciept',
-                  icon: AttachFileIcon,
-                  onClick: () => {
-                    setOpenAttachReceipt(true);
-                    setIroData(props.row);
-                    if (props?.row.FR) {
-                      FRServices.getById(props.row.FR).then((res) => {
-                        setFrData(res.data);
-                        console.log(res.data, 'fr');
-                      });
-                    }
-                    setPrintIroLoading(true);
-                    setTimeout(() => {
-                      setPrintIroLoading(false);
-                    }, 2000);
-                  } }] :
-              []),
+            // {
+            //   id: 'Close IRO',
+            //   text: 'Close IRO',
+            //   icon: PreviewIcon,
+            // },
             {
               id: 'Attachments',
               text: 'Attachments',
@@ -573,99 +510,31 @@ const ClosedIRO = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
-        <DialogTitle> Print IRO Receipt </DialogTitle>
+      <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-          <Container>  Download the IRO for {iroData?.IROno} &nbsp;
-            {iroData?.closedIroPdf&&<a href="#" onClick={async () => {
-              const file = (await FileUploaderServices.getFile(iroData?.closedIroPdf ?? '')).data;
-              if (file.downloadURL) {
-                const link = document.createElement('a');
-                link.href = file.downloadURL;
-                link.download = file.filename; // You can specify a custom file name here
-                link.click();
-              }
-            }}>{`${iroData?.IROno}_Receipt.pdf`}</a>}</Container>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setOpenPrintIro(false);
-            }}
-            variant="text"
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={ openAttachReceipt } onClose={() => setOpenAttachReceipt(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Are you sure</DialogTitle>
-        <DialogContent>
-          <Container>
-          Do you want to attach receipt for {iroData?.IROno}?
-            <br />
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+          <Container>Download the IRO for {iroData?.IROno}<br />
+            {iroData &&
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+                document={<IROTemplate rowData={iroData} fr={fr} mngrName={mngrName} officeMngrsig={selectedSignature} />}
+                fileName='IROReceipt.pdf'
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading || openPrintIro ? '....' : 'IROReceipt.pdf'}
+
+              </PDFDownloadLink>} </Container>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
               setIroData(null);
-              setOpenAttachReceipt(false);
             }}
             variant="text"
           >
             Cancel
           </Button>
-          <>
-            {iroData && mngrName&&selectedSignature&&FrData&& (
-              <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-                    </Button> }
-                </PDFDownloadLink>
-
-              </>
-            )}
-          </>
         </DialogActions>
       </Dialog>
-      {loading&&
-      <Lottie
-        options={{
-          loop: true,
-          autoplay: true,
-          animationData: Animations.loading,
-          rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-          },
-        }}
-        height={200}
-        width={200}
-        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
-        // isStopped={.state.isStopped}
-        // isPaused={.state.isPaused}
-      />}
       <FileUploader
         title="Attachments"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}

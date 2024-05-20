@@ -27,9 +27,6 @@ declare global{
       accountantSignature?:FileObject;
       officeManagerSignature?:FileObject;
     };
-    closedIroPdf?:string;
-    FR?: string;
-
     // signature?: {
     //   hrSignature?: {
     //     sign: FileObject;
