@@ -90,8 +90,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       setPaymentMethod(res.data);
     });
   }, []);
-  console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
-  console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
+  // console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
+  // console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
 
   useEffect(() => {
     if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
@@ -146,11 +146,13 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
 
         releaseAmount: props.data.reduce((tot, iro) => {
           if (!iro?.particulars) return tot;
+          console.log(iro.sanctionedAmountTotal, 'total amount');
 
           // Use `reduce` to sum the sanctioned amounts within the array
           const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
+          // console.log(tot + iro?.sanctionedAmount, 'totalSanctioned');
 
-          return iro.sanctionedAmount ?? tot + totalSanctioned;
+          return iro.sanctionedAmount ? tot + iro?.sanctionedAmount: tot + totalSanctioned;
         }, 0), IRO: props.data,
         division: props.data[0]?.division?._id ?? '',
       }));
