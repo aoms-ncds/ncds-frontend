@@ -147,7 +147,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
       <Page size="A4" >
         <div>
           <>
-            <Image src="/3D Logo.png" style={styles.image} />
+            <Image src="/3D Logo 3.png" style={styles.image} />
             <Text style={styles.heading}> INDIAN EVANGELICAL TEAM </Text></>
           {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
