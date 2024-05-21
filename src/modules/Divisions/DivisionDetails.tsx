@@ -18,10 +18,11 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [action, setAction] = useState<'add' | 'edit' | 'view'>('add');
-  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(1);
-  const [count, setCount] = useState(0);
+  const [otherBankDetailsCount, setOtherBankDetailsCount] = useState(0);
+  // const [count, setCount] = useState([]);
   const navigate = useNavigate();
-
+  let count : number[] =[];
+  let BenFicount : number[] =[];
   const addDivision = () => {
     // e.preventDefault();
     // event.preventDefault();
@@ -177,10 +178,12 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   });
   // eslint-disable-next-line new-cap
   DivisionsList(divisionDetails);
-  console.log(count, '  setCount(1)');
+
 
   useEffect(() => {
     if (divisionIDs) {
+      count=[];
+      BenFicount =[];
       setAction('view');
       DivisionsServices.getDivisionById(divisionIDs)
         .then((res) => {
@@ -201,7 +204,50 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
         });
     }
   }, []);
-  console.log(divisionDetails, 'divisionDetails');
+
+  if (divisionDetails?.FCRABankDetails?.bankName != null || divisionDetails?.DivisionBankFCRA?.bankName !=null) {
+    // setOtherBankDetailsCount(1);
+    count.push(1);
+  }
+  if (divisionDetails?.localBankDetails?.bankName != null || divisionDetails?.DivisionBankLocal?.bankName != null) {
+    count.push(2);
+  }
+  if (divisionDetails?.otherBankDetails?.bankName != null || divisionDetails?.BeneficiaryBank1?.bankName != null) {
+    count.push(3);
+  }
+  if (divisionDetails?.otherBankDetails1?.bankName != null || divisionDetails?.BeneficiaryBank2?.bankName != null) {
+    BenFicount.push(1);
+  }
+  if (divisionDetails?.otherBankDetails2?.bankName != null || divisionDetails?.BeneficiaryBank3?.bankName != null) {
+    BenFicount.push(2);
+  }
+  if (divisionDetails?.otherBankDetails2?.bankName != null || divisionDetails?.BeneficiaryBank4?.bankName != null) {
+    BenFicount.push(3);
+  }
+  if (divisionDetails?.otherBankDetails3?.bankName != null || divisionDetails?.BeneficiaryBank5?.bankName != null) {
+    BenFicount.push(4);
+  }
+  if (divisionDetails?.otherBankDetails4?.bankName != null || divisionDetails?.BeneficiaryBank6?.bankName != null) {
+    BenFicount.push(6);
+  }
+  if (divisionDetails?.BeneficiaryBank7?.bankName != null) {
+    BenFicount.push(7);
+  }
+  if (divisionDetails?.BeneficiaryBank8?.bankName != null) {
+    BenFicount.push(8);
+  }
+  if (divisionDetails?.BeneficiaryBank9?.bankName != null) {
+    BenFicount.push(9);
+  }
+  if (divisionDetails?.BeneficiaryBank10?.bankName != null) {
+    BenFicount.push(10);
+  }
+
+  // }, []);
+  // console.log(divisionDetails, 'shivi');
+  // console.log(count.includes(1), '  setCount(1)');
+  console.log(BenFicount, '  setCount(1)');
+  // console.log(divisionDetails, 'divisionDetails');
   return (
     <CommonPageLayout title={action === 'add' ? 'Add Division' : action === 'edit' ? 'Edit Division' : 'Division Details'}>
       {/* <Box sx={{ width: '100%' }}> */}
@@ -299,31 +345,71 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                 navigate('/divisions/');
               }}
             >
+
               <Grid container spacing={2}>
-                <BankDetailsForm
-                  value={divisionDetails?.FCRABankDetails ?? divisionDetails.DivisionBankFCRA}
-                  onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankFCRA: newbankDetails as BankDetails }));
-                  }}
-                  action={props.action}
-                  options={{ title: 'Division Bank FCRA' }}
-                />
-                <BankDetailsForm
-                  value={divisionDetails?.localBankDetails ?? divisionDetails.DivisionBankLocal}
-                  onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankLocal: newbankDetails as BankDetails }));
-                  }}
-                  action={props.action}
-                  options={{ title: 'Division Bank Local' }}
-                />
-                <BankDetailsForm
-                  value={divisionDetails?.otherBankDetails ?? divisionDetails.BeneficiaryBank1}
-                  onChange={(newbankDetails) => {
-                    setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank1: newbankDetails as BankDetails }));
-                  }}
-                  action={props.action}
-                  options={{ title: 'Beneficiary Bank 1' }}
-                />
+                {count.includes(1) && action =='view' ?(
+                  <BankDetailsForm
+                    value={divisionDetails?.FCRABankDetails ?? divisionDetails.DivisionBankFCRA}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankFCRA: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Division Bank FCRA' }}
+                  />
+                ):(
+                  <BankDetailsForm
+                    value={divisionDetails?.FCRABankDetails ?? divisionDetails.DivisionBankFCRA}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankFCRA: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Division Bank FCRA' }}
+                  />
+                )}
+
+                {count.includes(2) && action =='view' ?(
+
+                  <BankDetailsForm
+                    value={divisionDetails?.localBankDetails ?? divisionDetails.DivisionBankLocal}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankLocal: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Division Bank Local' }}
+                  />
+                ):(
+                  <BankDetailsForm
+                    value={divisionDetails?.localBankDetails ?? divisionDetails.DivisionBankLocal}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, DivisionBankLocal: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Division Bank Local' }}
+                  />
+                )}
+
+                {count.includes(3) && action =='view' ?(
+
+                  <BankDetailsForm
+                    value={divisionDetails?.otherBankDetails ?? divisionDetails.BeneficiaryBank1}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank1: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Beneficiary Bank 1' }}
+                  />
+                ):(
+
+                  <BankDetailsForm
+                    value={divisionDetails?.otherBankDetails ?? divisionDetails.BeneficiaryBank1}
+                    onChange={(newbankDetails) => {
+                      setDivisionDetails((divisionDetails) => ({ ...divisionDetails, BeneficiaryBank1: newbankDetails as BankDetails }));
+                    }}
+                    action={props.action}
+                    options={{ title: 'Beneficiary Bank 1' }}
+                  />
+                )}
+
                 {/* {newBanks.map((item, index) => (
                   <BankDetailsForm
                     key={index}
@@ -335,7 +421,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     options={{ title: `Other Bank Details${index + 1}` }}
                   />
                  ))}  */}
-                {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
+
+                {/* {Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
                   <BankDetailsForm
                     key={index}
                     value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
@@ -345,7 +432,38 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                     action={props.action}
                     options={{ title: `Beneficiary Bank ${index + 2}` }}
                   />
-                ))}
+                ))} */}
+                {
+                  action =='view' ?
+                    Array.from(BenFicount).map((_, index: number) => (
+                      <BankDetailsForm
+                        key={index}
+                        value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
+                        onChange={(newBankDetails) => {
+                          setDivisionDetails((divisionDetails) => ({
+                            ...divisionDetails,
+                            [`BeneficiaryBank${index + 2}`]: newBankDetails as BankDetails,
+                          }));
+                        }}
+                        action={props.action}
+                        options={{ title: `Beneficiary Bank ${index + 2}` }}
+                      />
+                    )) :
+                    Array.from({ length: otherBankDetailsCount }).map((_, index: number) => (
+                      <BankDetailsForm
+                        key={index}
+                        value={divisionDetails[`BeneficiaryBank${index + 2}` as keyof Division] as BankDetails | undefined}
+                        onChange={(newBankDetails) => {
+                          setDivisionDetails((divisionDetails) => ({
+                            ...divisionDetails,
+                            [`BeneficiaryBank${index + 2}`]: newBankDetails as BankDetails,
+                          }));
+                        }}
+                        action={props.action}
+                        options={{ title: `Beneficiary Bank ${index + 2}` }}
+                      />
+                    ))
+                }
 
                 <Grid item xs={12}>
                   {action !== 'view' && otherBankDetailsCount !=9 && (
@@ -359,11 +477,11 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                       Remove
                     </Button>
                   )}
-                  {action === 'view' && otherBankDetailsCount !=9 && (
+                  {/* {action === 'view' && otherBankDetailsCount !=9 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       View More Banks
                     </Button>
-                  )}
+                  )} */}
                   {action !== 'view' && (
                     <Button type="submit" variant="contained" sx={{ float: 'right', padding: '16px 64px' }}>
                       Submit
