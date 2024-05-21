@@ -65,7 +65,7 @@ const ChildeSupportPage = () => {
     FRdate: moment(),
     kind: 'FRs',
     particulars: [],
-    sanctionedAsPer: '',
+    sanctionedAsPer: ''
   });
   const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
@@ -138,7 +138,7 @@ const ChildeSupportPage = () => {
     let tot = 0;
     childList.map((i) => {
       tot += i.childSupport?.amount;
-      setTotal(tot);
+      setTotal(tot)
     });
     console.log(tot, 'tot');
   }, [childList]);
@@ -148,7 +148,7 @@ const ChildeSupportPage = () => {
       .then((res) => {
         console.log(res);
         // setWorkers(res.data);
-        setChildList(res.data);
+        setChildList(res.data)
         setAllChilde(res.data);
         // console.log( 'basic',workers?.reduce(
         //   (total, child) => child.supportStructure?.supportEnabled && child.supportStructure?.basic? total + Number(child.supportStructure?.basic):total,
@@ -170,6 +170,7 @@ const ChildeSupportPage = () => {
       .then((res) => {
         console.log(res);
         setCoordinatrs(res.data);
+
       })
       .catch((res) => {
         console.log(res);
@@ -202,6 +203,9 @@ const ChildeSupportPage = () => {
       ...requisition,
       purpose: 'Division',
     }));
+
+
+
   }, []);
   // console.log(divisions?.map((e)=>e.details.coordinator?.name?._id), 'ddf');
   // console.log(childList.map((r)=>r.childOf?._id),'cc');
@@ -220,11 +224,12 @@ const ChildeSupportPage = () => {
     // );
     const coordinators = workers?.filter((child) =>
       divisions?.some((division) =>
-        division.details.coordinator?.name?._id === child._id,
-      ),
+        division.details.coordinator?.name?._id === child._id
+      )
     );
 
     console.log(coordinators, 'setCoordinatrssd');
+
   }, []);
 
   const handleClick = (rowId: any) => {
@@ -234,8 +239,8 @@ const ChildeSupportPage = () => {
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
-      });
-  };
+      })
+    }
   const columns: GridColDef[] = [
     {
       field: 'actions',
@@ -244,7 +249,7 @@ const ChildeSupportPage = () => {
       headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
-          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu onClick={() => handleClick(params)} />,
+          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu  onClick={() => handleClick(params)} />,
           // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -270,7 +275,7 @@ const ChildeSupportPage = () => {
     },
     {
       field: 'division', width: 130,
-      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name,
+      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name
     },
     // {
     //   field: 'sub_division',
@@ -316,7 +321,7 @@ const ChildeSupportPage = () => {
       cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'CEA Amount'}</b>,
-      valueGetter: (params) => params.row.childSupport?.amount,
+      valueGetter: (params) => params.row.childSupport?.amount
     },
     // {
     //   field: 'supportEnabled',
@@ -383,9 +388,9 @@ const ChildeSupportPage = () => {
     },
     '&  .MuiDataGrid-cell': {
       borderRight: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-      }`,
+        }`,
       borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#f0f0f0' : '#303030'
-      }`,
+        }`,
       color:
         theme.palette.mode === 'light' ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,0.65)',
     },
@@ -415,7 +420,7 @@ const ChildeSupportPage = () => {
                 subCategory2: 'Child Education Assistance',
                 subCategory3: 'Select',
                 month: moment().format('MMMM'),
-                narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
+                narration: `Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>`,
                 requestedAmount: total,
                 unitPrice: total,
                 // quantity: supportEnabledWorkers?.length,
@@ -441,14 +446,14 @@ const ChildeSupportPage = () => {
                   onChange={(event, newVal) => {
                     if (newVal) {
                       const coordinatorId :any = newVal.details?.coordinator?.name?._id;
-                      console.log(coordinatorId, 'roro');
+                      console.log(coordinatorId,'roro');
+                      
 
-
-                      setChildList(() => allChild?.filter((child:any) =>
-                        child.division?._id == newVal?._id &&
+                      setChildList(() => allChild?.filter((child:any) => 
+                      child.division?._id == newVal?._id  &&
                        child.childOf?._id != coordinatorId) ?? []);
-
-
+                      
+                      
                       setDivision(newVal);
                     } else {
                       setChildList(allChild ?? []);
@@ -474,9 +479,9 @@ const ChildeSupportPage = () => {
                     if (newVal) {
                       setChildList((childe) => childe?.filter((child) => child._id == newVal?._id) ?? []);
                       setDivision(() =>
-                        newVal && 'division' in newVal && newVal.division ?
-                          divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null :
-                          null,
+                        newVal && 'division' in newVal && newVal.division
+                          ? divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null
+                          : null
                       );
                     } else setChildList(() => (division ? allChild?.filter((child: any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
@@ -490,16 +495,16 @@ const ChildeSupportPage = () => {
                   options={(coordinators ?? [])}
                   getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
                   onChange={(_e, newVal) => {
-                    setSelectedCoordinatrs(newVal ?? null);
+                    setSelectedCoordinatrs(newVal ?? null)
                     if (newVal) {
-                      const coordinatorId = newVal.division?.details?.coordinator?.name;
+                      const coordinatorId = newVal.division?.details?.coordinator?.name
                       console.log(coordinatorId, 'coordinatorId');
                       if (coordinatorId) {
                         setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId) ?? []);
                         setDivision(() =>
-                          newVal && 'division' in newVal && newVal.division ?
-                            divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
-                            null,
+                          newVal && 'division' in newVal && newVal.division
+                            ? divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null
+                            : null
                         );
                       }
                     } else {

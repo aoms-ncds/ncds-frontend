@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-undef */
-import { Autocomplete, Button, Divider, FormControl, Grid, TextField, Typography, createFilterOptions } from '@mui/material';
+import { Autocomplete, Button, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import AddressForm from '../../../components/AddressForm';
 import FileUploader from '../../../components/FileUploader/FileUploader';
@@ -11,6 +11,7 @@ import UserServices from '../../User/extras/UserServices';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
 import LeaderDetailsService from '../../Settings/extras/LeaderDetailsService';
+
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
   const [showFileUploader2, setShowFileUploader2] = useState(false);
@@ -19,7 +20,6 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const [showFileUploader5, setShowFileUploader5] = useState(false);
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
-  const filter = createFilterOptions();
 
   const [users, setUsers] = useState<User[] | null>(null);
   const { editID } = useParams();
@@ -134,7 +134,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         </FormControl>
       </Grid>
       <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
-      {((users && users?.length > 0) || props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader) && (
+      {((users && users.length > 0) || props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader) && (
         <>
           <Grid item xs={12}>
             <br />
@@ -204,43 +204,8 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               </Grid><Grid item xs={12} md={4}>
                 <Grid item xs={12}>
                   <FormControl variant="outlined" fullWidth>
-                    <Autocomplete
-                      value={props.value.seniorLeader?.name ?? null}
-                      options={(users ?? [])}
-                      getOptionLabel={(name) => `${name?.basicDetails.firstName} ${name.basicDetails.lastName}`}
-                      onChange={(e, newValue) => {
-                        if (newValue) {
-                          props.onChange({
-                            ...props.value,
-                            seniorLeader: {
-                              ...props.value.seniorLeader,
-                              name: newValue,
-                            },
-                          });
-                        }
-                      }}
-                      filterOptions={(options, params) => {
-                        const filtered = filter(options, params as any) as User[];
-                        const { inputValue } = params;
-
-                        // Suggest the creation of a new value
-                        const isExisting = options.some((option) => inputValue === `${option.basicDetails.firstName} ${option.basicDetails.lastName}`);
-                        if (inputValue !== '' && !isExisting) {
-                          filtered.push({
-                            basicDetails: {
-                              firstName: inputValue.split(' ')[0],
-                              lastName: inputValue.split(' ')[1] || '',
-                            },
-                            title: `Add "${inputValue}"`,
-                          } as unknown as User);
-                        }
-
-                        return filtered;
-                      }}
-                      renderInput={(params) => <TextField {...params} label="Choose U" variant='standard' />}
-                      fullWidth
-                    />
                     <UsersDropdown
+
                       users={users ?? []}
                       value={props.value.seniorLeader?.name ?? null}
                       onChange={(e, newValue) => {
