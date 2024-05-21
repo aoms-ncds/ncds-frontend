@@ -350,7 +350,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 {String(index + 1)}
               </PDFCell>
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'55%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
                 {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
               </PDFCell>
 
