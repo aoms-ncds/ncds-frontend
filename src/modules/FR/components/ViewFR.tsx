@@ -614,6 +614,16 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     Remark
                   </Button>
                   &nbsp;
+                  <Button
+                    variant="contained"
+                    color="info"
+                    onClick={() => {
+                      openDilog();
+                    }}
+                  >
+                    Add Extra sign
+                  </Button>
+                  &nbsp;
                   {props.action === 'view' && FRstatus != 'FR_APPROVED' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
@@ -1207,7 +1217,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 }}
               >
                 {' '}
-                Extra Signature
+                Signature
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -1266,10 +1276,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen2(false)}>Close</Button>
-          <Button onClick={(e) => handleClick(e)}>Verify</Button>
+          {/* <Button onClick={(e) => handleClick(e)}>Verify</Button> */}
           <Button onClick={() => {
             toggleAddSignature(true), setOpen2(false);
-          }}>Conform</Button>
+          }}>Confirm</Button>
         </DialogActions>
       </Dialog>
 
