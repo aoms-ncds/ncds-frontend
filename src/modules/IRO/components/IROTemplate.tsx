@@ -307,7 +307,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               <PDFCell style={{
                 textAlign: 'right', fontSize: 10, fontWeight: 'bold',
                 fontFamily: 'Oswald',
-                marginLeft: '20px',
+                marginLeft: '80px',
               }} width={'100%'}>
                 Narration
               </PDFCell>
@@ -350,7 +350,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 {String(index + 1)}
               </PDFCell>
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
-              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'55%'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'} >
                 {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
               </PDFCell>
 
@@ -392,7 +392,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               {/* <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div> */}
               <PDFCell width={'10%'} ></PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
-              <PDFCell style={{ paddingLeft: '30px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+              <PDFCell style={{ paddingLeft: '60px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
                 <br /> {totalAmount as any}
               </PDFCell>
               <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
