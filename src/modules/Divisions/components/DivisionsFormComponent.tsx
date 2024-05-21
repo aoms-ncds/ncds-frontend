@@ -205,7 +205,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 <Grid item xs={12}>
                   <FormControl variant="outlined" fullWidth>
                     <UsersDropdown
-                     
+
                       users={users ?? []}
                       value={props.value.seniorLeader?.name ?? null}
                       onChange={(e, newValue) => {
@@ -219,14 +219,14 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                           });
                         }
                       }}
-                      
+
                       disabled={props.action == 'view'}
                       // label={'Junior Leader 1'}
                       label={'Junior Leader 1'}
                       required={false} />
                   </FormControl>
                 </Grid>
-                
+
                 {/* <Autocomplete
                     options={users ?? []}
 
@@ -429,7 +429,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           )}
           {/* {props?.value?.name === 'DELHI OFFICE' && (
 
-        
+
           )} */}
         </>
       )}
