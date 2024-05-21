@@ -381,7 +381,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           variant: 'success',
                         });
                       })
-
                       .catch((err) => {
                         enqueueSnackbar({
                           message: err.message,

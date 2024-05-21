@@ -104,29 +104,19 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig:any }) => {
-  const [fr, setFr] = useState<FR>();
+const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:any }) => {
   console.log(props, 'ssds');
   console.log(props.mngrName, 'IRO');
   console.log(props.rowData?.releaseAmount, 'bnk');
   const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
   console.log(contentPerPage, 'contentPerPage');
 
-
-  useEffect(() => {
-    if (props?.rowData.FR) {
-      FRServices.getById(props.rowData.FR).then((res) => {
-        setFr(res.data);
-        console.log(res.data, 'fr');
-      });
-    }
-  }, []);
   let totalAmount = 0;
   let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const totalSacntion =fr?.particulars.forEach((e)=>{
+  const totalSacntion =props.fr?.particulars.forEach((e)=>{
     totalAmount2 += e?.sanctionedAmount !=undefined ? e?.sanctionedAmount : 0;
   });
   const sanctionedAmount = totalAmount2;
@@ -202,21 +192,21 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
           <View style={{ ...styles.box4, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR NO: {fr?.FRno}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR NO: {props.fr?.FRno}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On: {fr?.createdAt.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On: {props.fr?.createdAt.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {fr?.updatedAt.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.updatedAt.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For: {fr?.purpose}
+                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For: {props.fr?.purpose}
                 </Text></View>
               <View style={{ width: 180 }}>
                 <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>
-                  Requested Amt: {fr?.particulars[0].requestedAmount}
+                  Requested Amt: {props.fr?.particulars[0].requestedAmount}
                 </Text>
               </View>
               <View>
@@ -463,7 +453,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
                 height: 78,
                 width: 128,
               }}
-              src={`data:${props.officeMngrsig?.officeManagerSignature?.type};base64, ${props.officeMngrsig?.officeManagerSignature?.base64} `} />
+              src={`data:${props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.officeMngrSign?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>
@@ -473,7 +463,7 @@ const IROTemplate = (props: { rowData: any; fr: any; mngrName?:any;officeMngrsig
               style={{ ...styles.text2, marginTop: 5, left: 400, width: 130 }}
             >
               <Text style={{ ...styles.text1, fontSize: 10, marginTop: 15 }}>Office Manager</Text>
-              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>{props.officeMngrsig?.officeManagerName} </Text>            </View>
+              <Text style={{ ...styles.text1, fontSize: 10, marginTop: 5 }}>{props.officeMngrSign?.officeManagerName} </Text>            </View>
           </View>
           <div style={{ marginTop: '15', marginBottom: '20' }}>
             <Text style={{ fontSize: 8, color: 'grey', left: 30 }} >
