@@ -119,7 +119,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props, 'pro');
+  console.log(props.rowData?.additionalSignature, 'pro');
 
 
   let totalAmount=0;
@@ -255,8 +255,8 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             left: 60,
             top: 120,
             position: 'absolute',
-            height: 35,
-            width: 50,
+            height: 135,
+            width: 150,
           }}
           src={`data:${props.rowData?.additionalSignature?.type};base64, ${props.rowData?.additionalSignature?.base64} `} />
         </div>
@@ -290,7 +290,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             []
           )}
           <Text style={{ left: 60, top: 95, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalName}</Text>
-          <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalDesignation}</Text>
+          <Text style={{ left: 60, top: 117, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props?.rowData?.additionalDesignation}</Text>
         </div>
         {/* <div style={{ marginTop: 10, fontSize: 10 }}>
           <Text style={{ left: 60, position: 'absolute', fontSize: 10 }}>Date:</Text>
