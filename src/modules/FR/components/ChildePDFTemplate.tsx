@@ -99,15 +99,15 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null; total:number}) => {
-  console.log(props, '√poprosp');
+const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; total:number}) => {
+  console.log(props.data, '√poprosp');
 
   const [workers, setWorkers] = useState<Child[] | null>(null);
   const [total, setTotal] = useState<number>(0);
   console.log(props.total, 'prop.ttt');
-
   console.log(workers, 'pop');
   useEffect(() => {
+    setWorkers(props.data);
     let tot = 0;
     workers?.map((i) => {
       tot += i.childSupport.amount;
@@ -116,21 +116,21 @@ const ChildePDFTemplate = (props:{divisionId:string|null;workerId:string|null; t
     console.log(tot, 'tot');
   }, [props]);
 
-  useEffect(() => {
-    console.log(props, 'props');
-    if (props.workerId) {
-      ChildrenServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
-    } else if (props.divisionId) {
-      ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
-    .then((res) => {
-      console.log(res);
-      setWorkers(res.data);
-    })
-      .catch((res) => {
-        console.log(res);
-      });
-    }
-  }, [props.total]);
+  // useEffect(() => {
+  //   console.log(props, 'props');
+  //   if (props.workerId) {
+  //     ChildrenServices.getById(props.workerId).then((res)=>res?.data && setWorkers([res?.data]));
+  //   } else if (props.divisionId) {
+  //     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE, division: props.divisionId })
+  //   .then((res) => {
+  //     console.log(res);
+  //     setWorkers(res.data);
+  //   })
+  //     .catch((res) => {
+  //       console.log(res);
+  //     });
+  //   }
+  // }, [props.total]);
 
   return (
     <Document>
