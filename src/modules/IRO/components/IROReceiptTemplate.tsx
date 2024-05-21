@@ -133,7 +133,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
       <Page size="A4" >
         <div>
           <>
-            <Image src="/3D Logo.png" style={styles.image} />
+            <Image src="/3D Logo 3.png" style={styles.image} />
             <Text style={styles.heading}> INDIAN EVANGELICAL TEAM </Text></>
           {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
           <Text style={styles.title}> INTERNAL RELEASE ORDER </Text>
@@ -253,22 +253,22 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
               return (<PDFTableRow key={index} height='50' ><PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'50%'}>
                 {String(index + 1)}
               </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                  {item.mainCategory}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.mainCategory}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                  {item.narration}
-                </PDFCell>
-                <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                {item.narration}
+              </PDFCell>
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
 
-                <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
-                  {String(item.requestedAmount)}
-                </PDFCell>
-                {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
+              <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                {String(item.requestedAmount)}
+              </PDFCell>
+              {/* <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100'}>
                     {item.sanctionedAmount?.toString()}
                   </PDFCell> */}
               </PDFTableRow>);
@@ -331,7 +331,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
                 height: 78,
                 width: 128,
               }}
-                src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
+              src={`data:${props.rowData?.signature?.officeManagerSignature?.type};base64, ${props.rowData?.signature?.officeManagerSignature?.base64} `} />
             </View>
 
           </View>
