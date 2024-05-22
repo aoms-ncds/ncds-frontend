@@ -565,7 +565,6 @@ const Particulars = () => {
             } else {
               ParticularersService.edit(newCategory).then((res) => {
                 setCategory((langs: any) => (langs === null ? null : langs?.map((lang: any): any => (lang._id === newCategory ? res.data : lang))));
-
                 setNewCategory({
                   name: '',
                   subcategory1: [{
@@ -740,7 +739,7 @@ const Particulars = () => {
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
-          <Container>Do you want to delete this sacntioned as per?</Container>
+          <Container>Do you want to delete this particular as per?</Container>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => {
