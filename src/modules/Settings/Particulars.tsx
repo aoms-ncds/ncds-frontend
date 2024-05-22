@@ -67,7 +67,6 @@ const Particulars = () => {
   //   }]
   // }]
   // })
-  console.log(newCategory, 'newCategory');
 
   const removeReason = (id: string) => {
     const snackbarId = enqueueSnackbar({
@@ -580,10 +579,17 @@ const Particulars = () => {
                     }],
                   }],
                 });
+                if (res.data) {
+                  window.location.reload();
+                }
               });
             }
+            // const newLanguage = category?.filter((cat: any) => {
+            //   return cat._id !== languageToDelete?._id;
+            // });
+            // setCategory(newLanguage);
             handleClose();
-            window.location.reload()
+            // window.location.reload()
           }}
         >
           <DialogActions>
