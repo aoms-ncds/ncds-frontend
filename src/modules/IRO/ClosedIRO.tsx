@@ -208,27 +208,45 @@ const ClosedIRO = () => {
             //   text: 'Reconciliation',
             //   icon: EditIcon,
             // },
-            ...(!props.row.closedIroPdf?
-              [
-                {
-                  id: 'Attach IRO receipt',
-                  text: 'Attach IRO reciept',
-                  icon: AttachFileIcon,
-                  onClick: () => {
-                    setOpenAttachReceipt(true);
-                    setIroData(props.row);
-                    if (props?.row.FR) {
-                      FRServices.getById(props.row.FR).then((res) => {
-                        setFrData(res.data);
-                        console.log(res.data, 'fr');
-                      });
-                    }
-                    setPrintIroLoading(true);
-                    setTimeout(() => {
-                      setPrintIroLoading(false);
-                    }, 2000);
-                  } }] :
-              []),
+            // ...(!props.row.closedIroPdf?
+            //   [
+            //     {
+            //       id: 'Attach IRO receipt',
+            //       text: 'Attach IRO reciept',
+            //       icon: AttachFileIcon,
+            //       onClick: () => {
+            //         setOpenAttachReceipt(true);
+            //         setIroData(props.row);
+            //         if (props?.row.FR) {
+            //           FRServices.getById(props.row.FR).then((res) => {
+            //             setFrData(res.data);
+            //             console.log(res.data, 'fr');
+            //           });
+            //         }
+            //         setPrintIroLoading(true);
+            //         setTimeout(() => {
+            //           setPrintIroLoading(false);
+            //         }, 2000);
+            //       } }] :
+            //   []),
+            {
+              id: 'Attach IRO receipt',
+              text: 'Attach IRO reciept',
+              icon: AttachFileIcon,
+              onClick: () => {
+                setOpenAttachReceipt(true);
+                setIroData(props.row);
+                if (props?.row.FR) {
+                  FRServices.getById(props.row.FR).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+              } },
             {
               id: 'Attachments',
               text: 'Attachments',

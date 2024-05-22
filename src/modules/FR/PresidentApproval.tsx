@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import DropdownButton from '../../components/DropDownButton';
@@ -43,19 +44,19 @@ const PresidentApproval = () => {
     remark: '',
     transactionId: '',
   });
-    const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
-      setSearchText(event.target.value);
-    };
+  const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
+    setSearchText(event.target.value);
+  };
 
-    const filteredRows = (FRRequests ?? []).filter((row) => {
-      if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+  const filteredRows = (FRRequests ?? []).filter((row) => {
+    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
       (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
-        return true;
-      }
-      return Object.values(row).some((value) =>
-        value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
-      );
-    });
+      return true;
+    }
+    return Object.values(row).some((value) =>
+      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
+    );
+  });
   useEffect(() => {
     FRServices.getAll({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT })
       .then((res) => {
@@ -381,20 +382,20 @@ const PresidentApproval = () => {
         permissions={['READ_FR']}
         granted={(
           <>
-            <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container padding={2}>
-              <Grid item xs={6}>
-          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchChange}
-            fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
-          />
-          {/* </Grid> */}
-        </Grid>
+                <Grid item xs={6}>
+                  {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+                  <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchText}
+                    onChange={handleSearchChange}
+                    fullWidth
+                    style={{ width: '25%', alignItems: 'start' }}
+                  />
+                  {/* </Grid> */}
+                </Grid>
                 <Grid item xs={6} sx={{ px: 2 }}>
                   <PermissionChecks
                     permissions={['PRESIDENT_ACCESS']}
@@ -446,36 +447,36 @@ const PresidentApproval = () => {
                     )}/>
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <Box  sx={{
-              'height': 400,
-              'width': '100%',
-              '& .super-app-theme--cell': {
-                backgroundColor: '#f1f5fa',
-                color: 'black',
-                fontWeight: '600',
-              },
-              '& .super-app.negative': {
-                backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .super-app.positive': {
-                backgroundColor: '#d47483',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .even': {
-                backgroundColor: '#DEDAFF', // Change to red for even rows
-              },
-              '& .odd': {
-                backgroundColor: '#fff', // Change to blue for odd rows
-              },
-            }}
-          >
+                  <Box sx={{
+                    'height': 400,
+                    'width': '100%',
+                    '& .super-app-theme--cell': {
+                      backgroundColor: '#f1f5fa',
+                      color: 'black',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.negative': {
+                      backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .super-app.positive': {
+                      backgroundColor: '#d47483',
+                      color: '#1a3e72',
+                      fontWeight: '600',
+                    },
+                    '& .even': {
+                      backgroundColor: '#DEDAFF', // Change to red for even rows
+                    },
+                    '& .odd': {
+                      backgroundColor: '#fff', // Change to blue for odd rows
+                    },
+                  }}
+                  >
 
-                  <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
-              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-            } />
+                    <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={FRRequests === null} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) =>
+                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    } />
                   </Box>
                 </Grid>
               </Grid>
