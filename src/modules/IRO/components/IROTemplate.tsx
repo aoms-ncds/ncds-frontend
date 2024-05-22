@@ -139,8 +139,10 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
   // console.log(formattedDate, 'formattedDate');
   '';
   useEffect(() => {
-
-  }, [totalAmount]);
+    totalAmount = 0;
+    NewTot = 0;
+    totalAmount2 = 0;
+  }, []);
 
   // const raiseddateString = printdetails?.IROdate;
   // const raiseddate = new Date(raiseddateString);
