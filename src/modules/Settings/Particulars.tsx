@@ -739,7 +739,7 @@ const Particulars = () => {
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
-          <Container>Do you want to delete this particular as per?</Container>
+          <Container>Do you want to delete this particular?</Container>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => {
