@@ -112,6 +112,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
   console.log(contentPerPage, 'contentPerPage');
 
   let totalAmount = 0;
+  let NewTot:any = 0;
   let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
@@ -119,7 +120,11 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
   const totalSacntion =props.fr?.particulars.forEach((e)=>{
     totalAmount2 += e?.sanctionedAmount !=undefined ? e?.sanctionedAmount : 0;
   });
-  const sanctionedAmount = totalAmount2;
+  NewTot += props?.fr?.sanctionedAmount !=undefined ? props?.fr?.sanctionedAmount: 0;
+  console.log(NewTot, 'eee');
+  console.log(totalAmount2, 'eee');
+
+  const sanctionedAmount = NewTot?? totalAmount2;
   let sanctionedAmountWords = '';
 
   if (typeof sanctionedAmount !== 'undefined') {
@@ -396,7 +401,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 <br /> {totalAmount as any}
               </PDFCell>
               <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-                <br />{totalAmount2 as any}
+                <br />{NewTot ?? totalAmount2}
               </PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
             </PDFTableRow>
