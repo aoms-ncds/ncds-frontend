@@ -231,7 +231,7 @@ const ClosedIRO = () => {
             //   []),
             {
               id: 'Attach IRO receipt',
-              text: 'Attach IRO reciept',
+              text: 'Regenerate IRO',
               icon: AttachFileIcon,
               onClick: () => {
                 setOpenAttachReceipt(true);
