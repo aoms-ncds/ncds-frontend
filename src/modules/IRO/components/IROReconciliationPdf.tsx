@@ -262,7 +262,7 @@ const IROReconciliationPdf = (props:{data:
         (row.supportStructure?.MUTDeduction ?? 0)
       ):0}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total}</Text>
+              <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
               <div style={styles.cellGrid}></div>
             </View>
           </>
