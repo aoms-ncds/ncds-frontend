@@ -55,6 +55,16 @@ declare global {
       name?:User;
       sign?:FileObject;
     };
+    additionalJuniorLeader?:{
+
+      name?:User;
+      sign?:FileObject;
+    };
+    additionalSeniorLeader?:{
+
+      name?:User;
+      sign?:FileObject;
+    };
     president?:{
       name?:User;
       sign?:FileObject;

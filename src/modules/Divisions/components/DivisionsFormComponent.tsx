@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-undef */
-import { Autocomplete, Button, Divider, FormControl, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Divider, FormControl, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import AddressForm from '../../../components/AddressForm';
 import FileUploader from '../../../components/FileUploader/FileUploader';
@@ -11,6 +11,8 @@ import UserServices from '../../User/extras/UserServices';
 import { enqueueSnackbar } from 'notistack';
 import { useParams } from 'react-router-dom';
 import LeaderDetailsService from '../../Settings/extras/LeaderDetailsService';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
@@ -18,12 +20,20 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const [showFileUploader3, setShowFileUploader3] = useState(false);
   const [showFileUploader4, setShowFileUploader4] = useState(false);
   const [showFileUploader5, setShowFileUploader5] = useState(false);
+
+  const [showFileUploaderJr, setShowFileUploaderJr] = useState(false);
+  const [showFileUploaderSr, setShowFileUploaderSr] = useState(false);
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedTime, setSelectedTime] = useState('');
+  const [newJr, setNewJr] = useState<boolean>(false);
+  const [newSr, setNewSr] = useState<boolean>(false);
 
   const [users, setUsers] = useState<User[] | null>(null);
   const { editID } = useParams();
+  console.log(newJr, 'jr');
+
   useEffect(() => {
+    e();
     if (editID) {
       UserServices.getDivisionUser(editID)
         .then((res) => {
@@ -48,7 +58,19 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         });
       });
   }, []);
+  console.log(props, 'pp');
+  useEffect(() => {
+    if (props.value.additionalJuniorLeader?.name !== undefined) {
+      setNewJr(true);
+    }
+    if (props.value.additionalSeniorLeader?.name !== undefined) {
+      setNewSr(true);
+    }
+  }, [props.value]);
 
+  const e =()=>{
+    console.log(props.value.additionalJuniorLeader?.name, 'dd');
+  };
   return (
     <>
       <Grid item xs={12}>
@@ -202,96 +224,138 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   </Button>
                 </Grid>
               </Grid><Grid item xs={12} md={4}>
-                <Grid item xs={12}>
-                  <FormControl variant="outlined" fullWidth>
-                    <UsersDropdown
+                {newJr ==false &&(
 
-                      users={users ?? []}
-                      value={props.value.seniorLeader?.name ?? null}
-                      onChange={(e, newValue) => {
-                        if (newValue) {
-                          props.onChange({
-                            ...props.value,
-                            seniorLeader: {
-                              ...props.value.seniorLeader,
-                              name: newValue,
-                            },
-                          });
-                        }
-                      }}
+                  <><Grid item xs={12}>
+                    <FormControl variant="outlined" fullWidth>
+                      <UsersDropdown
 
-                      disabled={props.action == 'view'}
-                      // label={'Junior Leader 1'}
-                      label={'Junior Leader 1'}
-                      required={false} />
-                  </FormControl>
-                </Grid>
+                        users={users ?? []}
+                        value={props.value.seniorLeader?.name ?? null}
+                        onChange={(e, newValue) => {
+                          if (newValue) {
+                            props.onChange({
+                              ...props.value,
+                              additionalJuniorLeader: { name: undefined, sign: undefined },
+                              seniorLeader: {
+                                ...props.value.seniorLeader,
+                                name: newValue,
+                              },
+                            });
+                          }
+                        } }
 
-                {/* <Autocomplete
-                    options={users ?? []}
+                        disabled={props.action == 'view'}
+                        // label={'Junior Leader 1'}
+                        label={'Junior Leader 1'}
+                        required={false} />
+                    </FormControl>
+                  </Grid><Grid item xs={12}>
+                    <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                        E-signature
+                    </Button>
+                  </Grid><IconButton onClick={() => setNewJr(true)} aria-label="add" size="small">
+                    <AddIcon fontSize="inherit" /> <small style={{ fontSize: 11 }}>Add Custom</small>
+                  </IconButton></>
+                )}
 
-                    value={props.value.seniorLeader?.name ?? null}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
+                {newJr &&(
+
+                  <><TextField
+                    id="outlined-basic"
+                    sx={{ width: '23vw' }}
+
+                    value={props.value.additionalJuniorLeader?.name ?? null}
+                    onChange={(e) => {
+                      if (e) {
                         props.onChange({
                           ...props.value,
-                          seniorLeader: {
-                            ...props.value.seniorLeader,
-                            name: newValue,
+                          seniorLeader: { name: undefined, sign: undefined },
+                          additionalJuniorLeader: {
+                            ...props.value.additionalJuniorLeader,
+                            name: e.target.value as unknown as User,
                           },
                         });
                       }
-                    }}
-                    getOptionLabel={(user) => user.basicDetails.firstName}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="J"
-                        variant="standard"
-                        required
-                        sx={{
-                          background: '#f4f5f4',
-                          borderRadius: 50,
-                          padding: 2,
-                        }}
-                      />
-                    )}
-                  /> */}
-                <Grid item xs={12}>
-                  <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                    E-signature
-                  </Button>
-                </Grid>
+                    } }
+                    label=" Custom Junior Leader 1"
+                    InputLabelProps={{ shrink: true }}
+                    disabled={props.action === 'view'}
+                    variant="outlined" />
+                  <IconButton onClick={()=>setNewJr(false)} aria-label="delete" size="small">
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                  <br /><Button variant="contained" onClick={() => setShowFileUploaderJr(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                      E-signature
+                  </Button></>
+                )}
               </Grid>
               <Grid item xs={12} md={4}>
-                <Grid item xs={12}>
-                  <FormControl variant="outlined" fullWidth>
-                    <UsersDropdown
-                      users={users ?? []}
-                      disabled={props.action == 'view'}
-                      value={props.value.juniorLeader?.name ?? null}
-                      onChange={(e, newValue) => {
-                        if (newValue) {
-                          props.onChange({
-                            ...props.value,
-                            juniorLeader: {
-                              ...props.value.juniorLeader,
-                              name: newValue,
-                            },
-                          });
-                        }
-                      }}
-                      // label={'Junior Leader 2'}
-                      label={'Junior Leader 2'}
-                      required={false}
-                    />
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                    E-signature
+                {newSr ==false &&(
+
+                  <><Grid item xs={12}>
+                    <FormControl variant="outlined" fullWidth>
+                      <UsersDropdown
+                        users={users ?? []}
+                        disabled={props.action == 'view'}
+                        value={props.value.juniorLeader?.name ?? null}
+                        onChange={(e, newValue) => {
+                          if (newValue) {
+                            props.onChange({
+                              ...props.value,
+                              additionalSeniorLeader: { name: undefined, sign: undefined },
+                              juniorLeader: {
+                                ...props.value.juniorLeader,
+                                name: newValue,
+                              },
+                            });
+                          }
+                        } }
+                        // label={'Junior Leader 2'}
+                        label={'Junior Leader 2'}
+                        required={false} />
+                    </FormControl>
+                  </Grid><Grid item xs={12}>
+                    <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                        E-signature
+                    </Button>
+                  </Grid><IconButton onClick={() => setNewSr(true)} aria-label="add" size="small">
+                    <AddIcon fontSize="inherit" />  <small style={{ fontSize: 11 }}>Add Custom</small>
+                  </IconButton>
+                  </>
+                )}
+                {newSr && (
+                  <><TextField
+                    sx={{ width: '23vw' }}
+                    id="outlined-basic"
+                    value={props.value.additionalSeniorLeader?.name ?? null}
+                    onChange={(e) => {
+                      if (e) {
+                        props.onChange({
+                          ...props.value,
+                          juniorLeader: { name: undefined, sign: undefined },
+                          additionalSeniorLeader: {
+                            ...props.value.additionalSeniorLeader,
+                            name: e.target.value as unknown as User,
+                          },
+                        });
+                      }
+                    } }
+                    label=" Custom Junior Leader 2"
+                    InputLabelProps={{ shrink: true }}
+                    disabled={props.action === 'view'}
+                    variant="outlined" />
+                  <IconButton onClick={()=>setNewSr(false)} aria-label="delete" size="small">
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+
+                  <br /><Button variant="contained" onClick={() => setShowFileUploaderSr(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                      E-signature
                   </Button>
-                </Grid>
+                  </>
+
+                )}
+
               </Grid>
             </>
 
@@ -704,6 +768,119 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               ...props.value,
               officeManager: {
                 ...props.value.officeManager,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+
+      <FileUploader
+        title=" Custom sign 1 "
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderJr}
+        onClose={() => setShowFileUploaderJr(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.additionalJuniorLeader?.sign ? [props.value.additionalJuniorLeader?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              additionalJuniorLeader: {
+                ...props.value.additionalJuniorLeader,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            additionalJuniorLeader: {
+              ...props.value.additionalJuniorLeader,
+              sign: props.value.additionalJuniorLeader?.sign ?
+                {
+                  ...props.value.additionalJuniorLeader?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              additionalJuniorLeader: {
+                ...props.value.additionalJuniorLeader,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+
+
+      <FileUploader
+        title="Custom sign 2 "
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderSr}
+        onClose={() => setShowFileUploaderSr(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.additionalSeniorLeader?.sign ? [props.value.additionalSeniorLeader?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              additionalSeniorLeader: {
+                ...props.value.additionalSeniorLeader,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            additionalSeniorLeader: {
+              ...props.value.additionalSeniorLeader,
+              sign: props.value.additionalSeniorLeader?.sign ?
+                {
+                  ...props.value.additionalSeniorLeader?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              additionalSeniorLeader: {
+                ...props.value.additionalSeniorLeader,
                 sign: undefined,
               },
             });
