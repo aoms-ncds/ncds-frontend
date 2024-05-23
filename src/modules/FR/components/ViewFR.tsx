@@ -24,6 +24,7 @@ import {
   DialogContent,
   Divider,
   Typography,
+  Alert,
   // Checkbox,
   // FormControlLabel,
 } from '@mui/material';
@@ -65,6 +66,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   });
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showName, setShowName] = useState(false);
+  const [Err, setErr] = useState(false);
 
   const [addSignature, toggleAddSignature] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -159,22 +161,28 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
   const handleClick = (e: any) => {
     e.preventDefault();
-
-    if (props.onSubmit) {
-      {
-        const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
-        if (props.onSubmit) {
-          const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_APPROVED }; // Create a new object with updated status
-          props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+    if (props.value?.particulars?.[0].sanctionedAsPer != null) {
+      if (props.onSubmit) {
+        {
+          const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
+          if (props.onSubmit) {
+            const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_APPROVED }; // Create a new object with updated status
+            props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+          }
+          setTimeout(() => {
+            closeSnackbar(approvalSnack);
+            const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
+            setTimeout(() => closeSnackbar(approvedSnack), 500);
+          }, 500);
         }
-        setTimeout(() => {
-          closeSnackbar(approvalSnack);
-          const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
-          setTimeout(() => closeSnackbar(approvedSnack), 500);
-        }, 500);
-      }
-    } // Invoke props.onSubmit with the value as the argument
-    navigate('/fr/manage');
+      } // Invoke props.onSubmit with the value as the argument
+      navigate('/fr/manage');
+    } else {
+      setTimeout(() => {
+        setErr(false);
+      }, 5000);
+      setErr(true);
+    }
   };
   const handleClose = () => {
     setOpen(false);
@@ -489,6 +497,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={props.value.sanctionedBank || ''}
+                        required
                         disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                         onChange={(e) =>
                           props.onChange({
@@ -531,6 +540,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       <Select
                         labelId="sourceOfAccount"
                         label="Source Of Account"
+                        required
                         value={props.value.sourceOfAccount || ''}
                         disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                         onChange={(e) =>
@@ -805,22 +815,29 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             variant="contained"
                             color="success"
                             onClick={() => {
-                              const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
-                              if (props.onSubmit) {
-                                const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
-                                props.onSubmit(updatedValue);
-                              }
+                              if (props.value.sanctionedAsPer==null) {
+                                setErr(true);
+                              } else {
+                                const processingSnack = enqueueSnackbar({ message: 'Submitting FR To Accounts', variant: 'info' });
+                                if (props.onSubmit) {
+                                  const updatedValue = { ...props.value, status: FRLifeCycleStates.WAITING_FOR_ACCOUNTS };
+                                  props.onSubmit(updatedValue);
+                                }
 
-                              setTimeout(() => {
-                                closeSnackbar(processingSnack);
-                                const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                                setTimeout(() => closeSnackbar(processedSnack), 500);
-                              }, 500);
-                              navigate('/fr/Approve');
-                            }}
+                                setTimeout(() => {
+                                  closeSnackbar(processingSnack);
+                                  const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                                  setTimeout(() => closeSnackbar(processedSnack), 500);
+                                }, 500);
+                                navigate('/fr/Approve');
+                              }
+                            }
+                            }
                           >
                             verify
-                          </Button></>
+                          </Button>
+
+                        </>
                       }
                     />
                     //           ) : props.action === 'view' && FRstatus != 'WAITING_FOR_ACCOUNTS' && FRstatus!='FR_APPROVED' ? (
@@ -855,10 +872,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                 </div>
               </Grid>
 
-
             </Grid>
 
           </form>
+          <br />
+          {Err && <Alert sx={{ width: '30vw' }} variant="filled" severity="error">
+          Sanction as per require for each particular   !
+          </Alert>}
+
         </CardContent>
       </Container>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
@@ -1135,7 +1156,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   label="Sanctioned Amount"
                   type={'number'}
                   value={newParticular.sanctionedAmount ?? total}
-                  required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  required
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
                   disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
@@ -1180,10 +1201,13 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     }));
                   }
                 }}
+
                 renderInput={(params) => <TextField {...params}
-                  label="Sanctioned As Per"
-                // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  label="Sanctioned As Per*"
+                  // required
+                  // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                 />}
+
                 fullWidth
               />
             </Grid>
