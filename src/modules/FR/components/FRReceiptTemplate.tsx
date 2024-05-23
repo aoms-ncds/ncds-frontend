@@ -119,9 +119,10 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props.rowData?.additionalSignature, 'pro');
+  console.log(props.rowData, 'pro');
 
 
+  const additionalJr = props.rowData?.division?.details.additionalJuniorLeader?.name;
   let totalAmount=0;
   return (
     <Document>
@@ -233,12 +234,12 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.type };base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64 ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
             width: 50,
           }}
-          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `} />
+          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
           {props.rowData?.specialsanction == 'Yes' ? (
             <Image style={{
               left: 60,
@@ -270,13 +271,13 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
 
           <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName}</Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?? props.rowData?.division?.details.additionalJuniorLeader?.name as any} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName ?? ''}</Text>
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName ?? props.rowData?.division?.details.additionalSeniorLeader?.name as any} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName}</Text>
           {props.rowData?.specialsanction == 'Yes' ? (
             <>
               <Text style={{ left: 60, top: 100, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
-              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName}</Text>
+              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName } {props.rowData?.division?.details.president?.name?.basicDetails?.lastName}</Text>
 
               <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President Approved Date :</Text>
               <Text style={{ left: 165, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
