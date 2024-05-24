@@ -1,0 +1,208 @@
+import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
+import { useEffect, useState } from 'react';
+import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
+import WorkersServices from '../../Workers/extras/WorkersServices';
+
+Font.register({
+  family: 'Teko',
+  src: 'https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap',
+});
+
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: 'white',
+  },
+  image: {
+    position: 'absolute',
+    left: 385,
+    height: 50,
+    width: 50,
+    marginTop: 15,
+  },
+  title: {
+    marginTop: 65,
+    fontSize: 14,
+    position: 'absolute',
+    left: 270,
+    color: 'darkblue',
+  },
+
+  month: {
+    marginTop: 80,
+    fontSize: 12,
+    position: 'absolute',
+    left: 350,
+    color: 'black',
+  },
+  IRONo: {
+    marginTop: 90,
+    fontSize: 12,
+    position: 'absolute',
+    left: 365,
+    color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  line: {
+    position: 'absolute',
+    left: '20',
+    right: 22,
+    top: 113,
+    borderBottom: 1,
+    borderColor: 'black',
+  },
+  tableContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 114, // Adjust this value to set the table's position
+    width: 800,
+    flex: 1, // This will make the table fill the width of the page
+    flexShrink: 0,
+  },
+  tableRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#000',
+    borderBottomStyle: 'solid',
+    alignItems: 'center',
+    height: 50,
+    left: 20,
+  },
+  tableHead: {
+    flex: 1,
+    fontSize: 12,
+    padding: 2,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  tableHeadCopy: {
+    flex: 1,
+    fontSize: 12,
+    padding: 2,
+    // textAlign: 'justify',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+    // paddingLeft: '60vh',
+  },
+  tableCell: {
+    flex: 1,
+    fontSize: 12,
+    padding: 2,
+    textAlign: 'center',
+  },
+  headGrid: {
+    borderRight: 1,
+    height: 30,
+    // paddingRight: 50,
+  },
+  cellGrid: {
+    borderRight: 1,
+    height: 50,
+  },
+});
+
+// Create Document Component
+const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
+  const [workers, setWorkers] = useState<IWorker[] | null>(null);
+  const [purpose, setPurpose] = useState('Division');
+  console.log(props?.data?.map((e)=>e.childOf?.division?.details?.name), 'rte');
+  const [total, setTotal] = useState<number>(0);
+  console.log(props.total, 'prop.ttt');
+  console.log(workers, 'pop');
+  useEffect(() => {
+    let tot = 0;
+    props.data?.map((i) => {
+      tot += i.childSupport?.amount;
+      setTotal(tot);
+    });
+    console.log(tot, 'tot');
+  }, [props]);
+  return (
+    <Document>
+      <Page size={'A4'} style={styles.page} orientation='landscape'>
+        <div>
+          <Image src="/3D Logo 3.png" style={styles.image} />
+          <Text style={styles.title}>
+            {'CHILD SUPPORT SIGNATURE SHEET'}
+          </Text>
+          {/* <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
+          <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
+          {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
+        </div>
+        <View style={styles.line} />
+        <View style={styles.tableContainer} >
+          <View style={{ ...styles.tableRow, height: 30 }} key={0}>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>Sl No.</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>Child Code</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>First Name</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>Last Name</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>Division</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}>Net Amount</Text>
+            <div style={styles.headGrid}></div>
+            <Text style={styles.tableHead}></Text>
+            {/* <div style={styles.headGrid}></div> */}
+            <Text style={styles.tableHeadCopy}>Signature</Text>
+            <div style={styles.headGrid}></div>
+          </View>
+
+          {props.data?.map((row:any, index) => (<>
+            <View style={styles.tableRow} key={row._id}>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{index+1}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row.childCode}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row.firstName}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row.lastName}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row.childSupport?.amount ?? 0}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}></Text>
+              {/* <div style={styles.cellGrid}></div> */}
+              <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+              <div style={styles.cellGrid}></div>
+            </View>
+          </>
+          ))}
+          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1} >
+            <div style={styles.headGrid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ flex: 2,
+              fontSize: 12,
+              padding: 2,
+              textAlign: 'center', fontWeight: 'bold' }}>Total Net Amount</Text>
+            <div style={{ ...styles.headGrid }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{Number.isNaN(total) ? 0 : total}</Text>
+            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
+            <div style={styles.headGrid}></div>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+
+export default ChildeSupportSignSheet;
