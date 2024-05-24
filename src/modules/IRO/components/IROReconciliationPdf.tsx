@@ -77,6 +77,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
+  tableHeadCoppy: {
+    flex: 1,
+    fontSize: 12,
+    padding: 2,
+    // textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+    paddingLeft: 8,
+  },
   tableCell: {
     flex: 1,
     fontSize: 12,
@@ -86,10 +95,31 @@ const styles = StyleSheet.create({
   headGrid: {
     borderRight: 1,
     height: 30,
+    marginRight: 5,
+  },
+  headGridCopyy: {
+    borderRight: 1,
+    height: 30,
+    marginLeft: 5,
   },
   cellGrid: {
     borderRight: 1,
     height: 50,
+  },
+  cellGridCopy: {
+    borderRight: 1,
+    height: 50,
+    marginRight: 50,
+  },
+  cellGridCopy1: {
+    borderRight: 1,
+    height: 30,
+    marginRight: 44,
+  },
+  cellGridCopy2: {
+    borderRight: 1,
+    height: 30,
+    marginLeft: 5,
   },
 });
 
@@ -230,9 +260,9 @@ const IROReconciliationPdf = (props:{data:
             <Text style={styles.tableHead}>Sub-Division</Text>
             <div style={styles.headGrid}></div>
             <Text style={styles.tableHead}>Net Amount</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Signature</Text>
-            <div style={styles.headGrid}></div>
+            <div style={styles.cellGridCopy1}></div>
+            <Text style={styles.tableHeadCoppy}>Signature</Text>
+            <div style={styles.cellGridCopy2}></div>
           </View>
 
           {workers?.map((row, index) => (<>
@@ -261,7 +291,7 @@ const IROReconciliationPdf = (props:{data:
         (row.supportStructure?.impactDeduction ?? 0) +
         (row.supportStructure?.MUTDeduction ?? 0)
       ):0}</Text>
-              <div style={styles.cellGrid}></div>
+              <div style={styles.cellGridCopy}></div>
               <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
               <div style={styles.cellGrid}></div>
             </View>
@@ -288,7 +318,7 @@ const IROReconciliationPdf = (props:{data:
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total}</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
-            <div style={styles.headGrid}></div>
+            <div style={styles.headGridCopyy}></div>
           </View>
         </View>
       </Page>

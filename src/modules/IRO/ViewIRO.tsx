@@ -257,6 +257,7 @@ const ViewIRO = () => {
       total += particular?.sanctionedAmount;
     }
   });
+  console.log(IRO, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -288,7 +289,7 @@ const ViewIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) => setIRO(res.data)); // TODO: Implement REST API Call
+    IROServices.getById(iroID).then((res) => console.log(res.data, 'daa')); // TODO: Implement REST API Call
   }, [iroID]);
   return (
     <CommonPageLayout title="View And Manage IRO">
@@ -336,7 +337,7 @@ const ViewIRO = () => {
                             <Autocomplete
                               value={IRO?.purposeWorker}
                               options={[]}
-                              getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
+                              getOptionLabel={(worker) => `${worker?.basicDetails.firstName} ${worker?.basicDetails?.lastName}`}
                               onChange={() => { }}
                               //   if (selectedWorker) {
                               //    setIRO({

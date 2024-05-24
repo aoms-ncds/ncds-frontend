@@ -20,6 +20,7 @@ import ChildrenServices from '../Workers/extras/ChildrenServices';
 import ChildePDFTemplate from './components/ChildePDFTemplate';
 import { AnyARecord } from 'dns';
 import { useNavigate } from 'react-router-dom';
+import ChildeSupportSignSheet from './components/ChildeSupportSignSheet';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -550,7 +551,6 @@ const ChildeSupportPage = () => {
                     <PDFDownloadLink
                       document={<ChildePDFTemplate total={total} divisionId={pdfProps.divisionId} data={childList} />}
                       fileName="ChildeSupport.pdf"
-
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob, loading }) => (
@@ -610,6 +610,51 @@ const ChildeSupportPage = () => {
                   <br />
                   <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography>
                 </div>
+                <Grid item xs={12}>
+                  <div style={{ float: 'right' }}>
+                    {(selectedWorker || division) && (
+                      <PDFDownloadLink
+                        document={<ChildeSupportSignSheet total={total} data={childList} />}
+                        fileName="ChildeSupport.pdf"
+                        style={{ textDecoration: 'none', color: 'blue' }}
+                      >
+                        {({ blob, loading }) => (
+                          <> <Button
+
+                            // endIcon={<AttachIcon />}
+                            variant="contained"
+                            color="info"
+                            onClick={async () => {
+                              if (blob) {
+                                if (selectedWorker || division) {
+                                  const file = (blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
+                                  file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                                  // setFileObj(res.data); console.log(res.data, 'uploaded');
+                                    enqueueSnackbar({
+                                      message: 'File Downloaded',
+                                      variant: 'success',
+                                    });
+                                  });
+                                }
+                              }
+                            }} >
+                            {loading ? 'Loading...' : 'Download sign sheet'}
+                          </Button>
+                          </>
+                        )}
+                      </PDFDownloadLink>
+                    )}
+                    {/* <Button
+                    variant="contained"
+                    color="info"
+                    onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                      setFileObj(res.data); console.log(res.data, 'uploaded');
+                    })}
+                  >
+                     Upload File
+                  </Button> */}
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

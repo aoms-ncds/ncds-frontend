@@ -110,7 +110,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
     setWorkers(props.data);
     let tot = 0;
     workers?.map((i) => {
-      tot += i.childSupport.amount;
+      tot += i.childSupport?.amount;
       setTotal(tot);
     });
     console.log(tot, 'tot');
@@ -192,7 +192,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.gender}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.childSupport.amount}</Text>
+              <Text style={styles.tableCell}>{row.childSupport?.amount}</Text>
               <div style={styles.grid}></div>
             </View>
           </>
