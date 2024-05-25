@@ -26,14 +26,15 @@ export default {
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       IRODate: moment(data.IRODate),
+      // workerCode: ,
       releaseAmount: data.releaseAmount ? {
         ...data.releaseAmount,
         transferredDate: moment(data.releaseAmount?.transferredDate),
       }:undefined,
       purposeWorker: {
-        ...data.createdBy,
+        ...data.purposeWorker,
         basicDetails: {
-          ...data.createdBy.basicDetails,
+          ...data.purposeWorker.basicDetails,
           // gender: data.createdBy.basicDetails.gender as Gender|undefined,
           // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
           dateOfBirth: moment(data.createdBy.basicDetails.dateOfBirth),

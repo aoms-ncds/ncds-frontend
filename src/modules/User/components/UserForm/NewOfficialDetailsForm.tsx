@@ -85,7 +85,6 @@ const NewOfficialDetailsForm = (
     }
     // console.log(props.value.divisionHistory);
   }, [newDiv]);
- 
   useEffect(() => {
     ReasonforDeactivationService.getAll().then((res) => {
       setReason(res.data);

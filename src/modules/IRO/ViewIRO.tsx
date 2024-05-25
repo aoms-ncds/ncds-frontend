@@ -57,6 +57,7 @@ const ViewIRO = () => {
     IROno: '',
     IRODate: moment(),
     purpose: 'Division',
+    // purposeWorker: {},
     status: FRLifeCycleStates.FR_APPROVED,
     kind: 'IRO',
     sanctionedAmount: 0,
@@ -289,7 +290,9 @@ const ViewIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) => setIRO(res.data)); // TODO: Implement REST API Call
+    IROServices.getById(iroID).then((res) =>{
+      setIRO(res.data);
+    }); // TODO: Implement REST API Call
   }, [iroID]);
   return (
     <CommonPageLayout title="View And Manage IRO">
@@ -338,14 +341,15 @@ const ViewIRO = () => {
                               value={IRO?.purposeWorker}
                               options={[]}
                               getOptionLabel={(worker) => `${worker?.basicDetails.firstName} ${worker?.basicDetails?.lastName}`}
-                              onChange={() => { }}
-                              //   if (selectedWorker) {
-                              //    setIRO({
-                              //       ...IRO,
-                              //       purposeWorker: selectedWorker,
-                              //     });
-                              //   }
-                              // }}
+                              onChange={(selectedWorker) => {
+                                // if (selectedWorker) {
+                                //   setIRO({
+                                //     ...IRO,
+                                //     purposeWorker: selectedWorker,
+                                //   });
+                                // }
+                              }}
+                              //  }}
                               renderInput={(params) => <TextField {...params} label="Choose Worker" />}
                               fullWidth
                               disabled
