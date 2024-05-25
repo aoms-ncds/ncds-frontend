@@ -289,7 +289,7 @@ const ViewIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) => console.log(res.data, 'daa')); // TODO: Implement REST API Call
+    IROServices.getById(iroID).then((res) => setIRO(res.data)); // TODO: Implement REST API Call
   }, [iroID]);
   return (
     <CommonPageLayout title="View And Manage IRO">
