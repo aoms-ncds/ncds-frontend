@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Autocomplete, Button, Checkbox, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
@@ -341,9 +341,9 @@ const NewOfficialDetailsForm = (
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
-         options={reason ?? null}
-         disabled={props.value.status != 'Left'}
-         value={props.value.reasonForDeactivation as unknown as IReason}         
+          options={reason ?? null}
+          disabled={props.value.status != 'Left'}
+          value={props.value.reasonForDeactivation as unknown as IReason}
           getOptionLabel={(option) => option.reason ?? ''}
           onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason as unknown as DeactivationReason })}
           renderInput={(params) => <TextField {...params} label="Reason for Deactivation" variant={props.options?.textField.variant} />}
@@ -352,7 +352,7 @@ const NewOfficialDetailsForm = (
         {/* <Autocomplete
           options={reason ?? null}
           disabled={props.value.status != 'Left'}
-          value={props.value.reasonForDeactivation as unknown as IReason}         
+          value={props.value.reasonForDeactivation as unknown as IReason}
            getOptionLabel={(option) => option.reason ?? ''}
            onChange={(e, selectedReason) => props.onChange({ ...props.value, reasonForDeactivation: selectedReason as unknown as DeactivationReason })}
           renderInput={(params) => <TextField {...params} label="Reason for Deactivation"  />} /> */}

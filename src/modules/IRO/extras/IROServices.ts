@@ -34,10 +34,10 @@ export default {
       purposeWorker: {
         ...data.purposeWorker,
         basicDetails: {
-          ...data.purposeWorker.basicDetails,
+          ...data.purposeWorker?.basicDetails,
           // gender: data.createdBy.basicDetails.gender as Gender|undefined,
           // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
-          dateOfBirth: moment(data.createdBy.basicDetails.dateOfBirth),
+          dateOfBirth: moment(data.createdBy?.basicDetails.dateOfBirth),
         },
         officialDetails: {
           ...data.createdBy.officialDetails,
