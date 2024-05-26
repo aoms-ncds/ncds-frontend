@@ -243,16 +243,21 @@ const EditIRO = () => {
     attachment: [],
     sanctionedAsPer: '',
   });
+  interface AsPer{
+    asPer:[];
+  }
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
   const [selectedSubCategory2, setSelectedSubCategory2] = useState<SubCategory2 | null>(null);
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
-  const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
+  const [sanctionedAsPer, setSanctionedAsPer] = useState<AsPer[]>([]);
+  let asPer : any = [];
+
   useEffect(() => {
     const ddata = SanctionedAsPerService.getAll().then((res) => {
-      console.log(ddata, 'fdfd');
+      asPer = res.data.map((e:AsPer)=>e.asPer ); setSanctionedAsPer(asPer);
 
-      setSanctionedAsPer(res.data);
+      // setSanctionedAsPer(res.data);
     });
   }, []);
   const [open, setOpen] = useState(false);
@@ -1105,14 +1110,14 @@ const EditIRO = () => {
               </Grid>
               <br />
               <Autocomplete
-                value={IRO?.sanctionedAsPer as ISanctionedAsPer}
+                value={IRO?.sanctionedAsPer as unknown as AsPer}
                 options={sanctionedAsPer ?? []}
-                getOptionLabel={(option) => option.asPer ?? ''}
+                getOptionLabel={(option:any) => option ?? ''}
                 onChange={(_e, selectedSanction) => {
                   if (selectedSanction) {
                     setNewParticular((asper: any) => ({
                       ...asper,
-                      sanctionedAsPer: selectedSanction?.asPer,
+                      sanctionedAsPer: selectedSanction,
                     }));
                   }
                 }}

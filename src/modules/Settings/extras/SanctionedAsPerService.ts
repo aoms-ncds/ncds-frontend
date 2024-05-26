@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
 
   getAll: () =>
-    getStandardResponse<ISanctionedAsPer[]>(
+    getStandardResponse<[]>(
       axios.get('/settings/sanctionedAsPer/', { headers: { ...getAuthHeader() } }),
     ),
   create: (reason: CreatableSanctionedAsPer) => getStandardResponse<ISanctionedAsPer>(
