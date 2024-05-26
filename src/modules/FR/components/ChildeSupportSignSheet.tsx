@@ -106,11 +106,15 @@ const styles = StyleSheet.create({
 // Create Document Component
 const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
+  const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const d = new Date();
+  const name = month[d.getMonth()];
   const [purpose, setPurpose] = useState('Division');
-  console.log(props?.data?.map((e)=>e.childOf?.division?.details?.name), 'rte');
+  console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
-  console.log(props.total, 'prop.ttt');
-  console.log(workers, 'pop');
+  const div= props?.data?.map((e:any)=>e.division?.details?.name);
+  console.log(div?.[0], 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
@@ -123,12 +127,13 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
     <Document>
       <Page size={'A4'} style={styles.page} orientation='landscape'>
         <div>
+
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {'CHILD SUPPORT SIGNATURE SHEET'}
+            {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`}
           </Text>
-          {/* <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
-          <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
+          <Text style={styles.month}>{`For the Month of ${name}`}</Text>
+          {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
         <View style={styles.line} />
@@ -166,7 +171,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
               <div style={styles.cellGrid}></div>
               <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.childSupport?.amount ?? 0}</Text>
+              <Text style={styles.tableCell}>{row.childSupport?.amount != 0 ? row.childSupport?.amount : ''}</Text>
               <div style={styles.cellGrid}></div>
               <Text style={styles.tableCell}></Text>
               {/* <div style={styles.cellGrid}></div> */}

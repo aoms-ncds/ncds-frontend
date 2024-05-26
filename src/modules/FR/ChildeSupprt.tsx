@@ -319,7 +319,7 @@ const ChildeSupportPage = () => {
       cellClassName: 'row-current',
       headerAlign: 'center',
       renderHeader: () => <b>{'CEA Amount'}</b>,
-      valueGetter: (params) => params.row.childSupport?.amount,
+      valueGetter: (params) => params.row.childSupport?.amount != 0 ? params.row.childSupport?.amount : '',
     },
     // {
     //   field: 'supportEnabled',
