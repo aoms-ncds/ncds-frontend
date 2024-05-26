@@ -204,7 +204,6 @@ useEffect(() => {
 
 const sentBack = (() => {
   setReasonDialog(true);
-  console.log('fdfd');
   const rejectionSnack = enqueueSnackbar({ message: 'Sending Back FR', variant: 'info' });
   if (props.onSubmit) {
     const updatedValue = { ...props.value, status: FRLifeCycleStates.FR_SEND_BACK, reasonForSentBack: reasonForSentBack ?? '' };
