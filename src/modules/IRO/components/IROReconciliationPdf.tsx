@@ -88,9 +88,11 @@ const styles = StyleSheet.create({
   },
   tableCell: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 14,
     padding: 2,
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   headGrid: {
     borderRight: 1,
@@ -315,7 +317,7 @@ const IROReconciliationPdf = (props:{data:
               padding: 2,
               textAlign: 'center', fontWeight: 'bold' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total}</Text>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold', fontSize: 16 }}>{total}</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
             <div style={styles.headGridCopyy}></div>

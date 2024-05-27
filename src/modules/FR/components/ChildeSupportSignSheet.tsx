@@ -88,9 +88,11 @@ const styles = StyleSheet.create({
   },
   tableCell: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 14,
     padding: 2,
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
   },
   headGrid: {
     borderRight: 1,
@@ -196,9 +198,9 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
             <Text style={{ flex: 2,
               fontSize: 12,
               padding: 2,
-              textAlign: 'center', fontWeight: 'bold' }}>Total Net Amount</Text>
+              textAlign: 'center', fontWeight: 'bold', fontFamily: 'Oswald' }}>Total Net Amount</Text>
             <div style={{ ...styles.headGrid }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{Number.isNaN(total) ? 0 : total}</Text>
+            <Text style={{ ...styles.tableCell, fontWeight: 'ultrabold', fontFamily: 'Oswald', fontSize: 16 }} >{Number.isNaN(total) ? 0 : total}</Text>
             <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
             <div style={styles.headGrid}></div>

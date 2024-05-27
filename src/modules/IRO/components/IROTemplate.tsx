@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Avatar } from '@mui/material';
 import { PDFCell, PDFTable, PDFTableHeader, PDFTableRow } from './PDFTable';
 import { Page, Text, View, Document, StyleSheet, Font, Image } from '@react-pdf/renderer';
@@ -358,7 +359,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               </PDFCell>
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
-                {`${item.mainCategory} > ${item.subCategory1} > ${item.subCategory2} > ${item.subCategory3}`}
+                {`${item.mainCategory} > ${item.subCategory1 != 'Select' ? item.subCategory1 : ''} > ${item.subCategory2 != 'Select' ? item.subCategory2: ''} > ${item.subCategory3 != 'Select' ? item.subCategory3 : ''}`}
               </PDFCell>
 
               <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
