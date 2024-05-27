@@ -252,7 +252,7 @@ const ChildeSupportPage = () => {
         ].filter((action) => action !== false) as JSX.Element[],
     },
     // eslint-disable-next-line max-len
-    { field: 'childeCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Childe Code'}</b>, valueGetter: (params) => params.row?.childCode, align: 'center', headerAlign: 'center' },
+    { field: 'childeCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Child Code'}</b>, valueGetter: (params) => params.row?.childCode, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
       width: 120,
@@ -699,13 +699,14 @@ const ChildeSupportPage = () => {
                 loading={childList === null}
                 columnGroupingModel={columnGroupingModel}
                 experimentalFeatures={{ columnGrouping: true }}
-                slots={{
-                  footer: CustomFooter,
-                }}
+                // slots={{
+                //   footer: CustomFooter,
+                // }}
               // getRowClassName={(params) =>
               //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
               // }
               /></Box>
+            <CustomFooter/>
           </Grid>
         </Grid>
       </Card>

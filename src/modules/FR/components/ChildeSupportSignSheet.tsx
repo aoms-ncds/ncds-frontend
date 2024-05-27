@@ -111,17 +111,17 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
   const d = new Date();
   const name = month[d.getMonth()];
   const [purpose, setPurpose] = useState('Division');
-  console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
+  // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
   const div= props?.data?.map((e:any)=>e.division?.details?.name);
-  console.log(div?.[0], 'pop');
+  // console.log(div?.[0], 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
       tot += i.childSupport?.amount;
       setTotal(tot);
     });
-    console.log(tot, 'tot');
+    // console.log(tot, 'tot');
   }, [props]);
   return (
     <Document>

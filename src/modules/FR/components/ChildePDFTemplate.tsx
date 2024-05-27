@@ -104,8 +104,8 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
 
   const [workers, setWorkers] = useState<Child[] | null>(null);
   const [total, setTotal] = useState<number>(0);
-  console.log(props.total, 'prop.ttt');
-  console.log(workers, 'pop');
+  // console.log(props.total, 'prop.ttt');
+  // console.log(workers, 'pop');
   useEffect(() => {
     setWorkers(props.data);
     let tot = 0;
@@ -113,7 +113,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
       tot += i.childSupport?.amount;
       setTotal(tot);
     });
-    console.log(tot, 'tot');
+    // console.log(tot, 'tot');
   }, [props]);
 
   // useEffect(() => {
