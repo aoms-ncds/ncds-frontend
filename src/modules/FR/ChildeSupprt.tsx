@@ -449,7 +449,7 @@ const ChildeSupportPage = () => {
 
                       setChildList(() => allChild?.filter((child:any) =>
                         child.division?._id == newVal?._id &&
-                       child.childOf?._id != coordinatorId) ?? []);
+                       child.childOf?._id != coordinatorId && child.childSupport.amount != 0 ) ?? []);
 
 
                       setDivision(newVal);

@@ -81,10 +81,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     padding: 2,
-    // textAlign: 'center',
+    textAlign: 'right',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
-    paddingLeft: 8,
+    // paddingLeft: 8,
   },
   tableCell: {
     flex: 1,
@@ -182,6 +182,8 @@ const IROReconciliationPdf = (props:{data:
       setWorkers([]);
     }
   }, [props.data.IRONo]);
+  console.log(workers, 'workers');
+
   useEffect(() => {
     const basic = workers?.reduce(
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
@@ -239,9 +241,9 @@ const IROReconciliationPdf = (props:{data:
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`}
+            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} - {workers?.[0].officialDetails.divisionHistory[workers[0].officialDetails?.divisionHistory.length - 1]?.subDivision?.name}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
+          <Text style={styles.month}>{`For the Month of ${props.data.month}`} {new Date().getFullYear()}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
@@ -253,17 +255,17 @@ const IROReconciliationPdf = (props:{data:
             <div style={styles.headGrid}></div>
             <Text style={styles.tableHead}>Worker Code</Text>
             <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>First Name</Text>
+            <Text style={styles.tableHead}>Worker Name</Text>
             <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Last Name</Text>
-            <div style={styles.headGrid}></div>
+            {/* <Text style={styles.tableHead}>Last Name</Text>
+            <div style={styles.headGrid}></div> */}
             <Text style={styles.tableHead}>Division</Text>
             <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Sub-Division</Text>
-            <div style={styles.headGrid}></div>
             <Text style={styles.tableHead}>Net Amount</Text>
-            <div style={styles.cellGridCopy1}></div>
+            <div style={styles.headGrid}></div>
             <Text style={styles.tableHeadCoppy}>Signature</Text>
+            <Text style={styles.tableHead}></Text>
+            {/* <div style={styles.cellGridCopy1}></div> */}
             <div style={styles.cellGridCopy2}></div>
           </View>
 
@@ -274,15 +276,14 @@ const IROReconciliationPdf = (props:{data:
               <div style={styles.cellGrid}></div>
               <Text style={styles.tableCell}>{row.workerCode}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.basicDetails.firstName}</Text>
+              <Text style={styles.tableCell}>{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
-              <div style={styles.cellGrid}></div>
+              {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
+              <div style={styles.cellGrid}></div> */}
               <Text style={styles.tableCell}>{row.division?.details.name}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.officialDetails.divisionHistory[row.officialDetails?.divisionHistory.length - 1]?.subDivision?.name}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?(row.supportStructure?.basic ?? 0) +
+              <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled?
+                (row.supportStructure?.basic ?? 0) +
       (row.supportStructure?.HRA ?? 0) +
       (row.supportStructure?.spouseAllowance ?? 0) +
       (row.supportStructure?.positionalAllowance ?? 0) +
@@ -292,8 +293,10 @@ const IROReconciliationPdf = (props:{data:
       (
         (row.supportStructure?.impactDeduction ?? 0) +
         (row.supportStructure?.MUTDeduction ?? 0)
-      ):0}</Text>
-              <div style={styles.cellGridCopy}></div>
+      ):''}</Text>
+              <div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}></Text>
+              {/* <div style={styles.cellGridCopy}></div> */}
               <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
               <div style={styles.cellGrid}></div>
             </View>

@@ -43,6 +43,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
+  line1: {
+    height: 1,
+    backgroundColor: 'black',
+    marginVertical: 4, // Adjust the spacing as needed
+  },
   line: {
     position: 'absolute',
     left: '20',
@@ -112,11 +117,12 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
 
   const d = new Date();
   const name = month[d.getMonth()];
+  const year = new Date().getFullYear();
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
   const div= props?.data?.map((e:any)=>e.division?.details?.name);
-  // console.log(div?.[0], 'pop');
+  console.log(year, 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
@@ -132,9 +138,9 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
 
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`}
+            {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${name}`}</Text>
+          <Text style={styles.month}>{`For the Month of ${name}`} {year}</Text>
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
@@ -146,9 +152,9 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
             <div style={styles.headGrid}></div>
             <Text style={styles.tableHead}>Child Code</Text>
             <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>First Name</Text>
+            <Text style={styles.tableHead}>Child Name</Text>
             <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Last Name</Text>
+            <Text style={styles.tableHead}>Chid Of</Text>
             <div style={styles.headGrid}></div>
             <Text style={styles.tableHead}>Division</Text>
             <div style={styles.headGrid}></div>
@@ -167,9 +173,11 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
               <div style={styles.cellGrid}></div>
               <Text style={styles.tableCell}>{row.childCode}</Text>
               <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.firstName}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.lastName}</Text>
+              <Text style={styles.tableCell}>
+                {row.firstName}{' '}
+                <Text style={styles.tableCell}>{row.lastName} </Text>
+              </Text><div style={styles.cellGrid}></div>
+              <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {' '} {row?.childOf?.basicDetails?.lastName}</Text>
               <div style={styles.cellGrid}></div>
               <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
               <div style={styles.cellGrid}></div>
