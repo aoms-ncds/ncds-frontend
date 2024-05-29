@@ -686,6 +686,18 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         }));
                         setSelectedSubCategory2(selectedSubCategory2);
                       }
+                      const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
+
+                      if (subcat2?.includes('Select')) {
+                        console.log('Select');
+                        if (selectedSubCategory2) {
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            narration: selectedSubCategory2?.subcategory3[0].narration,
+                          }));
+                          setSelectedSubCategory3(selectedSubCategory3);
+                        }
+                      }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
@@ -706,7 +718,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         setSelectedSubCategory3(selectedSubCategory3);
                       }
                     }}
-                    renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
                     fullWidth
                   />
                 </Grid>

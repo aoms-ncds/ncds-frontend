@@ -896,6 +896,18 @@ const EditIRO = () => {
                           subCategory2: selectedSubCategory2.name,
                         }));
                         setSelectedSubCategory2(selectedSubCategory2);
+                        const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
+
+                        if (subcat2?.includes('Select')) {
+                          console.log('Select');
+                          if (selectedSubCategory2) {
+                            setNewParticular((particularDetails) => ({
+                              ...particularDetails,
+                              narration: selectedSubCategory2?.subcategory3[0].narration,
+                            }));
+                            setSelectedSubCategory3(selectedSubCategory3);
+                          }
+                        }
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
@@ -919,7 +931,7 @@ const EditIRO = () => {
                         setSelectedSubCategory3(selectedSubCategory3);
                       }
                     }}
-                    renderInput={(params) => <TextField {...params} label="Sub Category 3" required />}
+                    renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
                     // disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
                   />
