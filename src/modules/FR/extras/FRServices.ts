@@ -16,6 +16,7 @@ export default {
     FRdate: moment(fr.FRdate ),
     createdAt: moment(fr.createdAt),
     updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: moment(fr.frVerifiedOn),
   }))),
 
   getAllRemarksById: (fRId: string) =>
@@ -76,6 +77,7 @@ export default {
         FRdate: moment(data.FRdate),
         createdAt: moment(data.createdAt),
         updatedAt: moment(data.updatedAt),
+        frVerifiedOn: moment(data.frVerifiedOn),
       }),
     ),
   // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(

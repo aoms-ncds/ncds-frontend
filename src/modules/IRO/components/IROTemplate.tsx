@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
 });
 const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:any }) => {
-  console.log(props, 'ssds');
+  console.log(props.rowData?.iroVerifiedOn, 'DATESS');
   console.log(props.mngrName, 'IRO');
   console.log(props.rowData?.releaseAmount, 'bnk');
   const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
@@ -123,7 +123,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
   });
   NewTot += props?.fr?.sanctionedAmount !=undefined ? props?.fr?.sanctionedAmount: 0;
   console.log(NewTot, 'eee');
-  console.log(totalAmount2, 'eee');
+  console.log(props, 'eee');
 
   const sanctionedAmount = NewTot?? totalAmount2;
   let sanctionedAmountWords = '';
@@ -206,7 +206,8 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>FR Raised On: {props.fr?.createdAt.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.updatedAt.format('DD/MM/YYYY')}</Text>
+              {/* <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.updatedAt.format('DD/MM/YYYY')}</Text> */}
+              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.frVerifiedOn?.format('DD/MM/YYYY') ?? props.fr?.updatedAt.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
@@ -234,13 +235,13 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
           <View style={{ ...styles.box4, marginTop: 2 }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Verified On: {props?.rowData?.IRODate.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>IRO Verified On: {props?.rowData?.iroVerifiedOn?.format('DD/MM/YYYY') ?? props?.rowData?.IRODate.format('DD/MM/YYYY')}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Reconciled On: {props.rowData.updatedAt?.format('DD/MM/YYYY')}
+                <Text style={{ ...styles.text, marginTop: 10, left: 20 }}>Reconciled On: {props.rowData?.reconciliationOn?.format('DD/MM/YYYY') ?? props.rowData.updatedAt?.format('DD/MM/YYYY')}
                 </Text></View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On: {props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On: {props.rowData?.iroClosedOn?.format('DD/MM/YYYY') ?? props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>

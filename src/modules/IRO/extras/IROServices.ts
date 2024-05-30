@@ -15,6 +15,9 @@ export default {
         IRODate: moment(IRO.IRODate),
         createdAt: moment(IRO.createdAt),
         updatedAt: moment(IRO.updatedAt),
+        iroVerifiedOn: moment(IRO.iroVerifiedOn),
+        reconciliationOn: moment(IRO.reconciliationOn),
+        iroClosedOn: moment(IRO.iroClosedOn),
         releaseAmount: IRO.releaseAmount ? {
           ...IRO.releaseAmount,
           transferredDate: moment(IRO.releaseAmount?.transferredDate),
@@ -51,6 +54,9 @@ export default {
         },
         createdAt: moment(data.createdBy.createdAt),
         updatedAt: moment(data.createdBy.updatedAt),
+        iroVerifiedOn: moment(data.iroVerifiedOn),
+        reconciliationOn: moment(data.reconciliationOn),
+        iroClosedOn: moment(data.iroClosedOn),
       },
       createdBy: {
         ...data.createdBy,

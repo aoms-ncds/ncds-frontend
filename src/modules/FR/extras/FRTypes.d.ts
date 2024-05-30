@@ -125,6 +125,10 @@ declare global {
     additionalDesignation?:string;
     additionalName?:string;
     signatureSheet?:string;
+    frVerifiedOn?:Moment;
+    iroVerifiedOn?:Moment;
+    reconciliationOn?:Moment;
+    iroClosedOn?:Moment;
 
 
   }
