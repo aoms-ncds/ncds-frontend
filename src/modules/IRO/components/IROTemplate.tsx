@@ -260,7 +260,15 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
 
               </View>
               <View></View>
-              <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On: {props.rowData?.iroClosedOn ?? props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text>
+              {/* <Text style={{ ...styles.text, marginTop: 10 }}>IRO Closed On: {props.rowData?.iroClosedOn ?? props.rowData.updatedAt?.format('DD/MM/YYYY')}</Text> */}
+              <Text style={{ ...styles.text, marginTop: 10 }}>
+  IRO Closed On:
+                {props.rowData?.iroClosedOn ?
+                  moment(props.rowData.iroClosedOn).format('DD/MM/YYYY') :
+                  props.rowData?.updatedAt ?
+                    moment(props.rowData.updatedAt).format('DD/MM/YYYY') :
+                    'N/A'}
+              </Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
