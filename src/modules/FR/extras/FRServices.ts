@@ -16,7 +16,7 @@ export default {
     FRdate: moment(fr.FRdate ),
     createdAt: moment(fr.createdAt),
     updatedAt: moment(fr.updatedAt),
-    frVerifiedOn: moment(fr.frVerifiedOn),
+    frVerifiedOn: fr.frVerifiedOn? moment(fr.frVerifiedOn) : null,
   }))),
 
   getAllRemarksById: (fRId: string) =>
@@ -77,8 +77,7 @@ export default {
         FRdate: moment(data.FRdate),
         createdAt: moment(data.createdAt),
         updatedAt: moment(data.updatedAt),
-        frVerifiedOn: moment(data.frVerifiedOn),
-      }),
+        frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null }),
     ),
   // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
   //   axios.post('/fr/', frRequest),

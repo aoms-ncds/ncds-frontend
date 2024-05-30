@@ -12,12 +12,12 @@ export default {
     getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,
+        iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
+        reconciliationOn: IRO.reconciliationOn ? moment(IRO.reconciliationOn) : undefined,
+        iroClosedOn: IRO.iroClosedOn ? moment(IRO.iroClosedOn) : undefined,
         IRODate: moment(IRO.IRODate),
         createdAt: moment(IRO.createdAt),
         updatedAt: moment(IRO.updatedAt),
-        iroVerifiedOn: moment(IRO.iroVerifiedOn),
-        reconciliationOn: moment(IRO.reconciliationOn),
-        iroClosedOn: moment(IRO.iroClosedOn),
         releaseAmount: IRO.releaseAmount ? {
           ...IRO.releaseAmount,
           transferredDate: moment(IRO.releaseAmount?.transferredDate),
@@ -54,9 +54,9 @@ export default {
         },
         createdAt: moment(data.createdBy.createdAt),
         updatedAt: moment(data.createdBy.updatedAt),
-        iroVerifiedOn: moment(data.iroVerifiedOn),
-        reconciliationOn: moment(data.reconciliationOn),
-        iroClosedOn: moment(data.iroClosedOn),
+        iroVerifiedOn: data?.iroVerifiedOn ? moment(data?.iroVerifiedOn) : null,
+        reconciliationOn: data?.reconciliationOn ? moment(data?.reconciliationOn) : null,
+        iroClosedOn: data?.iroClosedOn ? moment(data?.iroClosedOn) : null,
       },
       createdBy: {
         ...data.createdBy,
