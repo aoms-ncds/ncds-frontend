@@ -206,7 +206,7 @@ const UserBasicDetailsForm = (
         <Autocomplete
           value={props?.value?.spouseOf as User}
           options={users}
-          getOptionLabel={(g) => g?.basicDetails?.firstName + g?.basicDetails?.lastName}
+          getOptionLabel={(g) => `${g?.basicDetails?.firstName} ${g?.basicDetails?.middleName ?? ''} ${g?.basicDetails?.lastName}`}
           onChange={(e, newValue) => props.onChange({ ...props.value, spouseOf: newValue as unknown as User })}
           renderInput={(params) => <TextField {...params} label="Spouse Of" variant={props?.options?.textField?.variant} />}
         />

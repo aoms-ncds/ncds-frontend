@@ -294,7 +294,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     <Autocomplete<IWorker | Staff>
                       value={props.value.purposeWorker ?? null}
                       options={(workers ?? [])}
-                      getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
+                      getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName ?? ''} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
                           props.onChange({

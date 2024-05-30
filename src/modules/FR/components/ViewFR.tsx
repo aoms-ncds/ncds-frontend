@@ -284,7 +284,7 @@ return (
                   <Autocomplete
                     value={props.value.purposeWorker}
                     options={[]}
-                    getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
+                    getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.middleName ?? ''} ${worker.basicDetails.lastName}`}
                     onChange={(_e, selectedWorker) => {
                       if (selectedWorker && props.action !== 'view') {
                         props.onChange({

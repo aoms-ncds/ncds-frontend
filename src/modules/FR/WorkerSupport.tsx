@@ -1196,7 +1196,7 @@ const WorkerSupportPage = () => {
                       <Autocomplete<IWorker>
                         value={selectedWorker ?? null}
                         options={(workers ?? [])}
-                        getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers.basicDetails.lastName}`}
+                        getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName} ${workers.basicDetails.lastName}`}
                         onChange={(_e, newVal) => {
                           setSelectedWorker(newVal);
                           if (newVal) {
