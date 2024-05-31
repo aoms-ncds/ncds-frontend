@@ -432,7 +432,7 @@ const ManageFrPage = () => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {/* {props.row?.particulars[0]?.subCategory3 =='Select'? props.row?.particulars[0]?.subCategory2: props.row?.particulars[0]?.subCategory3 } */}
-          { props.row.particulars[0]?.subCategory3 !='Select' && '' ?
+          { props.row.particulars[0]?.subCategory3 !='Select' ?
             props.row.particulars[0]?.subCategory3 :
             props.row.particulars[0].subCategory2 != 'Select'?
               props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1}
