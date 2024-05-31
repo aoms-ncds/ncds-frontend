@@ -52,11 +52,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-  useEffect(() => {
-    ReasonforDeactivationService.getAll().then((res) => {
-      setReason(res.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   ReasonforDeactivationService.getAll().then((res) => {
+  //     setReason(res.data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -76,6 +76,9 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           console.log(res);
         });
     } else if (currentTab == 2) {
+      ReasonforDeactivationService.getAll().then((res) => {
+        setReason(res.data);
+      });
       ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
           setChildList(res.data);
@@ -629,8 +632,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
             sx={{
-              height: 300,
-              width: '100%',
+              'height': 300,
+              'width': '100%',
               '& .super-app-theme--cell': {
                 backgroundColor: '#f1f5fa',
                 color: 'black',
@@ -664,18 +667,18 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
-          {remarks.length > 0
-            ? remarks.map((remark) => (
-                // eslint-disable-next-line max-len
-                <MessageItem
-                  key={remark._id}
-                  sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
-                  time={remark.updatedAt}
-                  body={remark.remark}
-                  isSent={true}
-                />
-              ))
-            : 'No Data Found '}
+          {remarks.length > 0 ?
+            remarks.map((remark) => (
+              // eslint-disable-next-line max-len
+              <MessageItem
+                key={remark._id}
+                sender={remark.createdBy.basicDetails.firstName + ' ' + remark.createdBy.basicDetails.lastName}
+                time={remark.updatedAt}
+                body={remark.remark}
+                isSent={true}
+              />
+            )) :
+            'No Data Found '}
         </DialogContent>
         <form
           onSubmit={(e) => {

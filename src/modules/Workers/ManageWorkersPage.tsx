@@ -17,6 +17,7 @@ import * as XLSX from 'xlsx';
 import moment from 'moment';
 import WorkerList from './components/WorkerList';
 import SearchComponent from './components/SearchComponent';
+import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
 
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
@@ -32,7 +33,13 @@ const ManageWorkerPage = () => {
   const [loading, setLoading] = useState(false);
   const [skip, setSkip] = useState(0);
   const [searchText, setSearchText] = useState('');
+  const [reason, setReason] = useState<IReason[]>([]);
 
+  useEffect(() => {
+    ReasonforDeactivationService.getAll().then((res) => {
+      setReason(res.data);
+    });
+  }, []);
   useEffect(() => {
     console.log(skip);
     fetchData({});
@@ -41,21 +48,21 @@ const ManageWorkerPage = () => {
   const fetchData = (args: { skip?: number }) => {
     setLoading(true);
     if (currentTab === 0) {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE})
+      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
-        console.log("sso");
+        console.log('sso');
         console.log(res.data, 'pores');
         setUsersAll(res.data);
       })
       .catch((error) => {
         console.error('Error fetching workers:', error);
-      })
+      });
 
-      
+
       WorkersServices.getWorkers({ status: UserLifeCycleStates.ACTIVE, skip: args.skip ?? skip, limit: 300 })
         .then((res) => {
-          console.log("OLD USER");
-          
+          console.log('OLD USER');
+
           setUsers((prevUsers) => [...prevUsers, ...res.data]);
         })
         .catch((error) => {
@@ -64,8 +71,6 @@ const ManageWorkerPage = () => {
         .finally(() => {
           setLoading(false);
         });
-     
-      
     } else if (currentTab == 1) {
       SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
@@ -154,7 +159,7 @@ const ManageWorkerPage = () => {
             {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
             {/* </Grid> */}
             <Grid item xs={12} padding={2}>
-              <SearchComponent onSearch={handleSearchChange}  />
+              <SearchComponent onSearch={handleSearchChange} />
               <PermissionChecks
                 permissions={['WRITE_WORKERS']}
                 granted={
@@ -162,8 +167,8 @@ const ManageWorkerPage = () => {
                     <>
                       <Button
                         onClick={async () => {
-                          const sheet = allusers
-                            ? allusers.map((user: IWorker) => [
+                          const sheet = allusers ?
+                            allusers.map((user: IWorker) => [
                                 user.workerCode,
                                 user.basicDetails.firstName,
                                 user.basicDetails.lastName,
@@ -179,9 +184,9 @@ const ManageWorkerPage = () => {
                                 user.basicDetails.highestQualification,
                                 user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
                                 user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                                user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving
-                                  ? moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true)
-                                  : moment(user.officialDetails.dateOfJoining)?.fromNow(true),
+                                user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+                                  moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true) :
+                                  moment(user.officialDetails.dateOfJoining)?.fromNow(true),
                                 user.spouse?.spouseCode,
                                 user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
                                 (user.supportStructure?.basic ?? 0) +
@@ -192,8 +197,8 @@ const ManageWorkerPage = () => {
                                   (user.supportStructure?.PIONMissionaryFund ?? 0) +
                                   (user.supportStructure?.telAllowance ?? 0),
                                 user.insurance?.impactNo,
-                              ])
-                            : [];
+                              ]) :
+                            [];
                           const headers = [
                             'Workers Code',
                             'First Name',
@@ -239,7 +244,7 @@ const ManageWorkerPage = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <WorkerList users={users} onScroll={handleScroll} deleteUser={handleDelete}></WorkerList>
+              <WorkerList users={users} reason={reason} onScroll={handleScroll} deleteUser={handleDelete}></WorkerList>
             </Grid>
           </Grid>
         </TabPanel>
