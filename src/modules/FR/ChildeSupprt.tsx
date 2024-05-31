@@ -148,7 +148,7 @@ const ChildeSupportPage = () => {
   useEffect(() => {
     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
-        console.log(res);
+        console.log(res, 'shibin');
         // setWorkers(res.data);
         setChildList(res.data);
         setAllChilde(res.data);
@@ -449,7 +449,7 @@ const ChildeSupportPage = () => {
 
                       setChildList(() => allChild?.filter((child:any) =>
                         child.division?._id == newVal?._id &&
-                       child.childOf?._id != coordinatorId && child.childSupport.amount != 0 ) ?? []);
+                       child.childOf?._id != coordinatorId && child.childSupport?.amount != 0 ) ?? []);
 
 
                       setDivision(newVal);
@@ -481,6 +481,7 @@ const ChildeSupportPage = () => {
                           divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null :
                           null,
                       );
+                      console.log(childList, 'coonewVal');
                     } else setChildList(() => (division ? allChild?.filter((child: any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}

@@ -122,7 +122,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
   const div= props?.data?.map((e:any)=>e.division?.details?.name);
-  console.log(year, 'pop');
+  console.log(props, 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {

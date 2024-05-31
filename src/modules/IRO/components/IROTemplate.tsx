@@ -207,7 +207,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 </Text></View>
               <View></View>
               {/* <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.updatedAt.format('DD/MM/YYYY')}</Text> */}
-              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.frVerifiedOn?.format('DD/MM/YYYY') ?? props.fr?.updatedAt.format('DD/MM/YYYY')}</Text>
+              <Text style={{ ...styles.text, marginTop: 10 }}>FR Verified On: {props.fr?.frVerifiedOn?.format('DD/MM/YYYY') ?? props.fr?.createdAt.format('DD/MM/YYYY')}</Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 180 }}>
