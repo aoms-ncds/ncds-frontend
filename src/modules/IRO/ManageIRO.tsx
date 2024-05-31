@@ -1071,7 +1071,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               iro.purposeSubdivision?.name,
                               iro.mainCategory,
                               iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                              iro.sanctionedAmount,
+                              iro.sanctionedAmount?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
                               iro.sanctionedBank,
                               iro.sanctionedAsPer,
                               iro.releaseAmount?.releaseAmount,

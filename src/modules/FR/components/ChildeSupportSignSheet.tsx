@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
+const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -140,7 +140,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number}) => {
           <Text style={styles.title}>
             {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${name}`} {year}</Text>
+          <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`} {year}</Text>
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>

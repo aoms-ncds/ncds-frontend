@@ -68,6 +68,7 @@ const ChildeSupportPage = () => {
     particulars: [],
     sanctionedAsPer: '',
   });
+  console.log(requisition.particulars?.[0]?.month, 'requisition');
   const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
   console.log(childList, 'childList');
@@ -77,6 +78,7 @@ const ChildeSupportPage = () => {
   };
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
+  const [loading, setLoading] = useState<boolean | null>(false);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -148,36 +150,22 @@ const ChildeSupportPage = () => {
   useEffect(() => {
     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
-        console.log(res, 'shibin');
-        // setWorkers(res.data);
         setChildList(res.data);
         setAllChilde(res.data);
-        // console.log( 'basic',workers?.reduce(
-        //   (total, child) => child.supportStructure?.supportEnabled && child.supportStructure?.basic? total + Number(child.supportStructure?.basic):total,
-        //   0,
-        // ));
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+        if (res.data) {
+          setLoading(true);
+        }
+      }),
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
         console.log(res);
         setWorkers(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
+      }),
     DivisionsServices.getcoordinators()
       .then((res) => {
         console.log(res);
         setCoordinatrs(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
       });
-
-
     if (user.user && user.user?.kind == 'worker') {
       DivisionsServices.getDivisionById(user.user?.division as unknown as string)
         .then((res) => {
@@ -225,8 +213,6 @@ const ChildeSupportPage = () => {
         division.details.coordinator?.name?._id === child._id,
       ),
     );
-
-    console.log(coordinators, 'setCoordinatrssd');
   }, []);
 
   const handleClick = (rowId: any) => {
@@ -464,7 +450,7 @@ const ChildeSupportPage = () => {
                     <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                       required />
                   )}
-                  disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
+                  disabled={loading !=true}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -615,7 +601,7 @@ const ChildeSupportPage = () => {
                   <div style={{ float: 'right' }}>
                     {(selectedWorker || division) && (
                       <PDFDownloadLink
-                        document={<ChildeSupportSignSheet total={total} data={childList} />}
+                        document={<ChildeSupportSignSheet month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList} />}
                         fileName="ChildeSupport.pdf"
                         style={{ textDecoration: 'none', color: 'blue' }}
                       >
