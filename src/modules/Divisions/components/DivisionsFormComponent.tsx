@@ -557,7 +557,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         })}
       />
       <FileUploader
-        title=" Senior Leader Signature"
+        title="Leader Signature 1"
         types={['image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
@@ -611,7 +611,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         })}
       />
       <FileUploader
-        title=" Junior Leader Signature"
+        title="Leader Signature 2"
         types={['image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],

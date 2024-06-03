@@ -239,7 +239,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             height: 50,
             width: 50,
           }}
-          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
+          src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
           {props.rowData?.specialsanction == 'Yes' ? (
             <Image style={{
               left: 60,
