@@ -485,7 +485,7 @@ const ChildeSupportPage = () => {
                       const coordinatorId = newVal.division?.details?.coordinator?.name;
                       console.log(coordinatorId, 'coordinatorId');
                       if (coordinatorId) {
-                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId) ?? []);
+                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
                         setDivision(() =>
                           newVal && 'division' in newVal && newVal.division ?
                             divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
