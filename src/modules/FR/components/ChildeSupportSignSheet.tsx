@@ -52,14 +52,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '20',
     right: 22,
-    top: 113,
+    top: 108,
     borderBottom: 1,
     borderColor: 'black',
   },
   tableContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 114, // Adjust this value to set the table's position
+    marginTop: 108, // Adjust this value to set the table's position
     width: 800,
     flex: 1, // This will make the table fill the width of the page
     flexShrink: 0,
@@ -135,7 +135,6 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
     <Document>
       <Page size={'A4'} style={styles.page} orientation='landscape'>
         <div>
-
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
             {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
