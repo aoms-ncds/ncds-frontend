@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Grid, TextField, Tooltip, Typography, styled } from '@mui/material';
@@ -155,22 +156,22 @@ const ChildeSupportPage = () => {
         if (res.data) {
           setLoading(true);
         }
-      }),
-    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-      .then((res) => {
-        console.log(res);
-        setWorkers(res.data);
-      }),
-    DivisionsServices.getcoordinators()
-      .then((res) => {
-        console.log(res);
-        setCoordinatrs(res.data);
       });
+    // DivisionsServices.getcoordinators()
+    //   .then((res) => {
+    //     console.log(res);
+    //     // setCoordinatrs(res.data);
+    //   });
     if (user.user && user.user?.kind == 'worker') {
       DivisionsServices.getDivisionById(user.user?.division as unknown as string)
         .then((res) => {
-          setDivision(res.data);
+          // setDivision(res.data);
           setDivisions([res.data]);
+          // const coordinatorId :any = newVal.details?.coordinator?.name?._id;
+
+          // setChildList(() => allChild?.filter((child:any) =>
+          //   child.division?._id == res.data?._id &&
+          //  child.childOf?._id != coordinatorId && child.childSupport?.amount != 0 ) ?? []);
         })
         .catch((error) =>
           enqueueSnackbar({
@@ -208,13 +209,26 @@ const ChildeSupportPage = () => {
     //     )
     //     .map((child: any) => child.name) ?? []
     // );
-    const coordinators = workers?.filter((child) =>
-      divisions?.some((division) =>
-        division.details.coordinator?.name?._id === child._id,
-      ),
-    );
-  }, []);
+    WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    .then((res) => {
+      console.log(res, 'rr');
+      // setWorkers(res.data);
+      setCoordinatrs((prevState:any) => {
+        // Filter workers based on designation
+        const filteredWorkers = res.data?.filter(
+          (e:any) => e.supportDetails?.designation?.name === 'Coordinator' || e.supportDetails?.designation?.name === 'Officiating Co-Ordinator',
+        );
 
+        // Return the filtered list to update state
+        return filteredWorkers;
+      });
+    });
+    // const test= workers?.filter((e)=>{
+    //   e.supportDetails.designation?.name == 'Coordinator';
+    // });
+    // console.log(test, 'test');
+  }, []);
+  console.log(coordinators, 'workers');
   const handleClick = (rowId: any) => {
     ChildrenServices.getById(rowId.id)
       .then((res) => {
@@ -389,34 +403,34 @@ const ChildeSupportPage = () => {
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
-          if (fileObj) {
-            setToggleRaiseFR(true);
-            setRequisition((requisition) => ({
-              ...requisition,
-              // purpose: selectedWorker?'child':'Division',
-              // purposeWorker: selectedWorker??undefined,
-              division: division ?? undefined,
+          // if (fileObj) {
+          setToggleRaiseFR(true);
+          setRequisition((requisition) => ({
+            ...requisition,
+            // purpose: selectedWorker?'child':'Division',
+            // purposeWorker: selectedWorker??undefined,
+            division: division ?? undefined,
+            mainCategory: 'Welfare of Children',
+            particulars: [{
+              _id: '',
               mainCategory: 'Welfare of Children',
-              particulars: [{
-                _id: '',
-                mainCategory: 'Welfare of Children',
-                subCategory1: 'Children Welfare',
-                subCategory2: 'Child Education Assistance',
-                subCategory3: 'Select',
-                month: moment().format('MMMM'),
-                narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
-                requestedAmount: total,
-                unitPrice: total,
-                // quantity: supportEnabledWorkers?.length,
-                attachment: fileObj ? [fileObj] : [],
-              }],
-            }));
-          } else {
-            enqueueSnackbar({
-              message: 'File Not Attached',
-              variant: 'info',
-            });
-          }
+              subCategory1: 'Children Welfare',
+              subCategory2: 'Child Education Assistance',
+              subCategory3: 'Select',
+              month: moment().format('MMMM'),
+              narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
+              requestedAmount: total,
+              unitPrice: total,
+              // quantity: supportEnabledWorkers?.length,
+              attachment: fileObj ? [fileObj] : [],
+            }],
+          }));
+          // // } else {
+          // //   enqueueSnackbar({
+          // //     message: 'File Not Attached',
+          // //     variant: 'info',
+          // //   });
+          // }
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -428,14 +442,12 @@ const ChildeSupportPage = () => {
                   value={division}
                   getOptionLabel={(div) => div.details?.name}
                   onChange={(event, newVal) => {
+                    console.log(newVal, 'roro');
                     if (newVal) {
                       const coordinatorId :any = newVal.details?.coordinator?.name?._id;
-                      console.log(coordinatorId, 'roro');
-
-
                       setChildList(() => allChild?.filter((child:any) =>
                         child.division?._id == newVal?._id &&
-                       child.childOf?._id != coordinatorId && child.childSupport?.amount != 0 ) ?? []);
+                       child.childOf?._id != coordinatorId && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator' ) ?? []);
 
 
                       setDivision(newVal);
@@ -482,7 +494,7 @@ const ChildeSupportPage = () => {
                   onChange={(_e, newVal) => {
                     setSelectedCoordinatrs(newVal ?? null);
                     if (newVal) {
-                      const coordinatorId = newVal.division?.details?.coordinator?.name;
+                      const coordinatorId = newVal._id;
                       console.log(coordinatorId, 'coordinatorId');
                       if (coordinatorId) {
                         setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
@@ -541,7 +553,8 @@ const ChildeSupportPage = () => {
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob, loading }) => (
-                        <> <Button
+                        <>
+                          {/* <Button
 
                           endIcon={<AttachIcon />}
                           variant="contained"
@@ -561,7 +574,7 @@ const ChildeSupportPage = () => {
                             }
                           }} >
                           {loading ? 'Loading...' : 'Attach File'}
-                        </Button>
+                        </Button> */}
                         </>
                       )}
                     </PDFDownloadLink>
@@ -579,10 +592,10 @@ const ChildeSupportPage = () => {
                   <PermissionChecks
                     permissions={['WRITE_FR']}
                     granted={
-                      <Tooltip open={open && !fileObj}
+                      <Tooltip open={open}
                         onClose={() => setOpen(false)}
                         onOpen={() => setOpen(true)}
-                        title={'Please Attach the file'} >
+                        title={''} >
                         <Button
                           variant="contained"
                           color="info"
@@ -595,7 +608,7 @@ const ChildeSupportPage = () => {
 
                   />
                   <br />
-                  <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography>
+                  {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
                 </div>
                 <Grid item xs={12}>
                   <div style={{ float: 'right' }}>

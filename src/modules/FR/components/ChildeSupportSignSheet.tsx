@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useEffect, useState } from 'react';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
@@ -114,7 +115,15 @@ const styles = StyleSheet.create({
 const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const rowsPerPage = 8;
+  const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
+  console.log(totalPages, 'totalPages');
 
+  // Function to get rows for a specific page
+  const getRowsForPage = (page:any) => {
+    const start = page * rowsPerPage;
+    return props?.data?.slice(start, start + rowsPerPage);
+  };
   const d = new Date();
   const name = month[d.getMonth()];
   const year = new Date().getFullYear();
@@ -143,75 +152,78 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
-        <View style={styles.line} />
-        <View style={styles.tableContainer} >
-          <View style={{ ...styles.tableRow, height: 30 }} key={0}>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Sl No.</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Child Code</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Child Name</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Chid Of</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Division</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}>Net Amount</Text>
-            <div style={styles.headGrid}></div>
-            <Text style={styles.tableHead}></Text>
-            {/* <div style={styles.headGrid}></div> */}
-            <Text style={styles.tableHeadCopy}>Signature</Text>
-            <div style={styles.headGrid}></div>
-          </View>
-
-          {props.data?.map((row:any, index) => (<>
-            <View style={styles.tableRow} key={row._id}>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{index+1}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.childCode}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>
-                {row.firstName}{' '}
-                <Text style={styles.tableCell}>{row.lastName} </Text>
-              </Text><div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {' '} {row?.childOf?.basicDetails?.lastName}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}>{row.childSupport?.amount != 0 ? row.childSupport?.amount : ''}</Text>
-              <div style={styles.cellGrid}></div>
-              <Text style={styles.tableCell}></Text>
-              {/* <div style={styles.cellGrid}></div> */}
-              <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-              <div style={styles.cellGrid}></div>
+        {Array.from({ length: totalPages }).map((_, pageIndex) => (
+          <><View style={styles.line} /><View style={styles.tableContainer}>
+            <View style={{ ...styles.tableRow, height: 30 }} key={0}>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Sl No.</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Child Code</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Child Name</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Chid Of</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Division</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}>Net Amount</Text>
+              <div style={styles.headGrid}></div>
+              <Text style={styles.tableHead}></Text>
+              {/* <div style={styles.headGrid}></div> */}
+              <Text style={styles.tableHeadCopy}>Signature</Text>
+              <div style={styles.headGrid}></div>
             </View>
-          </>
-          ))}
-          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1} >
-            <div style={styles.headGrid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ flex: 2,
-              fontSize: 12,
-              padding: 2,
-              textAlign: 'center', fontWeight: 'bold', fontFamily: 'Oswald' }}>Total Net Amount</Text>
-            <div style={{ ...styles.headGrid }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'ultrabold', fontFamily: 'Oswald', fontSize: 16 }} >{Number.isNaN(total) ? 0 : total}</Text>
-            <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
-            <div style={styles.headGrid}></div>
-          </View>
+
+            {getRowsForPage(pageIndex)?.map((row: any, index: any) => (<>
+              <View style={styles.tableRow} key={row._id}>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>{index + 1}</Text>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>{row.childCode}</Text>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>
+                  {row.firstName}{' '}
+                  <Text style={styles.tableCell}>{row.lastName} </Text>
+                </Text><div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {' '} {row?.childOf?.basicDetails?.lastName}</Text>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}>{row.childSupport?.amount != 0 ? row.childSupport?.amount : ''}</Text>
+                <div style={styles.cellGrid}></div>
+                <Text style={styles.tableCell}></Text>
+                {/* <div style={styles.cellGrid}></div> */}
+                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                <div style={styles.cellGrid}></div>
+              </View>
+            </>
+            ))}
+          </View></>
+        ))}
+        <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
+          <div style={styles.headGrid}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <Text style={{
+            flex: 2,
+            fontSize: 12,
+            padding: 2,
+            textAlign: 'center', fontWeight: 'bold', fontFamily: 'Oswald',
+          }}>Total Net Amount</Text>
+          <div style={{ ...styles.headGrid }}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'ultrabold', fontFamily: 'Oswald', fontSize: 16 }}>{Number.isNaN(total) ? 0 : total}</Text>
+          <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+          <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
+          <div style={styles.headGrid}></div>
         </View>
       </Page>
     </Document>
