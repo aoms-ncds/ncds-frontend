@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -43,6 +43,7 @@ import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
+import InfoIcon from '@mui/icons-material/Info';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -849,10 +850,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params: GridCellParams) => {
-        const frRequest = params.row as IROrder;
-        const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return <p>{particularAmount}</p>;
+      valueGetter(params) {
+        const IRORequest = params.row as IROrder;
+        const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
+        return particularAmount;
       },
     },
     {
@@ -1024,7 +1025,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   };
 
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) || (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+     (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
@@ -1056,6 +1062,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
                   <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
+                  <br />
+                  <Tooltip sx={{ fontSize: 30, padding: 1 }} title="The following fields can be searchable: IROno, IRODate, SubCategory">
+                    <InfoIcon>
+                      <DeleteIcon />
+                    </InfoIcon>
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={6}>
                   <PermissionChecks

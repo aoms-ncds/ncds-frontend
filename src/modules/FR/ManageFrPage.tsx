@@ -13,9 +13,9 @@ import {
   Print as PrintIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-
+import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -140,6 +140,7 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, [dateRange]);
+
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
@@ -414,7 +415,7 @@ const ManageFrPage = () => {
       ),
     },
     {
-      field: 'submainCategory',
+      field: 'subCategory',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
@@ -430,8 +431,7 @@ const ManageFrPage = () => {
             textAlign: 'center',
           }}
         >
-          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {/* {props.row?.particulars[0]?.subCategory3 =='Select'? props.row?.particulars[0]?.subCategory2: props.row?.particulars[0]?.subCategory3 } */}
+
           { props.row.particulars[0]?.subCategory3 !='Select' ?
             props.row.particulars[0]?.subCategory3 :
             props.row.particulars[0].subCategory2 != 'Select'?
@@ -587,11 +587,16 @@ const ManageFrPage = () => {
   };
 
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) || (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase()))) {
+    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) || (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+       (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+       (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+       (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  console.log(filteredRows, 'filteredRows');
 
   return (
     <CommonPageLayout
@@ -616,7 +621,14 @@ const ManageFrPage = () => {
                   <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
                       <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
+                      <br />
+                      <Tooltip sx={{ fontSize: 30, padding: 1 }} title="The following fields can be searchable: FRno, FRDate, SubCategory">
+                        <InfoIcon>
+                          <DeleteIcon />
+                        </InfoIcon>
+                      </Tooltip>
                     </Grid>
+
                     <Grid item xs={6} sx={{ px: 2 }}>
                       <br />
                       <PermissionChecks
