@@ -106,11 +106,7 @@ const styles = StyleSheet.create({
   },
 });
 const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:any }) => {
-  console.log(props?.rowData?.iroVerifiedOn, 'DATESS');
-  console.log(props.mngrName, 'IRO');
-  console.log(props.rowData?.releaseAmount, 'bnk');
   const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
-  console.log(contentPerPage, 'contentPerPage');
 
   let totalAmount = 0;
   let NewTot:any = 0;
@@ -214,7 +210,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>Requested For: {props.fr?.purpose}
                 </Text></View>
               <View style={{ width: 180 }}>
-                <Text style={{ ...styles.text, marginTop: 15, left: 20 }}>
+                <Text style={{ ...styles.text, marginTop: 15, left: 10 }}>
                   Requested Amt: {props.fr?.particulars[0].requestedAmount}
                 </Text>
               </View>
@@ -343,13 +339,13 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               <PDFCell style={{
                 textAlign: 'right', fontSize: 10, fontWeight: 'bold',
                 fontFamily: 'Oswald',
-                marginLeft: '20px',
+                marginLeft: '60px',
               }} width={'100%'}>
                 Narration
               </PDFCell>
               <PDFCell style={{
                 textAlign: 'right', fontSize: 10, fontWeight: 'bold',
-                marginLeft: '25px',
+                marginLeft: '50px',
                 fontFamily: 'Oswald',
               }} width={'100%'}>
                 Qty
@@ -399,8 +395,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'28%'}>
                 {String(item.quantity)}
               </PDFCell>
-              <div style={{ borderRight: 1, height: 100, borderRightColor: '#90e5fc' }}></div>
-
+              <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'30%'}>
                 {String(item.requestedAmount)}
               </PDFCell>
@@ -428,7 +423,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               {/* <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div> */}
               <PDFCell width={'10%'} ></PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
-              <PDFCell style={{ paddingLeft: '30px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
+              <PDFCell style={{ paddingLeft: '80px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
                 <br /> {totalAmount as any}
               </PDFCell>
               <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>

@@ -28,30 +28,28 @@ const DivisionsList = (arg:any) => {
 
   //   }, []);
 
-    let myArray: any = []
-    useEffect(()=>{
-      
-      if((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS==true){
-        const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
-        console.log(divisionId,'divisionId');
-        
-        if (divisionId) {
-          DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
-            myArray?.push(res.data);
-            setDivisions(myArray);
-          });
-        } 
-      }else{
-        DivisionsServices.getDivisions()
+  const myArray: any = [];
+  useEffect(()=>{
+    if ((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS==true) {
+      const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
+      console.log(divisionId, 'divisionId');
+
+      if (divisionId) {
+        DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
+          myArray?.push(res.data);
+          setDivisions(myArray);
+        });
+      }
+    } else {
+      DivisionsServices.getDivisions()
             .then((res) => {
               setDivisions(res.data);
             })
             .catch((err) => {
               console.log({ err });
             });
-        
-      }
-},[])
+    }
+  }, []);
   // useEffect(() => {
   //   DivisionsServices.getDivisions()
   //     .then((res) => {
@@ -135,9 +133,8 @@ const DivisionsList = (arg:any) => {
             ...(hasPermissions(['EDIT_DIVISION_ACCESS']) ? [
               {
                 id: 'edit',
-                text: 'Edit',
+                text: 'Edit For Coordinator',
                 component: Link,
-
                 onClick: () => {
                   window.open(`/divisions/editcoordinator/${props.row._id}`, '_blank');
                 },
@@ -255,7 +252,7 @@ const DivisionsList = (arg:any) => {
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
   });
-  
+
   return (
     <>
       <Grid container spacing={2} padding={2}>

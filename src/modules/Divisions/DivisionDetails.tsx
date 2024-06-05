@@ -12,6 +12,7 @@ import DivisionsFormComponent from './components/DivisionsFormComponent';
 import DivisionsList from './components/DivisionsList';
 interface DivisionFormPageProps {
   action: 'add' | 'edit' | 'view';
+  coordinator?: boolean;
 }
 const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   const { divisionIDs, editID } = useParams();
@@ -342,7 +343,8 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 action === 'add' ? addDivision() : editDivision();
-                navigate('/divisions/');
+                props.coordinator ? navigate('/divisions/view') : navigate('/divisions')
+                ;
               }}
             >
 

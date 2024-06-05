@@ -8,25 +8,27 @@ import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 
 const IRODashboard = () => {
-  const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<number | null>(null);
+  interface Icounts {
+    IRAppliedCount:number;
+  }
+  const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<Icounts>();
   const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
   const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
 
-
   useEffect(() => {
-    // IROServices.getCount()
-    //   .then((res) => setIROCount(res.data))
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+  // IROServices.getCount()
+  //   .then((res) => setIROCount(res.data))
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
     IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
-      .then((res) => setWaitingToOfficeManagerCount(res.data))
+    IROServices.getAppliedCount()
+      .then((res) => setWaitingToOfficeManagerCount(res.data as unknown as Icounts))
       .catch((error) => {
         console.log({ error });
       });
@@ -46,7 +48,7 @@ const IRODashboard = () => {
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.toString()} secondaryText={'Applied'} color="#fff" />
+            style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Applied'} color="#fff" />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"

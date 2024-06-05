@@ -50,7 +50,7 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'Divisions',
       path: '/editcoordinator/:editID',
-      element: <DivisionDetailsPage action="edit"/>,
+      element: <DivisionDetailsPage coordinator={true} action="edit"/>,
       private: true,
       requiredAccessRights: ['EDIT_DIVISION_ACCESS'],
     },
