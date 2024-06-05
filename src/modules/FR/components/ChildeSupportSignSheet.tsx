@@ -174,30 +174,32 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
               <div style={styles.headGrid}></div>
             </View>
 
-            {getRowsForPage(pageIndex)?.map((row: any, index: any) => (<>
-              <View style={styles.tableRow} key={row._id}>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{index + 1}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.childCode}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>
-                  {row.firstName}{' '}
-                  <Text style={styles.tableCell}>{row.lastName} </Text>
-                </Text><div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {' '} {row?.childOf?.basicDetails?.lastName}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.childSupport?.amount != 0 ? row.childSupport?.amount : ''}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}></Text>
-                {/* <div style={styles.cellGrid}></div> */}
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                <div style={styles.cellGrid}></div>
-              </View>
-            </>
-            ))}
+            {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
+              const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
+              return (
+                <View style={styles.tableRow} key={row._id}>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{globalIndex}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.childCode}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>
+                    {row.firstName} <Text style={styles.tableCell}>{row.lastName}</Text>
+                  </Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {row?.childOf?.basicDetails?.lastName}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.childSupport?.amount !== 0 ? row.childSupport?.amount : ''}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}></Text>
+                  {/* <div style={styles.cellGrid}></div> */}
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                  <div style={styles.cellGrid}></div>
+                </View>
+              );
+            })}
           </View></>
         ))}
         <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
