@@ -1064,7 +1064,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 <Grid item xs={6}>
                   <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
                   <br />
-                  <Tooltip sx={{ fontSize: 30, padding: 1 }} title="The following fields can be searchable: IROno, IRODate, SubCategory">
+                  <Tooltip sx={{ fontSize: 30, padding: 1, color: '#3b32e6' }} title="The following fields can be searchable: IROno, IRODate, SubCategory, Division">
                     <InfoIcon>
                       <DeleteIcon />
                     </InfoIcon>
