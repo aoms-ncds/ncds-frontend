@@ -91,7 +91,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     });
   }, []);
   // console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
-  // console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
+  console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
+  console.log(props.data[0]?.division?.otherBankDetails, ' props.data[0]?.sanctionedBank');
 
   useEffect(() => {
     if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
@@ -106,43 +107,41 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 props.data[0]?.division?.otherBankDetails :
                 props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
                   props.data[0]?.division?.FCRABankDetails :
-                  props.data[0]?.sanctionedBank == 'Other Bank 1' && props.data[0]?.division?.otherBankDetails1 ?
-                    props.data[0]?.division?.otherBankDetails1 :
-                    props.data[0]?.sanctionedBank == 'Other Bank 2' && props.data[0]?.division?.otherBankDetails2 ?
-                      props.data[0]?.division?.otherBankDetails2 :
-                      props.data[0]?.sanctionedBank == 'Other Bank 3' && props.data[0]?.division?.otherBankDetails3 ?
-                        props.data[0]?.division?.otherBankDetails3 :
-                        props.data[0]?.sanctionedBank == 'Other Bank 4' && props.data[0]?.division?.otherBankDetails4 ?
-                          props.data[0]?.division?.otherBankDetails4 :
-                          props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
-                            props.data[0]?.division?.DivisionBankLocal :
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ?
-                              props.data[0]?.division?.BeneficiaryBank1 :
-                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 ?
-                                props.data[0]?.division?.BeneficiaryBank2 :
-                                props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 ?
-                                  props.data[0]?.division?.BeneficiaryBank4 :
-                                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ?
-                                    props.data[0]?.division?.BeneficiaryBank5 :
-                                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
-                                      props.data[0]?.division?.BeneficiaryBank6 :
-                                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
-                                        props.data[0]?.division?.BeneficiaryBank7 :
-                                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
-                                          props.data[0]?.division?.BeneficiaryBank8 :
-                                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
-                                            props.data[0]?.division?.BeneficiaryBank9 :
-                                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
-                                              props.data[0]?.division?.BeneficiaryBank10 :
-                                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 ?
-                                                props.data[0]?.division?.BeneficiaryBank3 :
-                                                props.data[0]?.sanctionedBank == 'Beneficiary Bank1' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
-                                                  bankName: '',
-                                                  branchName: '',
-                                                  accountNumber: '',
-                                                  IFSCCode: '',
-                                                  beneficiary: '',
-                                                },
+                  props.data[0]?.sanctionedBank == 'Other Bank 2' && props.data[0]?.division?.otherBankDetails2 ?
+                    props.data[0]?.division?.otherBankDetails2 :
+                    props.data[0]?.sanctionedBank == 'Other Bank 3' && props.data[0]?.division?.otherBankDetails3 ?
+                      props.data[0]?.division?.otherBankDetails3 :
+                      props.data[0]?.sanctionedBank == 'Other Bank 4' && props.data[0]?.division?.otherBankDetails4 ?
+                        props.data[0]?.division?.otherBankDetails4 :
+                        props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
+                          props.data[0]?.division?.DivisionBankLocal :
+                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 || props.data[0]?.division?.otherBankDetails ?
+                            props.data[0]?.division?.BeneficiaryBank1|| props.data[0]?.division?.otherBankDetails:
+                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 || props.data[0]?.division?.otherBankDetails1 ?
+                              props.data[0]?.division?.BeneficiaryBank2 || props.data[0]?.division?.otherBankDetails1 :
+                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 || props.data[0]?.division?.otherBankDetails3 ?
+                                props.data[0]?.division?.BeneficiaryBank4 || props.data[0]?.division?.otherBankDetails3:
+                                props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ||props.data[0]?.division?.otherBankDetails4 ?
+                                  props.data[0]?.division?.BeneficiaryBank5 || props.data[0]?.division?.otherBankDetails4:
+                                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
+                                    props.data[0]?.division?.BeneficiaryBank6 :
+                                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
+                                      props.data[0]?.division?.BeneficiaryBank7 :
+                                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
+                                        props.data[0]?.division?.BeneficiaryBank8 :
+                                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
+                                          props.data[0]?.division?.BeneficiaryBank9 :
+                                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
+                                            props.data[0]?.division?.BeneficiaryBank10 :
+                                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 || props.data[0]?.division?.otherBankDetails2 ?
+                                              props.data[0]?.division?.BeneficiaryBank3 || props.data[0]?.division?.otherBankDetails2 :
+                                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank1 : {
+                                                bankName: 'A',
+                                                branchName: 'A',
+                                                accountNumber: 'A',
+                                                IFSCCode: '',
+                                                beneficiary: '',
+                                              },
 
         releaseAmount: props.data.reduce((tot, iro) => {
           if (!iro?.particulars) return tot;
