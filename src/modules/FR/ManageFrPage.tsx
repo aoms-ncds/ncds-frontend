@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -54,6 +55,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
+  const [delateModel, setDelateModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
@@ -85,6 +87,8 @@ const ManageFrPage = () => {
       });
   }, []);
   const deleteFR = (id: string) => {
+    console.log(id, 'log');
+
     const snackbarId = enqueueSnackbar({
       message: 'Removing FR',
       variant: 'info',
@@ -97,6 +101,7 @@ const ManageFrPage = () => {
             return FRRequests._id !== id;
           });
           setFRRequests(fr);
+          setDelateModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -240,7 +245,9 @@ const ManageFrPage = () => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
-                    deleteFR(props.row._id);
+                    // deleteFR(props.row._id);
+                    setSelectedFR(props.row._id);
+                    setDelateModel(true);
                   },
                 },
               ] :
@@ -432,7 +439,7 @@ const ManageFrPage = () => {
           }}
         >
 
-          { props.row.particulars[0]?.subCategory3 !='Select' ?
+          { props.row.particulars[0]?.subCategory3 !='Select' || props.row.particulars[0]?.subCategory3 !=null ?
             props.row.particulars[0]?.subCategory3 :
             props.row.particulars[0].subCategory2 != 'Select'?
               props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1}
@@ -974,6 +981,26 @@ const ManageFrPage = () => {
                   Cancel
                 </Button>
               </DialogActions>
+            </Dialog>
+            <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+              <DialogContent>
+                <Typography sx={{ color: 'red' }}>Are you sure you want to delete this FR?</Typography>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={()=>setDelateModel(false)}>Close</Button>
+                <Button
+                  endIcon={<DeleteIcon />}
+                  variant="contained"
+                  color="info"
+                  onClick={async () => {
+                    deleteFR(selectedFR?.toString() ?? '');
+                  } }
+                >
+                 Delate
+                </Button>
+              </DialogActions>
+
             </Dialog>
           </>
         }

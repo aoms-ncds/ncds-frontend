@@ -920,8 +920,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
-          maxItemSize: 1 * MB,
-          maxItemCount: 3,
+          maxItemSize: 3 * MB,
+          maxItemCount: 10,
           maxTotalSize: 3 * MB,
         }}
         // accept={['video/*']}

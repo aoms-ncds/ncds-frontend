@@ -42,6 +42,7 @@ interface UserCardProps {
 
 const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [rowID, setRowID] = useState<string>('');
@@ -183,14 +184,15 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
               hasPermissions(['ADMIN_ACCESS']) && (
                 <MenuItem
                   onClick={() => {
-                    WorkersServices.delete(user._id)
-                      .then((res) => {
-                        removeUser(user._id);
-                        enqueueSnackbar({ message: res.message, variant: 'success' });
-                      })
-                      .catch((err) => {
-                        enqueueSnackbar({ message: err.message, variant: 'error' });
-                      });
+                    // WorkersServices.delete(user._id)
+                    //   .then((res) => {
+                    //     removeUser(user._id);
+                    //     enqueueSnackbar({ message: res.message, variant: 'success' });
+                    //   })
+                    //   .catch((err) => {
+                    //     enqueueSnackbar({ message: err.message, variant: 'error' });
+                    //   });
+                    setDeleteModel(true);
                   }}
                 >
                   Delete
@@ -350,6 +352,34 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              WorkersServices.delete(user._id)
+                      .then((res) => {
+                        removeUser(user._id);
+                        enqueueSnackbar({ message: res.message, variant: 'success' });
+                        setDeleteModel(false);
+                      })
+                      .catch((err) => {
+                        enqueueSnackbar({ message: err.message, variant: 'error' });
+                      });
+            } }
+          >
+                 Delate
+          </Button>
+        </DialogActions>
+
+      </Dialog>;
     </>
   );
 };

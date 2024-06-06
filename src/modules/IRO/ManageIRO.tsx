@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -268,6 +269,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
+  const [delateModel, setDelateModel] = useState(false);
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -285,6 +287,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
+  console.log(selectedIROId, 'selectedIROId');
 
   const attach = async (blob: Blob) => {
     try {
@@ -462,6 +465,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   }, []);
 
   const deleteIRO = (id: string) => {
+    console.log(id, 'as is');
+
     const snackbarId = enqueueSnackbar({
       message: 'Removing IRO',
       variant: 'info',
@@ -474,6 +479,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             return IROrder._id !== id;
           });
           setIROrder(IRO);
+          setDelateModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -562,7 +568,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
-                    deleteIRO(params.row._id);
+                    setSelectedIROId(params.row._id);
+                    setDelateModel(true);
+                    // deleteIRO(params.row._id);
                   },
                 },
               ] :
@@ -839,6 +847,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               props.row.particulars[0]?.subCategory2 != 'Select' ?
                 props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1
           }
+          {/* {props.row.particulars[0]?.subCategory3 == 'Select' || props.row.particulars[0]?.subCategory3 == '' ? props.row.particulars[0]?.subCategory2 :
+            props.row.particulars[0]?.subCategory2 == 'Select' ? props.row.particulars[0]?.subCategory1: props.row.particulars[0]?.subCategory3 != 'Select' || props.row.particulars[0]?.subCategory3 != null ? props.row.particulars[0]?.subCategory3: null
+          } */}
         </p>
       ),
     },
@@ -1817,6 +1828,26 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             )}
           </>
         </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this IRO?</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDelateModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              deleteIRO(selectedIROId?.toString()?? '');
+            } }
+          >
+                 Delate
+          </Button>
+        </DialogActions>
+
       </Dialog>
       {loading&&
       <Lottie

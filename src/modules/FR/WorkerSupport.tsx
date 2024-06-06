@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, styled } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
@@ -22,6 +22,7 @@ import { useAuth } from '../../hooks/Authentication';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
+import { red } from '@mui/material/colors';
 interface TotalSupportStructure {
   basic?: number;
   prevBasic?: number;
@@ -84,6 +85,7 @@ const WorkerSupportPage = () => {
   const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
   const [subDivision, setSubDivision] = useState<SubDivision | null>(null);
   const [purpose, setPurpose] = useState<FRPurpose | null>(null);
+  const [modal, setModal] = useState<boolean>(false);
 
   const [frAction, setFrAction] = useState<'add' | 'view' | null>(null);
   const [requisition, setRequisition] = useState<CreatableFR>({
@@ -1407,7 +1409,11 @@ const WorkerSupportPage = () => {
           </DialogActions>
         }
       </Dialog>
-      <Dialog open={confirmAttach} onClose={() => setConfirmAttach(false)} maxWidth="xs" fullWidth>
+      <Dialog open={confirmAttach} onClose={(event, reason) => {
+        if (reason !== 'backdropClick') {
+          setConfirmAttach(false);
+        }
+      }} maxWidth="xs" fullWidth>
         <DialogTitle> Add attachment</DialogTitle>
         <DialogContent>
           <Container>FR created. Do you want to add attachment &nbsp;
@@ -1470,24 +1476,56 @@ const WorkerSupportPage = () => {
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob: supportBlob, loading: loading2 }) => (
-                        <Button
-                          endIcon={<AttachIcon />}
-                          variant="contained"
-                          color="info"
-                          onClick={async () => {
-                            if (signBlob && supportBlob) {
-                              setLoading(true);
-                              attach(signBlob, supportBlob);
-                            }
-                          }}
-                          disabled={loading1 || loading2 || disableAttach||loading}
-                        >
-                          {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
-                        </Button>
+                        <>
+                          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
+                            <DialogContent>
+                              <Typography sx={{ color: 'red' }}>Did you download the signature sheet?</Typography>
+                            </DialogContent>
+
+                            <DialogActions>
+                              <Button onClick={()=>setModal(false)}>Close</Button>
+                              <Button
+                                endIcon={<AttachIcon />}
+                                variant="contained"
+                                color="info"
+                                onClick={async () => {
+                                  if (signBlob && supportBlob) {
+                                    setLoading(true);
+                                    attach(signBlob, supportBlob);
+                                  }
+                                } }
+                                disabled={loading1 || loading2 || disableAttach || loading}
+                              >
+                                {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes'}
+                              </Button>
+                            </DialogActions>
+
+                          </Dialog>
+                          {/* <Button
+                            endIcon={<AttachIcon />}
+                            variant="contained"
+                            color="info"
+                            onClick={async () => {
+                              if (signBlob && supportBlob) {
+                                setLoading(true);
+                                attach(signBlob, supportBlob);
+                              }
+                            }}
+                            disabled={loading1 || loading2 || disableAttach||loading}
+                          >
+                            {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
+                          </Button> */}
+                          <Button onClick={() =>{
+                            setModal(true);
+                          } }>
+                            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
+                          </Button>
+                        </>
                       )}
                     </PDFDownloadLink>
                   )}
                 </PDFDownloadLink>
+
               </>
             )}
           </>

@@ -41,7 +41,7 @@ const SentBack = () => {
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
-        console.log({ res});
+        console.log({ res });
         setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
@@ -249,20 +249,20 @@ const SentBack = () => {
   return (
 
     <CommonPageLayout title="Sent Back iro">
-      <Card sx={{ maxWidth: '78vw',height: '85vh', alignItems: 'center' }}>
+      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2} >
-        <Grid item xs={6}>
-          {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            value={searchText}
-            onChange={handleSearchChange}
-            fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
-          />
-          {/* </Grid> */}
-        </Grid>
+          <Grid item xs={6}>
+            {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchText}
+              onChange={handleSearchChange}
+              fullWidth
+              style={{ width: '25%', alignItems: 'start' }}
+            />
+            {/* </Grid> */}
+          </Grid>
           <Grid item xs={6} sx={{ px: 2 }}>
             <PermissionChecks
               permissions={['MANAGE_FR']}
@@ -315,37 +315,37 @@ const SentBack = () => {
           </Grid>
           <Grid item xs={12} >
             <Box
-            sx={{
-              'height': 500,
-              'width': '100%',
-              '& .super-app-theme--cell': {
-                backgroundColor: '#f1f5fa',
-                color: 'black',
-                fontWeight: '600',
-              },
-              '& .super-app.negative': {
-                backgroundColor: 'rgba(157, 255, 118, 0.49)',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .super-app.positive': {
-                backgroundColor: '#d47483',
-                color: '#1a3e72',
-                fontWeight: '600',
-              },
-              '& .even': {
-                backgroundColor: '#DEDAFF', // Change to red for even rows
-              },
-              '& .odd': {
-                backgroundColor: '#fff', // Change to blue for odd rows
-              },
-            }}
-          >
-            
+              sx={{
+                'height': 500,
+                'width': '100%',
+                '& .super-app-theme--cell': {
+                  backgroundColor: '#f1f5fa',
+                  color: 'black',
+                  fontWeight: '600',
+                },
+                '& .super-app.negative': {
+                  backgroundColor: 'rgba(157, 255, 118, 0.49)',
+                  color: '#1a3e72',
+                  fontWeight: '600',
+                },
+                '& .super-app.positive': {
+                  backgroundColor: '#d47483',
+                  color: '#1a3e72',
+                  fontWeight: '600',
+                },
+                '& .even': {
+                  backgroundColor: '#DEDAFF', // Change to red for even rows
+                },
+                '& .odd': {
+                  backgroundColor: '#fff', // Change to blue for odd rows
+                },
+              }}
+            >
 
-            <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
-              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-            }/>
+
+              <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
+                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+              }/>
             </Box>
           </Grid>
         </Grid>
