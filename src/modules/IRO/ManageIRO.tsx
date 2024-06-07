@@ -62,6 +62,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
+  const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
@@ -276,6 +277,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
+  console.log(releaseAmountIROs, '#DD');
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -287,7 +289,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  console.log(selectedIROId, 'selectedIROId');
+  console.log(IROrder, 'selectedIROId');
 
   const attach = async (blob: Blob) => {
     try {
@@ -1139,10 +1141,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       startIcon={<AttachMoneyIcon />}
                       disabled={releaseAmountIROs.length == 0}
                       onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.division?._id == releaseAmountIROs[0].division?._id)) {
+                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank== releaseAmountIROs[0].sanctionedBank)) {
                           setOpenRelease(true);
+                          setNewTest(releaseAmountIROs);
                         } else {
-                          enqueueSnackbar({ message: 'IRO of Different divisions selected', variant: 'error' });
+                          enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
                         }
                       }}
                     >
@@ -1209,7 +1212,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
                           setReleaseAmountIROs(() => {
                             const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
-
                             return selectedIROs;
                           });
                         }}
@@ -1688,7 +1690,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs} />
+            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs ?? newTest } />
           </>
         }
         denied={(missingPermissions) => (

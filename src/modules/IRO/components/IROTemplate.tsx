@@ -117,12 +117,14 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
   const totalSacntion =props.fr?.particulars.forEach((e)=>{
     totalAmount2 += e?.sanctionedAmount !=undefined ? e?.sanctionedAmount : 0;
   });
+  console.log(totalAmount2, 'total');
+
   NewTot += props?.fr?.sanctionedAmount !=undefined ? props?.fr?.sanctionedAmount: 0;
   console.log(NewTot, 'eee');
-  console.log(props, 'eee');
 
-  const sanctionedAmount = NewTot?? totalAmount2;
+  const sanctionedAmount = NewTot !=0 ? NewTot : totalAmount2;
   let sanctionedAmountWords = '';
+  console.log(sanctionedAmount, 'amount');
 
   if (typeof sanctionedAmount !== 'undefined') {
     sanctionedAmountWords = numberToWords.toWords(sanctionedAmount);
@@ -130,7 +132,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
     sanctionedAmountWords = 'N/A';
   }
   // const dateString = props?.rowData?.releaseAmount?.transferredDate?? '';
-  // console.log(dateString, 'dateString');
+  console.log(sanctionedAmountWords, 'dateString');
 
   // const formattedDate = moment(dateString)?.format('DD MMMM YYYY');
   // console.log(formattedDate, 'formattedDate');
@@ -427,7 +429,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
                 <br /> {totalAmount as any}
               </PDFCell>
               <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-                <br />{NewTot ?? totalAmount2}
+                <br />{NewTot != 0 ? NewTot : totalAmount2}
               </PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
             </PDFTableRow>

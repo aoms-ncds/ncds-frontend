@@ -61,7 +61,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
   // if(iroStatus){
-  console.log(props, 'propssa');
+  console.log(props, 'new data');
 
   // eslint-disable-next-line prefer-const
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
