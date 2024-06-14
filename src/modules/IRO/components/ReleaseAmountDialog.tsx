@@ -92,68 +92,78 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   }, []);
   // console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
   console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
-  console.log( props.data[0]?.division?.BeneficiaryBank4, ' props.data[0]?.sanctionedBank');
+  console.log( props.data[0]?.division?.BeneficiaryBank3, ' props.data[0]?.sanctionedBank');
 
   useEffect(() => {
     if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
-      setReleaseAmount(() => ({
-        ...releaseAmount,
-        transferredBank:
-          props.data[0]?.sanctionedBank == 'Division Bank FCRA' && props.data[0]?.division?.DivisionBankFCRA ?
-            props.data[0]?.division?.DivisionBankFCRA :
-            props.data[0]?.sanctionedBank == 'Local Bank' && props.data[0]?.division?.localBankDetails ?
-              props.data[0]?.division?.localBankDetails :
-              props.data[0]?.sanctionedBank == 'Other Bank' && props.data[0]?.division?.otherBankDetails ?
-                props.data[0]?.division?.otherBankDetails :
-                props.data[0]?.sanctionedBank == 'FCRA' && props.data[0]?.division?.FCRABankDetails ?
-                  props.data[0]?.division?.FCRABankDetails :
-                  props.data[0]?.sanctionedBank == 'Other Bank 2' && props.data[0]?.division?.otherBankDetails2 ?
-                    props.data[0]?.division?.otherBankDetails2 :
-                    props.data[0]?.sanctionedBank == 'Other Bank 3' && props.data[0]?.division?.otherBankDetails3 ?
-                      props.data[0]?.division?.otherBankDetails3 :
-                      props.data[0]?.sanctionedBank == 'Other Bank 4' && props.data[0]?.division?.otherBankDetails4 ?
-                        props.data[0]?.division?.otherBankDetails4 :
-                        props.data[0]?.sanctionedBank == 'Division Bank Local' && props.data[0]?.division?.DivisionBankLocal ?
-                          props.data[0]?.division?.DivisionBankLocal :
-                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 1' && props.data[0]?.division?.BeneficiaryBank1 || props.data[0]?.division?.otherBankDetails ?
-                            props.data[0]?.division?.BeneficiaryBank1|| props.data[0]?.division?.otherBankDetails:
-                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 2' && props.data[0]?.division?.BeneficiaryBank2 || props.data[0]?.division?.otherBankDetails1 ?
-                              props.data[0]?.division?.BeneficiaryBank2 || props.data[0]?.division?.otherBankDetails1 :
-                              props.data[0]?.sanctionedBank == 'Beneficiary Bank 4' && props.data[0]?.division?.BeneficiaryBank4 || props.data[0]?.division?.otherBankDetails3 ?
-                                props.data[0]?.division?.BeneficiaryBank4:
-                                props.data[0]?.sanctionedBank == 'Beneficiary Bank 5' && props.data[0]?.division?.BeneficiaryBank5 ||props.data[0]?.division?.otherBankDetails4 ?
-                                  props.data[0]?.division?.BeneficiaryBank5 || props.data[0]?.division?.otherBankDetails4:
-                                  props.data[0]?.sanctionedBank == 'Beneficiary Bank 6' && props.data[0]?.division?.BeneficiaryBank6 ?
-                                    props.data[0]?.division?.BeneficiaryBank6 :
-                                    props.data[0]?.sanctionedBank == 'Beneficiary Bank 7' && props.data[0]?.division?.BeneficiaryBank7 ?
-                                      props.data[0]?.division?.BeneficiaryBank7 :
-                                      props.data[0]?.sanctionedBank == 'Beneficiary Bank 8' && props.data[0]?.division?.BeneficiaryBank8 ?
-                                        props.data[0]?.division?.BeneficiaryBank8 :
-                                        props.data[0]?.sanctionedBank == 'Beneficiary Bank 9' && props.data[0]?.division?.BeneficiaryBank9 ?
-                                          props.data[0]?.division?.BeneficiaryBank9 :
-                                          props.data[0]?.sanctionedBank == 'Beneficiary Bank 10' && props.data[0]?.division?.BeneficiaryBank10 ?
-                                            props.data[0]?.division?.BeneficiaryBank10 :
-                                            props.data[0]?.sanctionedBank == 'Beneficiary Bank 3' && props.data[0]?.division?.BeneficiaryBank3 || props.data[0]?.division?.otherBankDetails2 ?
-                                              props.data[0]?.division?.BeneficiaryBank3 || props.data[0]?.division?.otherBankDetails2 :
-                                              props.data[0]?.sanctionedBank == 'Beneficiaryy Bank 11' && props.data[0]?.division?.BeneficiaryBank1 ? props.data[0]?.division?.BeneficiaryBank8 : {
-                                                bankName: 'A',
-                                                branchName: 'A',
-                                                accountNumber: 'A',
-                                                IFSCCode: '',
-                                                beneficiary: '',
-                                              },
+      const data = props.data[0];
+      const division = data?.division;
+      const sanctionedBank = data?.sanctionedBank;
 
-        releaseAmount: props.data.reduce((tot, iro) => {
-          if (!iro?.particulars) return tot;
-          console.log(iro.sanctionedAmountTotal, 'total amount');
+      const getTransferredBank = () => {
+        switch (sanctionedBank) {
+        case 'Division Bank FCRA':
+          return division?.DivisionBankFCRA;
+        case 'Local Bank':
+          return division?.localBankDetails;
+        case 'Other Bank':
+          return division?.otherBankDetails;
+        case 'FCRA':
+          return division?.FCRABankDetails;
+        case 'Other Bank 2':
+          return division?.otherBankDetails2;
+        case 'Other Bank 3':
+          return division?.otherBankDetails3;
+        case 'Other Bank 4':
+          return division?.otherBankDetails4;
+        case 'Division Bank Local':
+          return division?.DivisionBankLocal;
+        case 'Beneficiary Bank 1':
+          return division?.BeneficiaryBank1 || division?.otherBankDetails;
+        case 'Beneficiary Bank 2':
+          return division?.BeneficiaryBank2 || division?.otherBankDetails1;
+        case 'Beneficiary Bank 3':
+          return division?.BeneficiaryBank3 || division?.otherBankDetails2;
+        case 'Beneficiary Bank 4':
+          return division?.BeneficiaryBank4 || division?.otherBankDetails3;
+        case 'Beneficiary Bank 5':
+          return division?.BeneficiaryBank5 || division?.otherBankDetails4;
+        case 'Beneficiary Bank 6':
+          return division?.BeneficiaryBank6;
+        case 'Beneficiary Bank 7':
+          return division?.BeneficiaryBank7;
+        case 'Beneficiary Bank 8':
+          return division?.BeneficiaryBank8;
+        case 'Beneficiary Bank 9':
+          return division?.BeneficiaryBank9;
+        case 'Beneficiary Bank 10':
+          return division?.BeneficiaryBank10;
+        case 'Beneficiaryy Bank 11':
+          return null;
+        default:
+          return {
+            bankName: '',
+            branchName: '',
+            accountNumber: '',
+            IFSCCode: '',
+            beneficiary: '',
+          };
+        }
+      };
 
-          // Use `reduce` to sum the sanctioned amounts within the array
-          const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
-          // console.log(tot + iro?.sanctionedAmount, 'totalSanctioned');
+      const totalReleaseAmount = props.data.reduce((tot, iro) => {
+        if (!iro?.particulars) return tot;
 
-          return iro.sanctionedAmount ? tot + iro?.sanctionedAmount: tot + totalSanctioned;
-        }, 0), IRO: props.data,
-        division: props.data[0]?.division?._id ?? '',
+        const totalSanctioned = iro.particulars.reduce((acc, amt) => acc + (amt?.sanctionedAmount || 0), 0);
+        return iro.sanctionedAmount ? tot + iro?.sanctionedAmount : tot + totalSanctioned;
+      }, 0);
+
+      setReleaseAmount((prevState:any) => ({
+        ...prevState,
+        transferredBank: getTransferredBank(),
+        releaseAmount: totalReleaseAmount,
+        IRO: props.data,
+        division: division?._id ?? '',
       }));
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
