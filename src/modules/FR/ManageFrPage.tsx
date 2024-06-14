@@ -736,7 +736,7 @@ const ManageFrPage = () => {
                       columns={columns}
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
-                      style={{ height: '70vh', width: '100%' }}
+                      style={{ height: '66vh', width: '100%' }}
                       getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
                     />
                   </Box>

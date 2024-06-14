@@ -52,6 +52,7 @@ interface TotalSupportStructure {
 const ChildeSupportPage = () => {
   const user = useAuth();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
+  const [workersSelect, setWorkersSelect] = useState<IWorker | null>(null);
   const [childList, setChildList] = useState<Child[]>([]);
   const [coordinators, setCoordinatrs] = useState<IWorker[] | null>([]);
   const [selectedcoordinators, setSelectedCoordinatrs] = useState<IWorker | null>(null);
@@ -212,7 +213,7 @@ const ChildeSupportPage = () => {
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
     .then((res) => {
       console.log(res, 'rr');
-      // setWorkers(res.data);
+      setWorkers(res.data);
       setCoordinatrs((prevState:any) => {
         // Filter workers based on designation
         const filteredWorkers = res.data?.filter(
@@ -466,26 +467,54 @@ const ChildeSupportPage = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <Autocomplete
-                  value={selectedWorker ?? null}
-                  options={(childList ?? [])}
-                  getOptionLabel={(childe) => `${childe?.firstName} ${childe.lastName}`}
-                  onChange={(_e, newVal:any) => {
-                    setSelectedWorker(newVal ?? null);
+                <Autocomplete<IWorker>
+                  value={workersSelect as unknown as IWorker}
+                  options={(workers ?? [])}
+                  getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
+                  onChange={(_e, newVal) => {
+                    setWorkersSelect(newVal as IWorker);
                     if (newVal) {
-                      setChildList((childe) => childe?.filter((child) => child._id == newVal?._id) ?? []);
+                      const coordinatorId = newVal._id;
+                      console.log(coordinatorId, 'coordinatorId');
+                      if (coordinatorId) {
+                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
+                        setDivision(() =>
+                          newVal && 'division' in newVal && newVal.division ?
+                            divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
+                            null,
+                        );
+                      }
+                    } else {
+                      setWorkersSelect(null);
+                      setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
+                    }
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Choose Worker" variant="standard" />}
+                  fullWidth
+                />
+              </Grid>
+              {/* <Grid item xs={12} md={6} >
+                <Autocomplete
+                  value={workersSelect as unknown as IWorker}
+                  options={(workers ?? [])}
+                  getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
+                  onChange={(_e, newVal:any) => {
+                    setWorkersSelect(newVal?? null);
+                    if (newVal) {
+                      setChildList((childe) => childe?.filter((child) => child.childOf?._id == newVal?._id && child.childSupport?.amount != 0) ?? []);
                       setDivision(() =>
                         newVal && 'division' in newVal && newVal.division ?
                           divisions?.find((div) => div._id === (newVal.division as Division)._id) ?? null :
                           null,
                       );
-                      console.log(childList, 'coonewVal');
                     } else setChildList(() => (division ? allChild?.filter((child: any) => (child.division as Division | undefined)?._id == division?._id) : allChild) ?? []);
                   }}
-                  renderInput={(params) => <TextField {...params} label="Choose Child" variant='standard' />}
+                  renderInput={(params) => <TextField {...params} label="Choose Worker" variant="standard" />}
                   fullWidth
+                  disabled={loading !=true}
+
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} md={6}>
                 <Autocomplete<IWorker>
                   value={selectedcoordinators ?? null}
