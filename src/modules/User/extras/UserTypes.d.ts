@@ -49,7 +49,7 @@ declare global {
     OTHER_ACCOUNTS_ACCESS_4: boolean;
 
     EDIT_DIVISION_ACCESS: boolean;
-
+    WAITTING_FOR_RELEASE_AMOUNT: boolean;
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;

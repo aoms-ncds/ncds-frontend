@@ -277,7 +277,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
-  console.log(releaseAmountIROs, '#DD');
+  console.log(releaseAmountIROs, '#ODD');
+  console.log(newTest, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -289,7 +290,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  console.log(IROrder, 'selectedIROId');
+  // console.log(IROrder, 'selectedIROId');
 
   const attach = async (blob: Blob) => {
     try {
@@ -421,7 +422,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS && userPermissions.ACCOUNTS_MNGR_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
-          console.log(res.data, 'datgajdfj');
+          // console.log(res.data, 'datgajdfj');
         });
       }
     } else {
@@ -430,7 +431,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
-  console.log(mngrName, 'mngrName');
+  // console.log(mngrName, 'mngrName');
 
   useEffect(() => {
     ESignatureService.getESignature().then((res) => {
@@ -1049,7 +1050,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
-  console.log(filteredRows, 'filteredRows');
+  // console.log(filteredRows, 'filteredRows');
 
   return (
     <CommonPageLayout
@@ -1214,6 +1215,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
                             return selectedIROs;
                           });
+                          setNewTest(releaseAmountIROs);
                         }}
                         getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
                         style={{ height: '65vh', width: '100%' }}
@@ -1690,7 +1692,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs ?? newTest } />
+            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
