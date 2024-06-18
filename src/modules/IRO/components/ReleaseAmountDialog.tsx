@@ -573,12 +573,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             </Button>
             {hasPermissions(['MANAGE_IRO']) ? (
               <>
-                {/* <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
-                  {iroStatus ? 'Send To Acc Mgr For Approval' : 'Release Amount'}
-                </Button> */}
                 <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
-                  Release Amount
+                  {iroStatus ? 'Send To Acc Mgr For Approval' : 'Release Amount'}
                 </Button>
+                {/* <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
+                  Release Amount
+                </Button> */}
                 <br />
               </>
             ) : null}
