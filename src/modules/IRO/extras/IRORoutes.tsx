@@ -9,6 +9,7 @@ import ReconciliationIRO from '../ReconciliationIRO';
 import AccountApprove from '../AccountApprovel';
 import OfficeMangerApprove from '../OfficeManagerApprovel';
 import EditIRO from '../EditIRO';
+import ReleaseFmRequest from '../ReleaseFmRequest';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -50,6 +51,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Release Amount',
       path: '/release_amount',
       element: <ManageIRO action='release'/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_IRO'],
+    },
+    {
+      title: 'Release Amount FM Request',
+      path: '/release_amount_fm_request',
+      element: <ReleaseFmRequest action='release'/>,
       private: true,
       requiredAccessRights: ['MANAGE_IRO'],
     },

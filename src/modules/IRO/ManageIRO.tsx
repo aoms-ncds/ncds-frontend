@@ -334,16 +334,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
     if (props.action === 'release') {
-      if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
-          .then((res) => {
-            // console.log(res.data, 'sds');
-            setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+      // if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
+      //   IROServices.getAll({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+      //     .then((res) => {
+      //       // console.log(res.data, 'sds');
+      //       setIROrder(() => [...res.data]);
+      //     })
+      //     .catch((error) => {
+      //       console.error(error);
+      //     });
+      // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
           .then((res) => {
@@ -419,7 +419,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //       console.error(error);
       //     });
       // }
-      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS && userPermissions.ACCOUNTS_MNGR_ACCESS) {
+      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS ) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           // console.log(res.data, 'datgajdfj');

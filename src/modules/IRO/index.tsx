@@ -79,6 +79,9 @@ const IRODashboard = () => {
                 <DashboardCardButton primaryText="Release Amount " color="#fff" targetRoute="/iro/release_amount" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton primaryText="Release Amount FM Request" color="#fff" targetRoute="/iro/release_amount_fm_request" />
+              </Grid>
+              <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton primaryText="Reconciliation IRO " color="#fff" targetRoute="/iro/reconciliation" />
               </Grid>
 
