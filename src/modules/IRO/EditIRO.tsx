@@ -373,6 +373,17 @@ const EditIRO = () => {
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={6}>
+                    <TextField
+                      label="IRO No"
+                      value={IRO.IROno}
+                      fullWidth
+                      disabled
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
                     <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -429,16 +440,24 @@ const EditIRO = () => {
                     </>
                   ) : null}
                   {IRO?.purpose === 'Subdivision' ? (
-                    <Grid item xs={12} md={6}>
+                    <><Grid item xs={12} md={6}>
                       <Autocomplete
                         options={[]}
                         value={IRO?.purposeSubdivision}
                         getOptionLabel={(subDiv) => subDiv.name}
-                        onChange={() => { }}
+                        onChange={() => { } }
                         renderInput={(params) => <TextField {...params} label="Subdivision" />}
+                        disabled />
+                    </Grid><Grid item xs={12} md={6}>
+                      <TextField
+                        label="Division"
+                        value={IRO.division?.details.name}
+                        fullWidth
                         disabled
-                      />
-                    </Grid>
+                        InputLabelProps={{
+                          shrink: true,
+                        }} />
+                    </Grid></>
                   ) : null}
                   {IRO?.purpose === 'Division' ? (
                     <Grid item xs={12} md={6}>

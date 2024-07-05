@@ -107,8 +107,6 @@ props.value?.particulars?.forEach((particular) => {
     total += particular?.sanctionedAmount;
   }
 });
-console.log(total, 'total');
-
 const user = useAuth();
 const handleClickOpen = (particular: Particular, index: number) => {
   setNewParticular((prev: any) => ({
@@ -246,6 +244,17 @@ return (
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
+              <TextField
+                label="IRO No"
+                value={props.value?.FRno}
+                fullWidth
+                disabled
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <DatePicker
                 label="Date"
                 value={props.value.FRdate || moment()}
@@ -314,16 +323,24 @@ return (
               </>
             ) : null}
             {props.value.purpose === 'Subdivision' ? (
-              <Grid item xs={12} md={6}>
+              <><Grid item xs={12} md={6}>
                 <Autocomplete
                   options={[]}
                   value={props.value.purposeSubdivision}
                   getOptionLabel={(subDiv) => subDiv.name}
                   onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
                   renderInput={(params) => <TextField {...params} label="Subdivision" />}
+                  disabled />
+              </Grid><Grid item xs={12} md={6}>
+                <TextField
+                  label="Division"
+                  value={props.value?.division?.details?.name}
+                  fullWidth
                   disabled
-                />
-              </Grid>
+                  InputLabelProps={{
+                    shrink: true,
+                  }} />
+              </Grid></>
             ) : null}
             {props.value.purpose === 'Division' ? (
               <Grid item xs={12} md={6}>
