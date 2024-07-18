@@ -136,7 +136,14 @@ const IROReconciliationPdf = (props:{data:
   useEffect(() => {
     console.log(props, 'props');
     if ((props.data.purpose=='Coordinator'||props.data.purpose=='Worker')&&props.data.workerId) {
-      WorkersServices.getById(props.data.workerId).then((res)=>res?.data && setWorkers([res?.data]));
+      WorkersServices.getById(props.data.workerId).then((res)=>res?.data && setWorkers([res?.data].filter((worker)=>worker.supportStructure.HRA !=0 ||
+      worker.supportStructure.MUTDeduction !=0 ||
+      worker.supportStructure.PIONMissionaryFund !=0 ||
+      worker.supportStructure.basic !=0 ||
+      worker.supportStructure.spouseAllowance !=0||
+      worker.supportStructure.positionalAllowance !=0||
+      worker.supportStructure.telAllowance !=0||
+      worker.supportStructure.impactDeduction !=0)));
       props.data.purpose=='Coordinator'? setPurpose('Coordinator'):setPurpose('Individual');
     } else if (props.data.purpose=='Subdivision'&&props.data.divisionId&&props.data.subDivisionId) {
       WorkersServices.getWorkersBySubDivision( { division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID??null })
