@@ -142,7 +142,16 @@ const IROReconciliationPdf = (props:{data:
       WorkersServices.getWorkersBySubDivision( { division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID??null })
     .then((res) => {
       console.log(res);
-      setWorkers(res.data);
+      // setWorkers(res.data);
+      setWorkers(res.data.filter((worker)=>worker.supportStructure.HRA !=0 ||
+      worker.supportStructure.MUTDeduction !=0 ||
+      worker.supportStructure.PIONMissionaryFund !=0 ||
+      worker.supportStructure.basic !=0 ||
+      worker.supportStructure.spouseAllowance !=0||
+      worker.supportStructure.positionalAllowance !=0||
+      worker.supportStructure.telAllowance !=0||
+      worker.supportStructure.impactDeduction !=0,
+      ));
       setPurpose(res.data[0].division?.details.name??'Division');
     })
       .catch((res) => {
@@ -156,7 +165,16 @@ const IROReconciliationPdf = (props:{data:
           designationParticular: props.data.designationParticularID })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data);
+            // setWorkers(res.data);
+            setWorkers(res.data.filter((worker)=>worker.supportStructure.HRA !=0 ||
+            worker.supportStructure.MUTDeduction !=0 ||
+            worker.supportStructure.PIONMissionaryFund !=0 ||
+            worker.supportStructure.basic !=0 ||
+            worker.supportStructure.spouseAllowance !=0||
+            worker.supportStructure.positionalAllowance !=0||
+            worker.supportStructure.telAllowance !=0||
+            worker.supportStructure.impactDeduction !=0,
+            ));
             setPurpose(res.data[0].division?.details.name??'Division');
           })
          .catch((res) => {
@@ -171,7 +189,15 @@ const IROReconciliationPdf = (props:{data:
         })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data.filter((worker)=>worker.supportStructure.supportEnabled));
+            setWorkers(res.data.filter((worker)=>worker.supportStructure.supportEnabled && worker.supportStructure.HRA !=0 ||
+            worker.supportStructure.MUTDeduction !=0 ||
+            worker.supportStructure.PIONMissionaryFund !=0 ||
+            worker.supportStructure.basic !=0 ||
+            worker.supportStructure.spouseAllowance !=0||
+            worker.supportStructure.positionalAllowance !=0||
+            worker.supportStructure.telAllowance !=0||
+            worker.supportStructure.impactDeduction !=0,
+            ));
             setPurpose(res.data[0].division?.details.name??'Division');
           })
          .catch((res) => {
