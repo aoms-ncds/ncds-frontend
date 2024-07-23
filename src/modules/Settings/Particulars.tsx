@@ -600,7 +600,7 @@ const Particulars = () => {
           <DialogContent>
             <Grid container spacing={3}>
               <Grid item md={12}>
-                {/* <Button  variant="contained" onClick={addSubcategory1}>ADD Category</Button> */}
+                <Button variant="contained" onClick={addSubcategory1}>ADD SUB CAT  1</Button>
                 <br />
                 <br />
                 <TextField
@@ -613,18 +613,6 @@ const Particulars = () => {
 
               <Grid item md={12}>
                 {/* <Button onClick={()=>setNewCategory([ ...newCategory ?? [],subcategory1:{...newCategory.subcategory1,name:'',subcategory2:[]}])}> add</Button> */}
-
-
-                {/* <TextField
-                  label="Sub Category 1"
-                  value={newCategory.subcategory1?.[0]?.name as unknown as MainCategory}
-                  onChange={(e) => setNewCategory(prevState => ({
-                    ...prevState,
-                    subcategory1: [{ ...prevState.subcategory1[0], name: e.target.value }],
-                  }))}
-                  fullWidth
-                /> */}
-
                 {newCategory.subcategory1?.map((item: SubCategory1, _index: number) => (
                   <div key={_index}>
                     <TextField
@@ -680,6 +668,17 @@ const Particulars = () => {
                     ))}
                   </div>
                 ))}
+
+
+                {/* <TextField
+                  label="Sub Category 1"
+                  value={newCategory.subcategory1?.[0]?.name as unknown as MainCategory}
+                  onChange={(e) => setNewCategory(prevState => ({
+                    ...prevState,
+                    subcategory1: [{ ...prevState.subcategory1[0], name: e.target.value }],
+                  }))}
+                  fullWidth
+                /> */}
 
               </Grid>
               {/* <Grid item md={12}>
