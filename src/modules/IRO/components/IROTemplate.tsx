@@ -105,9 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:any }) => {
-  const contentPerPage = Math.ceil(Object.keys(props.rowData).length / 2);
-
+const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign?:any }) => {
   let totalAmount = 0;
   let NewTot:any = 0;
   let totalAmount2 = 0;
@@ -142,6 +140,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
     NewTot = 0;
     totalAmount2 = 0;
   }, []);
+  console.log(totalAmount, 'hr');
 
   // const raiseddateString = printdetails?.IROdate;
   // const raiseddate = new Date(raiseddateString);
@@ -426,7 +425,7 @@ const IROTemplate = (props: { rowData: any;fr:FR; mngrName?:any;officeMngrSign:a
               <PDFCell width={'10%'} ></PDFCell>
               <PDFCell width={'10%'} ></PDFCell>
               <PDFCell style={{ paddingLeft: '80px', color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
-                <br /> {totalAmount as any}
+                {totalAmount as any ?? ''}
               </PDFCell>
               <PDFCell style={{ paddingRight: '30px', textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'55%'}>
                 <br />{NewTot != 0 ? NewTot : totalAmount2}
