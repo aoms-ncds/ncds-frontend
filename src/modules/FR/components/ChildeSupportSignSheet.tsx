@@ -186,6 +186,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
                 <div style={styles.headGrid}></div>
               </View>
 
+
               {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
                 const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
                 return (

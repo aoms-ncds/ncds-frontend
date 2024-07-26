@@ -122,7 +122,7 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        // console.log(res, 'rr');
+        console.log(res, 'rr');
         setFRRequests(res.data.filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
       })
       .catch((res) => {
@@ -417,7 +417,7 @@ const ManageFrPage = () => {
             textAlign: 'center',
           }}
         >
-          {props.row.mainCategory}
+          {props.row?.particulars[0]?.mainCategory}
         </p>
       ),
     },
@@ -649,7 +649,7 @@ const ManageFrPage = () => {
                                   fr.FRdate.format('DD/MM/YYYY'),
                                   fr.division?.details.name,
                                   fr.purposeSubdivision?.name,
-                                  fr.mainCategory,
+                                  fr?.mainCategory,
                                   fr.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
                                   fr.sanctionedAmount,
                                   fr.sanctionedBank,
