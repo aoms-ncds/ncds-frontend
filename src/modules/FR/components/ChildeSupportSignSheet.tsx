@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-key */
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useEffect, useState } from 'react';
@@ -157,7 +158,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`CHILD SUPPORT SIGNATURE SHEET OF ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
+            {`IET Child Education Assistance- ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
           </Text>
           <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`} {year}</Text>
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
