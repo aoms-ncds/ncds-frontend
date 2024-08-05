@@ -312,21 +312,25 @@ const IROReconciliationPdf = (props:{data:
               <div style={styles.cellGridCopy2}></div>
             </View>
 
-            {getRowsForPage(pageIndex)?.map((row: any, index: any) => (<>
-              <View style={styles.tableRow} key={row._id}>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{index + 1}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.workerCode}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
-                <div style={styles.cellGrid}></div>
-                {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
+            {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
+              const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
+
+              return (
+
+                <View style={styles.tableRow} key={row._id}>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{globalIndex}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.workerCode}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
+                  <div style={styles.cellGrid}></div>
+                  {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
         <div style={styles.cellGrid}></div> */}
-                <Text style={styles.tableCell}>{row.division?.details.name}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
-                  (row.supportStructure?.basic ?? 0) +
+                  <Text style={styles.tableCell}>{row.division?.details.name}</Text>
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
+                    (row.supportStructure?.basic ?? 0) +
                   (row.supportStructure?.HRA ?? 0) +
                   (row.supportStructure?.spouseAllowance ?? 0) +
                   (row.supportStructure?.positionalAllowance ?? 0) +
@@ -337,14 +341,14 @@ const IROReconciliationPdf = (props:{data:
                     (row.supportStructure?.impactDeduction ?? 0) +
                     (row.supportStructure?.MUTDeduction ?? 0)
                   ) : ''}</Text>
-                <div style={styles.cellGrid}></div>
-                <Text style={styles.tableCell}></Text>
-                {/* <div style={styles.cellGridCopy}></div> */}
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                <div style={styles.cellGrid}></div>
-              </View>
-            </>
-            ))}
+                  <div style={styles.cellGrid}></div>
+                  <Text style={styles.tableCell}></Text>
+                  {/* <div style={styles.cellGridCopy}></div> */}
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                  <div style={styles.cellGrid}></div>
+                </View>
+              );
+            })}
             {pageIndex === totalPages - 1 && (
               <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
                 <div style={styles.headGrid}></div>
