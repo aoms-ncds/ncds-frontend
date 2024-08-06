@@ -108,7 +108,7 @@ const IROReceiptTemplate = (props: { rowData: IROrder }) => {
   let sanctionedAmountWords = '';
 
   if (typeof sanctionedAmount !== 'undefined') {
-    sanctionedAmountWords = numberToWords.toWords(sanctionedAmount);
+    sanctionedAmountWords = numberToWords.toWords(sanctionedAmount?? '');
   } else {
     sanctionedAmountWords = 'N/A';
   }

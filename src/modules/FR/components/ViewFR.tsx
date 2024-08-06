@@ -88,7 +88,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     narration: '',
     attachment: [],
     sanctionedAsPer: '',
-    sanctionedAmount: 0,
+    sanctionedAmount: null,
 
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
@@ -101,7 +101,7 @@ interface AsPer{
   asPer:[];
 
 }
-let total = 0;
+let total: any;
 props.value?.particulars?.forEach((particular) => {
   if (particular?.sanctionedAmount) {
     total += particular?.sanctionedAmount;
@@ -112,7 +112,7 @@ const handleClickOpen = (particular: Particular, index: number) => {
   setNewParticular((prev: any) => ({
     ...prev,
     ...particular,
-    sanctionedAmount: 0,
+    sanctionedAmount: null,
   }));
   setOpen(true);
   setSelectedParticularIndex(index);
@@ -502,10 +502,10 @@ return (
                     variant="outlined"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    inputProps={{
-                      max: totalRequestedAmount, min: 0,
-                      onWheel: handleWheel,
-                    }}
+                    // inputProps={{
+                    //   max: totalRequestedAmount, min: 0,
+                    //   onWheel: handleWheel,
+                    // }}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   />
                   {/* </Tooltip> */}
@@ -1197,7 +1197,9 @@ return (
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 inputProps={{
-                  max: totalRequestedAmount, min: 0,
+                  max: totalRequestedAmount,
+                  min: 0,
+                  step: 0.01, // Allows up to two decimal places
                   onWheel: handleWheel,
                 }}
                 // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}

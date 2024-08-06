@@ -84,7 +84,7 @@ declare global {
     narration: string;
     attachment: FileObject[];
     sanctionedAsPer?:string;
-    sanctionedAmount?: number;
+    sanctionedAmount?: number | null;
 
 
   }
@@ -108,7 +108,7 @@ declare global {
     division?: Division;
     purposeCoordinator?: User;
     purposeOthers?: string;
-    sanctionedAmount?: number;
+    sanctionedAmount?: number | null;
     sanctionedAmountTotal?: number;
     status: number;
     sanctionedAsPer: string | ISanctionedAsPer;
