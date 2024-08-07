@@ -297,7 +297,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       if (iroData) {
         // File Blob creation
         const fileBlob = blob instanceof Blob ? new File([blob], `${iroData?.IROno}_Receipt.pdf`, { type: 'application/pdf' }) : null;
-        if ( fileBlob) {
+        if (fileBlob) {
           // File upload
           const file = await FileUploaderServices.uploadFile(fileBlob, undefined, 'FR', fileBlob.name);
 
@@ -419,7 +419,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //       console.error(error);
       //     });
       // }
-      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS ) {
+      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           // console.log(res.data, 'datgajdfj');
@@ -428,6 +428,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     } else {
       IROServices.getAll().then((res) => {
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+        // console.log(res.data, 'datgajdfj');
       });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
@@ -660,7 +661,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
-            ...(params.row.closedIroPdf?
+            ...(params.row.closedIroPdf ?
               [
                 {
                   id: 'print',
@@ -707,11 +708,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         purpose: params.row.purpose ?? 'Division',
                         divisionId: params.row.division?._id ?? null,
                         workerId:
-                            params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
-                              params.row.purposeCoordinator?._id :
-                              params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
-                                params.row.purposeWorker?._id :
-                                null,
+                          params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
+                            params.row.purposeCoordinator?._id :
+                            params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
+                              params.row.purposeWorker?._id :
+                              null,
                         subDivisionId: params.row.purposeSubdivision?._id ?? null,
                         designationParticularID: params.row.designationParticular ?? null,
                         IRONo: params.row.IROno,
@@ -845,7 +846,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         >
           {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
           {
-            props.row.particulars[0]?.subCategory3 !='Select' ?
+            props.row.particulars[0]?.subCategory3 != 'Select' ?
               props.row.particulars[0]?.subCategory3 :
               props.row.particulars[0]?.subCategory2 != 'Select' ?
                 props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1
@@ -987,19 +988,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         }
         switch (statusName) {
         case 'WAITING FOR OFFICE MNGR':
-          return clsx('orange');
-        case 'WAITING FOR ACCOUNTS STATE':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
+          return clsx('yellow-light');
         case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('green');
+          return clsx('yellow-dark');
+        case 'WAITING FOR ACCOUNTS STATE':
+          return clsx('orange-light');
+        case 'WAITING FOR RELEASE AMOUNT':
+          return clsx('orange-dark');
         case 'AMOUNT RELEASED':
-          return clsx('green');
+          return clsx('green-light');
         case 'RECONCILIATION DONE':
-          return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
-          return clsx('orange');
+          return clsx('green-medium');
+        case 'IRO CLOSED':
+          return clsx('green-dark');
+        case 'FR DISAPPROVED':
+          return clsx('red-light');
         default:
           // console.log('No class applied');
           return '';
@@ -1017,7 +1020,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           statusName = 'FR VERIFIED'; // Change to whatever new name you want
           break;
         case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          statusName = 'FR DISAPPROVED'; // Change to whatever new name you want
           break;
           // case 'WAITING_FOR_ACCOUNTS_MNGR':
           //   statusName = 'WAITING FOR ACCOUNTS MNGR';
@@ -1040,11 +1043,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
   const filteredRows = (IROrder ?? []).filter((row) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
     }
@@ -1098,7 +1101,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               iro.purposeSubdivision?.name,
                               iro.mainCategory,
                               iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                              iro.sanctionedAmount?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
+                              iro.sanctionedAmount ?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
                               iro.sanctionedBank,
                               iro.sanctionedAsPer,
                               iro.releaseAmount?.releaseAmount,
@@ -1142,7 +1145,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       startIcon={<AttachMoneyIcon />}
                       disabled={releaseAmountIROs.length == 0}
                       onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank== releaseAmountIROs[0].sanctionedBank)) {
+                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank == releaseAmountIROs[0].sanctionedBank)) {
                           setOpenRelease(true);
                           setNewTest(releaseAmountIROs);
                         } else {
@@ -1191,17 +1194,34 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         '& .odd': {
                           backgroundColor: '#fff',
                         },
-                        '& .green': {
-                          backgroundColor: '#80f76a',
+                        '& .orange-light': {
+                          backgroundColor: '#ffa500', /* Light orange */
                         },
-                        '& .orange': {
-                          backgroundColor: '#ffd35c',
+                        '& .orange-dark': {
+                          backgroundColor: '#cc8400', /* Darker orange */
                         },
-                        '& .red': {
-                          backgroundColor: '#ff6166',
+                        '& .yellow-light': {
+                          backgroundColor: '#ffffe0', /* Light yellow */
                         },
-                      }}
-                    >
+                        '& .yellow-dark ': {
+                          backgroundColor: '#ffd700', /* Darker yellow */
+                        },
+                        '& .green-light ': {
+                          backgroundColor: '#90ee90', /* Light green */
+                        },
+                        '& .green-medium': {
+                          backgroundColor: '#32cd32', /* Medium green */
+                        },
+                        '& .green-dark ': {
+                          backgroundColor: '#008000', /* Dark green */
+                        },
+                        '&  .red-light ': {
+                          backgroundColor: '#ff7f7f', /* Light red */
+                        },
+                        '&   .red-dark ': {
+                          backgroundColor: '#ff0000', /* Darker red */
+                        },
+                      }} >
                       <DataGrid
                         rows={filteredRows ?? []}
                         columns={columns}
@@ -1219,8 +1239,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
                         style={{ height: '65vh', width: '100%' }}
-                        // rowSelectionModel={selectedIROrelease}
-                        //
+                      // rowSelectionModel={selectedIROrelease}
+                      //
                       />
                     </Box>
                     {/* <DataGrid
@@ -1510,19 +1530,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           onClick={() => {
                             remark.remark ?
                               IROServices.addRemarks(remark)
-                                  .then((res) => {
-                                    setRemarks((remarks) => [...remarks, res.data]);
-                                    setRemark((remark) => ({
-                                      ...remark,
-                                      remark: '',
-                                    }));
-                                  })
-                                  .catch((error) => {
-                                    enqueueSnackbar({
-                                      variant: 'error',
-                                      message: error.message,
-                                    });
-                                  }) :
+                                .then((res) => {
+                                  setRemarks((remarks) => [...remarks, res.data]);
+                                  setRemark((remark) => ({
+                                    ...remark,
+                                    remark: '',
+                                  }));
+                                })
+                                .catch((error) => {
+                                  enqueueSnackbar({
+                                    variant: 'error',
+                                    message: error.message,
+                                  });
+                                }) :
                               '';
                           }}
                         >
@@ -1539,7 +1559,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     toggleOpenRemarks(false);
                     setSelectedIROId(null);
                   }}
-                  // sx={{ ml: 'auto' }}
+                // sx={{ ml: 'auto' }}
                 >
                   Close
                 </Button>
@@ -1692,7 +1712,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
@@ -1723,7 +1743,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
           <Container>Please download and attach the signature sheet: &nbsp;
-            {selectedIRO.signatureSheet?<a href="#" onClick={async () => {
+            {selectedIRO.signatureSheet ? <a href="#" onClick={async () => {
               const file = (await FileUploaderServices.getFile(selectedIRO?.signatureSheet ?? '')).data;
               if (file.downloadURL) {
                 const link = document.createElement('a');
@@ -1731,18 +1751,18 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
                 link.click();
               }
-            }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
-            <>
-              <PDFDownloadLink
-                document={<IROReconciliationPdf
-                  data={pdfProps}
-                />}
-                fileName="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
-              </PDFDownloadLink><br/>
-            </>)}NB: Ignore if already attached </Container>
+            }}>WorkersSignatureSheet.pdf</a> : (pdfProps &&
+              <>
+                <PDFDownloadLink
+                  document={<IROReconciliationPdf
+                    data={pdfProps}
+                  />}
+                  fileName="WorkersSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {({ loading }) => loading ? '....' : 'WorkersSignatureSheet.pdf'}
+                </PDFDownloadLink><br />
+              </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1759,7 +1779,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle> Print IRO Receipt </DialogTitle>
         <DialogContent>
           <Container>  Download the IRO for {selectedIRO?.IROno} &nbsp;
-            {selectedIRO.closedIroPdf&&<a href="#" onClick={async () => {
+            {selectedIRO.closedIroPdf && <a href="#" onClick={async () => {
               const file = (await FileUploaderServices.getFile(selectedIRO?.closedIroPdf ?? '')).data;
               if (file.downloadURL) {
                 const link = document.createElement('a');
@@ -1784,9 +1804,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-          Do you want to close {iroData?.IROno}?
+            Do you want to close {iroData?.IROno}?
             <br />
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+            {iroData && mngrName && selectedSignature && FrData && (
 
               <PDFDownloadLink
                 document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
@@ -1806,7 +1826,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             Cancel
           </Button>
           <>
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+            {iroData && mngrName && selectedSignature && FrData && (
 
               <>
                 <PDFDownloadLink document={<IROTemplate
@@ -1825,7 +1845,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       disabled={loading || printIroLoading}
                     >
                       {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-                    </Button> }
+                    </Button>}
                 </PDFDownloadLink>
 
               </>
@@ -1839,36 +1859,36 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={()=>setDelateModel(false)}>Close</Button>
+          <Button onClick={() => setDelateModel(false)}>Close</Button>
           <Button
             endIcon={<DeleteIcon />}
             variant="contained"
             color="info"
             onClick={async () => {
-              deleteIRO(selectedIROId?.toString()?? '');
-            } }
+              deleteIRO(selectedIROId?.toString() ?? '');
+            }}
           >
-                 Delate
+            Delate
           </Button>
         </DialogActions>
 
       </Dialog>
-      {loading&&
-      <Lottie
-        options={{
-          loop: true,
-          autoplay: true,
-          animationData: Animations.loading,
-          rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-          },
-        }}
-        height={200}
-        width={200}
-        style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+      {loading &&
+        <Lottie
+          options={{
+            loop: true,
+            autoplay: true,
+            animationData: Animations.loading,
+            rendererSettings: {
+              preserveAspectRatio: 'xMidYMid slice',
+            },
+          }}
+          height={200}
+          width={200}
+          style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         // isStopped={.state.isStopped}
         // isPaused={.state.isPaused}
-      />}
+        />}
     </CommonPageLayout>
   );
 };
