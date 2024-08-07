@@ -101,7 +101,7 @@ interface AsPer{
   asPer:[];
 
 }
-let total: any;
+let total = 0;
 props.value?.particulars?.forEach((particular) => {
   if (particular?.sanctionedAmount) {
     total += particular?.sanctionedAmount;
@@ -483,7 +483,7 @@ return (
                   <TextField
                     label="Sanctioned Amount"
                     type={'number'}
-                    value={props.value?.sanctionedAmount ?? total}
+                    value={props.value?.sanctionedAmount ?? total==0 ? '':total }
                     required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                     title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     autoComplete='off'
@@ -1177,7 +1177,14 @@ return (
               <TextField
                 label="Sanctioned Amount"
                 type={'number'}
-                value={newParticular.sanctionedAmount ?? total}
+                // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                value={
+                  newParticular.sanctionedAmount !== undefined ?
+                    newParticular.sanctionedAmount :
+                    total === 0 ?
+                      '' :
+                      total
+                }
                 required
                 title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                 autoComplete='off'
