@@ -126,8 +126,9 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const IROReconciliationPdf = (props:{data:
-  {purpose:FRPurpose|null;divisionId:string|null;workerId:string|null;designationParticularID:string|null;subDivisionId:string|null;IRONo:string|null;month:string|null};
+const IROReconciliationPdf = (props: {
+  data:
+  { purpose: FRPurpose | null; divisionId: string | null; workerId: string | null; designationParticularID: string | null; subDivisionId: string | null; IRONo: string | null; month: string | null };
 },
 ) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
@@ -138,64 +139,65 @@ const IROReconciliationPdf = (props:{data:
   console.log(totalPages, 'totalPages');
 
   // Function to get rows for a specific page
-  const getRowsForPage = (page:any) => {
+  const getRowsForPage = (page: any) => {
     const start = page * rowsPerPage;
     return workers?.slice(start, start + rowsPerPage);
   };
   useEffect(() => {
     console.log(props, 'props');
-    if ((props.data.purpose=='Coordinator'||props.data.purpose=='Worker')&&props.data.workerId) {
-      WorkersServices.getById(props.data.workerId).then((res)=>res?.data && setWorkers([res?.data].filter((worker)=>worker.supportStructure.HRA !=0 ||
-      worker.supportStructure.MUTDeduction !=0 ||
-      worker.supportStructure.PIONMissionaryFund !=0 ||
-      worker.supportStructure.basic !=0 ||
-      worker.supportStructure.spouseAllowance !=0||
-      worker.supportStructure.positionalAllowance !=0||
-      worker.supportStructure.telAllowance !=0||
-      worker.supportStructure.impactDeduction !=0)));
-      props.data.purpose=='Coordinator'? setPurpose('Coordinator'):setPurpose('Individual');
-    } else if (props.data.purpose=='Subdivision'&&props.data.divisionId&&props.data.subDivisionId) {
-      WorkersServices.getWorkersBySubDivision( { division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID??null })
-    .then((res) => {
-      console.log(res);
-      // setWorkers(res.data);
-      setWorkers(res.data.filter((worker)=>worker.supportStructure.HRA !=0 ||
-      worker.supportStructure.MUTDeduction !=0 ||
-      worker.supportStructure.PIONMissionaryFund !=0 ||
-      worker.supportStructure.basic !=0 ||
-      worker.supportStructure.spouseAllowance !=0||
-      worker.supportStructure.positionalAllowance !=0||
-      worker.supportStructure.telAllowance !=0||
-      worker.supportStructure.impactDeduction !=0,
-      ));
-      setPurpose(res.data[0].division?.details.name??'Division');
-    })
-      .catch((res) => {
-        console.log(res);
-      });
-    } else if (props.data.purpose=='Division'&&props.data.divisionId) {
+    if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
+      WorkersServices.getById(props.data.workerId).then((res) => res?.data && setWorkers([res?.data].filter((worker) => worker.supportStructure.HRA != 0 ||
+        worker.supportStructure.MUTDeduction != 0 ||
+        worker.supportStructure.PIONMissionaryFund != 0 ||
+        worker.supportStructure.basic != 0 ||
+        worker.supportStructure.spouseAllowance != 0 ||
+        worker.supportStructure.positionalAllowance != 0 ||
+        worker.supportStructure.telAllowance != 0 ||
+        worker.supportStructure.impactDeduction != 0)));
+      props.data.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
+    } else if (props.data.purpose == 'Subdivision' && props.data.divisionId && props.data.subDivisionId) {
+      WorkersServices.getWorkersBySubDivision({ division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID ?? null })
+        .then((res) => {
+          console.log(res);
+          // setWorkers(res.data);
+          setWorkers(res.data.filter((worker) => worker.supportStructure.HRA != 0 ||
+            worker.supportStructure.MUTDeduction != 0 ||
+            worker.supportStructure.PIONMissionaryFund != 0 ||
+            worker.supportStructure.basic != 0 ||
+            worker.supportStructure.spouseAllowance != 0 ||
+            worker.supportStructure.positionalAllowance != 0 ||
+            worker.supportStructure.telAllowance != 0 ||
+            worker.supportStructure.impactDeduction != 0,
+          ));
+          setPurpose(res.data[0].division?.details.name ?? 'Division');
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (props.data.purpose == 'Division' && props.data.divisionId) {
       if (props.data.designationParticularID) {
         console.log('');
         WorkersServices.getWorkersByDesignation({
           division: props.data.divisionId,
-          designationParticular: props.data.designationParticularID })
+          designationParticular: props.data.designationParticularID,
+        })
           .then((res) => {
             console.log(res);
             // setWorkers(res.data);
-            setWorkers(res.data.filter((worker)=>worker.supportStructure.HRA !=0 ||
-            worker.supportStructure.MUTDeduction !=0 ||
-            worker.supportStructure.PIONMissionaryFund !=0 ||
-            worker.supportStructure.basic !=0 ||
-            worker.supportStructure.spouseAllowance !=0||
-            worker.supportStructure.positionalAllowance !=0||
-            worker.supportStructure.telAllowance !=0||
-            worker.supportStructure.impactDeduction !=0,
+            setWorkers(res.data.filter((worker) => worker.supportStructure.HRA != 0 ||
+              worker.supportStructure.MUTDeduction != 0 ||
+              worker.supportStructure.PIONMissionaryFund != 0 ||
+              worker.supportStructure.basic != 0 ||
+              worker.supportStructure.spouseAllowance != 0 ||
+              worker.supportStructure.positionalAllowance != 0 ||
+              worker.supportStructure.telAllowance != 0 ||
+              worker.supportStructure.impactDeduction != 0,
             ));
-            setPurpose(res.data[0].division?.details.name??'Division');
+            setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
-         .catch((res) => {
-           console.log(res);
-         });
+          .catch((res) => {
+            console.log(res);
+          });
       } else {
         WorkersServices.getAll({
           status: UserLifeCycleStates.ACTIVE,
@@ -205,20 +207,20 @@ const IROReconciliationPdf = (props:{data:
         })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data.filter((worker)=>worker.supportStructure.supportEnabled && worker.supportStructure.HRA !=0 ||
-            worker.supportStructure.MUTDeduction !=0 ||
-            worker.supportStructure.PIONMissionaryFund !=0 ||
-            worker.supportStructure.basic !=0 ||
-            worker.supportStructure.spouseAllowance !=0||
-            worker.supportStructure.positionalAllowance !=0||
-            worker.supportStructure.telAllowance !=0||
-            worker.supportStructure.impactDeduction !=0,
+            setWorkers(res.data.filter((worker) => worker.supportStructure.supportEnabled && worker.supportStructure.HRA != 0 ||
+              worker.supportStructure.MUTDeduction != 0 ||
+              worker.supportStructure.PIONMissionaryFund != 0 ||
+              worker.supportStructure.basic != 0 ||
+              worker.supportStructure.spouseAllowance != 0 ||
+              worker.supportStructure.positionalAllowance != 0 ||
+              worker.supportStructure.telAllowance != 0 ||
+              worker.supportStructure.impactDeduction != 0,
             ));
-            setPurpose(res.data[0].division?.details.name??'Division');
+            setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
-         .catch((res) => {
-           console.log(res);
-         });
+          .catch((res) => {
+            console.log(res);
+          });
       }
     } else {
       setWorkers([]);
@@ -265,16 +267,16 @@ const IROReconciliationPdf = (props:{data:
     );
     setTotal(
       (basic ?? 0) +
-        (HRA ?? 0) +
-        (spouseAllowance ?? 0) +
-        (positionalAllowance ?? 0) +
-        (specialAllowance ?? 0) +
-        (PIONMissionaryFund ?? 0) +
-        (telAllowance ?? 0) -
-        (
-          (impactDeduction ?? 0) +
-          (MUTDeduction ?? 0)
-        ),
+      (HRA ?? 0) +
+      (spouseAllowance ?? 0) +
+      (positionalAllowance ?? 0) +
+      (specialAllowance ?? 0) +
+      (PIONMissionaryFund ?? 0) +
+      (telAllowance ?? 0) -
+      (
+        (impactDeduction ?? 0) +
+        (MUTDeduction ?? 0)
+      ),
     );
   }, [workers]);
   return (
@@ -298,12 +300,12 @@ const IROReconciliationPdf = (props:{data:
               <div style={styles.headGrid}></div>
               <Text style={styles.tableHead}>Worker Code</Text>
               <div style={styles.headGrid}></div>
-              <Text style={styles.tableHead}>Worker Name</Text>
+              <Text style={{ ...styles.tableHead, flex: 2 }}>Worker Name</Text>
               <div style={styles.headGrid}></div>
               {/* <Text style={styles.tableHead}>Last Name</Text>
     <div style={styles.headGrid}></div> */}
-              <Text style={styles.tableHead}>Division</Text>
-              <div style={styles.headGrid}></div>
+              {/* <Text style={styles.tableHead}>Division</Text>
+              <div style={styles.headGrid}></div> */}
               <Text style={styles.tableHead}>Net Amount</Text>
               <div style={styles.headGrid}></div>
               <Text style={styles.tableHeadCoppy}>Signature</Text>
@@ -323,24 +325,24 @@ const IROReconciliationPdf = (props:{data:
                   <div style={styles.cellGrid}></div>
                   <Text style={styles.tableCell}>{row.workerCode}</Text>
                   <div style={styles.cellGrid}></div>
-                  <Text style={styles.tableCell}>{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
+                  <Text style={{ ...styles.tableCell, flex: 2 }} >{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
                   <div style={styles.cellGrid}></div>
                   {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
         <div style={styles.cellGrid}></div> */}
-                  <Text style={styles.tableCell}>{row.division?.details.name}</Text>
-                  <div style={styles.cellGrid}></div>
+                  {/* <Text style={styles.tableCell}>{row.division?.details.name}</Text>
+                  <div style={styles.cellGrid}></div> */}
                   <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
                     (row.supportStructure?.basic ?? 0) +
-                  (row.supportStructure?.HRA ?? 0) +
-                  (row.supportStructure?.spouseAllowance ?? 0) +
-                  (row.supportStructure?.positionalAllowance ?? 0) +
-                  (row.supportStructure?.specialAllowance ?? 0) +
-                  (row.supportStructure?.PIONMissionaryFund ?? 0) +
-                  (row.supportStructure?.telAllowance ?? 0) -
-                  (
-                    (row.supportStructure?.impactDeduction ?? 0) +
-                    (row.supportStructure?.MUTDeduction ?? 0)
-                  ) : ''}</Text>
+                    (row.supportStructure?.HRA ?? 0) +
+                    (row.supportStructure?.spouseAllowance ?? 0) +
+                    (row.supportStructure?.positionalAllowance ?? 0) +
+                    (row.supportStructure?.specialAllowance ?? 0) +
+                    (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                    (row.supportStructure?.telAllowance ?? 0) -
+                    (
+                      (row.supportStructure?.impactDeduction ?? 0) +
+                      (row.supportStructure?.MUTDeduction ?? 0)
+                    ) : ''}</Text>
                   <div style={styles.cellGrid}></div>
                   <Text style={styles.tableCell}></Text>
                   {/* <div style={styles.cellGridCopy}></div> */}
@@ -357,8 +359,8 @@ const IROReconciliationPdf = (props:{data:
                 <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                 <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                 <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text> */}
                 <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                 <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                 <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
