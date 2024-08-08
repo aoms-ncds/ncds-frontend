@@ -318,7 +318,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   fullWidth
                   inputProps={{
-                    max: releaseAmount.releaseAmount ?? 0, min: 0, onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                    max: releaseAmount.releaseAmount ?? 0, min: 0, step: 0.01,
+                    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       event.preventDefault();
                       event.currentTarget.blur();
                     },

@@ -20,7 +20,7 @@ const DropdownButton = ({
     onClick?: (arg0: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
     component?: any;
     to?: string;
-    document?: React.ReactElement<ReactPDF.DocumentProps, string | React.JSXElementConstructor<any>>;
+    document?: React.ReactElement<string | React.JSXElementConstructor<any>>;
     fileName?: string;
   }[];
 }) => {
