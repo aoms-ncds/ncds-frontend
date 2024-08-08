@@ -676,7 +676,7 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                      Revert
+                                      Disapprove
                                     </Button>
                                     &nbsp;
                                     <Button
