@@ -54,8 +54,8 @@ const ChildeSupportPage = () => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [workersSelect, setWorkersSelect] = useState<IWorker | null>(null);
   const [childList, setChildList] = useState<Child[]>([]);
-  const [coordinators, setCoordinatrs] = useState<IWorker[] | null>([]);
-  const [selectedcoordinators, setSelectedCoordinatrs] = useState<IWorker | null>(null);
+  const [coordinators, setCoordinators] = useState<IWorker[] | null>([]);
+  const [selectedCoordinators, setSelectedCoordinators] = useState<IWorker | null>(null);
   const [allChild, setAllChilde] = useState<Child[] | null>(null);
   const [selectedWorker, setSelectedWorker] = useState<Child | null>(null);
   const [total, setTotal] = useState<number>(0);
@@ -211,19 +211,19 @@ const ChildeSupportPage = () => {
     //     .map((child: any) => child.name) ?? []
     // );
     WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-    .then((res) => {
-      console.log(res, 'rr');
-      setWorkers(res.data);
-      setCoordinatrs((prevState:any) => {
-        // Filter workers based on designation
-        const filteredWorkers = res.data?.filter(
-          (e:any) => e.supportDetails?.designation?.name === 'Coordinator' || e.supportDetails?.designation?.name === 'Officiating Co-Ordinator',
-        );
+      .then((res) => {
+        console.log(res, 'rr');
+        setWorkers(res.data);
+        setCoordinators((prevState: any) => {
+          // Filter workers based on designation
+          const filteredWorkers = res.data?.filter(
+            (e: any) => e.supportDetails?.designation?.name === 'Coordinator' || e.supportDetails?.designation?.name === 'Officiating Co-Ordinator',
+          );
 
-        // Return the filtered list to update state
-        return filteredWorkers;
+          // Return the filtered list to update state
+          return filteredWorkers;
+        });
       });
-    });
     // const test= workers?.filter((e)=>{
     //   e.supportDetails.designation?.name == 'Coordinator';
     // });
@@ -445,10 +445,10 @@ const ChildeSupportPage = () => {
                   onChange={(event, newVal) => {
                     console.log(newVal, 'roro');
                     if (newVal) {
-                      const coordinatorId :any = newVal.details?.coordinator?.name?._id;
-                      setChildList(() => allChild?.filter((child:any) =>
+                      const coordinator: any = newVal.details?.coordinator?.name;
+                      setChildList(() => allChild?.filter((child: any) =>
                         child.division?._id == newVal?._id &&
-                       child.childOf?._id != coordinatorId && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator' ) ?? []);
+                        child.childOf?._id != coordinator && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator') ?? []);
 
 
                       setDivision(newVal);
@@ -463,7 +463,7 @@ const ChildeSupportPage = () => {
                     <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                       required />
                   )}
-                  disabled={loading !=true}
+                  disabled={loading != true}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -517,11 +517,11 @@ const ChildeSupportPage = () => {
               </Grid> */}
               <Grid item xs={12} md={6}>
                 <Autocomplete<IWorker>
-                  value={selectedcoordinators ?? null}
+                  value={selectedCoordinators ?? null}
                   options={(coordinators ?? [])}
                   getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
                   onChange={(_e, newVal) => {
-                    setSelectedCoordinatrs(newVal ?? null);
+                    setSelectedCoordinators(newVal ?? null);
                     if (newVal) {
                       const coordinatorId = newVal._id;
                       console.log(coordinatorId, 'coordinatorId');
@@ -532,10 +532,19 @@ const ChildeSupportPage = () => {
                             divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
                             null,
                         );
+                        setRequisition((requisition) => ({
+                          ...requisition,
+                          purposeCoordinator: newVal,
+                          purpose: 'Coordinator',
+                        }));
                       }
                     } else {
-                      setSelectedCoordinatrs(null);
+                      setSelectedCoordinators(null);
                       setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
+                      setRequisition((requisition) => ({
+                        ...requisition,
+                        purpose: 'Division',
+                      }));
                     }
                   }}
                   renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant="standard" />}
@@ -658,7 +667,7 @@ const ChildeSupportPage = () => {
                                 if (selectedWorker || division) {
                                   const file = (blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
                                   file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
-                                  // setFileObj(res.data); console.log(res.data, 'uploaded');
+                                    // setFileObj(res.data); console.log(res.data, 'uploaded');
                                     enqueueSnackbar({
                                       message: 'File Downloaded',
                                       variant: 'success',
@@ -728,14 +737,14 @@ const ChildeSupportPage = () => {
                 loading={childList === null}
                 columnGroupingModel={columnGroupingModel}
                 experimentalFeatures={{ columnGrouping: true }}
-                // slots={{
-                //   footer: CustomFooter,
-                // }}
+              // slots={{
+              //   footer: CustomFooter,
+              // }}
               // getRowClassName={(params) =>
               //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
               // }
               /></Box>
-            <CustomFooter/>
+            <CustomFooter />
           </Grid>
         </Grid>
       </Card>

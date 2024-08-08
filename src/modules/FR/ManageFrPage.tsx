@@ -533,7 +533,7 @@ const ManageFrPage = () => {
           return clsx('green');
         case 'FR CLOSED':
           return clsx('green');
-        case ' FR DISAPPROVED':
+        case ' FR_REJECTED':
           return clsx('red');
         case 'WAITING FOR PRESIDENT':
           return clsx('orange');
