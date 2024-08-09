@@ -168,13 +168,24 @@ const PDFTemplate = (props: {
   useEffect(() => {
     console.log(props, 'props');
     if ((props.purpose == 'Coordinator' || props.purpose == 'Worker') && props.workerId) {
-      WorkersServices.getById(props.workerId).then((res) => res?.data && setWorkers([res?.data]));
+      WorkersServices.getById(props.workerId).then((res) => {
+        if (res?.data) {
+          // Check if supportEnabled is true before updating the state
+          if (res.data.supportStructure.supportEnabled === true) {
+            setWorkers([res.data]);
+          } else {
+            setWorkers([]); // Optionally set to an empty array if condition is not met
+          }
+        }
+      });
       props.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
     } else if (props.purpose == 'Subdivision' && props.divisionId && props.subDivisionId) {
       WorkersServices.getWorkersBySubDivision({ division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID ?? null })
         .then((res) => {
           console.log(res);
-          setWorkers(res.data);
+          // setWorkers(res.data);
+          const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+          setWorkers(filteredWorkers);
           setPurpose(res.data[0].division?.details.name ?? 'Division');
         })
         .catch((res) => {
@@ -189,7 +200,9 @@ const PDFTemplate = (props: {
         })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data);
+            const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+            setWorkers(filteredWorkers);
+
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
           .catch((res) => {
@@ -204,7 +217,9 @@ const PDFTemplate = (props: {
         })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data);
+            // setWorkers(res.data);
+            const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+            setWorkers(filteredWorkers);
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
           .catch((res) => {

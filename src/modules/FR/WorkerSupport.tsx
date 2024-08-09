@@ -1379,9 +1379,9 @@ const WorkerSupportPage = () => {
                 slots={{
                   footer: CustomFooter,
                 }}
-              // getRowClassName={(params) =>
-              //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
-              // }
+                // getRowClassName={(params) =>
+                //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
+                // }
               /></Box>
           </Grid>
         </Grid>

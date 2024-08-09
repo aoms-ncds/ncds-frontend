@@ -146,29 +146,51 @@ const IROReconciliationPdf = (props: {
   useEffect(() => {
     console.log(props, 'props');
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
-      WorkersServices.getById(props.data.workerId).then((res) => res?.data && setWorkers([res?.data].filter((worker) => worker.supportStructure.HRA != 0 ||
-        worker.supportStructure.MUTDeduction != 0 ||
-        worker.supportStructure.PIONMissionaryFund != 0 ||
-        worker.supportStructure.basic != 0 ||
-        worker.supportStructure.spouseAllowance != 0 ||
-        worker.supportStructure.positionalAllowance != 0 ||
-        worker.supportStructure.telAllowance != 0 ||
-        worker.supportStructure.impactDeduction != 0)));
+      WorkersServices.getById(props.data.workerId).then((res) => {
+        if (res?.data) {
+          const worker = res.data;
+          const hasValidSupportStructure = (supportStructure:any) => {
+            const hasAnyDeduction= supportStructure.HRA !== 0 ||
+            supportStructure.MUTDeduction !== 0 ||
+            supportStructure.PIONMissionaryFund !== 0 ||
+            supportStructure.basic !== 0 ||
+            supportStructure.spouseAllowance !== 0 ||
+            supportStructure.positionalAllowance !== 0 ||
+            supportStructure.telAllowance !== 0 ||
+            supportStructure.impactDeduction !== 0;
+            const isSupportEnabled = supportStructure.supportEnabled === true;
+            return hasAnyDeduction && isSupportEnabled;
+          };
+          if (hasValidSupportStructure(worker.supportStructure)) {
+            setWorkers([worker]);
+          }
+        }
+      });
       props.data.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
     } else if (props.data.purpose == 'Subdivision' && props.data.divisionId && props.data.subDivisionId) {
       WorkersServices.getWorkersBySubDivision({ division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID ?? null })
         .then((res) => {
           console.log(res);
           // setWorkers(res.data);
-          setWorkers(res.data.filter((worker) => worker.supportStructure.HRA != 0 ||
-            worker.supportStructure.MUTDeduction != 0 ||
-            worker.supportStructure.PIONMissionaryFund != 0 ||
-            worker.supportStructure.basic != 0 ||
-            worker.supportStructure.spouseAllowance != 0 ||
-            worker.supportStructure.positionalAllowance != 0 ||
-            worker.supportStructure.telAllowance != 0 ||
-            worker.supportStructure.impactDeduction != 0,
-          ));
+          const filteredWorkers = res.data.filter((worker: IWorker) => {
+            console.log(worker.supportStructure); // Log supportStructure for each worker
+            const hasAnyDeduction = worker.supportStructure.HRA !== 0 ||
+            worker.supportStructure.MUTDeduction !== 0 ||
+            worker.supportStructure.PIONMissionaryFund !== 0 ||
+            worker.supportStructure.basic !== 0 ||
+            worker.supportStructure.spouseAllowance !== 0 ||
+            worker.supportStructure.positionalAllowance !== 0 ||
+            worker.supportStructure.telAllowance !== 0 ||
+            worker.supportStructure.impactDeduction !== 0;
+
+            const isSupportEnabled = worker.supportStructure.supportEnabled;
+
+            return hasAnyDeduction && isSupportEnabled;
+          });
+
+          console.log(filteredWorkers, 'filteredWorkers3'); // Check the filtered results
+
+          setWorkers(filteredWorkers);
           setPurpose(res.data[0].division?.details.name ?? 'Division');
         })
         .catch((res) => {
@@ -184,15 +206,27 @@ const IROReconciliationPdf = (props: {
           .then((res) => {
             console.log(res);
             // setWorkers(res.data);
-            setWorkers(res.data.filter((worker) => worker.supportStructure.HRA != 0 ||
-              worker.supportStructure.MUTDeduction != 0 ||
-              worker.supportStructure.PIONMissionaryFund != 0 ||
-              worker.supportStructure.basic != 0 ||
-              worker.supportStructure.spouseAllowance != 0 ||
-              worker.supportStructure.positionalAllowance != 0 ||
-              worker.supportStructure.telAllowance != 0 ||
-              worker.supportStructure.impactDeduction != 0,
-            ));
+
+            const filteredWorkers = res.data.filter((worker: IWorker) => {
+              console.log(worker.supportStructure); // Log supportStructure for each worker
+              console.log(`supportEnabled: ${worker.supportStructure.supportEnabled}`); // Log the value
+              const hasAnyDeduction = worker.supportStructure.HRA !== 0 ||
+              worker.supportStructure.MUTDeduction !== 0 ||
+              worker.supportStructure.PIONMissionaryFund !== 0 ||
+              worker.supportStructure.basic !== 0 ||
+              worker.supportStructure.spouseAllowance !== 0 ||
+              worker.supportStructure.positionalAllowance !== 0 ||
+              worker.supportStructure.telAllowance !== 0 ||
+              worker.supportStructure.impactDeduction !== 0;
+
+              const isSupportEnabled = worker.supportStructure.supportEnabled;
+
+              return hasAnyDeduction && isSupportEnabled;
+            });
+
+            console.log(filteredWorkers, 'filteredWorkers1'); // Check the filtered results
+
+            setWorkers(filteredWorkers);
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
           .catch((res) => {
@@ -207,15 +241,25 @@ const IROReconciliationPdf = (props: {
         })
           .then((res) => {
             console.log(res);
-            setWorkers(res.data.filter((worker) => worker.supportStructure.supportEnabled && worker.supportStructure.HRA != 0 ||
-              worker.supportStructure.MUTDeduction != 0 ||
-              worker.supportStructure.PIONMissionaryFund != 0 ||
-              worker.supportStructure.basic != 0 ||
-              worker.supportStructure.spouseAllowance != 0 ||
-              worker.supportStructure.positionalAllowance != 0 ||
-              worker.supportStructure.telAllowance != 0 ||
-              worker.supportStructure.impactDeduction != 0,
-            ));
+            const filteredWorkers = res.data.filter((worker: IWorker) => {
+              console.log(worker.supportStructure); // Log supportStructure for each worker
+              const hasAnyDeduction = worker.supportStructure.HRA !== 0 ||
+              worker.supportStructure.MUTDeduction !== 0 ||
+              worker.supportStructure.PIONMissionaryFund !== 0 ||
+              worker.supportStructure.basic !== 0 ||
+              worker.supportStructure.spouseAllowance !== 0 ||
+              worker.supportStructure.positionalAllowance !== 0 ||
+              worker.supportStructure.telAllowance !== 0 ||
+              worker.supportStructure.impactDeduction !== 0;
+
+              const isSupportEnabled = worker.supportStructure.supportEnabled;
+
+              return hasAnyDeduction && isSupportEnabled;
+            });
+
+            console.log(filteredWorkers, 'filteredWorkers2'); // Check the filtered results
+
+            setWorkers(filteredWorkers);
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
           .catch((res) => {

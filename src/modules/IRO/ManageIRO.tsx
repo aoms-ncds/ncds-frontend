@@ -1001,7 +1001,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('green-medium');
         case 'IRO CLOSED':
           return clsx('green-dark');
-        case 'FR DISAPPROVED':
+        case 'IRO DISAPPROVED':
           return clsx('red-light');
         default:
           // console.log('No class applied');
@@ -1020,7 +1020,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           statusName = 'FR VERIFIED'; // Change to whatever new name you want
           break;
         case 'FR_REJECTED':
-          statusName = 'FR DISAPPROVED'; // Change to whatever new name you want
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
           break;
           // case 'WAITING_FOR_ACCOUNTS_MNGR':
           //   statusName = 'WAITING FOR ACCOUNTS MNGR';
