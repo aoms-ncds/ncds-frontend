@@ -55,6 +55,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
+  const [notFund, setNotFound] = useState(false);
   const [delateModel, setDelateModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
@@ -139,7 +140,10 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        if (res.data) {
+          setNotFound(true);
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        }
       })
       .catch((res) => {
         console.log(res);
@@ -603,6 +607,12 @@ const ManageFrPage = () => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  if (notFund && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: `${searchText} not found`,
+      variant: 'warning',
+    });
+  }
   console.log(filteredRows, 'filteredRows');
 
   return (
@@ -627,13 +637,24 @@ const ManageFrPage = () => {
                 <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
-                      <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
-                      <br />
-                      <Tooltip sx={{ fontSize: 30, padding: 1 }} title="The following fields can be searchable: FRno, FRDate, SubCategory">
-                        <InfoIcon>
-                          <DeleteIcon />
-                        </InfoIcon>
-                      </Tooltip>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField
+                          label="Search"
+                          variant="outlined"
+                          value={searchText}
+                          onChange={handleSearchChange}
+                          fullWidth
+                          style={{ width: '80%' }}
+                        />
+                        <Tooltip
+                          sx={{ fontSize: 20, padding: 0 }}
+                          title="The following fields can be searchable: FRno, FRDate, SubCategory"
+                        >
+                          <div style={{ marginLeft: 10 }}>
+                            <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
+                          </div>
+                        </Tooltip>
+                      </div>
                     </Grid>
 
                     <Grid item xs={6} sx={{ px: 2 }}>
