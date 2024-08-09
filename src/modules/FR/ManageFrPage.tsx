@@ -34,6 +34,7 @@ import clsx from 'clsx';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ESignatureService from '../Settings/extras/ESignatureService';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -77,6 +78,7 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
+
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -301,8 +303,18 @@ const ManageFrPage = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                  onClick: () => {
-                    setData(props.row);
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
                     setOpenPrintFr(true);
                     setTimeout(() => {
                       setOpenPrintFr(false);
@@ -956,7 +968,7 @@ const ManageFrPage = () => {
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
                 <Container>
-                  Download the FRReceipt,Delhi for {data?.FRno} <br />
+                  Download the FR Receipt, Delhi for {data?.FRno} <br />
                   {data && (
                     <PDFDownloadLink
                       document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
