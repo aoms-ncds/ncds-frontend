@@ -45,9 +45,9 @@ const ManageFrPage = () => {
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: moment().startOf('y'),
-    endDate: moment().endOf('y'),
-    rangeType: 'years',
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
   });
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -637,7 +637,7 @@ const ManageFrPage = () => {
           setFRRequests((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
         },
         rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
-        initialRange: 'years',
+        initialRange: 'months',
       }}
     >
       <PermissionChecks
