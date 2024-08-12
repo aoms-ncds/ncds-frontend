@@ -47,7 +47,7 @@ const ManageWorkerPage = () => {
 
   const fetchData = (args: { skip?: number }) => {
     setLoading(true);
-    if (currentTab === 0) {
+    if (currentTab === 0&&searchText==='') {
       WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
         console.log('sso');
@@ -159,7 +159,9 @@ const ManageWorkerPage = () => {
             {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
             {/* </Grid> */}
             <Grid item xs={12} padding={2}>
-              <SearchComponent onSearch={handleSearchChange} />
+              <SearchComponent onSearch={(searchKey)=>{
+handleSearchChange(searchKey); setSearchText(searchKey);
+}} />
               <PermissionChecks
                 permissions={['WRITE_WORKERS']}
                 granted={

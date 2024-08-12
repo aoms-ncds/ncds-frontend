@@ -34,6 +34,7 @@ import clsx from 'clsx';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ESignatureService from '../Settings/extras/ESignatureService';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -55,6 +56,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
+  const [notFund, setNotFound] = useState(false);
   const [delateModel, setDelateModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
@@ -76,6 +78,7 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
+
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -139,7 +142,10 @@ const ManageFrPage = () => {
   useEffect(() => {
     FRServices.getAll()
       .then((res) => {
-        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        if (res.data) {
+          setNotFound(true);
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        }
       })
       .catch((res) => {
         console.log(res);
@@ -297,8 +303,18 @@ const ManageFrPage = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                  onClick: () => {
-                    setData(props.row);
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
                     setOpenPrintFr(true);
                     setTimeout(() => {
                       setOpenPrintFr(false);
@@ -603,6 +619,12 @@ const ManageFrPage = () => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  if (notFund && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: `${searchText} not found`,
+      variant: 'warning',
+    });
+  }
   console.log(filteredRows, 'filteredRows');
 
   return (
@@ -627,13 +649,24 @@ const ManageFrPage = () => {
                 <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
-                      <TextField label="Search" variant="outlined" value={searchText} onChange={handleSearchChange} fullWidth style={{ width: '25%' }} />
-                      <br />
-                      <Tooltip sx={{ fontSize: 30, padding: 1 }} title="The following fields can be searchable: FRno, FRDate, SubCategory">
-                        <InfoIcon>
-                          <DeleteIcon />
-                        </InfoIcon>
-                      </Tooltip>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField
+                          label="Search"
+                          variant="outlined"
+                          value={searchText}
+                          onChange={handleSearchChange}
+                          fullWidth
+                          style={{ width: '80%' }}
+                        />
+                        <Tooltip
+                          sx={{ fontSize: 20, padding: 0 }}
+                          title="The following fields can be searchable: FRno, FRDate, SubCategory"
+                        >
+                          <div style={{ marginLeft: 10 }}>
+                            <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
+                          </div>
+                        </Tooltip>
+                      </div>
                     </Grid>
 
                     <Grid item xs={6} sx={{ px: 2 }}>
@@ -935,7 +968,7 @@ const ManageFrPage = () => {
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
                 <Container>
-                  Download the FRReceipt,Delhi for {data?.FRno} <br />
+                  Download the FR Receipt, Delhi for {data?.FRno} <br />
                   {data && (
                     <PDFDownloadLink
                       document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
