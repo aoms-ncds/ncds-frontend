@@ -545,8 +545,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {
               id: 'View',
               text: 'View Fr ',
-              component: Link,
-              to: `/fr/${(params.row as any).FR}/view`,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
+              },
               icon: PreviewIcon,
             },
             ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
