@@ -58,7 +58,7 @@ const PresidentApproval = () => {
     );
   });
   useEffect(() => {
-    FRServices.getAll({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT })
+    FRServices.getAll({ status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
       .then((res) => {
         setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
       })

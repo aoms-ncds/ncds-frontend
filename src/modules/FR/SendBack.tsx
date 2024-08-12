@@ -238,7 +238,7 @@ const SentBack = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ status: FRLifeCycleStates.FR_SEND_BACK })
+    FRServices.getAll({ status: [FRLifeCycleStates.FR_SEND_BACK]})
       .then((res) => {
         setClosedFRs(res.data);
       })
