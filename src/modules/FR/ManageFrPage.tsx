@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -45,9 +45,9 @@ const ManageFrPage = () => {
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: moment().startOf('y'),
-    endDate: moment().endOf('y'),
-    rangeType: 'years',
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
   });
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
@@ -56,7 +56,6 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
-  const [notFund, setNotFound] = useState(false);
   const [delateModel, setDelateModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
@@ -78,7 +77,7 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
-
+  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -123,10 +122,10 @@ const ManageFrPage = () => {
   };
 
   useEffect(() => {
-    FRServices.getAll()
+    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         console.log(res, 'rr');
-        setFRRequests(res.data.filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+        setFRRequests(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -140,17 +139,16 @@ const ManageFrPage = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAll()
+    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         if (res.data) {
-          setNotFound(true);
-          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })).filter((fr) => fr.FRdate.isSameOrAfter(dateRange.startDate) && fr.FRdate.isSameOrBefore(dateRange.endDate)));
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
         }
       })
       .catch((res) => {
         console.log(res);
       });
-  }, [dateRange]);
+  }, [dateRange, statusFilter]);
 
   const columns: GridColDef<FR>[] = [
     {
@@ -622,7 +620,7 @@ const ManageFrPage = () => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
-  if (notFund && filteredRows.length ===0) {
+  if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: `${searchText} not found`,
       variant: 'warning',
@@ -640,7 +638,7 @@ const ManageFrPage = () => {
           setFRRequests((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
         },
         rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
-        initialRange: 'years',
+        initialRange: 'months',
       }}
     >
       <PermissionChecks
@@ -673,7 +671,8 @@ const ManageFrPage = () => {
                     </Grid>
 
                     <Grid item xs={6} sx={{ px: 2 }}>
-                      <br />
+                      {/* <br /> */}
+
                       <PermissionChecks
                         permissions={['MANAGE_FR']}
                         granted={
@@ -728,6 +727,20 @@ const ManageFrPage = () => {
                           </>
                         }
                       />
+                    </Grid>
+                    <Grid item >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA':'ALL'}
+                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]:[])}
+                          name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting For Access or Reverted" />
+                        </RadioGroup>
+                      </FormControl>
                     </Grid>
                   </Grid>
 

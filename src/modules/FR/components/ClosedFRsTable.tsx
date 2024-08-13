@@ -202,7 +202,7 @@ const ClosedFRsTable = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ status: FRLifeCycleStates.FR_CLOSED })
+    FRServices.getAll({ status: [FRLifeCycleStates.FR_CLOSED]})
       .then((res) => {
         setClosedFRs(res.data);
       })
