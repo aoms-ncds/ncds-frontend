@@ -556,10 +556,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               text: 'View Fr ',
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
-              icon: PreviewIcon,
               onClick: () => {
                 window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
               },
+
             },
             ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
               [
