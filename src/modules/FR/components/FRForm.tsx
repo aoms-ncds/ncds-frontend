@@ -811,7 +811,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    disabled={props.disable==true}
+                    // disabled={props.disable==true}
                     value={newParticular.month}
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
