@@ -22,13 +22,13 @@ declare global {
     phoneNumber?: number;
     emailId?: string;
     higherEducation?: boolean;
+    ageOverRide?: boolean;
     courseName: string;
     totalAmountforCourse: number;
     startingYear: Moment;
     endingYear: Moment;
     reasonForDeactivation?: DeactivationReason;
-    deactivationDate?:Moment
-
+    deactivationDate?:Moment;
 
 
   }
@@ -49,12 +49,13 @@ declare global {
     phoneNumber?: number;
     emailId?: string;
     higherEducation?: boolean;
+    ageOverRide?: boolean;
     courseName?: string;
     totalAmountforCourse?: number;
     startingYear?: Moment;
     endingYear?: Moment;
     reasonForDeactivation?: DeactivationReason;
-    deactivationDate?:Moment
+    deactivationDate?:Moment;
   }
 
   // interface IChildSupport extends MongooseDocument{
