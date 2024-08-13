@@ -1198,7 +1198,9 @@ const WorkerSupportPage = () => {
                       <Autocomplete<IWorker>
                         value={selectedWorker ?? null}
                         options={(workers ?? [])}
-                        getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName} ${workers.basicDetails.lastName}`}
+                        getOptionLabel={(workers) =>
+                          // eslint-disable-next-line max-len
+                          `${workers?.basicDetails.firstName}${workers?.basicDetails.middleName?' '+ workers?.basicDetails.middleName:''}${workers?.basicDetails.lastName?' '+ workers?.basicDetails.lastName:''}`}
                         onChange={(_e, newVal) => {
                           setSelectedWorker(newVal);
                           if (newVal) {
