@@ -1110,6 +1110,19 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
                 </Grid>
+                <Grid item xs={12} md={3.5}>
+                  <FormLabel id="demo-radio-buttons-group-label">Age OverRide</FormLabel>
+                  <Checkbox
+                    checked={newChild.ageOverRide}
+                    onChange={(e) =>
+                      setNewChild((newchild) => ({
+                        ...newchild,
+                        ageOverRide: e.target.checked,
+                      }))
+                    }
+                    color="primary"
+                  />
+                </Grid>
               </Grid>
             </Container>
           </DialogContent>

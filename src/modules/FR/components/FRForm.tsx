@@ -116,6 +116,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       setParticulars(props.value.particulars);
     }
   }, [props.value.particulars]);
+  console.log(props, 'propd');
 
   const addParticulars = () => {
     handleClose();
@@ -657,6 +658,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
               <Grid container spacing={3}>
                 <Grid item md={12}>
                   <Autocomplete
+                    disabled={props.disable==true}
                     value={selectedSubCategory1}
                     options={selectedMainCategory?.subcategory1 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name}
@@ -675,6 +677,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    disabled={props.disable==true}
                     value={selectedSubCategory2}
                     options={selectedSubCategory1?.subcategory2 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
@@ -705,6 +708,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    disabled={props.disable==true}
                     value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
                     getOptionLabel={(subCategory3) => subCategory3.name}
@@ -739,6 +743,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         event.currentTarget.blur();
                       },
                     }}
+                    disabled={props.disable==true}
                     fullWidth
                   />
                 </Grid>
@@ -761,6 +766,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       },
                     }}
                     required
+                    disabled={props.disable==true}
                     fullWidth
                   />
                 </Grid>
@@ -769,6 +775,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     label="Multiply By Quantity"
                     control={
                       <Checkbox
+                        disabled={props.disable==true}
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
@@ -804,6 +811,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    disabled={props.disable==true}
                     value={newParticular.month}
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}

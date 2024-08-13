@@ -88,16 +88,22 @@ const SentBack = () => {
             {
               id: 'View',
               text: 'View Details ',
-              component: Link,
-              to: `/fr/${props.row._id}/view`,
+              // component: Link,
+              // to: `/fr/${props.row._id}/view`,
+              onClick: () => {
+                window.open(`/fr/${props.row._id}/view`, '_blank');
+              },
               icon: PreviewIcon,
             },
             ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ? [
               {
                 id: 'edit',
                 text: 'Edit',
-                component: Link,
-                to: `/fr/${props.row._id}/edit`,
+                // component: Link,
+                // to: `/fr/${props.row._id}/edit`,
+                onClick: () => {
+                  window.open(`/fr/${props.row._id}/edit`, '_blank');
+                },
                 icon: PreviewIcon,
               },
             ] : []),
@@ -238,7 +244,7 @@ const SentBack = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ status: FRLifeCycleStates.FR_SEND_BACK })
+    FRServices.getAll({ status: [FRLifeCycleStates.FR_SEND_BACK]})
       .then((res) => {
         setClosedFRs(res.data);
       })

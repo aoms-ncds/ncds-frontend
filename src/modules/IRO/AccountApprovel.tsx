@@ -353,9 +353,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {
               id: 'View',
               text: 'View Details ',
-              component: Link,
-              to: `/iro/${params.row._id}`,
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
+              onClick: () => {
+                window.open(`/iro/${params.row._id}`, '_blank');
+              },
             },
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [

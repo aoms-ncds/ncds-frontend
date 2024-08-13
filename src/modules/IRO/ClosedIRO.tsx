@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip } from '@mui/material';
 import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -24,6 +24,7 @@ import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
 import FRServices from '../FR/extras/FRServices';
+import InfoIcon from '@mui/icons-material/Info';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -435,19 +436,28 @@ const ClosedIRO = () => {
   }, []);
   return (
     <CommonPageLayout title="Closed IRO">
-      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
+      <Card sx={{ maxWidth: '78vw', height: '90vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
-            {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-            <TextField
-              label="Search"
-              variant="outlined"
-              value={searchText}
-              onChange={handleSearchChange}
-              fullWidth
-              style={{ width: '25%', alignItems: 'start' }}
-            />
-            {/* </Grid> */}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                label="Search"
+                variant="outlined"
+                value={searchText}
+                onChange={handleSearchChange}
+                fullWidth
+                style={{ width: '80%' }}
+              />
+              <Tooltip
+                sx={{ fontSize: 30, padding: 1, color: '#3b32e6' }}
+                title="The following fields can be searchable: IROno, IRODate, SubCategory, Division"
+              >
+                <div style={{ marginLeft: 10 }}>
+                  <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
+                </div>
+
+              </Tooltip>
+            </div>
           </Grid>
           <Grid item xs={6}>
             <Button

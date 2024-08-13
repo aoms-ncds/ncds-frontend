@@ -9,20 +9,20 @@ export default {
 
   imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
 
-  getAll: (conditions?: { status?: number }) => getStandardResponse<FR[]>(axios.get('/fr/',
+  getAll: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string }) => getStandardResponse<FR[]>(axios.get('/fr/',
     { params: conditions, headers: { ...getAuthHeader() } }),
-  (data) =>data.map((fr:FR)=>({
+  (data) => data.map((fr: FR) => ({
     ...fr,
-    FRdate: moment(fr.FRdate ),
+    FRdate: moment(fr.FRdate),
     createdAt: moment(fr.createdAt),
     updatedAt: moment(fr.updatedAt),
-    frVerifiedOn: fr.frVerifiedOn? moment(fr.frVerifiedOn) : null,
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
 
   getAllRemarksById: (fRId: string) =>
     getStandardResponse<Remark[]>(
       axios.get(`/fr/remarks/${fRId}`, { headers: { ...getAuthHeader() } }),
-      (remarks) => remarks.map((remark:Remark) => ({
+      (remarks) => remarks.map((remark: Remark) => ({
         ...remark,
         createdAt: moment(remark.createdAt),
         updatedAt: moment(remark.updatedAt),
@@ -62,11 +62,11 @@ export default {
   //   }),
   // ),
 
-  getMainCategory: ()=>getStandardResponse<MainCategory[]>(axios.get('/fr/category', { headers: { ...getAuthHeader() } })),
+  getMainCategory: () => getStandardResponse<MainCategory[]>(axios.get('/fr/category', { headers: { ...getAuthHeader() } })),
 
   // getParticulars: ()=>getStandardResponse<Particular[]>(axios.get('/fr/particular', { headers: { ...getAuthHeader() } })),
 
-  addParticulars: ( particularData: CreatableParticular) => getStandardResponse<Particular>(
+  addParticulars: (particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
   getById: (fRId: string) =>
@@ -77,7 +77,8 @@ export default {
         FRdate: moment(data.FRdate),
         createdAt: moment(data.createdAt),
         updatedAt: moment(data.updatedAt),
-        frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null }),
+        frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null,
+      }),
     ),
   // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
   //   axios.post('/fr/', frRequest),
@@ -160,7 +161,7 @@ export default {
 
   addRemarks: (remark: CreatableRemark) =>
     getStandardResponse<Remark>(
-      axios.post('/fr/remarks', { ...remark }, { headers: { ...getAuthHeader() } } ),
+      axios.post('/fr/remarks', { ...remark }, { headers: { ...getAuthHeader() } }),
       (remark) => ({
         ...remark,
         createdAt: moment(remark.createdAt),
@@ -224,20 +225,20 @@ export default {
           })
           .catch(reject);
       }),
-      (data) =>({
+      (data) => ({
         ...data,
-        FRdate: moment(data.FRdate ),
+        FRdate: moment(data.FRdate),
         createdAt: moment(data.createdAt),
         updatedAt: moment(data.updatedAt),
       }),
     );
   },
 
-  manageFRRequests: (frID: string, operation:string, frRequest: CreatableFR) => {
+  manageFRRequests: (frID: string, operation: string, frRequest: CreatableFR) => {
     return getStandardResponse<CreatableFR>(
       new Promise((resolve, reject) => {
         axios
-          .patch('/fr/' + frID+'/'+operation, {
+          .patch('/fr/' + frID + '/' + operation, {
             ...frRequest,
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
@@ -262,5 +263,5 @@ export default {
       }),
     );
   },
-  deleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId+ '/force', { headers: { ...getAuthHeader() } })),
+  deleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId + '/force', { headers: { ...getAuthHeader() } })),
 };

@@ -58,7 +58,7 @@ const PresidentApproval = () => {
     );
   });
   useEffect(() => {
-    FRServices.getAll({ status: FRLifeCycleStates.WAITING_FOR_PRESIDENT })
+    FRServices.getAll({ status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
       .then((res) => {
         setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
       })
@@ -141,17 +141,23 @@ const PresidentApproval = () => {
             {
               id: 'View',
               text: 'View And Manage',
-              component: Link,
-              to: `/fr/${props.row._id}/view`,
+              // component: Link,
+              // to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/fr/${props.row._id}/view`, '_blank');
+              },
             },
             ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ? [
               {
                 id: 'edit',
                 text: 'Edit',
-                component: Link,
-                to: `/fr/${props.row._id}/edit`,
+                // component: Link,
+                // to: `/fr/${props.row._id}/edit`,
                 icon: EditIcon,
+                onClick: () => {
+                  window.open(`/fr/${props.row._id}/edit`, '_blank');
+                },
               },
             ] : []),
             // {
