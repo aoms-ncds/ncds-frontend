@@ -68,6 +68,7 @@ declare global {
   }
 
   interface FormComponentProps<T, Options = undefined> {
+    disable?: boolean;
     value: T;
     onChange: (newState: T) => void;
     action: 'view' | 'add' | 'edit';

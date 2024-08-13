@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -30,6 +30,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
+import InfoIcon from '@mui/icons-material/Info';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -668,22 +669,30 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
-                  {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
-                  <TextField
-                    label="Search"
-                    variant="outlined"
-                    value={searchText}
-                    onChange={handleSearchChange}
-                    fullWidth
-                    style={{ width: '25%', alignItems: 'start' }}
-                  />
-                  {/* </Grid> */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <TextField
+                      label="Search"
+                      variant="outlined"
+                      value={searchText}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      style={{ width: '80%' }}
+                    />
+                    <Tooltip
+                      sx={{ fontSize: 30, padding: 1, color: '#3b32e6' }}
+                      title="The following fields can be searchable: IROno, IRODate, SubCategory, Division"
+                    >
+                      <div style={{ marginLeft: 10 }}>
+                        <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
+                      </div>
+
+                    </Tooltip>
+                  </div>
+                  <br />
                 </Grid>
-                <br />
-                <br />
                 <Grid item xs={6}>
                   <Button
                     onClick={async () => {

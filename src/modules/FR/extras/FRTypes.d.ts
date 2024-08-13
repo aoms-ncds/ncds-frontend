@@ -8,7 +8,7 @@ declare global {
     FRno: string;
     FRdate: Moment;
     // requestAmount: string;
-    sanction: string;
+    disable?:boolean;
     IRO?: string;
     reasonForSentBack?:string;
     designationParticular?:string;
@@ -41,6 +41,7 @@ declare global {
     additionalSignature?:FileObject;
     additionalDesignation?:string;
     additionalName?:string;
+    disable?:boolean;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 

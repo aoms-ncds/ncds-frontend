@@ -1393,6 +1393,7 @@ const WorkerSupportPage = () => {
             onChange={(newReq) => setRequisition(newReq)}
             action={frAction ?? 'view'}
             onSubmit={addFR} // Pass the addFR function to the onSubmit prop
+            disable= {true}
           />
         </DialogContent>
         {frAction == 'view' &&

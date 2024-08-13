@@ -754,7 +754,9 @@ const ChildeSupportPage = () => {
             value={requisition}
             onChange={(newReq) => setRequisition(newReq)}
             action={'add'}
-            onSubmit={addFR} // Pass the addFR function to the onSubmit prop
+            onSubmit={addFR}
+            disable= {true}
+            // Pass the addFR function to the onSubmit prop
           />
         </DialogContent>
       </Dialog>

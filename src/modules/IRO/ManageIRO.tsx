@@ -795,6 +795,68 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
+      field: 'status',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Status</b>,
+      width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+        case 'WAITING FOR OFFICE MNGR':
+          return clsx('yellow-light');
+        case 'WAITING FOR ACCOUNTS MNGR':
+          return clsx('yellow-dark');
+        case 'WAITING FOR ACCOUNTS STATE':
+          return clsx('orange-light');
+        case 'WAITING FOR RELEASE AMOUNT':
+          return clsx('orange-dark');
+        case 'AMOUNT RELEASED':
+          return clsx('green-light');
+        case 'RECONCILIATION DONE':
+          return clsx('green-medium');
+        case 'IRO CLOSED':
+          return clsx('green-dark');
+        case 'IRO DISAPPROVED':
+          return clsx('red-light');
+        default:
+          // console.log('No class applied');
+          return '';
+        }
+      },
+
+      valueGetter: (params) => {
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        // Check if the status name needs to be changed
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+          break;
+          // case 'WAITING_FOR_ACCOUNTS_MNGR':
+          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+          //   if (props.action === 'release') {
+          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          //   }
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+    {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
       headerClassName: 'super-app-theme--cell',
@@ -979,68 +1041,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       renderHeader: () => <b>Sanctioned Bank</b>,
       align: 'center',
       headerAlign: 'center',
-    },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      width: 250,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR OFFICE MNGR':
-          return clsx('yellow-light');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('yellow-dark');
-        case 'WAITING FOR ACCOUNTS STATE':
-          return clsx('orange-light');
-        case 'WAITING FOR RELEASE AMOUNT':
-          return clsx('orange-dark');
-        case 'AMOUNT RELEASED':
-          return clsx('green-light');
-        case 'RECONCILIATION DONE':
-          return clsx('green-medium');
-        case 'IRO CLOSED':
-          return clsx('green-dark');
-        case 'IRO DISAPPROVED':
-          return clsx('red-light');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
-
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
     },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
