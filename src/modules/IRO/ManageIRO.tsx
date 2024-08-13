@@ -64,7 +64,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
-  const [notFund, setNotFound] = useState(false);
+  const [notFound, setNotFound] = useState(false);
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
@@ -1065,7 +1065,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
-  if (notFund && filteredRows.length ===0) {
+  if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
       variant: 'warning',
@@ -1097,25 +1097,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <TextField
-                      label="Search"
-                      variant="outlined"
-                      value={searchText}
-                      onChange={handleSearchChange}
-                      fullWidth
-                      style={{ width: '80%' }}
-                    />
-                    <Tooltip
-                      sx={{ fontSize: 30, padding: 1, color: '#3b32e6' }}
-                      title="The following fields can be searchable: IROno, IRODate, SubCategory, Division"
-                    >
-                      <div style={{ marginLeft: 10 }}>
-                        <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
-                      </div>
-
-                    </Tooltip>
-                  </div>
+                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                  <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchText}
+                    placeholder='Enter IROno or IRODate or Division or SubCategory'
+                    onChange={handleSearchChange}
+                    fullWidth
+                    // style={{ width: '80%' }}
+                  />
+                  {/* </div> */}
                 </Grid>
 
                 <Grid item xs={6}>

@@ -609,12 +609,13 @@ const ManageFrPage = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    if ((row.FRno && row.FRno.toLowerCase().includes(searchText.toLowerCase())) || (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-       (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-       (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-       (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase()))
+    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
+    (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
     }
@@ -622,11 +623,11 @@ const ManageFrPage = () => {
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
-      message: `${searchText} not found`,
+      message: ` ${searchText} not found`,
       variant: 'warning',
     });
   }
-  console.log(filteredRows, 'filteredRows');
+  // console.log(filteredRows, 'filteredRows');
 
   return (
     <CommonPageLayout
@@ -650,24 +651,17 @@ const ManageFrPage = () => {
                 <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <TextField
-                          label="Search"
-                          variant="outlined"
-                          value={searchText}
-                          onChange={handleSearchChange}
-                          fullWidth
-                          style={{ width: '80%' }}
-                        />
-                        <Tooltip
-                          sx={{ fontSize: 20, padding: 0 }}
-                          title="The following fields can be searchable: FRno, FRDate, SubCategory"
-                        >
-                          <div style={{ marginLeft: 10 }}>
-                            <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
-                          </div>
-                        </Tooltip>
-                      </div>
+                      {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                      <TextField
+                        label="Search"
+                        variant="outlined"
+                        value={searchText}
+                        placeholder='Enter FRno or FRDate or Division or SubCategory'
+                        onChange={handleSearchChange}
+                        fullWidth
+                        // style={{ width: '80%' }}
+                      />
+                      {/* </div> */}
                     </Grid>
 
                     <Grid item xs={6} sx={{ px: 2 }}>

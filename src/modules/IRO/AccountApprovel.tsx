@@ -246,19 +246,28 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
+
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  if (searchText && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: ` ${searchText} not found`,
+      variant: 'warning',
+    });
+  }
   // const userPermissions = (user.user as User)?.permissions;
   //   useEffect(() => {
   //     if (props.action === 'release') {
@@ -680,16 +689,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
-                  {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
                     variant="outlined"
                     value={searchText}
+                    placeholder='Enter IROno or IRODate or Division or SubCategory'
                     onChange={handleSearchChange}
                     fullWidth
-                    style={{ width: '25%', alignItems: 'start' }}
+                    // style={{ width: '80%' }}
                   />
-                  {/* </Grid> */}
+                  {/* </div> */}
                 </Grid>
                 <Grid item xs={6}>
                   <Button
