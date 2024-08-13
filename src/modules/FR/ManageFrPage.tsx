@@ -732,7 +732,7 @@ const ManageFrPage = () => {
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting For Access or Reverted" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts or Reverted" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
