@@ -563,16 +563,22 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',

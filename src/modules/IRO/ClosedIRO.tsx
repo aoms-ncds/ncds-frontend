@@ -409,16 +409,22 @@ const ClosedIRO = () => {
       }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,
     },
     {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',

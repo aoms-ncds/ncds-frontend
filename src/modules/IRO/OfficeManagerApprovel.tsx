@@ -30,7 +30,6 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
-import InfoIcon from '@mui/icons-material/Info';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -237,7 +236,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
-  const total =0;
 
 
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -635,16 +633,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         return 0; // or return a suitable default value
       }, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props?.row?.sanctionedAsPer?.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',
