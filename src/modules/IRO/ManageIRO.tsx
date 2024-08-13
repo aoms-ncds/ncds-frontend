@@ -544,16 +544,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {
               id: 'View',
               text: 'View Details ',
-              component: Link,
-              to: `/iro/${params.row._id}`,
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/iro/${params.row._id}`, '_blank');
+              },
             },
             {
               id: 'View',
               text: 'View Fr ',
-              component: Link,
-              to: `/fr/${(params.row as any).FR}/view`,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
               icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
+              },
             },
             ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ?
               [

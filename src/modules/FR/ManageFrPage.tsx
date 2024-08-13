@@ -237,9 +237,12 @@ const ManageFrPage = () => {
                 {
                   id: 'edit',
                   text: 'Edit',
-                  component: Link,
-                  to: `/fr/${props.row._id}/edit`,
+                  // component: Link,
+                  // to: `/fr/${props.row._id}/edit`,
                   icon: EditIcon,
+                  onClick: () => {
+                    window.open(`/fr/${props.row._id}/edit`, '_blank');
+                  },
                 },
               ] :
               []),
