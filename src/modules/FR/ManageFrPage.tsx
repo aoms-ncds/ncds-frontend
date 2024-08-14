@@ -404,7 +404,7 @@ const ManageFrPage = () => {
         }
         switch (statusName) {
         case 'REVERTED':
-          return clsx('orange');
+          return clsx('red-light');
         case 'WAITING FOR ACCOUNTS':
           return clsx('orange');
         case 'IRO CLOSED':
@@ -775,6 +775,9 @@ const ManageFrPage = () => {
                       },
                       '& .red': {
                         backgroundColor: '#ff6166',
+                      },
+                      '& .red-light': {
+                        backgroundColor: '#ff7f7f',
                       },
                     }}
                   >
