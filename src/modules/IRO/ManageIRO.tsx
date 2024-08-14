@@ -898,7 +898,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             textAlign: 'center',
           }}
         >
-          {props.row.mainCategory}
+          {props.row?.particulars[0]?.mainCategory}
         </p>
       ),
     },
