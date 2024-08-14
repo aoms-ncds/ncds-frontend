@@ -512,10 +512,14 @@ const ManageFrPage = () => {
           }}
         >
 
-          { props.row.particulars[0]?.subCategory3 !='Select'?
+          {props.row.particulars[0]?.subCategory3 !== 'Select' && props.row.particulars[0]?.subCategory3 !== '' ?
             props.row.particulars[0]?.subCategory3 :
-            props.row.particulars[0].subCategory2 != 'Select'?
-              props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1}
+            props.row.particulars[0]?.subCategory2 !== 'Select' && props.row.particulars[0]?.subCategory2 !== '' ?
+              props.row.particulars[0]?.subCategory2 :
+              props.row.particulars[0]?.subCategory1
+          }
+
+
         </p>
       ),
     },
