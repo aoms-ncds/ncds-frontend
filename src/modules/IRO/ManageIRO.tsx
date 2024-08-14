@@ -554,6 +554,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {
               id: 'View',
               text: 'View Fr ',
+              icon: PreviewIcon,
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
