@@ -264,9 +264,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: moment().startOf('y'),
-    endDate: moment().endOf('y'),
-    rangeType: 'years',
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
   });
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
@@ -431,7 +431,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         });
       }
     } else {
-      IROServices.getAll().then((res) => {
+      IROServices.getAll({ dateRange: dateRange }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
         // console.log(res.data, 'datgajdfj');
@@ -1078,17 +1078,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
       momentFilter={
-        props.action == 'manage' ?
-          {
-            dateRange: dateRange,
-            onChange: (newDateRange) => {
-              setDateRange(newDateRange);
-              setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
-            },
-            rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
-            initialRange: 'years',
-          } :
-          undefined
+
+        {
+          dateRange: dateRange,
+          onChange: (newDateRange) => {
+            setDateRange(newDateRange);
+            setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+          },
+          rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+          initialRange: 'months',
+        }
+
       }
     >
       <PermissionChecks
