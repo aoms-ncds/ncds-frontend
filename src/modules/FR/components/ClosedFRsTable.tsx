@@ -13,6 +13,7 @@ import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import PermissionChecks from '../../User/components/PermissionChecks';
 import ESignatureService from '../../Settings/extras/ESignatureService';
 import moment from 'moment';
+import { enqueueSnackbar } from 'notistack';
 
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -50,14 +51,22 @@ const ClosedFRsTable = () => {
   }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
     if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
+    (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
-
+  if (searchText && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: ` ${searchText} not found`,
+      variant: 'warning',
+    });
+  }
 
   useEffect(() => {
     ESignatureService.getESignature()
@@ -213,16 +222,17 @@ const ClosedFRsTable = () => {
   return (
     <Grid container spacing={2} padding={2} >
       <Grid item xs={6}>
-        {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+        {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
         <TextField
           label="Search"
           variant="outlined"
           value={searchText}
+          placeholder='Enter FRno or FRDate or Division or SubCategory'
           onChange={handleSearchChange}
           fullWidth
-          style={{ width: '25%', alignItems: 'start' }}
+          // style={{ width: '80%' }}
         />
-        {/* </Grid> */}
+        {/* </div> */}
       </Grid>
       <Grid item xs={6} sx={{ px: 2 }}>
         <PermissionChecks

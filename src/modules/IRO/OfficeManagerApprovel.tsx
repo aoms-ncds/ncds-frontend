@@ -30,7 +30,6 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
-import InfoIcon from '@mui/icons-material/Info';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -237,7 +236,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
-  const total =0;
 
 
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -297,15 +295,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   };
 
   const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value?.toString().toLowerCase().includes(searchText.toLowerCase()),
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
-
+  if (searchText && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: ` ${searchText} not found`,
+      variant: 'warning',
+    });
+  }
   useEffect(() => {
     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
       .then((res) => {
@@ -627,16 +633,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         return 0; // or return a suitable default value
       }, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props?.row?.sanctionedAsPer?.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',
@@ -675,26 +687,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <TextField
-                      label="Search"
-                      variant="outlined"
-                      value={searchText}
-                      onChange={handleSearchChange}
-                      fullWidth
-                      style={{ width: '80%' }}
-                    />
-                    <Tooltip
-                      sx={{ fontSize: 30, padding: 1, color: '#3b32e6' }}
-                      title="The following fields can be searchable: IROno, IRODate, SubCategory, Division"
-                    >
-                      <div style={{ marginLeft: 10 }}>
-                        <InfoIcon sx={{ fontSize: 20, color: 'blue' }} />
-                      </div>
-
-                    </Tooltip>
-                  </div>
-                  <br />
+                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+                  <TextField
+                    label="Search"
+                    variant="outlined"
+                    value={searchText}
+                    placeholder='Enter IROno or IRODate or Division or SubCategory'
+                    onChange={handleSearchChange}
+                    fullWidth
+                    // style={{ width: '80%' }}
+                  />
+                  {/* </div> */}
                 </Grid>
                 <Grid item xs={6}>
                   <Button

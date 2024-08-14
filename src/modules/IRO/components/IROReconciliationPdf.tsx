@@ -65,8 +65,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
+    borderTopWidth: .5,
+    borderTopColor: '#000',
+    borderTopStyle: 'solid',
     alignItems: 'center',
-    height: 50,
+    height: 70,
     left: 20,
   },
   tableHead: {
@@ -77,15 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
-  tableHeadCoppy: {
-    flex: 1,
-    fontSize: 12,
-    padding: 2,
-    textAlign: 'right',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-    // paddingLeft: 8,
-  },
+
   tableCell: {
     flex: 1,
     fontSize: 14,
@@ -106,7 +101,7 @@ const styles = StyleSheet.create({
   },
   cellGrid: {
     borderRight: 1,
-    height: 50,
+    height: 70,
   },
   cellGridCopy: {
     borderRight: 1,
@@ -134,7 +129,7 @@ const IROReconciliationPdf = (props: {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
-  const rowsPerPage = 8;
+  const rowsPerPage = 6;
   const totalPages = Math.ceil((workers ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
 
@@ -337,46 +332,47 @@ const IROReconciliationPdf = (props: {
         </div>
         {Array.from({ length: totalPages }).map((_, pageIndex) => (
 
-          <><View style={styles.line} /><View style={styles.tableContainer}>
-            <View style={{ ...styles.tableRow, height: 30 }} key={0}>
-              <div style={styles.headGrid}></div>
-              <Text style={styles.tableHead}>Sl No.</Text>
-              <div style={styles.headGrid}></div>
-              <Text style={styles.tableHead}>Worker Code</Text>
-              <div style={styles.headGrid}></div>
-              <Text style={{ ...styles.tableHead, flex: 2 }}>Worker Name</Text>
-              <div style={styles.headGrid}></div>
-              {/* <Text style={styles.tableHead}>Last Name</Text>
+          <><View style={styles.line} />
+            <View style={styles.tableContainer}>
+              <View style={{ ...styles.tableRow, height: 30 }} key={0}>
+                <div style={styles.headGrid}></div>
+                <Text style={styles.tableHead}>Sl No.</Text>
+                <div style={styles.headGrid}></div>
+                <Text style={styles.tableHead}>Worker Code</Text>
+                <div style={styles.headGrid}></div>
+                <Text style={{ ...styles.tableHead, flex: 2 }}>Worker Name</Text>
+                <div style={styles.headGrid}></div>
+                {/* <Text style={styles.tableHead}>Last Name</Text>
     <div style={styles.headGrid}></div> */}
-              {/* <Text style={styles.tableHead}>Division</Text>
+                {/* <Text style={styles.tableHead}>Division</Text>
               <div style={styles.headGrid}></div> */}
-              <Text style={styles.tableHead}>Net Amount</Text>
-              <div style={styles.headGrid}></div>
-              <Text style={styles.tableHeadCoppy}>Signature</Text>
-              <Text style={styles.tableHead}></Text>
-              {/* <div style={styles.cellGridCopy1}></div> */}
-              <div style={styles.cellGridCopy2}></div>
-            </View>
+                <Text style={styles.tableHead}>Net Amount</Text>
+                <div style={styles.headGrid}></div>
+                <Text style={{ ...styles.tableHead, textAlign: 'right' }}>Signature</Text>
+                <Text style={styles.tableHead}></Text>
+                {/* <div style={styles.cellGridCopy1}></div> */}
+                <div style={styles.cellGridCopy2}></div>
+              </View>
 
-            {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
-              const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
+              {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
+                const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
 
-              return (
+                return (
 
-                <View style={styles.tableRow} key={row._id}>
-                  <div style={styles.cellGrid}></div>
-                  <Text style={styles.tableCell}>{globalIndex}</Text>
-                  <div style={styles.cellGrid}></div>
-                  <Text style={styles.tableCell}>{row.workerCode}</Text>
-                  <div style={styles.cellGrid}></div>
-                  <Text style={{ ...styles.tableCell, flex: 2 }} >{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
-                  <div style={styles.cellGrid}></div>
-                  {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
+                  <View style={styles.tableRow} key={row._id}>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{globalIndex}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.workerCode}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={{ ...styles.tableCell, flex: 2 }} >{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
+                    <div style={styles.cellGrid}></div>
+                    {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
         <div style={styles.cellGrid}></div> */}
-                  {/* <Text style={styles.tableCell}>{row.division?.details.name}</Text>
+                    {/* <Text style={styles.tableCell}>{row.division?.details.name}</Text>
                   <div style={styles.cellGrid}></div> */}
-                  <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
-                    (row.supportStructure?.basic ?? 0) +
+                    <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
+                      (row.supportStructure?.basic ?? 0) +
                     (row.supportStructure?.HRA ?? 0) +
                     (row.supportStructure?.spouseAllowance ?? 0) +
                     (row.supportStructure?.positionalAllowance ?? 0) +
@@ -387,43 +383,43 @@ const IROReconciliationPdf = (props: {
                       (row.supportStructure?.impactDeduction ?? 0) +
                       (row.supportStructure?.MUTDeduction ?? 0)
                     ) : ''}</Text>
-                  <div style={styles.cellGrid}></div>
-                  <Text style={styles.tableCell}></Text>
-                  {/* <div style={styles.cellGridCopy}></div> */}
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}></Text>
+                    {/* <div style={styles.cellGridCopy}></div> */}
+                    <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                    <div style={styles.cellGrid}></div>
+                  </View>
+                );
+              })}
+              {pageIndex === totalPages - 1 && (
+                <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
+                  <div style={styles.headGrid}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                  <div style={styles.cellGrid}></div>
-                </View>
-              );
-            })}
-            {pageIndex === totalPages - 1 && (
-              <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
-                <div style={styles.headGrid}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                  {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                 <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text> */}
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{
-                  flex: 2,
-                  fontSize: 12,
-                  padding: 2,
-                  textAlign: 'center', fontWeight: 'bold',
-                }}>Total Net Amount</Text>
-                <div style={{ ...styles.headGrid }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold', fontSize: 16 }}>{total}</Text>
-                <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
-                <div style={styles.headGridCopyy}></div>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <Text style={{
+                    flex: 2,
+                    fontSize: 12,
+                    padding: 2,
+                    textAlign: 'center', fontWeight: 'bold',
+                  }}>Total Net Amount</Text>
+                  <div style={{ ...styles.headGrid }}></div>
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold', fontSize: 16 }}>{total}</Text>
+                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
+                  <div style={styles.headGridCopyy}></div>
 
-              </View>
-            )}
-          </View></>
+                </View>
+              )}
+            </View></>
         ))}
       </Page>
     </Document>

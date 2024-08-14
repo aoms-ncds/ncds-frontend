@@ -197,13 +197,22 @@ const ReconciliationIRO = () => {
 
   const filteredRows = (reconciliationIRO ?? []).filter((row) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))) {
+      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    ) {
       return true;
     }
-    return Object.values(row).some((value) =>
-      value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
-    );
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  if (searchText && filteredRows.length ===0) {
+    enqueueSnackbar({
+      message: ` ${searchText} not found`,
+      variant: 'warning',
+    });
+  }
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -554,16 +563,22 @@ const ReconciliationIRO = () => {
         return 0; // or return a suitable default value
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
-      field: 'sanctionedAsPer',
-      renderHeader: () => (<b>Special Sanction</b>),
+      field: 'specialsanction',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
-        <p style={{
-          maxWidth: 200,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}> {props.row.sanctionedAsPer.toString()}</p>
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.specialsanction}
+        </p>
       ),
       width: 200,
       align: 'center',
@@ -601,16 +616,17 @@ const ReconciliationIRO = () => {
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
-            {/* <Grid sx={{ width: '30px', paddingLeft: '85%', paddingTop: '2px' }}> */}
+            {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
               variant="outlined"
               value={searchText}
+              placeholder='Enter IROno or IRODate or Division or SubCategory'
               onChange={handleSearchChange}
               fullWidth
-              style={{ width: '25%', alignItems: 'start' }}
+              // style={{ width: '80%' }}
             />
-            {/* </Grid> */}
+            {/* </div> */}
           </Grid>
           <Grid item xs={6}>
             <Button
