@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
     alignItems: 'center',
-    height: 50,
+    height: 70,
     left: 20,
   },
   tableRow1: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
     alignItems: 'center',
-    height: 50,
+    height: 70,
     left: 20,
     marginBottom: '280px',
   },
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   cellGrid: {
     borderRight: 1,
-    height: 50,
+    height: 70,
   },
 });
 
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const rowsPerPage = 8;
+  const rowsPerPage = 6;
   const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
 
