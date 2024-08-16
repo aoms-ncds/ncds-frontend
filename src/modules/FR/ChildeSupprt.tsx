@@ -448,7 +448,7 @@ const ChildeSupportPage = () => {
                       const coordinator: any = newVal.details?.coordinator?.name;
                       setChildList(() => allChild?.filter((child: any) =>
                         child.division?._id == newVal?._id &&
-                        child.childOf?._id != coordinator && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator') ?? []);
+                        child.childOf?._id != coordinator?._id && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator') ?? []);
 
 
                       setDivision(newVal);
