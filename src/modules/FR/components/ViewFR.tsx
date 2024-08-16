@@ -40,7 +40,7 @@ import PermissionChecks, { hasPermissions } from '../../User/components/Permissi
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import { monthNames, purposes } from '../extras/FRConfig';
-import { AttachFile as AttachmentIcon, Edit as EditIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Edit as EditIcon, History as HistoryIcon } from '@mui/icons-material';
 import MessageItem from '../../../components/MessageItem';
 import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
@@ -238,6 +238,9 @@ return (
   <div>
     <Container>
       <CardContent>
+        <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>} sx={{ float: 'right' }}>
+          Log
+        </Button>
         <form
           onSubmit={handleClick}
         >
