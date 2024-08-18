@@ -171,11 +171,11 @@ const PDFTemplate = (props: {
       WorkersServices.getById(props.workerId).then((res) => {
         if (res?.data) {
           // Check if supportEnabled is true before updating the state
-          if (res.data.supportStructure.supportEnabled === true) {
-            setWorkers([res.data]);
-          } else {
-            setWorkers([]); // Optionally set to an empty array if condition is not met
-          }
+          // if (res.data.supportStructure.supportEnabled === true) {
+          setWorkers([res.data]);
+          // } else {
+          //   setWorkers([]); // Optionally set to an empty array if condition is not met
+          // }
         }
       });
       props.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
@@ -183,9 +183,9 @@ const PDFTemplate = (props: {
       WorkersServices.getWorkersBySubDivision({ division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID ?? null })
         .then((res) => {
           console.log(res);
-          // setWorkers(res.data);
-          const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-          setWorkers(filteredWorkers);
+          setWorkers(res.data);
+          // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+          // setWorkers(filteredWorkers);
           setPurpose(res.data[0].division?.details.name ?? 'Division');
         })
         .catch((res) => {
@@ -200,8 +200,8 @@ const PDFTemplate = (props: {
         })
           .then((res) => {
             console.log(res);
-            const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-            setWorkers(filteredWorkers);
+            // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+            setWorkers(res.data);
 
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
@@ -217,9 +217,9 @@ const PDFTemplate = (props: {
         })
           .then((res) => {
             console.log(res);
-            // setWorkers(res.data);
-            const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-            setWorkers(filteredWorkers);
+            setWorkers(res.data);
+            // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
+            // setWorkers(filteredWorkers);
             setPurpose(res.data[0].division?.details.name ?? 'Division');
           })
           .catch((res) => {
