@@ -1706,7 +1706,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (

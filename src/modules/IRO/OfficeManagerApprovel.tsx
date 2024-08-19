@@ -31,7 +31,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 
-const ManageIRO = (props: { action: 'manage' | 'release' }) => {
+const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -1271,4 +1271,4 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   );
 };
 
-export default ManageIRO;
+export default OfficeMangerApprove;

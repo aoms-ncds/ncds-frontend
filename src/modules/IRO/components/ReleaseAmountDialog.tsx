@@ -18,7 +18,7 @@ import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 // import { MB } from '../../extras/CommonConfig';
 
 interface ReleaseDialogProps {
-  action: 'add' | 'view';
+  action: 'add' | 'manage'|'view';
   data: IROrder[];
   open: boolean;
   onClose: () => void;
@@ -325,7 +325,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     },
                   }}
                   variant="outlined"
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                   required
                 />
               </Grid>
@@ -335,7 +336,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   value={releaseAmount?.transferredDate}
                   format="DD/MM/YYYY"
                   sx={{ width: '100%' }}
-                  disabled={props.action == 'view'}
+                  disabled={props.action === 'view'}
+
                   slotProps={{
                     textField: {
                       required: true,
@@ -389,7 +391,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -407,7 +410,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -425,7 +429,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -443,7 +448,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -461,20 +467,21 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                   InputLabelProps={{
                     shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
                   }}
                 />
               </Grid>
-              {props.action == 'view' && (
+              {props.action !== 'add' && (
                 <Grid item xs={12} md={6} lg={4}>
                   <TextField
                     label="Payment Method"
                     value={releaseAmount?.modeOfPayment}
                     variant="outlined"
                     fullWidth
-                    disabled={props.action == 'view'}
+                    disabled
                     InputLabelProps={{
                       shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
                     }}
@@ -482,7 +489,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                 </Grid>
               )}
               {/* </Grid> */}
-              {props.action != 'view' && (
+              {props.action == 'add' && (
                 <Grid item xs={12} md={6} lg={4}>
                   <Autocomplete
                     disablePortal
@@ -499,7 +506,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                       }))
                     }
                     renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
-                  // disabled={props.action == 'view'}
+                    // disabled={props.action !== 'add'}
+
                   />
                 </Grid>
               )}
@@ -518,7 +526,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     variant="outlined"
                     fullWidth
                     // required
-                    disabled={props.action == 'view'}
+                    disabled={props.action !== 'add'}
+
                   />
                 </Grid>
               )}
@@ -537,7 +546,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   variant="outlined"
                   fullWidth
                   // required
-                  disabled={props.action == 'view'}
+                  disabled={props.action !== 'add'}
+
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -572,7 +582,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             >
               Close
             </Button>
-            {hasPermissions(['MANAGE_IRO']) ? (
+            {hasPermissions(['MANAGE_IRO']) && props.action!=='view'? (
               <>
                 <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
                   {iroStatus ? 'Send To Acc Mgr For Approval' : 'Release Amount'}
@@ -653,7 +663,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       /> */}
       <FileUploader
         title="Attachments"
-        action={props.action}
+        action={props.action==='add'?'add':'view'}
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
