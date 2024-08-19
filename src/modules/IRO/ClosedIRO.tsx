@@ -175,6 +175,17 @@ const ClosedIRO = () => {
               icon: PreviewIcon,
             },
             {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            {
               id: 'remarks',
               text: 'Remarks',
               icon: EditNoteIcon,
