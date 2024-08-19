@@ -951,7 +951,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
