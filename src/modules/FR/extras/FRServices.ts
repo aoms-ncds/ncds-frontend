@@ -264,4 +264,8 @@ export default {
     );
   },
   deleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId + '/force', { headers: { ...getAuthHeader() } })),
+  getLogById: (fRId: string) =>
+    getStandardResponse<ITransactionLog[]>(
+      axios.get(`/fr/${fRId}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };

@@ -195,5 +195,8 @@ export default {
   // submit: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/submit`, null, { headers: { ...getAuthHeader() } })),
 
   deleteIRO: (IroId: string) => getStandardResponse<number>(axios.delete('/iro/' + IroId+ '/force', { headers: { ...getAuthHeader() } })),
-
+  getLogById: (id: string) =>
+    getStandardResponse<ITransactionLog[]>(
+      axios.get(`/iro/${id}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };

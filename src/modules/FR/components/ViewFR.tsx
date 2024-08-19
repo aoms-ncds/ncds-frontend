@@ -53,7 +53,7 @@ import ESignatureService from '../../Settings/extras/ESignatureService';
 import { useAuth } from '../../../hooks/Authentication';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
-import { setSyntheticLeadingComments } from 'typescript';
+import LogDialog from './LogDialog';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -95,8 +95,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
-  console.log(props, 'newParticular');
-
+  // console.log(props, 'newParticular');
+  const [openLog, setOpenLog] = useState(false);
 interface AsPer{
   asPer:[];
 
@@ -238,9 +238,6 @@ return (
   <div>
     <Container>
       <CardContent>
-        <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>} sx={{ float: 'right' }}>
-          Log
-        </Button>
         <form
           onSubmit={handleClick}
         >
@@ -248,7 +245,7 @@ return (
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <TextField
-                label="IRO No"
+                label="FR No"
                 value={props.value?.FRno}
                 fullWidth
                 disabled
@@ -631,6 +628,11 @@ return (
               {/* )} */}
                 &nbsp;
               <div style={{ float: 'right' }}>
+                <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
+                  onClick={async ()=>setOpenLog(true)}>
+          Log
+                </Button>
+                &nbsp;
                 <Button
                   variant="contained"
                   color="info"
@@ -1441,7 +1443,7 @@ return (
         <Button onClick={() => setShowName(false)}>Add</Button>
       </DialogActions>
     </Dialog>
-
+    {props.value._id && <LogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={props.value._id}/>}
   </div>
 );
 };
