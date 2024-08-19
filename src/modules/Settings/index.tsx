@@ -107,13 +107,15 @@ const SettingsDashboard = () => {
         <Grid item xs={12} md={4} xl={3} width={350}>
           <DashboardCardButton primaryText="Leader Details" color="#fff" targetRoute="/settings/leaderDetails" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3} width={350}>
+          <DashboardCardButton primaryText="FR/IRO Log" color="#fff" targetRoute="/settings/transactionLog" />
+        </Grid>
       </Grid>
 
 
       <Dialog
         open={open}
         onClose={handleClose}
-    
       >
         <DialogTitle>Edit Age</DialogTitle>
         <DialogContent>

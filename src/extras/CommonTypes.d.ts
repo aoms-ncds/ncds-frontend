@@ -62,11 +62,6 @@ declare global {
     percentage: number;
   }
 
-  interface DateRange {
-    startDate: Moment;
-    endDate: Moment;
-  }
-
   interface FormComponentProps<T, Options = undefined> {
     disable?: boolean;
     value: T;
