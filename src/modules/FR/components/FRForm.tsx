@@ -597,7 +597,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   {props.action === 'add' || props.action === 'edit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
-                 
                       <PermissionChecks
                         permissions={['WRITE_FR']}
                         granted={
