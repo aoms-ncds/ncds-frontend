@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography } from '@mui/material';
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
@@ -36,6 +36,8 @@ const ReconciliationIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [conform, setConform] = useState<boolean>(false);
+  const [conform1, setConform1] = useState<boolean>(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -168,6 +170,7 @@ const ReconciliationIRO = () => {
             setReconcilationIRO(filterIRO);
             // Update local state and UI
             setIroData(null);
+            setConform1(false);
             enqueueSnackbar({
               message: 'File Attached',
               variant: 'success',
@@ -357,6 +360,7 @@ const ReconciliationIRO = () => {
               icon: PreviewIcon,
               onClick: () => {
                 setIroData(props.row);
+                setConform(true);
                 if (props?.row.FR) {
                   FRServices.getById(props.row.FR).then((res) => {
                     setFrData(res.data);
@@ -529,10 +533,10 @@ const ReconciliationIRO = () => {
         return <p>{particularAmount}</p>;
       },
     },
-    {
-      field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -540,7 +544,7 @@ const ReconciliationIRO = () => {
       valueGetter: (params) => {
         const transferredDate = params.row.releaseAmount?.transferredDate;
         if (transferredDate) {
-          const formattedDate = moment(transferredDate).format('YYYY-MM-DD'); // Adjust the format as needed
+          const formattedDate = moment(transferredDate).format('DD/MM/YYYY'); // Adjust the format as needed
           return formattedDate;
         } else {
           return 'N/A';
@@ -610,9 +614,13 @@ const ReconciliationIRO = () => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
     },
+    {
+      field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
+    },
   ];
   return (
-    <CommonPageLayout title="Reconciliation IRO">
+    <CommonPageLayout title="For Reconciliation">
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
@@ -893,7 +901,7 @@ const ReconciliationIRO = () => {
           </Button>
         </DialogActions>
       </Dialog> */}
-      <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
+      <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
@@ -911,7 +919,7 @@ const ReconciliationIRO = () => {
         <DialogActions>
           <Button
             onClick={() => {
-              setIroData(null);
+              setConform1(false);
             }}
             variant="text"
           >
@@ -961,6 +969,27 @@ const ReconciliationIRO = () => {
         // isStopped={.state.isStopped}
         // isPaused={.state.isPaused}
       />}
+      <Dialog open={Boolean(conform)} onClose={() => setConform(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to close this IRO?</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setConform(false)}>No</Button>
+          <Button
+            // endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              setConform1(true);
+              setConform(false);
+            } }
+          >
+                 Yes
+          </Button>
+        </DialogActions>
+
+      </Dialog>
     </CommonPageLayout>
   );
 };

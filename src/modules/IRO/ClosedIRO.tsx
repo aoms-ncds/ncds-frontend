@@ -377,16 +377,16 @@ const ClosedIRO = () => {
         return <p>{particularAmount}</p>;
       },
     },
-    {
-      field: 'updatedAt',
-      align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => (<b>Last Updated</b>),
-      width: 150,
-      renderCell: (props) => (
-        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
-      ),
-    },
+    // {
+    //   field: 'updatedAt',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   width: 150,
+    //   renderCell: (props) => (
+    //     <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+    //   ),
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -437,6 +437,16 @@ const ClosedIRO = () => {
     {
       field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
       valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+    },
+    {
+      field: 'updatedAt',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 150,
+      renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ),
     },
   ];
   useEffect(() => {

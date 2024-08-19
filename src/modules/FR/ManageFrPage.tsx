@@ -536,15 +536,15 @@ const ManageFrPage = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Last Updated</b>,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Last Updated</b>,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // {
     //   field: 'sanctionedAsPer',
     //   headerClassName: 'super-app-theme--cell',
@@ -606,6 +606,15 @@ const ManageFrPage = () => {
         </p>
       ),
       width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Last Updated</b>,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
       align: 'center',
       headerAlign: 'center',
     },
