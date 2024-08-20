@@ -63,12 +63,30 @@ const ClosedIRO = () => {
       updatedAt: moment(),
     },
   });
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
         console.log({ res });
         setSignature(res.data as Esignature);
         setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
@@ -647,7 +665,7 @@ const ClosedIRO = () => {
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -668,7 +686,7 @@ const ClosedIRO = () => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button

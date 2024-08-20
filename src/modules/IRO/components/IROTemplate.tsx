@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
-const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign?:any;president?:EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign?:any;president:EsignaturePresident }) => {
   let totalAmount = 0;
   let NewTot:any = 0;
   let totalAmount2 = 0;
@@ -462,7 +462,7 @@ As Per
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.president?.presidentSignature?.type};base64, ${props.president?.presidentSignature?.base64} `} />
+                      src={`data:${props.president.presidentSignature?.type};base64, ${props.president.presidentSignature?.base64} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -529,13 +529,10 @@ As Per
             </View>
           </div>
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
-            <Text style={{
-              fontSize: 10,
-              fontWeight: 'bold',
-              fontFamily: 'Oswald',
-            }}>
-      Prepared By:
-            </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ ...styles.text, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Prepared By:</Text>
+              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName?props?.rowData?.approvedBy?.basicDetails?.firstName.trim():''}${props?.rowData?.approvedBy?.basicDetails?.middleName ?' '+props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
+            </View>
             <Text style={{
               fontSize: 8,
               color: 'grey',

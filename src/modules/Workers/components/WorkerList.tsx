@@ -375,7 +375,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
                       });
             } }
           >
-                 Delate
+                 Delete
           </Button>
         </DialogActions>
 
