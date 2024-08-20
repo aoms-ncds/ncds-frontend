@@ -294,7 +294,7 @@ const ChildeSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'DOB'}</b>,
-      valueGetter: (params) => params.row.dateOfBirth.format('DD/MM/YYYY'),
+      valueGetter: (params) => params.row.dateOfBirth?.format('DD/MM/YYYY'),
     },
     {
       field: 'age',
