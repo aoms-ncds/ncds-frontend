@@ -81,6 +81,8 @@ const ChildeSupportPage = () => {
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
   const [loading, setLoading] = useState<boolean | null>(false);
+  // const supportEnabledWorkers = childList?.filter((item) => item.supportStructure?.supportEnabled === true);
+
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
@@ -292,7 +294,7 @@ const ChildeSupportPage = () => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: () => <b>{'DOB'}</b>,
-      valueGetter: (params) => params.row.dateOfBirth,
+      valueGetter: (params) => params.row.dateOfBirth?.format('DD/MM/YYYY'),
     },
     {
       field: 'age',
@@ -422,7 +424,7 @@ const ChildeSupportPage = () => {
               narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
               requestedAmount: total,
               unitPrice: total,
-              // quantity: supportEnabledWorkers?.length,
+              quantity: childList?.length,
               attachment: fileObj ? [fileObj] : [],
             }],
           }));

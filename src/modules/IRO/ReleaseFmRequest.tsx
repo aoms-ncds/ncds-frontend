@@ -794,6 +794,66 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
+      field: 'status',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Status</b>,
+      width: 300,
+      align: 'center',
+      headerAlign: 'center',
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+        case 'WAITING FOR OFFICE MNGR':
+          return clsx('orange');
+        case 'WAITING FOR ACCOUNTS STATE':
+          return clsx('orange');
+        case 'IRO CLOSED':
+          return clsx('green');
+        case 'WAITING FOR ACCOUNTS MNGR':
+          return clsx('green');
+        case 'AMOUNT RELEASED':
+          return clsx('green');
+        case 'RECONCILIATION DONE':
+          return clsx('green');
+        case 'WAITTING FOR RELEASE AMOUNT':
+          return clsx('orange');
+        default:
+          // console.log('No class applied');
+          return '';
+        }
+      },
+
+      valueGetter: (params) => {
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        // Check if the status name needs to be changed
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+          // case 'WAITING_FOR_ACCOUNTS_MNGR':
+          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+          //   if (props.action === 'release') {
+          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          //   }
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+    {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
       headerClassName: 'super-app-theme--cell',
@@ -833,34 +893,39 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       ),
     },
     {
-      field: 'submainCategory',
+      field: 'subCategory',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {
-            props.row.particulars[0]?.subCategory3 !='Select' ?
-              props.row.particulars[0]?.subCategory3 :
-              props.row.particulars[0]?.subCategory2 != 'Select' ?
-                props.row.particulars[0]?.subCategory2 : props.row.particulars[0]?.subCategory1
-          }
-          {/* {props.row.particulars[0]?.subCategory3 == 'Select' || props.row.particulars[0]?.subCategory3 == '' ? props.row.particulars[0]?.subCategory2 :
-            props.row.particulars[0]?.subCategory2 == 'Select' ? props.row.particulars[0]?.subCategory1: props.row.particulars[0]?.subCategory3 != 'Select' || props.row.particulars[0]?.subCategory3 != null ? props.row.particulars[0]?.subCategory3: null
-          } */}
-        </p>
-      ),
+      valueGetter: (params) => {
+        const subCategory3 = params.row.particulars[0]?.subCategory3;
+        const subCategory2 = params.row.particulars[0]?.subCategory2;
+        const subCategory1 = params.row.particulars[0]?.subCategory1;
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+          return subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+          return subCategory2;
+        } else {
+          return subCategory1;
+        }
+      },
+      renderCell: (params) => {
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {params.value}
+          </p>
+        );
+      },
     },
     {
       field: 'requestAmount',
@@ -978,66 +1043,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       renderHeader: () => <b>Sanctioned Bank</b>,
       align: 'center',
       headerAlign: 'center',
-    },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      width: 300,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR OFFICE MNGR':
-          return clsx('orange');
-        case 'WAITING FOR ACCOUNTS STATE':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('green');
-        case 'AMOUNT RELEASED':
-          return clsx('green');
-        case 'RECONCILIATION DONE':
-          return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
-          return clsx('orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
-
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
     },
   ];
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
