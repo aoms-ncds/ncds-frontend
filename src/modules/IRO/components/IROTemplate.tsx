@@ -472,7 +472,8 @@ As Per
                       fontWeight: 'bold',
                       fontFamily: 'Oswald',
                     }}>
-                      {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName}
+                      Mr. Shaji Varghese
+                      {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
                     <Text style={{
                       ...styles.text1,
