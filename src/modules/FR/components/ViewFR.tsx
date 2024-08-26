@@ -510,39 +510,98 @@ return (
                   />
                   {/* </Tooltip> */}
                 </Grid>
+                {!hasPermissions(['MANAGE_FR']) || props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS ? (
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                      <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
+                      <Select
+                        labelId="sanctioned_bank"
+                        label="Sanctioned Bank"
+                        value={props.value.sanctionedBank || ''}
+                        required
+                        disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                        onChange={(e) =>
+                          props.onChange({
+                            ...props.value,
+                            sanctionedBank: e.target.value,
+                          })
+                        }
+
+                      >
+                        {props?.value?.division?.DivisionBankFCRA?.bankName || props?.value?.division?.FCRABankDetails?.bankName ? (
+                          <MenuItem value={`FCRA-${props?.value?.division?.DivisionBankFCRA?.beneficiary || props?.value?.division?.FCRABankDetails?.beneficiary}`}>
+    Division Bank FCRA - {props?.value?.division?.DivisionBankFCRA?.beneficiary || props?.value?.division?.FCRABankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.DivisionBankLocal?.bankName || props?.value?.division?.localBankDetails?.bankName ? (
+                          <MenuItem value={`Local Bank-${props?.value?.division?.DivisionBankLocal?.beneficiary || props?.value?.division?.localBankDetails?.beneficiary}`}>
+    Division Bank Local - {props?.value?.division?.DivisionBankLocal?.beneficiary || props?.value?.division?.localBankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank1?.bankName || props?.value?.division?.otherBankDetails?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 1-${props?.value?.division?.BeneficiaryBank1?.beneficiary || props?.value?.division?.otherBankDetails?.beneficiary}`}>
+    Beneficiary Bank 1 - {props?.value?.division?.BeneficiaryBank1?.beneficiary || props?.value?.division?.otherBankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank2?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 2-${props?.value?.division?.BeneficiaryBank2?.beneficiary}`}>
+    Beneficiary Bank 2 - {props?.value?.division?.BeneficiaryBank2?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank3?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 3-${props?.value?.division?.BeneficiaryBank3?.beneficiary}`}>
+    Beneficiary Bank 3 - {props?.value?.division?.BeneficiaryBank3?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank4?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 4-${props?.value?.division?.BeneficiaryBank4?.beneficiary}`}>
+    Beneficiary Bank 4 - {props?.value?.division?.BeneficiaryBank4?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank5?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 5-${props?.value?.division?.BeneficiaryBank5?.beneficiary}`}>
+    Beneficiary Bank 5 - {props?.value?.division?.BeneficiaryBank5?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank6?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 6-${props?.value?.division?.BeneficiaryBank6?.beneficiary}`}>
+    Beneficiary Bank 6 - {props?.value?.division?.BeneficiaryBank6?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank7?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 7-${props?.value?.division?.BeneficiaryBank7?.beneficiary}`}>
+    Beneficiary Bank 7 - {props?.value?.division?.BeneficiaryBank7?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank8?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 8-${props?.value?.division?.BeneficiaryBank8?.beneficiary}`}>
+    Beneficiary Bank 8 - {props?.value?.division?.BeneficiaryBank8?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank9?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 9-${props?.value?.division?.BeneficiaryBank9?.beneficiary}`}>
+    Beneficiary Bank 9 - {props?.value?.division?.BeneficiaryBank9?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {props?.value?.division?.BeneficiaryBank10?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 10-${props?.value?.division?.BeneficiaryBank10?.beneficiary}`}>
+    Beneficiary Bank 10 - {props?.value?.division?.BeneficiaryBank10?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
 
 
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
-                    <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
-                    <Select
-                      labelId="sanctioned_bank"
-                      label="Sanctioned Bank"
-                      value={props.value.sanctionedBank || ''}
-                      required
-                      disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
-                      onChange={(e) =>
-                        props.onChange({
-                          ...props.value,
-                          sanctionedBank: e.target.value,
-                        })
-                      }
-
-                    >
-                      {props?.value?.division?.DivisionBankFCRA?.bankName || props?.value?.division?.FCRABankDetails?.bankName ? <MenuItem value={props.value.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
-                      {props?.value?.division?.DivisionBankLocal?.bankName || props?.value?.division?.localBankDetails?.bankName ? <MenuItem value={props.value.division.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank1?.bankName || props?.value?.division?.otherBankDetails?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank3?.bankName? <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {props.value.division?.BeneficiaryBank3?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank4?.bankName? <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {props.value.division?.BeneficiaryBank4?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank5?.bankName? <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {props.value.division?.BeneficiaryBank5?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank6?.bankName? <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {props.value.division?.BeneficiaryBank6?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank7?.bankName? <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {props.value.division?.BeneficiaryBank7?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank8?.bankName? <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {props.value.division?.BeneficiaryBank8?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank9?.bankName? <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {props.value.division?.BeneficiaryBank9?.beneficiary}</MenuItem> :'' }
-                      {props?.value?.division?.BeneficiaryBank10?.bankName? <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {props.value.division?.BeneficiaryBank10?.beneficiary}</MenuItem> :'' }
-
-                      {/* <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}</MenuItem>
+                        {/* <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
@@ -552,10 +611,37 @@ return (
                         <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem> */}
 
-                      {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                ):(
+                  <>
+                    <Grid item xs={12} md={6}>
+                      <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                        <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
+                        <Select
+                          labelId="sanctioned_bank"
+                          label="Sanctioned Bank"
+                          value={props.value.sanctionedBank || ''}
+                          required
+                          disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                          onChange={(e) =>
+                            props.onChange({
+                              ...props.value,
+                              sanctionedBank: e.target.value,
+                            })
+                          }
+
+                        >
+                          <MenuItem value={props?.value?.sanctionedBank}>{props?.value?.sanctionedBank}</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+
+                  </>
+                )}
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                     <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
