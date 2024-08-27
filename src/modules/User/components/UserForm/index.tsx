@@ -50,12 +50,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
         userPhoto?: File;
         setUserPhoto?: (newUserPhoto: File) => void;
       };
-      childprofilePic: {
-        childPhoto?: File;
-        setChildPhoto?: (newChildPhoto: File) => void;
+      childProfilePic: {
+        childPhoto?: { id: string; childPhoto: File | null }[];
+        setChildPhoto?: (newChildPhoto: { id: string; childPhoto: File | null }) => void;
       };
-      tab: any;
 
+      tab: any;
     }
   >,
 ) => {
@@ -97,6 +97,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       phoneNumber: 0,
       emailId: '',
       childProfile: '',
+      _id: (props.value as CreatableIWorker).children.length.toString(),
     });
   };
   if (props?.options?.tab) {
@@ -625,31 +626,21 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   Review from first step{' '}
                 </Button>
 
-
-                {props.options?.kind == 'worker'?(
+                {props.options?.kind == 'worker' ? (
                   <Button
-                    onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married'? (step) => step - 3 : (step) => step - 1)}
-
+                    onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married' ? (step) => step - 3 : (step) => step - 1)}
                     variant="outlined"
                     sx={{ padding: '16px 64px', mr: 1 }}
                   >
                     {' '}
-                   Go back
-                    {' '}
+                    Go back{' '}
                   </Button>
-
-                ):(
-                  <Button
-                    onClick={() => setActiveStep((step) => step - 3)}
-
-                    variant="outlined"
-                    sx={{ padding: '16px 64px', mr: 1 }}
-                  >
+                ) : (
+                  <Button onClick={() => setActiveStep((step) => step - 3)} variant="outlined" sx={{ padding: '16px 64px', mr: 1 }}>
                     {' '}
-                  Go back {' '}
+                    Go back{' '}
                   </Button>
-                )
-                }
+                )}
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
                   {' '}
                   {/* {(props.options?.kind === 'staff'||(props.options?.kind === 'worker' && props.value.basicDetails.martialStatus != 'Married') )? 'Submit' : 'Next'}{' '} */} Submit{' '}
@@ -725,7 +716,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                         const fileURL = URL.createObjectURL(selectedFile);
                         console.log(fileURL, 'fileURL');
 
-
                         // Update the state with the new file URL
                         setNewChild((newChild) => ({
                           ...newChild,
@@ -733,12 +723,15 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                         }));
 
                         // Optionally, you can also set the file in your props
-                        props.options?.childprofilePic?.setChildPhoto?.(selectedFile);
+                        props.options?.childProfilePic?.setChildPhoto &&
+                          props.options?.childProfilePic?.setChildPhoto({
+                            id: newChild._id??'',
+                            childPhoto: selectedFile,
+                          });
                       }
                     }
                   }}
                 />
-
               </Grid>
               {/* )} */}
             </Grid>
@@ -854,7 +847,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                     variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
-
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -870,7 +862,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     fullWidth
                     variant={props.options?.textField.variant}
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
-
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -894,11 +885,10 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     <RadioGroup
                       aria-labelledby="Gender"
                       value={newChild.gender ?? null}
-
                       onChange={(e) =>
                         setNewChild((newchild) => ({
                           ...newchild,
-                          gender: (e.target.value as unknown as IGender | undefined),
+                          gender: e.target.value as unknown as IGender | undefined,
                         }))
                       }
                       name="Gender"
@@ -956,25 +946,31 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       <TextField
                         label="Course Name"
                         value={newChild?.courseName}
-                        onChange={(e) => setNewChild((newchild) => ({
-                          ...newchild,
-                          courseName: e.target.value,
-                        }))}
+                        onChange={(e) =>
+                          setNewChild((newchild) => ({
+                            ...newchild,
+                            courseName: e.target.value,
+                          }))
+                        }
                         fullWidth
                         variant={props.options?.textField.variant}
-                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} />
+                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                      />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <TextField
                         label="Total Amount for Course"
                         value={newChild?.totalAmountforCourse}
-                        onChange={(e) => setNewChild((newchild: any) => ({
-                          ...newchild,
-                          totalAmountforCourse: e.target.value,
-                        }))}
+                        onChange={(e) =>
+                          setNewChild((newchild: any) => ({
+                            ...newchild,
+                            totalAmountforCourse: e.target.value,
+                          }))
+                        }
                         fullWidth
                         variant={props.options?.textField.variant}
-                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} />
+                        InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                      />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <FormControl variant={props.options?.textField.variant} fullWidth>
@@ -1022,7 +1018,6 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                         />
                       </FormControl>
                     </Grid>
-
                   </>
                 )}
 
@@ -1107,8 +1102,11 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   <TextField
                     label="Child Support Amount"
                     value={newChild?.childSupport?.amount}
-                    fullWidth variant={props.options?.textField.variant}
-                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }} disabled />
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                    disabled
+                  />
                 </Grid>
                 <Grid item xs={12} md={3.5}>
                   <FormLabel id="demo-radio-buttons-group-label">Age OverRide</FormLabel>
