@@ -43,6 +43,7 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
+  const [deactivateModel, setDeactivateModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [rowID, setRowID] = useState<string>('');
@@ -210,7 +211,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
                   <MenuItem
                     onClick={() => {
                       setRowID(user._id);
-                      setReasonDialog(true);
+                      // setReasonDialog(true);
+                      setDeactivateModel(true);
                     }}
                   >
                     Deactivate
@@ -353,8 +355,11 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
         </DialogActions>
       </Dialog>
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
-        <DialogContent>
+        {/* <DialogContent>
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
+        </DialogContent> */}
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>If this Worker is a coordinator, please change the coordinator in the division before deleting</Typography>
         </DialogContent>
 
         <DialogActions>
@@ -375,7 +380,30 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
                       });
             } }
           >
-                 Delate
+                 Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>;
+      <Dialog open={Boolean(deactivateModel)} onClose={() => setDeactivateModel(false)}>
+        {/* <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
+        </DialogContent> */}
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>If this Worker is a coordinator, please change the coordinator in the division before deactivating</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDeactivateModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              setReasonDialog(true);
+            } }
+          >
+                 Deactivate
           </Button>
         </DialogActions>
 
