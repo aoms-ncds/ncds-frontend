@@ -620,17 +620,30 @@ const ManageFrPage = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
-    (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    const searchTextLower = searchText.toLowerCase();
+
+    if (
+      (row.FRno && row.FRno.toLowerCase().includes(searchTextLower)) ||
+      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchTextLower)) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchTextLower))
     ) {
       return true;
     }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    // Check for subcategories within the particulars
+    // const subCategoryMatch = row.particulars?.some((particular) =>
+    //   (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
+    //   (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
+    //   (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
+    // );
+    // if (subCategoryMatch) {
+    //   return true;
+    // }
+    // Main filter logic
+
+    // Fallback: Check if any other row value matches the search text
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchTextLower));
   });
+
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
