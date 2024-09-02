@@ -179,7 +179,7 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
                 </Text>
               </View>
               <View>
-                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Co-Ordinator Name:   {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ?? ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ?? ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}
+                <Text style={{ ...styles.text, marginTop: 15, left: 50, marginBottom: 10 }}>Co-Ordinator Name:   {`${props?.rowData?.divisionCoordinator}`}
 
                 </Text>
               </View>

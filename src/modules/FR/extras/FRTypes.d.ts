@@ -130,6 +130,7 @@ declare global {
     iroVerifiedOn?:Moment;
     reconciliationOn?:Moment;
     iroClosedOn?:Moment;
+    divisionCoordinator?:string;
 
 
   }
