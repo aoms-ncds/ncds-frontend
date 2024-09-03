@@ -23,7 +23,10 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import GridLinkAction from '../../../components/GridLinkAction';
 import { hasPermissions } from '../../User/components/PermissionChecks';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Work, Handshake } from '@mui/icons-material';
+import {
+  Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, NoAccounts as NoAccountsIcon, Person as PersonIcon, Ballot as BallotIcon, Work, Handshake,
+  History as HistoryIcon,
+} from '@mui/icons-material';
 import StaffServices from '../../HR/extras/StaffServices';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import WorkersServices from '../extras/WorkersServices';
@@ -33,6 +36,8 @@ import MessageItem from '../../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
 import ReasonforDeactivationService from '../../Settings/extras/ReasonforDeactivationService';
 import CloseIcon from '@mui/icons-material/Close';
+import UserServices from '../../User/extras/UserServices';
+import UsersLogDialog from '../../User/components/UsersLogDialog';
 
 interface UserCardProps {
   user: IWorker;
@@ -54,7 +59,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
   // const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [reasonDialog, setReasonDialog] = useState(false);
-
+  const [logOpen, setLogOpen] = useState<string | null>(null)
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -91,8 +96,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
       .then((res) => {
         if (res.success) {
           window.location.reload();
-        //   const newWorkerRequests = user.value.filter((workerRequests: { _id: string; }) => workerRequests._id !== id);
-        //   user.onChange(newWorkerRequests);
+          //   const newWorkerRequests = user.value.filter((workerRequests: { _id: string; }) => workerRequests._id !== id);
+          //   user.onChange(newWorkerRequests);
         }
         closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -206,30 +211,38 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
                 Remarks
               </MenuItem>,
               hasPermissions(['MANAGE_WORKER']) &&
-                (user.status == UserLifeCycleStates.ACTIVE ? (
-                  <MenuItem
-                    onClick={() => {
-                      setRowID(user._id);
-                      setReasonDialog(true);
-                    }}
-                  >
-                    Deactivate
-                  </MenuItem>
-                ) : (
-                  <MenuItem
-                    onClick={() => {
-                      activateWorker(user._id);
-                    }}
-                  >
-                    Activate
-                  </MenuItem>
-                )),
+              (user.status == UserLifeCycleStates.ACTIVE ? (
+                <MenuItem
+                  onClick={() => {
+                    setRowID(user._id);
+                    setReasonDialog(true);
+                  }}
+                >
+                  Deactivate
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    activateWorker(user._id);
+                  }}
+                >
+                  Activate
+                </MenuItem>
+              )),
               hasPermissions(['ADMIN_ACCESS']) && (
                 <MenuItem
                   onClick={() => {
                     navigate(`/users/${user._id}/permission_manager`);
                   }}
                 >Permission Manager</MenuItem>
+              ),
+
+              hasPermissions(['ADMIN_ACCESS']) && (
+                <MenuItem
+                  onClick={() => {
+                    setLogOpen(user._id);
+                  }}
+                >Log</MenuItem>
               ),
               false,
             ].filter((action) => action !== false)}
@@ -322,7 +335,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
             getOptionLabel={(option) => option.reason ?? ''}
             onChange={(e, selectedReason) => {
               setReasonForDeactivation(selectedReason ?? null);
-            } }
+            }}
             renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
             fullWidth />
         </DialogContent>
@@ -332,7 +345,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
             onClick={() => {
               setReasonDialog(false);
               false;
-            } }
+            }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
             <CloseIcon sx={{ color: 'white' }} />
@@ -345,7 +358,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
                 deactivateWorker(rowID, reasonForDeactivation);
               }
               setReasonDialog(false);
-            } }
+            }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >
             submit
@@ -358,28 +371,29 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button onClick={() => setDeleteModel(false)}>Close</Button>
           <Button
             endIcon={<DeleteIcon />}
             variant="contained"
             color="info"
             onClick={async () => {
               WorkersServices.delete(user._id)
-                      .then((res) => {
-                        removeUser(user._id);
-                        enqueueSnackbar({ message: res.message, variant: 'success' });
-                        setDeleteModel(false);
-                      })
-                      .catch((err) => {
-                        enqueueSnackbar({ message: err.message, variant: 'error' });
-                      });
-            } }
+                .then((res) => {
+                  removeUser(user._id);
+                  enqueueSnackbar({ message: res.message, variant: 'success' });
+                  setDeleteModel(false);
+                })
+                .catch((err) => {
+                  enqueueSnackbar({ message: err.message, variant: 'error' });
+                });
+            }}
           >
-                 Delate
+            Delate
           </Button>
         </DialogActions>
 
       </Dialog>;
+      {logOpen && <UsersLogDialog open={Boolean(logOpen)} onClose={() => setLogOpen(null)} userId={logOpen} key={user._id} />}
     </>
   );
 };

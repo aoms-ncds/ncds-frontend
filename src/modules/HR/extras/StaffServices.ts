@@ -94,4 +94,9 @@ export default {
   deactivate: (id: string, reason: string) => getStandardResponse<Staff>(
     axios.patch(`/hr/staffs/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
 
+  getLogById: (id: string) =>
+    getStandardResponse<IUserUpdateLog[]>(
+      axios.get(`/workers/${id}/log`, { headers: { ...getAuthHeader() } }),
+    ),
+
 };

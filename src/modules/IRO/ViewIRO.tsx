@@ -47,7 +47,7 @@ import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
-import LogDialog from '../FR/components/LogDialog';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 
 const ViewIRO = () => {
@@ -909,7 +909,7 @@ const ViewIRO = () => {
         // getFiles={TestServices.getBills}
         getFiles={attachments}
       />
-      {iroID&&<LogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
+      {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
 
     </CommonPageLayout>
   );

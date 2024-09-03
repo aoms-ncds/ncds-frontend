@@ -53,7 +53,7 @@ import ESignatureService from '../../Settings/extras/ESignatureService';
 import { useAuth } from '../../../hooks/Authentication';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
-import LogDialog from './LogDialog';
+import TransactionLogDialog from './TransactionLogDialog';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -1443,7 +1443,7 @@ return (
         <Button onClick={() => setShowName(false)}>Add</Button>
       </DialogActions>
     </Dialog>
-    {props.value._id && <LogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={props.value._id}/>}
+    {props.value._id && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={props.value._id}/>}
   </div>
 );
 };

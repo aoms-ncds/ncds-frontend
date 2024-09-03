@@ -4,21 +4,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import FRServices from '../extras/FRServices';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
+import UserServices from '../extras/UserServices';
 
 
-const LogDialog = (props:{open:boolean;onClose:()=>void;TRId:string}) => {
-  const [logs, setLogs] = useState<ITransactionLog[]>([]);
+const UsersLogDialog = (props:{open:boolean;onClose:()=>void;userId:string}) => {
+  const [logs, setLogs] = useState<IUserUpdateLog[]>([]);
   useEffect(() => {
     const getLog=async ()=>{
-      setLogs(((await FRServices.getLogById(props.TRId)).data));
+      setLogs(((await UserServices.getLogById(props.userId)).data));
     };
-    if (props.TRId) {
+    if (props.userId) {
       getLog();
     }
-  }, [props.TRId]);
+  }, [props.userId]);
 
   return (
     <Dialog open={props.open} onClose={()=>props.onClose()} maxWidth='xl' >
@@ -31,7 +31,7 @@ const LogDialog = (props:{open:boolean;onClose:()=>void;TRId:string}) => {
             // eslint-disable-next-line react/jsx-no-comment-textnodes
             <li key={index}>
               <Typography variant="body1" color="initial" >
-                {`${log.TRNo} ${log.action} by 
+                {`${log.userCode} changed ${log.field} by 
                 ${log.doneBy.basicDetails.firstName} ${log.doneBy.basicDetails.middleName?log.doneBy.basicDetails.middleName+' ':''}${log.doneBy.basicDetails.lastName}
                  on ${moment(log.createdAt).format('DD/MM/YYYY hh:mm:ss a')}` }
               </Typography>
@@ -52,4 +52,4 @@ const LogDialog = (props:{open:boolean;onClose:()=>void;TRId:string}) => {
   );
 };
 
-export default LogDialog;
+export default UsersLogDialog;
