@@ -573,31 +573,38 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       ),
     },
     {
-      field: 'submainCategory',
+      field: 'subCategory',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {
-            props.row.particulars[0].subCategory3 =='Select' ?
-              props.row.particulars[0].subCategory2 :
-              props.row.particulars[0].subCategory2 == 'Select' ?
-                props.row.particulars[0].subCategory1 : ''
-
-          }
-        </p>
-      ),
+      valueGetter: (params) => {
+        const subCategory3 = params.row.particulars[0]?.subCategory3;
+        const subCategory2 = params.row.particulars[0]?.subCategory2;
+        const subCategory1 = params.row.particulars[0]?.subCategory1;
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+          return subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+          return subCategory2;
+        } else {
+          return subCategory1;
+        }
+      },
+      renderCell: (params) => {
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {params.value}
+          </p>
+        );
+      },
     },
     {
       field: 'requestAmount',
@@ -606,10 +613,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params: GridCellParams) => {
-        const frRequest = params.row as IROrder;
-        const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return <p>{particularAmount}</p>;
+      valueGetter(params) {
+        const IRORequest = params.row as IROrder;
+        const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
+        return particularAmount;
       },
     },
     {
@@ -634,7 +641,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       }, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Special Sanction</b>,
       renderCell: (props) => (
         <p

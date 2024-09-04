@@ -501,27 +501,33 @@ const ManageFrPage = () => {
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-
-          {props.row.particulars[0]?.subCategory3 !== 'Select' && props.row.particulars[0]?.subCategory3 !== '' ?
-            props.row.particulars[0]?.subCategory3 :
-            props.row.particulars[0]?.subCategory2 !== 'Select' && props.row.particulars[0]?.subCategory2 !== '' ?
-              props.row.particulars[0]?.subCategory2 :
-              props.row.particulars[0]?.subCategory1
-          }
-
-
-        </p>
-      ),
+      valueGetter: (params) => {
+        const subCategory3 = params.row.particulars[0]?.subCategory3;
+        const subCategory2 = params.row.particulars[0]?.subCategory2;
+        const subCategory1 = params.row.particulars[0]?.subCategory1;
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+          return subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+          return subCategory2;
+        } else {
+          return subCategory1;
+        }
+      },
+      renderCell: (params) => {
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {params.value}
+          </p>
+        );
+      },
     },
     {
       field: 'requestedAmount',
@@ -614,17 +620,30 @@ const ManageFrPage = () => {
     setSearchText(event.target.value);
   };
   const filteredRows = (FRRequests ?? []).filter((row) => {
-    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
-    (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+    const searchTextLower = searchText.toLowerCase();
+
+    if (
+      (row.FRno && row.FRno.toLowerCase().includes(searchTextLower)) ||
+      (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchTextLower)) ||
+      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchTextLower))
     ) {
       return true;
     }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    // Check for subcategories within the particulars
+    // const subCategoryMatch = row.particulars?.some((particular) =>
+    //   (particular?.subCategory1?.toLowerCase().includes(searchTextLower) || '') ||
+    //   (particular?.subCategory2?.toLowerCase().includes(searchTextLower) || '') ||
+    //   (particular?.subCategory3?.toLowerCase().includes(searchTextLower) || ''),
+    // );
+    // if (subCategoryMatch) {
+    //   return true;
+    // }
+    // Main filter logic
+
+    // Fallback: Check if any other row value matches the search text
+    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchTextLower));
   });
+
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,

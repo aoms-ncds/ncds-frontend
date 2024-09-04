@@ -173,44 +173,83 @@ const SentBack = () => {
       ),
     },
     {
-      field: 'submainCategory',
+      field: 'subCategory',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {props.row.particulars[0].subCategory3 =='Select'? props.row.particulars[0].subCategory2: props.row.particulars[0].subCategory3 }
-        </p>
-      ),
+      valueGetter: (params) => {
+        const subCategory3 = params.row.particulars[0]?.subCategory3;
+        const subCategory2 = params.row.particulars[0]?.subCategory2;
+        const subCategory1 = params.row.particulars[0]?.subCategory1;
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+          return subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+          return subCategory2;
+        } else {
+          return subCategory1;
+        }
+      },
+      renderCell: (params) => {
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {params.value}
+          </p>
+        );
+      },
     },
+    // {
+    //   field: 'requestAmount',
+    //   renderHeader: () => (<b>Requested Amount</b>),
+    //   width: 140,
+    //   align: 'center', headerAlign: 'center',
+    //   renderCell: (params: GridCellParams) => {
+    //     const frRequest = params.row as FR;
+    //     const particularAmount = frRequest.particulars?.reduce(
+    //       (total, particular) => total + Number(particular.requestedAmount),
+    //       0,
+    //     );
+    //     return <p>{particularAmount}</p>;
+    //   },
+    // },
     {
       field: 'requestAmount',
       renderHeader: () => (<b>Requested Amount</b>),
       width: 140,
-      align: 'center', headerAlign: 'center',
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params: GridCellParams) => {
+        const frRequest = params.row as FR;
+        const particularAmount = frRequest.particulars?.reduce(
+          (total, particular) => total + Number(particular.requestedAmount || 0), // Ensure we handle potential undefined values
+          0,
+        );
+        return particularAmount || 0; // Return 0 if the total is undefined
+      },
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as FR;
         const particularAmount = frRequest.particulars?.reduce(
-          (total, particular) => total + Number(particular.requestedAmount),
+          (total, particular) => total + Number(particular.requestedAmount || 0),
           0,
         );
         return <p>{particularAmount}</p>;
       },
     },
     { field: 'updatedAt', align: 'center',
-      headerAlign: 'center', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
-        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
-      ) },
+      headerAlign: 'center',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+
+    },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
@@ -235,21 +274,21 @@ const SentBack = () => {
     {
       field: 'reasonForSentBack',
       renderHeader: () => (<b>Reason For SentBack</b>),
-      width: 250,
+      width: 400,
       align: 'center',
       headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 250,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      valueGetter: (params) => params.row?.reasonForSentBack,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 400,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+          }}
+        >
+          {props.row?.reasonForSentBack}
+        </p>
+      ),
+      // valueGetter: (params) => params.row?.reasonForSentBack,
     },
   ];
 

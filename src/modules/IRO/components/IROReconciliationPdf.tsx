@@ -153,6 +153,7 @@ const IROReconciliationPdf = (props: {
             supportStructure.positionalAllowance !== 0 ||
             supportStructure.telAllowance !== 0 ||
             supportStructure.impactDeduction !== 0;
+            worker.supportStructure.specialAllowance !== 0;
             const isSupportEnabled = supportStructure.supportEnabled === true;
             return hasAnyDeduction && isSupportEnabled;
           };
@@ -165,7 +166,7 @@ const IROReconciliationPdf = (props: {
     } else if (props.data.purpose == 'Subdivision' && props.data.divisionId && props.data.subDivisionId) {
       WorkersServices.getWorkersBySubDivision({ division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID ?? null })
         .then((res) => {
-          console.log(res);
+          // console.log(res, 'shibin');
           // setWorkers(res.data);
           const filteredWorkers = res.data.filter((worker: IWorker) => {
             console.log(worker.supportStructure); // Log supportStructure for each worker
@@ -176,7 +177,7 @@ const IROReconciliationPdf = (props: {
             worker.supportStructure.spouseAllowance !== 0 ||
             worker.supportStructure.positionalAllowance !== 0 ||
             worker.supportStructure.telAllowance !== 0 ||
-            worker.supportStructure.impactDeduction !== 0;
+            worker.supportStructure.specialAllowance !== 0;
 
             const isSupportEnabled = worker.supportStructure.supportEnabled;
 
@@ -212,6 +213,7 @@ const IROReconciliationPdf = (props: {
               worker.supportStructure.spouseAllowance !== 0 ||
               worker.supportStructure.positionalAllowance !== 0 ||
               worker.supportStructure.telAllowance !== 0 ||
+              worker.supportStructure.specialAllowance !== 0;
               worker.supportStructure.impactDeduction !== 0;
 
               const isSupportEnabled = worker.supportStructure.supportEnabled;
@@ -245,6 +247,7 @@ const IROReconciliationPdf = (props: {
               worker.supportStructure.spouseAllowance !== 0 ||
               worker.supportStructure.positionalAllowance !== 0 ||
               worker.supportStructure.telAllowance !== 0 ||
+              worker.supportStructure.specialAllowance !== 0||
               worker.supportStructure.impactDeduction !== 0;
 
               const isSupportEnabled = worker.supportStructure.supportEnabled;

@@ -903,34 +903,39 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       ),
     },
     {
-      field: 'submainCategory',
+      field: 'subCategory',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {/* {props.row.particulars.map((e)=>e.subCategory3 =='Select'? e.subCategory2: e.subCategory3 )} */}
-          {props.row.particulars[0]?.subCategory3 !== 'Select' && props.row.particulars[0]?.subCategory3 !== '' ?
-            props.row.particulars[0]?.subCategory3 :
-            props.row.particulars[0]?.subCategory2 !== 'Select' && props.row.particulars[0]?.subCategory2 !== '' ?
-              props.row.particulars[0]?.subCategory2 :
-              props.row.particulars[0]?.subCategory1
-          }
-          {/* {props.row.particulars[0]?.subCategory3 == 'Select' || props.row.particulars[0]?.subCategory3 == '' ? props.row.particulars[0]?.subCategory2 :
-            props.row.particulars[0]?.subCategory2 == 'Select' ? props.row.particulars[0]?.subCategory1: props.row.particulars[0]?.subCategory3 != 'Select' || props.row.particulars[0]?.subCategory3 != null ? props.row.particulars[0]?.subCategory3: null
-          } */}
-        </p>
-      ),
+      valueGetter: (params) => {
+        const subCategory3 = params.row.particulars[0]?.subCategory3;
+        const subCategory2 = params.row.particulars[0]?.subCategory2;
+        const subCategory1 = params.row.particulars[0]?.subCategory1;
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+          return subCategory3;
+        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+          return subCategory2;
+        } else {
+          return subCategory1;
+        }
+      },
+      renderCell: (params) => {
+        return (
+          <p
+            style={{
+              maxWidth: 240,
+              whiteSpace: 'normal',
+              wordBreak: 'break-word',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            {params.value}
+          </p>
+        );
+      },
     },
     {
       field: 'requestAmount',
@@ -1057,9 +1062,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const filteredRows = (IROrder ?? []).filter((row) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
