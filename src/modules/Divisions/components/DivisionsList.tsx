@@ -4,18 +4,21 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Preview as PreviewIcon, Delete as DeleteIcon, Add as AddIcon, History as HistoryIcon } from '@mui/icons-material';
 import DropdownButton from '../../../components/DropDownButton';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useAuth } from '../../../hooks/Authentication';
+import DivisionLogDialog from './DivisionLogDialog';
 
 
-const DivisionsList = (arg:any) => {
+const DivisionsList = (arg: any) => {
   const [loadCount, setLoadCount] = useState(0);
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const auth = useAuth();
+  const [logOpen, setLogOpen] = useState<string | null>(null)
+
 
   // useEffect(() => {e
   //   DivisionsServices.getDivisions()
@@ -29,25 +32,25 @@ const DivisionsList = (arg:any) => {
   //   }, []);
 
   const myArray: any = [];
-  useEffect(()=>{
-    if ((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS==true) {
+  useEffect(() => {
+    if ((auth?.user as unknown as User)?.permissions?.EDIT_DIVISION_ACCESS == true) {
       const divisionId = auth?.user && auth.user.division ? auth.user.division : null;
       console.log(divisionId, 'divisionId');
 
       if (divisionId) {
-        DivisionsServices.getDivisionById(divisionId?.toString()).then((res)=>{
+        DivisionsServices.getDivisionById(divisionId?.toString()).then((res) => {
           myArray?.push(res.data);
           setDivisions(myArray);
         });
       }
     } else {
       DivisionsServices.getDivisions()
-            .then((res) => {
-              setDivisions(res.data);
-            })
-            .catch((err) => {
-              console.log({ err });
-            });
+        .then((res) => {
+          setDivisions(res.data);
+        })
+        .catch((err) => {
+          console.log({ err });
+        });
     }
   }, []);
   // useEffect(() => {
@@ -152,6 +155,19 @@ const DivisionsList = (arg:any) => {
                   removeDivisions(props.row._id);
                 },
               },
+
+            ] : []),
+            ...(hasPermissions(['ADMIN_ACCESS']) ? [
+              {
+                id: 'log',
+                text: 'Log',
+                // component: Link,
+                icon: HistoryIcon,
+                onClick: () => {
+                  setLogOpen(props.row._id);
+                },
+              },
+
             ] : []),
           ]}
         />
@@ -327,8 +343,7 @@ const DivisionsList = (arg:any) => {
           }
         />
       </Box>
-
-
+      {logOpen && <DivisionLogDialog open={Boolean(logOpen)} onClose={() => setLogOpen(null)} divId={logOpen} />}
     </>
 
   );

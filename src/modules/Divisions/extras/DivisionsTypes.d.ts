@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export default {};
 
 declare global {
@@ -89,5 +91,12 @@ declare global {
     division?: Division;
     name: string;
     leader?: User;
+  }
+   interface IDivisionUpdateLog extends Document{
+  divName:string;
+  divId:string;
+  field:string;
+  doneBy:User;
+  createdAt:Moment;
   }
 }
