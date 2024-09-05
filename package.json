@@ -27,6 +27,7 @@
     "clsx": "^2.1.0",
     "dayjs": "^1.11.7",
     "eslint-plugin-import": "^2.27.5",
+    "exceljs": "^4.4.0",
     "firebase": "^9.22.2",
     "firebase-tools": "^13.4.0",
     "moment": "^2.29.4",

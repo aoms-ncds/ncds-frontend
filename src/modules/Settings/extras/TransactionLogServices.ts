@@ -6,4 +6,8 @@ export default {
     getStandardResponse<ITransactionLog[]>(
       axios.get('/settings/transactionLogs/', { params: dateRange, headers: { ...getAuthHeader() } }),
     ),
+  deleteLog: (dateRange:DateRange) =>
+    getStandardResponse<ITransactionLog[]>(
+      axios.delete('/settings/transactionLogs/', { params: dateRange, headers: { ...getAuthHeader() } }),
+    ),
 };
