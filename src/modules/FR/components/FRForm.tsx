@@ -196,6 +196,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           message: res.message,
           variant: 'success',
         });
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -246,6 +247,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
                   };
                   // Create a new object with updated status
+                  console.log(updatedValue, 'updatedValue');
+
                   props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
                 } else {
                   enqueueSnackbar({
