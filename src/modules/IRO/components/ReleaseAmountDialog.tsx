@@ -99,6 +99,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       const data = props.data[0];
       const division = data?.division;
       const sanctionedBank = data?.sanctionedBank;
+      console.log(division, 'division2');
+      console.log(sanctionedBank, 'division2');
 
       const getTransferredBank = () => {
         switch (sanctionedBank) {
@@ -138,7 +140,27 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           return division?.BeneficiaryBank9;
         case 'Beneficiary Bank 10':
           return division?.BeneficiaryBank10;
-        case 'Beneficiaryy Bank 11':
+        case 'Beneficiary Bank 11':
+          return division?.BeneficiaryBank11;
+        case 'Beneficiary Bank 12':
+          return division?.BeneficiaryBank12;
+        case 'Beneficiary Bank 13':
+          return division?.BeneficiaryBank13;
+        case 'Beneficiary Bank 14':
+          return division?.BeneficiaryBank14;
+        case 'Beneficiary Bank 15':
+          return division?.BeneficiaryBank15;
+        case 'Beneficiary Bank 16':
+          return division?.BeneficiaryBank16;
+        case 'Beneficiary Bank 17':
+          return division?.BeneficiaryBank17;
+        case 'Beneficiary Bank 18':
+          return division?.BeneficiaryBank18;
+        case 'Beneficiary Bank 19':
+          return division?.BeneficiaryBank19;
+        case 'Beneficiary Bank 20':
+          return division?.BeneficiaryBank20;
+        case 'Beneficiary Bank 21':
           return null;
         default:
           return {

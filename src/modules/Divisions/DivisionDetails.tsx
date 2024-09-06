@@ -174,6 +174,76 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
       IFSCCode: '',
       beneficiary: '',
     },
+    BeneficiaryBank11: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank12: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank13: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank14: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank15: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank16: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank17: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank18: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank19: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
+    BeneficiaryBank20: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+      beneficiary: '',
+    },
     createdAt: moment(),
     updatedAt: moment(),
   });
@@ -242,6 +312,36 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
   }
   if (divisionDetails?.BeneficiaryBank10?.bankName != null) {
     BenFicount.push(10);
+  }
+  if (divisionDetails?.BeneficiaryBank11?.bankName != null) {
+    BenFicount.push(11);
+  }
+  if (divisionDetails?.BeneficiaryBank12?.bankName != null) {
+    BenFicount.push(12);
+  }
+  if (divisionDetails?.BeneficiaryBank13?.bankName != null) {
+    BenFicount.push(13);
+  }
+  if (divisionDetails?.BeneficiaryBank14?.bankName != null) {
+    BenFicount.push(14);
+  }
+  if (divisionDetails?.BeneficiaryBank15?.bankName != null) {
+    BenFicount.push(15);
+  }
+  if (divisionDetails?.BeneficiaryBank16?.bankName != null) {
+    BenFicount.push(16);
+  }
+  if (divisionDetails?.BeneficiaryBank17?.bankName != null) {
+    BenFicount.push(10);
+  }
+  if (divisionDetails?.BeneficiaryBank18?.bankName != null) {
+    BenFicount.push(17);
+  }
+  if (divisionDetails?.BeneficiaryBank19?.bankName != null) {
+    BenFicount.push(18);
+  }
+  if (divisionDetails?.BeneficiaryBank20?.bankName != null) {
+    BenFicount.push(20);
   }
 
   // }, []);
@@ -468,7 +568,7 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
                 }
 
                 <Grid item xs={12}>
-                  {action !== 'view' && otherBankDetailsCount !=9 && (
+                  {action !== 'view' && otherBankDetailsCount !=19 && (
                     <Button variant="contained" onClick={() => setOtherBankDetailsCount((count) => count + 1)}>
                       Add More Banks
                     </Button>
