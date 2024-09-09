@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
 });
 const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign?:any }) => {
   let totalAmount = 0;
+  let totalReqAmount = 0;
   let NewTot:any = 0;
   let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
@@ -119,7 +120,9 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
 
   NewTot += props?.fr?.sanctionedAmount !=undefined ? props?.fr?.sanctionedAmount: 0;
   console.log(NewTot, 'eee');
-
+  totalReqAmount = props.fr?.particulars?.reduce((acc, e) => {
+    return acc + (e?.requestedAmount !== undefined ? e.requestedAmount : 0);
+  }, 0) ?? 0;
   const sanctionedAmount = NewTot !=0 ? NewTot : totalAmount2;
   let sanctionedAmountWords = '';
   console.log(sanctionedAmount, 'amount');
@@ -212,7 +215,7 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
                 </Text></View>
               <View style={{ width: 180 }}>
                 <Text style={{ ...styles.text, marginTop: 15, left: 10 }}>
-                  Requested Amt: {props.fr?.particulars[0].requestedAmount}
+                  Requested Amt: {totalReqAmount}
                 </Text>
               </View>
               <View>
