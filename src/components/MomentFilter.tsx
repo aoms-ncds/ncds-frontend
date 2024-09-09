@@ -24,9 +24,8 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 
 interface DateFilterProps {
@@ -45,8 +44,11 @@ const MomentFilter = (props: DateFilterProps) => {
   );
 
   const [tmpDateRange, setTmpDateRange] = useState<
-    DateRange | undefined
-  >();
+    DateRange
+  >({
+    startDate: moment(),
+    endDate: moment(),
+  });
 
   // Dialog Controls
   const [open, toggleOpen] = useState(false);
@@ -60,7 +62,6 @@ const MomentFilter = (props: DateFilterProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
 
   return (
     <>
@@ -88,13 +89,13 @@ const MomentFilter = (props: DateFilterProps) => {
               currentRangeType === 'days' || currentRangeType === 'customDay' ?
                 props.onChange({
                   startDate: props.dateRange.startDate
-                      .clone()
-                      .subtract(1, 'day')
-                      .startOf('D'),
+                    .clone()
+                    .subtract(1, 'day')
+                    .startOf('D'),
                   endDate: props.dateRange.endDate
-                      .clone()
-                      .subtract(1, 'day')
-                      .endOf('D'),
+                    .clone()
+                    .subtract(1, 'day')
+                    .endOf('D'),
                   rangeType: currentRangeType,
                 }) :
                 currentRangeType === 'weeks' ?
@@ -112,37 +113,37 @@ const MomentFilter = (props: DateFilterProps) => {
                   currentRangeType === 'months' ?
                     props.onChange({
                       startDate: props.dateRange.startDate
-                      .clone()
-                      .subtract(1, 'month')
-                      .startOf('month'),
+                        .clone()
+                        .subtract(1, 'month')
+                        .startOf('month'),
                       endDate: props.dateRange.endDate
-                      .clone()
-                      .subtract(1, 'month')
-                      .endOf('month'),
+                        .clone()
+                        .subtract(1, 'month')
+                        .endOf('month'),
                       rangeType: currentRangeType,
                     }) :
                     currentRangeType === 'quarter_years' ?
                       props.onChange({
                         startDate: props.dateRange.startDate
-                      .clone()
-                      .subtract(3, 'month')
-                      .startOf('month'),
+                          .clone()
+                          .subtract(3, 'month')
+                          .startOf('month'),
                         endDate: props.dateRange.endDate
-                      .clone()
-                      .subtract(3, 'month')
-                      .endOf('month'),
+                          .clone()
+                          .subtract(3, 'month')
+                          .endOf('month'),
                         rangeType: currentRangeType,
                       }) :
                       currentRangeType === 'years' ?
                         props.onChange({
                           startDate: props.dateRange.startDate
-                      .clone()
-                      .subtract(1, 'year')
-                      .startOf('year'),
+                            .clone()
+                            .subtract(1, 'year')
+                            .startOf('year'),
                           endDate: props.dateRange.endDate
-                      .clone()
-                      .subtract(1, 'year')
-                      .endOf('year'),
+                            .clone()
+                            .subtract(1, 'year')
+                            .endOf('year'),
                           rangeType: currentRangeType,
                         }) :
                         ' '
@@ -437,37 +438,37 @@ const MomentFilter = (props: DateFilterProps) => {
                   currentRangeType === 'months' ?
                     props.onChange({
                       startDate: props.dateRange.startDate
-                      .clone()
-                      .add(1, 'month')
-                      .startOf('month'),
+                        .clone()
+                        .add(1, 'month')
+                        .startOf('month'),
                       endDate: props.dateRange.endDate
-                      .clone()
-                      .add(1, 'month')
-                      .endOf('month'),
+                        .clone()
+                        .add(1, 'month')
+                        .endOf('month'),
                       rangeType: currentRangeType,
                     }) :
                     currentRangeType === 'quarter_years' ?
                       props.onChange({
                         startDate: props.dateRange.startDate
-                      .clone()
-                      .add(3, 'month')
-                      .startOf('month'),
+                          .clone()
+                          .add(3, 'month')
+                          .startOf('month'),
                         endDate: props.dateRange.endDate
-                      .clone()
-                      .add(3, 'month')
-                      .endOf('month'),
+                          .clone()
+                          .add(3, 'month')
+                          .endOf('month'),
                         rangeType: currentRangeType,
                       }) :
                       currentRangeType === 'years' ?
                         props.onChange({
                           startDate: props.dateRange.startDate
-                      .clone()
-                      .add(1, 'year')
-                      .startOf('year'),
+                            .clone()
+                            .add(1, 'year')
+                            .startOf('year'),
                           endDate: props.dateRange.endDate
-                      .clone()
-                      .add(1, 'year')
-                      .endOf('year'),
+                            .clone()
+                            .add(1, 'year')
+                            .endOf('year'),
                           rangeType: currentRangeType,
                         }) :
                         ' '
@@ -592,9 +593,13 @@ const MomentFilter = (props: DateFilterProps) => {
               if (currentRangeType !== 'customDay') {
                 // reset to current Day
                 props.onChange({
-                  startDate: moment().startOf('D'),
-                  endDate: moment().endOf('D'),
+                  startDate: props.dateRange.startDate.startOf('D'),
+                  endDate: props.dateRange.startDate.endOf('D'),
                   rangeType: 'customDay',
+                });
+                setTmpDateRange({
+                  startDate: props.dateRange.startDate.startOf('D'),
+                  endDate: props.dateRange.startDate.endOf('D'),
                 });
               }
               setCurrentRangeType('customDay');
@@ -617,6 +622,10 @@ const MomentFilter = (props: DateFilterProps) => {
               // }
               setCurrentRangeType('customRange');
               toggleOpen(true);
+              setTmpDateRange({
+                startDate: props.dateRange.startDate.startOf('D'),
+                endDate: props.dateRange.endDate.endOf('D'),
+              });
             }}
           >
             Custom Range
@@ -630,48 +639,48 @@ const MomentFilter = (props: DateFilterProps) => {
         </DialogTitle>
         <DialogContent>
           <br />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+          <DatePicker
+            label={currentRangeType == 'customRange' ? 'Start date' : 'Date'}
+            format="DD/MM/YYYY"
+            value={tmpDateRange?.startDate}
+            onChange={(newValue) => {
+              newValue ?
+                currentRangeType === 'customRange' ?
+                  setTmpDateRange({
+                    ...props.dateRange,
+                    startDate: moment(newValue).startOf('D'),
+                    rangeType: 'customRange',
+                  }) :
+                  setTmpDateRange({
+                    startDate: moment(newValue).clone().startOf('D'),
+                    endDate: moment(newValue).clone().endOf('D'),
+                    rangeType: 'customDay',
+                  }) :
+                '';
+            }}
+            slotProps={{ textField: { size: 'small', fullWidth: true } }}
+          />
+          {/* </LocalizationProvider> */}
+          &nbsp;
+          {currentRangeType == 'customRange' && (
+            // <LocalizationProvider dateAdapter={}>
             <DatePicker
-              label={currentRangeType == 'customRange' ? 'Start date' : 'Date'}
+              label="End date"
               format="DD/MM/YYYY"
-              value={tmpDateRange?.startDate}
+              value={tmpDateRange?.endDate}
               onChange={(newValue) => {
                 newValue ?
-                  currentRangeType === 'customRange' ?
-                    setTmpDateRange({
-                      ...props.dateRange,
-                      startDate: newValue.startOf('D'),
-                      rangeType: 'customRange',
-                    }) :
-                    setTmpDateRange({
-                      startDate: newValue.clone().startOf('D'),
-                      endDate: newValue.clone().endOf('D'),
-                      rangeType: 'customDay',
-                    }) :
+                  setTmpDateRange({
+                    ...props.dateRange,
+                    endDate: moment(newValue).endOf('D'),
+                    rangeType: 'customRange',
+                  }) :
                   '';
               }}
               slotProps={{ textField: { size: 'small', fullWidth: true } }}
             />
-          </LocalizationProvider>
-          &nbsp;
-          {currentRangeType == 'customRange' && (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="End date"
-                format="DD/MM/YYYY"
-                value={tmpDateRange?.endDate}
-                onChange={(newValue) => {
-                  newValue ?
-                    setTmpDateRange({
-                      ...props.dateRange,
-                      endDate: newValue.endOf('D'),
-                      rangeType: 'customRange',
-                    }) :
-                    '';
-                }}
-                slotProps={{ textField: { size: 'small', fullWidth: true } }}
-              />
-            </LocalizationProvider>
+            // </LocalizationProvider>
           )}
         </DialogContent>
         <DialogActions>
@@ -680,9 +689,10 @@ const MomentFilter = (props: DateFilterProps) => {
             onClick={() => {
               toggleOpen(false);
               props.onChange({
-                startDate: tmpDateRange?.startDate??props.dateRange.startDate,
-                endDate: tmpDateRange?.endDate??props.dateRange.endDate,
-                rangeType: tmpDateRange?.rangeType??props.dateRange.rangeType });
+                startDate: tmpDateRange?.startDate ?? props.dateRange.startDate,
+                endDate: tmpDateRange?.endDate ?? props.dateRange.endDate,
+                rangeType: tmpDateRange?.rangeType ?? props.dateRange.rangeType,
+              });
             }}
           >
             OK
