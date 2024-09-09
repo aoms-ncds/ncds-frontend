@@ -58,10 +58,10 @@ declare global {
     middleName: string;
     lastName: string;
     dateOfBirth: Moment;
-    gender?: string;
+    gender?: IGender;
     field?: WorkerField;
     martialStatus?: MaritalStatus;
-    religion?: Religion;
+    religion?: IReligion;
     highestQualification?: string;
     motherTongue?: ILanguage;
     communicationLanguage?: ILanguage;
@@ -88,7 +88,7 @@ declare global {
     spouseOf?:User;
   }
   interface CreatableBasicDetails extends Creatable<BasicDetails> {
-    gender?: BasicDetails['gender'];
+    // gender?: IGender;
     dateOfBirth?: Moment;
     aadhaar?: {
       aadhaarNo?: string;

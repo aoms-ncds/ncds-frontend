@@ -62,7 +62,6 @@ const UserBasicDetailsForm = (
     }
   }, [props.value.martialStatus]);
 
-  console.log(props?.value?.spouseOf, 'props?.value?.spouseOf');
 
   return (
     <>
@@ -194,17 +193,17 @@ const UserBasicDetailsForm = (
       </Grid> */}
 
       <Grid item xs={12} md={6} lg={4}>
-        <Autocomplete
-          value={props?.value?.gender as unknown as IGender }
+        <Autocomplete<IGender>
+          value={props?.value?.gender?? null}
           options={gender}
           getOptionLabel={(g) => g.gender}
-          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as unknown as BasicDetails['gender'] })}
+          onChange={(e, newValue) => props.onChange({ ...props.value, gender: newValue as IGender })}
           renderInput={(params) => <TextField {...params} label="Gender" variant={props?.options?.textField?.variant} />}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        <Autocomplete
-          value={props?.value?.spouseOf as User}
+        <Autocomplete<IWorker | User>
+          value={props?.value?.spouseOf ?? null as unknown as IWorker}
           options={users}
           getOptionLabel={(g) => `${g?.basicDetails?.firstName} ${g?.basicDetails?.middleName ?? ''} ${g?.basicDetails?.lastName}`}
           onChange={(e, newValue) => props.onChange({ ...props.value, spouseOf: newValue as unknown as User })}
@@ -248,9 +247,9 @@ const UserBasicDetailsForm = (
         </Grid>
       )}
       <Grid item xs={12} md={6} lg={4}>
-        <Autocomplete
+        <Autocomplete<IReligion>
           options={religion}
-          value={props.value?.religion?.religion as unknown as IReligion}
+          value={props.value?.religion?? null }
           getOptionLabel={(option :any) => option.religion}
           onChange={(e, selectedReligion) =>
             props.onChange({

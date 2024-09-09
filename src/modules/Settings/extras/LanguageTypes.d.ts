@@ -11,6 +11,7 @@ interface IPaymentMethod extends MongooseDocument {
 interface IGender extends MongooseDocument {
     _id: string;
     gender: string;
+
 }
 interface IChildSupport extends MongooseDocument {
     name: string;
