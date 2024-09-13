@@ -641,8 +641,14 @@ const EditIRO = () => {
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
+                      // inputProps={{
+                      //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                      // }}
                       inputProps={{
-                        max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01, // Allows up to two decimal places
+                        onWheel: handleWheel,
                       }}
                       disabled
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -1211,8 +1217,14 @@ const EditIRO = () => {
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  // inputProps={{
+                  //   max: totalRequestedAmount, min: 0,
+                  //   onWheel: handleWheel,
+                  // }}
                   inputProps={{
-                    max: totalRequestedAmount, min: 0,
+                    max: totalRequestedAmount,
+                    min: 0,
+                    step: 0.01, // Allows up to two decimal places
                     onWheel: handleWheel,
                   }}
                 // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
