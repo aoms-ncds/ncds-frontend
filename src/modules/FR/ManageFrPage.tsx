@@ -123,23 +123,23 @@ const ManageFrPage = () => {
       });
   };
 
-  // useEffect(() => {
-  //   FRServices.getAll({ dateRange: dateRange, status: statusFilter })
-  //     .then((res) => {
-  //       console.log(res, 'rr');
-  //       setFRRequests(res.data);
-  //     })
-  //     .catch((res) => {
-  //       console.log(res);
-  //     });
-  //   LeaderDetailsService.getAll()
-  //     .then((res) => {
-  //       setLeaderHeading(res.data);
-  //     })
-  //     .catch((res) => {
-  //       console.log(res);
-  //     });
-  // }, []);
+  useEffect(() => {
+    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
+      .then((res) => {
+        console.log(res, 'rr');
+        setFRRequests(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    LeaderDetailsService.getAll()
+      .then((res) => {
+        setLeaderHeading(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, []);
   useEffect(() => {
     FRServices.getAll({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
