@@ -671,6 +671,128 @@ const EditIRO = () => {
                           })
                         }
                       >
+                        <MenuItem value={IRO?.sanctionedBank}>{IRO?.sanctionedBank}</MenuItem>
+                        {IRO?.division?.DivisionBankFCRA?.bankName !='' || IRO?.division?.FCRABankDetails?.bankName!='' ? (
+                          <MenuItem value={`FCRA-${IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}`}>
+    Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? (
+                          <MenuItem value={`Local Bank-${IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}`}>
+    Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank1?.bankName || IRO?.division?.otherBankDetails?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 1-${IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}`}>
+    Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank2?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 2-${IRO?.division?.BeneficiaryBank2?.beneficiary}`}>
+    Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank3?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 3-${IRO?.division?.BeneficiaryBank3?.beneficiary}`}>
+    Beneficiary Bank 3 - {IRO?.division?.BeneficiaryBank3?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank4?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 4-${IRO?.division?.BeneficiaryBank4?.beneficiary}`}>
+    Beneficiary Bank 4 - {IRO?.division?.BeneficiaryBank4?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank5?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 5-${IRO?.division?.BeneficiaryBank5?.beneficiary}`}>
+    Beneficiary Bank 5 - {IRO?.division?.BeneficiaryBank5?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank6?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 6-${IRO?.division?.BeneficiaryBank6?.beneficiary}`}>
+    Beneficiary Bank 6 - {IRO?.division?.BeneficiaryBank6?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank7?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 7-${IRO?.division?.BeneficiaryBank7?.beneficiary}`}>
+    Beneficiary Bank 7 - {IRO?.division?.BeneficiaryBank7?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank8?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 8-${IRO?.division?.BeneficiaryBank8?.beneficiary}`}>
+    Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank9?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 9-${IRO?.division?.BeneficiaryBank9?.beneficiary}`}>
+    Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+
+                        {IRO?.division?.BeneficiaryBank10?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 10-${IRO?.division?.BeneficiaryBank10?.beneficiary}`}>
+    Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank10?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 11-${IRO?.division?.BeneficiaryBank11?.beneficiary}`}>
+    Beneficiary Bank 11 - {IRO?.division?.BeneficiaryBank11?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank12?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 12-${IRO?.division?.BeneficiaryBank12?.beneficiary}`}>
+    Beneficiary Bank 12 - {IRO?.division?.BeneficiaryBank12?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank13?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 13-${IRO?.division?.BeneficiaryBank13?.beneficiary}`}>
+    Beneficiary Bank 13 - {IRO?.division?.BeneficiaryBank13?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank14?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 14-${IRO?.division?.BeneficiaryBank14?.beneficiary}`}>
+    Beneficiary Bank 14 - {IRO?.division?.BeneficiaryBank14?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank15?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 15-${IRO?.division?.BeneficiaryBank15?.beneficiary}`}>
+    Beneficiary Bank 15 - {IRO?.division?.BeneficiaryBank15?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank16?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 16-${IRO?.division?.BeneficiaryBank16?.beneficiary}`}>
+    Beneficiary Bank 16 - {IRO?.division?.BeneficiaryBank16?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank17?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 17-${IRO?.division?.BeneficiaryBank17?.beneficiary}`}>
+    Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank18?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 18-${IRO?.division?.BeneficiaryBank18?.beneficiary}`}>
+    Beneficiary Bank 18- {IRO?.division?.BeneficiaryBank18?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank19?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 19-${IRO?.division?.BeneficiaryBank19?.beneficiary}`}>
+    Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
+                        {IRO?.division?.BeneficiaryBank20?.bankName ? (
+                          <MenuItem value={`Beneficiary Bank 20-${IRO?.division?.BeneficiaryBank20?.beneficiary}`}>
+    Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
+                          </MenuItem>
+                        ) : ''}
                         {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
@@ -678,7 +800,7 @@ const EditIRO = () => {
                         <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
                         <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
                         <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem> */}
-                        {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
+                        {/* {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
                         {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? <MenuItem value={IRO?.division?.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank1?.bankName ||IRO?.division?.otherBankDetails?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
@@ -699,7 +821,7 @@ const EditIRO = () => {
                         {IRO?.division?.BeneficiaryBank17?.bankName? <MenuItem value={'Beneficiary Bank 17'}>Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank18?.bankName? <MenuItem value={'Beneficiary Bank 18'}>Beneficiary Bank 18 - {IRO?.division?.BeneficiaryBank18?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank19?.bankName? <MenuItem value={'Beneficiary Bank 19'}>Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' } */}
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
                     </FormControl>
