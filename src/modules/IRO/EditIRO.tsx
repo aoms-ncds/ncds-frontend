@@ -970,6 +970,24 @@ const EditIRO = () => {
           <DialogContent>
             <Container>
               <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Autocomplete
+                    value={selectedMainCategory ?? null}
+                    options={mainCategories ?? []}
+                    getOptionLabel={(mainCategory) => mainCategory.name}
+                    onChange={(e, selectedMainCategory) => {
+                      if (selectedMainCategory) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          mainCategory: selectedMainCategory.name,
+                        }));
+                        setSelectedMainCategory(selectedMainCategory);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Main Category" />}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <Autocomplete
                     value={selectedSubCategory1}
