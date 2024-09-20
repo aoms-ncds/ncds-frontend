@@ -47,6 +47,7 @@ import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import AddIcon from '@mui/icons-material/Add';
+import WorkersServices from '../Workers/extras/WorkersServices';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -322,7 +323,28 @@ const EditIRO = () => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   const [sanctionedAsPer, setSanctionedAsPer] = useState<AsPer[]>([]);
   let asPer : any = [];
+  const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
 
+  useEffect(() => {
+    if (IRO.purpose === 'Worker') {
+      WorkersServices.getWorkersByDivision()
+        .then((res) => {
+          setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (IRO.purpose === 'Subdivision') {
+      WorkersServices.getSubDivisionsByDivisionId()
+        .then((res) => {
+          setSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+  }, [IRO.purpose]);
   useEffect(() => {
     const ddata = SanctionedAsPerService.getAll().then((res) => {
       asPer = res.data.map((e:AsPer)=>e.asPer ); setSanctionedAsPer(asPer);
@@ -378,7 +400,7 @@ const EditIRO = () => {
   //     event.preventDefault();
   //   }
   // };
-  console.log(IRO, 'ziro');
+  console.log(IRO.purposeWorker, 'ziro');
 
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
@@ -412,7 +434,10 @@ const EditIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) => setIRO(res.data)); // TODO: Implement REST API Call
+    IROServices.getById(iroID).then((res) =>{
+      console.log(res.data, 'frdata');
+      setIRO(res.data);
+    } ); // TODO: Implement REST API Call
   }, [iroID]);
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -462,39 +487,48 @@ const EditIRO = () => {
                       value={IRO?.purpose}
                       options={purposes ?? []}
                       getOptionLabel={(requisition) => requisition ?? ''}
-                      onChange={
-                        () => { }
-                        // if (selectedPurpose) {
-                        //  setIRO({
-                        //     ...IRO,
-                        //     purpose: selectedPurpose as FRPurpose,
-                        //   });
-                        // }
-                      }
+                      // onChange={
+                      //   () => { }
+                      //   // if (selectedPurpose) {
+                      //   //  setIRO({
+                      //   //     ...IRO,
+                      //   //     purpose: selectedPurpose as FRPurpose,
+                      //   //   });
+                      //   // }
+                      // }
+                      onChange={(_e, selectedPurpose) => {
+                        if (selectedPurpose) {
+                          setIRO({
+                            ...IRO,
+                            purpose: selectedPurpose as FRPurpose,
+                          });
+                        }
+                      }}
                       renderInput={(params) => <TextField {...params} label="Requisition For" />}
                       fullWidth
-                      disabled
+                      // disabled
                     />
                   </Grid>
                   {IRO?.purpose === 'Worker' ? (
                     <>
                       <Grid item xs={12} md={6}>
-                        <Autocomplete
-                          value={IRO?.purposeWorker}
-                          options={[]}
-                          getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
-                          onChange={() => { }}
-                          //   if (selectedWorker) {
-                          //    setIRO({
-                          //       ...IRO,
-                          //       purposeWorker: selectedWorker,
-                          //     });
-                          //   }
-                          // }}
-                          renderInput={(params) => <TextField {...params} label="Choose Worker" />}
-                          fullWidth
-                          disabled
-                        />
+                        <Grid item xs={12}>
+                          <Autocomplete<IWorker | Staff>
+                            value={IRO.purposeWorker ?? null}
+                            options={(workers ?? [])}
+                            getOptionLabel={(workers) => `${workers?.basicDetails.firstName?? ''} ${workers?.basicDetails?.middleName ?? ''} ${workers.basicDetails.lastName?? ''}`}
+                            onChange={(_e, selectedWorker) => {
+                              if (selectedWorker) {
+                                setIRO({
+                                  ...IRO,
+                                  purposeWorker: selectedWorker,
+                                });
+                              }
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
+                            fullWidth
+                          />
+                        </Grid>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <TextField
@@ -513,18 +547,21 @@ const EditIRO = () => {
                   {IRO?.purpose === 'Subdivision' ? (
                     <><Grid item xs={12} md={6}>
                       <Autocomplete
-                        options={[]}
-                        value={IRO?.purposeSubdivision}
+                        options={subDivisions ?? []}
+                        value={IRO.purposeSubdivision ? IRO.purposeSubdivision : undefined}
                         getOptionLabel={(subDiv) => subDiv.name}
-                        onChange={() => { } }
+                        onChange={(event, newVal) =>
+                          setIRO({ ...IRO, purposeSubdivision: newVal ?? undefined })
+                        }
                         renderInput={(params) => <TextField {...params} label="Subdivision" />}
-                        disabled />
+                      />
+
                     </Grid><Grid item xs={12} md={6}>
                       <TextField
                         label="Division"
-                        value={IRO.division?.details.name}
+                        value={IRO.division?.details?.name}
                         fullWidth
-                        disabled
+                        // disabled
                         InputLabelProps={{
                           shrink: true,
                         }} />

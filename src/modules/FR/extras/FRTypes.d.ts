@@ -104,10 +104,10 @@ declare global {
   export interface ITransactions extends MongooseDocument {
     kind: 'FRs' | 'IRO';
     purposeWorker?: IWorker | Staff;
-    purposeSubdivision?: SubDivision;
+    purposeSubdivision?: SubDivision | null;
     purpose: FRPurpose;
     division?: Division;
-    purposeCoordinator?: User;
+    purposeCoordinator?: User| null;
     purposeOthers?: string;
     sanctionedAmount?: number | null;
     sanctionedAmountTotal?: number;
