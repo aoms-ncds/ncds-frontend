@@ -659,6 +659,31 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           <DialogContent>
             <Container>
               <Grid container spacing={3}>
+                <Grid item xs={12} >
+                  <Autocomplete
+                    value={selectedMainCategory ?? null}
+                    options={mainCategories ?? []}
+                    getOptionLabel={(mainCategory) => mainCategory.name}
+                    onChange={(e, selectedMainCategory) => {
+                      if (selectedMainCategory) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          mainCategory: selectedMainCategory.name,
+                        }));
+                        props.onChange({
+                          ...props.value,
+                          mainCategory: selectedMainCategory.name,
+                        });
+                        setSelectedMainCategory(selectedMainCategory);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length==0} />}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <Autocomplete
                     disabled={props.disable==true}
