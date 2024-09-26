@@ -40,6 +40,7 @@ export default {
    * @return {Promise<StandardResponse<Child>>} A promise that resolves to the response containing the edited child record.
    */
   edit: (child: CreatableChild): Promise<StandardResponse<Child>> => getStandardResponse<Child>(axios.patch(`/workers/children/${child._id}`, child, { headers: { ...getAuthHeader() } })),
+  deleteChild: (id: string) => getStandardResponse<Spouse>(axios.delete(`/workers/children/${id}/deleteChild`, { headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all child support records.
