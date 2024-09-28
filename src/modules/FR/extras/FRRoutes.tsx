@@ -7,6 +7,7 @@ import PresidentApproval from '../PresidentApproval';
 import SentBack from '../SendBack';
 import WorkerSupportPage from '../WorkerSupport';
 import ChildeSupportPage from '../ChildeSupprt';
+import ManageFrForDivision from '../ManagrFrForDivision';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -20,6 +21,22 @@ const divisionsPageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_FR'],
       showInDrawer: true,
       icon: <img src="/mod_icons/fr.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Manage FR',
+      path: '/manage',
+      element: <ManageFRPage />,
+      private: true,
+      requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Manage FR',
+      path: '/manageForDivision',
+      element: <ManageFrForDivision />,
+      private: true,
+      requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
     },
     {
       title: 'Manage FR',
