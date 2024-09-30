@@ -507,7 +507,7 @@ const ManageFrPage = () => {
         const subCategory3 = params.row.particulars[0]?.subCategory3;
         const subCategory2 = params.row.particulars[0]?.subCategory2;
         const subCategory1 = params.row.particulars[0]?.subCategory1;
-        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
           return subCategory3;
         } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
           return subCategory2;
