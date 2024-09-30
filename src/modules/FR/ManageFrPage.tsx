@@ -56,7 +56,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
-  const [delateModel, setDelateModel] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
@@ -105,7 +105,7 @@ const ManageFrPage = () => {
             return FRRequests._id !== id;
           });
           setFRRequests(fr);
-          setDelateModel(false);
+          setDeleteModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -256,7 +256,7 @@ const ManageFrPage = () => {
                   onClick: () => {
                     // deleteFR(props.row._id);
                     setSelectedFR(props.row._id);
-                    setDelateModel(true);
+                    setDeleteModel(true);
                   },
                 },
               ] :
@@ -1053,13 +1053,13 @@ const ManageFrPage = () => {
                 </Button>
               </DialogActions>
             </Dialog>
-            <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+            <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
               <DialogContent>
                 <Typography sx={{ color: 'red' }}>Are you sure you want to delete this FR?</Typography>
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={()=>setDelateModel(false)}>Close</Button>
+                <Button onClick={()=>setDeleteModel(false)}>Close</Button>
                 <Button
                   endIcon={<DeleteIcon />}
                   variant="contained"
@@ -1068,7 +1068,7 @@ const ManageFrPage = () => {
                     deleteFR(selectedFR?.toString() ?? '');
                   } }
                 >
-                 Delate
+                 Delete
                 </Button>
               </DialogActions>
 

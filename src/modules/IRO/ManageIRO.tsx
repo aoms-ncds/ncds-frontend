@@ -341,7 +341,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
-  const [delateModel, setDelateModel] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -496,7 +496,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
-
           // console.log(res.data, 'datgajdfj');
         });
       }
@@ -504,20 +503,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.getAll({ dateRange: dateRange }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        // console.log(res.data, 'datgajdfj');
-      });
+        });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
   // console.log(mngrName, 'mngrName');
 
-  useEffect(() => {
-    ESignatureService.getESignature().then((res) => {
-      setMngrName((res.data as { officeManagerName: string }).officeManagerName);
-    });
-  }, []);
+
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  // Refering to existing method
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
       filename: '',
       size: 0,
       type: 'application/vnd.ms-excel',
@@ -536,12 +548,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     ESignatureService.getESignature()
       .then((res) => {
         console.log({ res });
+        setMngrName((res.data as { officeManagerName: string }).officeManagerName);
         setSignature(res.data as Esignature);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
       });
-    console.log(selectedSignature);
   }, []);
 
   const deleteIRO = (id: string) => {
@@ -559,7 +572,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             return IROrder._id !== id;
           });
           setIROrder(IRO);
-          setDelateModel(false);
+          setDeleteModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -656,7 +669,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   icon: DeleteIcon,
                   onClick: () => {
                     setSelectedIROId(params.row._id);
-                    setDelateModel(true);
+                    setDeleteModel(true);
                     // deleteIRO(params.row._id);
                   },
                 },
@@ -1909,7 +1922,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {iroData && mngrName && selectedSignature && FrData && (
 
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -1930,7 +1943,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
@@ -1953,13 +1966,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </>
         </DialogActions>
       </Dialog>
-      <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this IRO?</Typography>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setDelateModel(false)}>Close</Button>
+          <Button onClick={() => setDeleteModel(false)}>Close</Button>
           <Button
             endIcon={<DeleteIcon />}
             variant="contained"
@@ -1968,7 +1981,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               deleteIRO(selectedIROId?.toString() ?? '');
             }}
           >
-            Delate
+            Delete
           </Button>
         </DialogActions>
 
