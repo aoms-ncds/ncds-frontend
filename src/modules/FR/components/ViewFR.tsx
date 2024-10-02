@@ -666,7 +666,7 @@ return (
                     Add Extra sign
                 </Button>
                   &nbsp;
-                {props.action === 'view' && FRstatus != 'FR_APPROVED' ? (
+                {props.action === 'view' && (FRstatus != 'FR_APPROVED'&&FRstatus!='FR_REJECTED') ? (
                   <>
                     {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
