@@ -605,6 +605,23 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         granted={
                           <Button
                             variant="contained"
+                            color="info"
+                            type="submit"
+                            onClick={() => setSubmit(1)}
+                            // disabled={particulars.length==0}
+                          >
+                        Submit{' '}
+                          </Button>
+                        }
+
+                      />
+                       &nbsp;
+                       &nbsp;
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={
+                          <Button
+                            variant="contained"
                             color="warning"
                             type="submit"
                             // disabled={particulars.length==0}
@@ -615,22 +632,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             Submit to President
                           </Button>
                         }
-                      />
-                  &nbsp;
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <Button
-                            variant="contained"
-                            color="info"
-                            type="submit"
-                            onClick={() => setSubmit(1)}
-                            // disabled={particulars.length==0}
-                          >
-                        Submit{' '}
-                          </Button>
-                        }
-
                       />
                     </>
                   ) : null}
