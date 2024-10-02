@@ -325,6 +325,37 @@ const ReconciliationIRO = () => {
             //   text: 'Remarks',
             //   icon: EditIcon,
             // },
+            {
+              id: 'View',
+              text: 'View Details ',
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
+              icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/iro/${props.row._id}`, '_blank');
+              },
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(props.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: () => {
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
+                },
+              }] : []),
 
             {
               id: 'remarks',
@@ -344,16 +375,37 @@ const ReconciliationIRO = () => {
                   });
               },
             },
-            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: () => {
-                  setAttachment(true);
-                  setSelectedIRO(props.row);
-                },
-              }] : []),
+            // {
+            //   id: 'View',
+            //   text: 'View Details ',
+            //   component: Link,
+            //   to: `/fr/${props.row._id}/view`,
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'Reconciliation',
+            //   text: 'Reconciliation',
+            //   icon: EditIcon,
+            // },
+            // {
+            //   id: 'Close IRO',
+            //   text: 'Close IRO',
+            //   icon: PreviewIcon,
+            // },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: PrintIcon,
+              onClick: () => {
+                // console.log(props.row.particulars );
+                // props.row.particulars.map((item)=>{
+                setAttachments(props.row.billAttachment);
+                // });
+                console.log(attachments, 'setAttachments(item.attachment);');
+
+                setViewFileUploader(true);
+              },
+            },
             {
               id: 'Close IRO',
               text: 'Close IRO',
@@ -393,37 +445,6 @@ const ReconciliationIRO = () => {
               //         variant: 'error',
               //       });
               //     });
-              },
-            },
-            // {
-            //   id: 'View',
-            //   text: 'View Details ',
-            //   component: Link,
-            //   to: `/fr/${props.row._id}/view`,
-            //   icon: PreviewIcon,
-            // },
-            // {
-            //   id: 'Reconciliation',
-            //   text: 'Reconciliation',
-            //   icon: EditIcon,
-            // },
-            // {
-            //   id: 'Close IRO',
-            //   text: 'Close IRO',
-            //   icon: PreviewIcon,
-            // },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: PrintIcon,
-              onClick: () => {
-                // console.log(props.row.particulars );
-                // props.row.particulars.map((item)=>{
-                setAttachments(props.row.billAttachment);
-                // });
-                console.log(attachments, 'setAttachments(item.attachment);');
-
-                setViewFileUploader(true);
               },
             },
           ]}
