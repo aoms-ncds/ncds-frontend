@@ -325,6 +325,7 @@ const EditIRO = () => {
   let asPer : any = [];
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
+  console.log(newParticular, 'newParticular');
 
   useEffect(() => {
     if (IRO.purpose === 'Worker') {
@@ -1244,8 +1245,8 @@ const EditIRO = () => {
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
-                        unitPrice: Number(e.target.value),
-                        requestedAmount: Number(e.target.value),
+                        unitPrice: (e.target.value as unknown as number),
+                        requestedAmount: (e.target.value as unknown as number),
                       }))
                     }
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
@@ -1253,6 +1254,7 @@ const EditIRO = () => {
                     fullWidth
                     inputProps={{
                       onWheel: handleWheel,
+                      inputMode: 'decimal', // Hint for browsers
                     }}
                   />
                 </Grid>
@@ -1280,7 +1282,7 @@ const EditIRO = () => {
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
-                        requestedAmount: Number(e.target.value),
+                        requestedAmount: (e.target.value as unknown as number),
                       }))
                     }
                     fullWidth
@@ -1289,6 +1291,7 @@ const EditIRO = () => {
                     InputLabelProps={{ shrink: true }}
                     inputProps={{
                       onWheel: handleWheel,
+                      inputMode: 'decimal', // Hint for browsers
                     }}
                   />
                 </Grid>
