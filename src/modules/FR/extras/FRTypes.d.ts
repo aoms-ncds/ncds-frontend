@@ -131,6 +131,7 @@ declare global {
     reconciliationOn?:Moment;
     iroClosedOn?:Moment;
     approvedBy?:string|IWorker;
+    divisionCoordinator?:string;
 
 
   }
