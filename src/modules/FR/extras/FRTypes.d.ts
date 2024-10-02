@@ -145,6 +145,13 @@ declare global {
     designations?:string[];
   }
  export type CreatableDesignationParticular = Creatable<IDesignationParticular>;
-
+ export interface ITransactionLog extends Document{
+  TRNo:string;
+  TRId:string;
+  action:string;
+  doneBy:User;
+  type:'FR'|'IRO';
+  createdAt:Moment;
+  }
 
 }

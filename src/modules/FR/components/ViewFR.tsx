@@ -40,7 +40,7 @@ import PermissionChecks, { hasPermissions } from '../../User/components/Permissi
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import { monthNames, purposes } from '../extras/FRConfig';
-import { AttachFile as AttachmentIcon, Edit as EditIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Edit as EditIcon, History as HistoryIcon } from '@mui/icons-material';
 import MessageItem from '../../../components/MessageItem';
 import { useNavigate } from 'react-router-dom';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
@@ -53,7 +53,7 @@ import ESignatureService from '../../Settings/extras/ESignatureService';
 import { useAuth } from '../../../hooks/Authentication';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
-import { setSyntheticLeadingComments } from 'typescript';
+import TransactionLogDialog from './TransactionLogDialog';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -95,8 +95,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
-  console.log(props, 'newParticular');
-
+  // console.log(props, 'newParticular');
+  const [openLog, setOpenLog] = useState(false);
 interface AsPer{
   asPer:[];
 
@@ -245,7 +245,7 @@ return (
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <TextField
-                label="IRO No"
+                label="FR No"
                 value={props.value?.FRno}
                 fullWidth
                 disabled
@@ -638,6 +638,11 @@ return (
               {/* )} */}
                 &nbsp;
               <div style={{ float: 'right' }}>
+                <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
+                  onClick={async ()=>setOpenLog(true)}>
+          Log
+                </Button>
+                &nbsp;
                 <Button
                   variant="contained"
                   color="info"
@@ -1448,7 +1453,7 @@ return (
         <Button onClick={() => setShowName(false)}>Add</Button>
       </DialogActions>
     </Dialog>
-
+    {props.value._id && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={props.value._id}/>}
   </div>
 );
 };

@@ -30,7 +30,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import SendIcon from '@mui/icons-material/Send';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { AttachFile as AttachmentIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, History as HistoryIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useState, useEffect } from 'react';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -47,6 +47,7 @@ import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 
 const ViewIRO = () => {
@@ -336,6 +337,8 @@ const ViewIRO = () => {
     event.preventDefault();
     event.currentTarget.blur();
   };
+  const [openLog, setOpenLog] = useState(false);
+
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
   //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -675,6 +678,11 @@ const ViewIRO = () => {
                         )}
                         &nbsp;
                         <div style={{ float: 'right' }}>
+                          <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
+                            onClick={async ()=>setOpenLog(true)}>
+                            Log
+                          </Button>
+                           &nbsp;
                           <Button
                             variant="contained"
                             color="info"
@@ -981,6 +989,8 @@ const ViewIRO = () => {
         // getFiles={TestServices.getBills}
         getFiles={attachments}
       />
+      {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
+
     </CommonPageLayout>
   );
 };

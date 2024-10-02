@@ -13,6 +13,7 @@ import Particulars from '../Particulars';
 import PaymentMethod from '../PaymentMethod';
 import DesignationParticulars from '../DesignationParticular';
 import LeaderDetails from '../LeaderDetails';
+import TransactionLog from '../TransactionLog';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -157,6 +158,15 @@ const settingsRoutes: ModuleRoute = {
       title: 'Leader Details',
       path: '/leaderDetails',
       element: <LeaderDetails/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'FR/IRO Log',
+      path: '/transactionLog',
+      element: <TransactionLog/>,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,

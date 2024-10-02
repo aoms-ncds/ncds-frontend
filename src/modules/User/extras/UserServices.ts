@@ -34,7 +34,7 @@ export default {
           },
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),
-        }))
+        })),
     ),
   getAllLog: (): Promise<StandardResponse<ILog[]>> =>
     getStandardResponse<ILog[]>(
@@ -61,7 +61,7 @@ export default {
           },
           createdAt: moment(log.user?.createdAt),
           updatedAt: moment(log.user?.updatedAt),
-        }))
+        })),
     ),
   getLastLog: (): Promise<StandardResponse<ILog | null>> =>
     getStandardResponse<ILog | null>(
@@ -72,7 +72,7 @@ export default {
         ...me,
         _id: me._id,
         createdAt: moment(me.createdAt),
-      })
+      }),
     ),
   getById: (userID: string, params?: { withPermissions: boolean }): Promise<StandardResponse<Staff | IWorker | null>> =>
     getStandardResponse<Staff | null>(axios.get(`/users/${userID}`, { params: { ...params }, headers: { ...getAuthHeader() } }), (data) => ({
@@ -117,7 +117,7 @@ export default {
         },
         createdAt: moment(me.createdAt),
         updatedAt: moment(me.updatedAt),
-      })
+      }),
     ),
   editPermission: (userID: string, permission: { name: string; value: boolean }) =>
     getStandardResponse<void>(axios.patch(`/users/${userID}/permissions`, { permission }, { headers: { ...getAuthHeader() } })),
@@ -131,15 +131,15 @@ export default {
           headers: {
             ...getAuthHeader(),
           },
-        }
-      )
+        },
+      ),
     ),
 
   deleteFCMToken: (token: string): Promise<StandardResponse<User | null>> =>
     getStandardResponse(
       axios.delete(`/users/fcm_token/${token}`, {
         headers: { ...getAuthHeader() },
-      })
+      }),
     ),
   getDivisionUser: (divisionID: string, params?: { withPermissions: boolean }): Promise<StandardResponse<User[]>> =>
     getStandardResponse<User[]>(
@@ -161,9 +161,13 @@ export default {
           },
           createdAt: moment(user.createdAt),
           updatedAt: moment(user.updatedAt),
-        }))
+        })),
     ),
 
   checkDuplicationOfMail: (userId: string) => getStandardResponse(axios.get(`/users/mail_duplicate/${userId}`, { headers: { ...getAuthHeader() } })),
   coordinatorOrNot: () => getStandardResponse<boolean>(axios.get('/users/coordinator_or_not', { headers: { ...getAuthHeader() } })),
+  getLogById: (id: string) =>
+    getStandardResponse<IUserUpdateLog[]>(
+      axios.get(`/users/${id}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };
