@@ -120,6 +120,7 @@ declare global {
     createdBy: IWorker;
     particulars: Particular[];
     workerSupport?:boolean;
+    childSupport?:boolean;
     designationParticular?:string;
     sourceOfAccount?:string;
     additionalSignature?:FileObject;

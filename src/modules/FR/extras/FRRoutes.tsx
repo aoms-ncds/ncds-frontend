@@ -8,6 +8,7 @@ import SentBack from '../SendBack';
 import WorkerSupportPage from '../WorkerSupport';
 import ChildeSupportPage from '../ChildeSupprt';
 import ManageFrForDivision from '../ManagrFrForDivision';
+import SupportFrPage from '../SupportFr';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -108,6 +109,14 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <ChildeSupportPage/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Support FR',
+      path: '/support',
+      element: <SupportFrPage/>,
+      private: true,
+      requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
     },
   ],

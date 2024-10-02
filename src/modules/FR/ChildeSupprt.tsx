@@ -69,6 +69,7 @@ const ChildeSupportPage = () => {
     kind: 'FRs',
     particulars: [],
     sanctionedAsPer: '',
+    childSupport: true,
   });
   console.log(requisition.particulars?.[0]?.month, 'requisition');
   const navigate = useNavigate();
