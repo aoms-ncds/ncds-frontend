@@ -413,7 +413,7 @@ const Profile = () => {
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                               }}
-                              src={`${child?.childProfile}`}
+                              src={`${child?.childProfile?.replace('uc', 'thumbnail')}`}
                               alt={`${user?.basicDetails.firstName}`}
                             />
                           </Grid>
