@@ -482,7 +482,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
-                            <TableCell align="center">{item.requestedAmount}</TableCell>
+                            <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -819,7 +819,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   <TextField
                     label="Total Amount"
                     type="number"
-                    value={newParticular?.requestedAmount}
+                    value={newParticular?.requestedAmount?.toFixed(2)}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,

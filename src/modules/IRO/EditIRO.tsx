@@ -325,7 +325,6 @@ const EditIRO = () => {
   let asPer : any = [];
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
-  console.log(newParticular, 'newParticular');
 
   useEffect(() => {
     if (IRO.purpose === 'Worker') {
@@ -642,7 +641,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.narration}</TableCell>
                                 <TableCell align="center">{item.quantity}</TableCell>
                                 <TableCell align="center">{item.month}</TableCell>
-                                <TableCell align="center">{item.requestedAmount}</TableCell>
+                                <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                 <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                               </TableRow>
@@ -1241,12 +1240,12 @@ const EditIRO = () => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice}
+                    value={newParticular?.unitPrice?.toFixed(2)}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
-                        unitPrice: (e.target.value as unknown as number),
-                        requestedAmount: (e.target.value as unknown as number),
+                        unitPrice: Number(e.target.value),
+                        requestedAmount: Number(e.target.value),
                       }))
                     }
                     disabled={!hasPermissions(['ADMIN_ACCESS'])}
@@ -1254,7 +1253,6 @@ const EditIRO = () => {
                     fullWidth
                     inputProps={{
                       onWheel: handleWheel,
-                      inputMode: 'decimal', // Hint for browsers
                     }}
                   />
                 </Grid>
@@ -1278,11 +1276,11 @@ const EditIRO = () => {
                   <TextField
                     label="Total Amount"
                     type="number"
-                    value={newParticular?.requestedAmount}
+                    value={newParticular?.requestedAmount?.toFixed(2)}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
-                        requestedAmount: (e.target.value as unknown as number),
+                        requestedAmount: Number(e.target.value),
                       }))
                     }
                     fullWidth
@@ -1291,7 +1289,6 @@ const EditIRO = () => {
                     InputLabelProps={{ shrink: true }}
                     inputProps={{
                       onWheel: handleWheel,
-                      inputMode: 'decimal', // Hint for browsers
                     }}
                   />
                 </Grid>
