@@ -1021,16 +1021,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerName: 'Last Updated',
+    //   headerClassName: 'super-app-theme--cell',
+    //   width: 130,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -1096,7 +1096,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -1121,6 +1121,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Last Updated',
+      headerClassName: 'super-app-theme--cell',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
     },

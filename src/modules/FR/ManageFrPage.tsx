@@ -544,15 +544,15 @@ const ManageFrPage = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Last Updated</b>,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Last Updated</b>,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // {
     //   field: 'sanctionedAsPer',
     //   headerClassName: 'super-app-theme--cell',
@@ -578,7 +578,7 @@ const ManageFrPage = () => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -614,6 +614,15 @@ const ManageFrPage = () => {
         </p>
       ),
       width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Last Updated</b>,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
       align: 'center',
       headerAlign: 'center',
     },

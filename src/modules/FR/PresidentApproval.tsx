@@ -353,15 +353,15 @@ const PresidentApproval = () => {
       },
     },
 
-    {
-      field: 'updatedAt',
-      renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerClassName: 'super-app-theme--cell',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
@@ -400,6 +400,15 @@ const PresidentApproval = () => {
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
+    },
+    {
+      field: 'updatedAt',
+      renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
+      align: 'center',
+      headerClassName: 'super-app-theme--cell',
+      headerAlign: 'center',
     },
 
   ];

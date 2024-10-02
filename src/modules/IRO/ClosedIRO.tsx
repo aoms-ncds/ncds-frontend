@@ -382,15 +382,16 @@ const ClosedIRO = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => (<b>Last Updated</b>),
-      width: 150,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-
-    },
+    // {
+    //   field: 'updatedAt',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   width: 150,
+    //   renderCell: (props) => (
+    //     <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+    //   ),
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -414,7 +415,8 @@ const ClosedIRO = () => {
     },
     {
       field: 'specialsanction',
-      renderHeader: () => <b>Special Sanction</b>,
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -440,6 +442,16 @@ const ClosedIRO = () => {
     {
       field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
       valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+    },
+    {
+      field: 'updatedAt',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 150,
+      renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ),
     },
   ];
   useEffect(() => {
