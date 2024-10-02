@@ -52,11 +52,11 @@ const styles = StyleSheet.create({
     // fontWeight: 'bold',
   },
   text: {
-    fontSize: 10,
+    fontSize: 11,
     color: 'black',
   },
   text1: {
-    fontSize: 10,
+    fontSize: 11,
     color: 'black',
 
   },
@@ -113,28 +113,28 @@ const styles = StyleSheet.create({
     height: 20,
   },
   tableText: {
-    fontSize: 10,
+    fontSize: 11,
   },
 });
-const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign?:any;president:EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngrSign?: any; president: EsignaturePresident }) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
-  let NewTot:any = 0;
+  let NewTot: any = 0;
   let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
 
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const totalSacntion =props.fr?.particulars.forEach((e)=>{
-    totalAmount2 += e?.sanctionedAmount !=undefined ? e?.sanctionedAmount : 0;
+  const totalSacntion = props.fr?.particulars.forEach((e) => {
+    totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
   console.log(totalAmount2, 'total');
 
-  NewTot += props?.fr?.sanctionedAmount !=undefined ? props?.fr?.sanctionedAmount: 0;
+  NewTot += props?.fr?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
   totalReqAmount = props.fr?.particulars?.reduce((acc, e) => {
     return acc + (e?.requestedAmount !== undefined ? e.requestedAmount : 0);
   }, 0) ?? 0;
-  const sanctionedAmount = NewTot !=0 ? NewTot : totalAmount2;
+  const sanctionedAmount = NewTot != 0 ? NewTot : totalAmount2;
   let sanctionedAmountWords = '';
   console.log(sanctionedAmount, 'amount');
 
@@ -172,14 +172,14 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
 
               <Text style={{ ...styles.heading, fontWeight: 700, fontFamily: 'Oswald' }}> INDIAN EVANGELICAL TEAM </Text></>
             {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
-            <Text style={{ ...styles.title, fontWeight: 700, fontFamily: 'Oswald' }}> INTERNAL RELEASE ORDER </Text>
+            <Text style={{ ...styles.title, fontWeight: 700, fontFamily: 'Oswald' }}> Internal Release Order </Text>
           </div>
 
           <div style={{ marginTop: 60 }}>
             <View style={{ ...styles.box, marginTop: 15 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>IRO NO:</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 10 }}>IRO NO:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 7 }}>{props.rowData?.IROno}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
@@ -189,12 +189,12 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', marginBottom: 3 }}>Division Name:</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Division Name:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{props?.rowData?.division?.details.name ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', marginBottom: 3 }}>Divisional Co-ordinator: </Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName?props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim():''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ?' '+props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Divisional Co-ordinator: </Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
                 </View>
               </View>
             </View>
@@ -251,12 +251,12 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', marginBottom: 3 }}>Branch Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 29 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 31, marginBottom: 3 }}>{props.rowData?.releaseAmount?.transferredBank?.branchName}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', marginBottom: 3 }}>FR NO</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 52 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 54, marginBottom: 3 }}>{props.fr?.FRno}</Text>
                 </View>
@@ -291,62 +291,62 @@ const IROTemplate = (props: { rowData?: any;fr?:FR; mngrName?:any;officeMngrSign
                 <Text
                   style={{
                     width: '20%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}
                 >
-          Sl No
+                  Sl No
+                </Text>
+                <div style={{ borderRight: 1, height: 24 }}></div>
+                <Text
+                  style={{
+                    width: '800 px', // Set fixed width,
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
+                    fontFamily: 'Oswald',
+                  }}
+                >
+                  Particulars / Narration
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     width: '100%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}
                 >
-       Particulars / Narration
-                </Text>
-                <div style={{ borderRight: 1, height: 24 }}></div>
-                <Text
-                  style={{
-                    width: '100%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
-                  }}
-                >
-Sanctioned
-As Per
+                  Sanctioned
+                  As Per
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     width: '40%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}
                 >
-        Qty
+                  Qty
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     width: '60%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}
                 >
-       Request Amount
+                  Request Amount
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     width: '60%',
-                    textAlign: 'center', fontSize: 10, fontWeight: 'bold',
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}
                 >
-       Sanctioned Amount
+                  Sanctioned Amount
                 </Text>
               </View>
               {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
@@ -359,7 +359,7 @@ As Per
                     {String(index + 1)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'800 px'}>
                     {item.narration}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
@@ -377,7 +377,7 @@ As Per
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
-                    {String( props.rowData.sanctionedAmount?? item?.sanctionedAmount )}
+                    {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
                   </PDFCell>
 
                   {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
@@ -386,29 +386,29 @@ As Per
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
-                Grand Total
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                  Grand Total
                 </PDFCell>
-                <PDFCell width={'20%'} ></PDFCell>
+                {/* <PDFCell width={'20%'} ></PDFCell> */}
                 <PDFCell width={'100%'} ></PDFCell>
-                <PDFCell width={'40%'} ></PDFCell>
+                <PDFCell width={'590 px'} ></PDFCell>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
-              <PDFTableRow key={props.rowData.particulars.length+1}>
-                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
-                Sanctioned Amount in Words:
+              <PDFTableRow key={props.rowData.particulars.length + 1}>
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                  Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
                 <PDFCell width={'100%'} ></PDFCell>
@@ -418,7 +418,7 @@ As Per
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <PDFCell style={{ textAlign: 'left', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
                   {sanctionedAmountWords}
                 </PDFCell>
               </PDFTableRow>
@@ -429,7 +429,7 @@ As Per
               <View style={{ width: 200 }}>
                 <Text style={{
                   ...styles.text, marginTop: 10, left: 5, fontWeight: 'bold',
-                  fontFamily: 'Oswald',
+                  fontFamily: 'Oswald', fontSize: 10,
                 }} >Balance amount to be adjusted:</Text></View>
               <View>
               </View>
@@ -438,7 +438,7 @@ As Per
               <View style={{ width: 200 }}>
                 <Text style={{
                   ...styles.text, left: 5, fontWeight: 'bold',
-                  fontFamily: 'Oswald',
+                  fontFamily: 'Oswald', fontSize: 10,
                 }} >Adjusted to IRO No.:</Text></View>
               <View>
               </View>
@@ -452,8 +452,9 @@ As Per
                   <Text style={{
                     ...styles.text,
                     textAlign: 'center',
+                    fontSize: 10,
                   }}>
-            E Signature protected.
+                    E Signature protected.
                   </Text>
                   <View style={{
                     ...styles.box5,
@@ -470,9 +471,9 @@ As Per
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
                       ...styles.text1,
-                      fontSize: 10,
+                      fontSize: 11,
                       textAlign: 'center',
-                      fontWeight: 'bold',
+                      // fontWeight: 'bold',
                       fontFamily: 'Oswald',
                     }}>
                       Mr. Shaji Varghese
@@ -480,21 +481,22 @@ As Per
                     </Text>
                     <Text style={{
                       ...styles.text1,
-                      fontSize: 10,
+                      fontSize: 11,
                       fontWeight: 'bold',
                       fontFamily: 'Oswald',
                       textAlign: 'center',
                     }}>
-            President
+                      President
                     </Text>
                   </View>
-                </View> ):
-                <View style={{ width: 300 }}/>}<View style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                </View>) :
+                <View style={{ width: 300 }} />}<View style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
                 <Text style={{
                   ...styles.text,
                   textAlign: 'center',
+                  fontSize: 10,
                 }}>
-        E Signature protected.
+                  E Signature protected.
                 </Text>
                 <View style={{
                   ...styles.box5,
@@ -512,21 +514,21 @@ As Per
                 <View style={{ textAlign: 'center', alignItems: 'center' }}>
                   <Text style={{
                     ...styles.text1,
-                    fontSize: 10,
+                    fontSize: 11,
                     textAlign: 'center',
-                    fontWeight: 'bold',
+                    // fontWeight: 'bold',
                     fontFamily: 'Oswald',
                   }}>
                     {props.officeMngrSign?.officeManagerName}
                   </Text>
                   <Text style={{
                     ...styles.text1,
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: 'bold',
                     fontFamily: 'Oswald',
                     textAlign: 'center',
                   }}>
-          Office Manager
+                    Office Manager
                   </Text>
                 </View>
               </View>
@@ -535,15 +537,15 @@ As Per
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Prepared By:</Text>
-              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName?props?.rowData?.approvedBy?.basicDetails?.firstName.trim():''}${props?.rowData?.approvedBy?.basicDetails?.middleName ?' '+props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
+              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName ? props?.rowData?.approvedBy?.basicDetails?.firstName.trim() : ''}${props?.rowData?.approvedBy?.basicDetails?.middleName ? ' ' + props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
             </View>
             <Text style={{
               fontSize: 8,
               color: 'grey',
               marginTop: 5,
             }}>
-      This document is electronically signed by an authorized person of the Indian Evangelical Team adding to the accuracy and
-      content of the information submitted.
+              This document is electronically signed by an authorized person of the Indian Evangelical Team adding to the accuracy and
+              content of the information submitted.
             </Text>
           </div>
         </View>
