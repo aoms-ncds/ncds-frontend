@@ -7,7 +7,7 @@ import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
-import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
+import { NoAccounts as NoAccountsIcon, Person as PersonIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useNavigate } from 'react-router-dom';
 import ChildrenServices from '../extras/ChildrenServices';
@@ -98,8 +98,18 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
   };
 
 
-  
-
+  const handleDelete = (params: any) => {
+    ChildrenServices.deleteChild(params.row._id)
+      .then((res) => {
+        enqueueSnackbar({ message: res.message, variant: 'success' });
+        navigate('/workers/');
+      })
+      .catch((error) => {
+        enqueueSnackbar({ message: error.message, variant: 'error' });
+        console.error('Error fetching user:', error);
+      });
+    console.log(params.row._id, 'ooo');
+  };
 
   const filteredRows = (props.value ?? []).filter((row) => {
     const childOfFullName = `${row.childOf?.basicDetails?.firstName || ''} ${row.childOf?.basicDetails?.lastName || ''}`.toLowerCase();
@@ -168,6 +178,13 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
             icon={<PersonIcon />}
             showInMenu
             onClick={() => handleClick(params)}
+          />,
+          <GridLinkAction
+            key={5}
+            label="Delete"
+            icon={<DeleteIcon />}
+            showInMenu
+            onClick={() => handleDelete(params)}
           />,
 
           ...(hasPermissions(['HR_DPARTMENT_ACCESS']) ?
@@ -287,7 +304,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       },
       renderHeader: () => (<b>Deactivation Date</b>),
       headerClassName: 'super-app-theme--cell',
-    }
+    },
   ].filter((action) => action !== false) as GridColDef<Child>[];
 
   return (

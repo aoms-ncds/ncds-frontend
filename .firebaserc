@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "iet-pro910"
+    "default": "iet-pro910",
+    "staging": "iet-staging-pro910"
   }
 }

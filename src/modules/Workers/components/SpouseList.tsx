@@ -3,7 +3,7 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNode
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
-import { NoAccounts as NoAccountsIcon, Person as PersonIcon } from '@mui/icons-material';
+import { NoAccounts as NoAccountsIcon, Person as PersonIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import { hasPermissions } from '../../User/components/PermissionChecks';
@@ -92,6 +92,19 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       });
     console.log(params.row._id, 'ooo');
   };
+  const handleDelete = (params: any) => {
+    WorkersServices.deleteSpouse(params.row._id)
+      .then((res) => {
+        setId(res.data._id);
+        enqueueSnackbar({ message: res.message, variant: 'success' });
+        navigate('/workers/');
+      })
+      .catch((error) => {
+        enqueueSnackbar({ message: error.message, variant: 'error' });
+        console.error('Error fetching user:', error);
+      });
+    console.log(params.row._id, 'ooo');
+  };
 
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -117,7 +130,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
     );
   });
 
-console.log(filteredRows,'filteredRows');
+  console.log(filteredRows, 'filteredRows');
 
   const columns: GridColDef<Spouse>[] = [
     hasPermissions(['MANAGE_WORKER']) &&
@@ -165,6 +178,13 @@ console.log(filteredRows,'filteredRows');
             icon={<VisibilityIcon />}
             showInMenu
             onClick={() => handleClick(params)}
+          />,
+          <GridLinkAction
+            key={5}
+            label="Delete"
+            icon={<DeleteIcon />}
+            showInMenu
+            onClick={() => handleDelete(params)}
           />,
         ].filter((action) => action !== false) as JSX.Element[]
       ),
@@ -274,7 +294,7 @@ console.log(filteredRows,'filteredRows');
       },
       renderHeader: () => (<b>Deactivation Date</b>),
       headerClassName: 'super-app-theme--cell',
-    }
+    },
   ].filter((action) => action !== false) as GridColDef<Spouse>[];
   return (
     <>

@@ -16,8 +16,28 @@ export default {
    * @param {File|undefined} childPhoto - The worker to be created.
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the created worker.
    */
-  create: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: File | undefined) =>
-    getStandardResponse<IWorker>(axios.post('/workers', { worker, image: userPhoto, image1: childPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+  create: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: { id: string; childPhoto: File | null }[]) => {
+    const formData = new FormData();
+
+    // Add the user photo
+    if (userPhoto) {
+      formData.append('image', userPhoto);
+    }
+
+    // Add each child photo with its corresponding ID
+    childPhoto.forEach((cp, index) => {
+      if (cp.childPhoto) {
+        formData.append('image1', cp.childPhoto);
+        formData.append(`childImageIds[${index}]`, cp.id);
+      }
+    });
+
+    // Add the worker details as a JSON string
+    formData.append('worker', JSON.stringify(worker));
+
+    return getStandardResponse<IWorker>(axios.post('/workers', formData,
+      { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } }));
+  },
 
   /**
    * Edits a worker.
@@ -26,8 +46,29 @@ export default {
    * @return {Promise<StandardResponse<IWorker>>} A promise that resolves to the response containing the edited worker.
    */
 
-  edit: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: File | undefined) =>
-    getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`, { worker, image: userPhoto, image1: childPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+  edit: (worker: CreatableIWorker, userPhoto: File | undefined, childPhoto: { id: string; childPhoto: File | null }[]) => {
+    const formData = new FormData();
+
+    // Add the user photo
+    if (userPhoto) {
+      formData.append('image', userPhoto);
+    }
+
+    // Add each child photo with its corresponding ID
+    childPhoto.forEach((cp, index) => {
+      if (cp.childPhoto) {
+        formData.append('image1', cp.childPhoto);
+        formData.append(`childImageIds[${index}]`, cp.id);
+      }
+    });
+
+    // Add the worker details as a JSON string
+    formData.append('worker', JSON.stringify(worker));
+
+    return getStandardResponse<IWorker>(axios.patch(`/workers/${worker._id}`,
+      formData,
+      { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } }));
+  },
 
   /**
    * Deletes a worker.
@@ -232,6 +273,9 @@ export default {
   // deactivate: (id: string) => getStandardResponse<IWorker>(axios.patch(`/workers/${id}/deactivate`, null, { headers: { ...getAuthHeader() } })),
 
   deactivatespouse: (id: string, reason: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),
+
+  deleteSpouse: (id: string) => getStandardResponse<Spouse>(axios.delete(`/workers/spouse/${id}/deleteSpouse`, { headers: { ...getAuthHeader() } })),
+
   activatespouse: (id: string) => getStandardResponse<Spouse>(axios.patch(`/workers/spouse/${id}/activate`, null, { headers: { ...getAuthHeader() } })),
 
   deactivatechild: (id: string, reason: string) => getStandardResponse<Spouse>(axios.patch(`/workers/children/${id}/deactivate`, { reason }, { headers: { ...getAuthHeader() } })),

@@ -75,11 +75,23 @@ const frDashboard = () => {
             <br />
             <br />
             <Grid container spacing={3}>
-              <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
-              </Grid>
 
+              <PermissionChecks
+                permissions={['MANAGE_FR']}
+                granted={(
+                  <Grid item xs={12} md={4} xl={3}>
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                      primaryText="Manage" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
+                  </Grid>
+                )} />
+              <PermissionChecks
+                permissions={['WRITE_FR']}
+                granted={(
+                  <Grid item xs={12} md={4} xl={3}>
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                      primaryText="Manage For Division" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manageForDivision" />
+                  </Grid>
+                )} />
 
               <PermissionChecks
                 permissions={['WRITE_FR']}

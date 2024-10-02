@@ -19,6 +19,16 @@ declare global {
     BeneficiaryBank8: BankDetails;
     BeneficiaryBank9: BankDetails;
     BeneficiaryBank10: BankDetails;
+    BeneficiaryBank11: BankDetails;
+    BeneficiaryBank12: BankDetails;
+    BeneficiaryBank13: BankDetails;
+    BeneficiaryBank14: BankDetails;
+    BeneficiaryBank15: BankDetails;
+    BeneficiaryBank16: BankDetails;
+    BeneficiaryBank17: BankDetails;
+    BeneficiaryBank18: BankDetails;
+    BeneficiaryBank19: BankDetails;
+    BeneficiaryBank20: BankDetails;
     FCRABankDetails?: BankDetails;
     localBankDetails?: BankDetails;
     otherBankDetails?: BankDetails;

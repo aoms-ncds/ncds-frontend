@@ -50,8 +50,10 @@ const StaffFormPage = (props: StaffFormPageProps) => {
   });
 
   const [userPhoto, setUserPhoto] = useState<File>();
-  const [childPhoto, setChildPhoto] = useState<File>();
-
+  const [childPhotos, setChildPhotos] = useState<{ id: string; childPhoto: File | null }[]>([{
+    id: '',
+    childPhoto: null,
+  }]);
   useEffect(() => {
     if (id) {
       StaffServices.getById(id)
@@ -86,10 +88,17 @@ const StaffFormPage = (props: StaffFormPageProps) => {
             setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
 
           },
-          childprofilePic: {
-            childPhoto: childPhoto,
-            setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
-
+          childProfilePic: {
+            childPhoto: childPhotos,
+            setChildPhoto: ((newChildPhoto) =>{
+              const _childPhotos=childPhotos.filter((_pht)=>_pht.id==='');
+              const childPhotosId=_childPhotos.map((_pht)=>_pht.id);
+              if (childPhotosId.includes(newChildPhoto.id)) {
+                setChildPhotos(()=>_childPhotos.map((_pht)=>_pht.id===newChildPhoto.id?newChildPhoto:_pht));
+              } else {
+                setChildPhotos(()=>[..._childPhotos, newChildPhoto]);
+              }
+            }),
           },
           tab: 0,
         }}

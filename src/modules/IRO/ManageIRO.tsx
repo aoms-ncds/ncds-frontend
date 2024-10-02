@@ -207,6 +207,76 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IFSCCode: '',
         beneficiary: '',
       },
+      BeneficiaryBank11: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank12: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank13: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank14: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank15: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank16: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank17: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank18: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank19: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank20: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -271,7 +341,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
-  const [delateModel, setDelateModel] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -426,7 +496,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
-
           // console.log(res.data, 'datgajdfj');
         });
       }
@@ -434,20 +503,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.getAll({ dateRange: dateRange }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        // console.log(res.data, 'datgajdfj');
-      });
+        });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
   // console.log(mngrName, 'mngrName');
 
-  useEffect(() => {
-    ESignatureService.getESignature().then((res) => {
-      setMngrName((res.data as { officeManagerName: string }).officeManagerName);
-    });
-  }, []);
+
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  // Refering to existing method
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
       filename: '',
       size: 0,
       type: 'application/vnd.ms-excel',
@@ -466,12 +548,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     ESignatureService.getESignature()
       .then((res) => {
         console.log({ res });
+        setMngrName((res.data as { officeManagerName: string }).officeManagerName);
         setSignature(res.data as Esignature);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
       });
-    console.log(selectedSignature);
   }, []);
 
   const deleteIRO = (id: string) => {
@@ -489,7 +572,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             return IROrder._id !== id;
           });
           setIROrder(IRO);
-          setDelateModel(false);
+          setDeleteModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -586,7 +669,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   icon: DeleteIcon,
                   onClick: () => {
                     setSelectedIROId(params.row._id);
-                    setDelateModel(true);
+                    setDeleteModel(true);
                     // deleteIRO(params.row._id);
                   },
                 },
@@ -913,7 +996,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         const subCategory3 = params.row.particulars[0]?.subCategory3;
         const subCategory2 = params.row.particulars[0]?.subCategory2;
         const subCategory1 = params.row.particulars[0]?.subCategory1;
-        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '') {
+        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
           return subCategory3;
         } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
           return subCategory2;
@@ -951,16 +1034,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerName: 'Last Updated',
+    //   headerClassName: 'super-app-theme--cell',
+    //   width: 130,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -1026,7 +1109,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -1051,6 +1134,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Last Updated',
+      headerClassName: 'super-app-theme--cell',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1839,7 +1932,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {iroData && mngrName && selectedSignature && FrData && (
 
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -1860,7 +1953,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
@@ -1883,13 +1976,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </>
         </DialogActions>
       </Dialog>
-      <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this IRO?</Typography>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setDelateModel(false)}>Close</Button>
+          <Button onClick={() => setDeleteModel(false)}>Close</Button>
           <Button
             endIcon={<DeleteIcon />}
             variant="contained"
@@ -1898,7 +1991,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               deleteIRO(selectedIROId?.toString() ?? '');
             }}
           >
-            Delate
+            Delete
           </Button>
         </DialogActions>
 

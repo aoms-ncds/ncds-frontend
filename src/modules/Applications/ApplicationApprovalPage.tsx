@@ -8,6 +8,7 @@ import moment from 'moment';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import PermissionChecks from '../User/components/PermissionChecks';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
@@ -84,23 +85,25 @@ const ApplicationApprovalPage = () => {
             </Typography>
 
           </CardContent>
-          <CardActions>
-            <PermissionChecks
-              permissions={['MANAGE_APPLICATION'] || ['PRESIDENT_ACCESS']}
-              granted={(
-                <>
+          {Number(applications?.status) !== CommonLifeCycleStates.APPROVED && (
 
-                  <Button
-                    variant="contained"
-                    color="error"
-                    sx={{ ml: 'auto' }}
-                    onClick={() => {
-                      const snackbarId = enqueueSnackbar({
-                        message: 'Rejecting...',
-                        variant: 'info',
-                      });
+            <CardActions>
+              <PermissionChecks
+                permissions={['MANAGE_APPLICATION'] || ['PRESIDENT_ACCESS']}
+                granted={(
+                  <>
 
-                      ApplicationServices.reject(applicationID as string)
+                    <Button
+                      variant="contained"
+                      color="error"
+                      sx={{ ml: 'auto' }}
+                      onClick={() => {
+                        const snackbarId = enqueueSnackbar({
+                          message: 'Rejecting...',
+                          variant: 'info',
+                        });
+
+                        ApplicationServices.reject(applicationID as string)
                 .then((res) => {
                   closeSnackbar(snackbarId);
                   enqueueSnackbar({
@@ -115,19 +118,19 @@ const ApplicationApprovalPage = () => {
                     variant: 'error',
                   });
                 });
-                    }}
-                  >
+                      }}
+                    >
             Reject
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => {
-                      const snackbarId = enqueueSnackbar({
-                        message: 'Approving...',
-                        variant: 'info',
-                      });
-                      ApplicationServices.approve(applicationID as string)
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => {
+                        const snackbarId = enqueueSnackbar({
+                          message: 'Approving...',
+                          variant: 'info',
+                        });
+                        ApplicationServices.approve(applicationID as string)
                 .then((res) => {
                   closeSnackbar(snackbarId);
                   enqueueSnackbar({
@@ -142,15 +145,16 @@ const ApplicationApprovalPage = () => {
                     variant: 'error',
                   });
                 });
-                    }}
-                  >
+                      }}
+                    >
             Approve
-                  </Button>
-                </>
-              )}
-            />
+                    </Button>
+                  </>
+                )}
+              />
 
-          </CardActions>
+            </CardActions>
+          )}
         </Card></Container>
       <FileUploader
         title="Attachments"

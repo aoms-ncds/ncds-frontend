@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography } from '@mui/material';
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
@@ -36,6 +36,8 @@ const ReconciliationIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [conform, setConform] = useState<boolean>(false);
+  const [conform1, setConform1] = useState<boolean>(false);
   const [attachment, setAttachment] = useState<boolean>(false);
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -137,12 +139,30 @@ const ReconciliationIRO = () => {
       updatedAt: moment(),
     },
   });
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
         console.log({ res });
         setSignature(res.data as Esignature);
         setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
@@ -168,6 +188,7 @@ const ReconciliationIRO = () => {
             setReconcilationIRO(filterIRO);
             // Update local state and UI
             setIroData(null);
+            setConform1(false);
             enqueueSnackbar({
               message: 'File Attached',
               variant: 'success',
@@ -198,9 +219,9 @@ const ReconciliationIRO = () => {
   const filteredRows = (reconciliationIRO ?? []).filter((row) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
@@ -322,6 +343,37 @@ const ReconciliationIRO = () => {
             //   text: 'Remarks',
             //   icon: EditIcon,
             // },
+            {
+              id: 'View',
+              text: 'View Details ',
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
+              icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/iro/${props.row._id}`, '_blank');
+              },
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(props.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: () => {
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
+                },
+              }] : []),
 
             {
               id: 'remarks',
@@ -341,22 +393,44 @@ const ReconciliationIRO = () => {
                   });
               },
             },
-            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: () => {
-                  setAttachment(true);
-                  setSelectedIRO(props.row);
-                },
-              }] : []),
+            // {
+            //   id: 'View',
+            //   text: 'View Details ',
+            //   component: Link,
+            //   to: `/fr/${props.row._id}/view`,
+            //   icon: PreviewIcon,
+            // },
+            // {
+            //   id: 'Reconciliation',
+            //   text: 'Reconciliation',
+            //   icon: EditIcon,
+            // },
+            // {
+            //   id: 'Close IRO',
+            //   text: 'Close IRO',
+            //   icon: PreviewIcon,
+            // },
+            {
+              id: 'Attachments',
+              text: 'Attachments',
+              icon: PrintIcon,
+              onClick: () => {
+                // console.log(props.row.particulars );
+                // props.row.particulars.map((item)=>{
+                setAttachments(props.row.billAttachment);
+                // });
+                console.log(attachments, 'setAttachments(item.attachment);');
+
+                setViewFileUploader(true);
+              },
+            },
             {
               id: 'Close IRO',
               text: 'Close IRO',
               icon: PreviewIcon,
               onClick: () => {
                 setIroData(props.row);
+                setConform(true);
                 if (props?.row.FR) {
                   FRServices.getById(props.row.FR).then((res) => {
                     setFrData(res.data);
@@ -389,37 +463,6 @@ const ReconciliationIRO = () => {
               //         variant: 'error',
               //       });
               //     });
-              },
-            },
-            // {
-            //   id: 'View',
-            //   text: 'View Details ',
-            //   component: Link,
-            //   to: `/fr/${props.row._id}/view`,
-            //   icon: PreviewIcon,
-            // },
-            // {
-            //   id: 'Reconciliation',
-            //   text: 'Reconciliation',
-            //   icon: EditIcon,
-            // },
-            // {
-            //   id: 'Close IRO',
-            //   text: 'Close IRO',
-            //   icon: PreviewIcon,
-            // },
-            {
-              id: 'Attachments',
-              text: 'Attachments',
-              icon: PrintIcon,
-              onClick: () => {
-                // console.log(props.row.particulars );
-                // props.row.particulars.map((item)=>{
-                setAttachments(props.row.billAttachment);
-                // });
-                console.log(attachments, 'setAttachments(item.attachment);');
-
-                setViewFileUploader(true);
               },
             },
           ]}
@@ -535,10 +578,10 @@ const ReconciliationIRO = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -546,7 +589,7 @@ const ReconciliationIRO = () => {
       valueGetter: (params) => {
         const transferredDate = params.row.releaseAmount?.transferredDate;
         if (transferredDate) {
-          const formattedDate = moment(transferredDate).format('YYYY-MM-DD'); // Adjust the format as needed
+          const formattedDate = moment(transferredDate).format('DD/MM/YYYY'); // Adjust the format as needed
           return formattedDate;
         } else {
           return 'N/A';
@@ -570,7 +613,8 @@ const ReconciliationIRO = () => {
       }, renderHeader: () => (<b>Sanctioned Amount</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'specialsanction',
-      renderHeader: () => <b>Special Sanction</b>,
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -591,8 +635,8 @@ const ReconciliationIRO = () => {
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
     {
-      field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
+      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
     },
     {
       field: 'status',
@@ -615,9 +659,13 @@ const ReconciliationIRO = () => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
     },
+    {
+      field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
+    },
   ];
   return (
-    <CommonPageLayout title="Reconciliation IRO">
+    <CommonPageLayout title="For Reconciliation">
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
@@ -898,7 +946,7 @@ const ReconciliationIRO = () => {
           </Button>
         </DialogActions>
       </Dialog> */}
-      <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
+      <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
@@ -906,7 +954,7 @@ const ReconciliationIRO = () => {
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -916,7 +964,7 @@ const ReconciliationIRO = () => {
         <DialogActions>
           <Button
             onClick={() => {
-              setIroData(null);
+              setConform1(false);
             }}
             variant="text"
           >
@@ -927,7 +975,7 @@ const ReconciliationIRO = () => {
 
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
@@ -966,6 +1014,27 @@ const ReconciliationIRO = () => {
         // isStopped={.state.isStopped}
         // isPaused={.state.isPaused}
       />}
+      <Dialog open={Boolean(conform)} onClose={() => setConform(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to close this IRO?</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setConform(false)}>No</Button>
+          <Button
+            // endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              setConform1(true);
+              setConform(false);
+            } }
+          >
+                 Yes
+          </Button>
+        </DialogActions>
+
+      </Dialog>
     </CommonPageLayout>
   );
 };

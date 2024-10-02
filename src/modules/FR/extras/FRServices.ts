@@ -18,6 +18,15 @@ export default {
     updatedAt: moment(fr.updatedAt),
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
+  getAllForDivision: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string }) => getStandardResponse<FR[]>(axios.get('/fr/forDivision/',
+    { params: conditions, headers: { ...getAuthHeader() } }),
+  (data) => data.map((fr: FR) => ({
+    ...fr,
+    FRdate: moment(fr.FRdate),
+    createdAt: moment(fr.createdAt),
+    updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
+  }))),
 
   getAllRemarksById: (fRId: string) =>
     getStandardResponse<Remark[]>(

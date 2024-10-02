@@ -196,6 +196,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           message: res.message,
           variant: 'success',
         });
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -246,6 +247,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
                   };
                   // Create a new object with updated status
+                  console.log(updatedValue, 'updatedValue');
+
                   props.onSubmit(updatedValue); // Invoke props.onSubmit with the value as the argument
                 } else {
                   enqueueSnackbar({
@@ -602,6 +605,23 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                         granted={
                           <Button
                             variant="contained"
+                            color="info"
+                            type="submit"
+                            onClick={() => setSubmit(1)}
+                            // disabled={particulars.length==0}
+                          >
+                        Submit{' '}
+                          </Button>
+                        }
+
+                      />
+                       &nbsp;
+                       &nbsp;
+                      <PermissionChecks
+                        permissions={['WRITE_FR']}
+                        granted={
+                          <Button
+                            variant="contained"
                             color="warning"
                             type="submit"
                             // disabled={particulars.length==0}
@@ -612,22 +632,6 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             Submit to President
                           </Button>
                         }
-                      />
-                  &nbsp;
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <Button
-                            variant="contained"
-                            color="info"
-                            type="submit"
-                            onClick={() => setSubmit(1)}
-                            // disabled={particulars.length==0}
-                          >
-                        Submit{' '}
-                          </Button>
-                        }
-
                       />
                     </>
                   ) : null}
@@ -656,6 +660,31 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
           <DialogContent>
             <Container>
               <Grid container spacing={3}>
+                <Grid item xs={12} >
+                  <Autocomplete
+                    value={selectedMainCategory ?? null}
+                    options={mainCategories ?? []}
+                    getOptionLabel={(mainCategory) => mainCategory.name}
+                    onChange={(e, selectedMainCategory) => {
+                      if (selectedMainCategory) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          mainCategory: selectedMainCategory.name,
+                        }));
+                        props.onChange({
+                          ...props.value,
+                          mainCategory: selectedMainCategory.name,
+                        });
+                        setSelectedMainCategory(selectedMainCategory);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length==0} />}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <Autocomplete
                     disabled={props.disable==true}

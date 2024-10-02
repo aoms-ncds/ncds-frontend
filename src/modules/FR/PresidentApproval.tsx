@@ -50,9 +50,9 @@ const PresidentApproval = () => {
   const filteredRows = (FRRequests ?? []).filter((row) => {
     if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
     (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
-    (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
+    // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
+    //   (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
+    //   (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
@@ -353,15 +353,15 @@ const PresidentApproval = () => {
       },
     },
 
-    {
-      field: 'updatedAt',
-      renderHeader: () => (<b>Last Updated</b>),
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerClassName: 'super-app-theme--cell',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerClassName: 'super-app-theme--cell',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'sanctionedAsPer',
       renderHeader: () => (<b>Special Sanction</b>),
@@ -400,6 +400,15 @@ const PresidentApproval = () => {
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
+    },
+    {
+      field: 'updatedAt',
+      renderHeader: () => (<b>Last Updated</b>),
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
+      align: 'center',
+      headerClassName: 'super-app-theme--cell',
+      headerAlign: 'center',
     },
 
   ];

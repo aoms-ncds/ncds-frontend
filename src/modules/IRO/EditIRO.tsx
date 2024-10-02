@@ -47,6 +47,7 @@ import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import AddIcon from '@mui/icons-material/Add';
+import WorkersServices from '../Workers/extras/WorkersServices';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -222,6 +223,76 @@ const EditIRO = () => {
         IFSCCode: '',
         beneficiary: '',
       },
+      BeneficiaryBank11: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank12: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank13: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank14: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank15: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank16: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank17: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank18: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank19: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank20: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
       createdAt: moment(),
       updatedAt: moment(),
     },
@@ -252,7 +323,28 @@ const EditIRO = () => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   const [sanctionedAsPer, setSanctionedAsPer] = useState<AsPer[]>([]);
   let asPer : any = [];
+  const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
+  const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
 
+  useEffect(() => {
+    if (IRO.purpose === 'Worker') {
+      WorkersServices.getWorkersByDivision()
+        .then((res) => {
+          setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (IRO.purpose === 'Subdivision') {
+      WorkersServices.getSubDivisionsByDivisionId()
+        .then((res) => {
+          setSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }
+  }, [IRO.purpose]);
   useEffect(() => {
     const ddata = SanctionedAsPerService.getAll().then((res) => {
       asPer = res.data.map((e:AsPer)=>e.asPer ); setSanctionedAsPer(asPer);
@@ -308,6 +400,7 @@ const EditIRO = () => {
   //     event.preventDefault();
   //   }
   // };
+  console.log(IRO.purposeWorker, 'ziro');
 
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
@@ -341,7 +434,10 @@ const EditIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) => setIRO(res.data)); // TODO: Implement REST API Call
+    IROServices.getById(iroID).then((res) =>{
+      console.log(res.data, 'frdata');
+      setIRO(res.data);
+    } ); // TODO: Implement REST API Call
   }, [iroID]);
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
@@ -391,39 +487,48 @@ const EditIRO = () => {
                       value={IRO?.purpose}
                       options={purposes ?? []}
                       getOptionLabel={(requisition) => requisition ?? ''}
-                      onChange={
-                        () => { }
-                        // if (selectedPurpose) {
-                        //  setIRO({
-                        //     ...IRO,
-                        //     purpose: selectedPurpose as FRPurpose,
-                        //   });
-                        // }
-                      }
+                      // onChange={
+                      //   () => { }
+                      //   // if (selectedPurpose) {
+                      //   //  setIRO({
+                      //   //     ...IRO,
+                      //   //     purpose: selectedPurpose as FRPurpose,
+                      //   //   });
+                      //   // }
+                      // }
+                      onChange={(_e, selectedPurpose) => {
+                        if (selectedPurpose) {
+                          setIRO({
+                            ...IRO,
+                            purpose: selectedPurpose as FRPurpose,
+                          });
+                        }
+                      }}
                       renderInput={(params) => <TextField {...params} label="Requisition For" />}
                       fullWidth
-                      disabled
+                      // disabled
                     />
                   </Grid>
                   {IRO?.purpose === 'Worker' ? (
                     <>
                       <Grid item xs={12} md={6}>
-                        <Autocomplete
-                          value={IRO?.purposeWorker}
-                          options={[]}
-                          getOptionLabel={(worker) => `${worker.basicDetails.firstName} ${worker.basicDetails.lastName}`}
-                          onChange={() => { }}
-                          //   if (selectedWorker) {
-                          //    setIRO({
-                          //       ...IRO,
-                          //       purposeWorker: selectedWorker,
-                          //     });
-                          //   }
-                          // }}
-                          renderInput={(params) => <TextField {...params} label="Choose Worker" />}
-                          fullWidth
-                          disabled
-                        />
+                        <Grid item xs={12}>
+                          <Autocomplete<IWorker | Staff>
+                            value={IRO.purposeWorker ?? null}
+                            options={(workers ?? [])}
+                            getOptionLabel={(workers) => `${workers?.basicDetails.firstName?? ''} ${workers?.basicDetails?.middleName ?? ''} ${workers.basicDetails.lastName?? ''}`}
+                            onChange={(_e, selectedWorker) => {
+                              if (selectedWorker) {
+                                setIRO({
+                                  ...IRO,
+                                  purposeWorker: selectedWorker,
+                                });
+                              }
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
+                            fullWidth
+                          />
+                        </Grid>
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <TextField
@@ -442,18 +547,21 @@ const EditIRO = () => {
                   {IRO?.purpose === 'Subdivision' ? (
                     <><Grid item xs={12} md={6}>
                       <Autocomplete
-                        options={[]}
-                        value={IRO?.purposeSubdivision}
+                        options={subDivisions ?? []}
+                        value={IRO.purposeSubdivision ? IRO.purposeSubdivision : undefined}
                         getOptionLabel={(subDiv) => subDiv.name}
-                        onChange={() => { } }
+                        onChange={(event, newVal) =>
+                          setIRO({ ...IRO, purposeSubdivision: newVal ?? undefined })
+                        }
                         renderInput={(params) => <TextField {...params} label="Subdivision" />}
-                        disabled />
+                      />
+
                     </Grid><Grid item xs={12} md={6}>
                       <TextField
                         label="Division"
-                        value={IRO.division?.details.name}
+                        value={IRO.division?.details?.name}
                         fullWidth
-                        disabled
+                        // disabled
                         InputLabelProps={{
                           shrink: true,
                         }} />
@@ -570,8 +678,14 @@ const EditIRO = () => {
                       variant="outlined"
                       fullWidth
                       InputLabelProps={{ shrink: true }}
+                      // inputProps={{
+                      //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                      // }}
                       inputProps={{
-                        max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01, // Allows up to two decimal places
+                        onWheel: handleWheel,
                       }}
                       disabled
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -613,7 +727,16 @@ const EditIRO = () => {
                         {IRO?.division?.BeneficiaryBank8?.bankName? <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank9?.bankName? <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}</MenuItem> :'' }
                         {IRO?.division?.BeneficiaryBank10?.bankName? <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}</MenuItem> :'' }
-
+                        {IRO?.division?.BeneficiaryBank11?.bankName? <MenuItem value={'Beneficiary Bank 11'}>Beneficiary Bank 11 - {IRO?.division?.BeneficiaryBank11?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank12?.bankName? <MenuItem value={'Beneficiary Bank 12'}>Beneficiary Bank 12 - {IRO?.division?.BeneficiaryBank12?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank13?.bankName? <MenuItem value={'Beneficiary Bank 13'}>Beneficiary Bank 13 - {IRO?.division?.BeneficiaryBank13?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank14?.bankName? <MenuItem value={'Beneficiary Bank 14'}>Beneficiary Bank 14 - {IRO?.division?.BeneficiaryBank14?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank15?.bankName? <MenuItem value={'Beneficiary Bank 15'}>Beneficiary Bank 15 - {IRO?.division?.BeneficiaryBank15?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank16?.bankName? <MenuItem value={'Beneficiary Bank 16'}>Beneficiary Bank 16 - {IRO?.division?.BeneficiaryBank16?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank17?.bankName? <MenuItem value={'Beneficiary Bank 17'}>Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank18?.bankName? <MenuItem value={'Beneficiary Bank 18'}>Beneficiary Bank 18 - {IRO?.division?.BeneficiaryBank18?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank19?.bankName? <MenuItem value={'Beneficiary Bank 19'}>Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}</MenuItem> :'' }
+                        {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' }
                         {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                       </Select>
                     </FormControl>
@@ -884,6 +1007,24 @@ const EditIRO = () => {
           <DialogContent>
             <Container>
               <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Autocomplete
+                    value={selectedMainCategory ?? null}
+                    options={mainCategories ?? []}
+                    getOptionLabel={(mainCategory) => mainCategory.name}
+                    onChange={(e, selectedMainCategory) => {
+                      if (selectedMainCategory) {
+                        setNewParticular((particularDetails) => ({
+                          ...particularDetails,
+                          mainCategory: selectedMainCategory.name,
+                        }));
+                        setSelectedMainCategory(selectedMainCategory);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Main Category" />}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <Autocomplete
                     value={selectedSubCategory1}
@@ -1131,8 +1272,14 @@ const EditIRO = () => {
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  // inputProps={{
+                  //   max: totalRequestedAmount, min: 0,
+                  //   onWheel: handleWheel,
+                  // }}
                   inputProps={{
-                    max: totalRequestedAmount, min: 0,
+                    max: totalRequestedAmount,
+                    min: 0,
+                    step: 0.01, // Allows up to two decimal places
                     onWheel: handleWheel,
                   }}
                 // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}

@@ -246,12 +246,12 @@ const Profile = () => {
                     </Typography>
                     {((user as unknown as IWorker)?.basicDetails.dateOfBirth?.fromNow() || '').replace(' ago', '')}
                   </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Gender: </Typography> {user?.basicDetails.gender?.gender?? 'Not Selected'} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Field: </Typography> {user?.basicDetails.field} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Marital Status: </Typography> {user?.basicDetails.martialStatus} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse Of: </Typography> {user?.basicDetails.spouseOf as any ?? ''} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Spouse Of: </Typography> {`${user?.basicDetails.spouseOf?.basicDetails.firstName?? 'Not selected'} ${user?.basicDetails.spouseOf?.basicDetails.middleName ?? ''} ${user?.basicDetails.spouseOf?.basicDetails.lastName ?? ''}`} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Highest Qualification: </Typography> {user?.basicDetails.highestQualification} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Religion: </Typography> {user?.basicDetails.religion} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Religion: </Typography> {user?.basicDetails.religion?.religion ?? 'Not Selected'} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Mother Tongue: </Typography> {user?.basicDetails.motherTongue?.name} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Communication Language: </Typography> {user?.basicDetails.communicationLanguage?.name} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known Languages: </Typography> {user?.basicDetails.knownLanguages?.map((lang) => lang.name).join(', ')} </Grid>
@@ -413,7 +413,7 @@ const Profile = () => {
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                               }}
-                              src={`${child?.childProfile}`}
+                              src={`${child?.childProfile?.replace('uc', 'thumbnail')}`}
                               alt={`${user?.basicDetails.firstName}`}
                             />
                           </Grid>
