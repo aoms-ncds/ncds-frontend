@@ -77,7 +77,7 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
-  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -760,13 +760,14 @@ const ManageFrPage = () => {
                       <FormControl>
                         <RadioGroup
                           aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]:[])}
+                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
+                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
                           name="Filter"
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts or Reverted" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
