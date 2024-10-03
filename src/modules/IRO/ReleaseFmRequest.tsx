@@ -1394,8 +1394,12 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                           });
                           setNewTest(releaseAmountIROs);
                         }}
-                        getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
-                        style={{ height: '65vh', width: '100%' }}
+                        getRowClassName={(params) => {
+                          if (params.row.specialsanction == 'Yes') {
+                            return 'special-sanction'; // Class for rows with special sanction
+                          }
+                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                        }} style={{ height: '65vh', width: '100%' }}
                         // rowSelectionModel={selectedIROrelease}
                         //
                       />

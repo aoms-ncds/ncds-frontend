@@ -883,9 +883,12 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           return selectedIROs;
                         });
                       }}
-                      getRowClassName={(params) =>
-                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                      }
+                      getRowClassName={(params) => {
+                        if (params.row.specialsanction == 'Yes') {
+                          return 'special-sanction'; // Class for rows with special sanction
+                        }
+                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                      }}
                       style={{ height: '80vh', width: '100%' }}
                       // rowSelectionModel={selectedIROrelease}
                       //
