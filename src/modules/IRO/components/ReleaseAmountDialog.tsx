@@ -505,7 +505,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                     fullWidth
                     disabled
                     InputLabelProps={{
-                      shrink: Boolean(releaseAmount?.transferredBank?.beneficiary),
+                      shrink: true,
                     }}
                   />
                 </Grid>

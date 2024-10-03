@@ -503,7 +503,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.getAll({ dateRange: dateRange }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        });
+      });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
   // console.log(mngrName, 'mngrName');
