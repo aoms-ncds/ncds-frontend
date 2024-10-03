@@ -121,6 +121,7 @@ const ReconciliationIRO = () => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [mngrName, setMngrName] = useState('');
   // const [openPrintIro, setOpenPrintIro] = useState(false);
+  const [FR, setFR] = useState<FR>();
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -169,7 +170,11 @@ const ReconciliationIRO = () => {
       });
     console.log(selectedSignature);
   }, []);
-
+  useEffect(()=>{
+    FRServices.getById(iroData?.FR ?? '').then((res)=>{
+      setFR(res.data);
+    });
+  }, [iroData]);
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -950,7 +955,7 @@ const ReconciliationIRO = () => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-          Do you want to close {iroData?.IROno}?
+            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <PDFDownloadLink
@@ -1016,7 +1021,7 @@ const ReconciliationIRO = () => {
       />}
       <Dialog open={Boolean(conform)} onClose={() => setConform(false)}>
         <DialogContent>
-          <Typography sx={{ color: 'red' }}>Are you sure you want to close this IRO?</Typography>
+          <Typography sx={{ color: 'red' }}>{`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FR?.FRno?? ''} ?`}</Typography>
         </DialogContent>
 
         <DialogActions>

@@ -38,6 +38,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
+  const [FR, setFR] = useState<FR | null>(null);
   const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
@@ -88,7 +89,16 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, []);
-  console.log(statusFilter, 'statusFilter');
+  useEffect(() => {
+    FRServices.getById(selectedFR?? '')
+      .then((res) => {
+        setFR(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [selectedFR]);
+  console.log(selectedFR, 'statusFilter');
 
   const deleteFR = (id: string) => {
     console.log(id, 'log');
@@ -1069,7 +1079,7 @@ const ManageFrPage = () => {
             </Dialog>
             <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
               <DialogContent>
-                <Typography sx={{ color: 'red' }}>Are you sure you want to delete this FR?</Typography>
+                <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this FR No ${FR?.FRno} from  ${FR?.division?.details.name} ?`}</Typography>
               </DialogContent>
 
               <DialogActions>
