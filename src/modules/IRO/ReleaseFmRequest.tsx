@@ -1961,7 +1961,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-          Do you want to close {iroData?.IROno}?
+            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
 

@@ -331,6 +331,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
+  const [IRO, setIRO] = useState<IROrder>();
+  const [FR, setFR] = useState<FR>();
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -348,7 +350,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
-  console.log(releaseAmountIROs, '#ODD');
+  console.log(FR, '#ODD');
   console.log(newTest, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
@@ -401,6 +403,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+    // IROServices.getById(selectedIROId ?? '').then((res)=>{
+    //   setIRO(res.data);
+    // });
+    FRServices.getById(IRO?.FR ?? '').then((res)=>{
+      setFR(res.data);
+    });
+  }, [selectedIROId]);
 
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -503,7 +514,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.getAll({ dateRange: dateRange }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        });
+      });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData]);
   // console.log(mngrName, 'mngrName');
@@ -670,6 +681,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   onClick: () => {
                     setSelectedIROId(params.row._id);
                     setDeleteModel(true);
+                    setIRO(params.row);
                     // deleteIRO(params.row._id);
                   },
                 },
@@ -1964,7 +1976,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-            Do you want to close {iroData?.IROno}?
+            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName && selectedSignature && FrData && (
 
@@ -2015,7 +2027,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       </Dialog>
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
-          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this IRO?</Typography>
+          <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this IRO No ${IRO?.IROno?? '...'} from ${IRO?.division?.details?.name?? '...'} related to FR No ${FR?.FRno?? ''} ?`}</Typography>
         </DialogContent>
 
         <DialogActions>
