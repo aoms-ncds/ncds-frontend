@@ -817,7 +817,12 @@ const ManageFrPage = () => {
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
                       style={{ height: '66vh', width: '100%' }}
-                      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
+                      getRowClassName={(params) => {
+                        if (params.row.specialsanction == 'Yes') {
+                          return 'special-sanction'; // Class for rows with special sanction
+                        }
+                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                      }}
                     />
                   </Box>
                 </Card>
