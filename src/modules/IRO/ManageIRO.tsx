@@ -1134,6 +1134,43 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedBank?.split('-')[0] || ''}
+        </p>
+      ),
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'beneficiary',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Beneficiary Name',
+      width: 200,
+      renderHeader: () => <b>Beneficiary Name</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedBank?.split('-')[1] || ''}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
     },
