@@ -2,7 +2,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -45,10 +45,12 @@ import Animations from '../../Animations';
 import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
+import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -416,7 +418,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
+        IROServices.getAll({ status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -427,7 +429,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Local' })
+        IROServices.getAll({ status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
             setNotFound(true);
@@ -493,19 +495,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
+        IROServices.getAll({ status: statusFilter }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
           // console.log(res.data, 'datgajdfj');
         });
       }
     } else {
-      IROServices.getAll({ dateRange: dateRange }).then((res) => {
+      IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-        });
+      });
     }
-  }, [openRelease, attachment, addSignature, dateRange, iroData]);
+  }, [openRelease, attachment, addSignature, dateRange, iroData, statusFilter]);
   // console.log(mngrName, 'mngrName');
 
 
@@ -1189,6 +1191,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
       }
     >
+
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
@@ -1260,6 +1263,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </Button>
                     }
                   />
+                  <Grid item sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }} >
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE)?'WFA':'ALL'}
+                        onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]:[])}
+                        name="Filter"
+                        row
+                      >
+                        <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                        <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
