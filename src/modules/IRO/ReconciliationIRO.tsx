@@ -22,6 +22,7 @@ import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import FRServices from '../FR/extras/FRServices';
+import ReleaseAmount from './components/ReleaseAmountDialog';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -30,6 +31,9 @@ const ReconciliationIRO = () => {
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [openRelease, setOpenRelease] = useState(false);
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
+  const [newTest, setNewTest] = useState<IROrder[]>([]);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -369,6 +373,16 @@ const ReconciliationIRO = () => {
               },
 
             },
+            ...(props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
+              [
+                {
+                  id: 'Release',
+                  text: 'View Release Amount',
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
             ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
               {
                 id: 'Reconciliation',
@@ -1040,6 +1054,8 @@ const ReconciliationIRO = () => {
         </DialogActions>
 
       </Dialog>
+      <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+
     </CommonPageLayout>
   );
 };

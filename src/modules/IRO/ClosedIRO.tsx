@@ -25,6 +25,7 @@ import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
 import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
+import ReleaseAmount from './components/ReleaseAmountDialog';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -38,6 +39,7 @@ const ClosedIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -45,6 +47,8 @@ const ClosedIRO = () => {
   const [mngrName, setMngrName] = useState('');
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
+  const [openRelease, setOpenRelease] = useState(false);
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -203,6 +207,16 @@ const ClosedIRO = () => {
               },
 
             },
+            ...(props.row.status >= IROLifeCycleStates.IRO_CLOSED ?
+              [
+                {
+                  id: 'Release',
+                  text: 'View Release Amount',
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
             {
               id: 'remarks',
               text: 'Remarks',
@@ -768,6 +782,8 @@ const ClosedIRO = () => {
         getFiles={attachments}
 
       />
+      <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+
     </CommonPageLayout>
   );
 };
