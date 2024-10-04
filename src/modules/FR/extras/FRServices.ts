@@ -78,7 +78,7 @@ export default {
   addParticulars: (particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
-  getById: (fRId: string) =>
+  getById: (fRId?: string) =>
     getStandardResponse<FR>(
       axios.get(`/fr/${fRId}`, { headers: { ...getAuthHeader() } }),
       (data) => ({

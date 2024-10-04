@@ -406,14 +406,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   };
 
-  useEffect(()=>{
-    // IROServices.getById(selectedIROId ?? '').then((res)=>{
-    //   setIRO(res.data);
-    // });
-    FRServices.getById(IRO?.FR ?? '').then((res)=>{
-      setFR(res.data);
-    });
-  }, [selectedIROId]);
+  // useEffect(()=>{
+  //   // IROServices.getById(selectedIROId ?? '').then((res)=>{
+  //   //   setIRO(res.data);
+  //   // });
+  //   FRServices.getById(IRO?.FR ?? '').then((res)=>{
+  //     setFR(res.data);
+  //   });
+  // }, [selectedIROId]);
 
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -681,6 +681,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
+                    FRServices.getById(params.row.FR?? '').then((res) => {
+                      console.log(res.data, 'daa');
+                      setFR(res.data);
+                    });
                     setSelectedIROId(params.row._id);
                     setDeleteModel(true);
                     setIRO(params.row);

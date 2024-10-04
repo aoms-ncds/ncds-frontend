@@ -89,15 +89,7 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, []);
-  useEffect(() => {
-    FRServices.getById(selectedFR?? '')
-      .then((res) => {
-        setFR(res.data);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, [selectedFR]);
+
   console.log(selectedFR, 'statusFilter');
 
   const deleteFR = (id: string) => {
@@ -264,6 +256,9 @@ const ManageFrPage = () => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
+                    FRServices.getById(props.row._id?? '').then((res) => {
+                      setFR(res.data);
+                    });
                     // deleteFR(props.row._id);
                     setSelectedFR(props.row._id);
                     setDeleteModel(true);
@@ -429,6 +424,8 @@ const ManageFrPage = () => {
           return clsx('red');
         case 'WAITING FOR PRESIDENT':
           return clsx('orange');
+        case 'IRO DISAPPROVED':
+          return clsx('red-dark');
         default:
           console.log('No class applied');
           return '';
@@ -450,6 +447,9 @@ const ManageFrPage = () => {
           break;
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+        case 'IRO_REJECTED':
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
           break;
           // Add more cases for other status names you want to change
         default:
@@ -819,6 +819,9 @@ const ManageFrPage = () => {
                       },
                       '& .red-light': {
                         backgroundColor: '#ff7f7f',
+                      },
+                      '& .red-dark': {
+                        backgroundColor: '#c90606',
                       },
                     }}
                   >
