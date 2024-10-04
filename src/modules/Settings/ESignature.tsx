@@ -16,8 +16,10 @@ const ESignature = () => {
   const [showOfficeManagerUploader, setShowOfficeManagerFileUploader] = useState(false);
   const [showOfficeManagerName, setShowOfficeManagerName] = useState(false);
   const [showPresidentUploader, setShowPresidentFileUploader] = useState(false);
+  const [showPresidentEmail, setShowPresidentEmail] = useState(false);
   const [addSignature, toggleAddSignature] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -35,7 +37,7 @@ const ESignature = () => {
       updatedAt: moment(),
     },
   });
-  console.log(name, 'shibinc');
+  console.log(email, 'shibinc');
 
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -63,6 +65,20 @@ const ESignature = () => {
         .then((res) => {
           setShowOfficeManagerName(false);
           console.log('ESignature added successfully');
+        })
+        .catch((error) => {
+          console.error('Error adding eSignature:', error);
+        });
+  };
+  const submitDataEmail= ()=>{
+    ESignatureService.addOfficeMnrEmail(email)
+        .then((res) => {
+          setShowPresidentEmail(false);
+          console.log('ESignature added successfully');
+          enqueueSnackbar({
+            message: 'Email id added successfully',
+            variant: 'success',
+          });
         })
         .catch((error) => {
           console.error('Error adding eSignature:', error);
@@ -121,8 +137,11 @@ const ESignature = () => {
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
+        console.log(res.data, 'er');
+
         // const name : {name:string}= res.data
         setName((res.data as {officeManagerName:string }).officeManagerName);
+        setEmail((res.data as {presidentEmail:string }).presidentEmail);
       })
       .catch((res) => {
         console.log(res);
@@ -192,6 +211,19 @@ const ESignature = () => {
                   >
                     {' '}
                     President Signature
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPresidentEmail(true);
+                    }}
+                  >
+                    {' '}
+                    President Email
                   </Button>
                 </Grid>
                 <Grid item xs={12}>
@@ -309,6 +341,36 @@ const ESignature = () => {
               <DialogActions>
                 <Button onClick={()=>setShowOfficeManagerName(false)}>Cancel</Button>
                 <Button onClick={submitData}>Add</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={showPresidentEmail}
+              onClose={() => setShowPresidentEmail(false)}
+            >
+              <DialogTitle>President Email</DialogTitle>
+              <DialogContent>
+                {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="email"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                  value={email}
+                  onChange={(e: any) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=>setShowPresidentEmail(false)}>Cancel</Button>
+                <Button onClick={submitDataEmail}>Add</Button>
               </DialogActions>
             </Dialog>
             <FileUploader
