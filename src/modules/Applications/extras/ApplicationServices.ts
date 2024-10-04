@@ -18,6 +18,7 @@ export default {
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),
   approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`, null, { headers: { ...getAuthHeader() } })),
   reject: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, null, { headers: { ...getAuthHeader() } })),
+  // sentToPresident: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/sentTopresident`, null, { headers: { ...getAuthHeader() } })),
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (application: CreatableApplication) => {
@@ -25,6 +26,29 @@ export default {
       new Promise((resolve, rejects) => {
         axios
           .post('/application', {
+            ...application,
+            application: {
+              name: application.name,
+              reason: application.reason,
+              status: application.status,
+            },
+          }, { headers: { ...getAuthHeader() } })
+
+          .then(async (application) => {
+            try {
+              resolve(application);
+            } catch (error) {
+              rejects(error);
+            }
+          });
+      }),
+    );
+  },
+  sentToPresident: (application: CreatableApplication) => {
+    return getStandardResponse<Application>(
+      new Promise((resolve, rejects) => {
+        axios
+          .post('/application/sentTopresident', {
             ...application,
             application: {
               name: application.name,

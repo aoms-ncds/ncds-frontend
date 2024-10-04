@@ -21,6 +21,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
+import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -237,7 +238,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     } else if (props.action == 'president') {
-      ApplicationServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
         .then((res) => {
           setApplications(res.data);
         })
@@ -403,41 +404,41 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
-        <GridLinkAction
-          key={3}
-          label="Forward to president"
-          icon={<ArrowForwardIcon />}
-          showInMenu
-          onClick={() => {
-            setStatusId(params.id as string);
-            const snackbarId = enqueueSnackbar({
-              message: 'Activating...',
-              variant: 'info',
-            });
-            ApplicationServices.active(params.id as string)
-              .then((res) => {
-                if (applications) {
-                  const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
-                  });
-                  setApplications(filteredApplications);
-                }
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-              })
-              .catch((err) => {
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
-          }}
-        />,
+        // props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        // <GridLinkAction
+        //   key={3}
+        //   label="Forward to president"
+        //   icon={<ArrowForwardIcon />}
+        //   showInMenu
+        //   onClick={() => {
+        //     setStatusId(params.id as string);
+        //     const snackbarId = enqueueSnackbar({
+        //       message: 'Activating...',
+        //       variant: 'info',
+        //     });
+        //     ApplicationServices.active(params.id as string)
+        //       .then((res) => {
+        //         if (applications) {
+        //           const filteredApplications = applications?.filter((application) => {
+        //             return application._id !== params.id;
+        //           });
+        //           setApplications(filteredApplications);
+        //         }
+        //         closeSnackbar(snackbarId);
+        //         enqueueSnackbar({
+        //           message: res.message,
+        //           variant: 'success',
+        //         });
+        //       })
+        //       .catch((err) => {
+        //         closeSnackbar(snackbarId);
+        //         enqueueSnackbar({
+        //           message: err.message,
+        //           variant: 'error',
+        //         });
+        //       });
+        //   }}
+        // />,
         props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
@@ -523,8 +524,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       headerAlign: 'center',
       valueGetter: (params) => {
         return params.value == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
-          params.value == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
-            params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+          params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+            params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
               params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
     },
@@ -572,6 +573,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
                     Attachments
+                  </Button>
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                     .then((res) => {
+                       // handleClose();
+                       // closeSnackbar(snackbarId);
+                       setShowApplicationFormDialog(false);
+                       enqueueSnackbar({
+                         message: res.message,
+                         variant: 'success',
+                       });
+                     });
+                  }}>
+                    Sent to president
                   </Button>
                 </Grid>
               </Grid>
@@ -665,9 +682,10 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                               application.createdBy && (application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
                               application.division?.details?.name,
                               Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
-                                Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
+                                Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'WAITING FOR PRESIDENT' :
                                   Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
                                     Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ',
+                              Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
                             ])) :
                             [];
                         const headers = [

@@ -7,6 +7,7 @@ import ApplicationServices from './extras/ApplicationServices';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import FRCountCard from '../FR/components/FRCountCard';
 import { useAuth } from '../../hooks/Authentication';
+import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 
 
 const APPDashboard = () => {
@@ -30,7 +31,7 @@ const APPDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
       .then((res) =>setApplicationActiveCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
 
       .catch((error) => {
@@ -51,7 +52,7 @@ const APPDashboard = () => {
       .then((res) => {
         setApplications(res.data.length);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+    ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
       .then((res) => {
         setApplicationsPresident(res.data.length);
       });
