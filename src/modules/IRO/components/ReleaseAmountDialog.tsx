@@ -98,9 +98,9 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
       const data = props.data[0];
       const division = data?.division;
-      const sanctionedBank = data?.sanctionedBank;
+      const sanctionedBank = data?.sanctionedBank.split(' - ')[0];
       console.log(division, 'division2');
-      console.log(sanctionedBank, 'division2');
+      console.log(sanctionedBank, 'division23');
 
       const getTransferredBank = () => {
         switch (sanctionedBank) {

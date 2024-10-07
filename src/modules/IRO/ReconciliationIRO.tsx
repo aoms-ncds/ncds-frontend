@@ -174,11 +174,11 @@ const ReconciliationIRO = () => {
       });
     console.log(selectedSignature);
   }, []);
-  useEffect(()=>{
-    FRServices.getById(iroData?.FR ?? '').then((res)=>{
-      setFR(res.data);
-    });
-  }, [iroData]);
+  // useEffect(()=>{
+  //   FRServices.getById(iroData?.FR ?? '').then((res)=>{
+  //     setFR(res.data);
+  //   });
+  // }, [iroData]);
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -352,6 +352,16 @@ const ReconciliationIRO = () => {
             //   text: 'Remarks',
             //   icon: EditIcon,
             // },
+            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+              {
+                id: 'Reconciliation',
+                text: 'Reconciliation',
+                icon: EditIcon,
+                onClick: () => {
+                  setAttachment(true);
+                  setSelectedIRO(props.row);
+                },
+              }] : []),
             {
               id: 'View',
               text: 'View Details ',
@@ -383,16 +393,16 @@ const ReconciliationIRO = () => {
                 },
               ] :
               []),
-            ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
-              {
-                id: 'Reconciliation',
-                text: 'Reconciliation',
-                icon: EditIcon,
-                onClick: () => {
-                  setAttachment(true);
-                  setSelectedIRO(props.row);
-                },
-              }] : []),
+            // ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
+            //   {
+            //     id: 'Reconciliation',
+            //     text: 'Reconciliation',
+            //     icon: EditIcon,
+            //     onClick: () => {
+            //       setAttachment(true);
+            //       setSelectedIRO(props.row);
+            //     },
+            //   }] : []),
 
             {
               id: 'remarks',
@@ -449,7 +459,7 @@ const ReconciliationIRO = () => {
               icon: PreviewIcon,
               onClick: () => {
                 setIroData(props.row);
-                setConform(true);
+                setConform1(true);
                 if (props?.row.FR) {
                   FRServices.getById(props.row.FR).then((res) => {
                     setFrData(res.data);
