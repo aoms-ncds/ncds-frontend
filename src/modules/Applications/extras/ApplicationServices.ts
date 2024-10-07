@@ -15,6 +15,7 @@ export default {
   getCount: (conditions?: { status?: number }) => getStandardResponse<number>(axios.get('/application/count', { params: conditions, headers: { ...getAuthHeader() } })),
   getAll: (conditions?: { status?: number }) => getStandardResponse<Application[]>(axios.get('/application', { params: conditions, headers: { ...getAuthHeader() } })),
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
+  addRemark: (applicationID: string, remark: string) => getStandardResponse<Application>(axios.patch(`/application/remark/${applicationID}`, { remark }, { headers: { ...getAuthHeader() } })),
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),
   approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`, null, { headers: { ...getAuthHeader() } })),
   reject: (applicationID: string, reason: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, { reason }, { headers: { ...getAuthHeader() } })),

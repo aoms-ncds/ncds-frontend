@@ -30,6 +30,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
   const [reasonDialog, setReasonDialog] = useState(false);
+  const [remarkDialog, setRemarkDialog] = useState(false);
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
@@ -227,6 +228,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   });
   const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
+  const [remark, setRemark] = useState<IReason | null | string>();
 
 
   const showLinkAction = props.action === 'manage';
@@ -376,6 +378,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setShowApplicationFormDialog(true);
           }}
         />,
+        <GridLinkAction
+          key={2}
+          label="Add Remark"
+          icon={<EditIcon />}
+          showInMenu
+          onClick={() => {
+            setRemarkDialog(true);
+            setEditId(params.id as string);
+          }}
+        />,
         (props.action == 'hr' || props.action == 'president') && (hasPermissions(['MANAGE_APPLICATION']) || hasPermissions(['PRESIDENT_ACCESS'])) &&
         <GridLinkAction
           key={3}
@@ -513,6 +525,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'division', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
         <p> {props.row.division?.details?.name}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
+    },
+    {
+      field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Remark</b>), renderCell: (props) =>
+        <p> {props.row?.remark?? 'N/A'}</p>,
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
@@ -836,6 +853,48 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                   });
                 });
               setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={remarkDialog} fullWidth maxWidth="md">
+        <DialogTitle>Remark</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
+            label="Remark"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setRemarkDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={async () => {
+              ApplicationServices.addRemark(editid as string, remark as string)
+              .then((res) => setApplicationFormState(res.data));
+              const snackbarId = enqueueSnackbar({
+                message: 'Remark added...',
+                variant: 'success',
+              });
+              setRemarkDialog(false);
+              window.location.reload();
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >
