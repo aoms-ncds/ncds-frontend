@@ -70,6 +70,7 @@ const ApplicationManagePages = () => {
     { field: '_id', headerName: 'S.No', width: 250 },
     { field: 'name', headerName: 'name', width: 250 },
     { field: 'reason', headerName: 'Reason', width: 250 },
+    { field: 'presidentSanction', headerName: 'President Sanction', width: 250 },
     { field: 'status', headerName: 'Status', width: 300 },
   ];
 

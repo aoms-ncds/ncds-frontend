@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -21,12 +21,16 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
+import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
+import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
+  const [reasonDialog, setReasonDialog] = useState(false);
+  const [remarkDialog, setRemarkDialog] = useState(false);
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
@@ -222,6 +226,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     attachment: [],
   });
+  const [reason, setReason] = useState<IReason[]>([]);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
+  const [remark, setRemark] = useState<IReason | null | string>();
 
 
   const showLinkAction = props.action === 'manage';
@@ -237,7 +244,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     } else if (props.action == 'president') {
-      ApplicationServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+      ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
         .then((res) => {
           setApplications(res.data);
         })
@@ -259,6 +266,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     }
+    ReasonforDeactivationService.getAll().then((res) => {
+      setReason(res.data);
+    });
   }, []);
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
@@ -368,6 +378,16 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setShowApplicationFormDialog(true);
           }}
         />,
+        <GridLinkAction
+          key={2}
+          label="Add Remark"
+          icon={<EditIcon />}
+          showInMenu
+          onClick={() => {
+            setRemarkDialog(true);
+            setEditId(params.id as string);
+          }}
+        />,
         (props.action == 'hr' || props.action == 'president') && (hasPermissions(['MANAGE_APPLICATION']) || hasPermissions(['PRESIDENT_ACCESS'])) &&
         <GridLinkAction
           key={3}
@@ -403,41 +423,41 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
-        <GridLinkAction
-          key={3}
-          label="Forward to president"
-          icon={<ArrowForwardIcon />}
-          showInMenu
-          onClick={() => {
-            setStatusId(params.id as string);
-            const snackbarId = enqueueSnackbar({
-              message: 'Activating...',
-              variant: 'info',
-            });
-            ApplicationServices.active(params.id as string)
-              .then((res) => {
-                if (applications) {
-                  const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
-                  });
-                  setApplications(filteredApplications);
-                }
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-              })
-              .catch((err) => {
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
-          }}
-        />,
+        // props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        // <GridLinkAction
+        //   key={3}
+        //   label="Forward to president"
+        //   icon={<ArrowForwardIcon />}
+        //   showInMenu
+        //   onClick={() => {
+        //     setStatusId(params.id as string);
+        //     const snackbarId = enqueueSnackbar({
+        //       message: 'Activating...',
+        //       variant: 'info',
+        //     });
+        //     ApplicationServices.active(params.id as string)
+        //       .then((res) => {
+        //         if (applications) {
+        //           const filteredApplications = applications?.filter((application) => {
+        //             return application._id !== params.id;
+        //           });
+        //           setApplications(filteredApplications);
+        //         }
+        //         closeSnackbar(snackbarId);
+        //         enqueueSnackbar({
+        //           message: res.message,
+        //           variant: 'success',
+        //         });
+        //       })
+        //       .catch((err) => {
+        //         closeSnackbar(snackbarId);
+        //         enqueueSnackbar({
+        //           message: err.message,
+        //           variant: 'error',
+        //         });
+        //       });
+        //   }}
+        // />,
         props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
@@ -445,31 +465,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           icon={<CloseIcon />}
           showInMenu
           onClick={() => {
-            const snackbarId = enqueueSnackbar({
-              message: 'Rejecting...',
-              variant: 'info',
-            });
-            ApplicationServices.reject(params.id as string)
-              .then((res) => {
-                if (applications) {
-                  const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
-                  });
-                  setApplications(filteredApplications);
-                }
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-              })
-              .catch((err) => {
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
+            setReasonDialog(true);
+            setStatusId(params.id as string);
           }}
         />,
       ].filter((action) => action !== false) as JSX.Element[]),
@@ -500,6 +497,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 250,
     },
     {
+      field: 'presidentSanction', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>President Sanction</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row.presidentSanction? 'Yes' : 'No'}
+        </p>),
+      width: 250,
+    },
+    {
       field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         // <p> {props.row.createdBy?.basicDetails.firstName  + ' ' + props.row.createdBy?.basicDetails?.middleName + ' ' + props.row.createdBy?.basicDetails.lastName} </p>,
         <p>
@@ -515,6 +528,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 170, headerAlign: 'center', align: 'center',
     },
     {
+      field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Remark</b>), renderCell: (props) =>
+        <p> {props.row?.remark?? 'N/A'}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
+    },
+    {
       field: 'status',
       headerClassName: 'super-app-theme--header',
       renderHeader: () => (<b>Status</b>),
@@ -523,10 +541,15 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       headerAlign: 'center',
       valueGetter: (params) => {
         return params.value == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
-          params.value == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
-            params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+          params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+            params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
               params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
+    },
+    {
+      field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
+        <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
     },
   ];
   return (
@@ -572,6 +595,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                 <Grid item md={6}>
                   <Button variant="contained" onClick={() => setShowFileUploader(true)} startIcon={<AttachmentIcon />}>
                     Attachments
+                  </Button>
+                </Grid>
+                <Grid item md={6}>
+                  <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                    ApplicationServices.sentToPresident(applicationFormState)
+                     .then((res) => {
+                       // handleClose();
+                       // closeSnackbar(snackbarId);
+                       setShowApplicationFormDialog(false);
+                       enqueueSnackbar({
+                         message: res.message,
+                         variant: 'success',
+                       });
+                     });
+                  }}>
+                    Sent to president
                   </Button>
                 </Grid>
               </Grid>
@@ -665,15 +704,17 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                               application.createdBy && (application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
                               application.division?.details?.name,
                               Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
-                                Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'Waiting for President' :
+                                Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'WAITING FOR PRESIDENT' :
                                   Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
                                     Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ',
+                              Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
                             ])) :
                             [];
                         const headers = [
                           'Application No',
                           'Name',
                           'Reason',
+                          'President Sanction',
                           'Applied By',
                           'Division',
                           'Status',
@@ -757,7 +798,111 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Grid>
 
         </Card>
+
       </Grid>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setReasonForDeactivation(e.target.value)}
+            label="Reason for rejection"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+              ApplicationServices.reject(statusId as string, reasonForDeactivation as string)
+                .then((res) => {
+                  if (applications) {
+                    const filteredApplications = applications?.filter((application) => {
+                      return application._id !== statusId;
+                    });
+                    setApplications(filteredApplications);
+                  }
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+                .catch((err) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={remarkDialog} fullWidth maxWidth="md">
+        <DialogTitle>Remark</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={remark}
+            onChange={(e) => setRemark(e.target.value)}
+            label="Remark"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setRemarkDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={async () => {
+              ApplicationServices.addRemark(editid as string, remark as string)
+              .then((res) => setApplicationFormState(res.data));
+              const snackbarId = enqueueSnackbar({
+                message: 'Remark added...',
+                variant: 'success',
+              });
+              setRemarkDialog(false);
+              window.location.reload();
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </CommonPageLayout>
   );
 };
