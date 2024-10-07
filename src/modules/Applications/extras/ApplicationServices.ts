@@ -17,7 +17,7 @@ export default {
   getById: (applicationID: string) => getStandardResponse<Application>(axios.get(`/application/${applicationID}`, { headers: { ...getAuthHeader() } })),
   active: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/active`, null, { headers: { ...getAuthHeader() } })),
   approve: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/approve`, null, { headers: { ...getAuthHeader() } })),
-  reject: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, null, { headers: { ...getAuthHeader() } })),
+  reject: (applicationID: string, reason: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/reject`, { reason }, { headers: { ...getAuthHeader() } })),
   // sentToPresident: (applicationID: string) => getStandardResponse<Application>(axios.patch(`/application/${applicationID}/sentTopresident`, null, { headers: { ...getAuthHeader() } })),
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

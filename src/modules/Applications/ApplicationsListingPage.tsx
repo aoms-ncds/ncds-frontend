@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -22,12 +22,14 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import moment from 'moment';
 import * as XLSX from 'xlsx';
 import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
+import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
   const [applications, setApplications] = useState<Application[] | null>(null);
   const [action, setAction] = useState<'add' | 'edit'>('add');
   const [showApplicationFormDialog, setShowApplicationFormDialog] = useState<boolean>(false);
+  const [reasonDialog, setReasonDialog] = useState(false);
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
@@ -223,6 +225,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     attachment: [],
   });
+  const [reason, setReason] = useState<IReason[]>([]);
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
 
 
   const showLinkAction = props.action === 'manage';
@@ -260,6 +264,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     }
+    ReasonforDeactivationService.getAll().then((res) => {
+      setReason(res.data);
+    });
   }, []);
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
@@ -446,31 +453,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           icon={<CloseIcon />}
           showInMenu
           onClick={() => {
-            const snackbarId = enqueueSnackbar({
-              message: 'Rejecting...',
-              variant: 'info',
-            });
-            ApplicationServices.reject(params.id as string)
-              .then((res) => {
-                if (applications) {
-                  const filteredApplications = applications?.filter((application) => {
-                    return application._id !== params.id;
-                  });
-                  setApplications(filteredApplications);
-                }
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: res.message,
-                  variant: 'success',
-                });
-              })
-              .catch((err) => {
-                closeSnackbar(snackbarId);
-                enqueueSnackbar({
-                  message: err.message,
-                  variant: 'error',
-                });
-              });
+            setReasonDialog(true);
+            setStatusId(params.id as string);
           }}
         />,
       ].filter((action) => action !== false) as JSX.Element[]),
@@ -544,6 +528,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
               params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
+    },
+    {
+      field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
+        <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
+      width: 170, headerAlign: 'center', align: 'center',
     },
   ];
   return (
@@ -792,7 +781,69 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </Grid>
 
         </Card>
+
       </Grid>
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setReasonForDeactivation(e.target.value)}
+            label="Reason for rejection"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+              ApplicationServices.reject(statusId as string, reasonForDeactivation as string)
+                .then((res) => {
+                  if (applications) {
+                    const filteredApplications = applications?.filter((application) => {
+                      return application._id !== statusId;
+                    });
+                    setApplications(filteredApplications);
+                  }
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: res.message,
+                    variant: 'success',
+                  });
+                })
+                .catch((err) => {
+                  closeSnackbar(snackbarId);
+                  enqueueSnackbar({
+                    message: err.message,
+                    variant: 'error',
+                  });
+                });
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </CommonPageLayout>
   );
 };
