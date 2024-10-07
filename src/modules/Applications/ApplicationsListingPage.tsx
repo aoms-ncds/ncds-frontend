@@ -501,6 +501,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 250,
     },
     {
+      field: 'presidentSanction', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>President Sanction</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row.presidentSanction? 'Yes' : 'No'}
+        </p>),
+      width: 250,
+    },
+    {
       field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
         // <p> {props.row.createdBy?.basicDetails.firstName  + ' ' + props.row.createdBy?.basicDetails?.middleName + ' ' + props.row.createdBy?.basicDetails.lastName} </p>,
         <p>
@@ -692,6 +708,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                           'Application No',
                           'Name',
                           'Reason',
+                          'President Sanction',
                           'Applied By',
                           'Division',
                           'Status',

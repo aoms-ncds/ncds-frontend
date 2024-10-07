@@ -6,6 +6,7 @@ declare global {
   reason: string;
   status: string;
   division?:Division;
+  presidentSanction?:boolean;
   createdBy?:User;
   attachment:FileObject[];
   }
