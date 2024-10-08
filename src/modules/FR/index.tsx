@@ -105,14 +105,14 @@ const frDashboard = () => {
 
               <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
-                granted={( <Grid item xs={12} md={4} xl={3}>
+                granted={(<Grid item xs={12} md={4} xl={3}>
                   <DashboardCardButton primaryText="Apply" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
-                </Grid>)}/>
+                </Grid>)} />
               <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
-                granted={( <Grid item xs={12} md={4} xl={3}>
+                granted={(<Grid item xs={12} md={4} xl={3}>
                   <DashboardCardButton primaryText="Apply" secondaryText="Child Support" color="#fff" targetRoute="/fr/child_support" />
-                </Grid>)}/>
+                </Grid>)} />
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Reverted"
                   secondaryText="FR" color="#fff" targetRoute="/fr/sentBack" />
@@ -133,6 +133,14 @@ const frDashboard = () => {
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Closed" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />
               </Grid>
+              <PermissionChecks
+                permissions={['HR_DPARTMENT_ACCESS']}
+                granted={(
+                  <Grid item xs={12} md={4} xl={3}>
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                      primaryText="Support" secondaryText="FR" color="#fff" targetRoute="/fr/support" />
+                  </Grid>
+                )} />
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Manage" secondaryText="IRO" color="#fff" targetRoute="/iro" />
