@@ -31,7 +31,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 
-const ManageIRO = (props: { action: 'manage' | 'release' }) => {
+const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -689,15 +689,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerName: 'Last Updated',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerName: 'Last Updated',
+    //   width: 130,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 150,
       valueGetter: (params) => {
@@ -711,7 +711,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       }, renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'specialsanction',
-      renderHeader: () => <b>Special Sanction</b>,
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -751,6 +752,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       valueGetter: (params) => {
         return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
       },
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Last Updated',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
     },
   ];
 
@@ -873,9 +883,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           return selectedIROs;
                         });
                       }}
-                      getRowClassName={(params) =>
-                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                      }
+                      getRowClassName={(params) => {
+                        if (params.row.specialsanction == 'Yes') {
+                          return 'special-sanction'; // Class for rows with special sanction
+                        }
+                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                      }}
                       style={{ height: '80vh', width: '100%' }}
                       // rowSelectionModel={selectedIROrelease}
                       //
@@ -1347,4 +1360,4 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   );
 };
 
-export default ManageIRO;
+export default OfficeMangerApprove;

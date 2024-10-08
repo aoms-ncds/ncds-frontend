@@ -62,8 +62,10 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
   });
 
   const [userPhoto, setUserPhoto] = useState<File>();
-  const [childPhoto, setChildPhoto] = useState<File>();
-
+  const [childPhotos, setChildPhotos] = useState<{ id: string; childPhoto: File | null }[]>([{
+    id: '',
+    childPhoto: null,
+  }]);
 
   useEffect(() => {
     if (id) {
@@ -81,25 +83,22 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
     if (props.action == 'add') {
       // console.log((auth.user as IWorker).division, 'vbhfvh');
       const divid = (auth.user as IWorker).division as unknown as string;
-      DivisionsServices.getDivisionById(divid)
-        .then((res) => {
-          setWorker(() => (
-            {
-              ...worker,
-              officialDetails: {
-                ...worker.officialDetails,
-                divisionHistory: [
-                  {
-                    division: res.data,
-                    subDivision: undefined,
-                    dateOfDivisionJoining: null,
-                    dateOfDivisionLeaving: null,
-                  }],
+      DivisionsServices.getDivisionById(divid).then((res) => {
+        setWorker(() => ({
+          ...worker,
+          officialDetails: {
+            ...worker.officialDetails,
+            divisionHistory: [
+              {
+                division: res.data,
+                subDivision: undefined,
+                dateOfDivisionJoining: null,
+                dateOfDivisionLeaving: null,
               },
-            }),
-          );
-        },
-        );
+            ],
+          },
+        }));
+      });
     }
   }, []);
 
@@ -118,23 +117,28 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           kind: 'worker',
           profilePic: {
             userPhoto: userPhoto,
-            setUserPhoto: ((newUserPhoto) => setUserPhoto(newUserPhoto)),
-
+            setUserPhoto: (newUserPhoto) => setUserPhoto(newUserPhoto),
           },
-          childprofilePic: {
-            childPhoto: childPhoto,
-            setChildPhoto: ((newChildPhoto) => setChildPhoto(newChildPhoto)),
-
-          },
+          childProfilePic: {
+            childPhoto: childPhotos,
+            setChildPhoto: ((newChildPhoto) =>{
+              const _childPhotos=childPhotos.filter((_pht)=>_pht.id!=='');
+              const childPhotosId=_childPhotos.map((_pht)=>_pht.id);
+              if (childPhotosId.includes(newChildPhoto.id)) {
+                setChildPhotos(()=>_childPhotos.map((_pht)=>_pht.id===newChildPhoto.id?newChildPhoto:_pht));
+              } else {
+                setChildPhotos(()=>[..._childPhotos, newChildPhoto]);
+              }
+            }) },
           tab: tabNO,
         }}
         onSubmit={async (creatableWorker) => {
           try {
             if (props.action === 'add') {
-              const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto, childPhoto);
+              const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto, childPhotos.filter((_pht)=>_pht.id!==''));
               enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
             } else if (props.action === 'edit') {
-              const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto, childPhoto);
+              const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto, childPhotos.filter((_pht)=>_pht.id!==''));
               enqueueSnackbar({ variant: 'success', message: updateWorkerResponse.message });
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

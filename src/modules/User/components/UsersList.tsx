@@ -239,7 +239,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                 window.open(`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`);
               }}
               showInMenu
-              // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+            // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
           ),
           (hasPermissions(['ADMIN_ACCESS']) || props?.options?.showEditButton === true) && (
@@ -261,9 +261,31 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                     enqueueSnackbar({ message: err.message, variant: 'error' });
                   });
               }}
-              // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+            // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
           ),
+          // (hasPermissions(['MANAGE_WORKER']) || props?.options?.showEditButton === true) && (
+          //   <GridLinkAction
+          //     key={2}
+          //     label="Log"
+          //     icon={<HistoryIcon />}
+          //     showInMenu
+          //     onClick={() => {
+          //       StaffOrWorkerServices.getLogById(params.row._id)
+          //         .then((res) => {
+          //           if (props.value) {
+          //             props.onChange(props.value.filter((user) => user._id !== params.row._id));
+          //           }
+
+          //           enqueueSnackbar({ message: res.message, variant: 'success' });
+          //         })
+          //         .catch((err) => {
+          //           enqueueSnackbar({ message: err.message, variant: 'error' });
+          //         });
+          //     }}
+          //   // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
+          //   />
+          // ),
           <GridLinkAction
             key={4}
             label="Remarks"
@@ -274,29 +296,29 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
             }}
           />,
           props.options?.status != 'reject' &&
-            hasPermissions(['MANAGE_WORKER']) &&
-            (params.row.status == UserLifeCycleStates.ACTIVE ? (
-              <GridLinkAction
-                key={5}
-                label="Deactivate"
-                icon={<NoAccountsIcon />}
-                showInMenu
-                onClick={() => {
-                  setRowID(params.row._id);
-                  setReasonDialog(true);
-                }}
-              />
-            ) : (
-              <GridLinkAction
-                key={5}
-                label="Activate"
-                icon={<PersonIcon />}
-                showInMenu
-                onClick={() => {
-                  activateWorker(params.row._id);
-                }}
-              />
-            )),
+          hasPermissions(['MANAGE_WORKER']) &&
+          (params.row.status == UserLifeCycleStates.ACTIVE ? (
+            <GridLinkAction
+              key={5}
+              label="Deactivate"
+              icon={<NoAccountsIcon />}
+              showInMenu
+              onClick={() => {
+                setRowID(params.row._id);
+                setReasonDialog(true);
+              }}
+            />
+          ) : (
+            <GridLinkAction
+              key={5}
+              label="Activate"
+              icon={<PersonIcon />}
+              showInMenu
+              onClick={() => {
+                activateWorker(params.row._id);
+              }}
+            />
+          )),
           hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],
@@ -493,12 +515,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                             user.officialDetails.dateOfLeaving?.from(user.officialDetails.dateOfJoining, true) :
                             user.officialDetails.dateOfJoining?.fromNow(true),
                           (user.supportStructure?.basic ?? 0) +
-                              (user.supportStructure?.HRA ?? 0) +
-                              (user.supportStructure?.spouseAllowance ?? 0) +
-                              (user.supportStructure?.positionalAllowance ?? 0) +
-                              (user.supportStructure?.specialAllowance ?? 0) +
-                              (user.supportStructure?.PIONMissionaryFund ?? 0) +
-                              (user.supportStructure?.telAllowance ?? 0),
+                          (user.supportStructure?.HRA ?? 0) +
+                          (user.supportStructure?.spouseAllowance ?? 0) +
+                          (user.supportStructure?.positionalAllowance ?? 0) +
+                          (user.supportStructure?.specialAllowance ?? 0) +
+                          (user.supportStructure?.PIONMissionaryFund ?? 0) +
+                          (user.supportStructure?.telAllowance ?? 0),
                           user.insurance?.impactNo,
                         ]) :
                         [];
@@ -570,12 +592,12 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                             user.spouse?.spouseCode,
                             user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
                             (user.supportStructure?.basic ?? 0) +
-                                (user.supportStructure?.HRA ?? 0) +
-                                (user.supportStructure?.spouseAllowance ?? 0) +
-                                (user.supportStructure?.positionalAllowance ?? 0) +
-                                (user.supportStructure?.specialAllowance ?? 0) +
-                                (user.supportStructure?.PIONMissionaryFund ?? 0) +
-                                (user.supportStructure?.telAllowance ?? 0),
+                            (user.supportStructure?.HRA ?? 0) +
+                            (user.supportStructure?.spouseAllowance ?? 0) +
+                            (user.supportStructure?.positionalAllowance ?? 0) +
+                            (user.supportStructure?.specialAllowance ?? 0) +
+                            (user.supportStructure?.PIONMissionaryFund ?? 0) +
+                            (user.supportStructure?.telAllowance ?? 0),
                             user.insurance?.impactNo,
                           ]) :
                           [];

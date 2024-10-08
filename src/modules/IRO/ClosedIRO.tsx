@@ -25,6 +25,7 @@ import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
 import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
+import ReleaseAmount from './components/ReleaseAmountDialog';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -38,6 +39,7 @@ const ClosedIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -45,10 +47,29 @@ const ClosedIRO = () => {
   const [mngrName, setMngrName] = useState('');
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
+  const [openRelease, setOpenRelease] = useState(false);
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
       filename: '',
       size: 0,
       type: 'application/vnd.ms-excel',
@@ -69,6 +90,7 @@ const ClosedIRO = () => {
         console.log({ res });
         setSignature(res.data as Esignature);
         setMngrName((res.data as { officeManagerName: string }).officeManagerName);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
@@ -174,6 +196,27 @@ const ClosedIRO = () => {
               to: `/iro/${props.row._id}`,
               icon: PreviewIcon,
             },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            ...(props.row.status >= IROLifeCycleStates.IRO_CLOSED ?
+              [
+                {
+                  id: 'Release',
+                  text: 'View Release Amount',
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
             {
               id: 'remarks',
               text: 'Remarks',
@@ -382,15 +425,16 @@ const ClosedIRO = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => (<b>Last Updated</b>),
-      width: 150,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-
-    },
+    // {
+    //   field: 'updatedAt',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   renderHeader: () => (<b>Last Updated</b>),
+    //   width: 150,
+    //   renderCell: (props) => (
+    //     <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+    //   ),
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -414,7 +458,8 @@ const ClosedIRO = () => {
     },
     {
       field: 'specialsanction',
-      renderHeader: () => <b>Special Sanction</b>,
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -438,8 +483,18 @@ const ClosedIRO = () => {
       headerAlign: 'center', width: 130,
     },
     {
-      field: 'released amount ', headerName: 'Released Amount', width: 150, renderHeader: () => <b>Released Amount</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.releaseAmount,
+      field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
+      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+    },
+    {
+      field: 'updatedAt',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => (<b>Last Updated</b>),
+      width: 150,
+      renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ),
     },
   ];
   useEffect(() => {
@@ -547,9 +602,13 @@ const ClosedIRO = () => {
               }}
             >
 
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) =>
-                params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-              } />
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) => {
+                if (params.row.specialsanction == 'Yes') {
+                  return 'special-sanction'; // Class for rows with special sanction
+                }
+                return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+              }}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -650,7 +709,7 @@ const ClosedIRO = () => {
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -671,7 +730,7 @@ const ClosedIRO = () => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
@@ -727,6 +786,8 @@ const ClosedIRO = () => {
         getFiles={attachments}
 
       />
+      <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+
     </CommonPageLayout>
   );
 };

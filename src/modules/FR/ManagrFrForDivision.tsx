@@ -77,7 +77,7 @@ const ManageFrForDivision = () => {
       updatedAt: moment(),
     },
   });
-  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -656,7 +656,7 @@ const ManageFrForDivision = () => {
 
   return (
     <CommonPageLayout
-      title="Manage FR"
+      title="Manage FR for division"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -751,13 +751,14 @@ const ManageFrForDivision = () => {
                       <FormControl>
                         <RadioGroup
                           aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]:[])}
+                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
+                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
                           name="Filter"
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts or Reverted" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
@@ -808,8 +809,12 @@ const ManageFrForDivision = () => {
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
                       style={{ height: '66vh', width: '100%' }}
-                      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
-                    />
+                      getRowClassName={(params) => {
+                        if (params.row.specialsanction == 'Yes') {
+                          return 'special-sanction'; // Class for rows with special sanction
+                        }
+                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                      }} />
                   </Box>
                 </Card>
               </Grid>

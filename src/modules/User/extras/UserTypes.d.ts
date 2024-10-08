@@ -231,4 +231,14 @@ declare global {
     auth_process_id: string;
     status: number;
   }
-}
+
+
+ interface IUserUpdateLog extends Document{
+  userCode:string;
+  userId:string;
+  field:string;
+  doneBy:User;
+  createdAt: Moment;
+  updatedAt: Moment;
+  }
+  }

@@ -30,7 +30,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import SendIcon from '@mui/icons-material/Send';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { AttachFile as AttachmentIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, History as HistoryIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useState, useEffect } from 'react';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -47,6 +47,8 @@ import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const ViewIRO = () => {
@@ -320,6 +322,8 @@ const ViewIRO = () => {
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [divisions, setDivisions] = useState<Division | null>(null);
+  const [rejectDialog, setrejectDialog] = useState(false);
+  const [reasonForReject, setReasonForReject] = useState<string | null>('');
 
 
   let total = 0;
@@ -336,6 +340,8 @@ const ViewIRO = () => {
     event.preventDefault();
     event.currentTarget.blur();
   };
+  const [openLog, setOpenLog] = useState(false);
+
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
   //   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -538,7 +544,7 @@ const ViewIRO = () => {
                                     <TableCell align="center">{item.narration}</TableCell>
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
-                                    <TableCell align="center">{item.requestedAmount}</TableCell>
+                                    <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                     <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                   </TableRow>
@@ -589,7 +595,129 @@ const ViewIRO = () => {
                               })
                             }
                           >
-                            {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
+                            <MenuItem value={IRO?.sanctionedBank}>{IRO?.sanctionedBank}</MenuItem>
+                            {IRO?.division?.DivisionBankFCRA?.bankName !='' || IRO?.division?.FCRABankDetails?.bankName!='' ? (
+                              <MenuItem value={`FCRA-${IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}`}>
+    Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? (
+                              <MenuItem value={`Local Bank-${IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}`}>
+    Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank1?.bankName || IRO?.division?.otherBankDetails?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 1-${IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}`}>
+    Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank2?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 2-${IRO?.division?.BeneficiaryBank2?.beneficiary}`}>
+    Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank3?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 3-${IRO?.division?.BeneficiaryBank3?.beneficiary}`}>
+    Beneficiary Bank 3 - {IRO?.division?.BeneficiaryBank3?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank4?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 4-${IRO?.division?.BeneficiaryBank4?.beneficiary}`}>
+    Beneficiary Bank 4 - {IRO?.division?.BeneficiaryBank4?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank5?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 5-${IRO?.division?.BeneficiaryBank5?.beneficiary}`}>
+    Beneficiary Bank 5 - {IRO?.division?.BeneficiaryBank5?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank6?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 6-${IRO?.division?.BeneficiaryBank6?.beneficiary}`}>
+    Beneficiary Bank 6 - {IRO?.division?.BeneficiaryBank6?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank7?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 7-${IRO?.division?.BeneficiaryBank7?.beneficiary}`}>
+    Beneficiary Bank 7 - {IRO?.division?.BeneficiaryBank7?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank8?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 8-${IRO?.division?.BeneficiaryBank8?.beneficiary}`}>
+    Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank9?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 9-${IRO?.division?.BeneficiaryBank9?.beneficiary}`}>
+    Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+
+                            {IRO?.division?.BeneficiaryBank10?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 10-${IRO?.division?.BeneficiaryBank10?.beneficiary}`}>
+    Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank10?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 11-${IRO?.division?.BeneficiaryBank11?.beneficiary}`}>
+    Beneficiary Bank 11 - {IRO?.division?.BeneficiaryBank11?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank12?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 12-${IRO?.division?.BeneficiaryBank12?.beneficiary}`}>
+    Beneficiary Bank 12 - {IRO?.division?.BeneficiaryBank12?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank13?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 13-${IRO?.division?.BeneficiaryBank13?.beneficiary}`}>
+    Beneficiary Bank 13 - {IRO?.division?.BeneficiaryBank13?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank14?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 14-${IRO?.division?.BeneficiaryBank14?.beneficiary}`}>
+    Beneficiary Bank 14 - {IRO?.division?.BeneficiaryBank14?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank15?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 15-${IRO?.division?.BeneficiaryBank15?.beneficiary}`}>
+    Beneficiary Bank 15 - {IRO?.division?.BeneficiaryBank15?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank16?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 16-${IRO?.division?.BeneficiaryBank16?.beneficiary}`}>
+    Beneficiary Bank 16 - {IRO?.division?.BeneficiaryBank16?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank17?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 17-${IRO?.division?.BeneficiaryBank17?.beneficiary}`}>
+    Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank18?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 18-${IRO?.division?.BeneficiaryBank18?.beneficiary}`}>
+    Beneficiary Bank 18- {IRO?.division?.BeneficiaryBank18?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank19?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 19-${IRO?.division?.BeneficiaryBank19?.beneficiary}`}>
+    Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {IRO?.division?.BeneficiaryBank20?.bankName ? (
+                              <MenuItem value={`Beneficiary Bank 20-${IRO?.division?.BeneficiaryBank20?.beneficiary}`}>
+    Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
+                              </MenuItem>
+                            ) : ''}
+                            {/* {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
                             {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? <MenuItem value={IRO?.division.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}</MenuItem> :'' }
                             {IRO?.division?.BeneficiaryBank1?.bankName || IRO?.division?.otherBankDetails?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}</MenuItem> :'' }
                             {IRO?.division?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
@@ -610,7 +738,7 @@ const ViewIRO = () => {
                             {IRO?.division?.BeneficiaryBank17?.bankName? <MenuItem value={'Beneficiary Bank 17'}>Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}</MenuItem> :'' }
                             {IRO?.division?.BeneficiaryBank18?.bankName? <MenuItem value={'Beneficiary Bank 18'}>Beneficiary Bank 18 - {IRO?.division?.BeneficiaryBank18?.beneficiary}</MenuItem> :'' }
                             {IRO?.division?.BeneficiaryBank19?.bankName? <MenuItem value={'Beneficiary Bank 19'}>Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}</MenuItem> :'' }
-                            {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' }
+                            {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' } */}
 
                             {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                           </Select>
@@ -673,8 +801,17 @@ const ViewIRO = () => {
                             </PDFDownloadLink>
                           </Button>
                         )}
+                        {IRO.reasonForRejectIRO &&
+                        <><span style={{ fontWeight: 'bold', color: 'red' }}> Rejection reason: </span><span style={{ color: 'red' }}>{IRO.reasonForRejectIRO ?? 'N/A'}</span></>
+                        }
+
                         &nbsp;
                         <div style={{ float: 'right' }}>
+                          <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
+                            onClick={async ()=>setOpenLog(true)}>
+                            Log
+                          </Button>
+                           &nbsp;
                           <Button
                             variant="contained"
                             color="info"
@@ -739,21 +876,22 @@ const ViewIRO = () => {
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
-                                        const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string)
-                                          .then((res) => {
+                                        setrejectDialog(true);
+                                        // const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                        // IROServices.reject(iroID as string)
+                                        //   .then((res) => {
 
-                                          });
+                                        //   });
 
-                                        // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
-                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                        // }
-                                        setTimeout(() => {
-                                          closeSnackbar(rejectionSnack);
-                                          const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
-                                          setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                                        }, 500);
+                                        // // if (props.onSubmit) {
+                                        // //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
+                                        // //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // // }
+                                        // setTimeout(() => {
+                                        //   closeSnackbar(rejectionSnack);
+                                        //   const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                                        //   setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                        // }, 500);
                                       }}
                                     >
                                       Disapprove
@@ -801,7 +939,7 @@ const ViewIRO = () => {
                                       color="error"
                                       onClick={() => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string)
+                                        IROServices.reject(iroID as string, '')
                                           .then((res) => {
                                             if (res.data) {
                                               navigate('/iro');
@@ -981,6 +1119,67 @@ const ViewIRO = () => {
         // getFiles={TestServices.getBills}
         getFiles={attachments}
       />
+      {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
+      <Dialog open={rejectDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reject Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+          <TextField
+            id="reasonForReject"
+            placeholder="Reason for rejection"
+            multiline
+            value={reasonForReject}
+            onChange={(e)=>setReasonForReject(e.target?.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setrejectDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+              IROServices.reject(iroID as string, reasonForReject as string)
+                                          .then((res) => {
+
+                                          });
+
+              // if (props.onSubmit) {
+              //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
+              //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+              // }
+              setTimeout(() => {
+                closeSnackbar(rejectionSnack);
+                const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+              }, 500);
+              false;
+              setrejectDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+                            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };

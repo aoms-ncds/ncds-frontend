@@ -12,3 +12,15 @@ code {
 .send-back-color {
   color: red;
 }
+.special-sanction {
+  background-color: green;
+  color: rgb(0, 0, 0); /* Optional: change text color for better visibility */
+}
+
+.even {
+  background-color: #f5f5f5;
+}
+
+.odd {
+  background-color: white;
+}

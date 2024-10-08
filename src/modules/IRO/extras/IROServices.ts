@@ -9,7 +9,7 @@ export default {
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  getAll: (conditions?: { status?: number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
+  getAll: (conditions?: { status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,
@@ -191,9 +191,12 @@ export default {
 
   officeManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/officeManagerApprove`, null, { headers: { ...getAuthHeader() } })),
   accountManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/accountManagerApprove`, null, { headers: { ...getAuthHeader() } })),
-  reject: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/rejected`, null, { headers: { ...getAuthHeader() } })),
+  reject: (IroID: string, reason:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/rejected`, { reason }, { headers: { ...getAuthHeader() } })),
   // submit: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/submit`, null, { headers: { ...getAuthHeader() } })),
 
   deleteIRO: (IroId: string) => getStandardResponse<number>(axios.delete('/iro/' + IroId+ '/force', { headers: { ...getAuthHeader() } })),
-
+  getLogById: (id: string) =>
+    getStandardResponse<ITransactionLog[]>(
+      axios.get(`/iro/${id}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };

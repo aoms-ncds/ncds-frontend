@@ -1,15 +1,14 @@
-import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import IRODashboard from '..';
 import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
-import ReleaseAmount from '../components/ReleaseAmountDialog';
 import ViewIRO from '../ViewIRO';
 import ReconciliationIRO from '../ReconciliationIRO';
 import AccountApprove from '../AccountApprovel';
 import OfficeMangerApprove from '../OfficeManagerApprovel';
 import EditIRO from '../EditIRO';
 import ReleaseFmRequest from '../ReleaseFmRequest';
+import RejectedIRO from '../RejectedIRO';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -65,6 +64,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Closed IRO',
       path: '/closed',
       element: <ClosedIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Rejected IRO',
+      path: '/rejected',
+      element: <RejectedIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },

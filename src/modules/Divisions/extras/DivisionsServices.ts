@@ -115,4 +115,8 @@ export default {
 
   deleteSubDivision: (subdivisionId: string) => getStandardResponse<number>(axios.delete('/divisions/sub_divisions/' + subdivisionId, { headers: { ...getAuthHeader() } })),
   divisionMarkAsRemove: (divisionId: string) => getStandardResponse<number>(axios.delete('/divisions/' + divisionId, { headers: { ...getAuthHeader() } })),
+  getLogById: (id: string) =>
+    getStandardResponse<IDivisionUpdateLog[]>(
+      axios.get(`/divisions/${id}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };

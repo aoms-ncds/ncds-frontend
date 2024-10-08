@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Button, Card, CardActions, CardContent, Container, Grid, Typography, Divider, Box } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Container, Grid, Typography, Divider, Box, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,11 +9,13 @@ import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import PermissionChecks from '../User/components/PermissionChecks';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import CloseIcon from '@mui/icons-material/Close';
 
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
   const navigate = useNavigate();
-
+  const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
+  const [reasonDialog, setReasonDialog] = useState(false);
   const [applications, setApplications] = useState<Application >();
   const [open, setOpen] = useState(false);
 
@@ -74,6 +76,14 @@ const ApplicationApprovalPage = () => {
 
               {applications?.reason}
             </Typography>
+            <br/>
+            {applications?.reasonForDeactivation && (
+
+              <Typography variant="body1" component="h2" align='left'>
+
+                <span style={{ fontWeight: 'bold' }}>Reason for rejection:  </span> {applications?.reasonForDeactivation}
+              </Typography>
+            )}
 
             <br/>
             <Typography variant="h5" component="h2" align='left'>
@@ -98,26 +108,7 @@ const ApplicationApprovalPage = () => {
                       color="error"
                       sx={{ ml: 'auto' }}
                       onClick={() => {
-                        const snackbarId = enqueueSnackbar({
-                          message: 'Rejecting...',
-                          variant: 'info',
-                        });
-
-                        ApplicationServices.reject(applicationID as string)
-                .then((res) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                })
-                .catch((err) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
+                        setReasonDialog(true);
                       }}
                     >
             Reject
@@ -178,6 +169,62 @@ const ApplicationApprovalPage = () => {
         // getFiles={TestServices.getBills}
         getFiles={applications?.attachment??[]}
       />
+      <Dialog open={reasonDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          <TextField
+            value={reasonForDeactivation}
+            onChange={(e) => setReasonForDeactivation(e.target.value)}
+            label="Reason for rejection"
+            required
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonDialog(false);
+              false;
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              const snackbarId = enqueueSnackbar({
+                message: 'Rejecting...',
+                variant: 'info',
+              });
+
+              ApplicationServices.reject(applicationID as string, reasonForDeactivation as string)
+      .then((res) => {
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        closeSnackbar(snackbarId);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+
+              setReasonDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };

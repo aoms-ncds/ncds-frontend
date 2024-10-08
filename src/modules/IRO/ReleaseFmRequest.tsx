@@ -340,7 +340,24 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
-  const [delateModel, setDelateModel] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
+    _id: '',
+    presidentSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
   let total = 0;
   selectedIRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -530,6 +547,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       .then((res) => {
         console.log({ res });
         setSignature(res.data as Esignature);
+        setSignaturePresident(res.data as EsignaturePresident);
       })
       .catch((res) => {
         console.log(res);
@@ -552,7 +570,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
             return IROrder._id !== id;
           });
           setIROrder(IRO);
-          setDelateModel(false);
+          setDeleteModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -648,7 +666,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                   icon: DeleteIcon,
                   onClick: () => {
                     setSelectedIROId(params.row._id);
-                    setDelateModel(true);
+                    setDeleteModel(true);
                     // deleteIRO(params.row._id);
                   },
                 },
@@ -1011,16 +1029,16 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerName: 'Last Updated',
+    //   headerClassName: 'super-app-theme--cell',
+    //   width: 130,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -1086,7 +1104,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -1111,6 +1129,76 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'status',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Status</b>,
+      width: 300,
+      align: 'center',
+      headerAlign: 'center',
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+        case 'WAITING FOR OFFICE MNGR':
+          return clsx('orange');
+        case 'WAITING FOR ACCOUNTS STATE':
+          return clsx('orange');
+        case 'IRO CLOSED':
+          return clsx('green');
+        case 'WAITING FOR ACCOUNTS MNGR':
+          return clsx('green');
+        case 'AMOUNT RELEASED':
+          return clsx('green');
+        case 'RECONCILIATION DONE':
+          return clsx('green');
+        case 'WAITTING FOR RELEASE AMOUNT':
+          return clsx('orange');
+        default:
+          // console.log('No class applied');
+          return '';
+        }
+      },
+
+      valueGetter: (params) => {
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        // Check if the status name needs to be changed
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+          // case 'WAITING_FOR_ACCOUNTS_MNGR':
+          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+          //   if (props.action === 'release') {
+          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          //   }
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Last Updated',
+      headerClassName: 'super-app-theme--cell',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1306,8 +1394,12 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                           });
                           setNewTest(releaseAmountIROs);
                         }}
-                        getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
-                        style={{ height: '65vh', width: '100%' }}
+                        getRowClassName={(params) => {
+                          if (params.row.specialsanction == 'Yes') {
+                            return 'special-sanction'; // Class for rows with special sanction
+                          }
+                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                        }} style={{ height: '65vh', width: '100%' }}
                         // rowSelectionModel={selectedIROrelease}
                         //
                       />
@@ -1781,7 +1873,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
@@ -1873,12 +1965,12 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-          Do you want to close {iroData?.IROno}?
+            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
               <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                 {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
               </PDFDownloadLink>
@@ -1899,7 +1991,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
               <>
                 <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} />}
+                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
@@ -1922,13 +2014,13 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           </>
         </DialogActions>
       </Dialog>
-      <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this IRO?</Typography>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={()=>setDelateModel(false)}>Close</Button>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
           <Button
             endIcon={<DeleteIcon />}
             variant="contained"
@@ -1937,7 +2029,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
               deleteIRO(selectedIROId?.toString()?? '');
             } }
           >
-                 Delate
+                 Delete
           </Button>
         </DialogActions>
 

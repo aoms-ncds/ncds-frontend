@@ -11,6 +11,7 @@ import ManageFrForDivision from '../ManagrFrForDivision';
 import SupportFrPage from '../SupportFr';
 
 
+
 const divisionsPageRoutes: ModuleRoute = {
   base: '/fr',
   pages: [
@@ -91,6 +92,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Revert Fr',
       path: '/sentBack',
       element: <SentBack/>,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Reject Fr',
+      path: '/rejected',
+      element: <RejectedFr/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,

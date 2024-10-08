@@ -38,6 +38,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
+  const [FR, setFR] = useState<FR | null>(null);
   const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
@@ -56,7 +57,7 @@ const ManageFrPage = () => {
     transactionId: '',
   });
   const [open, setOpen] = useState(false);
-  const [delateModel, setDelateModel] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
@@ -77,7 +78,7 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
-  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -88,7 +89,8 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, []);
-  console.log(statusFilter, 'statusFilter');
+
+  console.log(selectedFR, 'statusFilter');
 
   const deleteFR = (id: string) => {
     console.log(id, 'log');
@@ -105,7 +107,7 @@ const ManageFrPage = () => {
             return FRRequests._id !== id;
           });
           setFRRequests(fr);
-          setDelateModel(false);
+          setDeleteModel(false);
         }
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
@@ -254,9 +256,12 @@ const ManageFrPage = () => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
+                    FRServices.getById(props.row._id?? '').then((res) => {
+                      setFR(res.data);
+                    });
                     // deleteFR(props.row._id);
                     setSelectedFR(props.row._id);
-                    setDelateModel(true);
+                    setDeleteModel(true);
                   },
                 },
               ] :
@@ -419,6 +424,8 @@ const ManageFrPage = () => {
           return clsx('red');
         case 'WAITING FOR PRESIDENT':
           return clsx('orange');
+        case 'IRO DISAPPROVED':
+          return clsx('red-dark');
         default:
           console.log('No class applied');
           return '';
@@ -440,6 +447,9 @@ const ManageFrPage = () => {
           break;
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+        case 'IRO_REJECTED':
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
           break;
           // Add more cases for other status names you want to change
         default:
@@ -544,15 +554,15 @@ const ManageFrPage = () => {
         return particularAmount;
       },
     },
-    {
-      field: 'updatedAt',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Last Updated</b>,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'updatedAt',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Last Updated</b>,
+    //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+    //   width: 130,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     // {
     //   field: 'sanctionedAsPer',
     //   headerClassName: 'super-app-theme--cell',
@@ -578,7 +588,7 @@ const ManageFrPage = () => {
     {
       field: 'specialsanction',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Special Sanction</b>,
+      renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
           style={{
@@ -614,6 +624,36 @@ const ManageFrPage = () => {
         </p>
       ),
       width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'reasonForReject',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Reason For Reject</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.reasonForReject}
+        </p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Last Updated</b>,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      width: 130,
       align: 'center',
       headerAlign: 'center',
     },
@@ -751,13 +791,14 @@ const ManageFrPage = () => {
                       <FormControl>
                         <RadioGroup
                           aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS, FRLifeCycleStates.FR_SEND_BACK]:[])}
+                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
+                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
                           name="Filter"
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts or Reverted" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
@@ -800,6 +841,9 @@ const ManageFrPage = () => {
                       '& .red-light': {
                         backgroundColor: '#ff7f7f',
                       },
+                      '& .red-dark': {
+                        backgroundColor: '#c90606',
+                      },
                     }}
                   >
                     <DataGrid
@@ -808,7 +852,12 @@ const ManageFrPage = () => {
                       getRowId={(row) => row._id}
                       loading={FRRequests === null}
                       style={{ height: '66vh', width: '100%' }}
-                      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
+                      getRowClassName={(params) => {
+                        if (params.row.specialsanction == 'Yes') {
+                          return 'special-sanction'; // Class for rows with special sanction
+                        }
+                        return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
+                      }}
                     />
                   </Box>
                 </Card>
@@ -1053,13 +1102,13 @@ const ManageFrPage = () => {
                 </Button>
               </DialogActions>
             </Dialog>
-            <Dialog open={Boolean(delateModel)} onClose={() => setDelateModel(false)}>
+            <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
               <DialogContent>
-                <Typography sx={{ color: 'red' }}>Are you sure you want to delete this FR?</Typography>
+                <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this FR No ${FR?.FRno} from  ${FR?.division?.details.name} ?`}</Typography>
               </DialogContent>
 
               <DialogActions>
-                <Button onClick={()=>setDelateModel(false)}>Close</Button>
+                <Button onClick={()=>setDeleteModel(false)}>Close</Button>
                 <Button
                   endIcon={<DeleteIcon />}
                   variant="contained"
@@ -1068,7 +1117,7 @@ const ManageFrPage = () => {
                     deleteFR(selectedFR?.toString() ?? '');
                   } }
                 >
-                 Delate
+                 Delete
                 </Button>
               </DialogActions>
 

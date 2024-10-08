@@ -14,6 +14,10 @@ export default {
     axios.patch('/settings/esignature/officeMngrName', { name: data }, { headers: { ...getAuthHeader() } },
     ),
   ),
+  addOfficeMnrEmail: ( data:string ) => getStandardResponse(
+    axios.patch('/settings/esignature/presidentEMail', { email: data }, { headers: { ...getAuthHeader() } },
+    ),
+  ),
   getESignature: () => getStandardResponse(
     axios.get('/settings/esignature/', { headers: { ...getAuthHeader() } },
     ),

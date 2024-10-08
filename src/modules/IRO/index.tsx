@@ -82,7 +82,7 @@ const IRODashboard = () => {
                 <DashboardCardButton primaryText="Release Amount FM Request" color="#fff" targetRoute="/iro/release_amount_fm_request" />
               </Grid>
               <Grid item xs={12} md={4} xl={3}>
-                <DashboardCardButton primaryText="Reconciliation IRO " color="#fff" targetRoute="/iro/reconciliation" />
+                <DashboardCardButton primaryText="For Reconciliation " color="#fff" targetRoute="/iro/reconciliation" />
               </Grid>
 
             </>
@@ -90,6 +90,9 @@ const IRODashboard = () => {
 
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" color="#fff" targetRoute="/iro/closed" />
+        </Grid>
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
         </Grid>
         <PermissionChecks
           permissions={['ACCOUNTS_MNGR_ACCESS']}

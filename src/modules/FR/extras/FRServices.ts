@@ -78,7 +78,7 @@ export default {
   addParticulars: (particularData: CreatableParticular) => getStandardResponse<Particular>(
     axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
   ),
-  getById: (fRId: string) =>
+  getById: (fRId?: string) =>
     getStandardResponse<FR>(
       axios.get(`/fr/${fRId}`, { headers: { ...getAuthHeader() } }),
       (data) => ({
@@ -273,4 +273,8 @@ export default {
     );
   },
   deleteFr: (frId: string) => getStandardResponse<number>(axios.delete('/fr/' + frId + '/force', { headers: { ...getAuthHeader() } })),
+  getLogById: (fRId: string) =>
+    getStandardResponse<ITransactionLog[]>(
+      axios.get(`/fr/${fRId}/log`, { headers: { ...getAuthHeader() } }),
+    ),
 };

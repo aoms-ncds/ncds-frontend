@@ -243,13 +243,10 @@ const SentBack = () => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'updatedAt', align: 'center',
-      headerAlign: 'center',
-      renderHeader: () => (<b>Last Updated</b>),
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-
-    },
+    // { field: 'updatedAt', align: 'center',
+    //   headerAlign: 'center', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
+    //     <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+    //   ) },
     {
       field: 'status',
       renderHeader: () => (<b>Status</b>),
@@ -290,6 +287,10 @@ const SentBack = () => {
       ),
       // valueGetter: (params) => params.row?.reasonForSentBack,
     },
+    { field: 'updatedAt', align: 'center',
+      headerAlign: 'center', renderHeader: () => (<b>Last Updated</b>), width: 130, renderCell: (props) => (
+        <p> {props.row.updatedAt.format('DD/MM/YYYY')}</p>
+      ) },
   ];
 
   useEffect(() => {

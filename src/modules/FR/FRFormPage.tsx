@@ -21,6 +21,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     kind: 'FRs',
     particulars: [],
     reasonForSentBack: '',
+    reasonForReject: '',
     sanctionedAsPer: '',
   });
 
