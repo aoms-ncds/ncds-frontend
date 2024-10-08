@@ -1193,6 +1193,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
+      field: 'reasonForRejectIRO',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Beneficiary Name',
+      width: 200,
+      renderHeader: () => <b>Reason For Reject</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.reasonForRejectIRO}
+        </p>
+      ),
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'updatedAt',
       headerName: 'Last Updated',
       headerClassName: 'super-app-theme--cell',

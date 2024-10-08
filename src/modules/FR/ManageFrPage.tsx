@@ -628,6 +628,27 @@ const ManageFrPage = () => {
       headerAlign: 'center',
     },
     {
+      field: 'reasonForReject',
+      headerClassName: 'super-app-theme--cell',
+      renderHeader: () => <b>Reason For Reject</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.reasonForReject}
+        </p>
+      ),
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'updatedAt',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Last Updated</b>,
