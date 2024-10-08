@@ -71,7 +71,9 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const [addSignature, toggleAddSignature] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
+  const [rejectDialog, setrejectDialog] = useState(false);
   const [reasonForSentBack, setReasonForSentBack] = useState<string | null>('');
+  const [reasonForReject, setReasonForReject] = useState<string | null>('');
   const [sanctionedAsPers, setSanctionedAsPers] = useState<AsPer[]>([]);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   // const [isFocused, setFocused] = useState(false);
@@ -736,6 +738,14 @@ return (
                     Print FR
                 </PDFDownloadLink>
               </Button>}
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              {props.value.reasonForReject && (
+                <><span style={{ fontWeight: 'bold', color: 'red' }}> Rejection reason: </span><span style={{ color: 'red' }}>{props.value.reasonForReject ?? 'N/A'}</span></>
+
+              )}
 
               {/* )} */}
                 &nbsp;
@@ -841,6 +851,62 @@ return (
                         </Button>
                       </DialogActions>
                     </Dialog>
+                    <Dialog open={rejectDialog} fullWidth maxWidth="md">
+                      <DialogTitle>Reject Reason</DialogTitle>
+                      <DialogContent>
+                        <br />
+                        {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+                        <TextField
+                          id="reasonForReject"
+                          placeholder="Reason for rejection"
+                          multiline
+                          value={reasonForReject}
+                          onChange={(e)=>setReasonForReject(e.target?.value)}
+                          fullWidth
+                        />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            setrejectDialog(false);
+                            false;
+                          }}
+                          sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+                        >
+                          <CloseIcon sx={{ color: 'white' }} />
+                        </Button>
+
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                            if (props.onSubmit) {
+                              const updatedValue = { ...props.value, status: FRLifeCycleStates.REJECTED, reasonForReject: reasonForReject }; // Create a new object with updated status
+                              props.onSubmit(updatedValue as CreatableFR); // Invoke props.onSubmit with the updated value as the argument
+                            }
+                            setTimeout(() => {
+                              closeSnackbar(rejectionSnack);
+                              const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
+                              setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                            }, 500);
+                            navigate('/fr/manage');
+                            setrejectDialog(false);
+                          }}
+                          sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+                        >
+                            submit
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                       &nbsp;
                   </>
                 ) : null}
@@ -857,17 +923,7 @@ return (
                               variant="contained"
                               color="error"
                               onClick={() => {
-                                const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                                if (props.onSubmit) {
-                                  const updatedValue = { ...props.value, status: FRLifeCycleStates.REJECTED }; // Create a new object with updated status
-                                  props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                }
-                                setTimeout(() => {
-                                  closeSnackbar(rejectionSnack);
-                                  const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
-                                  setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                                }, 500);
-                                navigate('/fr/manage');
+                                setrejectDialog(true);
                               }}
                             >
                                 Disapprove

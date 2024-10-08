@@ -28,6 +28,7 @@ declare global{
       officeManagerSignature?:FileObject;
     };
     closedIroPdf?:string;
+    reasonForRejectIRO?:string;
     FR?: string;
 
     // signature?: {

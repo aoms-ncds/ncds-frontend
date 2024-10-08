@@ -546,11 +546,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
       },
     },
-    {
-      field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
-        <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
-      width: 170, headerAlign: 'center', align: 'center',
-    },
+    // {
+    //   field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
+    //     <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
+    //   width: 170, headerAlign: 'center', align: 'center',
+    // },
   ];
   return (
     <CommonPageLayout title="Application Manages ">

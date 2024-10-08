@@ -8,6 +8,7 @@ import SentBack from '../SendBack';
 import WorkerSupportPage from '../WorkerSupport';
 import ChildeSupportPage from '../ChildeSupprt';
 import ManageFrForDivision from '../ManagrFrForDivision';
+import RejectedFr from '../RejectedFr';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -90,6 +91,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Revert Fr',
       path: '/sentBack',
       element: <SentBack/>,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Reject Fr',
+      path: '/rejected',
+      element: <RejectedFr/>,
       private: true,
       requiredAccessRights: ['WRITE_FR'],
       icon: <RequestPageOutlinedIcon />,

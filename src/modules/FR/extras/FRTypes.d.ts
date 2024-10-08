@@ -11,6 +11,7 @@ declare global {
     disable?:boolean;
     IRO?: string;
     reasonForSentBack?:string;
+    reasonForReject?:string;
     designationParticular?:string;
   }
 
@@ -37,6 +38,7 @@ declare global {
     createdBy?: IWorker; // Added missing property
     particulars?: Particular[]; // Added missing property
     reasonForSentBack?:string;
+    reasonForReject?:string;
     sourceOfAccount?:string;
     additionalSignature?:FileObject;
     additionalDesignation?:string;

@@ -48,6 +48,7 @@ import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const ViewIRO = () => {
@@ -321,6 +322,8 @@ const ViewIRO = () => {
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [divisions, setDivisions] = useState<Division | null>(null);
+  const [rejectDialog, setrejectDialog] = useState(false);
+  const [reasonForReject, setReasonForReject] = useState<string | null>('');
 
 
   let total = 0;
@@ -798,6 +801,10 @@ const ViewIRO = () => {
                             </PDFDownloadLink>
                           </Button>
                         )}
+                        {IRO.reasonForRejectIRO &&
+                        <><span style={{ fontWeight: 'bold', color: 'red' }}> Rejection reason: </span><span style={{ color: 'red' }}>{IRO.reasonForRejectIRO ?? 'N/A'}</span></>
+                        }
+
                         &nbsp;
                         <div style={{ float: 'right' }}>
                           <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
@@ -869,21 +876,22 @@ const ViewIRO = () => {
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
-                                        const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string)
-                                          .then((res) => {
+                                        setrejectDialog(true);
+                                        // const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                        // IROServices.reject(iroID as string)
+                                        //   .then((res) => {
 
-                                          });
+                                        //   });
 
-                                        // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
-                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                        // }
-                                        setTimeout(() => {
-                                          closeSnackbar(rejectionSnack);
-                                          const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
-                                          setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                                        }, 500);
+                                        // // if (props.onSubmit) {
+                                        // //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
+                                        // //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                                        // // }
+                                        // setTimeout(() => {
+                                        //   closeSnackbar(rejectionSnack);
+                                        //   const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                                        //   setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                        // }, 500);
                                       }}
                                     >
                                       Disapprove
@@ -931,7 +939,7 @@ const ViewIRO = () => {
                                       color="error"
                                       onClick={() => {
                                         const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string)
+                                        IROServices.reject(iroID as string, '')
                                           .then((res) => {
                                             if (res.data) {
                                               navigate('/iro');
@@ -1112,7 +1120,66 @@ const ViewIRO = () => {
         getFiles={attachments}
       />
       {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
+      <Dialog open={rejectDialog} fullWidth maxWidth="md">
+        <DialogTitle>Reject Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+          <TextField
+            id="reasonForReject"
+            placeholder="Reason for rejection"
+            multiline
+            value={reasonForReject}
+            onChange={(e)=>setReasonForReject(e.target?.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setrejectDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
 
+          <Button
+            variant="contained"
+            onClick={() => {
+              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+              IROServices.reject(iroID as string, reasonForReject as string)
+                                          .then((res) => {
+
+                                          });
+
+              // if (props.onSubmit) {
+              //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
+              //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+              // }
+              setTimeout(() => {
+                closeSnackbar(rejectionSnack);
+                const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+              }, 500);
+              false;
+              setrejectDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+                            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };

@@ -1193,6 +1193,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
+      field: 'reasonForRejectIRO',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Beneficiary Name',
+      width: 200,
+      renderHeader: () => <b>Reason For Reject</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.reasonForRejectIRO}
+        </p>
+      ),
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'updatedAt',
       headerName: 'Last Updated',
       headerClassName: 'super-app-theme--cell',
@@ -1315,21 +1338,23 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         Export
                       </Button>
                     }
-                  />
-                  <Grid item sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }} >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE)?'WFA':'ALL'}
-                        onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]:[])}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
+                  />{props.action =='manage' && (
+
+                    <Grid item sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }} >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE)?'WFA':'ALL'}
+                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]:[])}
+                          name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                  )}
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
