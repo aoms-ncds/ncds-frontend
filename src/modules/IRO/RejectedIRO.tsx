@@ -531,7 +531,7 @@ const RejectedIRO = () => {
       });
   }, []);
   return (
-    <CommonPageLayout title="Closed IRO">
+    <CommonPageLayout title="Rejected IRO">
       <Card sx={{ maxWidth: '78vw', height: '90vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
