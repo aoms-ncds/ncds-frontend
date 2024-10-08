@@ -8,6 +8,7 @@ import AccountApprove from '../AccountApprovel';
 import OfficeMangerApprove from '../OfficeManagerApprovel';
 import EditIRO from '../EditIRO';
 import ReleaseFmRequest from '../ReleaseFmRequest';
+import RejectedIRO from '../RejectedIRO';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -63,6 +64,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Closed IRO',
       path: '/closed',
       element: <ClosedIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Rejected IRO',
+      path: '/rejected',
+      element: <RejectedIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },

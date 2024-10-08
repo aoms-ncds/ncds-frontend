@@ -117,6 +117,10 @@ const frDashboard = () => {
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Reverted"
                   secondaryText="FR" color="#fff" targetRoute="/fr/sentBack" />
               </Grid>
+              <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} primaryText="Rejected"
+                  secondaryText="FR" color="#fff" targetRoute="/fr/rejected" />
+              </Grid>
               <PermissionChecks
                 permissions={['PRESIDENT_ACCESS']}
                 granted={(

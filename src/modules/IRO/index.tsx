@@ -91,6 +91,9 @@ const IRODashboard = () => {
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" color="#fff" targetRoute="/iro/closed" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3}>
+          <DashboardCardButton primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
+        </Grid>
         <PermissionChecks
           permissions={['ACCOUNTS_MNGR_ACCESS']}
           granted={(
