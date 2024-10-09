@@ -9,6 +9,7 @@ import WorkerSupportPage from '../WorkerSupport';
 import ChildeSupportPage from '../ChildeSupprt';
 import ManageFrForDivision from '../ManagrFrForDivision';
 import SupportFrPage from '../SupportFr';
+import RejectedFr from '../RejectedFr';
 
 
 
