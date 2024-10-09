@@ -9,11 +9,8 @@ import UserServices from '../../User/extras/UserServices';
 import FRServices from '../../FR/extras/FRServices';
 
 Font.register({
-  family: 'Oswald',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf' }, // Normal
-    { src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf', fontWeight: 700 }, // Bold
-  ],
+  family: 'CourierPrime',
+  src: '/arial.ttf',
 });
 
 const styles = StyleSheet.create({
@@ -30,17 +27,17 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute',
-    left: 80,
+    left: 60,
     height: 60,
     width: 40,
     marginTop: 10,
   },
   heading: {
     position: 'absolute',
-    left: 130,
-    fontSize: 32,
+    left: 100,
+    fontSize: 25,
     // fontWeight: 'bold',
-    marginTop: 8,
+    marginTop: 15,
     color: '#cd151d',
   },
   title: {
@@ -170,30 +167,30 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <>
               <Image src="/3D Logo 3.png" style={styles.image} />
 
-              <Text style={{ ...styles.heading, fontWeight: 700, fontFamily: 'Oswald' }}> INDIAN EVANGELICAL TEAM </Text></>
+              <Text style={{ ...styles.heading, fontWeight: 500, fontFamily: 'CourierPrime' }}> INDIAN EVANGELICAL TEAM </Text></>
             {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
-            <Text style={{ ...styles.title, fontWeight: 700, fontFamily: 'Oswald' }}> Internal Release Order </Text>
+            <Text style={{ ...styles.title, fontWeight: 700, fontFamily: 'CourierPrime' }}> Internal Release Order </Text>
           </div>
 
           <div style={{ marginTop: 60 }}>
             <View style={{ ...styles.box, marginTop: 15 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 10 }}>IRO NO:</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 7 }}>{props.rowData?.IROno}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>IRO DATE:</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', top: 2, fontFamily: 'CourierPrime' }}>IRO DATE:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 7 }}>{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Division Name:</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Division Name:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{props?.rowData?.division?.details.name ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Divisional Co-ordinator: </Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Divisional Co-ordinator: </Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
                 </View>
               </View>
@@ -203,60 +200,60 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ ...styles.box, marginTop: 3 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Beneficiary Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Amt Released on</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Amt Released on</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Account No</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Account No</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 39 }}>{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Source Of Fund</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Source Of Fund</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 22 }}> {props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>IFSC Code</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>IFSC Code</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 42 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 44 }}>{props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Mode of Payment </Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Mode of Payment </Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 10 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 12 }}>{props.rowData?.releaseAmount?.modeOfPayment ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Bank Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Bank Name</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 39 }}>{props.rowData?.releaseAmount?.transferredBank?.bankName}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Transaction ID</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Transaction ID</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 22 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 24 }}>{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 29 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 31, marginBottom: 3 }}>{props.rowData?.releaseAmount?.transferredBank?.branchName}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'Oswald', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 52 }}>:</Text>
                   <Text style={{ ...styles.text, marginTop: 6, left: 54, marginBottom: 3 }}>{props.fr?.FRno}</Text>
                 </View>
@@ -292,7 +289,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   style={{
                     width: '20%',
                     textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                   }}
                 >
                   Sl No
@@ -302,7 +299,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   style={{
                     width: '800 px', // Set fixed width,
                     textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                   }}
                 >
                   Particulars / Narration
@@ -312,7 +309,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   style={{
                     width: '100%',
                     textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                   }}
                 >
                   Sanctioned
@@ -323,7 +320,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   style={{
                     width: '40%',
                     textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                   }}
                 >
                   Qty
@@ -332,21 +329,24 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <Text
                   style={{
                     width: '60%',
-                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    textAlign: 'center',
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    fontFamily: 'CourierPrime',
+                    flexWrap: 'wrap', // Allows the text to wrap
                   }}
                 >
-                  Request Amount
+  Request Amt
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     width: '60%',
-                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    textAlign: 'left', fontSize: 11, fontWeight: 'bold',
+                    fontFamily: 'CourierPrime',
                   }}
                 >
-                  Sanctioned Amount
+                  Sanctioned Amt
                 </Text>
               </View>
               {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
@@ -386,7 +386,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   Grand Total
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
@@ -397,17 +397,17 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'60%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'60%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'60%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
               <PDFTableRow key={props.rowData.particulars.length + 1}>
-                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
@@ -418,7 +418,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <PDFCell style={{ textAlign: 'left', fontSize: 11, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   {sanctionedAmountWords}
                 </PDFCell>
               </PDFTableRow>
@@ -429,7 +429,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
               <View style={{ width: 200 }}>
                 <Text style={{
                   ...styles.text, marginTop: 10, left: 5, fontWeight: 'bold',
-                  fontFamily: 'Oswald', fontSize: 10,
+                  fontFamily: 'CourierPrime', fontSize: 10,
                 }} >Balance amount to be adjusted:</Text></View>
               <View>
               </View>
@@ -438,7 +438,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
               <View style={{ width: 200 }}>
                 <Text style={{
                   ...styles.text, left: 5, fontWeight: 'bold',
-                  fontFamily: 'Oswald', fontSize: 10,
+                  fontFamily: 'CourierPrime', fontSize: 10,
                 }} >Adjusted to IRO No.:</Text></View>
               <View>
               </View>
@@ -474,7 +474,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                       fontSize: 11,
                       textAlign: 'center',
                       // fontWeight: 'bold',
-                      fontFamily: 'Oswald',
+                      fontFamily: 'CourierPrime',
                     }}>
                       Mr. Shaji Varghese
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
@@ -483,7 +483,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                       ...styles.text1,
                       fontSize: 11,
                       fontWeight: 'bold',
-                      fontFamily: 'Oswald',
+                      fontFamily: 'CourierPrime',
                       textAlign: 'center',
                     }}>
                       President
@@ -517,7 +517,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     fontSize: 11,
                     textAlign: 'center',
                     // fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                   }}>
                     {props.officeMngrSign?.officeManagerName}
                   </Text>
@@ -525,7 +525,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     ...styles.text1,
                     fontSize: 11,
                     fontWeight: 'bold',
-                    fontFamily: 'Oswald',
+                    fontFamily: 'CourierPrime',
                     textAlign: 'center',
                   }}>
                     Office Manager
@@ -536,7 +536,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
           </div>
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ ...styles.text, left: 5, fontWeight: 'bold', fontFamily: 'Oswald' }}>Prepared By:</Text>
+              <Text style={{ ...styles.text, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Prepared By:</Text>
               <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName ? props?.rowData?.approvedBy?.basicDetails?.firstName.trim() : ''}${props?.rowData?.approvedBy?.basicDetails?.middleName ? ' ' + props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
             </View>
             <Text style={{
