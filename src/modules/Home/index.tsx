@@ -96,7 +96,7 @@ const HomePage = () => {
           <Grid item xs={12} md={6} lg={3} xl={3}>
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
-                <Typography variant="body2" align='center' color={'black'}>IR</Typography>
+                <Typography variant="body2" align='center' color={'black'}>IRO</Typography>
                 <Typography variant="h5" align='center' color={'black'}>{iroCount}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />7.0%</span> <span style={{ color: 'black' }}>vs last 7 days </span>

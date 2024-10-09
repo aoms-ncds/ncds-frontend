@@ -458,7 +458,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         //       });
         //   }}
         // />,
-        props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        props.action === 'hr' || props.action === 'president' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
           label="Reject"

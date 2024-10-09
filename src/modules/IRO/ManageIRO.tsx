@@ -2023,10 +2023,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         </DialogActions>
       </Dialog>
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
-        <DialogTitle>Are you sure</DialogTitle>
+        <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
+            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName && selectedSignature && FrData && (
 

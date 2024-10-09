@@ -980,10 +980,10 @@ const ReconciliationIRO = () => {
         </DialogActions>
       </Dialog> */}
       <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Are you sure</DialogTitle>
+        <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-            {`Want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
+            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <PDFDownloadLink
