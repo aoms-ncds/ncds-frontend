@@ -599,7 +599,7 @@ const ManageFrPage = () => {
             textAlign: 'center',
           }}
         >
-          {props.row.specialsanction}
+          {props.row.specialsanction=='Yes' ? 'President': 'NO'}
         </p>
       ),
       width: 200,
