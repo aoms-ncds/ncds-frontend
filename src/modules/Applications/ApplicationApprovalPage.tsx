@@ -170,9 +170,32 @@ const ApplicationApprovalPage = () => {
         getFiles={applications?.attachment??[]}
       />
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>Reason</DialogTitle>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      Reason
+            <Button
+              variant="contained"
+              onClick={() => {
+                setReasonDialog(false);
+              }}
+              sx={{
+                'position': 'absolute',
+                'top': 8,
+                'right': 8,
+                'minWidth': 'auto',
+                'padding': '0.1rem',
+                'backgroundColor': 'red',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: 'white' }} />
+            </Button>
+          </Box>
+        </DialogTitle>
+
         <DialogContent>
-          <br />
           <TextField
             value={reasonForDeactivation}
             onChange={(e) => setReasonForDeactivation(e.target.value)}
@@ -181,17 +204,17 @@ const ApplicationApprovalPage = () => {
             fullWidth
           />
         </DialogContent>
+
         <DialogActions>
-          <Button
+          {/* <Button
             variant="contained"
             onClick={() => {
               setReasonDialog(false);
-              false;
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
             <CloseIcon sx={{ color: 'white' }} />
-          </Button>
+          </Button> */}
 
           <Button
             variant="contained"
@@ -202,29 +225,30 @@ const ApplicationApprovalPage = () => {
               });
 
               ApplicationServices.reject(applicationID as string, reasonForDeactivation as string)
-      .then((res) => {
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
-      })
-      .catch((err) => {
-        closeSnackbar(snackbarId);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
+          .then((res) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: res.message,
+              variant: 'success',
+            });
+          })
+          .catch((err) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: err.message,
+              variant: 'error',
+            });
+          });
 
               setReasonDialog(false);
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >
-            submit
+      Submit
           </Button>
         </DialogActions>
       </Dialog>
+
     </CommonPageLayout>
   );
 };

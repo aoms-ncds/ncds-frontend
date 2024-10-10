@@ -801,7 +801,30 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
       </Grid>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>Reason</DialogTitle>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      Reason
+            <Button
+              variant="contained"
+              onClick={() => {
+                setReasonDialog(false);
+              }}
+              sx={{
+                'position': 'absolute',
+                'top': 8,
+                'right': 8,
+                'minWidth': 'auto',
+                'padding': '0.1rem',
+                'backgroundColor': 'red',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: 'white' }} />
+            </Button>
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <br />
           <TextField
@@ -813,7 +836,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           />
         </DialogContent>
         <DialogActions>
-          <Button
+          {/* <Button
             variant="contained"
             onClick={() => {
               setReasonDialog(false);
@@ -822,7 +845,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
             <CloseIcon sx={{ color: 'white' }} />
-          </Button>
+          </Button> */}
 
           <Button
             variant="contained"
