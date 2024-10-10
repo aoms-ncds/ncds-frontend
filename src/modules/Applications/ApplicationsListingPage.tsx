@@ -458,7 +458,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         //       });
         //   }}
         // />,
-        props.action === 'hr' || props.action === 'president' && hasPermissions(['MANAGE_APPLICATION']) &&
+        props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
           label="Reject"
@@ -706,8 +706,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                               Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
                                 Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'WAITING FOR PRESIDENT' :
                                   Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
-                                    Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ',
-                              Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
+                                    Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED':
+                                      Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
                             ])) :
                             [];
                         const headers = [
@@ -801,30 +801,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
       </Grid>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      Reason
-            <Button
-              variant="contained"
-              onClick={() => {
-                setReasonDialog(false);
-              }}
-              sx={{
-                'position': 'absolute',
-                'top': 8,
-                'right': 8,
-                'minWidth': 'auto',
-                'padding': '0.1rem',
-                'backgroundColor': 'red',
-                '&:hover': {
-                  backgroundColor: 'darkred',
-                },
-              }}
-            >
-              <CloseIcon sx={{ color: 'white' }} />
-            </Button>
-          </Box>
-        </DialogTitle>
+        <DialogTitle>Reason</DialogTitle>
         <DialogContent>
           <br />
           <TextField
@@ -836,7 +813,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           />
         </DialogContent>
         <DialogActions>
-          {/* <Button
+          <Button
             variant="contained"
             onClick={() => {
               setReasonDialog(false);
@@ -845,7 +822,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
             <CloseIcon sx={{ color: 'white' }} />
-          </Button> */}
+          </Button>
 
           <Button
             variant="contained"
