@@ -1173,6 +1173,7 @@ const ViewIRO = () => {
               }, 500);
               false;
               setrejectDialog(false);
+              navigate('/iro/manage');
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >
