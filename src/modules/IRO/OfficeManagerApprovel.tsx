@@ -724,7 +724,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {' '}
-          {props.row.specialsanction}
+          {props.row.specialsanction == 'Yes'? 'President': 'No'}
         </p>
       ),
       width: 200,
