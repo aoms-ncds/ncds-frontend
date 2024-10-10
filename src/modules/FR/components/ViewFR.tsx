@@ -164,7 +164,7 @@ const openDilog = () => {
 
 const handleClick = (e: any) => {
   e.preventDefault();
-  if (props.value?.particulars?.[0].sanctionedAsPer != null) {
+  if (props.value?.particulars?.[0].sanctionedAsPer != null && props.value.sanctionedBank !=null && props.value.sourceOfAccount != null) {
     if (props.onSubmit) {
       {
         const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });
@@ -887,6 +887,8 @@ return (
 
                         <Button
                           variant="contained"
+                          disabled={reasonForReject==''}
+
                           onClick={() => {
                             const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
                             if (props.onSubmit) {
@@ -911,7 +913,7 @@ return (
                   </>
                 ) : null}
                 {
-                  props.action === 'view' && FRstatus == 'WAITING_FOR_ACCOUNTS' ? (
+                  props.action === 'view' && FRstatus == 'WAITING_FOR_ACCOUNTS'? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                         &nbsp;
@@ -991,17 +993,18 @@ return (
                           variant="contained"
                           color="error"
                           onClick={() => {
-                            const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
-                            if (props.onSubmit) {
-                              const updatedValue = { ...props.value, status: FRLifeCycleStates.REJECTED }; // Create a new object with updated status
-                              props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                            }
-                            setTimeout(() => {
-                              closeSnackbar(rejectionSnack);
-                              const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
-                              setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                            }, 500);
-                            navigate('/fr/Approve');
+                            setrejectDialog(true);
+                            // const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
+                            // if (props.onSubmit) {
+                            //   const updatedValue = { ...props.value, status: FRLifeCycleStates.REJECTED }; // Create a new object with updated status
+                            //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+                            // }
+                            // setTimeout(() => {
+                            //   closeSnackbar(rejectionSnack);
+                            //   const rejectedSnack = enqueueSnackbar({ message: 'Disapproved!', variant: 'success' });
+                            //   setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                            // }, 500);
+                            // navigate('/fr/Approve');
                           }}
                         >
                             Disapprove
@@ -1072,7 +1075,7 @@ return (
         </form>
         <br />
         {Err && <Alert sx={{ width: '30vw' }} variant="filled" severity="error">
-          Sanction as per require for each particular   !
+          Required fields must ber fill   !
         </Alert>}
 
       </CardContent>

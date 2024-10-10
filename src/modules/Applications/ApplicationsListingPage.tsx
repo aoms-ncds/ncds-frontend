@@ -458,7 +458,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         //       });
         //   }}
         // />,
-        props.action === 'hr' || props.action === 'president' && hasPermissions(['MANAGE_APPLICATION']) &&
+        props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
           label="Reject"
@@ -706,8 +706,8 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                               Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
                                 Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'WAITING FOR PRESIDENT' :
                                   Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
-                                    Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ',
-                              Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
+                                    Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED':
+                                      Number(application.status) == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT' : 'Unknown Status ',
                             ])) :
                             [];
                         const headers = [

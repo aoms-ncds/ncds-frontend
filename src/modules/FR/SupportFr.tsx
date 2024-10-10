@@ -704,7 +704,7 @@ const SupportFrPage = () => {
 
   return (
     <CommonPageLayout
-      title="Manage FR"
+      title="Support FR"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {

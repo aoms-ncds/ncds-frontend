@@ -23,6 +23,8 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import { red } from '@mui/material/colors';
+import CircularProgress from '@mui/material/CircularProgress';
+
 interface TotalSupportStructure {
   basic?: number;
   prevBasic?: number;
@@ -1499,7 +1501,9 @@ const WorkerSupportPage = () => {
                                 } }
                                 disabled={loading1 || loading2 || disableAttach || loading}
                               >
-                                {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes'}
+                                {loading1 || loading2 || loading|| disableAttach ? <Box sx={{ display: 'flex' }}>
+                                  <CircularProgress />
+                                </Box> : 'Yes'}
                               </Button>
                             </DialogActions>
 
