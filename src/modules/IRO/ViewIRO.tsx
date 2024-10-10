@@ -1155,6 +1155,7 @@ const ViewIRO = () => {
 
           <Button
             variant="contained"
+            disabled={reasonForReject==''}
             onClick={() => {
               const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
               IROServices.reject(iroID as string, reasonForReject as string)

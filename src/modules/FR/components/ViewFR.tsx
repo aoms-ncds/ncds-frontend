@@ -887,6 +887,8 @@ return (
 
                         <Button
                           variant="contained"
+                          disabled={reasonForReject==''}
+
                           onClick={() => {
                             const rejectionSnack = enqueueSnackbar({ message: 'Rejecting FR', variant: 'info' });
                             if (props.onSubmit) {
