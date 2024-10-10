@@ -1139,7 +1139,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           }}
         >
           {' '}
-          {props.row.specialsanction == 'Yes'? 'President': 'No'}
+          {props.row.specialsanction}
         </p>
       ),
       width: 200,

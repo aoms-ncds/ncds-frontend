@@ -11,10 +11,6 @@ import FRServices from '../../FR/extras/FRServices';
 Font.register({
   family: 'CourierPrime',
   src: '/arial.ttf',
-  fonts:[
-    {src: '/arial_bold.ttf', fontWeight:'bold'},
-    {src: '/ARIALBD 1.TTF', fontWeight:500}
-  ]
 });
 
 const styles = StyleSheet.create({
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 100,
     fontSize: 25,
-    fontWeight: 500,
+    // fontWeight: 'bold',
     marginTop: 15,
     color: '#cd151d',
   },
@@ -48,23 +44,21 @@ const styles = StyleSheet.create({
     marginTop: 45,
     fontSize: 15,
     position: 'absolute',
-    left: 180,
+    left: 200,
     color: 'black',
-    fontWeight: 500,
-    //
+    // fontWeight: 'bold',
   },
   text: {
     fontSize: 11,
     color: 'black',
-    fontWeight: 500,
   },
   text1: {
-    fontSize: 8,
+    fontSize: 11,
     color: 'black',
 
   },
   text2: {
-    fontSize: 6,
+    fontSize: 8,
     color: 'black',
 
   },
@@ -173,31 +167,31 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <>
               <Image src="/3D Logo 3.png" style={styles.image} />
 
-              <Text style={{ ...styles.heading,fontFamily: 'CourierPrime' }}> INDIAN EVANGELICAL TEAM </Text></>
+              <Text style={{ ...styles.heading, fontWeight: 500, fontFamily: 'CourierPrime' }}> INDIAN EVANGELICAL TEAM </Text></>
             {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
-            <Text style={{ ...styles.title, right: 50, fontFamily: 'CourierPrime' }}> INTERNAL RELEASE ORDER </Text>
+            <Text style={{ ...styles.title, fontWeight: 700, fontFamily: 'CourierPrime' }}> Internal Release Order </Text>
           </div>
 
           <div style={{ marginTop: 60 }}>
             <View style={{ ...styles.box, marginTop: 15 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2,  fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO</Text>
-                <Text style={{ ...styles.text, marginTop: 5, left: 74 }}>:&nbsp;{props.rowData?.IROno}</Text>
-              </View>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 7 }}>{props.rowData?.IROno}</Text>
+                </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime',fontSize: 10 }}>IRO DATE</Text>
-                  <Text style={{ ...styles.text, marginTop: 5, left: 81 }}>:&nbsp;{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', top: 2, fontFamily: 'CourierPrime' }}>IRO DATE:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 7 }}>{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Division Name</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 34, marginBottom: 3 }}>: {props?.rowData?.division?.details.name ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Division Name:</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{props?.rowData?.division?.details.name ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Divisional Co-ordinator</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>: {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Divisional Co-ordinator: </Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>{`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
                 </View>
               </View>
             </View>
@@ -206,62 +200,62 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ ...styles.box, marginTop: 3 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left:40 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
-                </View>
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Account No</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 48 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
-                </View>
-                <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source Of Fund</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 47 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Amt Released on</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>IFSC Code</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 42 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 55 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Account No</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 39 }}>{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Mode of Payment </Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 10 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 36 }}>:&nbsp;{props.rowData?.releaseAmount?.modeOfPayment ?? ''}</Text>
-                </View>
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Bank Name</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 51 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.bankName}</Text>
-                </View>
-                <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Transaction ID</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 22 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 55 }}>:&nbsp;{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Source Of Fund</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 22 }}> {props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 29 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 6, left: 40, marginBottom: 3 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.branchName}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>IFSC Code</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 42 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 44 }}>{props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 52 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 6, left: 97, marginBottom: 3 }}>:&nbsp;{props.fr?.FRno}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Mode of Payment </Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 10 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 12 }}>{props.rowData?.releaseAmount?.modeOfPayment ?? ''}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: 300, flexDirection: 'row' }}>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Bank Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 39 }}>{props.rowData?.releaseAmount?.transferredBank?.bankName}</Text>
+                </View>
+                <View style={{ width: 300, flexDirection: 'row' }}>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Transaction ID</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 22 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 24 }}>{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: 300, flexDirection: 'row' }}>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 29 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 31, marginBottom: 3 }}>{props.rowData?.releaseAmount?.transferredBank?.branchName}</Text>
+                </View>
+                <View style={{ width: 300, flexDirection: 'row' }}>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 52 }}>:</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 54, marginBottom: 3 }}>{props.fr?.FRno}</Text>
                 </View>
               </View>
             </View>
@@ -287,16 +281,15 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   alignItems: 'center',
                   height: 24,
                   textAlign: 'center',
-                
+                  fontWeight: 'bold',
                   flexGrow: 1,
                 }}
               >
                 <Text
                   style={{
                     width: '20%',
-                    textAlign: 'center', fontSize: 10,
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
-                    fontWeight : 500
                   }}
                 >
                   Sl No
@@ -304,9 +297,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
                     width: '800 px', // Set fixed width,
-                    textAlign: 'center', fontSize: 10,
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                   }}
                 >
@@ -315,9 +307,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
                     width: '100%',
-                    textAlign: 'center', fontSize: 10,
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                   }}
                 >
@@ -327,9 +318,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
                     width: '40%',
-                    textAlign: 'center', fontSize: 10,
+                    textAlign: 'center', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                   }}
                 >
@@ -341,7 +331,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     width: '60%',
                     textAlign: 'center',
                     fontSize: 11,
-                    fontWeight : 500,
+                    fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                     flexWrap: 'wrap', // Allows the text to wrap
                   }}
@@ -351,9 +341,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
                     width: '60%',
-                    textAlign: 'left', fontSize: 10,
+                    textAlign: 'left', fontSize: 11, fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                   }}
                 >
@@ -397,7 +386,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', left: 5, fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   Grand Total
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
@@ -408,17 +397,17 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontFamily: 'CourierPrime' }} width={'60%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'60%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontFamily: 'CourierPrime' }} width={'60%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'60%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
               <PDFTableRow key={props.rowData.particulars.length + 1}>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', left: 5, fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
@@ -429,7 +418,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ textAlign: 'left', fontSize: 11, fontWeight: 'bold', fontFamily: 'CourierPrime' }} width={'100%'}>
                   {sanctionedAmountWords}
                 </PDFCell>
               </PDFTableRow>
@@ -439,7 +428,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 200 }}>
                 <Text style={{
-                  ...styles.text, marginTop: 10, left: 5,
+                  ...styles.text, marginTop: 10, left: 5, fontWeight: 'bold',
                   fontFamily: 'CourierPrime', fontSize: 10,
                 }} >Balance amount to be adjusted:</Text></View>
               <View>
@@ -448,7 +437,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 200 }}>
                 <Text style={{
-                  ...styles.text, left: 5,
+                  ...styles.text, left: 5, fontWeight: 'bold',
                   fontFamily: 'CourierPrime', fontSize: 10,
                 }} >Adjusted to IRO No.:</Text></View>
               <View>
@@ -464,7 +453,6 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     ...styles.text,
                     textAlign: 'center',
                     fontSize: 10,
-                    fontWeight : 500
                   }}>
                     E Signature protected.
                   </Text>
@@ -485,8 +473,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                       ...styles.text1,
                       fontSize: 11,
                       textAlign: 'center',
-                      //f
-                      fontWeight : 500,
+                      // fontWeight: 'bold',
                       fontFamily: 'CourierPrime',
                     }}>
                       Mr. Shaji Varghese
@@ -495,7 +482,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     <Text style={{
                       ...styles.text1,
                       fontSize: 11,
-                      fontWeight : 500,
+                      fontWeight: 'bold',
                       fontFamily: 'CourierPrime',
                       textAlign: 'center',
                     }}>
@@ -508,7 +495,6 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   ...styles.text,
                   textAlign: 'center',
                   fontSize: 10,
-                  fontWeight : 500
                 }}>
                   E Signature protected.
                 </Text>
@@ -530,8 +516,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     ...styles.text1,
                     fontSize: 11,
                     textAlign: 'center',
-                    //
-                    fontWeight : 500,
+                    // fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                   }}>
                     {props.officeMngrSign?.officeManagerName}
@@ -539,7 +524,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   <Text style={{
                     ...styles.text1,
                     fontSize: 11,
-                    fontWeight : 500,
+                    fontWeight: 'bold',
                     fontFamily: 'CourierPrime',
                     textAlign: 'center',
                   }}>
@@ -551,7 +536,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
           </div>
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
+              <Text style={{ ...styles.text, left: 5, fontWeight: 'bold', fontFamily: 'CourierPrime' }}>Prepared By:</Text>
               <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName ? props?.rowData?.approvedBy?.basicDetails?.firstName.trim() : ''}${props?.rowData?.approvedBy?.basicDetails?.middleName ? ' ' + props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
             </View>
             <Text style={{
