@@ -316,7 +316,11 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -389,11 +393,11 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
     console.log(t.sanctionedAmount, 'amt');
   });
   useEffect(() => {
-    IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
+    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
       .then((res) => {
         setIROrder(res.data);
       });
-  }, []);
+  }, [dateRange]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -773,7 +777,19 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Account Manager Verify'}>
+    <CommonPageLayout title={'Account Manager Verify' } momentFilter={
+
+      {
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }
+
+    }>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={

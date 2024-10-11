@@ -21,7 +21,11 @@ const SentBack = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -294,17 +298,25 @@ const SentBack = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ status: [FRLifeCycleStates.FR_SEND_BACK]})
+    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.FR_SEND_BACK]} )
       .then((res) => {
         setClosedFRs(res.data);
       })
       .catch((err) => {
         console.log({ err });
       });
-  }, []);
+  }, [dateRange]);
   return (
 
-    <CommonPageLayout title="Sent Back iro">
+    <CommonPageLayout title="Sent Back iro" momentFilter={{
+      dateRange: dateRange,
+      onChange: (newDateRange) => {
+        setDateRange(newDateRange);
+        setClosedFRs((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
+      },
+      rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+      initialRange: 'months',
+    }}>
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2} >
           <Grid item xs={6}>

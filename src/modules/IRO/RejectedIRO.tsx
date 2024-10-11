@@ -40,6 +40,11 @@ const RejectedIRO = () => {
     remark: '',
     transactionId: '',
   });
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
@@ -522,16 +527,28 @@ const RejectedIRO = () => {
     },
   ];
   useEffect(() => {
-    IROServices.getAll({ status: IROLifeCycleStates.REJECTED })
+    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.REJECTED })
       .then((res) => {
         setIROrder(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [dateRange]);
   return (
-    <CommonPageLayout title="Rejected IRO">
+    <CommonPageLayout title="Rejected IRO" momentFilter={
+
+      {
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }
+
+    }>
       <Card sx={{ maxWidth: '78vw', height: '90vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>

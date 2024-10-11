@@ -126,7 +126,11 @@ const ReconciliationIRO = () => {
   const [mngrName, setMngrName] = useState('');
   // const [openPrintIro, setOpenPrintIro] = useState(false);
   const [FR, setFR] = useState<FR>();
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -248,7 +252,7 @@ const ReconciliationIRO = () => {
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS) {
       console.log('FRDD');
-      IROServices.getReconciliation({ sourceOfAccount: 'FCRA' })
+      IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'FCRA' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -257,7 +261,7 @@ const ReconciliationIRO = () => {
         });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getReconciliation({ sourceOfAccount: 'Local' })
+      IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'Local' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -311,7 +315,7 @@ const ReconciliationIRO = () => {
     //     });
     // }
     if (permissions?.OTHER_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation()
+      IROServices.getReconciliation({ dateRange: dateRange })
         .then((res) => {
           setReconcilationIRO(res.data);
         });
@@ -323,7 +327,7 @@ const ReconciliationIRO = () => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [attachment]);
+  }, [attachment, dateRange]);
 
   const columns: GridColDef<IROrder>[] = [
     {
@@ -694,7 +698,19 @@ const ReconciliationIRO = () => {
     },
   ];
   return (
-    <CommonPageLayout title="For Reconciliation">
+    <CommonPageLayout title="For Reconciliation" momentFilter={
+
+      {
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setReconcilationIRO((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }
+
+    } >
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>

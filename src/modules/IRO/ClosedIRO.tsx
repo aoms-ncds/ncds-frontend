@@ -49,7 +49,11 @@ const ClosedIRO = () => {
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
   const [openRelease, setOpenRelease] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -131,7 +135,7 @@ const ClosedIRO = () => {
         variant: 'error',
       });
     } finally {
-      IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })
+      IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => {
         setIROrder(res.data);
       })
@@ -498,16 +502,28 @@ const ClosedIRO = () => {
     },
   ];
   useEffect(() => {
-    IROServices.getAll({ status: IROLifeCycleStates.IRO_CLOSED })
+    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => {
         setIROrder(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [dateRange]);
   return (
-    <CommonPageLayout title="Closed IRO">
+    <CommonPageLayout title="Closed IRO" momentFilter={
+
+      {
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }
+
+    }>
       <Card sx={{ maxWidth: '78vw', height: '90vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
           <Grid item xs={6}>
