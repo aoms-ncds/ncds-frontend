@@ -11,10 +11,10 @@ import FRServices from '../../FR/extras/FRServices';
 Font.register({
   family: 'CourierPrime',
   src: '/arial.ttf',
-  fonts:[
-    {src: '/arial_bold.ttf', fontWeight:'bold'},
-    {src: '/ARIALBD 1.TTF', fontWeight:500}
-  ]
+  fonts: [
+    { src: '/arial_bold.ttf', fontWeight: 'bold' },
+    { src: '/ARIALBD 1.TTF', fontWeight: 500 },
+  ],
 });
 
 const styles = StyleSheet.create({
@@ -173,7 +173,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <>
               <Image src="/3D Logo 3.png" style={styles.image} />
 
-              <Text style={{ ...styles.heading,fontFamily: 'CourierPrime' }}> INDIAN EVANGELICAL TEAM </Text></>
+              <Text style={{ ...styles.heading, fontFamily: 'CourierPrime' }}> INDIAN EVANGELICAL TEAM </Text></>
             {/* <Image src={`${'https://drive.google.com/uc?id=1DLTxXV4OwASqLKQz_Z6iZQUrDjrdVZQB&expor'}`} style={styles.image} /> */}
             <Text style={{ ...styles.title, right: 50, fontFamily: 'CourierPrime' }}> INTERNAL RELEASE ORDER </Text>
           </div>
@@ -182,11 +182,11 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ ...styles.box, marginTop: 15 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2,  fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO</Text>
-                <Text style={{ ...styles.text, marginTop: 5, left: 74 }}>:&nbsp;{props.rowData?.IROno}</Text>
-              </View>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 74 }}>:&nbsp;{props.rowData?.IROno}</Text>
+                </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime',fontSize: 10 }}>IRO DATE</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO DATE</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 81 }}>:&nbsp;{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
@@ -213,7 +213,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left:40 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 40 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -287,7 +287,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   alignItems: 'center',
                   height: 24,
                   textAlign: 'center',
-                
+
                   flexGrow: 1,
                 }}
               >
@@ -296,7 +296,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     width: '20%',
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
-                    fontWeight : 500
+                    fontWeight: 500,
                   }}
                 >
                   Sl No
@@ -304,7 +304,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
+                    fontWeight: 500,
                     width: '800 px', // Set fixed width,
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
@@ -315,7 +315,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
+                    fontWeight: 500,
                     width: '100%',
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
@@ -327,7 +327,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
+                    fontWeight: 500,
                     width: '40%',
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
@@ -341,7 +341,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     width: '60%',
                     textAlign: 'center',
                     fontSize: 11,
-                    fontWeight : 500,
+                    fontWeight: 500,
                     fontFamily: 'CourierPrime',
                     flexWrap: 'wrap', // Allows the text to wrap
                   }}
@@ -351,7 +351,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    fontWeight : 500,
+                    fontWeight: 500,
                     width: '60%',
                     textAlign: 'left', fontSize: 10,
                     fontFamily: 'CourierPrime',
@@ -397,16 +397,16 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', left: 5, fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
                   Grand Total
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
                 <PDFCell width={'100%'} ></PDFCell>
                 <PDFCell width={'590 px'} ></PDFCell>
+                {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, height: 24 }}></div>
+                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
+                <div style={{ borderRight: 1, right: 0.1, height: 24 }}></div>
 
                 <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontFamily: 'CourierPrime' }} width={'60%'}>
                   {totalAmount as any ?? ''}
@@ -417,19 +417,19 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
-              <PDFTableRow key={props.rowData.particulars.length + 1}>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
+              <PDFTableRow key={props.rowData.particulars.length} >
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
                   Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
                 <PDFCell width={'100%'} ></PDFCell>
                 <PDFCell width={'40%'} ></PDFCell>
+                {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
-                <PDFCell style={{fontWeight : 500, textAlign: 'left', fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
+                {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
                   {sanctionedAmountWords}
                 </PDFCell>
               </PDFTableRow>
@@ -464,7 +464,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     ...styles.text,
                     textAlign: 'center',
                     fontSize: 10,
-                    fontWeight : 500
+                    fontWeight: 500,
                   }}>
                     E Signature protected.
                   </Text>
@@ -485,8 +485,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                       ...styles.text1,
                       fontSize: 11,
                       textAlign: 'center',
-                      //f
-                      fontWeight : 500,
+                      // f
+                      fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
                       Mr. Shaji Varghese
@@ -495,7 +495,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     <Text style={{
                       ...styles.text1,
                       fontSize: 11,
-                      fontWeight : 500,
+                      fontWeight: 500,
                       fontFamily: 'CourierPrime',
                       textAlign: 'center',
                     }}>
@@ -508,7 +508,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   ...styles.text,
                   textAlign: 'center',
                   fontSize: 10,
-                  fontWeight : 500
+                  fontWeight: 500,
                 }}>
                   E Signature protected.
                 </Text>
@@ -531,7 +531,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                     fontSize: 11,
                     textAlign: 'center',
                     //
-                    fontWeight : 500,
+                    fontWeight: 500,
                     fontFamily: 'CourierPrime',
                   }}>
                     {props.officeMngrSign?.officeManagerName}
@@ -539,7 +539,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   <Text style={{
                     ...styles.text1,
                     fontSize: 11,
-                    fontWeight : 500,
+                    fontWeight: 500,
                     fontFamily: 'CourierPrime',
                     textAlign: 'center',
                   }}>
