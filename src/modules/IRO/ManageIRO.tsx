@@ -429,7 +429,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -440,7 +440,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ status: statusFilter, sourceOfAccount: 'Local' })
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
             setNotFound(true);
@@ -506,7 +506,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ status: statusFilter }).then((res) => {
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
           // console.log(res.data, 'datgajdfj');

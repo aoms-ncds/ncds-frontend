@@ -307,7 +307,11 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     specialsanction: '',
   });
 
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
@@ -383,11 +387,11 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     });
   }
   useEffect(() => {
-    IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
+    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
       .then((res) => {
         setIROrder(res.data);
       });
-  }, []);
+  }, [dateRange]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -765,7 +769,19 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   ];
 
   return (
-    <CommonPageLayout title={'Office Manager Verify'}>
+    <CommonPageLayout title={'Office Manager Verify'} momentFilter={
+
+      {
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }
+
+    }>
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={

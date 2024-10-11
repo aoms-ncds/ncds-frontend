@@ -327,15 +327,16 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
+
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: moment().startOf('y'),
-    endDate: moment().endOf('y'),
-    rangeType: 'years',
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
   });
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
@@ -422,7 +423,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     if (props.action === 'release') {
       if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
-        IROServices.getAll({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+        IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
           .then((res) => {
             // console.log(res.data, 'sds');
             setIROrder(() => [...res.data]);
@@ -1227,20 +1228,16 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   }
   return (
     <CommonPageLayout
-      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
-      momentFilter={
-        props.action == 'manage' ?
-          {
-            dateRange: dateRange,
-            onChange: (newDateRange) => {
-              setDateRange(newDateRange);
-              setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
-            },
-            rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
-            initialRange: 'years',
-          } :
-          undefined
-      }
+      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amounst'}
+      momentFilter={{
+        dateRange: dateRange,
+        onChange: (newDateRange) => {
+          setDateRange(newDateRange);
+          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
+        },
+        rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+        initialRange: 'months',
+      }}
     >
       <PermissionChecks
         permissions={['READ_IRO']}

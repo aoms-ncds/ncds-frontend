@@ -31,6 +31,7 @@ import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
+import moment from 'moment';
 
 const PresidentApproval = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -43,6 +44,11 @@ const PresidentApproval = () => {
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
     transactionId: '',
+  });
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
   });
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
@@ -67,14 +73,14 @@ const PresidentApproval = () => {
   }
 
   useEffect(() => {
-    FRServices.getAll({ status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
+    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
       .then((res) => {
         setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
       })
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [dateRange]);
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
@@ -414,7 +420,15 @@ const PresidentApproval = () => {
   ];
 
   return (
-    <CommonPageLayout title="President Verify">
+    <CommonPageLayout title="President Verify" momentFilter={{
+      dateRange: dateRange,
+      onChange: (newDateRange) => {
+        setDateRange(newDateRange);
+        setFRRequests((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
+      },
+      rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+      initialRange: 'months',
+    }}>
       <PermissionChecks
         permissions={['READ_FR']}
         granted={(

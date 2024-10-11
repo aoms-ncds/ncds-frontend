@@ -18,7 +18,11 @@ import { enqueueSnackbar } from 'notistack';
 const ClosedFRsTable = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -235,14 +239,14 @@ const ClosedFRsTable = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ status: [FRLifeCycleStates.FR_CLOSED]})
+    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.FR_CLOSED]})
       .then((res) => {
         setClosedFRs(res.data);
       })
       .catch((err) => {
         console.log({ err });
       });
-  }, []);
+  }, [dateRange]);
   return (
     <Grid container spacing={2} padding={2} >
       <Grid item xs={6}>
