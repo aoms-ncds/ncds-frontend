@@ -187,7 +187,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO DATE</Text>
-                  <Text style={{ ...styles.text, marginTop: 5, left: 81 }}>:&nbsp;{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 60 }}>:&nbsp;{props.rowData?.IRODate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -196,8 +196,8 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   <Text style={{ ...styles.text, marginTop: 6, left: 34, marginBottom: 3 }}>: {props?.rowData?.division?.details.name ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Divisional Co-ordinator</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 7, marginBottom: 3 }}>: {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Div. Co-ordinator</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
                 </View>
               </View>
             </View>
@@ -213,7 +213,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 40 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -225,7 +225,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source Of Fund</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 47 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 26 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -237,7 +237,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Mode of Payment </Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 10 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 36 }}>:&nbsp;{props.rowData?.releaseAmount?.modeOfPayment ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:&nbsp;{props.rowData?.releaseAmount?.modeOfPayment ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -249,7 +249,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Transaction ID</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 22 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 55 }}>:&nbsp;{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 34 }}>:&nbsp;{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -261,7 +261,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>FR NO</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 52 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 6, left: 97, marginBottom: 3 }}>:&nbsp;{props.fr?.FRno}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 76, marginBottom: 3 }}>:&nbsp;{props.fr?.FRno}</Text>
                 </View>
               </View>
             </View>
