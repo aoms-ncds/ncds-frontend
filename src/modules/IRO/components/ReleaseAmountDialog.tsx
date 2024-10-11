@@ -108,7 +108,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           return division?.DivisionBankFCRA;
         case 'Local Bank ':
           return division?.localBankDetails;
-        case 'Other Bank ':
+        case 'Other Bank':
           return division?.otherBankDetails;
         case 'FCRA':
           return division?.FCRABankDetails;
