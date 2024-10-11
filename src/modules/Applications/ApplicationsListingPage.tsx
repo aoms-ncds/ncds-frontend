@@ -540,7 +540,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       align: 'center',
       headerAlign: 'center',
       valueGetter: (params) => {
-        return params.value == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
+        return params.value == CommonLifeCycleStates.CREATED ? 'WAITING FOR HR' :
           params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
             params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
               params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
@@ -703,7 +703,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                               application.reason,
                               application.createdBy && (application.createdBy?.basicDetails.firstName + ' ' + application.createdBy?.basicDetails.lastName),
                               application.division?.details?.name,
-                              Number(application.status) == CommonLifeCycleStates.CREATED ? 'Waiting for HR' :
+                              Number(application.status) == CommonLifeCycleStates.CREATED ? 'WAITING FOR HR' :
                                 Number(application.status) == CommonLifeCycleStates.ACTIVE ? 'WAITING FOR PRESIDENT' :
                                   Number(application.status) == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
                                     Number(application.status) == CommonLifeCycleStates.REJECTED ? 'REJECTED':

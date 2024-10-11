@@ -95,7 +95,7 @@ const ApplicationApprovalPage = () => {
             </Typography>
 
           </CardContent>
-          {Number(applications?.status) !== CommonLifeCycleStates.APPROVED && (
+          {Number(applications?.status) !== CommonLifeCycleStates.APPROVED && Number(applications?.status) !== CommonLifeCycleStates.REJECTED && (
 
             <CardActions>
               <PermissionChecks
@@ -128,6 +128,7 @@ const ApplicationApprovalPage = () => {
                     message: res.message,
                     variant: 'success',
                   });
+                  navigate('/application/manage');
                 })
                 .catch((err) => {
                   closeSnackbar(snackbarId);
@@ -231,6 +232,7 @@ const ApplicationApprovalPage = () => {
               message: res.message,
               variant: 'success',
             });
+            navigate('/application/manage');
           })
           .catch((err) => {
             closeSnackbar(snackbarId);
