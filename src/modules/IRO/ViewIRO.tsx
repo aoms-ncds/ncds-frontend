@@ -934,7 +934,7 @@ const ViewIRO = () => {
                                 permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
                                   <>
-                                    <Button
+                                    {/* <Button
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
@@ -958,7 +958,7 @@ const ViewIRO = () => {
                                       }}
                                     >
                                       Revert
-                                    </Button>
+                                    </Button> */}
                                     &nbsp;
                                     <Button
                                       variant="contained"
