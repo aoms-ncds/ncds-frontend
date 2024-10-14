@@ -23,6 +23,7 @@ import moment from 'moment';
 import * as XLSX from 'xlsx';
 import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
+import { useNavigate } from 'react-router-dom';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -229,6 +230,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [remark, setRemark] = useState<IReason | null | string>();
+  const navigate = useNavigate();
 
 
   const showLinkAction = props.action === 'manage';
@@ -423,41 +425,44 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               });
           }}
         />,
-        // props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
-        // <GridLinkAction
-        //   key={3}
-        //   label="Forward to president"
-        //   icon={<ArrowForwardIcon />}
-        //   showInMenu
-        //   onClick={() => {
-        //     setStatusId(params.id as string);
-        //     const snackbarId = enqueueSnackbar({
-        //       message: 'Activating...',
-        //       variant: 'info',
-        //     });
-        //     ApplicationServices.active(params.id as string)
-        //       .then((res) => {
-        //         if (applications) {
-        //           const filteredApplications = applications?.filter((application) => {
-        //             return application._id !== params.id;
-        //           });
-        //           setApplications(filteredApplications);
-        //         }
-        //         closeSnackbar(snackbarId);
-        //         enqueueSnackbar({
-        //           message: res.message,
-        //           variant: 'success',
-        //         });
-        //       })
-        //       .catch((err) => {
-        //         closeSnackbar(snackbarId);
-        //         enqueueSnackbar({
-        //           message: err.message,
-        //           variant: 'error',
-        //         });
-        //       });
-        //   }}
-        // />,
+        props.action == 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
+        <GridLinkAction
+          key={3}
+          label="Sent to president"
+          icon={<ArrowForwardIcon />}
+          showInMenu
+          onClick={() => {
+            setStatusId(params.id as string);
+            const snackbarId = enqueueSnackbar({
+              message: 'Activating...',
+              variant: 'info',
+            });
+            ApplicationServices.active(params.id as string)
+               .then((res) => {
+                 if (applications) {
+                   const filteredApplications = applications?.filter((application) => {
+                     return application._id !== params.id;
+                   });
+                   setApplications(filteredApplications);
+                 }
+                 // handleClose();
+                 // closeSnackbar(snackbarId);
+                 setShowApplicationFormDialog(false);
+                 //  navigate('/application');
+                 enqueueSnackbar({
+                   message: res.message,
+                   variant: 'success',
+                 });
+               })
+          .catch((err) => {
+            closeSnackbar(snackbarId);
+            enqueueSnackbar({
+              message: err.message,
+              variant: 'error',
+            });
+          });
+          }}
+        />,
         props.action === 'hr' && hasPermissions(['MANAGE_APPLICATION']) &&
         <GridLinkAction
           key={4}
@@ -618,7 +623,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button>
-            <Button type="submit">{action === 'add' ? 'Add' : 'Edit'}</Button>
+            <Button type="submit">{action === 'add' ? 'Sent to Hr' : 'Edit'}</Button>
           </DialogActions>
         </form>
       </Dialog>
