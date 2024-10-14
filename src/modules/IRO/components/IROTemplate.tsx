@@ -223,7 +223,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                   <Text style={{ ...styles.text, marginTop: 5, left: 48 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source Of Fund</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source of Fund</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
                   <Text style={{ ...styles.text, marginTop: 5, left: 26 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
@@ -293,7 +293,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
               >
                 <Text
                   style={{
-                    width: '20%',
+                    width: '12%',
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                     fontWeight: 500,
@@ -305,7 +305,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '800 px', // Set fixed width,
+                    width: '800px px', // Set fixed width,
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
@@ -316,19 +316,20 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '100%',
-                    textAlign: 'center', fontSize: 10,
+                    width: '70%',
+                    textAlign: 'center',
+                    fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
                 >
-                  Sanctioned
-                  As Per
+  Sanctioned{'\n'}
+  As Per
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '40%',
+                    width: '13%',
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
@@ -338,26 +339,25 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
-                    width: '60%',
-                    textAlign: 'center',
-                    fontSize: 11,
                     fontWeight: 500,
+                    width: '32%',
+                    textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
-                    flexWrap: 'wrap', // Allows the text to wrap
                   }}
                 >
-  Request Amt
+  Requested{'\n'}
+   Amt
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '60%',
-                    textAlign: 'left', fontSize: 10,
+                    width: '32%',
+                    textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
                 >
-                  Sanctioned Amt
+                  Sanctioned {'\n'} Amt
                 </Text>
               </View>
               {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
@@ -366,28 +366,28 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
 
 
                 return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='50' >
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'20%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'12%'}>
                     {String(index + 1)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'800 px'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'800px'}>
                     {item.narration}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'100%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'70%'}>
                     {String(item?.sanctionedAsPer ?? '')}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
 
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'40%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'13%'}>
                     {String(item.quantity)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(item.requestedAmount)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
                   </PDFCell>
 
@@ -397,23 +397,23 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'90%'}>
                   Grand Total
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
                 <PDFCell width={'100%'} ></PDFCell>
-                <PDFCell width={'590 px'} ></PDFCell>
+                <PDFCell width={'575 px'} ></PDFCell>
                 {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
                 <div style={{ borderRight: 1, right: 0.1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 11, fontFamily: 'CourierPrime' }} width={'60%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'39%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 11, fontFamily: 'CourierPrime' }} width={'60%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'39%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
@@ -439,22 +439,24 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 200 }}>
                 <Text style={{
-                  ...styles.text, marginTop: 10, left: 5,
+                  ...styles.text, marginTop: 10, padding: 5, left: 5,
                   fontFamily: 'CourierPrime', fontSize: 10,
-                }} >Balance amount to be adjusted:</Text></View>
-              <View>
+                }} >Balance amount to be adjusted:</Text>
               </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ width: 200 }}>
-                <Text style={{
-                  ...styles.text, left: 5,
-                  fontFamily: 'CourierPrime', fontSize: 10,
-                }} >Adjusted to IRO No.:</Text></View>
               <View>
               </View>
             </View>
           </div>
+          <br />
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 200 }}>
+              <Text style={{
+                ...styles.text, left: 5, padding: 5,
+                fontFamily: 'CourierPrime', fontSize: 10,
+              }} >Adjusted to IRO No.:</Text></View>
+            <View>
+            </View>
+          </View>
 
           <div style={{ marginTop: 5 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>

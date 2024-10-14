@@ -105,6 +105,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       const getTransferredBank = () => {
         switch (sanctionedBank) {
         case 'Division Bank FCRA ':
+        case 'Division Bank FCRA':
           return division?.DivisionBankFCRA;
         case 'Local Bank ':
           return division?.localBankDetails;
@@ -121,6 +122,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         case 'Division Bank Local ':
           return division?.DivisionBankLocal;
         case 'Beneficiary Bank 1 ':
+        case 'Beneficiary Bank 1':
           return division?.BeneficiaryBank1 || division?.otherBankDetails;
         case 'Beneficiary Bank 2 ':
           return division?.BeneficiaryBank2 || division?.otherBankDetails1;
