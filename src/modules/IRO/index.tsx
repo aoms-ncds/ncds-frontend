@@ -15,6 +15,8 @@ const IRODashboard = () => {
   const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
   const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
+  const [iroDivCOunt, setIroDivCount] = useState<number | null>(null);
+  console.log(iroDivCOunt, 'iroDivCOunt');
 
   useEffect(() => {
   // IROServices.getCount()
@@ -24,6 +26,11 @@ const IRODashboard = () => {
   //   });
     IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
+      .catch((error) => {
+        console.log(error);
+      });
+    IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
+      .then((res) => setIroDivCount(res.data))
       .catch((error) => {
         console.log(error);
       });
@@ -47,8 +54,16 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
         <Grid item xs={6} md={3} xl={3}>
+          <PermissionChecks
+            permissions={['MANAGE_IRO']}
+            granted={(
+              <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
+                style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Applied'} color="#fff" />
+            )} />
+          <br />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Applied'} color="#fff" />
+            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()} secondaryText={'Applied'} color="#fff" />
+
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"
