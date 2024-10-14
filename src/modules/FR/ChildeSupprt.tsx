@@ -71,6 +71,10 @@ const ChildeSupportPage = () => {
     sanctionedAsPer: '',
     childSupport: true,
   });
+  const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
+  const [filterdId, setFilterdId] = useState<string[]>([]);
+  console.log(selectedRowIds, 'selectedRowIds');
+
   console.log(requisition.particulars?.[0]?.month, 'requisition');
   const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
@@ -133,7 +137,7 @@ const ChildeSupportPage = () => {
   // calculateTotalCEAAmount(childList)
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', height: '4vh', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
       {/* {columns.map((column) => ( */}
       <div style={{ textAlign: 'center' }}>
         <b>Total: </b>
@@ -364,6 +368,41 @@ const ChildeSupportPage = () => {
   const columnGroupingModel: GridColumnGroupingModel = [
 
   ];
+  // const handleSelectionChange = (newSelection) => {
+  //   setFilterdId((prevSelectedIds) => {
+  //     const updatedSelection = new Set([...prevSelectedIds, ...newSelection]);
+  //     return Array.from(updatedSelection); // Convert the set back to an array
+  //   });
+
+  //   console.log('Updated Selected IDs:', filterdId);
+  // };
+
+  // const handleAction = () => {
+  //   const selectedRows = filterdId.length > 0 ?
+  //     childList.filter((row) => filterdId.includes(row._id)) :
+  //     childList; // If no rows are selected, use all rows
+
+  //   // Perform your action with `selectedRows`
+  //   console.log('Rows to process:', selectedRows);
+  //   setChildList(selectedRows);
+  // };
+  const handleSelectionChange = (newSelection: any) => {
+    console.log(newSelection, 'newSelection');
+    // setSelectedRowIds(newSelection); // Update state with selected row IDs
+    setFilterdId((prevSelectedIds) => {
+      const updatedSelection = new Set([...prevSelectedIds, ...newSelection]);
+      return Array.from(updatedSelection); // Convert the set back to an array
+    });
+  };
+  const handleAction = () => {
+    const selectedRows = filterdId.length > 0 ?
+      childList.filter((row) => filterdId.includes(row._id)) :
+      childList; // If no rows are selected, use all rows
+
+    // Perform your action with `selectedRows`
+    console.log('Rows to process:', selectedRows);
+    setChildList(selectedRows);
+  };
   const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     'border': 0,
     'color':
@@ -734,19 +773,22 @@ const ChildeSupportPage = () => {
 
               }}
             >
-              <StyledDataGrid rows={childList ?? []}
-                columns={columns}
-                getRowId={(row) => row._id}
-                loading={childList === null}
-                columnGroupingModel={columnGroupingModel}
-                experimentalFeatures={{ columnGrouping: true }}
-              // slots={{
-              //   footer: CustomFooter,
-              // }}
-              // getRowClassName={(params) =>
-              //   params.row.supportStructure.supportEnabled ? 'yes' : 'no'
-              // }
-              /></Box>
+              <div style={{ height: 400, width: '100%' }}>
+                <StyledDataGrid
+                  rows={childList ?? []}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  loading={childList === null}
+                  columnGroupingModel={columnGroupingModel}
+                  experimentalFeatures={{ columnGrouping: true }}
+                  checkboxSelection
+                  rowSelectionModel={filterdId} // Use the state variable here
+
+                  onRowSelectionModelChange={(newSelection) => handleSelectionChange(newSelection)} // Update on selection change
+                />
+                <Button variant='contained' onClick={handleAction}>Process Selected Rows</Button>
+              </div>
+            </Box>
             <CustomFooter />
           </Grid>
         </Grid>
