@@ -88,6 +88,7 @@ const ChildeSupportPage = () => {
   const [pdfProps, setPdfProps] = useState<{ divisionId: string | null; childId: string | null }>({ divisionId: null, childId: null });
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
   const [loading, setLoading] = useState<boolean | null>(false);
+  const [loadingDiv, setLoadingDiv] = useState<boolean | null>(false);
   // const supportEnabledWorkers = childList?.filter((item) => item.supportStructure?.supportEnabled === true);
   const [disableAttach, setDisableAttach] = useState(true);
   const [confirmAttach, setConfirmAttach] = useState(false);
@@ -181,6 +182,7 @@ const ChildeSupportPage = () => {
         setAllChilde(res.data);
         if (res.data) {
           // setLoading(true);
+          setLoadingDiv(true);
         }
       });
     // DivisionsServices.getcoordinators()
@@ -569,7 +571,7 @@ const ChildeSupportPage = () => {
                     <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
                       required />
                   )}
-                  disabled={loading != true}
+                  disabled={loadingDiv != true}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
