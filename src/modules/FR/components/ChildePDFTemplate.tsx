@@ -1,9 +1,8 @@
-import ReactPDF, { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
-import ChildrenServices from '../../Workers/extras/ChildrenServices';
 
 Font.register({
   family: 'Teko',
@@ -14,22 +13,42 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: 'white',
   },
-  box5: {
-    width: 490,
-    height: 80,
-    border: '1px solid #333',
-    left: 50,
+  image: {
     position: 'absolute',
-    right: '100',
-    transform: 'rotate(-90deg)',
+    left: 825,
+    height: 50,
+    width: 50,
+    marginTop: 20,
+  },
+  title: {
+    marginTop: 70,
+    fontSize: 12,
+    position: 'absolute',
+    left: 720,
+    color: 'darkblue',
+  },
+
+  frno: {
+    marginTop: 83,
+    fontSize: 10,
+    position: 'absolute',
+    left: 820,
+    color: 'black',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  month: {
+    marginTop: 95,
+    fontSize: 10,
+    position: 'absolute',
+    left: 790,
+    color: 'black',
   },
   heading: {
     position: 'absolute',
-    right: '1600',
-    marginTop: 1000,
-    // marginTop: 60,
+    left: '800',
+    marginTop: 60,
     fontWeight: 100,
-    transform: 'rotate(-90deg)',
   },
   headingLine: {
     position: 'absolute',
@@ -39,35 +58,19 @@ const styles = StyleSheet.create({
     borderBottom: 1,
     borderColor: 'black',
   },
-  container: {
-    transform: 'rotate(90deg)',
-  },
   line: {
     position: 'absolute',
     left: '20',
-    right: '1550',
-    top: 90,
-    marginTop: 1000,
-    borderBottom: 1,
-    borderColor: 'black',
-    transform: 'rotate(-90deg)',
-  },
-  line1: {
-    position: 'absolute',
-    left: '20',
     right: 15,
-    top: 90,
+    top: 106,
     borderBottom: 1,
     borderColor: 'black',
   },
   tableContainer: {
-    position: 'relative',
-    right: '800',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 1100, // Adjust this value to set the table's position
-    width: 2000,
-    transform: 'rotate(-90deg)', // Rotate the table by 90 degrees clockwise
+    marginTop: 107, // Adjust this value to set the table's position
+    width: 1650,
   },
   tableRow: {
     display: 'flex',
@@ -79,31 +82,39 @@ const styles = StyleSheet.create({
     height: 30,
     left: 20,
   },
+  tableHead: {
+    flex: 1,
+    fontSize: 6,
+    padding: 2,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
   tableCell: {
     flex: 1,
     fontSize: 6,
     padding: 2,
     textAlign: 'center',
   },
-  tableCell2: {
+  bottomTableCell: {
     flex: 1,
-    fontSize: 8,
-    padding: 4,
-    textAlign: 'right',
+    fontSize: 6,
+    padding: 2,
   },
   grid: {
     borderRight: 1,
     height: 30,
   },
-
 });
 
 // Create Document Component
-const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; total:number}) => {
-  console.log(props.data, '√poprosp');
-
+const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; month: string | null; total:number;
+}) => {
   const [workers, setWorkers] = useState<Child[] | null>(null);
   const [total, setTotal] = useState<number>(0);
+  const [purpose, setPurpose] = useState('Division');
+  console.log(props.data, '√poprosp');
+  const year = new Date().getFullYear();
+
   // console.log(props.total, 'prop.ttt');
   // console.log(workers, 'pop');
   useEffect(() => {
@@ -114,7 +125,8 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
       setTotal(tot);
     });
     // console.log(tot, 'tot');
-  }, [props]);
+  }, []);
+  const div= props?.data?.map((e:any)=>e.division?.details?.name);
 
   // useEffect(() => {
   //   console.log(props, 'props');
@@ -131,80 +143,142 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; tota
   //     });
   //   }
   // }, [props.total]);
-
   return (
     <Document>
-      <Page size={'A1'} style={styles.page}>
-        <Text style={styles.heading}>REPORT</Text>
-        {/* <View style={styles.line} /> */}
-        <View
-          style={{ ...styles.box5, marginTop: 15, left: 300, top: 300, width: 130 }}>
-          {/* <Image style={{
-                height: 78,
-                width: 128,
-              }}
-              src={`data:`} /> */}
-          {props?.total}
-        </View>
+      <Page size={'A2'} style={styles.page} orientation='landscape'>
+        <div>
+          <Image src="/3D Logo 3.png" style={styles.image} />
+          <Text style={styles.title}>
+            {`IET Child Educational Assistance ${div?.[0]}`}
+          </Text>
+          <Text style={styles.month}>{`For the Month of ${props.month}`} {year}</Text>
+          {/* <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
+        </div>
+        <View style={styles.line} />
         <View style={styles.tableContainer} >
           <View style={styles.tableRow} key={0}>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sl No.</Text>
+            <Text style={styles.tableHead}>Sl No.</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Childe Code</Text>
+            <Text style={styles.tableHead}>Child Code</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>First Name</Text>
+            <Text style={styles.tableHead}>Child Name</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Last Name</Text>
+            <Text style={styles.tableHead}>Child Of</Text>
             <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Division</Text>
+            <Text style={styles.tableHead}>DOB</Text>
             <div style={styles.grid}></div>
-            {/* <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Sub-Division</Text>
-            <div style={styles.grid}></div> */}
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>DOB</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Age</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Gender</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>CEA Amount</Text>
+            <Text style={styles.tableHead}>CEA Amount</Text>
             <div style={styles.grid}></div>
           </View>
 
-          {workers?.map((row:any, index) => (<>
+          {workers?.map((row, index) => (<>
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{index}</Text>
+              <Text style={styles.tableCell}>{index + 1}</Text>
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.childCode}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.firstName}</Text>
+              <Text style={styles.tableCell}>{row.firstName} {row.lastName}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.lastName}</Text>
+              <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {row?.childOf?.basicDetails?.lastName}</Text>
               <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.division?.details?.name}</Text>
+              <Text style={styles.tableCell}>{row.dateOfBirth?.format('DD/MM/YYYY')}</Text>
               <div style={styles.grid}></div>
-              {/* <Text style={styles.tableCell}>{row.lastName}</Text> */}
-              {/* <div style={styles.grid}></div> */}
-              <Text style={styles.tableCell}>{row.dateOfBirth instanceof Date ? row.dateOfBirth?.toLocaleDateString('en-GB') : ''}</Text>
-              <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{(row.dateOfBirth?.fromNow() || '')?.replace(' ago', '')}</Text>
-              <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.gender}</Text>
-              <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.childSupport?.amount}</Text>
+              <Text style={styles.tableCell}>{row.childSupport?.amount !== 0 ? row.childSupport?.amount : ''}</Text>
               <div style={styles.grid}></div>
             </View>
           </>
           ))}
 
-          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={1} >
-            <Text style={{ ...styles.tableCell2, fontWeight: 'bold' }}>Total: {props.total}</Text>
+
+          <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={3} >
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total Net Amount: </Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{props?.total}</Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={styles.grid}></div>
           </View>
+
+          {/* <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total: {props.total}</Text> */}
+
         </View>
-
-
       </Page>
     </Document>
   );

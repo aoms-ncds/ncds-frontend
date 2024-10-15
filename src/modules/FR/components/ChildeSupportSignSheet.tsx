@@ -130,7 +130,6 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
   const rowsPerPage = 6;
   const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
-
   // Function to get rows for a specific page
   const getRowsForPage = (page:any) => {
     const start = page * rowsPerPage;
@@ -151,7 +150,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
       setTotal(tot);
     });
     // console.log(tot, 'tot');
-  }, [props]);
+  }, []);
   return (
     <Document>
       <Page size={'A4'} style={styles.page} orientation='landscape'>

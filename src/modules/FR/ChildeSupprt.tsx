@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, CardContent, Dialog, DialogContent, Grid, TextField, Tooltip, Typography, styled } from '@mui/material';
+import { Autocomplete, Box, Button, Card, CardContent, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Tooltip, Typography, styled } from '@mui/material';
 import { DataGrid, GridColDef, GridColumnGroupingModel, GridRowParams } from '@mui/x-data-grid';
 import UserLifeCycleStates from '../User/extras/UserLifeCycleStates';
 import GridLinkAction from '../../components/GridLinkAction';
@@ -22,6 +22,7 @@ import ChildePDFTemplate from './components/ChildePDFTemplate';
 import { AnyARecord } from 'dns';
 import { useNavigate } from 'react-router-dom';
 import ChildeSupportSignSheet from './components/ChildeSupportSignSheet';
+import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 
 interface TotalSupportStructure {
   basic?: number;
@@ -74,6 +75,7 @@ const ChildeSupportPage = () => {
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [filterdId, setFilterdId] = useState<string[]>([]);
   console.log(selectedRowIds, 'selectedRowIds');
+  const [modal, setModal] = useState<boolean>(false);
 
   console.log(requisition.particulars?.[0]?.month, 'requisition');
   const navigate = useNavigate();
@@ -87,8 +89,13 @@ const ChildeSupportPage = () => {
   const [fileObj, setFileObj] = useState<FileObject | null>(null);
   const [loading, setLoading] = useState<boolean | null>(false);
   // const supportEnabledWorkers = childList?.filter((item) => item.supportStructure?.supportEnabled === true);
+  const [disableAttach, setDisableAttach] = useState(true);
+  const [confirmAttach, setConfirmAttach] = useState(false);
+  const [requisition2, setRequisition2] = useState<FR | null>(null);
+  const [frAction, setFrAction] = useState<'add' | 'view' | null>(null);
 
   const addFR = async (requisition: CreatableFR) => {
+    console.log('fn FUc');
     try {
       // const snackbarId =
       enqueueSnackbar({
@@ -97,12 +104,23 @@ const ChildeSupportPage = () => {
       });
 
       const res = await FRServices.createFRRequests(requisition);
-
+      const res2 = (await FRServices.getById(res.data._id));
+      setRequisition2(res2.data);
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'success',
+      });
+      setConfirmAttach(true);
+      setDisableAttach(true);
+      setTimeout(() => {
+        setDisableAttach(false);
+      }, 2000); // 2 seconds
       enqueueSnackbar({
         message: res.message,
         variant: 'success',
       });
       setToggleRaiseFR(false);
+      setFrAction(null);
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -162,7 +180,7 @@ const ChildeSupportPage = () => {
         setChildList(res.data);
         setAllChilde(res.data);
         if (res.data) {
-          setLoading(true);
+          // setLoading(true);
         }
       });
     // DivisionsServices.getcoordinators()
@@ -202,6 +220,56 @@ const ChildeSupportPage = () => {
       purpose: 'Division',
     }));
   }, []);
+  const attach = async (signBlob: Blob, supportBlob: Blob) => {
+    console.log('attach');
+    try {
+      if (selectedWorker || division) {
+        // File Blob creation
+        const signFileBlob = signBlob instanceof Blob ? new File([signBlob], 'ChildrenSignatureSheet.pdf', { type: 'application/pdf' }) : null;
+        const supportFileBlob = supportBlob instanceof Blob ? new File([supportBlob], 'ChildSupport.pdf', { type: 'application/pdf' }) : null;
+
+        if (supportFileBlob && signFileBlob) {
+          // File upload
+          const supportFile = await FileUploaderServices.uploadFile(supportFileBlob, undefined, 'FR', supportFileBlob.name);
+          const signFile = await FileUploaderServices.uploadFile(signFileBlob, undefined, 'FR', signFileBlob.name);
+
+          if (requisition2 && signFile.success && supportFile.success) {
+            // Update FR request
+            await FRServices.updateFRRequests(requisition2._id, {
+              ...requisition2,
+              particulars: requisition2?.particulars ? requisition2.particulars.map((particular, index) => {
+                return index === 0 ? { ...particular, attachment: [...particular.attachment, supportFile.data]} : particular;
+              }) : [],
+              signatureSheet: signFile.data._id,
+            });
+
+            // Update local state and UI
+            setRequisition2((await FRServices.getById(requisition2._id)).data);
+            enqueueSnackbar({
+              message: 'File Attached',
+              variant: 'success',
+            });
+            enqueueSnackbar({
+              message: 'FR updated',
+              variant: 'success',
+            });
+            setConfirmAttach(false);
+            setFrAction('view');
+          }
+        }
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error attaching files:', error);
+      enqueueSnackbar({
+        message: 'Error attaching files',
+        variant: 'error',
+      });
+    } finally {
+      // Reset loading state
+      setLoading(false);
+    }
+  };
   // console.log(divisions?.map((e)=>e.details.coordinator?.name?._id), 'ddf');
   // console.log(childList.map((r)=>r.childOf?._id),'cc');
   useEffect(() => {
@@ -387,12 +455,7 @@ const ChildeSupportPage = () => {
   //   setChildList(selectedRows);
   // };
   const handleSelectionChange = (newSelection: any) => {
-    console.log(newSelection, 'newSelection');
-    // setSelectedRowIds(newSelection); // Update state with selected row IDs
-    setFilterdId((prevSelectedIds) => {
-      const updatedSelection = new Set([...prevSelectedIds, ...newSelection]);
-      return Array.from(updatedSelection); // Convert the set back to an array
-    });
+    setFilterdId(newSelection);
   };
   const handleAction = () => {
     const selectedRows = filterdId.length > 0 ?
@@ -474,6 +537,7 @@ const ChildeSupportPage = () => {
           // //     variant: 'info',
           // //   });
           // }
+          handleAction();
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -628,35 +692,35 @@ const ChildeSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate total={total} divisionId={pdfProps.divisionId} data={childList} />}
+                      document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList} />}
                       fileName="ChildeSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
-                      {({ blob, loading }) => (
+                      {/* {({ blob, loading }) => (
                         <>
-                          {/* <Button
+                          <Button
 
-                          endIcon={<AttachIcon />}
-                          variant="contained"
-                          color="info"
-                          onClick={async () => {
-                            if (blob) {
-                              if (selectedWorker || division) {
-                                const file = (blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
-                                file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
-                                  setFileObj(res.data); console.log(res.data, 'uploaded');
-                                  enqueueSnackbar({
-                                    message: 'File Attached',
-                                    variant: 'success',
+                            endIcon={<AttachIcon />}
+                            variant="contained"
+                            color="info"
+                            onClick={async () => {
+                              if (blob) {
+                                if (selectedWorker || division) {
+                                  const file = (blob instanceof Blob ? new File([blob], 'ChildeSupport.pdf', { type: 'application/pdf' }) : null);
+                                  file && await FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
+                                    setFileObj(res.data); console.log(res.data, 'uploaded');
+                                    enqueueSnackbar({
+                                      message: 'File Attached',
+                                      variant: 'success',
+                                    });
                                   });
-                                });
+                                }
                               }
-                            }
-                          }} >
-                          {loading ? 'Loading...' : 'Attach File'}
-                        </Button> */}
+                            }} >
+                            {loading ? 'Loading...' : 'Attach File'}
+                          </Button>
                         </>
-                      )}
+                      )} */}
                     </PDFDownloadLink>
                   )}
                   {/* <Button
@@ -692,7 +756,7 @@ const ChildeSupportPage = () => {
                 </div>
                 <Grid item xs={12}>
                   <div style={{ float: 'right' }}>
-                    {(selectedWorker || division) && (
+                    {/* {(selectedWorker || division) && (
                       <PDFDownloadLink
                         document={<ChildeSupportSignSheet month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList} />}
                         fileName="ChildeSupport.pdf"
@@ -723,7 +787,7 @@ const ChildeSupportPage = () => {
                           </>
                         )}
                       </PDFDownloadLink>
-                    )}
+                    )} */}
                     {/* <Button
                     variant="contained"
                     color="info"
@@ -783,10 +847,9 @@ const ChildeSupportPage = () => {
                   experimentalFeatures={{ columnGrouping: true }}
                   checkboxSelection
                   rowSelectionModel={filterdId} // Use the state variable here
-
                   onRowSelectionModelChange={(newSelection) => handleSelectionChange(newSelection)} // Update on selection change
                 />
-                <Button variant='contained' onClick={handleAction}>Process Selected Rows</Button>
+                {/* <Button variant='contained' onClick={handleAction}>Process Selected Rows</Button> */}
               </div>
             </Box>
             <CustomFooter />
@@ -804,6 +867,118 @@ const ChildeSupportPage = () => {
             // Pass the addFR function to the onSubmit prop
           />
         </DialogContent>
+      </Dialog>
+      <Dialog open={confirmAttach} onClose={(event, reason) => {
+        if (reason !== 'backdropClick') {
+          setConfirmAttach(false);
+        }
+      }} maxWidth="xs" fullWidth>
+        <DialogTitle> Add attachment</DialogTitle>
+        <DialogContent>
+          <Container>FR created. Do you want to add attachment &nbsp;
+            {pdfProps &&
+              <PDFDownloadLink
+                document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+
+                fileName="ChildSupport.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => loading||disableAttach? '....' : 'ChildSupport.pdf'}
+
+              </PDFDownloadLink>}
+               and &nbsp;
+            <PDFDownloadLink
+              document={<ChildeSupportSignSheet
+                month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList}
+              />} fileName="ChildrenSignatureSheet.pdf"
+              style={{ color: 'blue' }}
+            >
+              {({ loading }) => loading||disableAttach?'....':'ChildrenSignatureSheet.pdf'}
+            </PDFDownloadLink>
+              ?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConfirmAttach(false);
+            }}
+            variant="text"
+          >
+            No, Cancel
+          </Button>
+          <>
+            {(selectedWorker || division) && pdfProps && (
+              <>
+                <PDFDownloadLink
+                  document={<ChildeSupportSignSheet
+                    month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList}
+                  />} fileName="ChildSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {({ blob: signBlob, loading: loading1 }) => (
+                    <PDFDownloadLink
+                      document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+
+                      fileName="ChildSupport.pdf"
+                      style={{ textDecoration: 'none', color: 'blue' }}
+                    >
+                      {({ blob: supportBlob, loading: loading2 }) => (
+                        <>
+                          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
+                            <DialogContent>
+                              <Typography sx={{ color: 'red' }}>Did you download the signature sheet?</Typography>
+                            </DialogContent>
+
+                            <DialogActions>
+                              <Button onClick={()=>setModal(false)}>Close</Button>
+                              <Button
+                                endIcon={<AttachIcon />}
+                                variant="contained"
+                                color="info"
+                                onClick={async () => {
+                                  if (signBlob && supportBlob) {
+                                    setLoading(true);
+                                    attach(signBlob, supportBlob);
+                                  }
+                                } }
+                                // disabled={loading1 || loading2 || disableAttach || loading}
+                              >
+                                {loading ? <Box sx={{ display: 'flex' }}>
+                                  <CircularProgress />
+                                </Box> : 'Yes'}
+                              </Button>
+                            </DialogActions>
+
+                          </Dialog>
+                          {/* <Button
+                            endIcon={<AttachIcon />}
+                            variant="contained"
+                            color="info"
+                            onClick={async () => {
+                              if (signBlob && supportBlob) {
+                                setLoading(true);
+                                attach(signBlob, supportBlob);
+                              }
+                            }}
+                            disabled={loading1 || loading2 || disableAttach||loading}
+                          >
+                            {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
+                          </Button> */}
+                          <Button onClick={() =>{
+                            setModal(true);
+                          } }>
+                            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
+                          </Button>
+                        </>
+                      )}
+                    </PDFDownloadLink>
+                  )}
+                </PDFDownloadLink>
+
+              </>
+            )}
+          </>
+        </DialogActions>
       </Dialog>
     </CommonPageLayout>
   );
