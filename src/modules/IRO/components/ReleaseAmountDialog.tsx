@@ -108,61 +108,87 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         case 'Division Bank FCRA':
           return division?.DivisionBankFCRA;
         case 'Local Bank ':
+        case 'Local Bank':
           return division?.localBankDetails;
         case 'Other Bank':
+        case 'Other Bank ':
           return division?.otherBankDetails;
+        case 'FCRA ':
         case 'FCRA':
           return division?.FCRABankDetails;
         case 'Other Bank 2 ':
+        case 'Other Bank 2':
           return division?.otherBankDetails2;
         case 'Other Bank 3 ':
+        case 'Other Bank 3':
           return division?.otherBankDetails3;
         case 'Other Bank 4 ':
+        case 'Other Bank 4':
           return division?.otherBankDetails4;
         case 'Division Bank Local ':
+        case 'Division Bank Local':
           return division?.DivisionBankLocal;
         case 'Beneficiary Bank 1 ':
         case 'Beneficiary Bank 1':
           return division?.BeneficiaryBank1 || division?.otherBankDetails;
         case 'Beneficiary Bank 2 ':
+        case 'Beneficiary Bank 2':
           return division?.BeneficiaryBank2 || division?.otherBankDetails1;
         case 'Beneficiary Bank 3 ':
+        case 'Beneficiary Bank 3':
           return division?.BeneficiaryBank3 || division?.otherBankDetails2;
         case 'Beneficiary Bank 4 ':
+        case 'Beneficiary Bank 4':
           return division?.BeneficiaryBank4 || division?.otherBankDetails3;
         case 'Beneficiary Bank 5 ':
+        case 'Beneficiary Bank 5':
           return division?.BeneficiaryBank5 || division?.otherBankDetails4;
         case 'Beneficiary Bank 6 ':
+        case 'Beneficiary Bank 6':
           return division?.BeneficiaryBank6;
         case 'Beneficiary Bank 7 ':
+        case 'Beneficiary Bank 7':
           return division?.BeneficiaryBank7;
         case 'Beneficiary Bank 8':
           return division?.BeneficiaryBank8;
         case 'Beneficiary Bank 9 ':
+        case 'Beneficiary Bank 9':
           return division?.BeneficiaryBank9;
         case 'Beneficiary Bank 10 ':
+        case 'Beneficiary Bank 10':
           return division?.BeneficiaryBank10;
         case 'Beneficiary Bank 11 ':
+        case 'Beneficiary Bank 11':
           return division?.BeneficiaryBank11;
         case 'Beneficiary Bank 12 ':
+        case 'Beneficiary Bank 12':
           return division?.BeneficiaryBank12;
         case 'Beneficiary Bank 13 ':
+        case 'Beneficiary Bank 13':
           return division?.BeneficiaryBank13;
+        case 'Beneficiary Bank 14':
         case 'Beneficiary Bank 14 ':
           return division?.BeneficiaryBank14;
         case 'Beneficiary Bank 15 ':
+        case 'Beneficiary Bank 15':
           return division?.BeneficiaryBank15;
         case 'Beneficiary Bank 16 ':
+        case 'Beneficiary Bank 16':
           return division?.BeneficiaryBank16;
         case 'Beneficiary Bank 17 ':
+        case 'Beneficiary Bank 17':
           return division?.BeneficiaryBank17;
         case 'Beneficiary Bank 18 ':
+        case 'Beneficiary Bank 18':
           return division?.BeneficiaryBank18;
         case 'Beneficiary Bank 19 ':
+        case 'Beneficiary Bank 19':
           return division?.BeneficiaryBank19;
         case 'Beneficiary Bank 20 ':
+        case 'Beneficiary Bank 20':
           return division?.BeneficiaryBank20;
         case 'Beneficiary Bank 21 ':
+        case 'Beneficiary Bank 21':
           return null;
         default:
           return {
