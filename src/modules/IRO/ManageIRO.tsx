@@ -1908,7 +1908,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
                 // types: [],
-                maxItemSize: 1 * MB,
+                maxItemSize: 6 * MB,
                 maxItemCount: 10,
                 maxTotalSize: 30 * MB,
               }}
