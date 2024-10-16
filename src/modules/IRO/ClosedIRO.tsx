@@ -304,6 +304,24 @@ const ClosedIRO = () => {
                 }, 2000);
               } },
             {
+              id: 'Attach IRO receipt',
+              text: 'Prev Regenerate IRO',
+              icon: AttachFileIcon,
+              onClick: () => {
+                setOpenAttachReceipt(true);
+                setIroData(props.row);
+                if (props?.row.FR) {
+                  FRServices.getById(props.row.FR).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+              } },
+            {
               id: 'Attachments',
               text: 'Attachments',
               icon: AttachFileIcon,

@@ -15,11 +15,15 @@ import StaffServices from '../HR/extras/StaffServices';
 const ESignature = () => {
   const [showOfficeManagerUploader, setShowOfficeManagerFileUploader] = useState(false);
   const [showOfficeManagerName, setShowOfficeManagerName] = useState(false);
+  const [showPrevOfficeManagerUploader, setShowPrevOfficeManagerFileUploader] = useState(false);
+  const [showPrevOfficeManagerName, setShowPrevOfficeManagerName] = useState(false);
   const [showPresidentUploader, setShowPresidentFileUploader] = useState(false);
   const [showPresidentEmail, setShowPresidentEmail] = useState(false);
   const [addSignature, toggleAddSignature] = useState(false);
   const [name, setName] = useState('');
+  const [prevname, setPravName] = useState('');
   const [email, setEmail] = useState('');
+  console.log(email, 'shibinc');
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -37,7 +41,23 @@ const ESignature = () => {
       updatedAt: moment(),
     },
   });
-  console.log(email, 'shibinc');
+  const [prevselectedSignature, setPrevSignature] = useState<Esignature>({
+    _id: '',
+    officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
 
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -64,6 +84,16 @@ const ESignature = () => {
     ESignatureService.addOfficeMnrName(name)
         .then((res) => {
           setShowOfficeManagerName(false);
+          console.log('ESignature added successfully');
+        })
+        .catch((error) => {
+          console.error('Error adding eSignature:', error);
+        });
+  };
+  const submitData2= ()=>{
+    ESignatureService.addPreOfficeMnrName(prevname)
+        .then((res) => {
+          setShowPrevOfficeManagerName(false);
           console.log('ESignature added successfully');
         })
         .catch((error) => {
@@ -112,6 +142,18 @@ const ESignature = () => {
     }
   }, [selectedSignature]);
   useEffect(() => {
+    if (prevselectedSignature?.prevOfficeManagerSignature && prevselectedSignature?.prevOfficeManagerSignature._id) {
+      console.log('is here', selectedSignature.officeManagerSignature?._id);
+      ESignatureService.addESignatureS3(prevselectedSignature.prevOfficeManagerSignature)
+        .then(() => {
+          console.log('ESignature added successfully');
+        })
+        .catch((error) => {
+          console.error('Error adding eSignature:', error);
+        });
+    }
+  }, [prevselectedSignature]);
+  useEffect(() => {
     if (selectedSignaturePresident?.presidentSignature && selectedSignaturePresident?.presidentSignature._id) {
       ESignatureService.addESignatureS2(selectedSignaturePresident.presidentSignature)
       .then(() => {
@@ -137,10 +179,20 @@ const ESignature = () => {
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
+        setPrevSignature(res?.data as Esignature);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [showPresidentUploader]);
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
         console.log(res.data, 'er');
 
         // const name : {name:string}= res.data
         setName((res.data as {officeManagerName:string }).officeManagerName);
+        setPravName((res.data as {prevOfficeManagerName:string }).prevOfficeManagerName);
         setEmail((res.data as {presidentEmail:string }).presidentEmail);
       })
       .catch((res) => {
@@ -148,6 +200,17 @@ const ESignature = () => {
       });
     console.log(selectedSignature);
   }, []);
+  useEffect(() => {
+    ESignatureService.getESignature()
+      .then((res) => {
+        console.log({ res });
+        setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    console.log(selectedSignature);
+  }, [showPresidentUploader]);
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -198,6 +261,32 @@ const ESignature = () => {
                   >
                     {' '}
                     Office Manager Name
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPrevOfficeManagerFileUploader(true);
+                    }}
+                  >
+                    {' '}
+                   Prev Office Manager Signature
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPrevOfficeManagerName(true);
+                    }}
+                  >
+                    {' '}
+                  Prev Office Manager Name
                   </Button>
                 </Grid>
                 <Grid item xs={12}>
@@ -344,6 +433,36 @@ const ESignature = () => {
               </DialogActions>
             </Dialog>
             <Dialog
+              open={showPrevOfficeManagerName}
+              onClose={() => setShowPrevOfficeManagerName(false)}
+            >
+              <DialogTitle>Prev President Name</DialogTitle>
+              <DialogContent>
+                {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="PrevName"
+                  name="PrevName"
+                  label="Prev Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  value={prevname}
+                  onChange={(e: any) => {
+                    setPravName(e.target.value);
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=>setShowPrevOfficeManagerName(false)}>Cancel</Button>
+                <Button onClick={submitData2}>Add</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
               open={showPresidentEmail}
               onClose={() => setShowPresidentEmail(false)}
             >
@@ -401,6 +520,37 @@ const ESignature = () => {
               getFiles={selectedSignature?.officeManagerSignature ? [selectedSignature?.officeManagerSignature]:[]}
               deleteFile={(fileId: string) => {
                 ESignatureService.removeESignature('officeManagerSignature');
+                return FileUploaderServices.deleteFile(fileId);
+              }}
+            />
+            <FileUploader
+              title="Prev sign"
+              action="add"
+              types={['image/png', 'image/jpeg', 'image/jpg']}
+              limits={{
+                // types: [],
+                maxItemSize: 6 * MB,
+                maxItemCount: 1,
+                maxTotalSize: 30 * MB,
+              }}
+              uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+                return FileUploaderServices.uploadFile(file, onProgress, 'Settings/eSignature', file.name)
+                  .then((res) => {
+                    console.log(res.data, 'FFF');
+                    setPrevSignature(()=>({
+                      ...prevselectedSignature,
+                      prevOfficeManagerSignature: res.data,
+                    }));
+                    return res;
+                  });
+              }}
+
+
+              open={showPrevOfficeManagerUploader}
+              onClose={() => setShowPrevOfficeManagerFileUploader(false)}
+              getFiles={prevselectedSignature?.prevOfficeManagerSignature ? [prevselectedSignature?.prevOfficeManagerSignature]:[]}
+              deleteFile={(fileId: string) => {
+                ESignatureService.removePreESignature('prevOfficeManagerSignature');
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />

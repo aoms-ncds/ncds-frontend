@@ -130,7 +130,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
   const totalSacntion = props.fr?.particulars.forEach((e) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(totalAmount2, 'total');
+  console.log(props.president.presidentSignature, 'total');
 
   NewTot += props?.fr?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
