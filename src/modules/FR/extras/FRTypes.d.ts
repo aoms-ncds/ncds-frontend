@@ -121,6 +121,7 @@ declare global {
     mainCategory?: string;
     createdBy: IWorker;
     particulars: Particular[];
+    groupIros?: [];
     workerSupport?:boolean;
     childSupport?:boolean;
     designationParticular?:string;

@@ -1334,7 +1334,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
                 // types: [],
-                maxItemSize: 6 * MB,
+                maxItemSize: 1 * MB,
                 maxItemCount: 10,
                 maxTotalSize: 30 * MB,
               }}
