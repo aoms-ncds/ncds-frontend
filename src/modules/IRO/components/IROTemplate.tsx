@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
 });
-const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngrSign?: any; president: EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?: any; officeMngrSign?: any; president: EsignaturePresident }) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
   let NewTot: any = 0;
@@ -130,7 +130,7 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
   const totalSacntion = props.fr?.particulars.forEach((e) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(props.president.presidentSignature, 'total');
+  console.log(totalAmount2, 'total');
 
   NewTot += props?.fr?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
@@ -514,40 +514,84 @@ const IROTemplate = (props: { rowData?: any; fr?: FR; mngrName?: any; officeMngr
                 }}>
                   E Signature protected.
                 </Text>
-                <View style={{
-                  ...styles.box5,
-                  width: 130,
-                  alignItems: 'center',
-                }}>
-                  <Image
-                    style={{
-                      height: 78,
-                      width: 128,
-                    }}
-                    src={`data:${props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.officeMngrSign?.officeManagerSignature?.base64}`}
-                  />
-                </View>
-                <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                  <Text style={{
-                    ...styles.text1,
-                    fontSize: 11,
-                    textAlign: 'center',
-                    //
-                    fontWeight: 500,
-                    fontFamily: 'CourierPrime',
+                {props.prev !=true ?(
+
+                  <View style={{
+                    ...styles.box5,
+                    width: 130,
+                    alignItems: 'center',
                   }}>
-                    {props.officeMngrSign?.officeManagerName}
-                  </Text>
-                  <Text style={{
-                    ...styles.text1,
-                    fontSize: 11,
-                    fontWeight: 500,
-                    fontFamily: 'CourierPrime',
-                    textAlign: 'center',
+                    <Image
+                      style={{
+                        height: 78,
+                        width: 128,
+                      }}
+                      src={`data:${props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.officeMngrSign?.officeManagerSignature?.base64}`}
+                    />
+                  </View>
+                ):(
+                  <View style={{
+                    ...styles.box5,
+                    width: 130,
+                    alignItems: 'center',
                   }}>
+                    <Image
+                      style={{
+                        height: 78,
+                        width: 128,
+                      }}
+                      src={`data:${props.officeMngrSign?.prevOfficeManagerSignature?.type};base64, ${props.officeMngrSign?.prevOfficeManagerSignature?.base64}`}
+                    />
+                  </View>
+
+                )}
+                {props.prev !=true ?(
+                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                    <Text style={{
+                      ...styles.text1,
+                      fontSize: 11,
+                      textAlign: 'center',
+                      //
+                      fontWeight: 500,
+                      fontFamily: 'CourierPrime',
+                    }}>
+                      {props.officeMngrSign?.officeManagerName}
+                    </Text>
+                    <Text style={{
+                      ...styles.text1,
+                      fontSize: 11,
+                      fontWeight: 500,
+                      fontFamily: 'CourierPrime',
+                      textAlign: 'center',
+                    }}>
+    Office Manager
+                    </Text>
+                  </View>
+                ):(
+
+                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                    <Text style={{
+                      ...styles.text1,
+                      fontSize: 11,
+                      textAlign: 'center',
+                      //
+                      fontWeight: 500,
+                      fontFamily: 'CourierPrime',
+                    }}>
+                      {props.officeMngrSign?.prevOfficeManagerName}
+                    </Text>
+                    <Text style={{
+                      ...styles.text1,
+                      fontSize: 11,
+                      fontWeight: 500,
+                      fontFamily: 'CourierPrime',
+                      textAlign: 'center',
+                    }}>
                     Office Manager
-                  </Text>
-                </View>
+                    </Text>
+                  </View>
+                )}
+
               </View>
             </View>
           </div>

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip } from '@mui/material';
@@ -47,6 +48,7 @@ const ClosedIRO = () => {
   const [mngrName, setMngrName] = useState('');
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
+  const [openAttachReceipt1, setOpenAttachReceipt1] = useState(false);
   const [openRelease, setOpenRelease] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -55,6 +57,23 @@ const ClosedIRO = () => {
     rangeType: 'months',
   });
   const [selectedSignature, setSignature] = useState<Esignature>({
+    _id: '',
+    officeManagerSignature: {
+      filename: '',
+      size: 0,
+      type: 'application/vnd.ms-excel',
+      storage: 'S3',
+      fileId: '',
+      downloadURL: null,
+      private: false,
+      status: 0,
+      _id: '',
+      base64: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+  });
+  const [prevselectedSignature, setPrevSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
       filename: '',
@@ -93,6 +112,7 @@ const ClosedIRO = () => {
       .then((res) => {
         console.log({ res });
         setSignature(res.data as Esignature);
+        setPrevSignature(res.data as Esignature);
         setMngrName((res.data as { officeManagerName: string }).officeManagerName);
         setSignaturePresident(res.data as EsignaturePresident);
       })
@@ -308,7 +328,7 @@ const ClosedIRO = () => {
               text: 'Prev Regenerate IRO',
               icon: AttachFileIcon,
               onClick: () => {
-                setOpenAttachReceipt(true);
+                setOpenAttachReceipt1(true);
                 setIroData(props.row);
                 if (props?.row.FR) {
                   FRServices.getById(props.row.FR).then((res) => {
@@ -765,6 +785,58 @@ const ClosedIRO = () => {
               <>
                 <PDFDownloadLink document={<IROTemplate
                   rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                  {({ blob, loading }) =>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                    </Button> }
+                </PDFDownloadLink>
+
+              </>
+            )}
+          </>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={ openAttachReceipt1 } onClose={() => setOpenAttachReceipt1(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure</DialogTitle>
+        <DialogContent>
+          <Container>
+          Do you want to attach receipt for {iroData?.IROno}?
+            <br />
+            {iroData && mngrName&&selectedSignature&&FrData&& (
+              <PDFDownloadLink
+                document={<IROTemplate prev={true} rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setIroData(null);
+              setOpenAttachReceipt1(false);
+            }}
+            variant="text"
+          >
+            Cancel
+          </Button>
+          <>
+            {iroData && mngrName&&selectedSignature&&FrData&& (
+              <>
+                <PDFDownloadLink document={<IROTemplate
+                  rowData={iroData} mngrName={mngrName} prev={true} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
                   {({ blob, loading }) =>
                     <Button
