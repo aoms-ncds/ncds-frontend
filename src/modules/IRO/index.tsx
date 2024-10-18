@@ -102,6 +102,16 @@ const IRODashboard = () => {
 
             </>
           )} />
+        <PermissionChecks
+          permissions={['AUDIT_VIEW']}
+          granted={(
+            <>
+              <Grid item xs={12} md={4} xl={3}>
+                <DashboardCardButton primaryText="Release Amount Audit" color="#fff" targetRoute="/iro/release_amount_audit" />
+              </Grid>
+
+            </>
+          )} />
 
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Closed IRO" color="#fff" targetRoute="/iro/closed" />
