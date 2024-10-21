@@ -27,6 +27,14 @@ declare global{
       accountantSignature?:FileObject;
       officeManagerSignature?:FileObject;
     };
+    // names?: {
+    //   president:string;
+    //   officeMgr:string;
+    // };
+    // sign?: {
+    //   president: FileObject;
+    //   officeMgr: FileObject;
+    // };
     closedIroPdf?:string;
     reasonForRejectIRO?:string;
     FR?: string;

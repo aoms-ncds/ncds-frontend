@@ -1228,7 +1228,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   }
   return (
     <CommonPageLayout
-      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amounst'}
+      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {

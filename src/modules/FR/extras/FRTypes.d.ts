@@ -13,6 +13,18 @@ declare global {
     reasonForSentBack?:string;
     reasonForReject?:string;
     designationParticular?:string;
+    signature?: {
+      coordinator?: FileObject;
+      jrLeader?: FileObject;
+      srLeader?: FileObject;
+      president?: FileObject;
+    };
+    names?: {
+      coordinator?: IWorker;
+      jrLeader?: IWorker;
+      srLeader?: IWorker;
+      president?: string;
+    };
   }
 
   interface CreatableFR extends Creatable<FR> {

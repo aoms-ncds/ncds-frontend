@@ -15,12 +15,14 @@ import StaffServices from '../HR/extras/StaffServices';
 const ESignature = () => {
   const [showOfficeManagerUploader, setShowOfficeManagerFileUploader] = useState(false);
   const [showOfficeManagerName, setShowOfficeManagerName] = useState(false);
+  const [showPresidentName, setShowPresidentName] = useState(false);
   const [showPrevOfficeManagerUploader, setShowPrevOfficeManagerFileUploader] = useState(false);
   const [showPrevOfficeManagerName, setShowPrevOfficeManagerName] = useState(false);
   const [showPresidentUploader, setShowPresidentFileUploader] = useState(false);
   const [showPresidentEmail, setShowPresidentEmail] = useState(false);
   const [addSignature, toggleAddSignature] = useState(false);
   const [name, setName] = useState('');
+  const [presidentName, setPresidentName] = useState('');
   const [prevname, setPravName] = useState('');
   const [email, setEmail] = useState('');
   console.log(email, 'shibinc');
@@ -192,6 +194,7 @@ const ESignature = () => {
 
         // const name : {name:string}= res.data
         setName((res.data as {officeManagerName:string }).officeManagerName);
+        setPresidentName((res.data as {presidentName:string }).presidentName);
         setPravName((res.data as {prevOfficeManagerName:string }).prevOfficeManagerName);
         setEmail((res.data as {presidentEmail:string }).presidentEmail);
       })
@@ -266,6 +269,33 @@ const ESignature = () => {
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
+                    color="info"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPresidentName(true);
+                    }}
+                  >
+                    {' '}
+                    President Name
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPresidentEmail(true);
+                    }}
+                  >
+                    {' '}
+                    President Email
+                  </Button>
+
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
                     color="success"
                     sx={{ width: 260 }}
                     onClick={() => {
@@ -290,30 +320,21 @@ const ESignature = () => {
                   </Button>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    sx={{ width: 260 }}
-                    onClick={() => {
-                      setShowPresidentFileUploader(true);
-                    }}
-                  >
-                    {' '}
+
+
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      sx={{ width: 260 }}
+                      onClick={() => {
+                        setShowPresidentFileUploader(true);
+                      }}
+                    >
+                      {' '}
                     President Signature
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    sx={{ width: 260 }}
-                    onClick={() => {
-                      setShowPresidentEmail(true);
-                    }}
-                  >
-                    {' '}
-                    President Email
-                  </Button>
+                    </Button>
+                  </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Button
@@ -406,7 +427,7 @@ const ESignature = () => {
               open={showOfficeManagerName}
               onClose={() => setShowOfficeManagerName(false)}
             >
-              <DialogTitle>President Name</DialogTitle>
+              <DialogTitle>Office Manager Name</DialogTitle>
               <DialogContent>
                 {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
@@ -430,6 +451,45 @@ const ESignature = () => {
               <DialogActions>
                 <Button onClick={()=>setShowOfficeManagerName(false)}>Cancel</Button>
                 <Button onClick={submitData}>Add</Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              open={showPresidentName}
+              onClose={() => setShowPresidentName(false)}
+            >
+              <DialogTitle>President Name</DialogTitle>
+              <DialogContent>
+                {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="presidentName"
+                  name="presidentName"
+                  label="President Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  value={presidentName}
+                  onChange={(e: any) => {
+                    setPresidentName(e.target.value);
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={()=>setShowPresidentName(false)}>Cancel</Button>
+                <Button onClick={()=>{
+                  ESignatureService.addPresidentName(presidentName)
+                   .then((res) => {
+                     setShowPresidentName(false);
+                     console.log(' added successfully');
+                   })
+                   .catch((error) => {
+                     console.error('Error adding :', error);
+                   });
+                }}>Add</Button>
               </DialogActions>
             </Dialog>
             <Dialog

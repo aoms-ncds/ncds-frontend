@@ -18,6 +18,10 @@ export default {
     axios.patch('/settings/esignature/officeMngrName', { name: data }, { headers: { ...getAuthHeader() } },
     ),
   ),
+  addPresidentName: ( data:string ) => getStandardResponse(
+    axios.patch('/settings/esignature/presidentName', { name: data }, { headers: { ...getAuthHeader() } },
+    ),
+  ),
   addPreOfficeMnrName: ( data:string ) => getStandardResponse(
     axios.patch('/settings/esignature/prevOfficeMngrName', { prevName: data }, { headers: { ...getAuthHeader() } },
     ),

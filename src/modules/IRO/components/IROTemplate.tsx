@@ -130,7 +130,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   const totalSacntion = props.fr?.particulars.forEach((e) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(totalAmount2, 'total');
+  console.log(props, 'total');
 
   NewTot += props?.fr?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
@@ -480,7 +480,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.president.presidentSignature?.type};base64, ${props.president.presidentSignature?.base64} `} />
+                      src={`data:${props.rowData.president.type};base64, ${props.rowData.president.type} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -491,7 +491,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      Mr. Shaji Varghese
+                      {props.rowData.names?.president}
+
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
                     <Text style={{
@@ -526,7 +527,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.officeMngrSign?.officeManagerSignature?.base64}`}
+                      src={`data:${props.rowData.sign?.officeMgr.type};base64, ${props.rowData.sign?.officeMgr?.base64}`}
                     />
                   </View>
                 ):(
@@ -555,8 +556,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.officeMngrSign?.officeManagerName}
-                    </Text>
+                      {props.rowData.names?.officeMgr}                      </Text>
                     <Text style={{
                       ...styles.text1,
                       fontSize: 11,
