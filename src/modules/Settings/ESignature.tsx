@@ -269,6 +269,19 @@ const ESignature = () => {
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
+                    color="success"
+                    sx={{ width: 260 }}
+                    onClick={() => {
+                      setShowPresidentFileUploader(true);
+                    }}
+                  >
+                    {' '}
+                    President Signature
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
                     color="info"
                     sx={{ width: 260 }}
                     onClick={() => {
@@ -279,6 +292,7 @@ const ESignature = () => {
                     President Name
                   </Button>
                 </Grid>
+
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
@@ -322,19 +336,6 @@ const ESignature = () => {
                 <Grid item xs={12}>
 
 
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      sx={{ width: 260 }}
-                      onClick={() => {
-                        setShowPresidentFileUploader(true);
-                      }}
-                    >
-                      {' '}
-                    President Signature
-                    </Button>
-                  </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Button
@@ -496,7 +497,7 @@ const ESignature = () => {
               open={showPrevOfficeManagerName}
               onClose={() => setShowPrevOfficeManagerName(false)}
             >
-              <DialogTitle>Prev President Name</DialogTitle>
+              <DialogTitle>Prev Office Manager</DialogTitle>
               <DialogContent>
                 {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
