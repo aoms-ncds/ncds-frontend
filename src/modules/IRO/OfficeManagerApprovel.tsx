@@ -3,6 +3,7 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
+  Edit as EditIcon,
   Print as PrintIcon,
   AttachFile as AttachmentIcon,
   Preview as PreviewIcon,
@@ -436,6 +437,20 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
               },
               icon: PreviewIcon,
             },
+            ...(hasPermissions(['OFFICE_MNGR_ACCESS']) ?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit',
+                  component: Link,
+                  // to: `/iro/${params.row._id}/edit`,
+                  onClick: () => {
+                    window.open(`/iro/${params.row._id}/edit`, '_blank');
+                  },
+                  icon: EditIcon,
+                },
+              ] :
+              []),
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && props.action == 'release' ?
               [
                 {

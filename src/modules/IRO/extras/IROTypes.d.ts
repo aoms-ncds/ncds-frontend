@@ -37,6 +37,7 @@ declare global{
     // };
     closedIroPdf?:string;
     reasonForRejectIRO?:string;
+    reasonForRevertIRO?:string;
     FR?: string;
 
     // signature?: {

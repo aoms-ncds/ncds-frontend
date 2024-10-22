@@ -24,6 +24,7 @@ import {
   Alert,
   Card,
   DialogContent,
+  Typography,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -323,7 +324,9 @@ const ViewIRO = () => {
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [divisions, setDivisions] = useState<Division | null>(null);
   const [rejectDialog, setrejectDialog] = useState(false);
+  const [reverDialog, setRevertDialog] = useState(false);
   const [reasonForReject, setReasonForReject] = useState<string | null>('');
+  const [reasonForRevert, setReasonForRevert] = useState<string | null>('');
 
 
   let total = 0;
@@ -784,7 +787,9 @@ const ViewIRO = () => {
                           fullWidth
                         />
                       </Grid> */}
+
                       <Grid item xs={12}>
+                        {IRO.reasonForRevertIRO && <><span style={{ fontWeight: 'bold', color: 'red' }}> Revert reason: </span><span style={{ color: 'red' }}>{IRO.reasonForRevertIRO ?? 'N/A'}</span></> }
                         {/* {props.action === 'edit' && ( */}
                         {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
 
@@ -926,41 +931,37 @@ const ViewIRO = () => {
                               &nbsp;
                             </>
                           ) : null}
-                          {IROstatus == 'WAITING_FOR_ACCOUNTS_MNGR' ? (
+                          {IROstatus == 'WAITING_FOR_ACCOUNTS_STATE' || IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT' ? (
                             <>
-                              {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
                               <PermissionChecks
                                 permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
                                   <>
-                                    {/* <Button
+                                    <Button
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
-                                        const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
-                                        IROServices.reject(iroID as string, '')
-                                          .then((res) => {
-                                            if (res.data) {
-                                              navigate('/iro');
-                                            }
-                                          });
+                                        setRevertDialog(true);
+                                        // const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                        // IROServices.revert(iroID as string, '')
+                                        //   .then((res) => {
+                                        //     if (res.data) {
+                                        //       navigate('/iro');
+                                        //     }
+                                        //   });
 
-                                        // if (props.onSubmit) {
-                                        //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
-                                        //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                        // }
-                                        setTimeout(() => {
-                                          closeSnackbar(rejectionSnack);
-                                          const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
-                                          setTimeout(() => closeSnackbar(rejectedSnack), 500);
-                                        }, 500);
+                                        // setTimeout(() => {
+                                        //   closeSnackbar(rejectionSnack);
+                                        //   const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                                        //   setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                        // }, 500);
                                       }}
                                     >
                                       Revert
-                                    </Button> */}
+                                    </Button>
                                     &nbsp;
-                                    <Button
+                                    {/* <Button
                                       variant="contained"
                                       color="success"
                                       type='submit'
@@ -974,10 +975,6 @@ const ViewIRO = () => {
                                             }
                                           });
 
-                                        // if (props.onSubmit) {
-                                        //   // const updatedValue = { ...IRO, status: IROLifeCycleStates.SUBMITTED_TO_ACCOUNTS_STATE }; // Create a new object with updated status
-                                        //   // props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-                                        // }
                                         setTimeout(() => {
                                           closeSnackbar(approvalSnack);
                                           const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
@@ -986,7 +983,7 @@ const ViewIRO = () => {
                                       }}
                                     >
                                       Verify
-                                    </Button>
+                                    </Button> */}
                                   </>
                                 }
                               />
@@ -1159,6 +1156,68 @@ const ViewIRO = () => {
             onClick={() => {
               const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
               IROServices.reject(iroID as string, reasonForReject as string)
+                                          .then((res) => {
+
+                                          });
+
+              // if (props.onSubmit) {
+              //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
+              //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
+              // }
+              setTimeout(() => {
+                closeSnackbar(rejectionSnack);
+                const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                setTimeout(() => closeSnackbar(rejectedSnack), 500);
+              }, 500);
+              false;
+              setrejectDialog(false);
+              navigate('/iro/manage');
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+                            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={reverDialog} fullWidth maxWidth="md">
+        <DialogTitle>Revert Reason</DialogTitle>
+        <DialogContent>
+          <br />
+          {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+          <TextField
+            id="revertForReject"
+            placeholder="Reason for Revert"
+            multiline
+            value={reasonForRevert}
+            onChange={(e)=>setReasonForRevert(e.target?.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setRevertDialog(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            disabled={reasonForRevert==''}
+            onClick={() => {
+              const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+              IROServices.revert(iroID as string, reasonForRevert as string)
                                           .then((res) => {
 
                                           });
