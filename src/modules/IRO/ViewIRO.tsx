@@ -25,6 +25,7 @@ import {
   Card,
   DialogContent,
   Typography,
+  Box,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -50,6 +51,7 @@ import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import CloseIcon from '@mui/icons-material/Close';
+import ReleaseAmount from './components/ReleaseAmountDialog';
 
 
 const ViewIRO = () => {
@@ -327,6 +329,8 @@ const ViewIRO = () => {
   const [reverDialog, setRevertDialog] = useState(false);
   const [reasonForReject, setReasonForReject] = useState<string | null>('');
   const [reasonForRevert, setReasonForRevert] = useState<string | null>('');
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
+  const [newTest, setNewTest] = useState<IROrder[]>([]);
 
 
   let total = 0;
@@ -335,6 +339,8 @@ const ViewIRO = () => {
       total += particular?.sanctionedAmount;
     }
   });
+  const [openRelease, setOpenRelease] = useState(false);
+
   console.log(IRO, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
@@ -817,6 +823,17 @@ const ViewIRO = () => {
                             Log
                           </Button>
                            &nbsp;
+                          {IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IRO.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ? (
+
+                            <Button variant="contained" color="primary"
+                              onClick={async ()=>[setOpenRelease(true),
+                                setReleaseAmountIROs([IRO])]}
+                            >
+
+                            Release amount
+                            </Button>
+                          ): []}
+                           &nbsp;
                           <Button
                             variant="contained"
                             color="info"
@@ -1027,8 +1044,11 @@ const ViewIRO = () => {
                 </CardContent>
               </Container>
             </Card>
+            <ReleaseAmount action={IRO.status ==IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE? 'add': 'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+
           </>
         }
+
         denied={(missingPermissions) => (
           <Grid item xs={12} lg={6}>
             <Alert severity="error">
@@ -1180,7 +1200,30 @@ const ViewIRO = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={reverDialog} fullWidth maxWidth="md">
-        <DialogTitle>Revert Reason</DialogTitle>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      Reason for revert
+            <Button
+              variant="contained"
+              onClick={() => {
+                setRevertDialog(false);
+              }}
+              sx={{
+                'position': 'absolute',
+                'top': 8,
+                'right': 8,
+                'minWidth': 'auto',
+                'padding': '0.1rem',
+                'backgroundColor': 'red',
+                '&:hover': {
+                  backgroundColor: 'darkred',
+                },
+              }}
+            >
+              <CloseIcon sx={{ color: 'white' }} />
+            </Button>
+          </Box>
+        </DialogTitle>
         <DialogContent>
           <br />
           {/* <Autocomplete<string>
@@ -1202,7 +1245,7 @@ const ViewIRO = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button
+          {/* <Button
             variant="contained"
             onClick={() => {
               setRevertDialog(false);
@@ -1210,7 +1253,7 @@ const ViewIRO = () => {
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
           >
             <CloseIcon sx={{ color: 'white' }} />
-          </Button>
+          </Button> */}
 
           <Button
             variant="contained"
