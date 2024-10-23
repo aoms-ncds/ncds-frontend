@@ -85,7 +85,13 @@ const IRODashboard = () => {
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Manage IRO" color="#fff" targetRoute="/iro/manage" />
         </Grid>
-
+        <PermissionChecks
+          permissions={['OFFICE_MNGR_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton primaryText="Office Manager " secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
+            </Grid>
+          )} />
         <PermissionChecks
           permissions={['MANAGE_IRO']}
           granted={(
@@ -119,20 +125,13 @@ const IRODashboard = () => {
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
         </Grid>
-        <PermissionChecks
+        {/* <PermissionChecks
           permissions={['ACCOUNTS_MNGR_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
               <DashboardCardButton primaryText="Accounts Manager  " secondaryText="Approval" color="#fff" targetRoute="/IRO/account_approve" />
             </Grid>
-          )} />
-        <PermissionChecks
-          permissions={['OFFICE_MNGR_ACCESS']}
-          granted={(
-            <Grid item xs={12} md={4} xl={3}>
-              <DashboardCardButton primaryText="Office Manager " secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
-            </Grid>
-          )} />
+          )} /> */}
       </Grid>
     </CommonPageLayout>
   );
