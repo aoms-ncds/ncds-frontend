@@ -52,7 +52,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     attachment: [],
     division: '',
   });
-  console.log(releaseAmount, 'iroStatus');
+  console.log(props, 'iroStatus');
   const model = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setOpen(true);
@@ -217,7 +217,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       }));
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id ?? '').then((res) => {
+        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id ?? props.data[0]?.releaseAmount ).then((res) => {
           console.log(res.data, 'upd');
 
           setReleaseAmount(res.data);

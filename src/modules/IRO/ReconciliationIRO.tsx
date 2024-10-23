@@ -314,10 +314,10 @@ const ReconciliationIRO = () => {
     //       console.error(error);
     //     });
     // }
-    if (permissions?.OTHER_ACCOUNTS_ACCESS && permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
+    if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation({ dateRange: dateRange })
         .then((res) => {
-          setReconcilationIRO(res.data);
+          setReconcilationIRO(() => [...res.data]);
         });
     }
     // IROServices.getReconciliation()
@@ -327,7 +327,7 @@ const ReconciliationIRO = () => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [attachment, dateRange]);
+  }, [attachment, dateRange, selectedIRO]);
 
   const columns: GridColDef<IROrder>[] = [
     {
