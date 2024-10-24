@@ -331,6 +331,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
+  const [groupIro, setGroupIro] = useState<any[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -554,6 +555,10 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
+    IROServices.groupedIRO().then((res)=>{
+      console.log(res, 'res90');
+      setGroupIro(res.data);
+    });
   }, []);
 
   const deleteIRO = (id: string) => {
@@ -588,6 +593,16 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         });
       });
   };
+  const flattenedData = groupIro.reduce((acc, item, parentIndex) => {
+    const iros = item.IRO.map((iro: IROrder) => ({
+      ...iro,
+      parentId: item._id,
+      IRODate: moment(iro.IRODate), // Format the date here
+      // Optionally keep reference to parent row
+      parentGroupIndex: parentIndex, // Track which parent group this IRO belongs to
+    }));
+    return [...acc, ...iros];
+  }, []);
   // Rest of your component code...
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -943,10 +958,20 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       },
     },
     {
+      field: 'iroGroup',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'IroGroup',
+      width: 250,
+      renderHeader: () => <b>Groups IROs</b>,
+      valueGetter: (params) => params.row.groupIros?.filter((e)=>e != params.row._id),
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
       headerClassName: 'super-app-theme--cell',
-      valueGetter: (params) => params.row.division?.details.name,
+      valueGetter: (params) => params.row.division?.details?.name,
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -1133,66 +1158,66 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      width: 300,
-      align: 'center',
-      headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR OFFICE MNGR':
-          return clsx('orange');
-        case 'WAITING FOR ACCOUNTS STATE':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('green');
-        case 'AMOUNT RELEASED':
-          return clsx('green');
-        case 'RECONCILIATION DONE':
-          return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
-          return clsx('orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
+    // {
+    //   field: 'status',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Status</b>,
+    //   width: 300,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   cellClassName: (params) => {
+    //     const statusName = params.formattedValue;
+    //     if (params.value == null) {
+    //       return '';
+    //     }
+    //     switch (statusName) {
+    //     case 'WAITING FOR OFFICE MNGR':
+    //       return clsx('orange');
+    //     case 'WAITING FOR ACCOUNTS STATE':
+    //       return clsx('orange');
+    //     case 'IRO CLOSED':
+    //       return clsx('green');
+    //     case 'WAITING FOR ACCOUNTS MNGR':
+    //       return clsx('green');
+    //     case 'AMOUNT RELEASED':
+    //       return clsx('green');
+    //     case 'RECONCILIATION DONE':
+    //       return clsx('green');
+    //     case 'WAITTING FOR RELEASE AMOUNT':
+    //       return clsx('orange');
+    //     default:
+    //       // console.log('No class applied');
+    //       return '';
+    //     }
+    //   },
 
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+    //   valueGetter: (params) => {
+    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+    //     // Check if the status name needs to be changed
+    //     switch (statusName) {
+    //     case 'SEND_BACK':
+    //       statusName = 'REVERTED';
+    //       break;
+    //     case 'FR_APPROVED':
+    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
+    //       break;
+    //     case 'FR_REJECTED':
+    //       statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //       // case 'WAITING_FOR_ACCOUNTS_MNGR':
+    //       //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+    //       //   if (props.action === 'release') {
+    //       //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+    //       //   }
+    //       break;
+    //       // Add more cases for other status names you want to change
+    //     default:
+    //       statusName = statusName.replaceAll('_', ' ');
+    //       break;
+    //     }
+    //     return statusName;
+    //   },
+    // },
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
@@ -1376,30 +1401,32 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                         },
                       }}
                     >
-                      <DataGrid
-                        rows={filteredRows ?? []}
-                        columns={columns}
-                        getRowId={(row) => row._id}
-                        checkboxSelection={props.action == 'release'}
-                        disableRowSelectionOnClick={props.action == 'release'}
-                        onRowSelectionModelChange={(newRowSelectionModel) => {
-                          // setSelectedIROrelease(newRowSelectionModel);
-
-                          setReleaseAmountIROs(() => {
-                            const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
-                            return selectedIROs;
-                          });
-                          setNewTest(releaseAmountIROs);
-                        }}
-                        getRowClassName={(params) => {
-                          if (params.row.specialsanction == 'Yes') {
-                            return 'special-sanction'; // Class for rows with special sanction
-                          }
-                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-                        }} style={{ height: '65vh', width: '100%' }}
-                        // rowSelectionModel={selectedIROrelease}
-                        //
-                      />
+                      <div style={{ height: '65vh', width: '100%' }}>
+                        <DataGrid
+                          rows={flattenedData}
+                          columns={columns}
+                          getRowId={(row) => row._id}
+                          checkboxSelection={props.action === 'release'}
+                          disableRowSelectionOnClick={props.action === 'release'}
+                          onRowSelectionModelChange={(newRowSelectionModel) => {
+                            setReleaseAmountIROs(() => {
+                              const selectedIROs = flattenedData.filter((iro: any) => newRowSelectionModel.includes(iro._id));
+                              return selectedIROs;
+                            });
+                          }}
+                          getRowClassName={(params) => {
+                            const parentGroupIndex = params.row.parentGroupIndex as number;
+                            // Apply color based on the parent group index
+                            if (parentGroupIndex % 3 === 0) {
+                              return 'group-color-1';
+                            } else if (parentGroupIndex % 3 === 1) {
+                              return 'group-color-2';
+                            } else {
+                              return 'group-color-3';
+                            }
+                          }}
+                        />
+                      </div>
                     </Box>
                     {/* <DataGrid
                       rows={filteredRows ?? []}
@@ -1844,7 +1871,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
                 // types: [],
-                maxItemSize: 6 * MB,
+                maxItemSize: 1 * MB,
                 maxItemCount: 10,
                 maxTotalSize: 30 * MB,
               }}

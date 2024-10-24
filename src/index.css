@@ -4,7 +4,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.group-color-1 {
+  background-color: #D63AE8; /* Light green for group 1 */
+}
 
+.group-color-2 {
+  background-color: #9D3AE8; /* Light red for group 2 */
+}
+.group-color-3 {
+  background-color: #E83AA2; /* Light red for group 2 */
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
