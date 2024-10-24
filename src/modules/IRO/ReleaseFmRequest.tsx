@@ -603,7 +603,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       })) :
       []; // If IRO is not an array, return an empty array
 
-    return [...acc, ...iros];
+    return [...acc, ...iros.filter((e)=>e.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT)];
   }, []);
   // Rest of your component code...
   useEffect(() => {
@@ -924,7 +924,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           return clsx('green');
         case 'RECONCILIATION DONE':
           return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
+        case 'WAITING FOR RELEASE AMOUNT':
           return clsx('orange');
         default:
           // console.log('No class applied');
@@ -944,6 +944,9 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           break;
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+          break;
+        case 'WAITTING_FOR_RELEASE_AMOUNT':
+          statusName = 'WAITING FOR RELEASE AMOUNT'; // Change to whatever new name you want
           break;
           // case 'WAITING_FOR_ACCOUNTS_MNGR':
           //   statusName = 'WAITING FOR ACCOUNTS MNGR';
@@ -1235,13 +1238,13 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (IROrder ?? []).filter((row) => {
+  const filteredRows = (flattenedData ?? []).filter((row: IROrder) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+      (row.division?.details?.name && row.division?.details?.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
     }
@@ -1405,7 +1408,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                     >
                       <div style={{ height: '65vh', width: '100%' }}>
                         <DataGrid
-                          rows={flattenedData}
+                          rows={filteredRows}
                           columns={columns}
                           getRowId={(row) => row._id}
                           checkboxSelection={props.action === 'release'}
@@ -1768,7 +1771,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
               // getFiles={selectedIRO?.signature?.hrSignature}
               getFiles={selectedIRO?.signature?.hrSignature ? [selectedIRO.signature.hrSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file?.name).then((res) => {
                   setSelectedIRO(() => ({
                     ...selectedIRO,
                     signature: {
