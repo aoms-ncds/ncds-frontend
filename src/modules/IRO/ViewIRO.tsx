@@ -975,7 +975,7 @@ const ViewIRO = () => {
                                         // }, 500);
                                       }}
                                     >
-                                      Revert
+                                      Edit Request
                                     </Button>
                                     &nbsp;
                                     {/* <Button
@@ -1202,7 +1202,7 @@ const ViewIRO = () => {
       <Dialog open={reverDialog} fullWidth maxWidth="md">
         <DialogTitle>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      Reason for revert
+      Reason for edit request
             <Button
               variant="contained"
               onClick={() => {
@@ -1237,7 +1237,7 @@ const ViewIRO = () => {
                           /> */}
           <TextField
             id="revertForReject"
-            placeholder="Reason for Revert"
+            placeholder="Reason for edit request"
             multiline
             value={reasonForRevert}
             onChange={(e)=>setReasonForRevert(e.target?.value)}

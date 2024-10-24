@@ -703,46 +703,46 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   onClick: () => [setOpenRelease(true), setReleaseAmountIROs([params.row])],
                   icon: CurrencyRupeeIcon,
                 },
-                {
-                  id: 'Close IRO',
-                  text: 'Close IRO',
-                  icon: PreviewIcon,
-                  onClick: () => {
-                    setIroData(params.row);
-                    if (params?.row.FR) {
-                      FRServices.getById(params.row.FR).then((res) => {
-                        setFrData(res.data);
-                        console.log(res.data, 'fr');
-                      });
-                    }
-                    setPrintIroLoading(true);
-                    setTimeout(() => {
-                      setPrintIroLoading(false);
-                    }, 2000);
-                    // IROServices.close(params.row._id)
-                    //     .then((res) => {
-                    //       // if (IROrder) {
-                    //       // eslint-disable-next-line @typescript-eslint/naming-convention
-                    //       const filterIRO = IROrder?.filter((iro) => {
-                    //         return iro._id !== params.row._id;
-                    //       });
-                    //       setIROrder(filterIRO);
-                    //       // }
+                // {
+                //   id: 'Close IRO',
+                //   text: 'Close IRO',
+                //   icon: PreviewIcon,
+                //   onClick: () => {
+                //     setIroData(params.row);
+                //     if (params?.row.FR) {
+                //       FRServices.getById(params.row.FR).then((res) => {
+                //         setFrData(res.data);
+                //         console.log(res.data, 'fr');
+                //       });
+                //     }
+                //     setPrintIroLoading(true);
+                //     setTimeout(() => {
+                //       setPrintIroLoading(false);
+                //     }, 2000);
+                //     // IROServices.close(params.row._id)
+                //     //     .then((res) => {
+                //     //       // if (IROrder) {
+                //     //       // eslint-disable-next-line @typescript-eslint/naming-convention
+                //     //       const filterIRO = IROrder?.filter((iro) => {
+                //     //         return iro._id !== params.row._id;
+                //     //       });
+                //     //       setIROrder(filterIRO);
+                //     //       // }
 
-                    //       enqueueSnackbar({
-                    //         message: res.message,
-                    //         variant: 'success',
-                    //       });
-                    //     })
+                //     //       enqueueSnackbar({
+                //     //         message: res.message,
+                //     //         variant: 'success',
+                //     //       });
+                //     //     })
 
-                    //     .catch((err) => {
-                    //       enqueueSnackbar({
-                    //         message: err.message,
-                    //         variant: 'error',
-                    //       });
-                    //     });
-                  },
-                },
+                //     //     .catch((err) => {
+                //     //       enqueueSnackbar({
+                //     //         message: err.message,
+                //     //         variant: 'error',
+                //     //       });
+                //     //     });
+                //   },
+                // },
               ] :
               []),
             ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
@@ -915,11 +915,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return '';
         }
         switch (statusName) {
-        case 'WAITING FOR OFFICE MNGR':
+        case 'WAITING FOR APPROVAL':
           return clsx('yellow-light');
         case 'WAITING FOR ACCOUNTS MNGR':
           return clsx('yellow-dark');
-        case 'WAITING FOR ACCOUNTS STATE':
+        case 'IRO APPROVED':
           return clsx('orange-light');
         case 'WAITING FOR RELEASE AMOUNT':
           return clsx('orange-dark');
@@ -931,6 +931,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('green-dark');
         case 'IRO DISAPPROVED':
           return clsx('red-light');
+        case 'IRO IN PROCESS':
+          return clsx('red-light');
         default:
           // console.log('No class applied');
           return '';
@@ -940,6 +942,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       valueGetter: (params) => {
         let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
         // Check if the status name needs to be changed
+        console.log(statusName, 'sjhivi');
         switch (statusName) {
         case 'SEND_BACK':
           statusName = 'REVERTED';
@@ -949,6 +952,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           break;
         case 'FR_REJECTED':
           statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+          break;
+        case 'WAITING_FOR_OFFICE_MNGR':
+          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
+          break;
+        case 'WAITING_FOR_ACCOUNTS_STATE':
+          statusName = 'IRO APPROVED'; // Change to whatever new name you want
+          break;
+        case 'IRO_IN_PROCESS':
+          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
           break;
           // case 'WAITING_FOR_ACCOUNTS_MNGR':
           //   statusName = 'WAITING FOR ACCOUNTS MNGR';
@@ -1350,7 +1362,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                          <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>

@@ -388,7 +388,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     });
   }
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR })
+    IROServices.getAll({ dateRange: dateRange, status: [IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]})
       .then((res) => {
         setIROrder(res.data);
       });
@@ -632,6 +632,27 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     {
+      field: 'status',
+      renderHeader: () => <b>Status</b>,
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      // renderCell: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 205,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      },
+    },
+    {
       field: 'subDivisionName',
       renderHeader: () => <b>Sub Division Name</b>,
       // renderCell: (props) => <p> {props.row.purposeSubdivision?.name}</p>,
@@ -751,27 +772,6 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
-    {
-      field: 'status',
-      renderHeader: () => <b>Status</b>,
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 205,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
     {
       field: 'updatedAt',
       headerName: 'Last Updated',

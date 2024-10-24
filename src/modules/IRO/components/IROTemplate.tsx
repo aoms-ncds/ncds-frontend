@@ -480,7 +480,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.president.type};base64, ${props.rowData.president.type} `} />
+                      src={`data:${props.rowData.president.type?? props.president.presidentSignature?.type};base64, ${props.rowData.president.type?? props.president.presidentSignature?.base64} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -491,7 +491,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.rowData.names?.president}
+                      {props.rowData.names?.president?? (props.president as any).presidentName}
 
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
@@ -527,7 +527,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.sign?.officeMgr.type};base64, ${props.rowData.sign?.officeMgr?.base64}`}
+                      src={`data:${props.rowData.sign?.officeMgr.type?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData.sign?.officeMgr?.base64?? props.officeMngrSign?.officeManagerSignature?.base64}`}
                     />
                   </View>
                 ):(
@@ -556,7 +556,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.rowData.names?.officeMgr}                      </Text>
+                      {props.rowData.names?.officeMgr?? props.officeMngrSign?.officeManagerName}                      </Text>
                     <Text style={{
                       ...styles.text1,
                       fontSize: 11,

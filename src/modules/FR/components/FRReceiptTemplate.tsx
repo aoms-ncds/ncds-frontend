@@ -119,7 +119,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props.rowData?.signature, 'pro');
+  console.log((props.president as any).presidentName, 'pro');
 
 
   const additionalJr = props.rowData?.division?.details.additionalJuniorLeader?.name;
@@ -229,17 +229,17 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData?.signature?.coordinator?.type?? props.rowData?.signature?.srLeader?.type};base64, ${props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.coordinator?.base64} `}/>
+          src={`data:${props.rowData?.signature?.coordinator?.type?? props.rowData?.signature?.srLeader?.type?? props.rowData.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.srLeader?.type?? props.rowData.division?.details.coordinator?.sign?.base64} `}/>
           <Image style={{ left: 260,
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData?.signature?.srLeader?.type ?? props.rowData?.signature?.srLeader?.type };base64, ${props.rowData?.signature?.srLeader?.base64 ?? props.rowData?.signature?.srLeader?.base64} `}/>
+          src={`data:${props.rowData?.signature?.srLeader?.type ?? props.rowData?.division?.details.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.type};base64, ${props.rowData?.signature?.srLeader?.base64 ?? props.rowData?.division?.details.seniorLeader?.sign?.base64 ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
             width: 50,
           }}
-          src={`data:${props.rowData?.signature?.jrLeader?.type ?? props.rowData?.signature?.jrLeader?.type};base64, ${props.rowData?.signature?.jrLeader?.base64 ??props.rowData?.signature?.jrLeader?.base64} `} />
+          src={`data:${props.rowData?.signature?.jrLeader?.type ?? props.rowData?.division?.details.juniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.signature?.jrLeader?.base64 ?? props.rowData?.division?.details.juniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
           {props.rowData?.specialsanction == 'Yes' ? (
             <Image style={{
               left: 60,
@@ -248,7 +248,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               height: 35,
               width: 50,
             }}
-            src={`data:${props.rowData?.signature?.president?.type};base64, ${props.rowData?.signature?.president?.base64} `} />
+            src={`data:${props.rowData?.signature?.president?.type?? props.president.presidentSignature?.type};base64, ${props.rowData?.signature?.president?.base64?? props.president.presidentSignature?.base64} `} />
           ) : (
             []
           )}
@@ -268,16 +268,45 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
         {/* </div> */}
         <div style={{ marginTop: 50, fontSize: 10 }}>
           <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Coordinator</Text>
-
-          <Text style={{ left: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.coordinator?.basicDetails?.firstName} {props.rowData?.names?.coordinator?.basicDetails?.lastName}</Text>
+          <Text
+            style={{
+              left: 60,
+              position: 'absolute',
+              fontSize: 10,
+              fontWeight: 'bold',
+              fontFamily: 'Oswald',
+            }}
+          >
+            {props.rowData?.names?.coordinator?.basicDetails?.firstName ?
+              `${props.rowData.names.coordinator.basicDetails.firstName} ${props.rowData.names.coordinator.basicDetails.lastName}` :
+              `${props.rowData.division?.details.coordinator?.name?.basicDetails?.firstName} ${props.rowData.division?.details.coordinator?.name?.basicDetails?.lastName}`
+            }
+          </Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
-          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.jrLeader?.basicDetails?.firstName ?? props.rowData?.division?.details.additionalJuniorLeader?.name as any} {props.rowData?.names?.jrLeader?.basicDetails?.lastName ?? ''}</Text>
+          <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+            {props.rowData.names?.jrLeader?.basicDetails?.firstName ?
+              `${props.rowData.names.jrLeader.basicDetails.firstName} ${props.rowData.names.jrLeader.basicDetails.lastName || ''}` :
+              props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?
+                `${props.rowData.division.details.seniorLeader.name.basicDetails.firstName} ${props.rowData.division.details.seniorLeader.name.basicDetails.lastName || ''}` :
+                typeof props.rowData?.division?.details.additionalJuniorLeader?.name === 'string' ?
+                  props.rowData?.division?.details.additionalJuniorLeader?.name :
+                  ''}
+          </Text>
+
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.srLeader?.basicDetails?.firstName ?? props.rowData?.division?.details.additionalSeniorLeader?.name as any} {props.rowData?.names?.srLeader?.basicDetails?.lastName}</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+            {props.rowData?.names?.srLeader?.basicDetails?.firstName ?
+              `${props.rowData.names.srLeader.basicDetails.firstName} ${props.rowData.names.srLeader.basicDetails.lastName || ''}` :
+              props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?
+                `${props.rowData.division.details.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details.juniorLeader?.name?.basicDetails.lastName || ''}` :
+                typeof props.rowData?.division?.details?.additionalSeniorLeader?.name === 'string' ?
+                  props.rowData.division.details.additionalSeniorLeader.name :
+                  ''}
+          </Text>
           {props.rowData?.specialsanction == 'Yes' ? (
             <>
               <Text style={{ left: 60, top: 100, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
-              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.president }</Text>
+              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.president?? (props.president as any).presidentName?? ''}</Text>
 
               <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President Approved Date :</Text>
               <Text style={{ left: 165, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>

@@ -13,6 +13,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
   public static readonly RECONCILIATION_DONE = 215;
   public static readonly WAITTING_FOR_RELEASE_AMOUNT = 216;
   public static readonly IRO_REJECTED = 217;
+  public static readonly IRO_IN_PROCESS = 218;
 
 
   public static readonly allTransactionStatus = ({
@@ -33,6 +34,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
     RECONCILIATION_DONE: IROLifeCycleStates.RECONCILIATION_DONE,
     WAITTING_FOR_RELEASE_AMOUNT: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT,
     IRO_REJECTED: IROLifeCycleStates.IRO_REJECTED,
+    IRO_IN_PROCESS: IROLifeCycleStates.IRO_IN_PROCESS,
 
   });
 
