@@ -932,7 +932,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         case 'IRO DISAPPROVED':
           return clsx('red-light');
         case 'IRO IN PROCESS':
-          return clsx('red-light');
+          return clsx('dark-orange');
         default:
           // console.log('No class applied');
           return '';
@@ -1449,6 +1449,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         },
                         '&   .red-dark ': {
                           backgroundColor: '#ff0000', /* Darker red */
+                        },
+                        '&   .dark-orange': {
+                          backgroundColor: '#FFD243', /* Darker red */
                         },
                       }} >
                       <DataGrid
