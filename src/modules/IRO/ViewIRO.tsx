@@ -940,7 +940,7 @@ const ViewIRO = () => {
                                         }, 500);
                                       }}
                                     >
-                                      Verify
+                                      Approve
                                     </Button>
                                   </>
                                 }
