@@ -217,11 +217,18 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       }));
     } else {
       if (props.data[0]?.status >= IROLifeCycleStates.AMOUNT_RELEASED || IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.data[0]?.releaseAmount) {
-        IROServices.getReleaseAmountById(props.data[0]?.releaseAmount?._id ?? props.data[0]?.releaseAmount ).then((res) => {
-          console.log(res.data, 'upd');
+        const releaseAmountId = typeof props.data[0]?.releaseAmount === 'string' ?
+          props.data[0]?.releaseAmount :
+          props.data[0]?.releaseAmount?._id;
 
-          setReleaseAmount(res.data);
-        });
+        if (releaseAmountId) {
+          IROServices.getReleaseAmountById(releaseAmountId).then((res) => {
+            console.log(res.data, 'upd');
+            setReleaseAmount(res.data);
+          });
+        } else {
+          console.error('No valid releaseAmountId found.');
+        }
       }
     }
     setIroStatus(props.data.every((iro) => iro.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE));

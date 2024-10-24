@@ -331,7 +331,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
-  const [groupIro, setGroupIro] = useState<any[]>([]);
+  const [groupIro, setGroupIro] = useState<any>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -593,14 +593,16 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         });
       });
   };
-  const flattenedData = groupIro.reduce((acc, item, parentIndex) => {
-    const iros = item.IRO.map((iro: IROrder) => ({
-      ...iro,
-      parentId: item._id,
-      IRODate: moment(iro.IRODate), // Format the date here
-      // Optionally keep reference to parent row
-      parentGroupIndex: parentIndex, // Track which parent group this IRO belongs to
-    }));
+  const flattenedData = groupIro.reduce((acc: any, item: { IRO: IROrder[]; _id: any}, parentIndex: any) => {
+    const iros = Array.isArray(item.IRO) ? // Ensure IRO is an array before mapping
+      item.IRO.map((iro: IROrder) => ({
+        ...iro,
+        parentId: item._id,
+        IRODate: moment(iro.IRODate), // Format the date here
+        parentGroupIndex: parentIndex, // Track which parent group this IRO belongs to
+      })) :
+      []; // If IRO is not an array, return an empty array
+
     return [...acc, ...iros];
   }, []);
   // Rest of your component code...
@@ -1415,7 +1417,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                             });
                           }}
                           getRowClassName={(params) => {
-                            const parentGroupIndex = params.row.parentGroupIndex as number;
+                            const parentGroupIndex = (params.row as any).parentGroupIndex;
                             // Apply color based on the parent group index
                             if (parentGroupIndex % 3 === 0) {
                               return 'group-color-1';
