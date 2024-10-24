@@ -595,7 +595,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
                   }
                   variant="outlined"
                   fullWidth
-                  required
+                  // required
                   disabled={props.action !== 'add'}
 
                 />
