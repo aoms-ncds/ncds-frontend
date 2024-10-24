@@ -74,6 +74,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         variant: 'success',
       });
       props.onClose();
+      window.location.reload();
     });
     setTimeout(() => {
       closeSnackbar(approvalSnack);
