@@ -1075,9 +1075,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Amount Release Date',
       headerClassName: 'super-app-theme--cell',
       width: 200,
-      valueGetter: (params) => {
-        moment(params.row.releaseAmount?.transferredDate)?.format('DD/MM/YYYY') ?? '';
-      },
+      valueGetter: (params) =>
+        params.row.releaseAmount?.transferredDate ?
+          moment(params.row.releaseAmount.transferredDate).format('DD/MM/YYYY') :
+          'N/A',
+
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
 
       align: 'center',
@@ -1162,6 +1164,43 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedBank?.split('-')[0] || ''}
+        </p>
+      ),
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'beneficiary',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'Beneficiary Name',
+      width: 200,
+      renderHeader: () => <b>Beneficiary Name</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedBank?.split('-')[1] || ''}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
     },
