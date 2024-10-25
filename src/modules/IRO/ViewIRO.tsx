@@ -331,6 +331,7 @@ const ViewIRO = () => {
   const [reasonForRevert, setReasonForRevert] = useState<string | null>('');
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
+  const userPermissions = (user.user as User)?.permissions;
 
 
   let total = 0;
@@ -948,9 +949,89 @@ const ViewIRO = () => {
                               &nbsp;
                             </>
                           ) : null}
-                          {IROstatus == 'WAITING_FOR_ACCOUNTS_STATE' || IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT' ? (
+                          {IROstatus == 'WAITING_FOR_ACCOUNTS_STATE' ? (
                             <>
                               &nbsp;
+                              {userPermissions?.FCRA_ACCOUNTS_ACCESS ?(
+
+                                <PermissionChecks
+                                  permissions={['FCRA_ACCOUNTS_ACCESS']}
+                                  granted={
+                                    <>
+                                      <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() => {
+                                          setRevertDialog(true);
+                                          // const rejectionSnack = enqueueSnackbar({ message: 'Rejecting IRO', variant: 'info' });
+                                          // IROServices.revert(iroID as string, '')
+                                          //   .then((res) => {
+                                          //     if (res.data) {
+                                          //       navigate('/iro');
+                                          //     }
+                                          //   });
+                                          // setTimeout(() => {
+                                          //   closeSnackbar(rejectionSnack);
+                                          //   const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });
+                                          //   setTimeout(() => closeSnackbar(rejectedSnack), 500);
+                                          // }, 500);
+                                        }}
+                                      >
+                                        Edit Request
+                                      </Button>
+                                      &nbsp;
+                                      {/* <Button
+                                        variant="contained"
+                                        color="success"
+                                        type='submit'
+                                        onClick={() => {
+                                          const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
+                                          IROServices.accountManagerApprove(iroID as string)
+                                            .then((res) => {
+                                              console.log('new heh');
+                                              if (res.data) {
+                                                navigate('/iro');
+                                              }
+                                            });
+
+                                          setTimeout(() => {
+                                            closeSnackbar(approvalSnack);
+                                            const approvedSnack = enqueueSnackbar({ message: 'Verified!', variant: 'success' });
+                                            setTimeout(() => closeSnackbar(approvedSnack), 500);
+                                          }, 500);
+                                        }}
+                                      >
+                                        Verify
+                                      </Button> */}
+                                    </>
+                                  }
+                                />
+                              ):(
+                                <PermissionChecks
+                                  permissions={['LOCAL_ACCOUNT_ACCESS']}
+                                  granted={
+                                    <>
+                                      <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() => {
+                                          setRevertDialog(true);
+                                        }}
+                                      >
+                                        Edit Request
+                                      </Button>
+                                      &nbsp;
+                                    </>
+                                  }
+                                />
+                              )}
+                              &nbsp;
+                            </>
+                          ) : null}
+                          {IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT' ? (
+                            <>
+                              &nbsp;
+
                               <PermissionChecks
                                 permissions={['ACCOUNTS_MNGR_ACCESS']}
                                 granted={
