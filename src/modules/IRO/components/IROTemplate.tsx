@@ -225,7 +225,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source of Fund</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 26 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 28 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -365,28 +365,28 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 // totalAmount2 += props.rowData.sanctionedAmount ?? 0;
 
 
-                return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='50' >
+                return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='100' >
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'12%'}>
                     {String(index + 1)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 50 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'800px'}>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'800px'}>
                     {item.narration}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 50 }}></div>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'70%'}>
                     {String(item?.sanctionedAsPer ?? '')}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 50 }}></div>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
 
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'13%'}>
                     {String(item.quantity)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 50 }}></div>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(item.requestedAmount)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 50 }}></div>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
                   </PDFCell>
@@ -422,8 +422,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
-                <PDFCell width={'100%'} ></PDFCell>
-                <PDFCell width={'40%'} ></PDFCell>
+                {/* <PDFCell width={'100%'} ></PDFCell> */}
+                {/* <PDFCell width={'40%'} ></PDFCell> */}
                 {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
@@ -480,7 +480,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.president.type?? props.president.presidentSignature?.type};base64, ${props.rowData.president.type?? props.president.presidentSignature?.base64} `} />
+                      src={`data:${props.rowData.president?.type?? props.president.presidentSignature?.type};base64, ${props.rowData.president?.type?? props.president.presidentSignature?.base64} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
