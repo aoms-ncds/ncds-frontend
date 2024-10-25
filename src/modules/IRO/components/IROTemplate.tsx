@@ -598,7 +598,14 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
-              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>{`${props?.rowData?.approvedBy?.basicDetails?.firstName ? props?.rowData?.approvedBy?.basicDetails?.firstName.trim() : ''}${props?.rowData?.approvedBy?.basicDetails?.middleName ? ' ' + props?.rowData?.approvedBy?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.approvedBy?.basicDetails?.lastName ?? ''}`}</Text>
+              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>
+                {props?.rowData?.approvedBy?.basicDetails?.firstName ?
+                  `${props.rowData.approvedBy.basicDetails.firstName} ${
+                    props.rowData.approvedBy.basicDetails.middleName || ''
+                  } ${props.rowData.approvedBy.basicDetails.lastName || ''}` :
+                  'Daut Kumar'}
+              </Text>
+
             </View>
             <Text style={{
               fontSize: 8,
