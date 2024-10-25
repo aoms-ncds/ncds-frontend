@@ -1075,7 +1075,9 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Amount Release Date',
       headerClassName: 'super-app-theme--cell',
       width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
+      valueGetter: (params) => {
+        moment(params.row.releaseAmount?.transferredDate)?.format('DD/MM/YYYY') ?? '';
+      },
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
 
       align: 'center',
@@ -1228,7 +1230,20 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Last Updated',
       headerClassName: 'super-app-theme--cell',
       width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {moment(props.row.updatedAt).format('DD/MM/YYYY')}
+        </p>
+      ),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
