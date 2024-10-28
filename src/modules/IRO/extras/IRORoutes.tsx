@@ -101,7 +101,7 @@ const iroPageRoutes: ModuleRoute = {
       path: '/:iroID/edit',
       element: <EditIRO />,
       private: true,
-      requiredAccessRights: ['ACCOUNTS_MNGR_ACCESS'],
+      requiredAccessRights: ['MANAGE_IRO'],
     },
     // {
     //   title: 'Release Amount',

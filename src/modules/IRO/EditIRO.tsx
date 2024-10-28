@@ -555,7 +555,6 @@ const EditIRO = () => {
                         }
                         renderInput={(params) => <TextField {...params} label="Subdivision" />}
                       />
-
                     </Grid><Grid item xs={12} md={6}>
                       <TextField
                         label="Division"
@@ -619,9 +618,12 @@ const EditIRO = () => {
                             IRO?.particulars?.map((item, index) => (
                               <TableRow key={item._id} >
                                 <TableCell component="th" sx={{ display: 'flex' }}>
-                                  <IconButton>
-                                    <EditIcon onClick={() => editParticular(item)} />
-                                  </IconButton>
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) && (
+                                  // Content to render if the user has access
+                                    <IconButton>
+                                      <EditIcon onClick={() => editParticular(item)} />
+                                    </IconButton>
+                                  )}
                                   <IconButton>
                                     <AddIcon onClick={() => handleClickOpen(item)} />
                                   </IconButton>
@@ -700,7 +702,7 @@ const EditIRO = () => {
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={IRO?.sanctionedBank ?? null}
-                        disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE}
                         onChange={(e) =>
                           setIRO({
                             ...IRO,
@@ -888,6 +890,7 @@ const EditIRO = () => {
                       <Select
                         labelId="sourceOfAccount"
                         label="sourceOfAccount"
+                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE}
                         value={IRO?.sourceOfAccount ?? null}
                         onChange={(e) =>
                           setIRO({
@@ -939,18 +942,36 @@ const EditIRO = () => {
                         Remarks
                       </Button>
                       &nbsp;
-                      <PermissionChecks
-                        permissions={['ACCOUNTS_MNGR_ACCESS']}
-                        granted={
-                          <Button
-                            variant="contained"
-                            color="info"
-                            type="submit"
-                          // disabled={particulars.length==0}
-                          >
-                            Submit{' '}
-                          </Button>
-                        } />
+                      {hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ? (
+                        <PermissionChecks
+                          permissions={['ACCOUNTS_MNGR_ACCESS']}
+                          granted={
+                            <Button
+                              variant="contained"
+                              color="info"
+                              type="submit"
+                              // disabled={particulars.length==0}
+                            >
+                          Submit{' '}
+                            </Button>
+                          } />
+                      ) : (
+                      // Content to render if the user doesn't have access
+                        <PermissionChecks
+                          permissions={['OFFICE_MNGR_ACCESS']}
+                          granted={
+                            <Button
+                              variant="contained"
+                              color="info"
+                              type="submit"
+                              // disabled={particulars.length==0}
+                            >
+                          Submit{' '}
+                            </Button>
+                          } />
+                      )}
+
+
                     </div>
                   </Grid>
                 </Grid>

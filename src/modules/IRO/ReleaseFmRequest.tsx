@@ -1469,6 +1469,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                           checkboxSelection={props.action === 'release'}
                           disableRowSelectionOnClick={props.action === 'release'}
                           onRowSelectionModelChange={(newRowSelectionModel) => {
+                            console.log(newRowSelectionModel, 'newRowSelectionModel');
+                            console.log(groupIro, 'newRowSelectionModel');
                             setReleaseAmountIROs(() => {
                               const selectedIROs = flattenedData.filter((iro: any) => newRowSelectionModel.includes(iro._id));
                               return selectedIROs;
