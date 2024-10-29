@@ -660,7 +660,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
-            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
+            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS']) ?
               [
                 {
                   id: 'edit',

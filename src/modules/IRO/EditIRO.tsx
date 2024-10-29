@@ -618,12 +618,12 @@ const EditIRO = () => {
                             IRO?.particulars?.map((item, index) => (
                               <TableRow key={item._id} >
                                 <TableCell component="th" sx={{ display: 'flex' }}>
-                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) && (
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS'])? (
                                   // Content to render if the user has access
                                     <IconButton>
                                       <EditIcon onClick={() => editParticular(item)} />
                                     </IconButton>
-                                  )}
+                                  ): []}
                                   <IconButton>
                                     <AddIcon onClick={() => handleClickOpen(item)} />
                                   </IconButton>
@@ -702,7 +702,7 @@ const EditIRO = () => {
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={IRO?.sanctionedBank ?? null}
-                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE}
+                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && !hasPermissions(['ADMIN_ACCESS'])}
                         onChange={(e) =>
                           setIRO({
                             ...IRO,
@@ -890,7 +890,7 @@ const EditIRO = () => {
                       <Select
                         labelId="sourceOfAccount"
                         label="sourceOfAccount"
-                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE}
+                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && !hasPermissions(['ADMIN_ACCESS'])}
                         value={IRO?.sourceOfAccount ?? null}
                         onChange={(e) =>
                           setIRO({
