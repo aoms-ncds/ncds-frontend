@@ -171,7 +171,7 @@ export default {
       }),
     ),
 
-  getReleaseAmountById: (id: string) =>
+  getReleaseAmountById: (id?: string) =>
     getStandardResponse<IReleaseAmount>(axios.get(`/iro/release_amount/${id}`, { headers: { ...getAuthHeader() } }), (releaseAmount)=>({
       ...releaseAmount,
       IRO: releaseAmount.IRO.map((iro:IROrder) => ({

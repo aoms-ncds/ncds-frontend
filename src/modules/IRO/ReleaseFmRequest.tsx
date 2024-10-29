@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
@@ -331,6 +332,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
+  const [openReleaseConform, setOpenReleaseConform] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [groupIro, setGroupIro] = useState<any>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
@@ -344,6 +346,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
+  const [selectedIroNo, setSelectedIroNo] = useState(null); // State to hold the selected iroNo
   const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -381,7 +384,22 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   // console.log(IROrder, 'selectedIROId');
-
+  const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
+    _id: '',
+    modeOfPayment: '',
+    releaseAmount: 0,
+    transactionNumber: '',
+    transferredAmount: 0,
+    transferredDate: null,
+    transferredBank: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+    },
+    attachment: [],
+    division: '',
+  });
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -420,6 +438,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       setLoading(false);
     }
   };
+  // useEffect(()=>{
+  // }, [releaseAmountIROs]);
 
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -1402,7 +1422,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                       disabled={releaseAmountIROs.length == 0}
                       onClick={() => {
                         if (releaseAmountIROs.every((iro) => iro.sanctionedBank== releaseAmountIROs[0].sanctionedBank)) {
-                          setOpenRelease(true);
+                          // setOpenRelease(true);
+                          IROServices.getReleaseAmountById(releaseAmountIROs[0]?.releaseAmount?._id?? '').then((res) => {
+                            setReleaseAmount(res.data);
+                          });
+                          setOpenReleaseConform(true);
                           setNewTest(releaseAmountIROs);
                         } else {
                           enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
@@ -1470,7 +1494,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                           disableRowSelectionOnClick={props.action === 'release'}
                           onRowSelectionModelChange={(newRowSelectionModel) => {
                             console.log(newRowSelectionModel, 'newRowSelectionModel');
-                            console.log(groupIro, 'newRowSelectionModel');
+                            const selectedRow = flattenedData.find((iro: IROrder) => iro._id === newRowSelectionModel[0] );
+                            setSelectedIroNo(selectedRow?.IROno|| null); // Accessing the inner iroNo
                             setReleaseAmountIROs(() => {
                               const selectedIROs = flattenedData.filter((iro: any) => newRowSelectionModel.includes(iro._id));
                               return selectedIROs;
@@ -2116,6 +2141,28 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
             } }
           >
                  Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>
+      <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
+        <DialogTitle>Reminder</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>
+         This {selectedIroNo} is part of a bulk release, the following IROs will also be released along with it:{releaseAmount?.IRO?.map((e)=><li>{e.IROno}</li>)}</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setOpenReleaseConform(false)}>Close</Button>
+          <Button
+            // endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              setOpenRelease(true);
+            } }
+          >
+                 Conform
           </Button>
         </DialogActions>
 

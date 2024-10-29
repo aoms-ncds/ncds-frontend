@@ -52,11 +52,12 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     attachment: [],
     division: '',
   });
-  console.log(props, 'iroStatus');
+  console.log(releaseAmount, 'iroStatus');
   const model = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setOpen(true);
   };
+  console.log(props.data, 'props.data');
   let saveReleaseAmount;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -68,7 +69,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     e.preventDefault();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
-    IROServices.releaseAmount(props.data, releaseAmount).then((res) => {
+    IROServices.releaseAmount(releaseAmount.IRO?? [], releaseAmount).then((res) => {
       enqueueSnackbar({
         message: res.message,
         variant: 'success',

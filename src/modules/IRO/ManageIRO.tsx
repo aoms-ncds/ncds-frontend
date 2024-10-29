@@ -330,6 +330,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     signature: {},
     specialsanction: '',
   });
+
+  const [openReleaseConform, setOpenReleaseConform] = useState(false);
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
@@ -1917,7 +1919,28 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
+              <DialogTitle>Reminder</DialogTitle>
+              <DialogContent>
+                <Typography sx={{ color: 'red' }}>
+         This {IROrder?.[0]?.IROno} is part of a bulk release, the following IROs will also be released along with it:<li></li></Typography>
+              </DialogContent>
 
+              <DialogActions>
+                <Button onClick={()=>setOpenReleaseConform(false)}>Close</Button>
+                <Button
+                  endIcon={<DeleteIcon />}
+                  variant="contained"
+                  color="info"
+                  onClick={async () => {
+                    setOpenRelease(true);
+                  } }
+                >
+                 Delete
+                </Button>
+              </DialogActions>
+
+            </Dialog>
             <FileUploader
               title=" Bill Upload"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
