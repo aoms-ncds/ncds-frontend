@@ -2162,7 +2162,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
               setOpenRelease(true);
             } }
           >
-                 Conform
+                 Confirm
           </Button>
         </DialogActions>
 
