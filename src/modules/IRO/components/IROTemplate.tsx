@@ -205,15 +205,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           <div >
             <View style={{ ...styles.box, marginTop: 3 }}>
               <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: 300, flexDirection: 'row' }}>
+                <View style={{ width: 500, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text> */}
                   <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}</Text>
-                </View>
-                <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -223,7 +218,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   <Text style={{ ...styles.text, marginTop: 5, left: 48 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Source of Fund</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 5, fontFamily: 'CourierPrime' }}>Source of Fund</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
                   <Text style={{ ...styles.text, marginTop: 5, left: 28 }}>:&nbsp;{props.rowData?.sourceOfAccount ?? ''}</Text>
                 </View>
@@ -247,9 +242,9 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   <Text style={{ ...styles.text, marginTop: 5, left: 51 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.bankName}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Transaction ID</Text>
-                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 22 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 34 }}>:&nbsp;{props.rowData?.releaseAmount?.transactionNumber ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
+                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
+                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>

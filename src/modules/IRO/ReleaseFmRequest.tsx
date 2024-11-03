@@ -987,12 +987,31 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       field: 'iroGroup',
       headerClassName: 'super-app-theme--cell',
       headerName: 'IroGroup',
-      width: 250,
+      width: 300,
       renderHeader: () => <b>Groups IROs</b>,
-      valueGetter: (params) => params.row.groupIros?.filter((e)=>e != params.row._id),
+      valueGetter: (params) => params.row.groupIros?.filter((e) => e !== params.row._id),
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params) => {
+        const parentGroupIndex = (params.row as any).parentGroupIndex;
+        let backgroundColor;
+
+        // Apply color based on the parent group index
+        if (parentGroupIndex % 3 === 0) {
+          backgroundColor = '#D63AE8'; // Light red
+        } else if (parentGroupIndex % 3 === 1) {
+          backgroundColor = '#9D3AE8'; // Light green
+        } else {
+          backgroundColor = '#E83AA2'; // Light blue
+        }
+        return (
+          <div style={{ backgroundColor, padding: '8px', borderRadius: '4px' }}>
+            {params.value}
+          </div>
+        );
+      },
     },
+
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
@@ -1501,17 +1520,17 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                               return selectedIROs;
                             });
                           }}
-                          getRowClassName={(params) => {
-                            const parentGroupIndex = (params.row as any).parentGroupIndex;
-                            // Apply color based on the parent group index
-                            if (parentGroupIndex % 3 === 0) {
-                              return 'group-color-1';
-                            } else if (parentGroupIndex % 3 === 1) {
-                              return 'group-color-2';
-                            } else {
-                              return 'group-color-3';
-                            }
-                          }}
+                          // getRowClassName={(params) => {
+                          //   const parentGroupIndex = (params.row as any).parentGroupIndex;
+                          //   // Apply color based on the parent group index
+                          //   if (parentGroupIndex % 3 === 0) {
+                          //     return 'group-color-1';
+                          //   } else if (parentGroupIndex % 3 === 1) {
+                          //     return 'group-color-2';
+                          //   } else {
+                          //     return 'group-color-3';
+                          //   }
+                          // }}
                         />
                       </div>
                     </Box>

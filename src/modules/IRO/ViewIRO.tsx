@@ -887,7 +887,7 @@ const ViewIRO = () => {
                             </>
                           ) : null} */}
 
-                          {IROstatus == 'WAITING_FOR_OFFICE_MNGR' ? (
+                          {IROstatus == 'WAITING_FOR_OFFICE_MNGR'|| IROstatus == 'IRO_IN_PROCESS' ? (
                             <>
                               {/* Only display buttons if props.action is 'view' */}
                               &nbsp;
@@ -927,7 +927,7 @@ const ViewIRO = () => {
                                         const approvalSnack = enqueueSnackbar({ message: 'Approving IRO', variant: 'info' });
                                         IROServices.officeManagerApprove(iroID as string)
                                           .then((res) => {
-                                            navigate('/iro');
+                                            navigate('/IRO/office_approve');
                                             // window.location.reload();
                                           });
                                         // if (props.onSubmit) {
@@ -1272,7 +1272,7 @@ const ViewIRO = () => {
               }, 500);
               false;
               setrejectDialog(false);
-              navigate('/iro/manage');
+              navigate('/IRO/office_approve');
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >

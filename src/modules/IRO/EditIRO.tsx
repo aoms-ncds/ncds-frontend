@@ -618,7 +618,7 @@ const EditIRO = () => {
                             IRO?.particulars?.map((item, index) => (
                               <TableRow key={item._id} >
                                 <TableCell component="th" sx={{ display: 'flex' }}>
-                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS'])? (
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
                                   // Content to render if the user has access
                                     <IconButton>
                                       <EditIcon onClick={() => editParticular(item)} />
@@ -1400,7 +1400,7 @@ const EditIRO = () => {
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
-                  // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  disabled={ IRO?.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT || IRO?.status != IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
                   onChange={(e) => {
                     if (totalRequestedAmount) {
                       setNewParticular((amount: any) => ({
@@ -1442,7 +1442,7 @@ const EditIRO = () => {
                     }));
                   }
                 }}
-                disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                //  disabled={!hasPermissions(['ADMIN_ACCESS'])}
                 renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
                 fullWidth
               />

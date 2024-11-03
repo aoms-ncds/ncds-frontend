@@ -31,6 +31,7 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
+import clsx from 'clsx';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -634,22 +635,74 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'status',
       renderHeader: () => <b>Status</b>,
-      width: 205,
+      width: 250,
       align: 'center',
       headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 205,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+        case 'WAITING FOR APPROVAL':
+          return clsx('yellow-light');
+        case 'WAITING FOR ACCOUNTS MNGR':
+          return clsx('yellow-dark');
+        case 'IRO APPROVED':
+          return clsx('orange-light');
+        case 'WAITING FOR RELEASE AMOUNT':
+          return clsx('orange-dark');
+        case 'AMOUNT RELEASED':
+          return clsx('green-light');
+        case 'RECONCILIATION DONE':
+          return clsx('green-medium');
+        case 'IRO CLOSED':
+          return clsx('green-dark');
+        case 'IRO DISAPPROVED':
+          return clsx('red-light');
+        case 'IRO IN PROCESS':
+          return clsx('dark-orange');
+        default:
+          // console.log('No class applied');
+          return '';
+        }
+      },
+
       valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+        // Check if the status name needs to be changed
+        console.log(statusName, 'sjhivi');
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED'; // Change to whatever new name you want
+          break;
+        case 'FR_REJECTED':
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+          break;
+        case 'WAITING_FOR_OFFICE_MNGR':
+          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
+          break;
+        case 'WAITING_FOR_ACCOUNTS_STATE':
+          statusName = 'IRO APPROVED'; // Change to whatever new name you want
+          break;
+        case 'IRO_IN_PROCESS':
+          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
+          break;
+          // case 'WAITING_FOR_ACCOUNTS_MNGR':
+          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+          //   if (props.action === 'release') {
+          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          //   }
+          break;
+          // Add more cases for other status names you want to change
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
       },
     },
     {
@@ -872,7 +925,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 <br />
                 <Box
                   sx={{
-                    'height': 700,
+                    'height': 300,
                     'width': '100%',
                     '& .super-app-theme--cell': {
                       backgroundColor: '#f1f5fa',
@@ -890,10 +943,40 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       fontWeight: '600',
                     },
                     '& .even': {
-                      backgroundColor: '#DEDAFF', // Change to red for even rows
+                      backgroundColor: '#DEDAFF',
                     },
                     '& .odd': {
-                      backgroundColor: '#fff', // Change to blue for odd rows
+                      backgroundColor: '#fff',
+                    },
+                    '& .orange-light': {
+                      backgroundColor: '#ffa500', /* Light orange */
+                    },
+                    '& .orange-dark': {
+                      backgroundColor: '#cc8400', /* Darker orange */
+                    },
+                    '& .yellow-light': {
+                      backgroundColor: '#ffffe0', /* Light yellow */
+                    },
+                    '& .yellow-dark ': {
+                      backgroundColor: '#ffd700', /* Darker yellow */
+                    },
+                    '& .green-light ': {
+                      backgroundColor: '#90ee90', /* Light green */
+                    },
+                    '& .green-medium': {
+                      backgroundColor: '#32cd32', /* Medium green */
+                    },
+                    '& .green-dark ': {
+                      backgroundColor: '#008000', /* Dark green */
+                    },
+                    '&  .red-light ': {
+                      backgroundColor: '#ff7f7f', /* Light red */
+                    },
+                    '&   .red-dark ': {
+                      backgroundColor: '#ff0000', /* Darker red */
+                    },
+                    '&   .dark-orange': {
+                      backgroundColor: '#FFD243', /* Darker red */
                     },
                   }}
                 >
@@ -906,8 +989,6 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       checkboxSelection={props.action == 'release'}
                       disableRowSelectionOnClick={props.action == 'release'}
                       onRowSelectionModelChange={(newRowSelectionModel) => {
-                      // setSelectedIROrelease(newRowSelectionModel);
-
                         setReleaseAmountIROs(() => {
                           const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
 
