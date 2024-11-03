@@ -1400,7 +1400,7 @@ const EditIRO = () => {
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
-                  disabled={ IRO?.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT || IRO?.status != IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
+                  disabled={ IRO?.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT || IRO?.status != IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }
                   onChange={(e) => {
                     if (totalRequestedAmount) {
                       setNewParticular((amount: any) => ({
@@ -1431,7 +1431,7 @@ const EditIRO = () => {
               </Grid>
               <br />
               <Autocomplete
-                value={IRO?.sanctionedAsPer as unknown as AsPer}
+                value={newParticular.sanctionedAsPer as unknown as AsPer}
                 options={sanctionedAsPer ?? []}
                 getOptionLabel={(option:any) => option ?? ''}
                 onChange={(_e, selectedSanction) => {
