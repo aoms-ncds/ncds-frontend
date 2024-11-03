@@ -987,7 +987,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       field: 'iroGroup',
       headerClassName: 'super-app-theme--cell',
       headerName: 'IroGroup',
-      width: 300,
+      width: 350,
       renderHeader: () => <b>Groups IROs</b>,
       valueGetter: (params) => params.row.groupIros?.filter((e) => e !== params.row._id),
       align: 'center',
@@ -1004,13 +1004,24 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         } else {
           backgroundColor = '#E83AA2'; // Light blue
         }
+
         return (
-          <div style={{ backgroundColor, padding: '8px', borderRadius: '4px' }}>
-            {params.value}
+          <div style={{
+            backgroundColor,
+            padding: '10px',
+            borderRadius: '4px',
+            maxHeight: '80px', // Fixed height for the scrollable container
+            overflowY: 'auto', // Enables vertical scrolling
+            whiteSpace: 'pre-wrap', // Allows line breaks within the container
+            wordBreak: 'break-word', // Breaks long words if needed
+            maxWidth: '40ch', // Limits the width to approx. 30 characters
+          }}>
+            {params.row?.groupIros?.join(', ')}
           </div>
         );
       },
     },
+
 
     {
       field: 'divisionName',
