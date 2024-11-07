@@ -1010,7 +1010,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
             backgroundColor,
             padding: '10px',
             borderRadius: '4px',
-            maxHeight: '80px', // Fixed height for the scrollable container
+            maxHeight: '60px', // Fixed height for the scrollable container
             overflowY: 'auto', // Enables vertical scrolling
             whiteSpace: 'pre-wrap', // Allows line breaks within the container
             wordBreak: 'break-word', // Breaks long words if needed

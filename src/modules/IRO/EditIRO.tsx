@@ -48,9 +48,12 @@ import MessageItem from '../../components/MessageItem';
 import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import AddIcon from '@mui/icons-material/Add';
 import WorkersServices from '../Workers/extras/WorkersServices';
+import { useAuth } from '../../hooks/Authentication';
 
 const EditIRO = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
+  console.log(user, 'user');
 
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
@@ -1400,7 +1403,11 @@ const EditIRO = () => {
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
-                  disabled={ IRO?.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT || IRO?.status != IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }
+                  // disabled={
+                  //   IRO?.status === IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ||
+                  //   IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
+                  disabled={IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && !hasPermissions(['ADMIN_ACCESS']) }
+
                   onChange={(e) => {
                     if (totalRequestedAmount) {
                       setNewParticular((amount: any) => ({
