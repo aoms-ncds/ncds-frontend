@@ -535,7 +535,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     {
       field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Remark</b>), renderCell: (props) =>
         <p> {props.row?.remark?? 'N/A'}</p>,
-      width: 170, headerAlign: 'center', align: 'center',
+      width: 250, headerAlign: 'center', align: 'center',
     },
     {
       field: 'status',

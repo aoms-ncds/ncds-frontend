@@ -15,16 +15,25 @@ const NotificationPage = () => {
     {
       field: 'title',
       renderHeader: () => (<b>Title</b>),
-      minWidth: 200,
+      minWidth: 250,
       type: 'string',
       renderCell: (props) => {
         return (
-          <Link to={`/notification/${props.row._id}`} style={{ textDecoration: 'none' }}>
+          <Link
+            to={`/notification/${props.row._id}`}
+            style={{
+              textDecoration: 'none',
+              maxWidth: '100%', // Ensures it doesn't exceed the cell width
+              whiteSpace: 'normal', // Allows text to wrap to the next line
+              wordBreak: 'break-word', // Breaks long words to avoid overflow
+            }}
+          >
             {props.value}
           </Link>
         );
       },
     },
+
 
     {
       field: 'body',
