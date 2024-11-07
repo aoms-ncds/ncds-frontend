@@ -41,7 +41,7 @@ import { purposes } from '../FR/extras/FRConfig';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import IROReceiptTemplate from './components/IROReceiptTemplate';
 import IROServices from './extras/IROServices';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import { useNavigate, useParams } from 'react-router-dom';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { uncapitalizeObjectKeys } from '@mui/x-date-pickers/internals';
@@ -824,16 +824,14 @@ const ViewIRO = () => {
                             Log
                           </Button>
                            &nbsp;
-                          {IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IRO.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ? (
-
+                          {hasPermissions(['FCRA_ACCOUNTS_ACCESS'])|| hasPermissions(['LOCAL_ACCOUNT_ACCESS'])|| hasPermissions(['ADMIN_ACCESS']) ? (
                             <Button variant="contained" color="primary"
                               onClick={async ()=>[setOpenRelease(true),
                                 setReleaseAmountIROs([IRO])]}
                             >
-
                             Release amount
                             </Button>
-                          ): []}
+                          ):[]}
                            &nbsp;
                           <Button
                             variant="contained"
