@@ -1248,12 +1248,12 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
             textAlign: 'center',
           }}
         >
-          {' '}
           {props.row.sanctionedBank?.split('-')[1] || ''}
         </p>
       ),
       align: 'center',
       headerAlign: 'center',
+      valueGetter: (params) => params.row.sanctionedBank?.split('-')[1] || '',
     },
     // {
     //   field: 'status',
