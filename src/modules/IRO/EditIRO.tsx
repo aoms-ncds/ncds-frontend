@@ -705,7 +705,7 @@ const EditIRO = () => {
                         labelId="sanctioned_bank"
                         label="Sanctioned Bank"
                         value={IRO?.sanctionedBank ?? null}
-                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && !hasPermissions(['ADMIN_ACCESS'])}
+                        disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS'])&& !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
                         onChange={(e) =>
                           setIRO({
                             ...IRO,
@@ -1167,6 +1167,7 @@ const EditIRO = () => {
                         setSelectedMainCategory(selectedMainCategory);
                       }
                     }}
+                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) }
                     renderInput={(params) => <TextField {...params} label="Choose Main Category" />}
                     fullWidth
                   />
@@ -1253,7 +1254,7 @@ const EditIRO = () => {
                         quantity: Number(e.target.value),
                       }))
                     }
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS']) && !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
                     inputProps={{
                       onWheel: handleWheel,
                     }}
@@ -1321,7 +1322,7 @@ const EditIRO = () => {
                     value={newParticular.month}
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS'])&& !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
                     onChange={(e, selectedMonth) => {
                       if (selectedMonth) {
                         setNewParticular((particularDetails) => ({
@@ -1406,7 +1407,7 @@ const EditIRO = () => {
                   // disabled={
                   //   IRO?.status === IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ||
                   //   IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
-                  disabled={IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && !hasPermissions(['ADMIN_ACCESS']) }
+                  disabled={!hasPermissions(['ADMIN_ACCESS']) &&!hasPermissions(['OFFICE_MNGR_ACCESS']) }
 
                   onChange={(e) => {
                     if (totalRequestedAmount) {
