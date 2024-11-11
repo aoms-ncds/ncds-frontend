@@ -824,14 +824,21 @@ const ViewIRO = () => {
                             Log
                           </Button>
                            &nbsp;
-                          {hasPermissions(['FCRA_ACCOUNTS_ACCESS'])|| hasPermissions(['LOCAL_ACCOUNT_ACCESS'])|| hasPermissions(['ADMIN_ACCESS']) ? (
-                            <Button variant="contained" color="primary"
-                              onClick={async ()=>[setOpenRelease(true),
-                                setReleaseAmountIROs([IRO])]}
+                          {(IRO.status === IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || IRO.status === IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT) &&
+  (hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) || hasPermissions(['ADMIN_ACCESS'])) && (
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={async () => {
+                                setOpenRelease(true);
+                                setReleaseAmountIROs([IRO]);
+                              }}
                             >
-                            Release amount
+      Release amount
                             </Button>
-                          ):[]}
+                          )
+                          }
+
                            &nbsp;
                           <Button
                             variant="contained"
