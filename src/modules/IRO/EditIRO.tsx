@@ -945,34 +945,14 @@ const EditIRO = () => {
                         Remarks
                       </Button>
                       &nbsp;
-                      {hasPermissions(['ACCOUNTS_MNGR_ACCESS']) ? (
-                        <PermissionChecks
-                          permissions={['ACCOUNTS_MNGR_ACCESS']}
-                          granted={
-                            <Button
-                              variant="contained"
-                              color="info"
-                              type="submit"
-                              // disabled={particulars.length==0}
-                            >
-                          Submit{' '}
-                            </Button>
-                          } />
-                      ) : (
-                      // Content to render if the user doesn't have access
-                        <PermissionChecks
-                          permissions={['OFFICE_MNGR_ACCESS']}
-                          granted={
-                            <Button
-                              variant="contained"
-                              color="info"
-                              type="submit"
-                              // disabled={particulars.length==0}
-                            >
-                          Submit{' '}
-                            </Button>
-                          } />
-                      )}
+                      <Button
+                        variant="contained"
+                        color="info"
+                        type="submit"
+                        // disabled={particulars.length==0}
+                      >
+                        Submit
+                      </Button>
 
 
                     </div>
