@@ -1407,12 +1407,12 @@ const EditIRO = () => {
                   //   max: totalRequestedAmount, min: 0,
                   //   onWheel: handleWheel,
                   // }}
-                  inputProps={{
-                    max: totalRequestedAmount,
-                    min: 0,
-                    step: 0.01, // Allows up to two decimal places
-                    onWheel: handleWheel,
-                  }}
+                  // inputProps={{
+                  //   max: totalRequestedAmount,
+                  //   min: 0,
+                  //   step: 0.01, // Allows up to two decimal places
+                  //   onWheel: handleWheel,
+                  // }}
                 // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                 />
                 {/* </Tooltip> */}
