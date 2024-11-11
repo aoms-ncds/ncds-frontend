@@ -502,8 +502,11 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 250,
     },
     {
-      field: 'presidentSanction', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>President Sanction</b>),
+      field: 'presidentSanction',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+      renderHeader: () => (<b>President Sanction</b>),
       renderCell: (params) => (
         <p style={{
           maxWidth: 250,
@@ -513,24 +516,48 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: 3,
         }}>
-          {params.row.presidentSanction? 'Yes' : 'No'}
-        </p>),
+          {params.row.presidentSanction ? 'Yes' : 'No'}
+        </p>
+      ),
       width: 250,
+      // Adding valueGetter for filter compatibility
+      valueGetter: (params) => params.row.presidentSanction ? 'Yes' : 'No',
     },
+
     {
-      field: 'createdBy', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Applied By</b>), renderCell: (props) =>
-        // <p> {props.row.createdBy?.basicDetails.firstName  + ' ' + props.row.createdBy?.basicDetails?.middleName + ' ' + props.row.createdBy?.basicDetails.lastName} </p>,
+      field: 'createdBy',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Applied By</b>),
+      renderCell: (props) => (
         <p>
           {props.row.createdBy?.basicDetails?.firstName || ''} {' '}
           {props.row.createdBy?.basicDetails?.middleName || ''} {' '}
           {props.row.createdBy?.basicDetails?.lastName || ''}
-        </p>,
-      width: 170, headerAlign: 'center', align: 'center',
+        </p>
+      ),
+      width: 170,
+      // Adding valueGetter for filter compatibility
+      valueGetter: (props) => [
+        props.row.createdBy?.basicDetails?.firstName || '',
+        props.row.createdBy?.basicDetails?.middleName || '',
+        props.row.createdBy?.basicDetails?.lastName || '',
+      ].join(' ').trim(),
     },
+
     {
-      field: 'division', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Division</b>), renderCell: (props) =>
-        <p> {props.row.division?.details?.name}</p>,
-      width: 170, headerAlign: 'center', align: 'center',
+      field: 'division',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+      align: 'center',
+      renderHeader: () => (<b>Division</b>),
+      renderCell: (props) => (
+        <p>{props.row.division?.details?.name || ''}</p>
+      ),
+      width: 170,
+      // Adding valueGetter for filter compatibility
+      valueGetter: (props) => props.row.division?.details?.name || '',
     },
     {
       field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Remark</b>), renderCell: (props) =>
