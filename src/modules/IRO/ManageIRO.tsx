@@ -367,7 +367,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     date: string | null;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  // console.log(IROrder, 'selectedIROId');
+  console.log(props.action, 'selectedIROId');
 
   const attach = async (blob: Blob) => {
     try {
@@ -660,11 +660,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
-            ...(hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS']) ?
+            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) ?
               [
                 {
                   id: 'edit',
                   text: 'Edit',
+                  component: Link,
+                  // to: `/iro/${params.row._id}/edit`,
+                  onClick: () => {
+                    window.open(`/iro/${params.row._id}/edit`, '_blank');
+                  },
+                  icon: EditIcon,
+                },
+              ] :
+              []),
+            ...(hasPermissions(['ADMIN_ACCESS']) && props.action =='manage' ?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit for admin',
                   component: Link,
                   // to: `/iro/${params.row._id}/edit`,
                   onClick: () => {
