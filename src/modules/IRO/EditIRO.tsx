@@ -893,7 +893,7 @@ const EditIRO = () => {
                       <Select
                         labelId="sourceOfAccount"
                         label="sourceOfAccount"
-                        disabled={IRO.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE && !hasPermissions(['ADMIN_ACCESS'])}
+                        disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
                         value={IRO?.sourceOfAccount ?? null}
                         onChange={(e) =>
                           setIRO({
