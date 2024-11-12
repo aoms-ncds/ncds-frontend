@@ -115,7 +115,7 @@ const MinimalModuleDataAnalytics = () => {
               icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
               // count={divisionsCount?.toString()}
               dot={'.'}
-              count={divisionsCount?.toString()}
+              count={Number(divisionsCount) === 0 ? '1' : divisionsCount || '1'}
               color="#fff" targetRoute={`/divisions/details/${(user.user as User).division}`} />
           </Grid>
         }

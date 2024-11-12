@@ -71,7 +71,7 @@ const HomePage = () => {
             <Card sx={{ backgroundColor: '#fff', color: 'white', borderRight: 1, borderColor: 'grey', height: '400' }}>
               <CardContent>
                 <Typography variant="body1" align='center' color={'black'}>Divisions</Typography>
-                <Typography variant="h5" align='center' color={'black'}>{divisionsCount}</Typography>
+                <Typography variant="h5" align='center' color={'black'}>{Number(divisionsCount) === 0 ? '1' : divisionsCount || '1'}</Typography>
                 <Typography variant="body2" align='center'>
                   <span className="text-success" style={{ color: 'green' }}><ArrowUpwardIcon />2.1%</span> <span style={{ color: 'black' }}> vs last 7 days</span>
                 </Typography>

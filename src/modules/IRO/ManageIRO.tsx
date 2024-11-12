@@ -61,6 +61,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [showAccountFileUploader, setShowAccountFileUploader] = useState(false);
   const [showAccountManagerFileUploader, setShowAccountManagerFileUploader] = useState(false);
   const [attachment, setAttachment] = useState<boolean>(false);
+  const [file, setFile] = useState<boolean>(false);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
@@ -606,15 +607,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   };
   // Rest of your component code...
   useEffect(() => {
-    if (selectedIRO._id != '') {
+    // Check if `selectedIRO` has a valid ID and `billAttachment` is not empty
+    if (selectedIRO._id !== '' && selectedIRO.billAttachment.length > 0) {
       IROServices.updateIRO(selectedIRO._id, selectedIRO);
     }
-  }, [selectedIRO.billAttachment]);
-  useEffect(() => {
-    if (selectedIRO._id != '') {
-      IROServices.updateIRO(selectedIRO._id, selectedIRO);
-    }
-  }, [selectedIRO]);
+  }, [file]);
+  // useEffect(() => {
+  //   if (selectedIRO._id != '') {
+  //     IROServices.updateIRO(selectedIRO._id, selectedIRO);
+  //   }
+  // }, [selectedIRO]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -1969,12 +1971,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               open={attachment}
               action={fileUploaderAction}
               postApprove={() => IROServices.reconciliationCompleted(selectedIRO._id)}
-              onClose={() => setAttachment(false)}
+              onClose={() => {
+                setAttachment(false), setFile(false);
+              }}
               // getFiles={TestServices.getBills}
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
                   setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+                  setFile(true);
                   return res;
                 });
               }}
