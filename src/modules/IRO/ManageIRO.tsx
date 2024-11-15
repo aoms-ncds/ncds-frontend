@@ -618,11 +618,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   //   }
   // }, [selectedIRO]);
 
-  useEffect(() => {
-    if (selectedIRO._id != '') {
-      IROServices.updateIRO(selectedIRO._id, selectedIRO);
-    }
-  }, [selectedIRO.signature]);
+  // useEffect(() => {
+  //   if (selectedIRO._id != '') {
+  //     IROServices.updateIRO(selectedIRO._id, selectedIRO);
+  //   }
+  // }, [selectedIRO.signature]);
 
   const columns: GridColDef<IROrder>[] = [
     {

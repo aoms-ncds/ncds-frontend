@@ -35,6 +35,8 @@ import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDev
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 
 const ManageFrForDivision = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -49,6 +51,18 @@ const ManageFrForDivision = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [data3, setData3] = useState<FR | null>(null);
+  const [pdfProps, setPdfProps] = useState<{
+    purpose: FRPurpose | null;
+    divisionId: string | null;
+    workerId: string | null;
+    designationParticularID: string | null;
+    subDivisionId: string | null;
+    IRONo: string | null;
+    month: string | null;
+    date: string | null;
+  } | null>(null);
+  const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -339,6 +353,40 @@ const ManageFrForDivision = () => {
                 }, 2000);
               },
             },
+            ...(hasPermissions(['HR_DPARTMENT_ACCESS'])&&props.row.workerSupport ?
+              [
+                {
+                  id: 'print_Sign',
+                  text: 'Signature Sheet',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    setData3(props.row);
+                    if (props.row.workerSupport) {
+                      setPdfProps({
+                        purpose: props.row.purpose ?? 'Division',
+                        divisionId: props.row.division?._id ?? null,
+                        workerId:
+                        props.row.purpose == 'Coordinator' && props.row.purposeCoordinator ?
+                          props.row.purposeCoordinator?._id :
+                          props.row.purpose == 'Worker' && props.row.purposeWorker?._id ?
+                            props.row.purposeWorker?._id :
+                            null,
+                        subDivisionId: props.row.purposeSubdivision?._id ?? null,
+                        designationParticularID: props.row.designationParticular ?? null,
+                        IRONo: null,
+                        month: props.row.particulars[0].month,
+                        date: null,
+                      });
+                      setSupportAttachment(true);
+                    }
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ] :
+              []),
             {
               id: 'notification',
               text: 'Send notification',
@@ -989,6 +1037,42 @@ const ManageFrForDivision = () => {
                 </form>
               </Dialog>
             </Grid>
+            <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
+              <DialogTitle> Signature Attachment </DialogTitle>
+              <DialogContent>
+                <Container>Please download the signature sheet: &nbsp;
+                  {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
+                    const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
+                    if (file.downloadURL) {
+                      const link = document.createElement('a');
+                      link.href = file.downloadURL;
+                      link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
+                      link.click();
+                    }
+                  }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
+              <>
+                <PDFDownloadLink
+                  document={<IROReconciliationPdf
+                    data={pdfProps}
+                  />}
+                  fileName="WorkersSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {({ loading }) => loading ? '....' : 'WorkersSignatureSheet.pdf'}
+                </PDFDownloadLink><br />
+              </>)} NB: Ignore if already attached </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setSupportAttachment(false);
+                  }}
+                  variant="text"
+                >
+            Ok
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog
               open={open}
               // TransitionComponent={Transition}
