@@ -61,7 +61,7 @@ const IRODashboard = () => {
                 style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Applied'} color="#fff" /><br /></>
             )} />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()} secondaryText={'Applied'} color="#fff" />
+            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()} secondaryText={'New Applied'} color="#fff" />
 
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
