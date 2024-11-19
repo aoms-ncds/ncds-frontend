@@ -1167,6 +1167,13 @@ return (
       onClose={() => setViewFileUploader(false)}
       // getFiles={TestServices.getBills}
       getFiles={attachments}
+      deleteFile={(fileId: string) => {
+        setNewParticular((particularDetails) => ({
+          ...particularDetails,
+          attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        }));
+        return FileUploaderServices.deleteFile(fileId);
+      }}
     />
     <Dialog
       open={showAddParticularDialog}
