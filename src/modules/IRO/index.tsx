@@ -58,7 +58,7 @@ const IRODashboard = () => {
             permissions={['MANAGE_IRO']}
             granted={(
               <><FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-                style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Applied'} color="#fff" /><br /></>
+                style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
             )} />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
             style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()} secondaryText={'New Applied'} color="#fff" />

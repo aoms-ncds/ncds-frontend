@@ -167,9 +167,9 @@ const ChildeSupportPage = () => {
     </div>
   );
   useEffect(() => {
-    let tot = 0;
+    const tot = 0;
     childList.map((i) => {
-      tot += i.childSupport?.amount;
+      const tot = childList.reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
       setTotal(tot);
     });
     console.log(tot, 'tot');
@@ -458,6 +458,26 @@ const ChildeSupportPage = () => {
   // };
   const handleSelectionChange = (newSelection: any) => {
     setFilterdId(newSelection);
+    setRequisition((requisition) => ({
+      ...requisition,
+      // purpose: selectedWorker?'child':'Division',
+      // purposeWorker: selectedWorker??undefined,
+      division: division ?? undefined,
+      mainCategory: 'Welfare of Children',
+      particulars: [{
+        _id: '',
+        mainCategory: 'Welfare of Children',
+        subCategory1: 'Children Welfare',
+        subCategory2: 'Child Education Assistance',
+        subCategory3: 'Select',
+        month: moment().format('MMMM'),
+        narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
+        requestedAmount: total,
+        unitPrice: total,
+        quantity: childList?.length,
+        attachment: fileObj ? [fileObj] : [],
+      }],
+    }));
   };
   const handleAction = () => {
     const selectedRows = filterdId.length > 0 ?
@@ -511,7 +531,10 @@ const ChildeSupportPage = () => {
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
+          const tot = childList.reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
+          handleAction();
           // if (fileObj) {
+          // setTimeout(() => {
           setToggleRaiseFR(true);
           setRequisition((requisition) => ({
             ...requisition,
@@ -527,19 +550,20 @@ const ChildeSupportPage = () => {
               subCategory3: 'Select',
               month: moment().format('MMMM'),
               narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
-              requestedAmount: total,
-              unitPrice: total,
+              requestedAmount: tot,
+              unitPrice: tot,
               quantity: childList?.length,
               attachment: fileObj ? [fileObj] : [],
             }],
           }));
+          console.log(tot, '00');
+          // }, 2000);
           // // } else {
           // //   enqueueSnackbar({
           // //     message: 'File Not Attached',
           // //     variant: 'info',
           // //   });
           // }
-          handleAction();
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -746,6 +770,7 @@ const ChildeSupportPage = () => {
                           variant="contained"
                           color="info"
                           type='submit'
+                          onClick={handleAction}
                         >
                           Raise FR
                         </Button></Tooltip>
