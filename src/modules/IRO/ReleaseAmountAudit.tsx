@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
@@ -67,6 +68,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -330,7 +332,9 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
 
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const [openRelease, setOpenRelease] = useState(false);
+  const [openReleaseConform, setOpenReleaseConform] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
+  const [groupIro, setGroupIro] = useState<any>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -342,6 +346,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
+  const [selectedIroNo, setSelectedIroNo] = useState(null); // State to hold the selected iroNo
   const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -379,7 +384,22 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   // console.log(IROrder, 'selectedIROId');
-
+  const [releaseAmount, setReleaseAmount] = useState<IReleaseAmount>({
+    _id: '',
+    modeOfPayment: '',
+    releaseAmount: 0,
+    transactionNumber: '',
+    transferredAmount: 0,
+    transferredDate: null,
+    transferredBank: {
+      bankName: '',
+      branchName: '',
+      accountNumber: '',
+      IFSCCode: '',
+    },
+    attachment: [],
+    division: '',
+  });
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -418,6 +438,8 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       setLoading(false);
     }
   };
+  // useEffect(()=>{
+  // }, [releaseAmountIROs]);
 
   const userPermissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -554,6 +576,10 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
+    IROServices.groupedIRO().then((res)=>{
+      console.log(res, 'res90');
+      setGroupIro(res.data);
+    });
   }, []);
 
   const deleteIRO = (id: string) => {
@@ -588,6 +614,18 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         });
       });
   };
+  const flattenedData = groupIro.reduce((acc: any, item: { IRO: IROrder[]; _id: any}, parentIndex: any) => {
+    const iros = Array.isArray(item.IRO) ? // Ensure IRO is an array before mapping
+      item.IRO.map((iro: IROrder) => ({
+        ...iro,
+        parentId: item._id,
+        IRODate: moment(iro.IRODate), // Format the date here
+        parentGroupIndex: parentIndex, // Track which parent group this IRO belongs to
+      })) :
+      []; // If IRO is not an array, return an empty array
+
+    return [...acc, ...iros.filter((e)=>e.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT)];
+  }, []);
   // Rest of your component code...
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -761,7 +799,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
           return clsx('green');
         case 'RECONCILIATION DONE':
           return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
+        case 'WAITING FOR RELEASE AMOUNT':
           return clsx('orange');
         default:
           // console.log('No class applied');
@@ -782,6 +820,9 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         case 'FR_REJECTED':
           statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
           break;
+        case 'WAITTING_FOR_RELEASE_AMOUNT':
+          statusName = 'WAITING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+          break;
           // case 'WAITING_FOR_ACCOUNTS_MNGR':
           //   statusName = 'WAITING FOR ACCOUNTS MNGR';
           //   if (props.action === 'release') {
@@ -797,10 +838,50 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       },
     },
     {
+      field: 'iroGroup',
+      headerClassName: 'super-app-theme--cell',
+      headerName: 'IroGroup',
+      width: 350,
+      renderHeader: () => <b>Groups IROs</b>,
+      valueGetter: (params) => params.row.groupIros?.filter((e) => e !== params.row._id),
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => {
+        const parentGroupIndex = (params.row as any).parentGroupIndex;
+        let backgroundColor;
+
+        // Apply color based on the parent group index
+        if (parentGroupIndex % 3 === 0) {
+          backgroundColor = '#D63AE8'; // Light red
+        } else if (parentGroupIndex % 3 === 1) {
+          backgroundColor = '#9D3AE8'; // Light green
+        } else {
+          backgroundColor = '#E83AA2'; // Light blue
+        }
+
+        return (
+          <div style={{
+            backgroundColor,
+            padding: '10px',
+            borderRadius: '4px',
+            maxHeight: '60px', // Fixed height for the scrollable container
+            overflowY: 'auto', // Enables vertical scrolling
+            whiteSpace: 'pre-wrap', // Allows line breaks within the container
+            wordBreak: 'break-word', // Breaks long words if needed
+            maxWidth: '40ch', // Limits the width to approx. 30 characters
+          }}>
+            {params.row?.groupIros?.join(', ')}
+          </div>
+        );
+      },
+    },
+
+
+    {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
       headerClassName: 'super-app-theme--cell',
-      valueGetter: (params) => params.row.division?.details.name,
+      valueGetter: (params) => params.row.division?.details?.name,
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -899,7 +980,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Amount Release Date',
       headerClassName: 'super-app-theme--cell',
       width: 200,
-      valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
+      valueGetter: (params) =>
+        params.row.releaseAmount?.transferredDate ?
+          moment(params.row.releaseAmount.transferredDate).format('DD/MM/YYYY') :
+          'N/A',
+
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
 
       align: 'center',
@@ -984,75 +1069,125 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {props.row.sanctionedBank?.split('-')[0] || ''}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
     },
     {
-      field: 'status',
+      field: 'beneficiary',
       headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      width: 300,
+      headerName: 'Beneficiary Name',
+      width: 200,
+      renderHeader: () => <b>Beneficiary Name</b>,
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 300,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {props.row.sanctionedBank?.split('-')[1] || ''}
+        </p>
+      ),
       align: 'center',
       headerAlign: 'center',
-      cellClassName: (params) => {
-        const statusName = params.formattedValue;
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'WAITING FOR OFFICE MNGR':
-          return clsx('orange');
-        case 'WAITING FOR ACCOUNTS STATE':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'WAITING FOR ACCOUNTS MNGR':
-          return clsx('green');
-        case 'AMOUNT RELEASED':
-          return clsx('green');
-        case 'RECONCILIATION DONE':
-          return clsx('green');
-        case 'WAITTING FOR RELEASE AMOUNT':
-          return clsx('orange');
-        default:
-          // console.log('No class applied');
-          return '';
-        }
-      },
-
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
+      valueGetter: (params) => params.row.sanctionedBank?.split('-')[1] || '',
     },
+    // {
+    //   field: 'status',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Status</b>,
+    //   width: 300,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   cellClassName: (params) => {
+    //     const statusName = params.formattedValue;
+    //     if (params.value == null) {
+    //       return '';
+    //     }
+    //     switch (statusName) {
+    //     case 'WAITING FOR OFFICE MNGR':
+    //       return clsx('orange');
+    //     case 'WAITING FOR ACCOUNTS STATE':
+    //       return clsx('orange');
+    //     case 'IRO CLOSED':
+    //       return clsx('green');
+    //     case 'WAITING FOR ACCOUNTS MNGR':
+    //       return clsx('green');
+    //     case 'AMOUNT RELEASED':
+    //       return clsx('green');
+    //     case 'RECONCILIATION DONE':
+    //       return clsx('green');
+    //     case 'WAITTING FOR RELEASE AMOUNT':
+    //       return clsx('orange');
+    //     default:
+    //       // console.log('No class applied');
+    //       return '';
+    //     }
+    //   },
+
+    //   valueGetter: (params) => {
+    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+    //     // Check if the status name needs to be changed
+    //     switch (statusName) {
+    //     case 'SEND_BACK':
+    //       statusName = 'REVERTED';
+    //       break;
+    //     case 'FR_APPROVED':
+    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
+    //       break;
+    //     case 'FR_REJECTED':
+    //       statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //       // case 'WAITING_FOR_ACCOUNTS_MNGR':
+    //       //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+    //       //   if (props.action === 'release') {
+    //       //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+    //       //   }
+    //       break;
+    //       // Add more cases for other status names you want to change
+    //     default:
+    //       statusName = statusName.replaceAll('_', ' ');
+    //       break;
+    //     }
+    //     return statusName;
+    //   },
+    // },
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
       headerClassName: 'super-app-theme--cell',
       width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderCell: (props) => (
+        <p
+          style={{
+            maxWidth: 200,
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+        >
+          {' '}
+          {moment(props.row.updatedAt).format('DD/MM/YYYY')}
+        </p>
+      ),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',
@@ -1062,13 +1197,13 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (IROrder ?? []).filter((row) => {
+  const filteredRows = (flattenedData ?? []).filter((row: IROrder) => {
     if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
       // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
+      (row.division?.details?.name && row.division?.details?.name.toLowerCase().includes(searchText.toLowerCase()))
     ) {
       return true;
     }
@@ -1082,7 +1217,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   }
   return (
     <CommonPageLayout
-      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount audit'}
+      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -1171,7 +1306,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                       disabled={releaseAmountIROs.length == 0}
                       onClick={() => {
                         if (releaseAmountIROs.every((iro) => iro.sanctionedBank== releaseAmountIROs[0].sanctionedBank)) {
-                          setOpenRelease(true);
+                          // setOpenRelease(true);
+                          IROServices.getReleaseAmountById(releaseAmountIROs[0]?.releaseAmount?._id?? '').then((res) => {
+                            setReleaseAmount(res.data);
+                          });
+                          setOpenReleaseConform(true);
                           setNewTest(releaseAmountIROs);
                         } else {
                           enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
@@ -1230,30 +1369,35 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                         },
                       }}
                     >
-                      <DataGrid
-                        rows={filteredRows ?? []}
-                        columns={columns}
-                        getRowId={(row) => row._id}
-                        // checkboxSelection={props.action == 'release'}
-                        // disableRowSelectionOnClick={props.action == 'release'}
-                        // onRowSelectionModelChange={(newRowSelectionModel) => {
-                        //   // setSelectedIROrelease(newRowSelectionModel);
-
-                        //   setReleaseAmountIROs(() => {
-                        //     const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
-                        //     return selectedIROs;
-                        //   });
-                        //   setNewTest(releaseAmountIROs);
-                        // }}
-                        getRowClassName={(params) => {
-                          if (params.row.specialsanction == 'Yes') {
-                            return 'special-sanction'; // Class for rows with special sanction
-                          }
-                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-                        }} style={{ height: '65vh', width: '100%' }}
-                        // rowSelectionModel={selectedIROrelease}
-                        //
-                      />
+                      <div style={{ height: '65vh', width: '100%' }}>
+                        <DataGrid
+                          rows={filteredRows}
+                          columns={columns}
+                          getRowId={(row) => row._id}
+                          // checkboxSelection={props.action === 'release'}
+                          disableRowSelectionOnClick={props.action === 'release'}
+                          onRowSelectionModelChange={(newRowSelectionModel) => {
+                            console.log(newRowSelectionModel, 'newRowSelectionModel');
+                            const selectedRow = flattenedData.find((iro: IROrder) => iro._id === newRowSelectionModel[0] );
+                            setSelectedIroNo(selectedRow?.IROno|| null); // Accessing the inner iroNo
+                            setReleaseAmountIROs(() => {
+                              const selectedIROs = flattenedData.filter((iro: any) => newRowSelectionModel.includes(iro._id));
+                              return selectedIROs;
+                            });
+                          }}
+                          // getRowClassName={(params) => {
+                          //   const parentGroupIndex = (params.row as any).parentGroupIndex;
+                          //   // Apply color based on the parent group index
+                          //   if (parentGroupIndex % 3 === 0) {
+                          //     return 'group-color-1';
+                          //   } else if (parentGroupIndex % 3 === 1) {
+                          //     return 'group-color-2';
+                          //   } else {
+                          //     return 'group-color-3';
+                          //   }
+                          // }}
+                        />
+                      </div>
                     </Box>
                     {/* <DataGrid
                       rows={filteredRows ?? []}
@@ -1593,7 +1737,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
               // getFiles={selectedIRO?.signature?.hrSignature}
               getFiles={selectedIRO?.signature?.hrSignature ? [selectedIRO.signature.hrSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+                return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file?.name).then((res) => {
                   setSelectedIRO(() => ({
                     ...selectedIRO,
                     signature: {
@@ -1698,7 +1842,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
                 // types: [],
-                maxItemSize: 6 * MB,
+                maxItemSize: 1 * MB,
                 maxItemCount: 10,
                 maxTotalSize: 30 * MB,
               }}
@@ -1724,7 +1868,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
@@ -1881,6 +2025,28 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
             } }
           >
                  Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>
+      <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
+        <DialogTitle>Reminder</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>
+         This {selectedIroNo} is part of a bulk release, the following IROs will also be released along with it:{releaseAmount?.IRO?.map((e)=><li>{e.IROno}</li>)}</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setOpenReleaseConform(false)}>Close</Button>
+          <Button
+            // endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              setOpenRelease(true);
+            } }
+          >
+                 Confirm
           </Button>
         </DialogActions>
 
