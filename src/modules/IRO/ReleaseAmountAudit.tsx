@@ -1217,7 +1217,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   }
   return (
     <CommonPageLayout
-      title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
+      title={'IRO Release Audit'}
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {

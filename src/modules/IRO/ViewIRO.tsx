@@ -1221,13 +1221,13 @@ const ViewIRO = () => {
         action="view"
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
-        deleteFile={(fileId: string) => {
-          // setNewParticular((particularDetails) => ({
-          //   ...particularDetails,
-          //   attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
-          // }));
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        // deleteFile={(fileId: string) => {
+        //   // setNewParticular((particularDetails) => ({
+        //   //   ...particularDetails,
+        //   //   attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        //   // }));
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
         getFiles={attachments}
       />
       {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
