@@ -66,7 +66,7 @@ const iroPageRoutes: ModuleRoute = {
       path: '/release_amount_audit',
       element: <ReleaseAmountAudit action='release'/>,
       private: true,
-      requiredAccessRights: ['MANAGE_IRO'],
+      requiredAccessRights: ['AUDIT_VIEW'],
     },
     {
       title: 'Closed IRO',
