@@ -300,7 +300,18 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '800px px', // Set fixed width,
+                    width: '635px px', // Set fixed width,
+                    textAlign: 'center', fontSize: 10,
+                    fontFamily: 'CourierPrime',
+                  }}
+                >
+                  Main Category
+                </Text>
+                <div style={{ borderRight: 1, height: 24 }}></div>
+                <Text
+                  style={{
+                    fontWeight: 500,
+                    width: '635px px', // Set fixed width,
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
@@ -311,14 +322,14 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '70%',
+                    width: '60%',
                     textAlign: 'center',
                     fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
                 >
-  Sanctioned{'\n'}
-  As Per
+                  Sanctioned{'\n'}
+                  As Per
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
@@ -340,8 +351,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                     fontFamily: 'CourierPrime',
                   }}
                 >
-  Requested{'\n'}
-   Amt
+                  Requested{'\n'}
+                  Amt
                 </Text>
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
@@ -365,11 +376,15 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                     {String(index + 1)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 100 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'800px'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
+                    {`${item.mainCategory == 'Select' ? '' : item.mainCategory}${item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1}${item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2}${item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}`}
+                  </PDFCell>
+                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
                     {item.narration}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 100 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'70%'}>
+                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
                     {String(item?.sanctionedAsPer ?? '')}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 100 }}></div>
@@ -392,23 +407,24 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </PDFTableRow>);
               })}
               <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
-                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'90%'}>
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'85%'}>
                   Grand Total
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
-                <PDFCell width={'100%'} ></PDFCell>
-                <PDFCell width={'575 px'} ></PDFCell>
+                {/* <PDFCell width={'90%'} ></PDFCell> */}
+                <PDFCell width={'637 px'} ></PDFCell>
+                <PDFCell width={'637 px'} ></PDFCell>
                 {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
                 <div style={{ borderRight: 1, right: 0.1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'39%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'32%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'39%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'32%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
@@ -475,7 +491,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.president?.type?? props.president.presidentSignature?.type};base64, ${props.rowData.president?.type?? props.president.presidentSignature?.base64} `} />
+                      src={`data:${props.rowData.president?.type ?? props.president.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props.president.presidentSignature?.base64} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -486,7 +502,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.rowData.names?.president?? (props.president as any).presidentName}
+                      {props.rowData.names?.president ?? (props.president as any).presidentName}
 
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
@@ -510,7 +526,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 }}>
                   E Signature protected.
                 </Text>
-                {props.prev !=true ?(
+                {props.prev != true ? (
 
                   <View style={{
                     ...styles.box5,
@@ -522,10 +538,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.sign?.officeMgr.type?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData.sign?.officeMgr?.base64?? props.officeMngrSign?.officeManagerSignature?.base64}`}
+                      src={`data:${props.rowData.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
                     />
                   </View>
-                ):(
+                ) : (
                   <View style={{
                     ...styles.box5,
                     width: 130,
@@ -541,7 +557,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   </View>
 
                 )}
-                {props.prev !=true ?(
+                {props.prev != true ? (
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
                       ...styles.text1,
@@ -551,7 +567,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.rowData.names?.officeMgr?? props.officeMngrSign?.officeManagerName}                      </Text>
+                      {props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}                      </Text>
                     <Text style={{
                       ...styles.text1,
                       fontSize: 11,
@@ -559,10 +575,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontFamily: 'CourierPrime',
                       textAlign: 'center',
                     }}>
-    Office Manager
+                      Office Manager
                     </Text>
                   </View>
-                ):(
+                ) : (
 
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -582,7 +598,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontFamily: 'CourierPrime',
                       textAlign: 'center',
                     }}>
-                    Office Manager
+                      Office Manager
                     </Text>
                   </View>
                 )}
@@ -595,8 +611,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
               <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>
                 {props?.rowData?.approvedBy?.basicDetails?.firstName ?
-                  `${props.rowData.approvedBy.basicDetails.firstName} ${
-                    props.rowData.approvedBy.basicDetails.middleName || ''
+                  `${props.rowData.approvedBy.basicDetails.firstName} ${props.rowData.approvedBy.basicDetails.middleName || ''
                   } ${props.rowData.approvedBy.basicDetails.lastName || ''}` :
                   'Daut Kumar'}
               </Text>
