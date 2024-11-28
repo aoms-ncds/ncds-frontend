@@ -7,6 +7,7 @@ import * as numberToWords from 'number-to-words';
 import { useState, useEffect } from 'react';
 import UserServices from '../../User/extras/UserServices';
 import FRServices from '../../FR/extras/FRServices';
+import { ToWords } from 'to-words';
 
 Font.register({
   family: 'CourierPrime',
@@ -125,7 +126,14 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   let NewTot: any = 0;
   let totalAmount2 = 0;
   // const [coordinatorImage, setCoordinatrImage] = useState<string | null>(null);
-
+  const toWords = new ToWords({
+    localeCode: 'en-IN', // Set Indian locale
+    converterOptions: {
+      currency: false, // Set true if dealing with currency
+      ignoreDecimal: false, // Include decimal words if applicable
+      ignoreZeroCurrency: false,
+    },
+  });
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
   const totalSacntion = props.fr?.particulars.forEach((e) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
@@ -142,7 +150,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   console.log(sanctionedAmount, 'amount');
 
   if (typeof sanctionedAmount !== 'undefined') {
-    sanctionedAmountWords = numberToWords.toWords(sanctionedAmount);
+    sanctionedAmountWords = toWords.convert(sanctionedAmount);
     sanctionedAmountWords = sanctionedAmountWords.charAt(0).toUpperCase() + sanctionedAmountWords.slice(1) + ' only';
   } else {
     sanctionedAmountWords = 'N/A';
@@ -296,8 +304,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 >
                   Sl No
                 </Text>
-                <div style={{ borderRight: 1, height: 24 }}></div>
-                <Text
+                {/* <div style={{ borderRight: 1, height: 24 }}></div> */}
+                {/* <Text
                   style={{
                     fontWeight: 500,
                     width: '635px px', // Set fixed width,
@@ -306,7 +314,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   }}
                 >
                   Main Category
-                </Text>
+                </Text> */}
                 <div style={{ borderRight: 1, height: 24 }}></div>
                 <Text
                   style={{
@@ -376,13 +384,36 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                     {String(index + 1)}
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 100 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
+                  {/* <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
                     {`${item.mainCategory == 'Select' ? '' : item.mainCategory}${item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1}${item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2}${item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}`}
-                  </PDFCell>
+                  </PDFCell> */}
                   <div style={{ borderRight: 1, height: 100 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
-                    {item.narration}
-                  </PDFCell>
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      height: '100',
+                      width: '635px',
+                      padding: 5,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        textAlign: 'left', fontSize: 10, padding: 5,
+                      }}
+                    >
+                      {item.mainCategory == 'Select' ? '' : item.mainCategory} {item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1} {item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2} {item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}
+                    </Text>
+                    <Text
+                      style={{
+                        textAlign: 'left', fontSize: 10, padding: 5,
+                      }}
+                    >
+                      {item.narration}
+
+                    </Text>
+                  </View>
+
                   <div style={{ borderRight: 1, height: 100 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
                     {String(item?.sanctionedAsPer ?? '')}
@@ -419,17 +450,17 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
                 <div style={{ borderRight: 1, right: 0.1, height: 24 }}></div>
 
-                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'32%'}>
+                <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'50%'}>
                   {totalAmount as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
-                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'32%'}>
+                <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'50%'}>
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
               <PDFTableRow key={props.rowData.particulars.length} >
-                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'100%'}>
+                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'30%'}>
                   Sanctioned Amount in Words:
                 </PDFCell>
                 <PDFCell width={'20%'} ></PDFCell>
