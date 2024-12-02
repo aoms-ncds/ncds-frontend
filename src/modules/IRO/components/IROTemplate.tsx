@@ -533,7 +533,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {props.rowData.names?.president ?? (props.president as any).presidentName}
+                      {(props.president as any).presidentName?? props.rowData.names?.president}
 
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
