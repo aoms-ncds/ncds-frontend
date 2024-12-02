@@ -216,7 +216,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <View style={{ width: 500, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.beneficiary ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.sanctionedBank ?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
