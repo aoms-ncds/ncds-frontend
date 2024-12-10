@@ -125,6 +125,9 @@ dependencies:
   react-zoom-pan-pinch:
     specifier: ^3.4.3
     version: 3.4.3(react-dom@18.2.0)(react@18.2.0)
+  to-words:
+    specifier: ^4.1.0
+    version: 4.1.0
   typescript:
     specifier: ^4.4.2
     version: 4.4.2
@@ -14445,6 +14448,11 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
+
+  /to-words@4.1.0:
+    resolution: {integrity: sha512-42GLFZQr/7i3sNiXJ7J83Kkw3hj8pWdTtj5kPjSWnyr1lkxmCnC2Dkx8JMttMAnQxj76ktyGpuDRsrxU5UeXpw==}
+    engines: {node: '>=12.0.0'}
+    dev: false
 
   /toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}

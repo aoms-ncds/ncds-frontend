@@ -18,19 +18,19 @@ import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 // import { MB } from '../../extras/CommonConfig';
 
 interface ReleaseDialogProps {
-  action: 'add' | 'manage'|'view';
+  action: 'add' | 'manage' | 'view';
   data: IROrder[];
   open: boolean;
   onClose: () => void;
 }
-interface optioinalBank{
+interface optioinalBank {
   FCRABankDetails?: BankDetails;
-    localBankDetails?: BankDetails;
-    otherBankDetails?: BankDetails;
-    otherBankDetails1?: BankDetails;
-    otherBankDetails2?: BankDetails;
-    otherBankDetails3?: BankDetails;
-    otherBankDetails4?: BankDetails;
+  localBankDetails?: BankDetails;
+  otherBankDetails?: BankDetails;
+  otherBankDetails1?: BankDetails;
+  otherBankDetails2?: BankDetails;
+  otherBankDetails3?: BankDetails;
+  otherBankDetails4?: BankDetails;
 }
 const ReleaseAmount = (props: ReleaseDialogProps) => {
   const [iroStatus, setIroStatus] = useState(false);
@@ -69,7 +69,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     e.preventDefault();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
-    IROServices.releaseAmount(releaseAmount.IRO?? [], releaseAmount).then((res) => {
+    IROServices.releaseAmount(releaseAmount.IRO ?? [], releaseAmount).then((res) => {
       enqueueSnackbar({
         message: res.message,
         variant: 'success',
@@ -97,7 +97,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   }, []);
   // console.log(props.data[0]?.division?.localBankDetails, ' props.data[0]?.sanctionedBank');
   console.log(props.data[0]?.sanctionedBank, ' props.data[0]?.sanctionedBank');
-  console.log( props.data[0]?.division?.BeneficiaryBank3, ' props.data[0]?.sanctionedBank');
+  console.log(props.data[0]?.division?.BeneficiaryBank3, ' props.data[0]?.sanctionedBank');
 
   useEffect(() => {
     if (props.data[0]?.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) {
@@ -213,7 +213,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return iro.sanctionedAmount ? tot + iro?.sanctionedAmount : tot + totalSanctioned;
       }, 0);
 
-      setReleaseAmount((prevState:any) => ({
+      setReleaseAmount((prevState: any) => ({
         ...prevState,
         transferredBank: getTransferredBank(),
         releaseAmount: totalReleaseAmount,
@@ -305,7 +305,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         return <p>{particularAmount}</p>;
       },
     },
-    { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180,
+    {
+      field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180,
       valueGetter: (params) => {
         if (params.row.sanctionedAmount !== undefined) {
           return params.row.sanctionedAmount;
@@ -315,7 +316,8 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         }
         return 0; // or return a suitable default value
       },
-      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center' },
+      renderHeader: () => <b>Sanctioned Amount</b>, align: 'center', headerAlign: 'center',
+    },
 
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 180, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
     // {
@@ -644,7 +646,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             >
               Close
             </Button>
-            {hasPermissions(['MANAGE_IRO']) && props.action!=='view'? (
+            {hasPermissions(['MANAGE_IRO']) && props.action !== 'view' ? (
               <>
                 <Button variant="contained" style={{ textAlign: 'right', float: 'right' }} type="submit">
                   {iroStatus ? 'Amount Release Request' : 'Release Amount'}
@@ -725,7 +727,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
       /> */}
       <FileUploader
         title="Attachments"
-        action={props.action==='add'?'add':'view'}
+        action={props.action === 'add' ? 'add' : 'view'}
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
