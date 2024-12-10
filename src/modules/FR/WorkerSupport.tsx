@@ -148,6 +148,15 @@ const WorkerSupportPage = () => {
       setTimeout(() => {
         setDisableAttach(false);
       }, 2000); // 2 seconds
+
+      const currentYear = moment().year(); // Ensure `year` is called as a method
+      const particulars = requisition.particulars || [];
+
+      const isUpcomingYear = particulars.some((part) => part.isUpcomingYear);
+      const _month = particulars[0]?.month ?? null;
+
+      const month = `${_month} ${isUpcomingYear ? currentYear + 1 : currentYear}`;
+
       setPdfProps(({
         purpose: purpose ?? 'Division',
         divisionId: division?._id ?? null,
@@ -156,7 +165,7 @@ const WorkerSupportPage = () => {
         subDivisionId: subDivision?._id ?? null,
         designationParticularID: designationParticular?._id ?? null,
         FrNo: res2.data.FRno,
-        FrMonth: res2.data.particulars[0]?.month ?? '',
+        FrMonth: month,
       }));
       setSignPdfProps({ purpose: purpose??'Division',
         divisionId: division?._id??null,
@@ -165,7 +174,7 @@ const WorkerSupportPage = () => {
         subDivisionId: subDivision?._id ?? null,
         designationParticularID: designationParticular?._id ?? null,
         IRONo: 'IRO'+res2.data.FRno.slice(-4),
-        month: res2.data.particulars[0].month,
+        month: month,
       });
       setFrAction(null);
     } catch (err) {

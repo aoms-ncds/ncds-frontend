@@ -329,7 +329,7 @@ const IROReconciliationPdf = (props: {
           <Text style={styles.title}>
             {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} - {workers?.[0].officialDetails.divisionHistory[workers[0].officialDetails?.divisionHistory.length - 1]?.subDivision?.name}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${props.data.month}`} {new Date().getFullYear()}</Text>
+          <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
