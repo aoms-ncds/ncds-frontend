@@ -113,7 +113,6 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; mont
   const [total, setTotal] = useState<number>(0);
   const [purpose, setPurpose] = useState('Division');
   console.log(props.data, '√poprosp');
-  const year = new Date().getFullYear();
 
   // console.log(props.total, 'prop.ttt');
   // console.log(workers, 'pop');
@@ -151,7 +150,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; mont
           <Text style={styles.title}>
             {`IET Child Educational Assistance ${div?.[0]}`}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${props.month}`} {year}</Text>
+          <Text style={styles.month}>{`For the Month of ${props.month}`}</Text>
           {/* <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
         <View style={styles.line} />

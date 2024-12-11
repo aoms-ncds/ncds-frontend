@@ -135,9 +135,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
     const start = page * rowsPerPage;
     return props?.data?.slice(start, start + rowsPerPage);
   };
-  const d = new Date();
-  const name = month[d.getMonth()];
-  const year = new Date().getFullYear();
+
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
@@ -160,7 +158,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
           <Text style={styles.title}>
             {`IET Child Education Assistance- ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
           </Text>
-          <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`} {year}</Text>
+          <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`}</Text>
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>

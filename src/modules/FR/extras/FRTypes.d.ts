@@ -94,6 +94,7 @@ declare global {
     subCategory3: string;
     quantity?: number;
     month: string;
+    isUpcomingYear?:boolean;
     unitPrice?: number;
     requestedAmount?: number;
     narration: string;

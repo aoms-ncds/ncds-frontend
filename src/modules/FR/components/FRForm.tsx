@@ -340,12 +340,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
 
               {/* {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
-                  <Autocomplete
-                    value={props.value.purposeCoordinator??null}
-                    options={coordinators ?? []}
-                    getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
-                    onChange={(e, selectedCoordinator) => {
-                      if (selectedCoordinator && props.action !== 'view') {
+                  <Autocompleteview') {
                         props.onChange({
                           ...props.value,
                           purposeCoordinator: selectedCoordinator,
@@ -854,6 +849,22 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     }}
                     renderInput={(params) => <TextField {...params} label="For the Month" required />}
                     fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <FormControlLabel
+                    label="Upcoming Year"
+                    control={
+                      <Checkbox
+                        // disabled={props.disable==true}
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            isUpcomingYear: e.target.checked,
+                          }))
+                        }
+                      />
+                    }
                   />
                 </Grid>
 

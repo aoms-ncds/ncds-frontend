@@ -77,7 +77,6 @@ const ChildeSupportPage = () => {
   console.log(selectedRowIds, 'selectedRowIds');
   const [modal, setModal] = useState<boolean>(false);
 
-  console.log(requisition.particulars?.[0]?.month, 'requisition');
   const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
   console.log(childList, 'childList');
@@ -526,6 +525,15 @@ const ChildeSupportPage = () => {
 
   }));
 
+  const getMonth = () => {
+    const currentYear = moment().year(); // Ensure `year` is called as a method
+    const particulars = requisition.particulars || [];
+
+    const isUpcomingYear = particulars.some((part) => part.isUpcomingYear);
+    const month = particulars[0]?.month ?? null;
+
+    return `${month} ${isUpcomingYear ? currentYear + 1 : currentYear}`;
+  };
   return (
     <CommonPageLayout title="Child Support">
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
@@ -718,7 +726,7 @@ const ChildeSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList} />}
+                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList} />}
                       fileName="ChildeSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
@@ -785,7 +793,7 @@ const ChildeSupportPage = () => {
                   <div style={{ float: 'right' }}>
                     {/* {(selectedWorker || division) && (
                       <PDFDownloadLink
-                        document={<ChildeSupportSignSheet month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList} />}
+                        document={<ChildeSupportSignSheet month={getMonth() ?? null} total={total} data={childList} />}
                         fileName="ChildeSupport.pdf"
                         style={{ textDecoration: 'none', color: 'blue' }}
                       >
@@ -905,7 +913,7 @@ const ChildeSupportPage = () => {
           <Container>FR created. Do you want to add attachment &nbsp;
             {pdfProps &&
               <PDFDownloadLink
-                document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+                document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
 
                 fileName="ChildSupport.pdf"
                 style={{ color: 'blue' }}
@@ -913,10 +921,10 @@ const ChildeSupportPage = () => {
                 {({ loading }) => loading||disableAttach? '....' : 'ChildSupport.pdf'}
 
               </PDFDownloadLink>}
-               and &nbsp;
+              &nbsp; and &nbsp;
             <PDFDownloadLink
               document={<ChildeSupportSignSheet
-                month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList}
+                month={getMonth()} total={total} data={childList}
               />} fileName="ChildrenSignatureSheet.pdf"
               style={{ color: 'blue' }}
             >
@@ -938,13 +946,13 @@ const ChildeSupportPage = () => {
               <>
                 <PDFDownloadLink
                   document={<ChildeSupportSignSheet
-                    month={requisition.particulars?.[0]?.month ?? null} total={total} data={childList}
+                    month={getMonth() ?? null} total={total} data={childList}
                   />} fileName="ChildSignatureSheet.pdf"
                   style={{ color: 'blue' }}
                 >
                   {({ blob: signBlob, loading: loading1 }) => (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate month={requisition.particulars?.[0]?.month ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
 
                       fileName="ChildSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
