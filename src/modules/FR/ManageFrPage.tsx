@@ -63,7 +63,18 @@ const ManageFrPage = () => {
     month: string | null;
     date: string | null;
   } | null>(null);
+  const [pdfPropsChild, setPdfPropsChild] = useState<{
+    purpose: FRPurpose | null;
+    divisionId: string | null;
+    workerId: string | null;
+    designationParticularID: string | null;
+    subDivisionId: string | null;
+    IRONo: string | null;
+    month: string | null;
+    date: string | null;
+  } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
+  const [supportAttachmentChild, setSupportAttachmentChild] = useState<boolean>(false);
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -383,6 +394,41 @@ const ManageFrPage = () => {
                         date: null,
                       });
                       setSupportAttachment(true);
+                    }
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ] :
+              []),
+            ...(hasPermissions(['HR_DPARTMENT_ACCESS'])&&props.row.childSupport ?
+              [
+                {
+                  id: 'print_Sign',
+                  text: 'Signature Sheet Childe',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    setData3(props.row);
+
+                    if (props.row.childSupport) {
+                      setPdfPropsChild({
+                        purpose: props.row.purpose ?? 'Division',
+                        divisionId: props.row.division?._id ?? null,
+                        workerId:
+                            props.row.purpose == 'Coordinator' && props.row.purposeCoordinator ?
+                              props.row.purposeCoordinator?._id :
+                              props.row.purpose == 'Worker' && props.row.purposeWorker?._id ?
+                                props.row.purposeWorker?._id :
+                                null,
+                        subDivisionId: props.row.purposeSubdivision?._id ?? null,
+                        designationParticularID: props.row.designationParticular ?? null,
+                        IRONo: null,
+                        month: props.row.particulars[0].month,
+                        date: null,
+                      });
+                      setSupportAttachmentChild(true);
                     }
                     setOpenPrintFr(true);
                     setTimeout(() => {
@@ -1110,6 +1156,43 @@ const ManageFrPage = () => {
                 <Button
                   onClick={() => {
                     setSupportAttachment(false);
+                  }}
+                  variant="text"
+                >
+            Ok
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={supportAttachmentChild} onClose={() => setSupportAttachmentChild(false)} maxWidth="xs" fullWidth>
+              <DialogTitle> Signature Attachment </DialogTitle>
+              <DialogContent>
+                <Container>Please download the signature sheet: &nbsp;
+                  {data3?.signatureSheet ?<> <a href="#" onClick={async () => {
+                    const file = (await FileUploaderServices.getFile(data3?.signatureSheet ?? '')).data;
+                    if (file.downloadURL) {
+                      const link = document.createElement('a');
+                      link.href = file.downloadURL;
+                      link.download = 'ChildrenSignatureSheet.pdf'; // You can specify a custom file name here
+                      link.click();
+                    }
+                  }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
+              <>
+                <PDFDownloadLink
+                  document={<IROReconciliationPdf
+                    data={pdfProps}
+                  />}
+                  fileName="ChildrenSignatureSheet.pdf"
+                  style={{ color: 'blue' }}
+                >
+                  {({ loading }) => loading ? '....' : 'ChildrenSignatureSheet.pdf'}
+                </PDFDownloadLink><br />
+              </>)} NB: Ignore if already attached </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setSupportAttachmentChild(false);
+                    window.location.reload();
                   }}
                   variant="text"
                 >
