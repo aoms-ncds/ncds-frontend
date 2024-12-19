@@ -399,7 +399,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   >
                     <Text
                       style={{
-                        textAlign: 'left', fontSize: 10, padding: 5,
+                        fontWeight: 300,
+                        // width: '32%',
+                        fontSize: 10,
+                        fontFamily: 'CourierPrime', textAlign: 'left', padding: 5,
                       }}
                     >
                       {item.mainCategory == 'Select' ? '' : item.mainCategory} {item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1} {item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2} {item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}
