@@ -407,7 +407,7 @@ const ManageFrPage = () => {
               [
                 {
                   id: 'print_Sign',
-                  text: 'Signature Sheet Childe',
+                  text: 'Signature Sheet Child',
                   icon: PrintIcon,
                   onClick: async () => {
                     setData3(props.row);
