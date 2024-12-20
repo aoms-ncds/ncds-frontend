@@ -27,6 +27,7 @@ import IROTemplate from './components/IROTemplate';
 import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import ReleaseAmount from './components/ReleaseAmountDialog';
+import NextPlanIcon from '@mui/icons-material/NextPlan';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -90,6 +91,10 @@ const ClosedIRO = () => {
       updatedAt: moment(),
     },
   });
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // 0-based index for page
+    pageSize: 50, // Number of rows per page
+  });
   const [signaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -121,7 +126,13 @@ const ClosedIRO = () => {
       });
     console.log(selectedSignature);
   }, []);
-
+  useEffect(() => {
+    IROServices.getAll({ page: paginationModel, dateRange: dateRange })
+    .then((res) => {
+      console.log(res, 'rr');
+      setIROrder(res.data);
+    });
+  }, [paginationModel]);
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -577,6 +588,7 @@ const ClosedIRO = () => {
             />
             {/* </div> */}
           </Grid>
+
           <Grid item xs={6}>
             <Button
               onClick={async () => {
@@ -626,7 +638,23 @@ const ClosedIRO = () => {
             >
               Export
             </Button>
+            <Grid item>
+              <Button
+                variant="outlined"
+                sx={{ marginBottom: 3 }}
+                startIcon={<NextPlanIcon />}
+                onClick={() => {
+                  setPaginationModel((prev) => ({
+                    page: 50,
+                    pageSize: prev.pageSize + 50, // Keep the page size the same
+                  }));
+                }}
+              >
+      Load more
+              </Button>
+            </Grid>
           </Grid>
+
           <Grid item xs={12}>
             <Box
               sx={{

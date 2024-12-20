@@ -9,7 +9,7 @@ export default {
 
   imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
 
-  getAll: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/',
+  getAll: (conditions?: {page?:{}, status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({
     ...fr,

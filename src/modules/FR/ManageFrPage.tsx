@@ -14,6 +14,7 @@ import {
   Print as PrintIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
+import NextPlanIcon from '@mui/icons-material/NextPlan';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
 import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
@@ -84,7 +85,15 @@ const ManageFrPage = () => {
   const [open, setOpen] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
-
+  const [rows, setRows] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState<any>(0); // 0-based index for page
+  const [pageSize, setPageSize] = useState<any>(50);
+  const [rowCount, setRowCount] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0, // 0-based index for page
+    pageSize: 50, // Number of rows per page
+  });
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -150,11 +159,22 @@ const ManageFrPage = () => {
       });
   };
 
+  console.log(rowCount, 'vontnoe');
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter })
+    .then((res) => {
+      console.log(res, 'rr');
+      setFRRequests(res.data);
+      setRows(res.data); // Update rows for the current page
+    });
+  }, [paginationModel]);
+
+  useEffect(() => {
+    FRServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         console.log(res, 'rr');
         setFRRequests(res.data);
+        setRows(res.data); // Update rows for the current page
       })
       .catch((res) => {
         console.log(res);
@@ -168,7 +188,7 @@ const ManageFrPage = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         if (res.data) {
           setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
@@ -881,21 +901,55 @@ const ManageFrPage = () => {
                         }
                       />
                     </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
-                          name="Filter"
-                          row
+                    <Grid container alignItems="center" justifyContent="space-between">
+                      <Grid item p={1}>
+                        <FormControl>
+                          <RadioGroup
+                            aria-labelledby="Filter"
+                            value={
+                              statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
+                                'WFA' :
+                                statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                  'RVT' :
+                                  'ALL'
+                            }
+                            onChange={(e) =>
+                              setStatusFilter(
+                                e.target.value === 'WFA' ?
+                                  [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
+                                  e.target.value === 'RVT' ?
+                                    [FRLifeCycleStates.FR_SEND_BACK] :
+                                    [],
+                              )
+                            }
+                            name="Filter"
+                            row
+                          >
+                            <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                            <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                            <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
+                          </RadioGroup>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          sx={{ marginBottom: 3 }}
+                          startIcon={<NextPlanIcon />}
+                          onClick={() => {
+                            setPaginationModel((prev) => ({
+                              page: 50,
+                              pageSize: prev.pageSize + 50, // Keep the page size the same
+                            }));
+                          }}
                         >
-                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
-                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
-                        </RadioGroup>
-                      </FormControl>
+      Load more
+                        </Button>
+                      </Grid>
                     </Grid>
+
+
                   </Grid>
 
                   <Box
@@ -941,13 +995,13 @@ const ManageFrPage = () => {
                     }}
                   >
                     <DataGrid
-                      rows={filteredRows ?? []}
+                      rows={filteredRows}
                       columns={columns}
-                      getRowId={(row) => row._id}
-                      loading={FRRequests === null}
-                      style={{ height: '66vh', width: '100%' }}
+                      loading={loading}
+                      getRowId={(row) => row._id} // Unique row identifier
+                      style={{ height: '60vh', width: '100%' }}
                       getRowClassName={(params) => {
-                        if (params.row.specialsanction == 'Yes') {
+                        if (params.row.specialsanction === 'Yes') {
                           return 'special-sanction'; // Class for rows with special sanction
                         }
                         return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
