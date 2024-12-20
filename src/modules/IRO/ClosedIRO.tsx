@@ -166,7 +166,7 @@ const ClosedIRO = () => {
         variant: 'error',
       });
     } finally {
-      IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
+      IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => {
         setIROrder(res.data);
       })
@@ -551,7 +551,7 @@ const ClosedIRO = () => {
     },
   ];
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
+    IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => {
         setIROrder(res.data);
       })
