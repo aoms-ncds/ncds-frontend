@@ -7,11 +7,13 @@ import { enqueueSnackbar, closeSnackbar } from 'notistack';
 import WorkersServices from '../extras/WorkersServices';
 import GridLinkAction from '../../../components/GridLinkAction';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
-import { NoAccounts as NoAccountsIcon, Person as PersonIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { NoAccounts as NoAccountsIcon, Person as PersonIcon, Delete as DeleteIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useNavigate } from 'react-router-dom';
 import ChildrenServices from '../extras/ChildrenServices';
 import CloseIcon from '@mui/icons-material/Close';
+import * as XLSX from 'xlsx';
+
 const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 'active' }>) => {
   // const [childList, setChildList] = useState<Child[]>();
   const [rowId, setRowId] = useState('');
@@ -19,7 +21,6 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
-
 
   const deactivateChild = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
@@ -47,6 +48,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
         });
       });
   };
+  console.log(props.value, 'props.value');
+
   const activateChild = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Activating Child',
@@ -351,17 +354,73 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
       </Dialog>
       <br />
       <Grid item xs={6}>
-        <Grid sx={{ mb: 3, mt: 0, mx: 2 }}>
+        <Grid
+          container
+          sx={{ mb: 3, mt: 0, mx: 2 }}
+          spacing={2}
+          alignItems="center"
+          justifyContent="space-between"
+          style={{ display: 'flex' }}
+        >
+
+
+          {/* Search Field */}
           <TextField
             label="Search"
             variant="outlined"
             value={searchText}
             onChange={handleSearchChange}
             fullWidth
-            style={{ width: '25%', alignItems: 'start' }}
+            style={{ width: '25%' }}
           />
+          {/* Export Button */}
+          <Button
+            onClick={async () => {
+              const sheet = props.value ?
+                props.value.map((user: any) => [
+                  user.childCode,
+                  user.firstName,
+                  user.lastName,
+                  user.childOf?.basicDetails.firstName + ' ' + user.childOf?.basicDetails.lastName,
+                  (user.division as unknown as Division)?.details?.name,
+                  user?.childOf?.officialDetails.divisionHistory?.[0]?.subDivision?.name,
+                  moment(user.dateOfBirth).format('DD/MM/YYYY'),
+                  (user.dateOfBirth?.fromNow() || '').replace(' ago', ''),
+                  user.gender,
+                  user.childSupport.amount,
+                  user.childSupport.name,
+                ]) :
+                [];
+              const headers = [
+                'Child Code',
+                'First Name',
+                'Last Name',
+                'Child Of',
+                'Division',
+                'Sub Division',
+                'DOB',
+                'Age',
+                'Gender',
+                'CEA Amount',
+                'Level',
+              ];
+              const worksheet = XLSX.utils.json_to_sheet(sheet);
+              const workbook = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+              XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+              XLSX.writeFile(workbook, 'Child.xlsx', { compression: true });
+            }}
+            startIcon={<DownloadIcon />}
+            color="primary"
+            variant="contained"
+            sx={{ marginRight: 10 }}
+          >
+      Export
+          </Button>
         </Grid>
       </Grid>
+
+
       <Grid item xs={12} md={12}>
         <Card style={{ height: '60vh', width: '100%' }}>
           <Box
