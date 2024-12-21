@@ -46,7 +46,6 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
-import NextPlanIcon from '@mui/icons-material/NextPlan';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -356,10 +355,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0, // 0-based index for page
-    pageSize: 50, // Number of rows per page
-  });
   console.log(FR, '#ODD');
   console.log(newTest, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
@@ -437,7 +432,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -448,7 +443,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
             setNotFound(true);
@@ -514,27 +509,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter }).then((res) => {
+        IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
           // console.log(res.data, 'datgajdfj');
         });
       }
     } else {
-      IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter }).then((res) => {
+      IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
   }, [openRelease, attachment, addSignature, dateRange, iroData, statusFilter]);
   // console.log(mngrName, 'mngrName');
-  useEffect(() => {
-    IROServices.getAll({ page: paginationModel, dateRange: dateRange, status: statusFilter })
-    .then((res) => {
-      console.log(res, 'rr');
-      setIROrder(res.data);
-    });
-  }, [paginationModel]);
+
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -1381,12 +1370,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       >
                         Export
                       </Button>
-
                     }
-
-                  />
-
-                  {props.action =='manage' && (
+                  />{props.action =='manage' && (
 
                     <Grid item sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }} >
                       <FormControl>
@@ -1401,37 +1386,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
                         </RadioGroup>
                       </FormControl>
-
-                      <Grid
-                        item
-                        sx={{
-                          width: { xs: '100%', sm: '75%', md: '50%' }, // Responsive width
-                          paddingTop: 2,
-                          display: 'flex', // Flexbox for alignment
-                          justifyContent: { xs: 'center', md: 'flex-start' }, // Center on small screens
-                        }}
-                      >
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            marginBottom: 3,
-                            width: { xs: '100%', sm: 'auto' }, // Full width on small screens
-                          }}
-                          startIcon={<NextPlanIcon />}
-                          onClick={() => {
-                            setPaginationModel((prev) => ({
-                              page: 50,
-                              pageSize: prev.pageSize + 50, // Keep the page size the same
-                            }));
-                          }}
-                        >
-    Load more
-                        </Button>
-                      </Grid>
-
-
                     </Grid>
-
                   )}
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
