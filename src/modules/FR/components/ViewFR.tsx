@@ -468,7 +468,7 @@ return (
               <TextField
                 label="Requested Amount"
                 InputLabelProps={{ shrink: true }}
-                value={totalRequestedAmount}
+                value={totalRequestedAmount?.toFixed(2)}
                 // onChange={(e) =>
                 //   // eslint-disable-next-line @typescript-eslint/naming-convention
 
