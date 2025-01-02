@@ -487,7 +487,7 @@ return (
                   <TextField
                     label="Sanctioned Amount"
                     type={'number'}
-                    value={props.value?.sanctionedAmount ?? total==0 ? '':total }
+                    value={props.value?.sanctionedAmount ?? total==0 ? '':total.toFixed(2) }
                     required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                     title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     autoComplete='off'

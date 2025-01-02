@@ -565,14 +565,14 @@ const ViewIRO = () => {
                         </TableContainer>
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount} fullWidth disabled />
+                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(0)} fullWidth disabled />
                       </Grid>
 
                       <Grid item xs={12} md={6}>
                         <TextField
                           label="Sanctioned Amount"
                           type={'number'}
-                          value={IRO.sanctionedAmount ?? total}
+                          value={IRO.sanctionedAmount ?? total.toFixed(2)}
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention
