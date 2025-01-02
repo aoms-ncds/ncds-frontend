@@ -26,6 +26,22 @@ export default {
         }:undefined,
       })),
     ),
+  getAllCustom: (conditions?: { status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
+    getStandardResponse<IROrder[]>(axios.get('/iro/custom/', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+      IROrders.map((IRO) => ({
+        ...IRO,
+        iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
+        reconciliationOn: IRO.reconciliationOn ? moment(IRO.reconciliationOn) : undefined,
+        iroClosedOn: IRO.iroClosedOn ? moment(IRO.iroClosedOn) : undefined,
+        IRODate: moment(IRO.IRODate),
+        createdAt: moment(IRO.createdAt),
+        updatedAt: moment(IRO.updatedAt),
+        releaseAmount: IRO.releaseAmount ? {
+          ...IRO.releaseAmount,
+          transferredDate: moment(IRO.releaseAmount?.transferredDate),
+        }:undefined,
+      })),
+    ),
 
   getById: (IROId: string) =>
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}`, { headers: { ...getAuthHeader() } }), (data) => ({
@@ -92,7 +108,110 @@ export default {
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
+  getByIdCustom: (IROId: string) =>
+    getStandardResponse<IROrder>(axios.get(`/iro/${IROId}/custom`, { headers: { ...getAuthHeader() } }), (data) => ({
+      ...data,
+      IRODate: moment(data.IRODate),
+      // workerCode: ,
+      releaseAmount: data.releaseAmount ? {
+        ...data.releaseAmount,
+        transferredDate: moment(data.releaseAmount?.transferredDate),
+      }:undefined,
+      purposeWorker: {
+        ...data.purposeWorker,
+        basicDetails: {
+          ...data.purposeWorker?.basicDetails,
+          // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+          // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+          dateOfBirth: moment(data.createdBy?.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...data.createdBy.officialDetails,
+          dateOfJoining: data.createdBy.officialDetails.dateOfJoining ? moment(data.createdBy.officialDetails.dateOfJoining) : undefined,
+          dateOfLeaving: data.createdBy.officialDetails.dateOfLeaving ? moment(data.createdBy.officialDetails.dateOfLeaving) : undefined,
+          divisionHistory: data.createdBy.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+            ...divHis,
+            dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+            dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+          })),
+        },
+        createdAt: moment(data.createdBy.createdAt),
+        updatedAt: moment(data.createdBy.updatedAt),
+        iroVerifiedOn: data?.iroVerifiedOn ? moment(data?.iroVerifiedOn) : null,
+        reconciliationOn: data?.reconciliationOn ? moment(data?.reconciliationOn) : null,
+        iroClosedOn: data?.iroClosedOn ? moment(data?.iroClosedOn) : null,
+      },
+      createdBy: {
+        ...data.createdBy,
+        basicDetails: {
+          ...data.createdBy.basicDetails,
+          // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+          // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+          dateOfBirth: moment(data.createdBy.basicDetails.dateOfBirth),
+        },
+        officialDetails: {
+          ...data.createdBy.officialDetails,
+          dateOfJoining: data.createdBy.officialDetails.dateOfJoining ? moment(data.createdBy.officialDetails.dateOfJoining) : undefined,
+          dateOfLeaving: data.createdBy.officialDetails.dateOfLeaving ? moment(data.createdBy.officialDetails.dateOfLeaving) : undefined,
+          divisionHistory: data.createdBy.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+            ...divHis,
+            dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+            dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+          })),
+        },
+        signature: {
+          ...data.signature,
+          hrSignature: data.signature?.hrSignature ? data.signature.hrSignature: undefined,
+          accountManagerSignature: data.signature?.accountManagerSignature ? data.signature.accountManagerSignature : undefined,
+          accountantSignature: data.signature?.accountantSignature ? data.signature.accountantSignature : undefined,
 
+
+        },
+        createdAt: moment(data.createdBy.createdAt),
+        updatedAt: moment(data.createdBy.updatedAt),
+      },
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+    })),
+  createFRRequestsIRO: (frRequest: CreatableFR) => {
+    return getStandardResponse<FR>(
+      new Promise((resolve, reject) => {
+        axios
+            .post('/iro/custom/', {
+              ...frRequest,
+              particulars: [],
+            }, { headers: { ...getAuthHeader() } })
+            .then(async (createdFR) => {
+              // Create partcularsisions
+              try {
+                if (frRequest.particulars) {
+                  for (let i = 0; i < frRequest.particulars.length; i++) {
+                    const particulars = frRequest.particulars[i];
+                    await axios.post('/fr/particulars/custom/', {
+                      FR: createdFR.data.data._id,
+                      mainCategory: particulars.mainCategory,
+                      subCategory1: particulars.subCategory1,
+                      subCategory2: particulars.subCategory2,
+                      subCategory3: particulars.subCategory3,
+                      quantity: particulars.quantity,
+                      month: particulars.month,
+                      unitPrice: particulars.unitPrice,
+                      requestedAmount: particulars.requestedAmount,
+                      narration: particulars.narration,
+                      attachment: particulars.attachment,
+                      isUpcomingYear: Boolean(particulars.isUpcomingYear),
+                    }, { headers: { ...getAuthHeader() } });
+                  }
+                }
+                resolve(createdFR);
+              } catch (error) {
+                reject(error);
+              }
+            })
+            .catch(reject);
+      }),
+    );
+  },
   sendNotifications: (name: string, id: string) => getStandardResponse<void>(axios.post(`/iro/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
   getReconciliation: (conditions?: {dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',

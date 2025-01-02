@@ -288,7 +288,7 @@ return (
                 }}
                 renderInput={(params) => <TextField {...params} label="Requisition For" />}
                 fullWidth
-                disabled
+                // disabled
               />
             </Grid>
             {props.value.purpose === 'Worker' ? (
@@ -308,7 +308,7 @@ return (
                     }}
                     renderInput={(params) => <TextField {...params} label="Choose Worker" />}
                     fullWidth
-                    disabled
+                    // disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>

@@ -55,7 +55,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 
 
-const ViewIRO = () => {
+const ViewIRO = (props: any) => {
   const navigate = useNavigate();
   const { iroID } = useParams();
   const [IRO, setIRO] = useState<IROrder>({
@@ -343,7 +343,7 @@ const ViewIRO = () => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(IRO, 'ORRO');
+  console.log(props, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -377,9 +377,15 @@ const ViewIRO = () => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    IROServices.getById(iroID).then((res) =>{
-      setIRO(res.data);
-    }); // TODO: Implement REST API Call
+    if (props.action === 'custom') {
+      IROServices.getByIdCustom(iroID).then((res) =>{
+        setIRO(res.data);
+      }); // TODO: Implement REST API Call
+    } else {
+      IROServices.getById(iroID).then((res) =>{
+        setIRO(res.data);
+      }); // TODO: Implement REST API Call
+    }
   }, [iroID]);
   return (
     <CommonPageLayout title="View And Manage IRO">
