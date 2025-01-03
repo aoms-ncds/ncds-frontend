@@ -357,6 +357,7 @@ const ViewIRO = (props: any) => {
     event.currentTarget.blur();
   };
   const [openLog, setOpenLog] = useState(false);
+  console.log(IROstatus, 'IROstatus');
 
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
@@ -1214,6 +1215,36 @@ const ViewIRO = (props: any) => {
                               &nbsp;
                             </>
                           ) : null}
+
+                          {IROstatus == 'WAITING_FOR_OFFICE_MNGR' || IROstatus == 'WAITING_FOR_ACCOUNTS_STATE'|| IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT'?(
+                            <>
+                              &nbsp;
+                              <PermissionChecks
+                                permissions={['MANAGE_IRO']}
+                                granted={
+                                  <>
+                                    <Button
+                                      variant="contained"
+                                      color="error"
+                                      onClick={() => {
+                                        const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
+                                        IROServices.revertToDivision(iroID as string)
+                                                                  .then((res) => {
+                                                                    navigate('/iro/manage');
+                                                                  });
+                                      }}
+                                    >
+                                      Revert to division
+                                    </Button>
+                                    &nbsp;
+                                  </>
+                                }
+                              />
+                              &nbsp;
+                            </>
+
+                          ):''}
+
                           {/* {IROstatus === 'WAITING_FOR_OFFICE_MNGR' || IROstatus === 'WAITING_FOR_ACCOUNTS_MNGR' ? (
                             <PermissionChecks
                               permissions={['WRITE_IRO']}
@@ -1479,10 +1510,6 @@ const ViewIRO = (props: any) => {
 
                                           });
 
-              // if (props.onSubmit) {
-              //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
-              //   props.onSubmit(updatedValue); // Invoke props.onSubmit with the updated value as the argument
-              // }
               setTimeout(() => {
                 closeSnackbar(rejectionSnack);
                 const rejectedSnack = enqueueSnackbar({ message: 'Reverted!', variant: 'success' });

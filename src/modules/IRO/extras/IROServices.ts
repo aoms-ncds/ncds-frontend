@@ -314,6 +314,7 @@ export default {
   accountManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/accountManagerApprove`, null, { headers: { ...getAuthHeader() } })),
   reject: (IroID: string, reason:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/rejected`, { reason }, { headers: { ...getAuthHeader() } })),
   revert: (IroID: string, reason:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/revert`, { reason }, { headers: { ...getAuthHeader() } })),
+  revertToDivision: (IroID: string, reason?:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/revert_to_division`, { reason }, { headers: { ...getAuthHeader() } })),
   // submit: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/submit`, null, { headers: { ...getAuthHeader() } })),
 
   deleteIRO: (IroId: string) => getStandardResponse<number>(axios.delete('/iro/' + IroId+ '/force', { headers: { ...getAuthHeader() } })),
