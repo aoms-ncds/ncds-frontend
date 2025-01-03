@@ -41,6 +41,7 @@ import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { useAuth } from '../../../hooks/Authentication';
 import MessageItem from '../../../components/MessageItem';
 import IRO from '../../IRO';
+import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
@@ -65,7 +66,11 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     narration: '',
     attachment: [],
   });
+  const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+
   const [showFileUploader, setShowFileUploader] = useState(false);
+  const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
+  const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -81,7 +86,11 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     setShowAddParticularDialog(false);
     ('add');
   };
-
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
+  }, []);
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
@@ -543,210 +552,183 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   disabled
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                {/* <Tooltip open={isFocused?true:false}
-                      onClose={() => setOpen(false)}
-                      onOpen={() => setOpen(true)}
-                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
-                <TextField
-                  label="Sanctioned Amount"
-                  type={'number'}
-                  value={props?.value.sanctionedAmount ?? total}
-                  title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
-                  autoComplete='off'
-                  onChange={(e) =>
-                    props.onChange({
+
+
+              {props.action === 'custom'||props.action === 'customIRO' ? (
+                <><Grid item xs={12} md={6}>
+                  {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                  <TextField
+                    label="Sanctioned Amount"
+                    type={'number'}
+                    value={props?.value.sanctionedAmount ?? total}
+                    title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                    autoComplete='off'
+                    onChange={(e) => props.onChange({
                       ...props.value,
                       sanctionedAmount: Number(e.target.value),
-                    })
-                  }
-                  // onFocus={() => setFocused(true)}
-                  // onBlur={() => setFocused(false)}
-                  variant="outlined"
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  // inputProps={{
-                  //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
-                  // }}
-                  inputProps={{
-                    max: totalRequestedAmount,
-                    min: 0,
-                    step: 0.01, // Allows up to two decimal places
-                    // onWheel: handleWheel,
-                  }}
-                  // disabled
-                  // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
-                />
-                {/* </Tooltip> */}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
-                  <Select
-                    labelId="sanctioned_bank"
+                    })}
+                    // onFocus={() => setFocused(true)}
+                    // onBlur={() => setFocused(false)}
+                    variant="outlined"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    // inputProps={{
+                    //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                    // }}
+                    inputProps={{
+                      max: totalRequestedAmount,
+                      min: 0,
+                      step: 0.01, // Allows up to two decimal places
+                      // onWheel: handleWheel,
+                    }} />
+                  {/* </Tooltip> */}
+                </Grid><Grid item xs={12} md={6}>
+                  <TextField
                     label="Sanctioned Bank"
-                    value={props?.value?.sanctionedBank ?? ''}
-                    onChange={(e) =>
-                      props.onChange({
-                        ...props.value,
-                        sanctionedBank: String(e.target.value),
-                      })
-                    }
-                  >
-                    <MenuItem value={props.value?.sanctionedBank}>{props.value?.sanctionedBank}</MenuItem>
-                    {props.value?.division?.DivisionBankFCRA?.bankName !='' || props.value?.division?.FCRABankDetails?.bankName!='' ? (
-                      <MenuItem value={`FCRA-${props.value?.division?.DivisionBankFCRA?.beneficiary || props.value?.division?.FCRABankDetails?.beneficiary}`}>
-    Division Bank FCRA - {props.value?.division?.DivisionBankFCRA?.beneficiary || props.value?.division?.FCRABankDetails?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
+                    type={'text'}
+                    value={props?.value.sanctionedBank ?? ''}
+                    autoComplete='off'
+                    onChange={(e) => props.onChange({
+                      ...props.value,
+                      sanctionedBank: e.target.value,
+                    })}
 
-                    {props.value?.division?.DivisionBankLocal?.bankName || props.value?.division?.localBankDetails?.bankName ? (
-                      <MenuItem value={`Local Bank-${props.value?.division?.DivisionBankLocal?.beneficiary || props.value?.division?.localBankDetails?.beneficiary}`}>
-    Division Bank Local - {props.value?.division?.DivisionBankLocal?.beneficiary || props.value?.division?.localBankDetails?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank1?.bankName || props.value?.division?.otherBankDetails?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 1-${props.value?.division?.BeneficiaryBank1?.beneficiary || props.value?.division?.otherBankDetails?.beneficiary}`}>
-    Beneficiary Bank 1 - {props.value?.division?.BeneficiaryBank1?.beneficiary || props.value?.division?.otherBankDetails?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank2?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 2-${props.value?.division?.BeneficiaryBank2?.beneficiary}`}>
-    Beneficiary Bank 2 - {props.value?.division?.BeneficiaryBank2?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank3?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 3-${props.value?.division?.BeneficiaryBank3?.beneficiary}`}>
-    Beneficiary Bank 3 - {props.value?.division?.BeneficiaryBank3?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank4?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 4-${props.value?.division?.BeneficiaryBank4?.beneficiary}`}>
-    Beneficiary Bank 4 - {props.value?.division?.BeneficiaryBank4?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank5?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 5-${props.value?.division?.BeneficiaryBank5?.beneficiary}`}>
-    Beneficiary Bank 5 - {props.value?.division?.BeneficiaryBank5?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank6?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 6-${props.value?.division?.BeneficiaryBank6?.beneficiary}`}>
-    Beneficiary Bank 6 - {props.value?.division?.BeneficiaryBank6?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank7?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 7-${props.value?.division?.BeneficiaryBank7?.beneficiary}`}>
-    Beneficiary Bank 7 - {props.value?.division?.BeneficiaryBank7?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank8?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 8-${props.value?.division?.BeneficiaryBank8?.beneficiary}`}>
-    Beneficiary Bank 8 - {props.value?.division?.BeneficiaryBank8?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank9?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 9-${props.value?.division?.BeneficiaryBank9?.beneficiary}`}>
-    Beneficiary Bank 9 - {props.value?.division?.BeneficiaryBank9?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-
-                    {props.value?.division?.BeneficiaryBank10?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 10-${props.value?.division?.BeneficiaryBank10?.beneficiary}`}>
-    Beneficiary Bank 10 - {props.value?.division?.BeneficiaryBank10?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank10?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 11-${props.value?.division?.BeneficiaryBank11?.beneficiary}`}>
-    Beneficiary Bank 11 - {props.value?.division?.BeneficiaryBank11?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank12?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 12-${props.value?.division?.BeneficiaryBank12?.beneficiary}`}>
-    Beneficiary Bank 12 - {props.value?.division?.BeneficiaryBank12?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank13?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 13-${props.value?.division?.BeneficiaryBank13?.beneficiary}`}>
-    Beneficiary Bank 13 - {props.value?.division?.BeneficiaryBank13?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank14?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 14-${props.value?.division?.BeneficiaryBank14?.beneficiary}`}>
-    Beneficiary Bank 14 - {props.value?.division?.BeneficiaryBank14?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank15?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 15-${props.value?.division?.BeneficiaryBank15?.beneficiary}`}>
-    Beneficiary Bank 15 - {props.value?.division?.BeneficiaryBank15?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank16?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 16-${props.value?.division?.BeneficiaryBank16?.beneficiary}`}>
-    Beneficiary Bank 16 - {props.value?.division?.BeneficiaryBank16?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank17?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 17-${props.value?.division?.BeneficiaryBank17?.beneficiary}`}>
-    Beneficiary Bank 17 - {props.value?.division?.BeneficiaryBank17?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank18?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 18-${props.value?.division?.BeneficiaryBank18?.beneficiary}`}>
-    Beneficiary Bank 18- {props.value?.division?.BeneficiaryBank18?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank19?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 19-${props.value?.division?.BeneficiaryBank19?.beneficiary}`}>
-    Beneficiary Bank 19 - {props.value?.division?.BeneficiaryBank19?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {props.value?.division?.BeneficiaryBank20?.bankName ? (
-                      <MenuItem value={`Beneficiary Bank 20-${props.value?.division?.BeneficiaryBank20?.beneficiary}`}>
-    Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
-                      </MenuItem>
-                    ) : ''}
-                    {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                        <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
-                        <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
-                        <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
-                        <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
-                        <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem> */}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
-                  <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
-                  <Select
-                    labelId="sourceOfAccount"
-                    label="sourceOfAccount"
-                    // disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
-                    value={props.value?.sourceOfAccount ?? null}
-                    onChange={(e) =>
-                      props.onChange({
+                    variant="outlined"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }} />
+                </Grid><Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
+                    <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
+                    <Select
+                      labelId="sourceOfAccount"
+                      label="sourceOfAccount"
+                      // disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
+                      value={props.value?.sourceOfAccount ?? null}
+                      onChange={(e) => props.onChange({
                         ...props.value,
                         sourceOfAccount: String(e.target.value),
+                      })}
+                    >
+                      <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                      <MenuItem value={'Local'}>Local</MenuItem>
+                      {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                </Grid></>
+              ):''}
+
+
+              {props.action === 'customIRO' ?(
+                <><Grid item xs={12} md={6}>
+                  <TextField
+                    label="Amount Transferred"
+                    type="number"
+                    value={(props.value as any)?.releaseAmount ?? ''}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        releaseAmount: String(e.target.value),
                       })
                     }
-                  >
-                    <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                    <MenuItem value={'Local'}>Local</MenuItem>
-                    {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                  </Select>
-                </FormControl>
-              </Grid>
+                    fullWidth
+                    // inputProps={{
+                    //   max: (props.value as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
+                    //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                    //     event.preventDefault();
+                    //     event.currentTarget.blur();
+                    //   },
+                    // }}
+                    variant="outlined"
+
+                    required />
+                </Grid><Grid item xs={12} md={6}>
+                  <DatePicker
+                    label="Date"
+                    value={(props.value as any)?.transferredDate}
+                    format="DD/MM/YYYY"
+                    sx={{ width: '100%' }}
+                    slotProps={{
+                      textField: {
+                        required: true,
+                      },
+                    }}
+                    onChange={(newValue) =>
+                      props.onChange({
+                        ...props?.value,
+                        transferredDate: newValue, // Use the newValue provided by DatePicker
+                      })
+                    }
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
+                    getOptionLabel={(method) => method.paymentMethod ?? ''}
+                    value={props?.value?.modeOfPayment}
+                    options={paymnetMethod ?? []} // Ensure this is defined and populated
+                    onChange={(event, newValue) =>
+                      props.onChange({
+                        ...props.value,
+                        modeOfPayment: newValue, // Use newValue provided by Autocomplete
+                      })
+                    }
+                    renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Transaction No:"
+                    value={props.value.releaseAmount?.transactionNumber}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        transactionNumber: String(e.target.value),
+                      })
+                    }
+                    variant="outlined"
+                    fullWidth
+                    // required
+
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Office Manager Name"
+                    value={props.value.officeManagerName}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        officeManagerName: String(e.target.value),
+                      })
+                    }
+                    variant="outlined"
+                    fullWidth
+                    // required
+
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={4} lg={2}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
+                                  Attachments
+                  </Button>
+                </Grid>
+                <Grid item xs={12} md={4} lg={4}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
+                                  Office manager Sign
+                  </Button>
+                </Grid>
+
+                </>
+              ):''}
               {/* <Grid item xs={12} md={6}>
                 <TextField
                   label="Sanctioned Amount"
@@ -1258,6 +1240,88 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             ...particularDetails,
             attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
           }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustom}
+        onClose={() => setShowFileUploaderCustom(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.attachment}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              attachment: [...(props.value.attachment || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustomOfficeMngr}
+        onClose={() => setShowFileUploaderCustomOfficeMngr(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.officeManagerSign}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              officeManagerSign: [...(props.value.officeManagerSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
           return FileUploaderServices.deleteFile(fileId);
         }}
       />

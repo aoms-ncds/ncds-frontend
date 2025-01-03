@@ -112,6 +112,7 @@ export default {
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}/custom`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
       IRODate: moment(data.IRODate),
+      transferredDate: moment(data.transferredDate),
       // workerCode: ,
       releaseAmount: data.releaseAmount ? {
         ...data.releaseAmount,
@@ -187,7 +188,7 @@ export default {
                 if (frRequest.particulars) {
                   for (let i = 0; i < frRequest.particulars.length; i++) {
                     const particulars = frRequest.particulars[i];
-                    await axios.post('/fr/particulars/custom/', {
+                    await axios.post('/fr/particulars/customIRO/', {
                       FR: createdFR.data.data._id,
                       mainCategory: particulars.mainCategory,
                       subCategory1: particulars.subCategory1,

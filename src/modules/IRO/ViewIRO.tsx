@@ -58,6 +58,11 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 const ViewIRO = (props: any) => {
   const navigate = useNavigate();
   const { iroID } = useParams();
+  const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
+
+  const [Data, setData] = useState<any>();
+  const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
+
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -343,7 +348,7 @@ const ViewIRO = (props: any) => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(props, 'ORRO');
+  console.log(Data, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -377,9 +382,12 @@ const ViewIRO = (props: any) => {
     if (!iroID) {
       throw new Error('IRO ID Missing in URL');
     }
-    if (props.action === 'custom') {
+    if (props.action ==='custom') {
+      console.log('custom');
       IROServices.getByIdCustom(iroID).then((res) =>{
         setIRO(res.data);
+        setData(res.data);
+        console.log(res.data, 'res.data');
       }); // TODO: Implement REST API Call
     } else {
       IROServices.getById(iroID).then((res) =>{
@@ -783,6 +791,113 @@ const ViewIRO = (props: any) => {
                           </Select>
                         </FormControl>
                       </Grid>
+                      {props.action === 'custom' ?(
+                        <><Grid item xs={12} md={6}>
+                          <TextField
+                            label="Amount Transferred"
+                            type="number"
+                            value={Data?.releaseAmount}
+                            onChange={(e) =>
+                              props.onChange({
+                                ...props.value,
+                                releaseAmount: String(e.target.value),
+                              })
+                            }
+                            fullWidth
+                            // inputProps={{
+                            //   max: (props.value as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
+                            //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                            //     event.preventDefault();
+                            //     event.currentTarget.blur();
+                            //   },
+                            // }}
+                            variant="outlined"
+
+                            required />
+                        </Grid><Grid item xs={12} md={6}>
+                          <DatePicker
+                            label="Date"
+                            value={Data?.transferredDate}
+                            format="DD/MM/YYYY"
+                            sx={{ width: '100%' }}
+                            slotProps={{
+                              textField: {
+                                required: true,
+                              },
+                            }}
+                            onChange={(newValue) =>
+                              props.onChange({
+                                ...props?.value,
+                                transferredDate: newValue, // Use the newValue provided by DatePicker
+                              })
+                            }
+                          />
+
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={4}>
+                          <TextField
+                            label="Payment Method"
+                            value={Data?.modeOfPayment}
+                            variant="outlined"
+                            fullWidth
+                            disabled
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={4}>
+                          <TextField
+                            label="Transaction No:"
+                            value={Data?.transactionNumber}
+                            onChange={(e) =>
+                              props.onChange({
+                                ...props.value,
+                                transactionNumber: String(e.target.value),
+                              })
+                            }
+                            variant="outlined"
+                            fullWidth
+                            // required
+                            InputLabelProps={{
+                              shrink: !!Data?.transactionNumber, // Explicitly control shrinking
+                            }}
+
+                          />
+
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={4}>
+                          <TextField
+                            label="Office Manager Name"
+                            value={Data?.officeManagerName}
+                            onChange={(e) =>
+                              props.onChange({
+                                ...props.value,
+                                officeManagerName: String(e.target.value),
+                              })
+                            }
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{
+                              shrink: !!Data?.officeManagerName, // Explicitly control shrinking
+                            }}
+                            // required
+
+                          />
+
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={2}>
+                          <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
+                                  Attachments
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12} md={4} lg={4}>
+                          <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
+                                  Office manager Sign
+                          </Button>
+                        </Grid>
+                        </>
+                      ):''}
                       {/* <Grid item xs={12} md={6}>
                         <Autocomplete
                           value={IRO?.sanctionedAsPer as ISanctionedAsPer}
@@ -1384,6 +1499,88 @@ const ViewIRO = (props: any) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FileUploader
+        title="Attachments"
+        action="view"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustom}
+        onClose={() => setShowFileUploaderCustom(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={Data?.attachment}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              attachment: [...(props.value.attachment || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="view"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustomOfficeMngr}
+        onClose={() => setShowFileUploaderCustomOfficeMngr(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={[Data?.officeManagerSign]}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              officeManagerSign: [...(props.value?.officeManagerSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
     </CommonPageLayout>
   );
 };

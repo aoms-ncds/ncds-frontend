@@ -76,8 +76,14 @@ const FRFormPage = (props: FRFormPageProps) => {
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
-      navigate('/fr/');
-
+      // navigate('/fr/');
+      if (props.action === 'custom') {
+        navigate('/fr/');
+      } else if (props.action === 'add') {
+        navigate('/fr/');
+      } else if (props.action === 'customIRO') {
+        navigate('/iro/');
+      }
       enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
@@ -92,7 +98,7 @@ const FRFormPage = (props: FRFormPageProps) => {
       }
 
       enqueueSnackbar({
-        message: res.message,
+        message: res?.message,
         variant: 'success',
       });
     } catch (err) {

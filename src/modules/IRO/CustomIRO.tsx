@@ -26,6 +26,7 @@ import FRServices from '../FR/extras/FRServices';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import PermissionChecks from '../User/components/PermissionChecks';
 import { Link } from 'react-router-dom';
+import IROTemplateCustom from './components/IROTemplateCustom';
 
 const CustomIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -46,82 +47,7 @@ const CustomIRO = () => {
   const [conform, setConform] = useState<boolean>(false);
   const [conform1, setConform1] = useState<boolean>(false);
   const [attachment, setAttachment] = useState<boolean>(false);
-  const [selectedIRO, setSelectedIRO] = useState<IROrder>({
-    _id: '',
-    IROno: '',
-    IRODate: moment(),
-    purpose: 'Division',
-    status: CommonLifeCycleStates.ACTIVE,
-    kind: 'IRO',
-    sanctionedAmount: 0,
-    sanctionedAsPer: '',
-    sanctionedBank: '',
-    mainCategory: '',
-    particulars: [],
-    releaseAmount: {
-      _id: '',
-      modeOfPayment: '',
-      releaseAmount: 0,
-      transactionNumber: '',
-      transferredAmount: 0,
-      transferredDate: null,
-      transferredBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-      },
-      attachment: [],
-      division: '',
-    },
-    createdBy: {
-      workerCode: '',
-      kind: 'worker',
-      tokens: [],
-      basicDetails: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: '',
-        permanentAddress: {},
-        currentOfficialAddress: {},
-        residingAddress: {},
-        dateOfBirth: moment(),
-      },
-      officialDetails: {
-        divisionHistory: [],
-        remarks: '',
-        status: null,
-        noOfChurches: 0,
-      },
-      supportDetails: {
-        selfSupport: true,
-        percentageofSelfSupport: 0,
-        // totalNoOfYearsInMinistry: 10,
-        withChurch: true,
-      },
-      supportStructure: {
-        basic: 0,
-        HRA: 0,
-        spouseAllowance: 0,
-        positionalAllowance: 0,
-        specialAllowance: 0,
-        impactDeduction: 0,
-        telAllowance: 0,
-        PIONMissionaryFund: 0,
-        MUTDeduction: 0,
-      },
-      children: [],
-      _id: '',
-      createdAt: moment(),
-      updatedAt: moment(),
-    },
-    createdAt: moment(),
-    updatedAt: moment(),
-    billAttachment: [],
-    signature: {},
-    specialsanction: '',
-  });
+  const [selectedIRO, setSelectedIRO] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -129,6 +55,7 @@ const CustomIRO = () => {
   const [mngrName, setMngrName] = useState('');
   // const [openPrintIro, setOpenPrintIro] = useState(false);
   const [FR, setFR] = useState<FR>();
+  const [openPrintIro, setOpenPrintIro] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -179,7 +106,7 @@ const CustomIRO = () => {
       .catch((res) => {
         console.log(res);
       });
-    console.log(selectedSignature);
+    console.log(selectedIRO, 'selectedIRO');
   }, []);
   // useEffect(()=>{
   //   FRServices.getById(iroData?.FR ?? '').then((res)=>{
@@ -379,17 +306,19 @@ const CustomIRO = () => {
                 window.open( `/iro/${props.row._id}`, '_blank');
               },
             },
+            // ...(props.row.closedIroPdf ?
+            // [
             {
-              id: 'View',
-              text: 'View Fr ',
-              icon: PreviewIcon,
-              // component: Link,
-              // to: `/fr/${(props.row as any).FR}/view`,
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                setSelectedIRO(props.row);
+                setOpenPrintIro(true);
               },
-
             },
+            // ] :
+            // []),
             ...(props.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
               [
                 {
@@ -1105,7 +1034,32 @@ const CustomIRO = () => {
 
       </Dialog>
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
-
+      <Dialog open={Boolean(openPrintIro)} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {selectedIRO?.IROno}
+            <br />
+            {selectedIRO && (
+              <PDFDownloadLink document={<IROTemplateCustom rowData={selectedIRO as any}
+                officeMngrSign={selectedIRO.officeManagerSign as any}
+                officeMngrName={selectedIRO.officeManagerName as any}/>} fileName="IRO.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading ? '....' : 'IRO.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenPrintIro(false);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };
