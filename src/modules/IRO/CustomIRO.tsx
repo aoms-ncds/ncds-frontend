@@ -303,7 +303,7 @@ const CustomIRO = () => {
               // to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
               onClick: () => {
-                window.open( `/iro/${props.row._id}`, '_blank');
+                window.open( `/iro/${props.row._id}/custom`, '_blank');
               },
             },
             // ...(props.row.closedIroPdf ?

@@ -114,7 +114,7 @@ const iroPageRoutes: ModuleRoute = {
     },
     {
       title: 'View IRO',
-      path: '/:iroID/',
+      path: '/:iroID/custom',
       element: <ViewIRO action={'custom'} />,
       private: true,
       requiredAccessRights: ['READ_IRO'],

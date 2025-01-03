@@ -348,7 +348,7 @@ const ViewIRO = (props: any) => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(Data, 'ORRO');
+  console.log(props, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -387,7 +387,6 @@ const ViewIRO = (props: any) => {
       IROServices.getByIdCustom(iroID).then((res) =>{
         setIRO(res.data);
         setData(res.data);
-        console.log(res.data, 'res.data');
       }); // TODO: Implement REST API Call
     } else {
       IROServices.getById(iroID).then((res) =>{
