@@ -1079,7 +1079,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount;
+        return particularAmount.toFixed(2);
       },
     },
     // {

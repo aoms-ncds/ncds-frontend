@@ -656,7 +656,7 @@ const EditIRO = () => {
                     </TableContainer>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount} fullWidth disabled />
+                    <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     {/* <Tooltip open={isFocused?true:false}
@@ -666,7 +666,7 @@ const EditIRO = () => {
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={IRO?.sanctionedAmount ?? total}
+                      value={IRO?.sanctionedAmount?.toFixed(2) ?? total.toFixed(2)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       onChange={(e) => {
@@ -1245,7 +1245,7 @@ const EditIRO = () => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice?.toFixed(2)}
+                    value={newParticular?.unitPrice}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,

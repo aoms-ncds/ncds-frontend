@@ -565,7 +565,7 @@ const ViewIRO = () => {
                         </TableContainer>
                       </Grid>
                       <Grid item xs={12} md={6}>
-                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(0)} fullWidth disabled />
+                        <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
                       </Grid>
 
                       <Grid item xs={12} md={6}>
