@@ -29,11 +29,12 @@ const NotificationService = {
         },
       }),
   ),
-  getMyMessages: (read: boolean): Promise<StandardResponse<Message[]>> => getStandardResponse(
+  getMyMessages: (read: boolean, title?:boolean): Promise<StandardResponse<Message[]>> => getStandardResponse(
     axios.get(
       '/notification/my_messages', {
         params: {
           read,
+          title,
         },
         headers: {
           ...getAuthHeader(),

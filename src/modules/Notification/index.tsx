@@ -10,6 +10,7 @@ import NotificationService from './extras/NotificationService';
 const NotificationPage = () => {
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [showReadMessages, setShowReadMessages] = useState(false);
+  const [title, setTitle] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const columns: GridColDef<Message>[] = [
     {
@@ -135,7 +136,7 @@ const NotificationPage = () => {
 
   useEffect(() => {
     // setLoading((loading) => loading + 1);
-    NotificationService.getMyMessages(showReadMessages)
+    NotificationService.getMyMessages(showReadMessages, title)
       .then((res) => {
         setMessages(res.data);
       })
@@ -146,7 +147,7 @@ const NotificationPage = () => {
           variant: 'error',
         });
       });
-  }, [showReadMessages]);
+  }, [showReadMessages, title]);
   return (
     <CommonPageLayout title="Notifications">
       <Grid item xs={12} md={12}>
@@ -184,9 +185,21 @@ const NotificationPage = () => {
             label={showReadMessages ? 'Read Messages' : 'Unread Messages'}
             sx={{ float: 'right' }}
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={title}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setTitle(event.target.checked);
+                }}
+              />
+            }
+            label={'New Bills Attached ' }
+            sx={{ float: 'right' }}
+          />
+          {/* <br />
           <br />
-          <br />
-          <br />
+          <br /> */}
           <DataGrid
             sx={{ height: '55vh', width: '100%' }}
             // components={{}}
