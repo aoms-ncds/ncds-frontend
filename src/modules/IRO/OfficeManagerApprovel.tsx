@@ -1298,9 +1298,20 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                     toggleOpenRemarks(false);
                     setSelectedIROId(null);
                   }}
-                // sx={{ ml: 'auto' }}
+                  sx={{ ml: 1, height: '60px' }}
+
                 >
                   Close
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    // setSelectedFR(props.row._id);
+                    toggleSendNotification(true);
+                  }}
+                  // sx={{ ml: 'auto' }}
+                >
+                      Send notification
                 </Button>
               </DialogActions>
             </Dialog>

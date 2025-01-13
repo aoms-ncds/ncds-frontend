@@ -24,6 +24,7 @@ import * as XLSX from 'xlsx';
 import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
 import { useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -478,6 +479,39 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
     {
+      field: 'status',
+      headerClassName: 'super-app-theme--header',
+      renderHeader: () => (<b>Status</b>),
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        return params.value == CommonLifeCycleStates.CREATED ? 'WAITING FOR HR' :
+          params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
+            params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
+              params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
+      },
+      cellClassName: (params) => {
+        console.log('CellClassName params:', params);
+        const statusName = params.formattedValue;
+        console.log('Status Name###:', statusName);
+        if (params.value == null) {
+          return '';
+        }
+        switch (statusName) {
+        case 'WAITING FOR PRESIDENT':
+          return clsx('orange');
+        case 'APPROVED':
+          return clsx('green');
+        case 'REJECTED':
+          return clsx('red');
+        default:
+          console.log('No class applied');
+          return '';
+        }
+      },
+    },
+    {
       field: 'applicationCode', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150,
     },
@@ -498,6 +532,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitLineClamp: 3,
         }}>
           {params.value}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applied Date</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          { moment(params.value?.createdAt).format('DD/MM/YYYY hh:mm A')}
         </p>),
       width: 250,
     },
@@ -564,20 +614,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         <p> {props.row?.remark?? 'N/A'}</p>,
       width: 250, headerAlign: 'center', align: 'center',
     },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--header',
-      renderHeader: () => (<b>Status</b>),
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        return params.value == CommonLifeCycleStates.CREATED ? 'WAITING FOR HR' :
-          params.value == CommonLifeCycleStates.APPROVED ? 'APPROVED' :
-            params.value == ApplicationLifeCycleStates.SENT_TO_PRESIDENT ? 'WAITING FOR PRESIDENT':
-              params.value == CommonLifeCycleStates.REJECTED ? 'REJECTED' : 'Unknown Status ';
-      },
-    },
+
     // {
     //   field: 'reasonForDeactivation', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Reason For Reject</b>), renderCell: (props) =>
     //     <p> {props.row.reasonForDeactivation?? 'N/A'}</p>,
@@ -818,8 +855,18 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     '& .odd': {
                       backgroundColor: '#fff', // Change to blue for odd rows
                     },
+                    '& .orange': {
+                      backgroundColor: 'orange', // Change to blue for odd rows
+                    },
+                    '& .green': {
+                      backgroundColor: 'green', // Change to blue for odd rows
+                    },
+                    '& .red': {
+                      backgroundColor: 'red', // Change to blue for odd rows
+                    },
                   }}
                 >
+
 
                   <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={applications === null} getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'

@@ -272,21 +272,7 @@ const SupportFrPage = () => {
                 },
               ] :
               []),
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    // deleteFR(props.row._id);
-                    setSelectedFR(props.row._id);
-                    setDelateModel(true);
-                  },
-                },
-              ] :
-              []),
+
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -444,6 +430,21 @@ const SupportFrPage = () => {
               },
               icon: MessageIcon,
             },
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                  // deleteFR(props.row._id);
+                    setSelectedFR(props.row._id);
+                    setDelateModel(true);
+                  },
+                },
+              ] :
+              []),
           ]}
         />
       ),

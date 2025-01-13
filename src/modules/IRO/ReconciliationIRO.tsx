@@ -1,6 +1,15 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
+import {
+  AttachFile as AttachmentIcon,
+  AttachMoney as AttachMoneyIcon,
+  CurrencyRupee as CurrencyRupeeIcon,
+  Close as CloseIcon,
+  Message as MessageIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
 import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography } from '@mui/material';
+// eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
@@ -34,6 +43,7 @@ const ReconciliationIRO = () => {
   const [openRelease, setOpenRelease] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
+  const [sendNotification, toggleSendNotification] = useState<boolean>(false);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -498,6 +508,15 @@ const ReconciliationIRO = () => {
               //     });
               },
             },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                toggleSendNotification(true);
+              },
+              icon: MessageIcon,
+            },
           ]}
         />
       ),
@@ -615,6 +634,18 @@ const ReconciliationIRO = () => {
     //   field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
     //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
     // },
+    {
+      field: 'Mode of Transfer',
+      headerName: 'Mode of Transfer',
+      width: 200,
+      valueGetter: (params) => {
+        return params.row.releaseAmount?.modeOfPayment;
+      },
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+
+      align: 'center',
+      headerAlign: 'center',
+    },
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
@@ -816,6 +847,152 @@ const ReconciliationIRO = () => {
           </Grid>
         </Grid>
       </Card>
+      <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
+        <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+            <Grid item>
+              <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Send Notifications
+              </Typography>
+              {/* <Divider /> */}
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  IROServices.sendNotifications('president', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
+                              });
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                }}
+                endIcon={<SendIcon />}
+              >
+                {' '}
+                        Send to President
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  IROServices.sendNotifications('accounts', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
+                              });
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                }}
+                endIcon={<SendIcon />}
+              >
+                {' '}
+                        Send to accounts
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  IROServices.sendNotifications('office_manager', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
+                              });
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                }}
+                endIcon={<SendIcon />}
+              >
+                {' '}
+                        Send to office manager
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  IROServices.sendNotifications('account_manager', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
+                              });
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                }}
+                endIcon={<SendIcon />}
+              >
+                {' '}
+                        Send to account manager
+              </Button>
+              {/* <br /><br /> */}
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  IROServices.sendNotifications('division_head', selectedIROId ?? '')
+                            .then(() => {
+                              enqueueSnackbar({
+                                message: 'Message Sent',
+                                variant: 'success',
+                              });
+                            })
+                            .catch((res) => {
+                              console.log(res);
+                            });
+                }}
+                endIcon={<SendIcon />}
+              >
+                {' '}
+                        Send to division head
+              </Button>
+            </Grid>
+            <br />
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  toggleSendNotification(false);
+                  setSelectedIROId('');
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+                endIcon={<CloseIcon />}
+              >
+                        close
+              </Button>
+            </Grid>
+            {/* <Grid item xs={12}>
+        <Button variant="contained" color='inherit'> Send to division head</Button>
+
+      </Grid> */}
+          </Grid>
+        </DialogContent>
+      </Dialog>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
@@ -873,9 +1050,20 @@ const ReconciliationIRO = () => {
               toggleOpenRemarks(false);
               setSelectedIROId(null);
             }}
-          // sx={{ ml: 'auto' }}
+            sx={{ ml: 1, height: '60px' }}
+
           >
             close
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              // setSelectedFR(props.row._id);
+              toggleSendNotification(true);
+            }}
+            // sx={{ ml: 'auto' }}
+          >
+                      Send notification
           </Button>
         </DialogActions>
       </Dialog>
