@@ -43,7 +43,7 @@ import MessageItem from '../../../components/MessageItem';
 import IRO from '../../IRO';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 
-const FRForm = (props: FormComponentProps<CreatableFR>) => {
+const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
@@ -222,7 +222,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
       });
   };
   let total = 0;
-  props.value?.particulars?.forEach((particular) => {
+  props.value?.particulars?.forEach((particular:any) => {
     if (particular?.sanctionedAmount) {
       total += particular?.sanctionedAmount;
     }
@@ -670,7 +670,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     disablePortal
                     id="Payment_method"
                     getOptionLabel={(method) => method.paymentMethod ?? ''}
-                    value={props?.value?.modeOfPayment}
+                    value={props?.value?.modeOfPayment?? ''}
                     options={paymnetMethod ?? []} // Ensure this is defined and populated
                     onChange={(event, newValue) =>
                       props.onChange({
@@ -1279,7 +1279,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file:any) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}
@@ -1320,7 +1320,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file:any) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}

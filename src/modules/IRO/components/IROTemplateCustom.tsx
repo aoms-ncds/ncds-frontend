@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
 });
-const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; officeMngrSign?: any; officeMngrName?: any; president: EsignaturePresident }) => {
+const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; officeMngrSign?: any; officeMngrName?: any } & Record<string, any>) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
   let NewTot: any = 0;
@@ -135,14 +135,14 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
     },
   });
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const totalSacntion = props.rowData?.particulars.forEach((e) => {
+  const totalSacntion = props.rowData?.particulars.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
   console.log(props, 'total');
 
   NewTot += props?.rowData?.sanctionedAmount != undefined ? props?.rowData?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
-  totalReqAmount = props.rowData?.particulars?.reduce((acc, e) => {
+  totalReqAmount = props.rowData?.particulars?.reduce((acc:any, e:any) => {
     return acc + (e?.requestedAmount !== undefined ? e.requestedAmount : 0);
   }, 0) ?? 0;
   const sanctionedAmount = NewTot != 0 ? NewTot : totalAmount2;

@@ -148,7 +148,7 @@ const ReopenedFr = () => {
                   const res1 = await FRServices.getById(props.row._id as string);
                   const convertedData: CreatableFR = {
                     ...res1.data,
-                    requestAmount: res1.data?.requestedAmount, // Fix key access if needed
+                    requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
                   };
 
                   // Update the state

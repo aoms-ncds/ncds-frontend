@@ -864,7 +864,7 @@ const CustomIRO = () => {
         renameFile={(fileId: string, newName: string) => {
           setSelectedIRO(() => ({
             ...selectedIRO,
-            billAttachment: selectedIRO?.billAttachment.map((file) =>
+            billAttachment: selectedIRO?.billAttachment.map((file: { _id: string }) =>
               file._id === fileId ? { ...file, filename: newName } : file,
             ),
           }));
@@ -873,7 +873,7 @@ const CustomIRO = () => {
         deleteFile={(fileId: string) => {
           setSelectedIRO(() => ({
             ...selectedIRO,
-            billAttachment: selectedIRO?.billAttachment.filter((file) => file._id !== fileId),
+            billAttachment: selectedIRO?.billAttachment.filter((file: { _id: string }) => file._id !== fileId),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}

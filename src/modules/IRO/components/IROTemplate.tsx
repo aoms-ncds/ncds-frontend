@@ -135,7 +135,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
     },
   });
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const totalSacntion = props.fr?.particulars.forEach((e) => {
+  const totalSacntion = props.fr?.particulars.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
   console.log(props, 'total');

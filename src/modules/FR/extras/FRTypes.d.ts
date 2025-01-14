@@ -56,6 +56,9 @@ declare global {
     additionalDesignation?:string;
     additionalName?:string;
     disable?:boolean;
+    releaseAmount?:string;
+    transferredDate?:Moment;
+    modeOfPayment?:string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 

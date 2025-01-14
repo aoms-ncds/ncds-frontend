@@ -1561,7 +1561,7 @@ const ViewIRO = (props: any) => {
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file: { _id: string }) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}
@@ -1602,7 +1602,7 @@ const ViewIRO = (props: any) => {
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file: { _id: string }) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}
