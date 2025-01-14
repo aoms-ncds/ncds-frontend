@@ -696,21 +696,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
               ] :
               []),
 
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    setSelectedIROId(params.row._id);
-                    setDeleteModel(true);
-                    // deleteIRO(params.row._id);
-                  },
-                },
-              ] :
-              []),
 
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
               [
@@ -867,6 +852,22 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                   },
                 },
               ]),
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    setSelectedIROId(params.row._id);
+                    setDeleteModel(true);
+                    // deleteIRO(params.row._id);
+                  },
+                },
+              ] :
+              []),
+
             // {
             //   id: 'Send Back',
             //   text: 'Send Back',
@@ -1861,9 +1862,20 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                     toggleOpenRemarks(false);
                     setSelectedIROId(null);
                   }}
-                  // sx={{ ml: 'auto' }}
+                  sx={{ ml: 1, height: '60px' }}
+
                 >
                   Close
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    // setSelectedFR(props.row._id);
+                    toggleSendNotification(true);
+                  }}
+                  // sx={{ ml: 'auto' }}
+                >
+                      Send notification
                 </Button>
               </DialogActions>
             </Dialog>

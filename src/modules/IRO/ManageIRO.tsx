@@ -641,6 +641,57 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           primaryText="Actions"
           key={'IRO action'}
           items={[
+            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
+              [
+                {
+                  id: 'Release',
+                  text: 'Release Amount',
+                  component: Link,
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([params.row])],
+                  icon: CurrencyRupeeIcon,
+                },
+                // {
+                //   id: 'Close IRO',
+                //   text: 'Close IRO',
+                //   icon: PreviewIcon,
+                //   onClick: () => {
+                //     setIroData(params.row);
+                //     if (params?.row.FR) {
+                //       FRServices.getById(params.row.FR).then((res) => {
+                //         setFrData(res.data);
+                //         console.log(res.data, 'fr');
+                //       });
+                //     }
+                //     setPrintIroLoading(true);
+                //     setTimeout(() => {
+                //       setPrintIroLoading(false);
+                //     }, 2000);
+                //     // IROServices.close(params.row._id)
+                //     //     .then((res) => {
+                //     //       // if (IROrder) {
+                //     //       // eslint-disable-next-line @typescript-eslint/naming-convention
+                //     //       const filterIRO = IROrder?.filter((iro) => {
+                //     //         return iro._id !== params.row._id;
+                //     //       });
+                //     //       setIROrder(filterIRO);
+                //     //       // }
+
+                //     //       enqueueSnackbar({
+                //     //         message: res.message,
+                //     //         variant: 'success',
+                //     //       });
+                //     //     })
+
+              //     //     .catch((err) => {
+              //     //       enqueueSnackbar({
+              //     //         message: err.message,
+              //     //         variant: 'error',
+              //     //       });
+              //     //     });
+              //   },
+              // },
+              ] :
+              []),
             {
               id: 'View',
               text: 'View Details ',
@@ -691,78 +742,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               ] :
               []),
 
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    FRServices.getById(params.row.FR?? '').then((res) => {
-                      console.log(res.data, 'daa');
-                      setFR(res.data);
-                    });
-                    setSelectedIROId(params.row._id);
-                    setDeleteModel(true);
-                    setIRO(params.row);
-                    // deleteIRO(params.row._id);
-                  },
-                },
-              ] :
-              []),
 
-            ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
-              [
-                {
-                  id: 'Release',
-                  text: 'Release Amount',
-                  component: Link,
-                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([params.row])],
-                  icon: CurrencyRupeeIcon,
-                },
-                // {
-                //   id: 'Close IRO',
-                //   text: 'Close IRO',
-                //   icon: PreviewIcon,
-                //   onClick: () => {
-                //     setIroData(params.row);
-                //     if (params?.row.FR) {
-                //       FRServices.getById(params.row.FR).then((res) => {
-                //         setFrData(res.data);
-                //         console.log(res.data, 'fr');
-                //       });
-                //     }
-                //     setPrintIroLoading(true);
-                //     setTimeout(() => {
-                //       setPrintIroLoading(false);
-                //     }, 2000);
-                //     // IROServices.close(params.row._id)
-                //     //     .then((res) => {
-                //     //       // if (IROrder) {
-                //     //       // eslint-disable-next-line @typescript-eslint/naming-convention
-                //     //       const filterIRO = IROrder?.filter((iro) => {
-                //     //         return iro._id !== params.row._id;
-                //     //       });
-                //     //       setIROrder(filterIRO);
-                //     //       // }
-
-                //     //       enqueueSnackbar({
-                //     //         message: res.message,
-                //     //         variant: 'success',
-                //     //       });
-                //     //     })
-
-                //     //     .catch((err) => {
-                //     //       enqueueSnackbar({
-                //     //         message: err.message,
-                //     //         variant: 'error',
-                //     //       });
-                //     //     });
-                //   },
-                // },
-              ] :
-              []),
             ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
               [
                 {
@@ -815,6 +795,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
               icon: MessageIcon,
             },
+
             // {
             //   id: 'signature',
             //   text: 'Add signature',
@@ -897,6 +878,26 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //     });
             //   },
             // },
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    FRServices.getById(params.row.FR?? '').then((res) => {
+                      console.log(res.data, 'daa');
+                      setFR(res.data);
+                    });
+                    setSelectedIROId(params.row._id);
+                    setDeleteModel(true);
+                    setIRO(params.row);
+                  // deleteIRO(params.row._id);
+                  },
+                },
+              ] :
+              []),
           ]}
         />
       ),
@@ -1222,30 +1223,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
       valueGetter: (params) => params.row.sanctionedBank?.split('-')[1] || '',
     },
+    ...(props.action !== 'release' ?
+      [
+        {
+          field: 'reasonForRejectIRO',
+          headerClassName: 'super-app-theme--cell',
+          headerName: 'Beneficiary Name',
+          width: 200,
+          renderHeader: () => <b>Reason For Reject</b>,
+          renderCell: (props:any) => (
+            <p
+              style={{
+                maxWidth: 300,
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                justifyContent: 'center',
+                textAlign: 'center',
+              }}
+            >
+              {props.row.reasonForRejectIRO}
+            </p>
+          ),
+          align: 'center' as const, // Explicitly cast to `GridAlignment`
+          headerAlign: 'center' as const,
+        },
+      ] :
+      []),
 
-    {
-      field: 'reasonForRejectIRO',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'Beneficiary Name',
-      width: 200,
-      renderHeader: () => <b>Reason For Reject</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 300,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {' '}
-          {props.row.reasonForRejectIRO}
-        </p>
-      ),
-      align: 'center',
-      headerAlign: 'center',
-    },
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
@@ -1817,9 +1821,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     toggleOpenRemarks(false);
                     setSelectedIROId(null);
                   }}
-                // sx={{ ml: 'auto' }}
+                  sx={{ ml: 1, height: '60px' }}
                 >
                   Close
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    // setSelectedFR(props.row._id);
+                    toggleSendNotification(true);
+                  }}
+                  // sx={{ ml: 'auto' }}
+                >
+                      Send notification
                 </Button>
               </DialogActions>
             </Dialog>

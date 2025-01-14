@@ -260,21 +260,6 @@ const ManageFrForDivision = () => {
                 },
               ] :
               []),
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    // deleteFR(props.row._id);
-                    setSelectedFR(props.row._id);
-                    setDelateModel(true);
-                  },
-                },
-              ] :
-              []),
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -396,6 +381,21 @@ const ManageFrForDivision = () => {
               },
               icon: MessageIcon,
             },
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    // deleteFR(props.row._id);
+                    setSelectedFR(props.row._id);
+                    setDelateModel(true);
+                  },
+                },
+              ] :
+              []),
           ]}
         />
       ),
@@ -1029,9 +1029,20 @@ const ManageFrForDivision = () => {
                         toggleOpenRemarks(false);
                         setSelectedFR(null);
                       }}
-                      // sx={{ ml: 'auto' }}
+                      sx={{ ml: 1, height: '60px' }}
+
                     >
                       close
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        // setSelectedFR(props.row._id);
+                        toggleSendNotification(true);
+                      }}
+                      // sx={{ ml: 'auto' }}
+                    >
+                      Send notification
                     </Button>
                   </DialogActions>
                 </form>

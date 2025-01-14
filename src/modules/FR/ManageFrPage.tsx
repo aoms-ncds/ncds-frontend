@@ -273,24 +273,7 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-            ...(hasPermissions(['ADMIN_ACCESS']) ?
-              [
-                {
-                  id: 'delete',
-                  text: 'Delete',
-                  component: Link,
-                  icon: DeleteIcon,
-                  onClick: () => {
-                    FRServices.getById(props.row._id?? '').then((res) => {
-                      setFR(res.data);
-                    });
-                    // deleteFR(props.row._id);
-                    setSelectedFR(props.row._id);
-                    setDeleteModel(true);
-                  },
-                },
-              ] :
-              []),
+
             // {
             //   id: 'sendBackDivision1',
             //   text: 'Send Back to Division',
@@ -447,6 +430,24 @@ const ManageFrPage = () => {
               },
               icon: MessageIcon,
             },
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    FRServices.getById(props.row._id?? '').then((res) => {
+                      setFR(res.data);
+                    });
+                    // deleteFR(props.row._id);
+                    setSelectedFR(props.row._id);
+                    setDeleteModel(true);
+                  },
+                },
+              ] :
+              []),
           ]}
         />
       ),
@@ -1119,12 +1120,28 @@ const ManageFrPage = () => {
                         toggleOpenRemarks(false);
                         setSelectedFR(null);
                       }}
-                      // sx={{ ml: 'auto' }}
+                      sx={{ ml: 1, height: '60px' }}
                     >
                       close
                     </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        // setSelectedFR(props.row._id);
+                        toggleSendNotification(true);
+                      }}
+                      // sx={{ ml: 'auto' }}
+                    >
+                      Send notification
+                    </Button>
                   </DialogActions>
                 </form>
+                {/* <Button onClick={()=>{
+                  // setSelectedFR(props.row._id);
+                  toggleSendNotification(true);
+                }}>
+            Sent notufication
+                </Button> */}
               </Dialog>
             </Grid>
             <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
