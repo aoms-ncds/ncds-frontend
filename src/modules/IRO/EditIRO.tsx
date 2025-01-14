@@ -1079,7 +1079,7 @@ const EditIRO = () => {
         }}
         // accept={['video/*']}
         open={viewFileUploader}
-        action="view"
+        action="add"
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
         getFiles={attachments}

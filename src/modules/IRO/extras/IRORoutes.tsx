@@ -10,6 +10,8 @@ import EditIRO from '../EditIRO';
 import ReleaseFmRequest from '../ReleaseFmRequest';
 import RejectedIRO from '../RejectedIRO';
 import ReleaseAmountAudit from '../ReleaseAmountAudit';
+import CustomIRO from '../CustomIRO';
+import FRFormPage from '../../FR/FRFormPage';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -76,6 +78,20 @@ const iroPageRoutes: ModuleRoute = {
       requiredAccessRights: ['READ_IRO'],
     },
     {
+      title: 'custom IRO',
+      path: '/custom',
+      element: <CustomIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Apply Custom IRO',
+      path: '/applyCustom',
+      element: <FRFormPage action="customIRO" />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
       title: 'Rejected IRO',
       path: '/rejected',
       element: <RejectedIRO />,
@@ -93,6 +109,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'View IRO',
       path: '/:iroID',
       element: <ViewIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'View IRO',
+      path: '/:iroID/custom',
+      element: <ViewIRO action={'custom'} />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },

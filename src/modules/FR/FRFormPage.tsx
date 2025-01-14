@@ -9,8 +9,9 @@ import { enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
+import IROServices from '../IRO/extras/IROServices';
 interface FRFormPageProps {
-  action: 'add' | 'edit' | 'view';
+  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO';
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const navigate = useNavigate();
@@ -24,13 +25,19 @@ const FRFormPage = (props: FRFormPageProps) => {
     reasonForReject: '',
     sanctionedAsPer: '',
   });
+  console.log(requisition, 'props.action');
 
   useEffect(() => {
     if (props.action !== 'add' && !frID) {
-      throw new Error('FR ID Missing in URL');
+      if (props.action !== 'custom' && !frID) {
+        if (props.action !== 'customIRO' && !frID) {
+          throw new Error('FR ID Missing in URL');
+        }
+      }
     }
-    if (props.action === 'edit' || props.action === 'view') {
-      FRServices.getById(frID as string)
+    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom' ) {
+      if (props.action as any === 'custom') {
+        FRServices.getByIdCustom(frID as string)
         .then((res) => {
           const convertedData: CreatableFR = {
             ...res.data,
@@ -46,22 +53,52 @@ const FRFormPage = (props: FRFormPageProps) => {
             message: error.message,
           });
         });
+      } else {
+        FRServices.getById(frID as string)
+          .then((res) => {
+            const convertedData: CreatableFR = {
+              ...res.data,
+              requestAmount: ['requestedAmount'],
+            };
+            setRequisition(convertedData);
+            setFRLoaded(true);
+            console.log({ convertedData });
+          })
+          .catch((error) => {
+            enqueueSnackbar({
+              variant: 'error',
+              message: error.message,
+            });
+          });
+      }
     }
   }, []);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
-      navigate('/fr/');
-
+      // navigate('/fr/');
+      if (props.action === 'custom') {
+        navigate('/fr/');
+      } else if (props.action === 'add') {
+        navigate('/fr/');
+      } else if (props.action === 'customIRO') {
+        navigate('/iro/');
+      }
       enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
       });
-
-      const res = await FRServices.createFRRequests(requisition);
+      let res;
+      if (props.action === 'custom') {
+        res = await FRServices.createFRRequestsCustom(requisition);
+      } else if (props.action === 'add') {
+        res = await FRServices.createFRRequests(requisition);
+      } else if (props.action === 'customIRO') {
+        res = await IROServices.createFRRequestsIRO(requisition);
+      }
 
       enqueueSnackbar({
-        message: res.message,
+        message: res?.message,
         variant: 'success',
       });
     } catch (err) {
@@ -170,6 +207,13 @@ const FRFormPage = (props: FRFormPageProps) => {
                   onChange={(newReq) => setRequisition(newReq)}
                   action={props.action}
                   onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+                />
+              ) : props.action === 'custom' || props.action === 'customIRO' ? (
+                <FRForm
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={addFR} // Pass the addFR function to the onSubmit prop
                 />
               ) : (
                 <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />

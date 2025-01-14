@@ -20,6 +20,10 @@ import {
   InputAdornment,
   Checkbox,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -31,11 +35,13 @@ import FileUploader from '../../../components/FileUploader/FileUploader';
 import SendIcon from '@mui/icons-material/Send';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 import { MB } from '../../../extras/CommonConfig';
-import PermissionChecks from '../../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import FRLifeCycleStates from '../extras/FRLifeCycleStates';
 import { useAuth } from '../../../hooks/Authentication';
 import MessageItem from '../../../components/MessageItem';
+import IRO from '../../IRO';
+import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 
 const FRForm = (props: FormComponentProps<CreatableFR>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
@@ -60,7 +66,11 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     narration: '',
     attachment: [],
   });
+  const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+
   const [showFileUploader, setShowFileUploader] = useState(false);
+  const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
+  const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -70,16 +80,21 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
     transactionId: '',
   });
   const [submit, setSubmit] = useState(0);
-  const [particularDialog, setParticularDialog] = useState<'add' | 'edit'>('add');
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit'|'custom'|'customIRO'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
     ('add');
   };
-
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
+  }, []);
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
+  console.log(newParticular, 'newParticular');
 
   useEffect(() => {
     if (props.value.purpose === 'Worker') {
@@ -206,6 +221,12 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
         });
       });
   };
+  let total = 0;
+  props.value?.particulars?.forEach((particular) => {
+    if (particular?.sanctionedAmount) {
+      total += particular?.sanctionedAmount;
+    }
+  });
   useEffect(() => {
     setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular.mainCategory));
   }, [newParticular]);
@@ -244,7 +265,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 if (totalRequestedAmount>0) {
                   const updatedValue = {
                     ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
-                      FRLifeCycleStates.WAITING_FOR_PRESIDENT : undefined,
+                      FRLifeCycleStates.WAITING_FOR_PRESIDENT : submit == 3 ?FRLifeCycleStates.REOPENED: undefined,
                   };
                   // Create a new object with updated status
                   console.log(updatedValue, 'updatedValue');
@@ -324,6 +345,43 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   </Grid>
                 </>
               ) : null}
+              {props.action=== 'custom'|| props.action=== 'customIRO' ? (
+                <Grid item xs={12} md={6}>
+                  {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                  <TextField
+                    label={props.action === 'custom' ? 'FR No' : 'IRO No'}
+                    value={props?.value.FRno}
+                    autoComplete='off'
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        FRno: (e.target.value),
+                      })
+                    }
+                    // onFocus={() => setFocused(true)}
+                    // onBlur={() => setFocused(false)}
+                    variant="outlined"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    // inputProps={{
+                    //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                    // }}
+                    inputProps={{
+                      max: totalRequestedAmount,
+                      min: 0,
+                      step: 0.01, // Allows up to two decimal places
+                    // onWheel: handleWheel,
+                    }}
+                  // disabled
+                  // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                  />
+                  {/* </Tooltip> */}
+                </Grid>
+
+              ):''}
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
@@ -368,7 +426,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                   />
                 </Grid>
               ) : null}
-              {props.action === 'add' && (
+              {props.action === 'add'||props.action === 'custom' ||props.action === 'customIRO' ? (
                 <>
                   <Grid item xs={12}>
                     <Typography>Particulars</Typography>
@@ -399,8 +457,8 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     />
                   </Grid>
                 </>
-              )}
-              {props.action === 'add' && (
+              ):''}
+              {props.action === 'add'|| props.action === 'custom' ||props.action === 'customIRO'? (
                 <Grid item xs={12} md={4} lg={4}>
                   <Button
                     variant="contained"
@@ -427,7 +485,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                     Add particulars
                   </Button>
                 </Grid>
-              )}
+              ):''}
               {particulars.length > 0 && (
                 <Grid item xs={12}>
                   <TableContainer>
@@ -495,6 +553,182 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                 />
               </Grid>
 
+
+              {props.action === 'custom'||props.action === 'customIRO' ? (
+                <><Grid item xs={12} md={6}>
+                  {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                  <TextField
+                    label="Sanctioned Amount"
+                    type={'number'}
+                    value={props?.value.sanctionedAmount ?? total}
+                    title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                    autoComplete='off'
+                    onChange={(e) => props.onChange({
+                      ...props.value,
+                      sanctionedAmount: Number(e.target.value),
+                    })}
+                    // onFocus={() => setFocused(true)}
+                    // onBlur={() => setFocused(false)}
+                    variant="outlined"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    // inputProps={{
+                    //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
+                    // }}
+                    inputProps={{
+                      max: totalRequestedAmount,
+                      min: 0,
+                      step: 0.01, // Allows up to two decimal places
+                      // onWheel: handleWheel,
+                    }} />
+                  {/* </Tooltip> */}
+                </Grid><Grid item xs={12} md={6}>
+                  <TextField
+                    label="Sanctioned Bank"
+                    type={'text'}
+                    value={props?.value.sanctionedBank ?? ''}
+                    autoComplete='off'
+                    onChange={(e) => props.onChange({
+                      ...props.value,
+                      sanctionedBank: e.target.value,
+                    })}
+
+                    variant="outlined"
+                    fullWidth
+                    InputLabelProps={{ shrink: true }} />
+                </Grid><Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
+                    <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
+                    <Select
+                      labelId="sourceOfAccount"
+                      label="sourceOfAccount"
+                      // disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
+                      value={props.value?.sourceOfAccount ?? null}
+                      onChange={(e) => props.onChange({
+                        ...props.value,
+                        sourceOfAccount: String(e.target.value),
+                      })}
+                    >
+                      <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                      <MenuItem value={'Local'}>Local</MenuItem>
+                      {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                </Grid></>
+              ):''}
+
+
+              {props.action === 'customIRO' ?(
+                <><Grid item xs={12} md={6}>
+                  <TextField
+                    label="Amount Transferred"
+                    type="number"
+                    value={(props.value as any)?.releaseAmount ?? ''}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        releaseAmount: String(e.target.value),
+                      })
+                    }
+                    fullWidth
+                    // inputProps={{
+                    //   max: (props.value as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
+                    //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                    //     event.preventDefault();
+                    //     event.currentTarget.blur();
+                    //   },
+                    // }}
+                    variant="outlined"
+
+                    required />
+                </Grid><Grid item xs={12} md={6}>
+                  <DatePicker
+                    label="Date"
+                    value={(props.value as any)?.transferredDate}
+                    format="DD/MM/YYYY"
+                    sx={{ width: '100%' }}
+                    slotProps={{
+                      textField: {
+                        required: true,
+                      },
+                    }}
+                    onChange={(newValue) =>
+                      props.onChange({
+                        ...props?.value,
+                        transferredDate: newValue, // Use the newValue provided by DatePicker
+                      })
+                    }
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <Autocomplete
+                    disablePortal
+                    id="Payment_method"
+                    getOptionLabel={(method) => method.paymentMethod ?? ''}
+                    value={props?.value?.modeOfPayment}
+                    options={paymnetMethod ?? []} // Ensure this is defined and populated
+                    onChange={(event, newValue) =>
+                      props.onChange({
+                        ...props.value,
+                        modeOfPayment: newValue, // Use newValue provided by Autocomplete
+                      })
+                    }
+                    renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Transaction No:"
+                    value={props.value.releaseAmount?.transactionNumber}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        transactionNumber: String(e.target.value),
+                      })
+                    }
+                    variant="outlined"
+                    fullWidth
+                    // required
+
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Office Manager Name"
+                    value={props.value.officeManagerName}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        officeManagerName: String(e.target.value),
+                      })
+                    }
+                    variant="outlined"
+                    fullWidth
+                    // required
+
+                  />
+
+                </Grid>
+                <Grid item xs={12} md={4} lg={2}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
+                                  Attachments
+                  </Button>
+                </Grid>
+                <Grid item xs={12} md={4} lg={4}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
+                                  Office manager Sign
+                  </Button>
+                </Grid>
+
+                </>
+              ):''}
               {/* <Grid item xs={12} md={6}>
                 <TextField
                   label="Sanctioned Amount"
@@ -592,7 +826,7 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                       Remark
                     </Button> : null}
                   &nbsp;
-                  {props.action === 'add' || props.action === 'edit' ? (
+                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom'||props.action === 'customIRO' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
@@ -602,7 +836,13 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
                             variant="contained"
                             color="info"
                             type="submit"
-                            onClick={() => setSubmit(1)}
+                            onClick={() => {
+                              if (props.value.status ==FRLifeCycleStates.REOPENED) {
+                                setSubmit(3);
+                              } else {
+                                setSubmit(1);
+                              }
+                            }}
                             // disabled={particulars.length==0}
                           >
                         Submit{' '}
@@ -1000,6 +1240,88 @@ const FRForm = (props: FormComponentProps<CreatableFR>) => {
             ...particularDetails,
             attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
           }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustom}
+        onClose={() => setShowFileUploaderCustom(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.attachment}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              attachment: [...(props.value.attachment || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderCustomOfficeMngr}
+        onClose={() => setShowFileUploaderCustomOfficeMngr(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.officeManagerSign}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              officeManagerSign: [...(props.value.officeManagerSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file) => file._id !== fileId),
+          });
           return FileUploaderServices.deleteFile(fileId);
         }}
       />

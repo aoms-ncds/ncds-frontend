@@ -8,8 +8,17 @@ export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/fr/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
   imageget: () => getStandardResponse<FR>(axios.get('/image', { headers: { ...getAuthHeader() } })),
-
+  reopen: (fRId:string) => getStandardResponse<FR>(axios.post(`/fr/${fRId}/reopen`, { headers: { ...getAuthHeader() } })),
   getAll: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/',
+    { params: conditions, headers: { ...getAuthHeader() } }),
+  (data) => data.map((fr: FR) => ({
+    ...fr,
+    FRdate: moment(fr.FRdate),
+    createdAt: moment(fr.createdAt),
+    updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
+  }))),
+  getAllCustom: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/custom/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({
     ...fr,
@@ -89,6 +98,17 @@ export default {
         frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null,
       }),
     ),
+  getByIdCustom: (fRId?: string) =>
+    getStandardResponse<FR>(
+      axios.get(`/fr/${fRId}/custom`, { headers: { ...getAuthHeader() } }),
+      (data) => ({
+        ...data,
+        FRdate: moment(data.FRdate),
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+        frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null,
+      }),
+    ),
   // createFRRequests: ( frRequest: CreatableFR) => getStandardResponse<number>(
   //   axios.post('/fr/', frRequest),
   // ),
@@ -107,6 +127,45 @@ export default {
                 for (let i = 0; i < frRequest.particulars.length; i++) {
                   const particulars = frRequest.particulars[i];
                   await axios.post('/fr/particulars/', {
+                    FR: createdFR.data.data._id,
+                    mainCategory: particulars.mainCategory,
+                    subCategory1: particulars.subCategory1,
+                    subCategory2: particulars.subCategory2,
+                    subCategory3: particulars.subCategory3,
+                    quantity: particulars.quantity,
+                    month: particulars.month,
+                    unitPrice: particulars.unitPrice,
+                    requestedAmount: particulars.requestedAmount,
+                    narration: particulars.narration,
+                    attachment: particulars.attachment,
+                    isUpcomingYear: Boolean(particulars.isUpcomingYear),
+                  }, { headers: { ...getAuthHeader() } });
+                }
+              }
+              resolve(createdFR);
+            } catch (error) {
+              reject(error);
+            }
+          })
+          .catch(reject);
+      }),
+    );
+  },
+  createFRRequestsCustom: (frRequest: CreatableFR) => {
+    return getStandardResponse<FR>(
+      new Promise((resolve, reject) => {
+        axios
+          .post('/fr/custom/', {
+            ...frRequest,
+            particulars: [],
+          }, { headers: { ...getAuthHeader() } })
+          .then(async (createdFR) => {
+            // Create partcularsisions
+            try {
+              if (frRequest.particulars) {
+                for (let i = 0; i < frRequest.particulars.length; i++) {
+                  const particulars = frRequest.particulars[i];
+                  await axios.post('/fr/particulars/custom/', {
                     FR: createdFR.data.data._id,
                     mainCategory: particulars.mainCategory,
                     subCategory1: particulars.subCategory1,

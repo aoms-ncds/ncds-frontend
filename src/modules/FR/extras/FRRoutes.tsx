@@ -10,7 +10,8 @@ import ChildeSupportPage from '../ChildeSupprt';
 import ManageFrForDivision from '../ManagrFrForDivision';
 import SupportFrPage from '../SupportFr';
 import RejectedFr from '../RejectedFr';
-
+import ReopenedFr from '../ReopenedFr';
+import CustomFR from '../CustomFR';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -66,6 +67,14 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
+      title: 'Apply Custom FR',
+      path: '/applyCustom',
+      element: <FRFormPage action="custom" />,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
       title: 'Closed FR',
       path: '/closed',
       element: <ClosedFR />,
@@ -74,9 +83,25 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
+      title: 'Re opened FR',
+      path: '/reopened',
+      element: <ReopenedFr />,
+      private: true,
+      requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
       title: 'View FR',
       path: '/:frID/view',
       element: <FRFormPage action="view" />,
+      private: true,
+      requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'View FR',
+      path: '/:frID/viewCustom',
+      element: <FRFormPage action="custom" />,
       private: true,
       requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
@@ -127,6 +152,14 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <SupportFrPage/>,
       private: true,
       requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Custom FR',
+      path: '/CustomFR',
+      element: <CustomFR/>,
+      private: true,
+      requiredAccessRights: ['MANAGE_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
   ],

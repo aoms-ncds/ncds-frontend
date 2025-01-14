@@ -6,6 +6,7 @@ export default class FRLifeCycleStates extends CommonLifeCycleStates {
   // Inactive states
   public static readonly FR_CLOSED = -200;
   public static readonly FR_SEND_BACK = -201;
+  public static readonly REOPENED = 220;
 
   // Active states
   public static readonly WAITING_FOR_PRESIDENT = 201;

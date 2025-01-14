@@ -50,7 +50,7 @@ import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
-  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, IROLifeCycleStates.REVERTED_TO_DIVISION]); // default WFA: Waiting for access or Reverted
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -1377,20 +1377,38 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     }
                   />{props.action =='manage' && (
 
-                    <Grid item sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }} >
+                    <Grid
+                      item
+                      sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                    >
                       <FormControl>
                         <RadioGroup
                           aria-labelledby="Filter"
-                          value={statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE)?'WFA':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]:[])}
+                          value={
+                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                              statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                'ALL'
+                          }
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === 'WFA') {
+                              setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                            } else if (value === 'RTD') {
+                              setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                            } else {
+                              setStatusFilter([]); // Use an empty array for "ALL" to show all items
+                            }
+                          }}
                           name="Filter"
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                           <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
+                          <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
+
                   )}
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
