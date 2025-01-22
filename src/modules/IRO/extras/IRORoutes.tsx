@@ -12,6 +12,7 @@ import RejectedIRO from '../RejectedIRO';
 import ReleaseAmountAudit from '../ReleaseAmountAudit';
 import CustomIRO from '../CustomIRO';
 import FRFormPage from '../../FR/FRFormPage';
+import ReopenedIRO from '../ReopenedIRO';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -109,6 +110,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'View IRO',
       path: '/:iroID',
       element: <ViewIRO />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
+    },
+    {
+      title: 'Re opened IRO',
+      path: '/reopened',
+      element: <ReopenedIRO />,
       private: true,
       requiredAccessRights: ['READ_IRO'],
     },

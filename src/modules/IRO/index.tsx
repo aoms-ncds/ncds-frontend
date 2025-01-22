@@ -136,7 +136,7 @@ const IRODashboard = () => {
         </Grid>
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/fr/reopened" />
+            primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/iro/reopened" />
         </Grid>
         <PermissionChecks
           permissions={['CUSTOM_FR_IRO']}

@@ -15,18 +15,10 @@ import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
-import FRServices from '../FR/extras/FRServices';
+import IROServices from './extras/IROServices';
 
 const ReopenedIRO = () => {
-  const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
-  const [requisition, setRequisition] = useState<CreatableFR>({
-    FRdate: moment(),
-    kind: 'FRs',
-    particulars: [],
-    reasonForSentBack: '',
-    reasonForReject: '',
-    sanctionedAsPer: '',
-  });
+  const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
@@ -64,8 +56,8 @@ const ReopenedIRO = () => {
       });
   }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
-    if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
-    (row.FRdate && row.FRdate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
+    if ((row.IROno && row.IROno?.toLowerCase().includes(searchText?.toLowerCase())) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText?.toLowerCase()))||
     // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
     //   (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
     //   (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
@@ -93,7 +85,7 @@ const ReopenedIRO = () => {
       });
   }, []);
 
-  const columns:GridColDef<FR>[] = [
+  const columns:GridColDef<IROrder>[] = [
     {
       field: '_manage',
       renderHeader: () => (<b>Action</b>),
@@ -102,9 +94,9 @@ const ReopenedIRO = () => {
       renderCell: (props) => (
         <DropdownButton
           useIconButton={true}
-          id="FR action"
+          id="IRO action"
           primaryText="Actions"
-          key={'FR action'}
+          key={'IRO action'}
           items={[
             // {
             //   id: 'print',
@@ -113,60 +105,58 @@ const ReopenedIRO = () => {
             //   to: '/view' + props.row._id,
             //   icon: PrintIcon,
             // },
-            {
-              id: 'print',
-              text: 'Print FR',
-              component: PDFDownloadLink,
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR }/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
-            },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR }/>,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
             {
               id: 'View',
-              text: 'View Details ',
-              component: Link,
-              to: `/fr/${props.row._id}/view`,
+              text: 'View Fr ',
               icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
             },
             {
               id: 'edit',
               text: 'Edit',
-              // component: Link,
-              // to: `/fr/${props.row._id}/edit`,
-              icon: EditIcon,
+              component: Link,
+              // to: `/iro/${params.row._id}/edit`,
               onClick: () => {
-                window.open(`/fr/${props.row._id}/edit`, '_blank');
+                window.open(`/iro/${props.row._id}/edit`, '_blank');
               },
+              icon: EditIcon,
             },
             {
               id: 'View',
-              text: 'Close Fr ',
+              text: 'Close IRO ',
               component: Link,
               onClick: async () => {
                 try {
                   // Fetch the first API data
-                  const res1 = await FRServices.getById(props.row._id as string);
-                  const convertedData: CreatableFR = {
-                    ...res1.data,
-                    requestAmount: res1.data?.requestedAmount, // Fix key access if needed
-                  };
 
                   // Update the state
-                  setRequisition(convertedData);
-                  console.log({ convertedData });
 
                   // Wait for the state update to complete
                   await new Promise((resolve) => setTimeout(resolve, 0));
 
                   // Perform the second API call using the updated requisition
-                  const res2 = await FRServices.manageFRRequests(props.row._id, 'close', convertedData);
+                  const res2 = await IROServices.close(props.row._id);
                   console.log(res2);
 
                   // Show success message
-                  enqueueSnackbar({
-                    message: 'FR Reopened',
-                    variant: 'success',
-                  });
+                  // enqueueSnackbar({
+                  //   message: 'FR Reopened',
+                  //   variant: 'success',
+                  // });
+                  window.location.reload();
                 } catch (error) {
                   // Handle errors
                   enqueueSnackbar({
@@ -181,15 +171,15 @@ const ReopenedIRO = () => {
         />
       ),
     },
-    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 100, align: 'center',
+    { field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100, align: 'center',
       headerAlign: 'center' },
     // { field: 'FRdate', align: 'center',
     //   headerAlign: 'center', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
     //     <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
     //   ) },
     {
-      field: 'FRdate',
-      headerName: 'FRdate',
+      field: 'IROdate',
+      headerName: 'IROdate',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -298,7 +288,7 @@ const ReopenedIRO = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
+    IROServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
       .then((res) => {
         setClosedFRs(res.data);
       })
@@ -307,11 +297,11 @@ const ReopenedIRO = () => {
       });
   }, [dateRange]);
   return (
-    <CommonPageLayout title="Reopened FR" momentFilter={{
+    <CommonPageLayout title="Reopened IRO" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);
-        setClosedFRs((fr) => (fr ? fr.filter((fr) => fr.FRdate.isSameOrAfter(newDateRange.startDate) && fr.FRdate.isSameOrBefore(newDateRange.endDate)) : []));
+        setClosedFRs((fr) => (fr ? fr.filter((fr) => fr?.iroClosedOn?.isSameOrAfter(newDateRange.startDate) && fr.iroClosedOn?.isSameOrBefore(newDateRange.endDate)) : []));
       },
       rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
       initialRange: 'months',
@@ -331,7 +321,7 @@ const ReopenedIRO = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid item xs={6} sx={{ px: 2 }}>
+          {/* <Grid item xs={6} sx={{ px: 2 }}>
             <PermissionChecks
               permissions={['MANAGE_FR']}
               granted={(
@@ -356,7 +346,7 @@ const ReopenedIRO = () => {
                       ])) :
                       [];
                     const headers=[
-                      'FR No',
+                      'IRO No',
                       'Date',
                       'Division',
                       'Sub Division',
@@ -380,7 +370,7 @@ const ReopenedIRO = () => {
                               Export
                 </Button>
               )}/>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} >
             <Box
               sx={{

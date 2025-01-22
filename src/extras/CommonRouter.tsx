@@ -18,6 +18,7 @@ import PermissionChecks from '../modules/User/components/PermissionChecks';
 import UserServices from '../modules/User/extras/UserServices';
 import usersPageRoutes from '../modules/User/extras/UsersRoutes';
 import UnauthorizedPage from '../modules/User/UnauthorizedPage';
+import customFrIroRoute from '../modules/CustomReport/extras/CustomFR-IRO-Routes';
 
 export const allModuleRoutes = [
   homePageRoutes,
@@ -33,6 +34,7 @@ export const allModuleRoutes = [
   applicationRoutes,
   notificationPageRoutes,
   settingsRoutes,
+  customFrIroRoute,
 
 ];
 const Router = () => {
@@ -52,7 +54,6 @@ const Router = () => {
     ([] as RouteObject[]).concat(
       ...allModuleRoutes.map((moduleRoute) =>
         moduleRoute.pages.map((page) => ({
-          
           path: moduleRoute.base + page.path,
           element: !page.private ?
             page.element :
