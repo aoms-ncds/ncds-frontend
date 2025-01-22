@@ -271,6 +271,45 @@ const ClosedIRO = () => {
                 },
               ] :
               []),
+            {
+              id: 'View',
+              text: 'Reopen',
+              component: Link,
+              onClick: async () => {
+                try {
+                  // Fetch the first API data
+                  const res1 = await FRServices.getById(props.row._id as string);
+                  const convertedData: CreatableFR = {
+                    ...res1.data,
+                    // requestAmount: res1.data?.requestedAmount, // Fix key access if needed
+                  };
+
+                  // Update the state
+                  // setRequisition(convertedData);
+                  console.log({ convertedData });
+
+                  // Wait for the state update to complete
+                  await new Promise((resolve) => setTimeout(resolve, 0));
+
+                  // Perform the second API call using the updated requisition
+                  const res2 = await FRServices.manageFRRequests(props.row._id, 'reopened', convertedData);
+                  console.log(res2);
+
+                  // Show success message
+                  enqueueSnackbar({
+                    message: 'FR Reopened',
+                    variant: 'success',
+                  });
+                } catch (error) {
+                  // Handle errors
+                  enqueueSnackbar({
+                    variant: 'error',
+                    // message: err.message,
+                  });
+                }
+              },
+              icon: PreviewIcon,
+            },
             // {
             //   id: 'View',
             //   text: 'View Details ',
