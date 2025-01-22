@@ -713,7 +713,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
-            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) ?
+            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) || IROLifeCycleStates.REVERTED_TO_DIVISION ==params.row.status ?
               [
                 {
                   id: 'edit',

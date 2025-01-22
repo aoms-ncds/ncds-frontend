@@ -304,6 +304,8 @@ const EditIRO = () => {
     updatedAt: moment(),
     signature: {},
     specialsanction: '',
+    // attachment?: [],
+
   });
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   const [newParticular, setNewParticular] = useState<Particular>({
@@ -356,7 +358,7 @@ const EditIRO = () => {
     });
   }, []);
   const [open, setOpen] = useState(false);
-  console.log(newParticular, 'dq');
+  console.log(IRO, 'dq');
   // console.log(props, 'wdqw');
 
   let total = 0;
@@ -507,9 +509,10 @@ const EditIRO = () => {
                           });
                         }
                       }}
+                      disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO.status}
                       renderInput={(params) => <TextField {...params} label="Requisition For" />}
                       fullWidth
-                      // disabled
+
                     />
                   </Grid>
                   {IRO?.purpose === 'Worker' ? (
@@ -633,7 +636,8 @@ const EditIRO = () => {
                                   <IconButton
                                     onClick={() => {
                                       setViewFileUploader(true);
-                                      setAttachments(item.attachment);
+                                      setAttachments(newParticular.attachment);
+                                      setNewParticular(item);
                                     }}
                                   >
                                     <AttachmentIcon />
@@ -1089,6 +1093,13 @@ const EditIRO = () => {
               ...particularDetails,
               attachment: [...particularDetails.attachment, res.data],
             }));
+            // setIRO((prevDetails: any) => ({
+            //   ...prevDetails, // Preserve the outer state structure
+            //   particulars: {
+            //     ...prevDetails.particulars, // Preserve existing properties inside `particulars`
+            //     attachment: res.data, // Update only the `attachment` field within `particulars`
+            //   },
+            // }));
             return res;
           });
           return resp;
@@ -1147,7 +1158,7 @@ const EditIRO = () => {
                         setSelectedMainCategory(selectedMainCategory);
                       }
                     }}
-                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) }
+                    disabled={IROLifeCycleStates.REVERTED_TO_DIVISION == IRO.status && !hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) }
                     renderInput={(params) => <TextField {...params} label="Choose Main Category" />}
                     fullWidth
                   />
@@ -1430,7 +1441,7 @@ const EditIRO = () => {
                     }));
                   }
                 }}
-                //  disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO?.status}
                 renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
                 fullWidth
               />
