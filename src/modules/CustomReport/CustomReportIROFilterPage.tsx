@@ -491,7 +491,7 @@ const IROReportFilter = () => {
                   ) : ''}
                   {filters.division?.BeneficiaryBank20?.bankName ? (
                     <MenuItem value={`Beneficiary Bank 20-${filters.division?.BeneficiaryBank20?.beneficiary}`}>
-                      {filter.division?.BeneficiaryBank20?.beneficiary}
+                      {filters.division?.BeneficiaryBank20?.beneficiary}
                     </MenuItem>
                   ) : ''}
 

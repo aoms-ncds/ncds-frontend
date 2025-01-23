@@ -66,7 +66,7 @@ declare global {
     disable?: boolean;
     value: T;
     onChange: (newState: T) => void;
-    action: 'view' | 'add' | 'edit'| 'custom'|'customIRO';
+    action: 'view' | 'add' | 'edit'| 'custom'|'customIRO'| 'reopen';
     onSubmit?: (data: T) => Promise<void>;
     options?: Options;
   }

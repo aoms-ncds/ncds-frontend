@@ -483,7 +483,7 @@ const EditIRO = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled />
+                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED !==IRO.status} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
@@ -578,8 +578,7 @@ const EditIRO = () => {
                         onChange={() => { }}
                         renderInput={(params) => <TextField {...params} label="Choose Division" />}
                         fullWidth
-                        disabled
-                      />
+                        disabled={IROLifeCycleStates.REOPENED !==IRO.status}/>
                     </Grid>
                   ) : null}
                   {IRO?.purpose === 'Coordinator' ? (
@@ -590,7 +589,7 @@ const EditIRO = () => {
                         getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                         renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
                         fullWidth
-                        disabled
+                        disabled={IROLifeCycleStates.REOPENED !==IRO.status}
                       />
                     </Grid>
                   ) : null}

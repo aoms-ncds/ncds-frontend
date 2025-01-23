@@ -300,6 +300,7 @@ const ClosedIRO = () => {
                     message: 'IRO Reopened',
                     variant: 'success',
                   });
+                  window.location.reload();
                 } catch (error) {
                   // Handle errors
                   enqueueSnackbar({

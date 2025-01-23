@@ -4,7 +4,6 @@ import ClosedIRO from '../ClosedIRO';
 import ManageIRO from '../ManageIRO';
 import ViewIRO from '../ViewIRO';
 import ReconciliationIRO from '../ReconciliationIRO';
-import AccountApprove from '../AccountApprovel';
 import OfficeMangerApprove from '../OfficeManagerApprovel';
 import EditIRO from '../EditIRO';
 import ReleaseFmRequest from '../ReleaseFmRequest';
@@ -13,6 +12,8 @@ import ReleaseAmountAudit from '../ReleaseAmountAudit';
 import CustomIRO from '../CustomIRO';
 import FRFormPage from '../../FR/FRFormPage';
 import ReopenedIRO from '../ReopenedIRO';
+import EditIROForRevert from '../EditIROForRevert';
+import AccountApprove from '../AccountApprovel';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -133,6 +134,13 @@ const iroPageRoutes: ModuleRoute = {
       element: <EditIRO />,
       private: true,
       requiredAccessRights: ['MANAGE_IRO'],
+    },
+    {
+      title: 'Edit IRO REVERT',
+      path: '/:iroID/EditIROForRevert',
+      element: <EditIROForRevert />,
+      private: true,
+      requiredAccessRights: ['READ_IRO'],
     },
     // {
     //   title: 'Release Amount',

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import ESignatureService from '../Settings/extras/ESignatureService';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import FRServices from './extras/FRServices';
@@ -128,16 +128,33 @@ const ReopenedFr = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            {
-              id: 'edit',
-              text: 'Edit',
-              // component: Link,
-              // to: `/fr/${props.row._id}/edit`,
-              icon: EditIcon,
-              onClick: () => {
-                window.open(`/fr/${props.row._id}/edit`, '_blank');
+            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['MANAGE_FR'])?[
+
+              {
+                id: 'edit',
+                text: 'Edit',
+                // component: Link,
+                // to: `/fr/${props.row._id}/edit`,
+                icon: EditIcon,
+                onClick: () => {
+                  window.open(`/fr/${props.row._id}/edit`, '_blank');
+                },
               },
-            },
+            ]:[]),
+
+            ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['MANAGE_FR'])?[
+
+              {
+                id: 'edit',
+                text: 'Edit for coordinator',
+                // component: Link,
+                // to: `/fr/${props.row._id}/edit`,
+                icon: EditIcon,
+                onClick: () => {
+                  window.open(`/fr/${props.row._id}/editReopen`, '_blank');
+                },
+              },
+            ]:[]),
             {
               id: 'View',
               text: 'Close Fr ',
@@ -164,9 +181,10 @@ const ReopenedFr = () => {
 
                   // Show success message
                   enqueueSnackbar({
-                    message: 'FR Reopened',
+                    message: 'FR Closed',
                     variant: 'success',
                   });
+                  window.location.reload();
                 } catch (error) {
                   // Handle errors
                   enqueueSnackbar({

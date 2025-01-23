@@ -159,6 +159,7 @@ const ClosedFR = () => {
                     message: 'FR Reopened',
                     variant: 'success',
                   });
+                  window.location.reload();
                 } catch (error) {
                   // Handle errors
                   enqueueSnackbar({

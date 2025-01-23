@@ -727,6 +727,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
+            ...(IROLifeCycleStates.REVERTED_TO_DIVISION == params.row.status ?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit for coordinator',
+                  component: Link,
+                  // to: `/iro/${params.row._id}/edit`,
+                  onClick: () => {
+                    window.open(`/iro/${params.row._id}/EditIROForRevert`, '_blank');
+                  },
+                  icon: EditIcon,
+                },
+              ] :
+              []),
             ...(hasPermissions(['ADMIN_ACCESS']) && props.action =='manage' ?
               [
                 {
