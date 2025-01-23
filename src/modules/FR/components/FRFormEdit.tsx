@@ -1041,7 +1041,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
               <Grid container spacing={3}>
                 <Grid item xs={12} >
                   <Autocomplete
-                      disabled  
+                    disabled
                     value={selectedMainCategory ?? null}
                     options={mainCategories ?? []}
                     getOptionLabel={(mainCategory) => mainCategory.name}

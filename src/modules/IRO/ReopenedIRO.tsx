@@ -307,8 +307,8 @@ const ReopenedIRO = () => {
     //     <p> {props.row.FRdate.format('DD/MM/YYYY')}</p>
     //   ) },
     {
-      field: 'IROdate',
-      headerName: 'IROdate',
+      field: 'IRODate',
+      headerName: 'IRODate',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,

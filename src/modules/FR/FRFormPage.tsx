@@ -118,7 +118,11 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
-      navigate('/fr/');
+      if (requisition.status ==FRLifeCycleStates.REOPENED) {
+        navigate('/fr/reopened');
+      } else {
+        navigate('/fr/manage');
+      }
 
       enqueueSnackbar({
         message: 'Updating FR Request',

@@ -1,5 +1,5 @@
 
-import { Grid, TextField, Button, Box, Card } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -16,9 +16,11 @@ import FRServices from './extras/FRServices';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon, Edit as EditIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
+import IROTemplate from '../IRO/components/IROTemplate';
 
 const ReopenedFr = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
+  const [id, setID] = useState('');
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
@@ -36,6 +38,7 @@ const ReopenedFr = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
+  const [conform1, setConform1] = useState<boolean>(false);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -160,38 +163,8 @@ const ReopenedFr = () => {
               text: 'Close Fr ',
               component: Link,
               onClick: async () => {
-                try {
-                  // Fetch the first API data
-                  const res1 = await FRServices.getById(props.row._id as string);
-                  const convertedData: CreatableFR = {
-                    ...res1.data,
-                    requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
-                  };
-
-                  // Update the state
-                  setRequisition(convertedData);
-                  console.log({ convertedData });
-
-                  // Wait for the state update to complete
-                  await new Promise((resolve) => setTimeout(resolve, 0));
-
-                  // Perform the second API call using the updated requisition
-                  const res2 = await FRServices.manageFRRequests(props.row._id, 'close', convertedData);
-                  console.log(res2);
-
-                  // Show success message
-                  enqueueSnackbar({
-                    message: 'FR Closed',
-                    variant: 'success',
-                  });
-                  window.location.reload();
-                } catch (error) {
-                  // Handle errors
-                  enqueueSnackbar({
-                    variant: 'error',
-                    // message: err.message,
-                  });
-                }
+                setID(props.row._id);
+                setConform1(true);
               },
               icon: PreviewIcon,
             },
@@ -440,6 +413,67 @@ const ReopenedFr = () => {
         </Grid>
 
       </Card>
+      <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Warning</DialogTitle>
+        <DialogContent>
+          <Container>
+          Are you sure you want to close this FR ?</Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConform1(false);
+            }}
+            variant="text"
+          >
+            Cancel
+          </Button>
+          <>
+
+            <Button
+              variant="contained"
+              color="info"
+              onClick={async () => {
+                try {
+                  // Fetch the first API data
+                  const res1 = await FRServices.getById(id as string);
+                  const convertedData: CreatableFR = {
+                    ...res1.data,
+                    requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
+                  };
+
+                  // Update the state
+                  setRequisition(convertedData);
+                  console.log({ convertedData });
+
+                  // Wait for the state update to complete
+                  await new Promise((resolve) => setTimeout(resolve, 0));
+
+                  // Perform the second API call using the updated requisition
+                  const res2 = await FRServices.manageFRRequests(id, 'close', convertedData);
+                  console.log(res2);
+
+                  // Show success message
+                  enqueueSnackbar({
+                    message: 'FR Closed',
+                    variant: 'success',
+                  });
+                  window.location.reload();
+                } catch (error) {
+                  // Handle errors
+                  enqueueSnackbar({
+                    variant: 'error',
+                    // message: err.message,
+                  });
+                }
+              }}
+            >
+              {'Yes, Close'}
+            </Button>
+
+          </>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };

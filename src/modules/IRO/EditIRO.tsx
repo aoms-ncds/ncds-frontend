@@ -483,7 +483,17 @@ const EditIRO = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED !==IRO.status} />
+                    <DatePicker label="Date" value={IRO?.IRODate}
+                      format="DD/MM/YYYY"
+                      onChange={(_e) => {
+                        if (_e) {
+                          setIRO({
+                            ...IRO,
+                            IRODate: _e as any,
+                          });
+                        }
+                      }}
+                      slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED !==IRO.status} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
