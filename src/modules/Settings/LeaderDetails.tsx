@@ -162,7 +162,7 @@ const LeaderDetails = () => {
               LeaderDetailsService.create(newHeading).then((res) => {
                 setLeaderHeading((langs) => (langs === null ? [res.data] : [...langs, res.data]));
                 setNewLeader({
-                    name: '',
+                  name: '',
                 });
               });
             } else {
@@ -170,7 +170,7 @@ const LeaderDetails = () => {
                 setLeaderHeading((Label) => (Label === null ? null : Label?.map((Label) => (Label._id === newHeading._id ? res.data : Label))));
 
                 setNewLeader({
-                    name: '',
+                  name: '',
                 });
               });
             }
@@ -197,7 +197,7 @@ const LeaderDetails = () => {
               onClick={() => {
                 handleClose();
                 setNewLeader({
-                    name: '',
+                  name: '',
                 });
               }}
               variant="contained"
@@ -214,22 +214,22 @@ const LeaderDetails = () => {
       </Dialog>
 
       <Card>
-        {Label?.length !=5  && (
-        <Grid container spacing={2} >
-          <Grid item xs={12} sx={{ px: 2 }}>
-            <br />
-            <Button
-              variant="contained"
-              sx={{ float: 'right', marginBottom: 3 }}
-              startIcon={<AddIcon />}
-              onClick={() => {
-                setDialogAction('add');
-              }}
-            >
+        {Label?.length !=5 && (
+          <Grid container spacing={2} >
+            <Grid item xs={12} sx={{ px: 2 }}>
+              <br />
+              <Button
+                variant="contained"
+                sx={{ float: 'right', marginBottom: 3 }}
+                startIcon={<AddIcon />}
+                onClick={() => {
+                  setDialogAction('add');
+                }}
+              >
                             Add new
-            </Button>
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
         )}
 
         <DataGrid

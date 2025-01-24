@@ -309,6 +309,8 @@ export default {
       createdAt: moment(remark.createdAt),
       updatedAt: moment(remark.updatedAt),
     })),
+  editFrNo: (oldNo: string, newNo: string) =>
+    getStandardResponse<any>(axios.post('/iro/FrNoEdit', { oldNo, newNo }, { headers: { ...getAuthHeader() } })),
 
   officeManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/officeManagerApprove`, null, { headers: { ...getAuthHeader() } })),
   accountManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/accountManagerApprove`, null, { headers: { ...getAuthHeader() } })),

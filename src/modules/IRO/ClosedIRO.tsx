@@ -456,7 +456,7 @@ const ClosedIRO = () => {
             textAlign: 'center',
           }}
         >
-          {props.row.mainCategory}
+          {props.row.particulars[0]?.mainCategory}
         </p>
       ),
     },

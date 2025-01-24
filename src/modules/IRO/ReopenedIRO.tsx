@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -21,12 +21,15 @@ import FRServices from '../FR/extras/FRServices';
 import IROTemplate from './components/IROTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { useAuth } from '../../hooks/Authentication';
+import { set } from 'mongoose';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
+  const [dialogAction, setDialogAction] = useState<boolean>(false);
+  const [frNo, setFrNo] = useState<string>('');
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -90,6 +93,7 @@ const ReopenedIRO = () => {
           console.log(res);
         });
     console.log(selectedSignature);
+    setFrNo(FrData?.FRno ?? '');
   }, []);
   useEffect(() => {
     ESignatureService.getESignature()
@@ -296,7 +300,26 @@ const ReopenedIRO = () => {
                 }, 2000);
               },
             },
+            {
+              id: 'edit',
+              text: 'Edit FrNo',
+              component: Link,
+              // to: `/iro/${params.row._id}/edit`,
+              onClick: () => {
+                if (props?.row.FR) {
+                  FRServices.getById(props.row.FR).then((res) => {
+                    setFrData(res.data);
+                    setFrNo(res.data.FRno);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setDialogAction(true);
+                // window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+              },
+              icon: EditIcon,
+            },
           ]}
+
         />
       ),
     },
@@ -347,7 +370,7 @@ const ReopenedIRO = () => {
             textAlign: 'center',
           }}
         >
-          {props.row.mainCategory}
+          {props.row.particulars[0]?.mainCategory}
         </p>
       ),
     },
@@ -593,6 +616,56 @@ const ReopenedIRO = () => {
           </>
         </DialogActions>
       </Dialog>
+      <Dialog open={dialogAction} PaperProps={{ style: { width: '500px' } }}>
+        <form
+          onSubmit={(e) => {
+            IROServices.editFrNo(FrData?.FRno?? '', frNo).then((res) => {
+              enqueueSnackbar({
+                message: 'FrNo updated',
+                variant: 'success',
+              });
+            });
+            // setDialogAction(false);
+          }}
+        >
+          <DialogTitle>Change FRno</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="leaders"
+              label="Enter New FrNo"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={frNo}
+              onChange={(e) => setFrNo(e.target.value)}
+              required
+            />
+            <br />
+            <Typography sx={{ color: 'red' }}>
+            This action will replace the current FR No and cannot be undone.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setDialogAction(false);
+                setFrNo('');
+              }}
+              variant="contained"
+              sx={{ right: 20, marginBottom: 2 }}
+              color="error"
+            >
+                            Close
+            </Button>
+            <Button type="submit" variant="contained" sx={{ right: 20, marginBottom: 2 }} color="success">
+              Add
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
     </CommonPageLayout>
   );
 };

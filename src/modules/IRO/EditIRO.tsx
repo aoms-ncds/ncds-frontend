@@ -26,7 +26,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
-import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
@@ -49,6 +49,7 @@ import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import AddIcon from '@mui/icons-material/Add';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import { useAuth } from '../../hooks/Authentication';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -60,6 +61,10 @@ const EditIRO = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const { iroID } = useParams();
+  const [divisions, setDivisions] = useState<any | null>(null);
+  const [allSubDivisions, setAllSubDivisions] = useState<any | null>(null);
+  const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
+
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -327,6 +332,7 @@ const EditIRO = () => {
   const [sanctionedAsPer, setSanctionedAsPer] = useState<AsPer[]>([]);
   let asPer : any = [];
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
+  const [Allworkers, setAllWorkers] = useState<IWorker[] | Staff[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
 
   useEffect(() => {
@@ -334,6 +340,13 @@ const EditIRO = () => {
       WorkersServices.getWorkersByDivision()
         .then((res) => {
           setWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+      WorkersServices.getAll()
+        .then((res) => {
+          setAllWorkers(res.data);
         })
         .catch((res) => {
           console.log(res);
@@ -354,11 +367,32 @@ const EditIRO = () => {
 
       // setSanctionedAsPer(res.data);
     });
+    DivisionsServices.getDivisions().then((res) => {
+      //   setDivision(res.data ?? null);
+      setDivisions(res.data);
+    });
+    DivisionsServices.getSubDivisions().then((res) => {
+      //   setDivision(res.data ?? null);
+      setAllSubDivisions(res.data);
+    });
+    DivisionsServices.getcoordinators().then((res) => {
+      //   setDivision(res.data ?? null);
+      setAllCoortinators(res.data);
+    });
   }, []);
   const [open, setOpen] = useState(false);
   console.log(newParticular, 'dq');
   // console.log(props, 'wdqw');
-
+  const deleteParticular = (particularId: string | undefined, index: number) => {
+    // if (!particularId) {
+    // Delete by index if the particularId is not available
+    const updatedParticulars = IRO.particulars.filter((_item, i) => i !== index);
+    console.log(updatedParticulars, 'updatedParticulars');
+    IRO.particulars = updatedParticulars;
+    setNewParticular(updatedParticulars[0]);
+    return;
+    // }
+  };
   let total = 0;
   IRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
@@ -421,16 +455,16 @@ const EditIRO = () => {
     }
   }, [IRO.particulars]);
   useEffect(() => {
-    setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular.mainCategory));
+    setSelectedMainCategory(() => mainCategories?.find((item) => item.name == newParticular?.mainCategory));
   }, [newParticular]);
   useEffect(() => {
-    setSelectedSubCategory1(() => selectedMainCategory?.subcategory1.find((item) => item.name == newParticular.subCategory1) ?? null);
+    setSelectedSubCategory1(() => selectedMainCategory?.subcategory1.find((item) => item.name == newParticular?.subCategory1) ?? null);
   }, [selectedMainCategory]);
   useEffect(() => {
-    setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular.subCategory2) ?? null);
+    setSelectedSubCategory2(() => selectedSubCategory1?.subcategory2.find((item) => item.name == newParticular?.subCategory2) ?? null);
   }, [selectedSubCategory1]);
   useEffect(() => {
-    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular.subCategory3) ?? null);
+    setSelectedSubCategory3(() => selectedSubCategory2?.subcategory3.find((item) => item.name == newParticular?.subCategory3) ?? null);
   }, [selectedSubCategory2]);
 
   useEffect(() => {
@@ -528,7 +562,7 @@ const EditIRO = () => {
                         <Grid item xs={12}>
                           <Autocomplete<IWorker | Staff>
                             value={IRO.purposeWorker ?? null}
-                            options={(workers ?? [])}
+                            options={(Allworkers ?? [])}
                             getOptionLabel={(workers) => `${workers?.basicDetails.firstName?? ''} ${workers?.basicDetails?.middleName ?? ''} ${workers.basicDetails.lastName?? ''}`}
                             onChange={(_e, selectedWorker) => {
                               if (selectedWorker) {
@@ -560,7 +594,7 @@ const EditIRO = () => {
                   {IRO?.purpose === 'Subdivision' ? (
                     <><Grid item xs={12} md={6}>
                       <Autocomplete
-                        options={subDivisions ?? []}
+                        options={ allSubDivisions ?? []}
                         value={IRO.purposeSubdivision ? IRO.purposeSubdivision : undefined}
                         getOptionLabel={(subDiv) => subDiv.name}
                         onChange={(event, newVal) =>
@@ -583,10 +617,11 @@ const EditIRO = () => {
                     <Grid item xs={12} md={6}>
                       <Autocomplete
                         value={IRO?.division}
-                        options={[]}
+                        options={divisions?? []}
                         getOptionLabel={(division) => division.details.name}
-                        onChange={() => { }}
-                        renderInput={(params) => <TextField {...params} label="Choose Division" />}
+                        onChange={(event, newVal) =>
+                          setIRO({ ...IRO, division: newVal ?? undefined })
+                        } renderInput={(params) => <TextField {...params} label="Choose Division" />}
                         fullWidth
                         disabled={IROLifeCycleStates.REOPENED !==IRO.status}/>
                     </Grid>
@@ -595,7 +630,10 @@ const EditIRO = () => {
                     <Grid item xs={12} md={6}>
                       <Autocomplete
                         value={IRO?.purposeCoordinator}
-                        options={[]}
+                        options={allCoortinators ??[]}
+                        onChange={(event, newVal) =>
+                          setIRO({ ...IRO, purposeCoordinator: newVal ?? undefined })
+                        }
                         getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                         renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
                         fullWidth
@@ -630,6 +668,14 @@ const EditIRO = () => {
                             IRO?.particulars?.map((item, index) => (
                               <TableRow key={item._id} >
                                 <TableCell component="th" sx={{ display: 'flex' }}>
+                                  <PermissionChecks
+                                    permissions={['WRITE_IRO']}
+                                    granted={
+                                      <IconButton>
+                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                      </IconButton>
+                                    }
+                                  />
                                   {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
                                   // Content to render if the user has access
                                     <IconButton>
@@ -1050,7 +1096,7 @@ const EditIRO = () => {
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={newParticular.attachment}
+        getFiles={newParticular?.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
             // console.log(res.data._id);
@@ -1308,7 +1354,7 @@ const EditIRO = () => {
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    value={newParticular.month}
+                    value={newParticular?.month}
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
                     disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS'])&& !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
@@ -1328,7 +1374,7 @@ const EditIRO = () => {
                 <Grid item md={12}>
                   <TextField
                     label="Narration"
-                    value={newParticular.narration}
+                    value={newParticular?.narration}
                     multiline
                     maxRows={4}
                     onChange={(e) =>
@@ -1389,7 +1435,7 @@ const EditIRO = () => {
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
-                  value={newParticular.sanctionedAmount ?? total}
+                  value={newParticular?.sanctionedAmount ?? total}
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
@@ -1428,7 +1474,7 @@ const EditIRO = () => {
               </Grid>
               <br />
               <Autocomplete
-                value={newParticular.sanctionedAsPer as unknown as AsPer}
+                value={newParticular?.sanctionedAsPer as unknown as AsPer}
                 options={sanctionedAsPer ?? []}
                 getOptionLabel={(option:any) => option ?? ''}
                 onChange={(_e, selectedSanction) => {
