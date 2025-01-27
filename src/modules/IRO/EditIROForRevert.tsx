@@ -483,7 +483,7 @@ const EditIROForRevert = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED !==IRO.status} />
+                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED ==IRO.status} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
@@ -556,6 +556,7 @@ const EditIROForRevert = () => {
                         onChange={(event, newVal) =>
                           setIRO({ ...IRO, purposeSubdivision: newVal ?? undefined })
                         }
+                        disabled={IROLifeCycleStates.REOPENED ==IRO.status}
                         renderInput={(params) => <TextField {...params} label="Subdivision" />}
                       />
                     </Grid><Grid item xs={12} md={6}>
@@ -563,7 +564,7 @@ const EditIROForRevert = () => {
                         label="Division"
                         value={IRO.division?.details?.name}
                         fullWidth
-                        // disabled
+                        disabled={IROLifeCycleStates.REOPENED ==IRO.status}
                         InputLabelProps={{
                           shrink: true,
                         }} />
@@ -631,7 +632,7 @@ const EditIROForRevert = () => {
                                   </IconButton> */}
                                   <IconButton
                                     onClick={() => {
-                                      setViewFileUploader(true);
+                                      setShowFileUploader(true);
                                       setAttachments(item.attachment);
                                     }}
                                   >
@@ -1028,7 +1029,7 @@ const EditIROForRevert = () => {
       </Dialog>
       <FileUploader
         title="Attachments"
-        action="add"
+        action="view"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
@@ -1040,7 +1041,7 @@ const EditIROForRevert = () => {
         open={showFileUploader}
         onClose={() => setShowFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={newParticular.attachment}
+        getFiles={attachments}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
             // console.log(res.data._id);

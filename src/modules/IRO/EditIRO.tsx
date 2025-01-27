@@ -1327,22 +1327,23 @@ const EditIRO = () => {
                     }}
                   />
                 </Grid>
-                {hasPermissions(['ADMIN_ACCESS']) && (
-                  <Grid item md={12}>
-                    <FormControlLabel
-                      label="Multiply By Quantity"
-                      control={
-                        <Checkbox
-                          onChange={(e) =>
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
-                            }))
-                          }
-                        />
-                      }
-                    />
-                  </Grid>)}
+                {/* {hasPermissions(['ADMIN_ACCESS']) && ( */}
+                <Grid item md={12}>
+                  <FormControlLabel
+                    label="Multiply By Quantity"
+                    control={
+                      <Checkbox
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            requestedAmount: e.target.checked ? (particularDetails?.quantity ?? 0) * (newParticular?.unitPrice ?? 0) : particularDetails?.unitPrice ?? 0,
+                          }))
+                        }
+                      />
+                    }
+                  />
+                </Grid>
+                {/* // )} */}
                 <Grid item md={12}>
                   <TextField
                     label="Total Amount"
@@ -1453,7 +1454,7 @@ const EditIRO = () => {
                   // disabled={
                   //   IRO?.status === IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ||
                   //   IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
-                  disabled={!hasPermissions(['ADMIN_ACCESS']) &&!hasPermissions(['OFFICE_MNGR_ACCESS']) }
+                  disabled={!hasPermissions(['ADMIN_ACCESS']) &&!hasPermissions(['OFFICE_MNGR_ACCESS']) && IROLifeCycleStates.REOPENED !== IRO.status}
 
                   onChange={(e) => {
                     if (totalRequestedAmount) {
