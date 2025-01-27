@@ -348,7 +348,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete<IWorker | Staff>
                       value={props.value.purposeWorker ?? null}
-                      options={(props.action =='add'? workers : Allworkers) ??[]}
+                      options={( workers) ??[]}
                       getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName ?? ''} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -415,7 +415,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    options={(props.action =='add'? subDivisions : AllSubDivisions) ??[]}
+                    options={( subDivisions) ??[]}
                     value={props.value.purposeSubdivision ?? null}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) =>
