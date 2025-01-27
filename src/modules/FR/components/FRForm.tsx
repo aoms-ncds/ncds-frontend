@@ -425,7 +425,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               ) : null}
-              {props.value?.purpose === 'Division' ? (
+              {/* {props.value?.purpose === 'Division' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.division ?? null}
@@ -440,8 +440,8 @@ const FRForm = (props: FormComponentProps<any>) => {
                     fullWidth
                   />
                 </Grid>
-              ) : null}
-              {props.value?.purpose === 'Coordinator' ? (
+              ) : null} */}
+              {/* {props.value?.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props?.value.purposeCoordinator}
@@ -457,7 +457,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                     fullWidth
                   />
                 </Grid>
-              ) : null}
+              ) : null} */}
               {/* {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocompleteview') {
