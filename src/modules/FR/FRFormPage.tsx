@@ -120,6 +120,9 @@ const FRFormPage = (props: FRFormPageProps) => {
     try {
       if (requisition.status ==FRLifeCycleStates.REOPENED) {
         navigate('/fr/reopened');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         navigate('/fr/manage');
       }

@@ -751,7 +751,7 @@ const EditIRO = () => {
                         step: 0.01, // Allows up to two decimal places
                         onWheel: handleWheel,
                       }}
-                      disabled
+                      disabled={IROLifeCycleStates.REOPENED !== IRO.status}
                     // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     />
                     {/* </Tooltip> */}
@@ -952,7 +952,7 @@ const EditIRO = () => {
                       <Select
                         labelId="sourceOfAccount"
                         label="sourceOfAccount"
-                        disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
+                        disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) &&IROLifeCycleStates.REOPENED !== IRO.status}
                         value={IRO?.sourceOfAccount ?? null}
                         onChange={(e) =>
                           setIRO({
@@ -1319,7 +1319,7 @@ const EditIRO = () => {
                         requestedAmount: Number(e.target.value),
                       }))
                     }
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
+                    disabled={!hasPermissions(['ADMIN_ACCESS']) &&IROLifeCycleStates.REOPENED !== IRO.status}
                     required
                     fullWidth
                     inputProps={{
