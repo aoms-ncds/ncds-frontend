@@ -22,11 +22,13 @@ import IROTemplate from './components/IROTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { useAuth } from '../../hooks/Authentication';
 import { set } from 'mongoose';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
   const [iroData, setIroData] = useState<IROrder | null>(null);
   const [dialogAction, setDialogAction] = useState<boolean>(false);
   const [frNo, setFrNo] = useState<string>('');
@@ -41,7 +43,7 @@ const ReopenedIRO = () => {
     setSearchText(event.target.value);
   };
   const user = useAuth();
-  console.log(user, 'user21');
+  console.log(isCoordinator, 'user21');
 
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [selectedSignature, setSignature] = useState<Esignature>({
@@ -100,6 +102,13 @@ const ReopenedIRO = () => {
       .then((res) => {
         console.log({ res });
         setSignaturePresident(res.data as EsignaturePresident);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+    DivisionsServices.isCoordinator()
+      .then((res) => {
+        setisCoordinator(res.data);
       })
       .catch((res) => {
         console.log(res);
@@ -217,34 +226,39 @@ const ReopenedIRO = () => {
               },
 
             },
-            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['OFFICE_MNGR_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
-              [
+            ...(!isCoordinator|| hasPermissions(['ADMIN_ACCESS']) ?[
 
-                {
-                  id: 'edit',
-                  text: 'Edit',
-                  component: Link,
-                  // to: `/iro/${params.row._id}/edit`,
-                  onClick: () => {
-                    window.open(`/iro/${props.row._id}/edit`, '_blank');
+              ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['OFFICE_MNGR_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
+                [
+
+                  {
+                    id: 'edit',
+                    text: 'Edit',
+                    component: Link,
+                    // to: `/iro/${params.row._id}/edit`,
+                    onClick: () => {
+                      window.open(`/iro/${props.row._id}/edit`, '_blank');
+                    },
+                    icon: EditIcon,
                   },
-                  icon: EditIcon,
-                },
-              ]:[]),
+                ]:[]),
+            ]:[]),
             ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['OFFICE_MNGR_ACCESS']) || !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||!hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||!hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
               [
+                ...(isCoordinator ?[
 
-
-                {
-                  id: 'edit',
-                  text: 'Edit for coordinator',
-                  component: Link,
-                  // to: `/iro/${params.row._id}/edit`,
-                  onClick: () => {
-                    window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+                  {
+                    id: 'edit',
+                    text: 'Edit for coordinator',
+                    component: Link,
+                    // to: `/iro/${params.row._id}/edit`,
+                    onClick: () => {
+                      window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+                    },
+                    icon: EditIcon,
                   },
-                  icon: EditIcon,
-                },
+                ]:[]),
+
               ]:[]),
 
             // {
@@ -280,44 +294,47 @@ const ReopenedIRO = () => {
             //   },
             //   icon: PreviewIcon,
             // },
-            {
-              id: 'Close IRO',
-              text: 'Close IRO',
-              icon: PreviewIcon,
-              onClick: () => {
-                setIroData(props.row);
-                setConform1(true);
-                if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
-                    setFrData(res.data);
-                    console.log(res.data, 'fr');
-                  });
-                }
-                setPrintIroLoading(true);
-                setTimeout(() => {
-                  setPrintIroLoading(false);
-                  // window.location.reload();
-                }, 2000);
+            ...(!isCoordinator ?[
+
+              {
+                id: 'Close IRO',
+                text: 'Close IRO',
+                icon: PreviewIcon,
+                onClick: () => {
+                  setIroData(props.row);
+                  setConform1(true);
+                  if (props?.row.FR) {
+                    FRServices.getById(props.row.FR).then((res) => {
+                      setFrData(res.data);
+                      console.log(res.data, 'fr');
+                    });
+                  }
+                  setPrintIroLoading(true);
+                  setTimeout(() => {
+                    setPrintIroLoading(false);
+                    // window.location.reload();
+                  }, 2000);
+                },
               },
-            },
-            {
-              id: 'edit',
-              text: 'Edit FrNo',
-              component: Link,
-              // to: `/iro/${params.row._id}/edit`,
-              onClick: () => {
-                if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
-                    setFrData(res.data);
-                    setFrNo(res.data.FRno);
-                    console.log(res.data, 'fr');
-                  });
-                }
-                setDialogAction(true);
-                // window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+              {
+                id: 'edit',
+                text: 'Edit FrNo',
+                component: Link,
+                // to: `/iro/${params.row._id}/edit`,
+                onClick: () => {
+                  if (props?.row.FR) {
+                    FRServices.getById(props.row.FR).then((res) => {
+                      setFrData(res.data);
+                      setFrNo(res.data.FRno);
+                      console.log(res.data, 'fr');
+                    });
+                  }
+                  setDialogAction(true);
+                  // window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+                },
+                icon: EditIcon,
               },
-              icon: EditIcon,
-            },
+            ]:[]),
           ]}
 
         />

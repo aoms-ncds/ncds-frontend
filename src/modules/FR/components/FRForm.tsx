@@ -42,13 +42,17 @@ import { useAuth } from '../../../hooks/Authentication';
 import MessageItem from '../../../components/MessageItem';
 import IRO from '../../IRO';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
+  const [Allworkers, setAllWorkers] = useState<IWorker[] | Staff[]>();
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
+  const [AllSubDivisions, setAllSubDivisions] = useState<SubDivision[]>();
+  const [AllDivisions, setAllDivisions] = useState<Division[]>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
@@ -67,6 +71,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     attachment: [],
   });
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+  const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
@@ -90,6 +95,10 @@ const FRForm = (props: FormComponentProps<any>) => {
     PaymentMethodService.getAll().then((res) => {
       setPaymentMethod(res.data);
     });
+    DivisionsServices.getcoordinators().then((res) => {
+      //   setDivision(res.data ?? null);
+      setAllCoortinators(res.data);
+    });
   }, []);
   useEffect(() => {
     console.log({ submit });
@@ -105,10 +114,31 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
+      WorkersServices.getAll()
+        .then((res) => {
+          setAllWorkers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     } else if (props.value.purpose === 'Subdivision') {
       WorkersServices.getSubDivisionsByDivisionId()
         .then((res) => {
           setSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+      DivisionsServices.getSubDivisions()
+        .then((res) => {
+          setAllSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+      DivisionsServices.getDivisions()
+        .then((res) => {
+          setAllDivisions(res.data);
         })
         .catch((res) => {
           console.log(res);
@@ -318,7 +348,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete<IWorker | Staff>
                       value={props.value.purposeWorker ?? null}
-                      options={(workers ?? [])}
+                      options={(props.action =='add'? workers : Allworkers) ??[]}
                       getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName ?? ''} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -385,7 +415,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    options={subDivisions ?? []}
+                    options={(props.action =='add'? subDivisions : AllSubDivisions) ??[]}
                     value={props.value.purposeSubdivision ?? null}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) =>
@@ -395,7 +425,39 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               ) : null}
-
+              {props.value?.purpose === 'Division' ? (
+                <Grid item xs={12} md={6}>
+                  <Autocomplete
+                    value={props.value.division ?? null}
+                    options={AllDivisions?? []}
+                    getOptionLabel={(division) => division.details?.name}
+                    onChange={(_e, purposeDivision) => {
+                      props.onChange({
+                        ...props.value,
+                        purposeDivision: purposeDivision,
+                      });
+                    }}renderInput={(params) => <TextField {...params} label="Choose Division" />}
+                    fullWidth
+                  />
+                </Grid>
+              ) : null}
+              {props.value?.purpose === 'Coordinator' ? (
+                <Grid item xs={12} md={6}>
+                  <Autocomplete
+                    value={props?.value.purposeCoordinator}
+                    options={allCoortinators ??[]}
+                    onChange={(_e, purposeCoordinator) => {
+                      props.onChange({
+                        ...props.value,
+                        purposeCoordinator: purposeCoordinator,
+                      });
+                    }}
+                    getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
+                    renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
+                    fullWidth
+                  />
+                </Grid>
+              ) : null}
               {/* {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocompleteview') {

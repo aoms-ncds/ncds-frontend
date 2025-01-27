@@ -17,6 +17,7 @@ import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon, E
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import IROTemplate from '../IRO/components/IROTemplate';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ReopenedFr = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -38,6 +39,8 @@ const ReopenedFr = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
+
   const [conform1, setConform1] = useState<boolean>(false);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
@@ -65,6 +68,13 @@ const ReopenedFr = () => {
       .catch((res) => {
         console.log(res);
       });
+    DivisionsServices.isCoordinator()
+            .then((res) => {
+              setisCoordinator(res.data);
+            })
+            .catch((res) => {
+              console.log(res);
+            });
   }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
     if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
@@ -158,16 +168,19 @@ const ReopenedFr = () => {
                 },
               },
             ]:[]),
-            {
-              id: 'View',
-              text: 'Close Fr ',
-              component: Link,
-              onClick: async () => {
-                setID(props.row._id);
-                setConform1(true);
-              },
-              icon: PreviewIcon,
-            },
+            ...(!isCoordinator ?
+              [
+                {
+                  id: 'View',
+                  text: 'Close Fr ',
+                  component: Link,
+                  onClick: async () => {
+                    setID(props.row._id);
+                    setConform1(true);
+                  },
+                  icon: PreviewIcon,
+                },
+              ]:[]),
           ]}
         />
       ),
