@@ -309,9 +309,12 @@ export default {
       createdAt: moment(remark.createdAt),
       updatedAt: moment(remark.updatedAt),
     })),
+  editFrNo: (oldNo: string, newNo: string) =>
+    getStandardResponse<any>(axios.post('/iro/FrNoEdit', { oldNo, newNo }, { headers: { ...getAuthHeader() } })),
 
   officeManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/officeManagerApprove`, null, { headers: { ...getAuthHeader() } })),
   accountManagerApprove: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/accountManagerApprove`, null, { headers: { ...getAuthHeader() } })),
+  reopen: (IroID: string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/reopened`, null, { headers: { ...getAuthHeader() } })),
   reject: (IroID: string, reason:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/rejected`, { reason }, { headers: { ...getAuthHeader() } })),
   revert: (IroID: string, reason:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/revert`, { reason }, { headers: { ...getAuthHeader() } })),
   revertToDivision: (IroID: string, reason?:string) => getStandardResponse<IROrder>(axios.patch(`/iro/${IroID}/revert_to_division`, { reason }, { headers: { ...getAuthHeader() } })),

@@ -10,8 +10,9 @@ import moment from 'moment';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import IROServices from '../IRO/extras/IROServices';
+import FRFormEdit from './components/FRFormEdit';
 interface FRFormPageProps {
-  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO';
+  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen';
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const navigate = useNavigate();
@@ -35,8 +36,10 @@ const FRFormPage = (props: FRFormPageProps) => {
         }
       }
     }
-    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom' ) {
+    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom'||props.action === 'reopen' ) {
       if (props.action as any === 'custom') {
+        console.log('A1');
+
         FRServices.getByIdCustom(frID as string)
         .then((res) => {
           const convertedData: CreatableFR = {
@@ -54,6 +57,8 @@ const FRFormPage = (props: FRFormPageProps) => {
           });
         });
       } else {
+        console.log('A2');
+
         FRServices.getById(frID as string)
           .then((res) => {
             const convertedData: CreatableFR = {
@@ -62,7 +67,7 @@ const FRFormPage = (props: FRFormPageProps) => {
             };
             setRequisition(convertedData);
             setFRLoaded(true);
-            console.log({ convertedData });
+            console.log({ res });
           })
           .catch((error) => {
             enqueueSnackbar({
@@ -113,7 +118,11 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
-      navigate('/fr/');
+      if (requisition.status ==FRLifeCycleStates.REOPENED) {
+        navigate('/fr/reopened');
+      } else {
+        navigate('/fr/manage');
+      }
 
       enqueueSnackbar({
         message: 'Updating FR Request',
@@ -208,6 +217,17 @@ const FRFormPage = (props: FRFormPageProps) => {
                   action={props.action}
                   onSubmit={editFR} // Pass the addFR function to the onSubmit prop
                 />
+                // <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={editFR} />
+
+              ): props.action === 'reopen' ? (
+                <FRFormEdit
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+                />
+                // <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={editFR} />
+
               ) : props.action === 'custom' || props.action === 'customIRO' ? (
                 <FRForm
                   value={requisition}

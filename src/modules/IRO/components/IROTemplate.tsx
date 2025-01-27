@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
 });
-const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?: any; officeMngrSign?: any; president: EsignaturePresident }) => {
+const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?: any; officeMngrSign?: any; president?: EsignaturePresident }) => {
   let totalAmount = 0;
   let totalReqAmount = 0;
   let NewTot: any = 0;
@@ -135,7 +135,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
     },
   });
   // console.log(props.rowData.division.details.coordinator, 'coordinatorImage');
-  const totalSacntion = props.fr?.particulars.forEach((e:any) => {
+  const totalSacntion = props.fr?.particulars?.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
   console.log(props, 'total');
@@ -252,7 +252,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
@@ -374,7 +374,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   Sanctioned {'\n'} Amt
                 </Text>
               </View>
-              {props.rowData.particulars && props.rowData.particulars.map((item: Particular, index: number) => {
+              {props.rowData?.particulars && props.rowData?.particulars?.map((item: Particular, index: number) => {
                 totalAmount += item.requestedAmount ?? 0;
                 // totalAmount2 += props.rowData.sanctionedAmount ?? 0;
 
@@ -440,7 +440,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   </PDFCell> */}
                 </PDFTableRow>);
               })}
-              <PDFTableRow key={props.rowData.particulars.length} style={{ borderBottomColor: 'initial' }}>
+              <PDFTableRow key={props.rowData?.particulars?.length} style={{ borderBottomColor: 'initial' }}>
                 <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'85%'}>
                   Grand Total
                 </PDFCell>
@@ -462,7 +462,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
-              <PDFTableRow key={props.rowData.particulars.length} >
+              <PDFTableRow key={props.rowData?.particulars?.length} >
                 <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'30%'}>
                   Sanctioned Amount in Words:
                 </PDFCell>
@@ -525,7 +525,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.president?.type ?? props.president.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props.president.presidentSignature?.base64} `} />
+                      src={`data:${props.rowData.president?.type ?? props?.president?.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props?.president?.presidentSignature?.base64} `} />
                   </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
@@ -536,7 +536,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {(props.president as any).presidentName?? props.rowData.names?.president}
+                      {(props?.president as any).presidentName?? props.rowData.names?.president}
 
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
@@ -572,7 +572,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
+                      src={`data:${props.rowData?.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
                     />
                   </View>
                 ) : (

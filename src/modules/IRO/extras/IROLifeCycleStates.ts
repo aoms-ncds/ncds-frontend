@@ -15,6 +15,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
   public static readonly IRO_REJECTED = 217;
   public static readonly IRO_IN_PROCESS = 218;
   public static readonly REVERTED_TO_DIVISION = 219;
+  public static readonly REOPENED = 220;
 
 
   public static readonly allTransactionStatus = ({
@@ -37,6 +38,7 @@ export default class IROLifeCycleStates extends FRLifeCycleStates {
     IRO_REJECTED: IROLifeCycleStates.IRO_REJECTED,
     IRO_IN_PROCESS: IROLifeCycleStates.IRO_IN_PROCESS,
     REVERTED_TO_DIVISION: IROLifeCycleStates.REVERTED_TO_DIVISION,
+    REOPENED: IROLifeCycleStates.REOPENED,
 
   });
 

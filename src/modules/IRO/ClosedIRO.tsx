@@ -271,6 +271,46 @@ const ClosedIRO = () => {
                 },
               ] :
               []),
+            {
+              id: 'View',
+              text: 'Reopen',
+              component: Link,
+              onClick: async () => {
+                try {
+                  // Fetch the first API data
+                  const res1 = await IROServices.getById(props.row._id as string);
+                  const convertedData: IROrder = {
+                    ...res1.data,
+                    // requestAmount: res1.data?.requestedAmount, // Fix key access if needed
+                  };
+
+                  // Update the state
+                  // setRequisition(convertedData);
+                  console.log({ convertedData });
+
+                  // Wait for the state update to complete
+                  await new Promise((resolve) => setTimeout(resolve, 0));
+
+                  // Perform the second API call using the updated requisition
+                  const res2 = await IROServices.reopen(props.row._id);
+                  console.log(res2);
+
+                  // Show success message
+                  enqueueSnackbar({
+                    message: 'IRO Reopened',
+                    variant: 'success',
+                  });
+                  window.location.reload();
+                } catch (error) {
+                  // Handle errors
+                  enqueueSnackbar({
+                    variant: 'error',
+                    // message: err.message,
+                  });
+                }
+              },
+              icon: PreviewIcon,
+            },
             // {
             //   id: 'View',
             //   text: 'View Details ',
@@ -416,7 +456,7 @@ const ClosedIRO = () => {
             textAlign: 'center',
           }}
         >
-          {props.row.mainCategory}
+          {props.row.particulars[0]?.mainCategory}
         </p>
       ),
     },
@@ -467,6 +507,7 @@ const ClosedIRO = () => {
         return particularAmount;
       },
     },
+
     // {
     //   field: 'updatedAt',
     //   align: 'center',
@@ -482,6 +523,15 @@ const ClosedIRO = () => {
       headerName: 'Amount Release Date',
       width: 200,
       valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
+      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'IRO Close Date',
+      headerName: 'IRO Closed Date',
+      width: 200,
+      valueGetter: (params) => params.row.iroClosedOn?.format('DD/MM/YYYY') ?? 'N/A',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',

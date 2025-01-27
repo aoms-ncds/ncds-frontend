@@ -536,7 +536,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 250,
     },
     {
-      field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
+      field: 'appledDate', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Applied Date</b>),
       renderCell: (params) => (
         <p style={{
@@ -547,8 +547,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: 3,
         }}>
-          { moment(params.value?.createdAt).format('DD/MM/YYYY hh:mm A')}
-        </p>),
+          {moment(params.value?.createdAt).format('DD/MM/YYYY hh:mm A')}</p>),
       width: 250,
     },
     {

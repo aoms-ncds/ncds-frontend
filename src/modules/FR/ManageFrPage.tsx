@@ -546,6 +546,9 @@ const ManageFrPage = () => {
         case 'IRO_REJECTED':
           statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
           break;
+        case 'REOPEND':
+          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+          break;
           // Add more cases for other status names you want to change
         default:
           statusName = statusName.replaceAll('_', ' ');

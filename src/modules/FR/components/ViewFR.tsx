@@ -477,7 +477,7 @@ return (
                 disabled
               />
             </Grid>
-            {props.action === 'view' && props.value.status && (props.value.status >= FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status == FRLifeCycleStates.FR_CLOSED) ? (
+            {props.action === 'view'? (
               <>
                 <Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
