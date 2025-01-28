@@ -694,7 +694,7 @@ const EditIRO = () => {
                                   </IconButton>
                                   <IconButton
                                     onClick={() => {
-                                      setViewFileUploader(true);
+                                      setShowFileUploader(true);
                                       setAttachments(newParticular.attachment);
                                       setNewParticular(item);
                                     }}
@@ -1092,7 +1092,7 @@ const EditIRO = () => {
       </Dialog>
       <FileUploader
         title="Attachments"
-        action="add"
+        action="view"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
           // types: [],
@@ -1116,20 +1116,20 @@ const EditIRO = () => {
             return res;
           });
         }}
-        renameFile={(fileId: string, newName: string) => {
-          setNewParticular((particularDetails) => ({
-            ...particularDetails,
-            attachment: particularDetails.attachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
-          }));
-          return FileUploaderServices.renameFile(fileId, newName);
-        }}
-        deleteFile={(fileId: string) => {
-          setNewParticular((particularDetails) => ({
-            ...particularDetails,
-            attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
-          }));
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        // deleteFile={(fileId: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        //   }));
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
       />
       <FileUploader
         title="Attachments"

@@ -46,6 +46,7 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -71,6 +72,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -571,6 +574,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       .catch((res) => {
         console.log(res);
       });
+
+    DivisionsServices.isCoordinator()
+      .then((res) => {
+        setisCoordinator(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
 
   const deleteIRO = (id: string) => {
@@ -727,7 +738,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
-            ...(IROLifeCycleStates.REVERTED_TO_DIVISION == params.row.status ?
+            ...(isCoordinator || hasPermissions(['ADMIN_ACCESS'])?
               [
                 {
                   id: 'edit',
