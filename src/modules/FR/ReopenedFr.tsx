@@ -154,20 +154,25 @@ const ReopenedFr = () => {
                 },
               },
             ]:[]),
+            ...(isCoordinator ?
 
-            ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['MANAGE_FR'])?[
+              [
 
-              {
-                id: 'edit',
-                text: 'Edit for coordinator',
-                // component: Link,
-                // to: `/fr/${props.row._id}/edit`,
-                icon: EditIcon,
-                onClick: () => {
-                  window.open(`/fr/${props.row._id}/editReopen`, '_blank');
-                },
-              },
-            ]:[]),
+                ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['MANAGE_FR'])?[
+
+                  {
+                    id: 'edit',
+                    text: 'Edit for coordinator',
+                    // component: Link,
+                    // to: `/fr/${props.row._id}/edit`,
+                    icon: EditIcon,
+                    onClick: () => {
+                      window.open(`/fr/${props.row._id}/editReopen`, '_blank');
+                    },
+                  },
+                ]:[]),
+
+              ]:[]),
             ...(!isCoordinator ?
               [
                 {

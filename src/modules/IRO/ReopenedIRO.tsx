@@ -294,7 +294,7 @@ const ReopenedIRO = () => {
             //   },
             //   icon: PreviewIcon,
             // },
-            ...(!isCoordinator ?[
+            ...(!isCoordinator || hasPermissions(['ADMIN_ACCESS']) ?[
 
               {
                 id: 'Close IRO',
