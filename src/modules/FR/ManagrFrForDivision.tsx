@@ -91,6 +91,8 @@ const ManageFrForDivision = () => {
       updatedAt: moment(),
     },
   });
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
+
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
@@ -101,6 +103,13 @@ const ManageFrForDivision = () => {
       .catch((res) => {
         console.log(res);
       });
+    DivisionsServices.isCoordinator()
+                  .then((res) => {
+                    setisCoordinator(res.data);
+                  })
+                  .catch((res) => {
+                    console.log(res);
+                  });
   }, []);
   console.log(statusFilter, 'statusFilter');
 
@@ -338,7 +347,7 @@ const ManageFrForDivision = () => {
                 }, 2000);
               },
             },
-            ...(hasPermissions(['HR_DPARTMENT_ACCESS'])&&props.row.workerSupport ?
+            ...(hasPermissions(['ADMIN_ACCESS'])&&props.row.workerSupport || isCoordinator ?
               [
                 {
                   id: 'print_Sign',

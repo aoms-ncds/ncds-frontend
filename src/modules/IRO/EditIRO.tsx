@@ -1403,7 +1403,7 @@ const EditIRO = () => {
                   />
                 </Grid>
                 <Grid item md={12}>
-                  <Button variant="contained" onClick={() => {
+                  <Button disabled={IRO.status != IROLifeCycleStates.REOPENED && !hasPermissions(['ADMIN_ACCESS'])} variant="contained" onClick={() => {
                     setViewFileUploader(true); setAttachments(newParticular.attachment);
                   }} startIcon={<AttachmentIcon />}>
                     Attachments
