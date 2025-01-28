@@ -85,7 +85,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     transactionId: '',
   });
   const [submit, setSubmit] = useState(0);
-  const [particularDialog, setParticularDialog] = useState<'add' | 'edit'|'custom'|'customIRO'>('add');
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
@@ -103,8 +103,18 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(newParticular, 'newParticular');
-
+  console.log(props.value.division?._id, 'newParticular');
+  useEffect(() => {
+    DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
+      .then((res2) => setAllSubDivisions(res2.data))
+      // .then((res) => console.log(res.data, 'sec'))
+      .catch((error) =>
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        }),
+      );
+  }, [props.value]);
   useEffect(() => {
     if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
@@ -131,11 +141,19 @@ const FRForm = (props: FormComponentProps<any>) => {
         });
       DivisionsServices.getSubDivisions()
         .then((res) => {
-          setAllSubDivisions(res.data);
+          // setAllSubDivisions(res.data);
         })
         .catch((res) => {
           console.log(res);
         });
+      DivisionsServices.getDivisions()
+        .then((res) => {
+          setAllDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else if (props.value.purpose === 'Division') {
       DivisionsServices.getDivisions()
         .then((res) => {
           setAllDivisions(res.data);
@@ -197,6 +215,7 @@ const FRForm = (props: FormComponentProps<any>) => {
 
     // Other logic for API calls, snackbar, etc.
   };
+
   const editParticular = (particular: Particular, index: number) => {
     setParticularDialog('edit');
     // setParticulars((particulars)=>
@@ -252,7 +271,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       });
   };
   let total = 0;
-  props.value?.particulars?.forEach((particular:any) => {
+  props.value?.particulars?.forEach((particular: any) => {
     if (particular?.sanctionedAmount) {
       total += particular?.sanctionedAmount;
     }
@@ -292,10 +311,10 @@ const FRForm = (props: FormComponentProps<any>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               if (props.onSubmit) {
-                if (totalRequestedAmount>0) {
+                if (totalRequestedAmount > 0) {
                   const updatedValue = {
                     ...props.value, status: submit == 1 ? FRLifeCycleStates.WAITING_FOR_ACCOUNTS : submit == 2 ?
-                      FRLifeCycleStates.WAITING_FOR_PRESIDENT : submit == 3 ?FRLifeCycleStates.REOPENED: undefined,
+                      FRLifeCycleStates.WAITING_FOR_PRESIDENT : submit == 3 ? FRLifeCycleStates.REOPENED : undefined,
                   };
                   // Create a new object with updated status
                   console.log(updatedValue, 'updatedValue');
@@ -348,7 +367,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   <Grid item xs={12} md={6}>
                     <Autocomplete<IWorker | Staff>
                       value={props.value.purposeWorker ?? null}
-                      options={( workers) ??[]}
+                      options={(props.action == 'add' ? workers : Allworkers) ?? []}
                       getOptionLabel={(workers) => `${workers?.basicDetails.firstName} ${workers?.basicDetails.middleName ?? ''} ${workers.basicDetails.lastName}`}
                       onChange={(_e, selectedWorker) => {
                         if (selectedWorker && props.action !== 'view') {
@@ -375,7 +394,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   </Grid>
                 </>
               ) : null}
-              {props.action=== 'custom'|| props.action=== 'customIRO' ? (
+              {props.action === 'custom' || props.action === 'customIRO' ? (
                 <Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
                       onClose={() => setOpen(false)}
@@ -403,7 +422,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                       max: totalRequestedAmount,
                       min: 0,
                       step: 0.01, // Allows up to two decimal places
-                    // onWheel: handleWheel,
+                      // onWheel: handleWheel,
                     }}
                   // disabled
                   // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -411,41 +430,45 @@ const FRForm = (props: FormComponentProps<any>) => {
                   {/* </Tooltip> */}
                 </Grid>
 
-              ):''}
+              ) : ''}
+              {(props.action === 'edit' &&
+  (props.value?.purpose === 'Division' || props.value?.purpose === 'Subdivision')) && (
+                <Grid item xs={12} md={6}>
+                  <Autocomplete
+                    value={props.value.division ?? null}
+                    options={AllDivisions ?? []}
+                    getOptionLabel={(division) => division.details?.name || ''}
+                    onChange={(_e, purposeDivision) => {
+                      props.onChange({
+                        ...props.value,
+                        division: purposeDivision,
+                      });
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Division" />}
+                    fullWidth
+                  />
+                </Grid>
+              )}
+
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    options={( subDivisions) ??[]}
+                    options={(props.action =='add'? subDivisions: AllSubDivisions) ?? []}
                     value={props.value.purposeSubdivision ?? null}
                     getOptionLabel={(subDiv) => subDiv.name}
                     onChange={(event, newVal) =>
-                      props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined, division: newVal?.division, purposeCoordinator: newVal?.division?.details?.coordinator?.name })
+                      props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined, division: props.value.division, purposeCoordinator: newVal?.division?.details?.coordinator?.name })
                     }
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
                   />
                 </Grid>
               ) : null}
-              {/* {props.value?.purpose === 'Division' ? (
-                <Grid item xs={12} md={6}>
-                  <Autocomplete
-                    value={props.value.division ?? null}
-                    options={AllDivisions?? []}
-                    getOptionLabel={(division) => division.details?.name}
-                    onChange={(_e, purposeDivision) => {
-                      props.onChange({
-                        ...props.value,
-                        purposeDivision: purposeDivision,
-                      });
-                    }}renderInput={(params) => <TextField {...params} label="Choose Division" />}
-                    fullWidth
-                  />
-                </Grid>
-              ) : null} */}
-              {/* {props.value?.purpose === 'Coordinator' ? (
+
+              {props.value?.purpose === 'Coordinator' && props.action =='edit' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props?.value.purposeCoordinator}
-                    options={allCoortinators ??[]}
+                    options={(allCoortinators) ?? []}
                     onChange={(_e, purposeCoordinator) => {
                       props.onChange({
                         ...props.value,
@@ -457,7 +480,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                     fullWidth
                   />
                 </Grid>
-              ) : null} */}
+              ):''}
               {/* {props.value.purpose === 'Coordinator' ? (
                 <Grid item xs={12} md={6}>
                   <Autocompleteview') {
@@ -488,7 +511,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               ) : null}
-              {props.action === 'add'||props.action === 'custom' ||props.action === 'customIRO' ? (
+              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ? (
                 <>
                   <Grid item xs={12}>
                     <Typography>Particulars</Typography>
@@ -514,13 +537,13 @@ const FRForm = (props: FormComponentProps<any>) => {
                           setSelectedSubCategory1(null);
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length==0} />}
+                      renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length == 0} />}
                       fullWidth
                     />
                   </Grid>
                 </>
-              ):''}
-              {props.action === 'add'|| props.action === 'custom' ||props.action === 'customIRO'? (
+              ) : ''}
+              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ? (
                 <Grid item xs={12} md={4} lg={4}>
                   <Button
                     variant="contained"
@@ -547,7 +570,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                     Add particulars
                   </Button>
                 </Grid>
-              ):''}
+              ) : ''}
               {particulars.length > 0 && (
                 <Grid item xs={12}>
                   <TableContainer>
@@ -592,9 +615,9 @@ const FRForm = (props: FormComponentProps<any>) => {
                               </IconButton>
                             </TableCell>
                             <TableCell align="center">{index + 1}</TableCell>
-                            <TableCell align="center"> {`${item.mainCategory == 'Select'? '' : item.mainCategory } 
-                            > ${item.subCategory1=='Select' ? '' : item.subCategory1} > 
-                            ${item.subCategory2=='Select' ? '' : item.subCategory2} > ${item.subCategory3=='Select' ? '' : item.subCategory3}`}</TableCell>
+                            <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
+                            > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2 == 'Select' ? '' : item.subCategory2} > ${item.subCategory3 == 'Select' ? '' : item.subCategory3}`}</TableCell>
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
@@ -616,7 +639,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               </Grid>
 
 
-              {props.action === 'custom'||props.action === 'customIRO' || props.action === 'edit' ? (
+              {props.action === 'custom' || props.action === 'customIRO' || props.action === 'edit' ? (
                 <><Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
 onClose={() => setOpen(false)}
@@ -666,125 +689,125 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
 
                     >
                       <MenuItem value={props.value.sanctionedBank}>{props.value.sanctionedBank}</MenuItem>
-                      {props.value.division?.DivisionBankFCRA?.bankName !='' || props.value.division?.FCRABankDetails?.bankName!='' ? (
+                      {props.value.division?.DivisionBankFCRA?.bankName != '' || props.value.division?.FCRABankDetails?.bankName != '' ? (
                         <MenuItem value={`FCRA-${props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}`}>
-                     Division Bank FCRA - {props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}
+                            Division Bank FCRA - {props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.DivisionBankLocal?.bankName || props.value.division?.localBankDetails?.bankName ? (
                         <MenuItem value={`Local Bank-${props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}`}>
-                     Division Bank Local - {props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}
+                            Division Bank Local - {props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank1?.bankName || props.value.division?.otherBankDetails?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 1-${props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}`}>
-                     Beneficiary Bank 1 - {props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}
+                            Beneficiary Bank 1 - {props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank2?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 2-${props.value.division?.BeneficiaryBank2?.beneficiary}`}>
-                     Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}
+                            Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank3?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 3-${props.value.division?.BeneficiaryBank3?.beneficiary}`}>
-                     Beneficiary Bank 3 - {props.value.division?.BeneficiaryBank3?.beneficiary}
+                            Beneficiary Bank 3 - {props.value.division?.BeneficiaryBank3?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank4?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 4-${props.value.division?.BeneficiaryBank4?.beneficiary}`}>
-                     Beneficiary Bank 4 - {props.value.division?.BeneficiaryBank4?.beneficiary}
+                            Beneficiary Bank 4 - {props.value.division?.BeneficiaryBank4?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank5?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 5-${props.value.division?.BeneficiaryBank5?.beneficiary}`}>
-                     Beneficiary Bank 5 - {props.value.division?.BeneficiaryBank5?.beneficiary}
+                            Beneficiary Bank 5 - {props.value.division?.BeneficiaryBank5?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank6?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 6-${props.value.division?.BeneficiaryBank6?.beneficiary}`}>
-                     Beneficiary Bank 6 - {props.value.division?.BeneficiaryBank6?.beneficiary}
+                            Beneficiary Bank 6 - {props.value.division?.BeneficiaryBank6?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank7?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 7-${props.value.division?.BeneficiaryBank7?.beneficiary}`}>
-                     Beneficiary Bank 7 - {props.value.division?.BeneficiaryBank7?.beneficiary}
+                            Beneficiary Bank 7 - {props.value.division?.BeneficiaryBank7?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank8?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 8-${props.value.division?.BeneficiaryBank8?.beneficiary}`}>
-                     Beneficiary Bank 8 - {props.value.division?.BeneficiaryBank8?.beneficiary}
+                            Beneficiary Bank 8 - {props.value.division?.BeneficiaryBank8?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank9?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 9-${props.value.division?.BeneficiaryBank9?.beneficiary}`}>
-                     Beneficiary Bank 9 - {props.value.division?.BeneficiaryBank9?.beneficiary}
+                            Beneficiary Bank 9 - {props.value.division?.BeneficiaryBank9?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
                       {props.value.division?.BeneficiaryBank10?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 10-${props.value.division?.BeneficiaryBank10?.beneficiary}`}>
-                     Beneficiary Bank 10 - {props.value.division?.BeneficiaryBank10?.beneficiary}
+                            Beneficiary Bank 10 - {props.value.division?.BeneficiaryBank10?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank10?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 11-${props.value.division?.BeneficiaryBank11?.beneficiary}`}>
-                     Beneficiary Bank 11 - {props.value.division?.BeneficiaryBank11?.beneficiary}
+                            Beneficiary Bank 11 - {props.value.division?.BeneficiaryBank11?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank12?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 12-${props.value.division?.BeneficiaryBank12?.beneficiary}`}>
-                     Beneficiary Bank 12 - {props.value.division?.BeneficiaryBank12?.beneficiary}
+                            Beneficiary Bank 12 - {props.value.division?.BeneficiaryBank12?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank13?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 13-${props.value.division?.BeneficiaryBank13?.beneficiary}`}>
-                     Beneficiary Bank 13 - {props.value.division?.BeneficiaryBank13?.beneficiary}
+                            Beneficiary Bank 13 - {props.value.division?.BeneficiaryBank13?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank14?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 14-${props.value.division?.BeneficiaryBank14?.beneficiary}`}>
-                     Beneficiary Bank 14 - {props.value.division?.BeneficiaryBank14?.beneficiary}
+                            Beneficiary Bank 14 - {props.value.division?.BeneficiaryBank14?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank15?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 15-${props.value.division?.BeneficiaryBank15?.beneficiary}`}>
-                     Beneficiary Bank 15 - {props.value.division?.BeneficiaryBank15?.beneficiary}
+                            Beneficiary Bank 15 - {props.value.division?.BeneficiaryBank15?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank16?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 16-${props.value.division?.BeneficiaryBank16?.beneficiary}`}>
-                     Beneficiary Bank 16 - {props.value.division?.BeneficiaryBank16?.beneficiary}
+                            Beneficiary Bank 16 - {props.value.division?.BeneficiaryBank16?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank17?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 17-${props.value.division?.BeneficiaryBank17?.beneficiary}`}>
-                     Beneficiary Bank 17 - {props.value.division?.BeneficiaryBank17?.beneficiary}
+                            Beneficiary Bank 17 - {props.value.division?.BeneficiaryBank17?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank18?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 18-${props.value.division?.BeneficiaryBank18?.beneficiary}`}>
-                     Beneficiary Bank 18- {props.value.division?.BeneficiaryBank18?.beneficiary}
+                            Beneficiary Bank 18- {props.value.division?.BeneficiaryBank18?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank19?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 19-${props.value.division?.BeneficiaryBank19?.beneficiary}`}>
-                     Beneficiary Bank 19 - {props.value.division?.BeneficiaryBank19?.beneficiary}
+                            Beneficiary Bank 19 - {props.value.division?.BeneficiaryBank19?.beneficiary}
                         </MenuItem>
                       ) : ''}
                       {props.value.division?.BeneficiaryBank20?.bankName ? (
                         <MenuItem value={`Beneficiary Bank 20-${props.value.division?.BeneficiaryBank20?.beneficiary}`}>
-                     Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
+                            Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
                         </MenuItem>
                       ) : ''}
 
@@ -822,10 +845,10 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     </Select>
                   </FormControl>
                 </Grid></>
-              ):''}
+              ) : ''}
 
 
-              {props.action === 'customIRO' ?(
+              {props.action === 'customIRO' ? (
                 <><Grid item xs={12} md={6}>
                   <TextField
                     label="Amount Transferred"
@@ -873,7 +896,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     disablePortal
                     id="Payment_method"
                     getOptionLabel={(method) => method.paymentMethod ?? ''}
-                    value={props?.value?.modeOfPayment?? ''}
+                    value={props?.value?.modeOfPayment ?? ''}
                     options={paymnetMethod ?? []} // Ensure this is defined and populated
                     onChange={(event, newValue) =>
                       props.onChange({
@@ -921,17 +944,17 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 </Grid>
                 <Grid item xs={12} md={4} lg={2}>
                   <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
-                                  Attachments
+                      Attachments
                   </Button>
                 </Grid>
                 <Grid item xs={12} md={4} lg={4}>
                   <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
-                                  Office manager Sign
+                      Office manager Sign
                   </Button>
                 </Grid>
 
                 </>
-              ):''}
+              ) : ''}
               {/* <Grid item xs={12} md={6}>
                 <TextField
                   label="Sanctioned Amount"
@@ -1017,19 +1040,19 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       onClick={() => {
                         toggleOpenRemarks(true);
                         FRServices.getAllRemarksById(props.value._id ?? '')
-                        .then((res) => setRemarks(res.data ?? []))
-                        .catch((error) => {
-                          enqueueSnackbar({
-                            variant: 'error',
-                            message: error.message,
+                          .then((res) => setRemarks(res.data ?? []))
+                          .catch((error) => {
+                            enqueueSnackbar({
+                              variant: 'error',
+                              message: error.message,
+                            });
                           });
-                        });
                       }}
                     >
                       Remark
                     </Button> : null}
                   &nbsp;
-                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom'||props.action === 'customIRO' ? (
+                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
@@ -1040,22 +1063,22 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                             color="info"
                             type="submit"
                             onClick={() => {
-                              if (props.value.status ==FRLifeCycleStates.REOPENED) {
+                              if (props.value.status == FRLifeCycleStates.REOPENED) {
                                 setSubmit(3);
                               } else {
                                 setSubmit(1);
                               }
                             }}
-                            // disabled={particulars.length==0}
+                          // disabled={particulars.length==0}
                           >
-                        Submit{' '}
+                            Submit{' '}
                           </Button>
                         }
 
                       />
-                       &nbsp;
-                       &nbsp;
-                      {FRLifeCycleStates.REOPENED !== props.value.status &&(
+                      &nbsp;
+                      &nbsp;
+                      {FRLifeCycleStates.REOPENED !== props.value.status && (
 
                         <PermissionChecks
                           permissions={['WRITE_FR']}
@@ -1069,7 +1092,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                                 setSubmit(2);
                               }}
                             >
-                            Submit to President
+                              Submit to President
                             </Button>
                           }
                         />
@@ -1122,13 +1145,13 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                         setSelectedSubCategory1(null);
                       }
                     }}
-                    renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length==0} />}
+                    renderInput={(params) => <TextField {...params} label="Choose Main Category" required={props.value.particulars?.length == 0} />}
                     fullWidth
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    disabled={props.disable==true}
+                    disabled={props.disable == true}
                     value={selectedSubCategory1}
                     options={selectedMainCategory?.subcategory1 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name}
@@ -1147,7 +1170,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    disabled={props.disable==true}
+                    disabled={props.disable == true}
                     value={selectedSubCategory2}
                     options={selectedSubCategory1?.subcategory2 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
@@ -1159,7 +1182,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                         }));
                         setSelectedSubCategory2(selectedSubCategory2);
                       }
-                      const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
+                      const subcat2 = selectedSubCategory2?.subcategory3.map((e) => e.name);
 
                       if (subcat2?.includes('Select')) {
                         console.log('Select');
@@ -1178,7 +1201,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
-                    disabled={props.disable==true}
+                    disabled={props.disable == true}
                     value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
                     getOptionLabel={(subCategory3) => subCategory3.name}
@@ -1213,7 +1236,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                         event.currentTarget.blur();
                       },
                     }}
-                    disabled={props.disable==true}
+                    disabled={props.disable == true}
                     fullWidth
                   />
                 </Grid>
@@ -1236,7 +1259,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       },
                     }}
                     required
-                    disabled={props.disable==true}
+                    disabled={props.disable == true}
                     fullWidth
                   />
                 </Grid>
@@ -1245,7 +1268,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     label="Multiply By Quantity"
                     control={
                       <Checkbox
-                        disabled={props.disable==true}
+                        disabled={props.disable == true}
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
@@ -1485,7 +1508,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file:any) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}
@@ -1526,7 +1549,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         deleteFile={(fileId: string) => {
           props.onChange({
             ...props.value,
-            attachment: props.value.attachment.filter((file:any) => file._id !== fileId),
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
           });
           return FileUploaderServices.deleteFile(fileId);
         }}

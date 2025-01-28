@@ -382,6 +382,17 @@ const EditIRO = () => {
       setAllCoortinators(res.data);
     });
   }, []);
+  useEffect(() => {
+    DivisionsServices.getSubDivisionsByDivisionId(IRO.division?._id ?? '')
+        .then((res2) => setAllSubDivisions(res2.data))
+        // .then((res) => console.log(res.data, 'sec'))
+        .catch((error) =>
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          }),
+        );
+  }, [IRO.division]);
   const [open, setOpen] = useState(false);
   console.log(IRO, 'dq');
   // console.log(props, 'wdqw');
@@ -594,29 +605,7 @@ const EditIRO = () => {
                       </Grid>
                     </>
                   ) : null}
-                  {IRO?.purpose === 'Subdivision' ? (
-                    <><Grid item xs={12} md={6}>
-                      <Autocomplete
-                        options={ allSubDivisions ?? []}
-                        value={IRO.purposeSubdivision ? IRO.purposeSubdivision : undefined}
-                        getOptionLabel={(subDiv) => subDiv.name}
-                        onChange={(event, newVal) =>
-                          setIRO({ ...IRO, purposeSubdivision: newVal ?? undefined })
-                        }
-                        renderInput={(params) => <TextField {...params} label="Subdivision" />}
-                      />
-                    </Grid><Grid item xs={12} md={6}>
-                      <TextField
-                        label="Division"
-                        value={IRO.division?.details?.name}
-                        fullWidth
-                        // disabled
-                        InputLabelProps={{
-                          shrink: true,
-                        }} />
-                    </Grid></>
-                  ) : null}
-                  {IRO?.purpose === 'Division' ? (
+                  {IRO?.purpose === 'Division' || IRO?.purpose === 'Subdivision' ? (
                     <Grid item xs={12} md={6}>
                       <Autocomplete
                         value={IRO?.division}
@@ -629,6 +618,21 @@ const EditIRO = () => {
                         disabled={IROLifeCycleStates.REOPENED !==IRO.status}/>
                     </Grid>
                   ) : null}
+                  {IRO?.purpose === 'Subdivision' ? (
+                    <><Grid item xs={12} md={6}>
+                      <Autocomplete
+                        options={ allSubDivisions ?? []}
+                        value={IRO.purposeSubdivision ? IRO.purposeSubdivision : undefined}
+                        getOptionLabel={(subDiv) => subDiv.name}
+                        onChange={(event, newVal) =>
+                          setIRO({ ...IRO, purposeSubdivision: newVal ?? undefined })
+                        }
+                        renderInput={(params) => <TextField {...params} label="Subdivision" />}
+                      />
+                    </Grid>
+                    </>
+                  ) : null}
+
                   {IRO?.purpose === 'Coordinator' ? (
                     <Grid item xs={12} md={6}>
                       <Autocomplete
