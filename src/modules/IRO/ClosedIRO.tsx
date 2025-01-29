@@ -27,6 +27,7 @@ import IROTemplate from './components/IROTemplate';
 import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import ReleaseAmount from './components/ReleaseAmountDialog';
+import { hasPermissions } from '../User/components/PermissionChecks';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -271,46 +272,50 @@ const ClosedIRO = () => {
                 },
               ] :
               []),
-            {
-              id: 'View',
-              text: 'Reopen',
-              component: Link,
-              onClick: async () => {
-                try {
-                  // Fetch the first API data
-                  const res1 = await IROServices.getById(props.row._id as string);
-                  const convertedData: IROrder = {
-                    ...res1.data,
-                    // requestAmount: res1.data?.requestedAmount, // Fix key access if needed
-                  };
 
-                  // Update the state
-                  // setRequisition(convertedData);
-                  console.log({ convertedData });
+            ...(hasPermissions(['REOPEN_FR_IRO']) ?[
 
-                  // Wait for the state update to complete
-                  await new Promise((resolve) => setTimeout(resolve, 0));
+              {
+                id: 'View',
+                text: 'Reopen',
+                component: Link,
+                onClick: async () => {
+                  try {
+                    // Fetch the first API data
+                    const res1 = await IROServices.getById(props.row._id as string);
+                    const convertedData: IROrder = {
+                      ...res1.data,
+                      // requestAmount: res1.data?.requestedAmount, // Fix key access if needed
+                    };
 
-                  // Perform the second API call using the updated requisition
-                  const res2 = await IROServices.reopen(props.row._id);
-                  console.log(res2);
+                    // Update the state
+                    // setRequisition(convertedData);
+                    console.log({ convertedData });
 
-                  // Show success message
-                  enqueueSnackbar({
-                    message: 'IRO Reopened',
-                    variant: 'success',
-                  });
-                  window.location.reload();
-                } catch (error) {
-                  // Handle errors
-                  enqueueSnackbar({
-                    variant: 'error',
-                    // message: err.message,
-                  });
-                }
+                    // Wait for the state update to complete
+                    await new Promise((resolve) => setTimeout(resolve, 0));
+
+                    // Perform the second API call using the updated requisition
+                    const res2 = await IROServices.reopen(props.row._id);
+                    console.log(res2);
+
+                    // Show success message
+                    enqueueSnackbar({
+                      message: 'IRO Reopened',
+                      variant: 'success',
+                    });
+                    window.location.reload();
+                  } catch (error) {
+                    // Handle errors
+                    enqueueSnackbar({
+                      variant: 'error',
+                      // message: err.message,
+                    });
+                  }
+                },
+                icon: PreviewIcon,
               },
-              icon: PreviewIcon,
-            },
+            ]:[]),
             // {
             //   id: 'View',
             //   text: 'View Details ',

@@ -149,10 +149,10 @@ const frDashboard = () => {
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Re Opened" secondaryText="FRs" color="#fff" targetRoute="/fr/reopened" />
               </Grid>
-              <Grid item xs={12} md={4} xl={3}>
+              {/* <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Custom" secondaryText="FRs" color="#fff" targetRoute="/fr/CustomFR" />
-              </Grid>
+              </Grid> */}
 
 
             </Grid>

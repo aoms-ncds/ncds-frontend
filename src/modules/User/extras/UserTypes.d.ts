@@ -52,6 +52,7 @@ declare global {
     WAITTING_FOR_RELEASE_AMOUNT: boolean;
     AUDIT_VIEW: boolean;
     CUSTOM_FR_IRO: boolean;
+    REOPEN_FR_IRO: boolean;
 
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;

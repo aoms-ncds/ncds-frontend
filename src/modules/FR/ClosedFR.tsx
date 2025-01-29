@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import ESignatureService from '../Settings/extras/ESignatureService';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import FRServices from './extras/FRServices';
@@ -130,46 +130,49 @@ const ClosedFR = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            {
-              id: 'View',
-              text: 'Reopen',
-              component: Link,
-              onClick: async () => {
-                try {
-                  // Fetch the first API data
-                  const res1 = await FRServices.getById(props.row._id as string);
-                  const convertedData: CreatableFR = {
-                    ...res1.data,
-                    requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
-                  };
+            ...(hasPermissions(['REOPEN_FR_IRO']) ?[
+              {
+                id: 'View',
+                text: 'Reopen',
+                component: Link,
+                onClick: async () => {
+                  try {
+                    // Fetch the first API data
+                    const res1 = await FRServices.getById(props.row._id as string);
+                    const convertedData: CreatableFR = {
+                      ...res1.data,
+                      requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
+                    };
 
-                  // Update the state
-                  setRequisition(convertedData);
-                  console.log({ convertedData });
+                    // Update the state
+                    setRequisition(convertedData);
+                    console.log({ convertedData });
 
-                  // Wait for the state update to complete
-                  await new Promise((resolve) => setTimeout(resolve, 0));
+                    // Wait for the state update to complete
+                    await new Promise((resolve) => setTimeout(resolve, 0));
 
-                  // Perform the second API call using the updated requisition
-                  const res2 = await FRServices.manageFRRequests(props.row._id, 'reopened', convertedData);
-                  console.log(res2);
+                    // Perform the second API call using the updated requisition
+                    const res2 = await FRServices.manageFRRequests(props.row._id, 'reopened', convertedData);
+                    console.log(res2);
 
-                  // Show success message
-                  enqueueSnackbar({
-                    message: 'FR Reopened',
-                    variant: 'success',
-                  });
-                  window.location.reload();
-                } catch (error) {
-                  // Handle errors
-                  enqueueSnackbar({
-                    variant: 'error',
-                    // message: err.message,
-                  });
-                }
+                    // Show success message
+                    enqueueSnackbar({
+                      message: 'FR Reopened',
+                      variant: 'success',
+                    });
+                    window.location.reload();
+                  } catch (error) {
+                    // Handle errors
+                    enqueueSnackbar({
+                      variant: 'error',
+                      // message: err.message,
+                    });
+                  }
+                },
+                icon: PreviewIcon,
               },
-              icon: PreviewIcon,
-            },
+
+            ]:[]),
 
           ]}
         />

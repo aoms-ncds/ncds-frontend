@@ -572,7 +572,7 @@ const EditIRO = () => {
                           });
                         }
                       }}
-                      disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO.status}
+                      disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO.status || IROLifeCycleStates.REOPENED !== IRO.status}
                       renderInput={(params) => <TextField {...params} label="Requisition For" />}
                       fullWidth
 

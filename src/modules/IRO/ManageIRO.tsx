@@ -738,7 +738,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
-            ...(isCoordinator || hasPermissions(['ADMIN_ACCESS'])?
+            ...(isCoordinator || hasPermissions(['ADMIN_ACCESS'])) && (params.row.status==IROLifeCycleStates.REOPENED || params.row.status==IROLifeCycleStates.REVERTED_TO_DIVISION) ?
               [
                 {
                   id: 'edit',
@@ -751,7 +751,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   icon: EditIcon,
                 },
               ] :
-              []),
+              [],
             ...(hasPermissions(['ADMIN_ACCESS']) && props.action =='manage' ?
               [
                 {
