@@ -724,7 +724,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               },
 
             },
-            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) || IROLifeCycleStates.REVERTED_TO_DIVISION ==params.row.status ?
+            ...(props.action != 'manage' && (hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ||hasPermissions(['ADMIN_ACCESS'])) || IROLifeCycleStates.REVERTED_TO_DIVISION ==params.row.status&& !isCoordinator ?
               [
                 {
                   id: 'edit',
@@ -768,7 +768,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               []),
 
 
-            ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
+            ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && !isCoordinator ?
               [
                 {
                   id: 'Release',

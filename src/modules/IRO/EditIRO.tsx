@@ -64,6 +64,7 @@ const EditIRO = () => {
   const [divisions, setDivisions] = useState<any | null>(null);
   const [allSubDivisions, setAllSubDivisions] = useState<any | null>(null);
   const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
 
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
@@ -380,6 +381,13 @@ const EditIRO = () => {
     DivisionsServices.getcoordinators().then((res) => {
       //   setDivision(res.data ?? null);
       setAllCoortinators(res.data);
+    });
+    DivisionsServices.isCoordinator()
+    .then((res) => {
+      setisCoordinator(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
     });
   }, []);
   useEffect(() => {

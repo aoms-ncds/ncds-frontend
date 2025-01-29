@@ -630,7 +630,7 @@ const CustomIRO = () => {
     },
   ];
   return (
-    <CommonPageLayout title="For Reconciliation" momentFilter={
+    <CommonPageLayout title="Custom IRO" momentFilter={
 
       {
         dateRange: dateRange,
@@ -707,23 +707,16 @@ const CustomIRO = () => {
             >
               Export
             </Button>
-            <PermissionChecks
-              permissions={['WRITE_FR']}
-              granted={
-                <>
-                  <Button
-                    variant="contained"
-                    sx={{ float: 'right', mr: 2, mt: 2 }} startIcon={<AddIcon />}
-                    component={Link}
-                    to="/iro/applyCustom"
-                  // onClick={() => {
-                  // }}
-                  >
+            <Button
+              variant="contained"
+              sx={{ float: 'right', mr: 2, mt: 2 }} startIcon={<AddIcon />}
+              component={Link}
+              to="/iro/applyCustom"
+              // onClick={() => {
+              // }}
+            >
                               Add new
-                  </Button>
-                </>
-              }
-            />
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <Box

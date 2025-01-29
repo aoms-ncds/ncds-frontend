@@ -793,7 +793,7 @@ const CustomFR = () => {
 
   return (
     <CommonPageLayout
-      title="Manage FR"
+      title="Custom FR"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -865,24 +865,17 @@ const CustomFR = () => {
                         }
                       />
 
-                      <PermissionChecks
-                        permissions={['WRITE_FR']}
-                        granted={
-                          <>
-                            <Button
-                              variant="contained"
-                              sx={{ float: 'right', marginBottom: 3, mr: 2 }}
-                              startIcon={<AddIcon />}
-                              component={Link}
-                              to="/fr/applyCustom"
-                              // onClick={() => {
-                              // }}
-                            >
+                      <Button
+                        variant="contained"
+                        sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                        startIcon={<AddIcon />}
+                        component={Link}
+                        to="/fr/applyCustom"
+                        // onClick={() => {
+                        // }}
+                      >
                               Add new
-                            </Button>
-                          </>
-                        }
-                      />
+                      </Button>
                     </Grid>
                     {/* <Grid item >
                       <FormControl>

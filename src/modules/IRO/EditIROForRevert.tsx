@@ -49,6 +49,7 @@ import SanctionedAsPerService from '../Settings/extras/SanctionedAsPerService';
 import AddIcon from '@mui/icons-material/Add';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import { useAuth } from '../../hooks/Authentication';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 
 const EditIROForRevert = () => {
   const navigate = useNavigate();
@@ -60,6 +61,8 @@ const EditIROForRevert = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const { iroID } = useParams();
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
+
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -354,6 +357,14 @@ const EditIROForRevert = () => {
 
       // setSanctionedAsPer(res.data);
     });
+
+    DivisionsServices.isCoordinator()
+    .then((res) => {
+      setisCoordinator(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
   }, []);
   const [open, setOpen] = useState(false);
   console.log(newParticular, 'dq');
@@ -483,7 +494,7 @@ const EditIROForRevert = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED ==IRO.status} />
+                    <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED ==IRO.status || isCoordinator} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
