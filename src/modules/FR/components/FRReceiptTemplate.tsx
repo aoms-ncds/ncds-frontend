@@ -284,17 +284,6 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
           </Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-            {props.rowData.names?.jrLeader?.basicDetails?.firstName ?
-              `${props.rowData.names.jrLeader.basicDetails.firstName} ${props.rowData.names.jrLeader.basicDetails.lastName || ''}` :
-              props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?
-                `${props.rowData.division.details.seniorLeader.name.basicDetails.firstName} ${props.rowData.division.details.seniorLeader.name.basicDetails.lastName || ''}` :
-                typeof props.rowData?.division?.details.additionalJuniorLeader?.name === 'string' ?
-                  props.rowData?.division?.details.additionalJuniorLeader?.name :
-                  ''}
-          </Text>
-
-          <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
-          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
             {props.rowData?.names?.srLeader?.basicDetails?.firstName ?
               `${props.rowData.names.srLeader.basicDetails.firstName} ${props.rowData.names.srLeader.basicDetails.lastName || ''}` :
               props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?
@@ -302,6 +291,18 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 typeof props.rowData?.division?.details?.additionalSeniorLeader?.name === 'string' ?
                   props.rowData.division.details.additionalSeniorLeader.name :
                   ''}
+          </Text>
+
+          <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
+          <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+            {props.rowData.names?.jrLeader?.basicDetails?.firstName ?
+              `${props.rowData.names.jrLeader.basicDetails.firstName} ${props.rowData.names.jrLeader.basicDetails.lastName || ''}` :
+              props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?
+                `${props.rowData.division.details.seniorLeader.name.basicDetails.firstName} ${props.rowData.division.details.seniorLeader.name.basicDetails.lastName || ''}` :
+                typeof props.rowData?.division?.details.additionalJuniorLeader?.name === 'string' ?
+                  props.rowData?.division?.details.additionalJuniorLeader?.name :
+                  ''}
+
           </Text>
           {props.rowData?.specialsanction == 'Yes' ? (
             <>

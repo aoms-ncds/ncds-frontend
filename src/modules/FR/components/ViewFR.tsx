@@ -151,7 +151,7 @@ useEffect(() => {
 
 
   const divisionId = user?.user && user.user.division ? user.user.division : null;
-  console.log(divisionId, 'divisionId');
+  console.log(props, 'divisionId');
 
   if (divisionId) {
     DivisionsServices.getDivisionById(divisionId?.toString()).then((res) => {
@@ -288,7 +288,7 @@ return (
                 }}
                 renderInput={(params) => <TextField {...params} label="Requisition For" />}
                 fullWidth
-                // disabled
+                disabled
               />
             </Grid>
             {props.value.purpose === 'Worker' ? (
@@ -477,7 +477,7 @@ return (
                 disabled
               />
             </Grid>
-            {props.action === 'view'? (
+            {props.action === 'view' && props.value.status && (props.value.status >= FRLifeCycleStates.WAITING_FOR_ACCOUNTS || props.value.status == FRLifeCycleStates.FR_CLOSED)? (
               <>
                 <Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
@@ -785,7 +785,7 @@ return (
                     Add Extra sign
                 </Button>
                   &nbsp;
-                {props.action === 'view' && (FRstatus != 'FR_APPROVED'&&FRstatus!='FR_REJECTED') ? (
+                {props.action === 'view' && (FRstatus != 'FR_APPROVED'&&FRstatus!='FR_REJECTED'&&FRstatus!='REOPENED') ? (
                   <>
                     {/* Only display buttons if props.action is 'view' */}
                       &nbsp;
@@ -1169,13 +1169,13 @@ return (
       onClose={() => setViewFileUploader(false)}
       // getFiles={TestServices.getBills}
       getFiles={attachments}
-      deleteFile={(fileId: string) => {
-        setNewParticular((particularDetails) => ({
-          ...particularDetails,
-          attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
-        }));
-        return FileUploaderServices.deleteFile(fileId);
-      }}
+      // deleteFile={(fileId: string) => {
+      //   setNewParticular((particularDetails) => ({
+      //     ...particularDetails,
+      //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+      //   }));
+      //   return FileUploaderServices.deleteFile(fileId);
+      // }}
     />
     <Dialog
       open={showAddParticularDialog}

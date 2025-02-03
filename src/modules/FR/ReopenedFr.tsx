@@ -18,6 +18,8 @@ import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import IROTemplate from '../IRO/components/IROTemplate';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
+import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 
 const ReopenedFr = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -31,6 +33,9 @@ const ReopenedFr = () => {
     sanctionedAsPer: '',
   });
   const [searchText, setSearchText] = useState('');
+  const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [data, setData] = useState<FR | null>(null);
+
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -40,6 +45,7 @@ const ReopenedFr = () => {
     setSearchText(event.target.value);
   };
   const [isCoordinator, setisCoordinator] = useState<any>(false);
+  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
   const [conform1, setConform1] = useState<boolean>(false);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -71,6 +77,13 @@ const ReopenedFr = () => {
     DivisionsServices.isCoordinator()
             .then((res) => {
               setisCoordinator(res.data);
+            })
+            .catch((res) => {
+              console.log(res);
+            });
+    LeaderDetailsService.getAll()
+            .then((res) => {
+              setLeaderHeading(res.data);
             })
             .catch((res) => {
               console.log(res);
@@ -134,6 +147,32 @@ const ReopenedFr = () => {
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
+            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
+              [
+                {
+                  id: 'print',
+                  text: 'Print FR HQ DELHI',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ] :
+              []),
             {
               id: 'View',
               text: 'View Details ',
@@ -490,6 +529,33 @@ const ReopenedFr = () => {
             </Button>
 
           </>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Download the FR Receipt, Delhi for {data?.FRno} <br />
+            {data && (
+              <PDFDownloadLink
+                document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
+                fileName="FRReceiptDelhi.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </CommonPageLayout>

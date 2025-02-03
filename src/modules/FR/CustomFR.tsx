@@ -37,6 +37,7 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import FRReceiptTemplateCustom from './components/FRReceiptTemplateCustom';
 
 const CustomFR = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -261,6 +262,16 @@ const CustomFR = () => {
               component: Link,
               to: `/fr/${props.row._id}/viewCustom`,
               icon: PreviewIcon,
+            },
+            {
+              id: 'edit',
+              text: 'Edit',
+              // component: Link,
+              // to: `/fr/${props.row._id}/edit`,
+              icon: EditIcon,
+              onClick: () => {
+                window.open(`/fr/${props.row._id}/editCustom`, '_blank');
+              },
             },
             ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ?
               [
@@ -962,7 +973,7 @@ const CustomFR = () => {
                       <Divider />
                     </Grid>
                     <Grid item xs={12}>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         color="success"
                         sx={{ width: 260 }}
@@ -979,7 +990,7 @@ const CustomFR = () => {
                       >
                         {' '}
                         Send to President
-                      </Button>
+                      </Button> */}
                     </Grid>
                     <Grid item xs={12}>
                       <Button
@@ -1248,7 +1259,7 @@ const CustomFR = () => {
                   Downloading the FRReceipt for {data2?.FRno}
                   <br />
                   {data2 && (
-                    <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                    <PDFDownloadLink document={<FRReceiptTemplateCustom rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
                       {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
                     </PDFDownloadLink>
                   )}{' '}

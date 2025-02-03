@@ -308,7 +308,7 @@ const SentBack = () => {
   }, [dateRange]);
   return (
 
-    <CommonPageLayout title="Sent Back iro" momentFilter={{
+    <CommonPageLayout title="Reverted IRO" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);

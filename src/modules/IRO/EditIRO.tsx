@@ -572,7 +572,7 @@ const EditIRO = () => {
                           });
                         }
                       }}
-                      disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO.status || IROLifeCycleStates.REOPENED !== IRO.status}
+                      disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO.status || IROLifeCycleStates.REOPENED !== IRO.status &&!hasPermissions(['OFFICE_MNGR_ACCESS'])&& hasPermissions(['ACCOUNTS_MNGR_ACCESS']) && !hasPermissions(['ADMIN_ACCESS'] )}
                       renderInput={(params) => <TextField {...params} label="Requisition For" />}
                       fullWidth
 
@@ -623,7 +623,7 @@ const EditIRO = () => {
                           setIRO({ ...IRO, division: newVal ?? undefined })
                         } renderInput={(params) => <TextField {...params} label="Choose Division" />}
                         fullWidth
-                        disabled={IROLifeCycleStates.REOPENED !==IRO.status}/>
+                        disabled={IROLifeCycleStates.REOPENED !==IRO.status&&!hasPermissions(['OFFICE_MNGR_ACCESS'])&& hasPermissions(['ACCOUNTS_MNGR_ACCESS']) && !hasPermissions(['ADMIN_ACCESS'])}/>
                     </Grid>
                   ) : null}
                   {IRO?.purpose === 'Subdivision' ? (
@@ -652,7 +652,7 @@ const EditIRO = () => {
                         getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                         renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
                         fullWidth
-                        disabled={IROLifeCycleStates.REOPENED !==IRO.status}
+                        disabled={IROLifeCycleStates.REOPENED !==IRO.status&&!hasPermissions(['OFFICE_MNGR_ACCESS']) &&hasPermissions(['ACCOUNTS_MNGR_ACCESS']) && !hasPermissions(['ADMIN_ACCESS'])}
                       />
                     </Grid>
                   ) : null}

@@ -12,7 +12,7 @@ import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import IROServices from '../IRO/extras/IROServices';
 import FRFormEdit from './components/FRFormEdit';
 interface FRFormPageProps {
-  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen';
+  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen'| 'customEdit';
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const navigate = useNavigate();
@@ -36,70 +36,82 @@ const FRFormPage = (props: FRFormPageProps) => {
         }
       }
     }
-    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom'||props.action === 'reopen' ) {
-      if (props.action as any === 'custom') {
+    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom'||props.action === 'reopen'||props.action === 'customEdit' ) {
+      if (props.action as any === 'custom' ||props.action === 'customEdit' ) {
         console.log('A1');
-
+        // if (frID) {
         FRServices.getByIdCustom(frID as string)
-        .then((res) => {
-          const convertedData: CreatableFR = {
-            ...res.data,
-            requestAmount: ['requestedAmount'],
-          };
-          setRequisition(convertedData);
-          setFRLoaded(true);
-          console.log({ convertedData });
-        })
-        .catch((error) => {
-          enqueueSnackbar({
-            variant: 'error',
-            message: error.message,
-          });
-        });
+  .then((res) => {
+    const convertedData: CreatableFR = {
+      ...res.data,
+      requestAmount: ['requestedAmount'],
+    };
+    setRequisition(convertedData);
+    setFRLoaded(true);
+    console.log({ convertedData });
+  })
+  .catch((error) => {
+    enqueueSnackbar({
+      variant: 'error',
+      message: error.message,
+    });
+  });
       } else {
         console.log('A2');
-
+        // if (frID) {
         FRServices.getById(frID as string)
-          .then((res) => {
-            const convertedData: CreatableFR = {
-              ...res.data,
-              requestAmount: ['requestedAmount'],
-            };
-            setRequisition(convertedData);
-            setFRLoaded(true);
-            console.log({ res });
-          })
-          .catch((error) => {
-            enqueueSnackbar({
-              variant: 'error',
-              message: error.message,
-            });
-          });
+.then((res) => {
+  const convertedData: CreatableFR = {
+    ...res.data,
+    requestAmount: ['requestedAmount'],
+  };
+  setRequisition(convertedData);
+  setFRLoaded(true);
+  console.log({ res });
+})
+.catch((error) => {
+  enqueueSnackbar({
+    variant: 'error',
+    message: error.message,
+  });
+});
+        // }
+        // }
       }
     }
   }, []);
   const addFR = async (requisition: CreatableFR) => {
     try {
       // const snackbarId =
+      let res;
       // navigate('/fr/');
       if (props.action === 'custom') {
-        navigate('/fr/');
+        if (res) {
+          navigate('/fr/');
+        }
       } else if (props.action === 'add') {
         navigate('/fr/');
       } else if (props.action === 'customIRO') {
-        navigate('/iro/');
+        if (res) {
+          navigate('/iro/');
+        }
       }
       enqueueSnackbar({
         message: 'Creating FR Request',
         variant: 'info',
       });
-      let res;
       if (props.action === 'custom') {
         res = await FRServices.createFRRequestsCustom(requisition);
+        if (res) {
+          navigate('/fr/');
+        }
       } else if (props.action === 'add') {
         res = await FRServices.createFRRequests(requisition);
       } else if (props.action === 'customIRO') {
         res = await IROServices.createFRRequestsIRO(requisition);
+        if (res) {
+          navigate('/iro/');
+        }
       }
 
       enqueueSnackbar({
@@ -133,11 +145,19 @@ const FRFormPage = (props: FRFormPageProps) => {
       });
 
       if (frID) {
-        const res = await FRServices.updateFRRequests(frID, requisition);
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
-        });
+        if (props.action === 'customEdit') {
+          const res = await FRServices.updateFRRequestsCustom(frID, requisition);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+        } else {
+          const res = await FRServices.updateFRRequests(frID, requisition);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+        }
       }
     } catch (err) {
       console.log(err);
@@ -238,9 +258,17 @@ const FRFormPage = (props: FRFormPageProps) => {
                   action={props.action}
                   onSubmit={addFR} // Pass the addFR function to the onSubmit prop
                 />
-              ) : (
-                <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />
-              )}
+              ) : props.action === 'customEdit' ? (
+                <FRForm
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+                />
+              ) :
+                (
+                  <ViewFR value={requisition} options={{ FRLoaded }} onChange={(newReq) => setRequisition(newReq)} action={props.action} onSubmit={manageFR} />
+                )}
             </Card>
           </>
         }

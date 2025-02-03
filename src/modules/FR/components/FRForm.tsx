@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Container,
   CardContent,
@@ -24,6 +25,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Divider,
+  Tooltip,
 } from '@mui/material';
 import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -43,6 +46,9 @@ import MessageItem from '../../../components/MessageItem';
 import IRO from '../../IRO';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import AddIcon from '@mui/icons-material/Add';
+import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
+import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
@@ -60,6 +66,12 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [selectedSubCategory3, setSelectedSubCategory3] = useState<SubCategory3 | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const { user } = useAuth();
+  const [addSignature, toggleAddSignature] = useState(false);
+  const [eSignCoordinator, seteSignCoordinator] = useState(false);
+  const [eSignJrLeader, seteSignJrLeader] = useState(false);
+  const [eSignSrLeader, seteSignSrLeader] = useState(false);
+  const [eSignPresident, setePresident] = useState(false);
+
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
     mainCategory: '',
@@ -72,6 +84,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   });
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
+  const [sanctionedAsPers, setSanctionedAsPers] = useState<any[]>([]);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
@@ -86,10 +99,23 @@ const FRForm = (props: FormComponentProps<any>) => {
   });
   const [submit, setSubmit] = useState(0);
   const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
+  const [open, setOpen] = useState(false);
+
+  const [showCoordinatorName, setCoordinatorName] = useState(false);
+  const [showJrLeaderName, setJrLeaderName] = useState(false);
+  const [showSrLeaderName, setSrLeaderName] = useState(false);
+  const [showPresidentName, setPresidentName] = useState(false);
 
   const handleClose = () => {
     setShowAddParticularDialog(false);
     ('add');
+  };
+  const handleCloses = () => {
+    setOpen(false);
+  };
+  const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
   };
   useEffect(() => {
     PaymentMethodService.getAll().then((res) => {
@@ -163,6 +189,14 @@ const FRForm = (props: FormComponentProps<any>) => {
         });
     }
   }, [props.value.purpose]);
+  let asPer;
+  useEffect(() => {
+    const ddata = SanctionedAsPerService.getAll().then((res) => {
+      asPer = res.data.map((e:any)=>e.asPer ); setSanctionedAsPers(asPer);
+      console.log(asPer);
+    });
+  }, []);
+
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === props.value.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
@@ -269,6 +303,16 @@ const FRForm = (props: FormComponentProps<any>) => {
           variant: 'error',
         });
       });
+  };
+  const handleClickOpen = (particular: Particular, index: number) => {
+    setNewParticular((prev: any) => ({
+      ...prev,
+      ...particular,
+      sanctionedAmount: null,
+    }));
+    setOpen(true);
+    setSelectedParticularIndex(index);
+    // setNewParticular(particular);
   };
   let total = 0;
   props.value?.particulars?.forEach((particular: any) => {
@@ -394,7 +438,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   </Grid>
                 </>
               ) : null}
-              {props.action === 'custom' || props.action === 'customIRO' ? (
+              {props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                 <Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
                       onClose={() => setOpen(false)}
@@ -403,29 +447,24 @@ const FRForm = (props: FormComponentProps<any>) => {
                   <TextField
                     label={props.action === 'custom' ? 'FR No' : 'IRO No'}
                     value={props?.value.FRno}
-                    autoComplete='off'
+                    autoComplete="off"
                     onChange={(e) =>
                       props.onChange({
                         ...props.value,
-                        FRno: (e.target.value),
+                        FRno: e.target.value,
                       })
                     }
-                    // onFocus={() => setFocused(true)}
-                    // onBlur={() => setFocused(false)}
                     variant="outlined"
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    // inputProps={{
-                    //   max: totalRequestedAmount, min: 0, onWheel: handleWheel,
-                    // }}
                     inputProps={{
                       max: totalRequestedAmount,
                       min: 0,
                       step: 0.01, // Allows up to two decimal places
-                      // onWheel: handleWheel,
                     }}
-                  // disabled
-                  // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">{props.action === 'custom'? 'FRNo' :'IRONo'}</InputAdornment>,
+                    }}
                   />
                   {/* </Tooltip> */}
                 </Grid>
@@ -511,7 +550,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   />
                 </Grid>
               ) : null}
-              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ? (
+              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                 <>
                   <Grid item xs={12}>
                     <Typography>Particulars</Typography>
@@ -543,7 +582,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   </Grid>
                 </>
               ) : ''}
-              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ? (
+              {props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                 <Grid item xs={12} md={4} lg={4}>
                   <Button
                     variant="contained"
@@ -583,6 +622,9 @@ const FRForm = (props: FormComponentProps<any>) => {
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>
                           <TableCell align="center">Requested Amount</TableCell>
+                          { props.value.status == FRLifeCycleStates.REOPENED && (
+                            <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
+                          )}
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -602,6 +644,13 @@ const FRForm = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
+                                  {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED && (
+                                    <Tooltip title="Add Sanction as per">
+                                      <IconButton>
+                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                      </IconButton>
+                                    </Tooltip>
+                                  )}
                                 </>
                               )}
                               <IconButton
@@ -621,6 +670,8 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
+                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
+                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -639,7 +690,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               </Grid>
 
 
-              {props.action === 'custom' || props.action === 'customIRO' || props.action === 'edit' ? (
+              {props.action === 'custom' ||props.action === 'customEdit' || props.action === 'customIRO' || props.action === 'edit'&& props.value.status !==FRLifeCycleStates.FR_SEND_BACK|| props.value.status ==FRLifeCycleStates.REOPENED && props.value.status ==FRLifeCycleStates.WAITING_FOR_ACCOUNTS ? (
                 <><Grid item xs={12} md={6}>
                   {/* <Tooltip open={isFocused?true:false}
 onClose={() => setOpen(false)}
@@ -844,7 +895,51 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
                     </Select>
                   </FormControl>
-                </Grid></>
+                </Grid>
+                {props.action =='custom' ||props.action === 'customEdit' && props.value.isPresident &&(
+
+                  <Grid item xs={12} md={6}>
+                    <DatePicker
+                      label="President sanction Date"
+                      value={(props.value as any)?.PresidentApprovedDate}
+                      format="DD/MM/YYYY"
+                      sx={{ width: '100%' }}
+                      slotProps={{
+                        textField: {
+                          required: true,
+                        },
+                      }}
+                      onChange={(newValue) =>
+                        props.onChange({
+                          ...props?.value,
+                          presidentSanctionDate: newValue, // Use the newValue provided by DatePicker
+                        })
+                      }
+                    />
+
+                  </Grid>
+                )}
+                {props.action =='custom' || props.action === 'customEdit' &&(
+                  <><Grid item md={12}>
+                    <FormControlLabel
+                      label="President sanction"
+                      checked={props.value.isPresident || false} // Ensure it's always a boolean
+                      onChange={(e:any) =>
+                        props.onChange({
+                          ...props.value,
+                          isPresident: e.target.checked, // Directly assign boolean value
+                        })
+                      }
+                      control={<Checkbox />}
+                    />
+                  </Grid><br /><Grid>
+
+                    <Button variant="contained" onClick={() => toggleAddSignature(true)} startIcon={<AttachmentIcon />}>
+                          Add Signature
+                    </Button>
+                  </Grid></>
+                )}
+                </>
               ) : ''}
 
 
@@ -1052,7 +1147,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       Remark
                     </Button> : null}
                   &nbsp;
-                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ? (
+                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
@@ -1078,7 +1173,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       />
                       &nbsp;
                       &nbsp;
-                      {FRLifeCycleStates.REOPENED !== props.value.status && (
+                      {FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='custom'&& props.action !=='customIRO'&& props.action !== 'customEdit' ? (
 
                         <PermissionChecks
                           permissions={['WRITE_FR']}
@@ -1096,7 +1191,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                             </Button>
                           }
                         />
-                      )}
+                      ):[]}
                     </>
                   ) : null}
                 </div>
@@ -1431,6 +1526,138 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           </DialogActions>
         </form>
       </Dialog>
+      <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }} >
+        <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+            <Grid item>
+              <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Add Signatures
+              </Typography>
+              <Divider />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setCoordinatorName(true);
+                }}
+              >
+                {' '}
+                    Coordinator Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  seteSignCoordinator(true);
+                }}
+              >
+                {' '}
+                Coordinator Sign
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setJrLeaderName(true);
+                }}
+              >
+                {' '}
+                    Jr Leader Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="info"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  seteSignJrLeader(true);
+                }}
+              >
+                {' '}
+                    Jr Leader Signature
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setSrLeaderName(true);
+                }}
+              >
+                {' '}
+                    Sr Leader Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="warning"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  // setShowPresidentFileUploader(true);
+                  seteSignSrLeader(true);
+                }}
+              >
+                {' '}
+                    Sr Leader Signature
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setPresidentName(true);
+                }}
+              >
+                {' '}
+                    President Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setePresident(true);
+                }}
+              >
+                {' '}
+                   President Signature
+              </Button>
+            </Grid>
+
+
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  toggleAddSignature(false);
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+                // endIcon={<CloseIcon />}
+              >
+                        Close
+              </Button>
+            </Grid>
+
+          </Grid>
+        </DialogContent>
+      </Dialog>
       <FileUploader
         title="Attachments"
         action="add"
@@ -1513,6 +1740,246 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
+      <Dialog
+        open={showCoordinatorName}
+        onClose={() => setCoordinatorName(false)}
+      >
+        <DialogTitle>Coordinator Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.names?.coordinator}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                coordinatorName: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setCoordinatorName(false)}>Cancel</Button>
+          <Button onClick={()=>setCoordinatorName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showJrLeaderName}
+        onClose={() => setJrLeaderName(false)}
+      >
+        <DialogTitle>Junior Leader Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.names?.jrLeader}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                jrLeaderName: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setJrLeaderName(false)}>Cancel</Button>
+          <Button onClick={()=>setJrLeaderName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showPresidentName}
+        onClose={() => setPresidentName(false)}
+      >
+        <DialogTitle>President Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.names?.president}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                presidentName: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setPresidentName(false)}>Cancel</Button>
+          <Button onClick={()=>setPresidentName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        // PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+      // sx={{ width: '30%', textAlign: 'center' }}
+      >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCloses();
+            props.onChange({
+              ...props.value,
+              particulars: props.value.particulars?.map((part: { _id: string | undefined }) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
+            });
+            // setParticulars({
+            //   particulars: props.value.particulars?.map((part: any, _ind: number | null) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+            // });
+          }}
+
+        >
+
+          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+            Sanctioned Amount
+          </DialogTitle>
+          <DialogContent>
+
+
+            <Grid item xs={12} md={6} width={'20rem'} padding={1}>
+              <Grid item xs={12} md={6}>
+                {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                <TextField
+                  label="Sanctioned Amount"
+                  type={'number'}
+                  // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                  value={newParticular?.sanctionedAmount ?? total}
+
+                  required
+                  title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                  autoComplete='off'
+                  // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  onChange={(e) => {
+                    if (totalRequestedAmount) {
+                      setNewParticular((amount: any) => ({
+                        ...amount,
+                        sanctionedAmount: Number(e.target.value),
+                      }));
+                    }
+                  }
+                  }
+                  // onFocus={() => setFocused(true)}
+                  // onBlur={() => setFocused(false)}
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ shrink: true }}
+                  inputProps={{
+                    max: totalRequestedAmount,
+                    min: 0,
+                    step: 0.01, // Allows up to two decimal places
+                    onWheel: handleWheel,
+                  }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                />
+                {/* </Tooltip> */}
+              </Grid>
+              <br />
+              <Autocomplete
+                value={newParticular?.sanctionedAsPer as unknown as any}
+                options={sanctionedAsPers ?? []}
+                getOptionLabel={(option:any) => option ?? ''}
+                // getOptionLabel={(requisition) => requisition}
+                // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(_e, selectedSanction) => {
+                // const { _id, createdAt, updatedAt, __v, asPer } = selectedSanction;
+                  // if (selectedSanction && props.action === 'view') {
+                  // setNewParticular({
+                  //   ...props.value,
+                  //   sanctionedAsPer: selectedSanction as ISanctionedAsPer,
+                  // });
+                  setNewParticular((asper: any) => ({
+                    ...asper,
+                    sanctionedAsPer: selectedSanction,
+                  }));
+                  // }
+                }}
+
+                renderInput={(params) => <TextField {...params}
+                  label="Sanctioned As Per*"
+                // required
+                // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                />}
+
+                fullWidth
+              />
+            </Grid>
+
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleCloses}>
+              Cancel
+            </Button>
+            <Button type="submit">Add</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+      <Dialog
+        open={showSrLeaderName}
+        onClose={() => setSrLeaderName(false)}
+      >
+        <DialogTitle>Senior Leader Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value.names?.srLeader}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                srLeaderName: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setSrLeaderName(false)}>Cancel</Button>
+          <Button onClick={()=>setSrLeaderName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
       <FileUploader
         title="Attachments"
         action="add"
@@ -1535,6 +2002,170 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             props.onChange({
               ...props.value,
               officeManagerSign: [...(props.value.officeManagerSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={eSignCoordinator}
+        onClose={() => seteSignCoordinator(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.signature?.coordinator}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              CoordinatorSign: [...(props.value.CoordinatorSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={eSignJrLeader}
+        onClose={() => seteSignJrLeader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.signature?.jrLeader}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              jrLeaderSign: [...(props.value.jrLeaderSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={eSignSrLeader}
+        onClose={() => seteSignSrLeader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.signature?.srLeader}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              srLeaderSign: [...(props.value.srLeaderSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={eSignPresident}
+        onClose={() => setePresident(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.signature?.president}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              presidentSign: [...(props.value.srLeaderSign || []), res.data],
             });
             return res;
           });
@@ -1586,13 +2217,13 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           }));
           return FileUploaderServices.renameFile(fileId, newName);
         }}
-        deleteFile={(fileId: string) => {
-          setNewParticular((particularDetails) => ({
-            ...particularDetails,
-            attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
-          }));
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        // deleteFile={(fileId: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        //   }));
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
       />
     </div>
   );

@@ -11,7 +11,7 @@ import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
-import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Print as PrintIcon, AttachFile as AttachmentIcon, Download as DownloadIcon, Edit as EditIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
@@ -23,6 +23,9 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import { useAuth } from '../../hooks/Authentication';
 import { set } from 'mongoose';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import FileUploader from '../../components/FileUploader/FileUploader';
+import { MB } from '../../extras/CommonConfig';
+import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
@@ -38,13 +41,292 @@ const ReopenedIRO = () => {
     rangeType: 'months',
   });
   const [mngrName, setMngrName] = useState('');
+  const [attachment, setAttachment] = useState<boolean>(false);
+  const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
+  const [file, setFile] = useState<boolean>(false);
+  const [viewFileUploader, setViewFileUploader] = useState(false);
 
+  const [selectedIRO, setSelectedIRO] = useState<IROrder>({
+    _id: '',
+    IROno: '',
+    IRODate: moment(),
+    purpose: 'Division',
+    status: CommonLifeCycleStates.ACTIVE,
+    kind: 'IRO',
+    sanctionedAmount: 0,
+    sanctionedAsPer: '',
+    sanctionedBank: '',
+    mainCategory: '',
+    particulars: [],
+    // releaseAmount: {
+    //   _id: '',
+    //   modeOfPayment: '',
+    //   releaseAmount: 0,
+    //   transactionNumber: '',
+    //   transferredAmount: 0,
+    //   transferredDate: null,
+    //   transferredBank: {
+    //     bankName: '',
+    //     branchName: '',
+    //     accountNumber: '',
+    //     IFSCCode: '',
+    //   },
+    //   attachment: [],
+    //   division: '',
+    // },
+    division: {
+      _id: '',
+      details: {
+        name: '',
+        divisionId: '',
+        contactNumber: '',
+        email: '',
+        address: {
+          buildingName: '',
+          street: '',
+          city: '',
+          state: '',
+          country: '',
+          pincode: '',
+        },
+        coordinator: {},
+        seniorLeader: {},
+        juniorLeader: {},
+        president: {},
+        officeManager: {},
+      },
+      subDivisions: [
+        {
+          _id: '',
+          name: '',
+        },
+      ],
+      DivisionBankFCRA: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      DivisionBankLocal: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank1: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank2: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank3: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank4: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank5: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank6: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank7: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank8: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank9: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank10: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank11: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank12: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank13: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank14: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank15: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank16: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank17: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank18: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank19: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      BeneficiaryBank20: {
+        bankName: '',
+        branchName: '',
+        accountNumber: '',
+        IFSCCode: '',
+        beneficiary: '',
+      },
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+    createdBy: {
+      workerCode: '',
+      kind: 'worker',
+      tokens: [],
+      basicDetails: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        permanentAddress: {},
+        currentOfficialAddress: {},
+        residingAddress: {},
+        dateOfBirth: moment(),
+      },
+      officialDetails: {
+        divisionHistory: [],
+        remarks: '',
+        status: null,
+        noOfChurches: 0,
+      },
+      supportDetails: {
+        selfSupport: true,
+        percentageofSelfSupport: 0,
+        // totalNoOfYearsInMinistry: 10,
+        withChurch: true,
+      },
+      supportStructure: {
+        basic: 0,
+        HRA: 0,
+        spouseAllowance: 0,
+        positionalAllowance: 0,
+        specialAllowance: 0,
+        impactDeduction: 0,
+        telAllowance: 0,
+        PIONMissionaryFund: 0,
+        MUTDeduction: 0,
+      },
+      children: [],
+      _id: '',
+      createdAt: moment(),
+      updatedAt: moment(),
+    },
+    createdAt: moment(),
+    updatedAt: moment(),
+    billAttachment: [],
+    signature: {},
+    specialsanction: '',
+  });
+  const [pdfProps, setPdfProps] = useState<{
+    purpose: FRPurpose | null;
+    divisionId: string | null;
+    workerId: string | null;
+    designationParticularID: string | null;
+    subDivisionId: string | null;
+    IRONo: string | null;
+    month: string | null;
+    date: string | null;
+  } | null>(null);
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
   const user = useAuth();
-  console.log(isCoordinator, 'user21');
-
+  console.log(selectedIRO, 'selectedIRO');
+  useEffect(() => {
+    // Check if `selectedIRO` has a valid ID and `billAttachment` is not empty
+    if (selectedIRO._id !== '' && selectedIRO.billAttachment.length > 0) {
+      IROServices.updateIRO(selectedIRO._id, selectedIRO);
+    }
+  }, [file]);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -200,6 +482,49 @@ const ReopenedIRO = () => {
           primaryText="Actions"
           key={'IRO action'}
           items={[
+
+            ...(hasPermissions(['ADMIN_ACCESS']) || isCoordinator ?
+              [
+                {
+                  id: 'Attachments',
+                  text: 'IRO Attachments',
+                  icon: AttachmentIcon,
+                  onClick: () => {
+                    setAttachment(true);
+                    setFileUploaderAction('add');
+                    setSelectedIRO(props.row);
+                    if (props.row.workerSupport) {
+                      setPdfProps({
+                        purpose: props.row.purpose ?? 'Division',
+                        divisionId: props.row.division?._id ?? null,
+                        workerId:
+                                      props.row.purpose == 'Coordinator' && props.row.purposeCoordinator ?
+                                        props.row.purposeCoordinator?._id :
+                                        props.row.purpose == 'Worker' && props.row.purposeWorker?._id ?
+                                          props.row.purposeWorker?._id :
+                                          null,
+                        subDivisionId: props.row.purposeSubdivision?._id ?? null,
+                        designationParticularID: props.row.designationParticular ?? null,
+                        IRONo: props.row.IROno,
+                        month: props.row.particulars[0].month,
+                        date: moment(props.row.releaseAmount?.transferredDate).format('DD/MM/YYYY'),
+                      });
+                      // setSupportAttachment(true);
+                    }
+                  },
+                },
+              ] :
+              [
+                {
+                  id: 'Attachments',
+                  text: 'IRO Attachments',
+                  icon: AttachmentIcon,
+                  onClick: () => {
+                    setViewFileUploader(true);
+                    setSelectedIRO(props.row);
+                  },
+                },
+              ]),
             // {
             //   id: 'print',
             //   text: 'Print FR',
@@ -217,39 +542,21 @@ const ReopenedIRO = () => {
             // },
             {
               id: 'View',
-              text: 'View Fr ',
-              icon: PreviewIcon,
+              text: 'View IRO',
               // component: Link,
-              // to: `/fr/${(params.row as any).FR}/view`,
+              // to: `/iro/${params.row._id}`,
+              icon: PreviewIcon,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                window.open( `/iro/${props.row._id}`, '_blank');
               },
-
             },
-            ...(!isCoordinator|| hasPermissions(['ADMIN_ACCESS']) ?[
-
-              ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['OFFICE_MNGR_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
-                [
-
-                  {
-                    id: 'edit',
-                    text: 'Edit',
-                    component: Link,
-                    // to: `/iro/${params.row._id}/edit`,
-                    onClick: () => {
-                      window.open(`/iro/${props.row._id}/edit`, '_blank');
-                    },
-                    icon: EditIcon,
-                  },
-                ]:[]),
-            ]:[]),
             ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['OFFICE_MNGR_ACCESS']) || !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||!hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||!hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
               [
                 ...(isCoordinator ?[
 
                   {
                     id: 'edit',
-                    text: 'Edit for coordinator',
+                    text: 'Edit IRO - Coordinator',
                     component: Link,
                     // to: `/iro/${params.row._id}/edit`,
                     onClick: () => {
@@ -260,6 +567,77 @@ const ReopenedIRO = () => {
                 ]:[]),
 
               ]:[]),
+            ...(!isCoordinator|| hasPermissions(['ADMIN_ACCESS']) ?[
+
+              ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['OFFICE_MNGR_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])||hasPermissions(['LOCAL_ACCOUNT_ACCESS'])||hasPermissions(['FCRA_ACCOUNTS_ACCESS'])?
+                [
+
+                  {
+                    id: 'edit',
+                    text: 'Edit IRO ',
+                    component: Link,
+                    // to: `/iro/${params.row._id}/edit`,
+                    onClick: () => {
+                      window.open(`/iro/${props.row._id}/edit`, '_blank');
+                    },
+                    icon: EditIcon,
+                  },
+                ]:[]),
+            ]:[]),
+            ...(!isCoordinator || hasPermissions(['ADMIN_ACCESS']) ?[
+
+              {
+                id: 'Close IRO',
+                text: 'Close IRO',
+                icon: PreviewIcon,
+                onClick: () => {
+                  setIroData(props.row);
+                  setConform1(true);
+                  if (props?.row.FR) {
+                    FRServices.getById(props.row.FR).then((res) => {
+                      setFrData(res.data);
+                      console.log(res.data, 'fr');
+                    });
+                  }
+                  setPrintIroLoading(true);
+                  setTimeout(() => {
+                    setPrintIroLoading(false);
+                    // window.location.reload();
+                  }, 2000);
+                },
+              },
+            ]:[]),
+            {
+              id: 'View',
+              text: 'View FR ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+              },
+
+            },
+            ...(!isCoordinator || hasPermissions(['ADMIN_ACCESS']) ?[
+              {
+                id: 'edit',
+                text: 'Change FR No',
+                component: Link,
+                // to: `/iro/${params.row._id}/edit`,
+                onClick: () => {
+                  if (props?.row.FR) {
+                    FRServices.getById(props.row.FR).then((res) => {
+                      setFrData(res.data);
+                      setFrNo(res.data.FRno);
+                      console.log(res.data, 'fr');
+                    });
+                  }
+                  setDialogAction(true);
+                  // window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
+                },
+                icon: EditIcon,
+              },
+            ]:[]),
 
             // {
             //   id: 'View',
@@ -294,47 +672,7 @@ const ReopenedIRO = () => {
             //   },
             //   icon: PreviewIcon,
             // },
-            ...(!isCoordinator || hasPermissions(['ADMIN_ACCESS']) ?[
 
-              {
-                id: 'Close IRO',
-                text: 'Close IRO',
-                icon: PreviewIcon,
-                onClick: () => {
-                  setIroData(props.row);
-                  setConform1(true);
-                  if (props?.row.FR) {
-                    FRServices.getById(props.row.FR).then((res) => {
-                      setFrData(res.data);
-                      console.log(res.data, 'fr');
-                    });
-                  }
-                  setPrintIroLoading(true);
-                  setTimeout(() => {
-                    setPrintIroLoading(false);
-                    // window.location.reload();
-                  }, 2000);
-                },
-              },
-              {
-                id: 'edit',
-                text: 'Edit FrNo',
-                component: Link,
-                // to: `/iro/${params.row._id}/edit`,
-                onClick: () => {
-                  if (props?.row.FR) {
-                    FRServices.getById(props.row.FR).then((res) => {
-                      setFrData(res.data);
-                      setFrNo(res.data.FRno);
-                      console.log(res.data, 'fr');
-                    });
-                  }
-                  setDialogAction(true);
-                  // window.open(`/iro/${props.row._id}/EditIROForRevert`, '_blank');
-                },
-                icon: EditIcon,
-              },
-            ]:[]),
           ]}
 
         />
@@ -682,7 +1020,57 @@ const ReopenedIRO = () => {
           </DialogActions>
         </form>
       </Dialog>
-
+      <FileUploader
+        title=" Bill Upload"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={attachment}
+        action={fileUploaderAction}
+        postApprove={() => IROServices.reconciliationCompleted(selectedIRO._id)}
+        onClose={() => {
+          setAttachment(false), setFile(false);
+          window.location.reload();
+        }}
+        // getFiles={TestServices.getBills}
+        getFiles={selectedIRO?.billAttachment ?? []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
+            setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.length > 0 ? [...selectedIRO.billAttachment, res.data] : [res.data]}));
+            setFile(true);
+            return res;
+          });
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)) }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.filter((file) => file._id !== fileId) }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploader}
+        action="view"
+        onClose={() => setViewFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={selectedIRO?.billAttachment ?? []}
+      />
     </CommonPageLayout>
   );
 };

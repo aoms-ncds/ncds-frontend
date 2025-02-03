@@ -123,6 +123,14 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
+      title: 'Edit FR',
+      path: '/:frID/editCustom',
+      element: <FRFormPage action="customEdit" />,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
       title: 'Revert Fr',
       path: '/sentBack',
       element: <SentBack/>,

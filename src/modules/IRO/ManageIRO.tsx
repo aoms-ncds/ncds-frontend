@@ -620,7 +620,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     // Check if `selectedIRO` has a valid ID and `billAttachment` is not empty
     if (selectedIRO._id !== '' && selectedIRO.billAttachment.length > 0) {
-      IROServices.updateIRO(selectedIRO._id, selectedIRO);
+      IROServices.updateIRO(selectedIRO._id, selectedIRO, false, true);
     }
   }, [file]);
   // useEffect(() => {
@@ -831,48 +831,63 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //   },
             //   icon: FingerprintIcon,
             // },
-            ...(hasPermissions(['WRITE_IRO']) && params.row.status == IROLifeCycleStates.AMOUNT_RELEASED ?
+            ...(hasPermissions(['WRITE_IRO']) ||
+            params.row.status == IROLifeCycleStates.REVERTED_TO_DIVISION ||
+            params.row.status == IROLifeCycleStates.AMOUNT_RELEASED) ?
+              (
+                isCoordinator ?
+                  [
+                    {
+                      id: 'Attachments',
+                      text: 'Attachments',
+                      icon: AttachmentIcon,
+                      onClick: () => {
+                        setAttachment(true);
+                        setFileUploaderAction('add');
+                        setSelectedIRO(params.row);
+                        if (params.row.workerSupport) {
+                          setPdfProps({
+                            purpose: params.row.purpose ?? 'Division',
+                            divisionId: params.row.division?._id ?? null,
+                            workerId:
+                                 params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
+                                   params.row.purposeCoordinator?._id :
+                                   params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
+                                     params.row.purposeWorker?._id :
+                                     null,
+                            subDivisionId: params.row.purposeSubdivision?._id ?? null,
+                            designationParticularID: params.row.designationParticular ?? null,
+                            IRONo: params.row.IROno,
+                            month: params.row.particulars[0].month,
+                            date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY'),
+                          });
+                          // setSupportAttachment(true);
+                        }
+                      },
+                    },
+                  ] :
+                  [{
+                    id: 'Attachments',
+                    text: 'View Attachments',
+                    icon: AttachmentIcon,
+                    onClick: () => {
+                      setViewFileUploader(true);
+                      setSelectedIRO(params.row);
+                    },
+                  }]
+              ) :
               [
                 {
                   id: 'Attachments',
-                  text: 'Attachments',
-                  icon: AttachmentIcon,
-                  onClick: () => {
-                    setAttachment(true);
-                    setFileUploaderAction('add');
-                    setSelectedIRO(params.row);
-                    if (params.row.workerSupport) {
-                      setPdfProps({
-                        purpose: params.row.purpose ?? 'Division',
-                        divisionId: params.row.division?._id ?? null,
-                        workerId:
-                          params.row.purpose == 'Coordinator' && params.row.purposeCoordinator ?
-                            params.row.purposeCoordinator?._id :
-                            params.row.purpose == 'Worker' && params.row.purposeWorker?._id ?
-                              params.row.purposeWorker?._id :
-                              null,
-                        subDivisionId: params.row.purposeSubdivision?._id ?? null,
-                        designationParticularID: params.row.designationParticular ?? null,
-                        IRONo: params.row.IROno,
-                        month: params.row.particulars[0].month,
-                        date: moment(params.row.releaseAmount?.transferredDate).format('DD/MM/YYYY'),
-                      });
-                      setSupportAttachment(true);
-                    }
-                  },
-                },
-              ] :
-              [
-                {
-                  id: 'Attachments',
-                  text: 'Attachments',
+                  text: 'View Attachments',
                   icon: AttachmentIcon,
                   onClick: () => {
                     setViewFileUploader(true);
                     setSelectedIRO(params.row);
                   },
                 },
-              ]),
+              ],
+
             // {
             //   id: 'Send Back',
             //   text: 'Send Back',

@@ -104,6 +104,7 @@ export default {
       (data) => ({
         ...data,
         FRdate: moment(data.FRdate),
+        PresidentApprovedDate: moment(data.PresidentApprovedDate),
         createdAt: moment(data.createdAt),
         updatedAt: moment(data.updatedAt),
         frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null,
@@ -243,6 +244,70 @@ export default {
       new Promise((resolve, reject) => {
         axios
           .patch('/fr/' + frID, {
+            ...frRequest,
+          }, { headers: { ...getAuthHeader() } })
+          .then(async (updatedFR) => {
+            try {
+              if (frRequest.particulars) {
+                for (let i = 0; i < frRequest.particulars.length; i++) {
+                  const particulars = frRequest.particulars[i];
+                  if (particulars._id) {
+                    await axios.patch(`/fr/particulars/${particulars._id}`, {
+                      FR: updatedFR.data.data._id,
+                      mainCategory: particulars.mainCategory,
+                      subCategory1: particulars.subCategory1,
+                      subCategory2: particulars.subCategory2,
+                      subCategory3: particulars.subCategory3,
+                      quantity: particulars.quantity,
+                      unitPrice: particulars.unitPrice,
+                      month: particulars.month,
+                      requestedAmount: particulars.requestedAmount,
+                      narration: particulars?.narration,
+                      sanctionedAsPer: particulars.sanctionedAsPer,
+                      attachment: particulars.attachment,
+                      sanctionedAmount: particulars.sanctionedAmount,
+
+                    }, { headers: { ...getAuthHeader() } });
+                  } else {
+                    await axios.post('/fr/particulars/', {
+                      FR: updatedFR.data.data._id,
+                      mainCategory: particulars.mainCategory,
+                      subCategory1: particulars.subCategory1,
+                      subCategory2: particulars.subCategory2,
+                      subCategory3: particulars.subCategory3,
+                      unitPrice: particulars.unitPrice,
+                      quantity: particulars.quantity,
+                      month: particulars.month,
+                      requestedAmount: particulars.requestedAmount,
+                      narration: particulars?.narration,
+                      sanctionedAsPer: particulars.sanctionedAsPer,
+                      attachment: particulars.attachment,
+                      sanctionedAmount: particulars.sanctionedAmount,
+
+                    }, { headers: { ...getAuthHeader() } });
+                  }
+                }
+              }
+              resolve(updatedFR); // Resolve with the updated division
+            } catch (error) {
+              reject(error);
+            }
+          })
+          .catch(reject);
+      }),
+      (data) => ({
+        ...data,
+        FRdate: moment(data.FRdate),
+        createdAt: moment(data.createdAt),
+        updatedAt: moment(data.updatedAt),
+      }),
+    );
+  },
+  updateFRRequestsCustom: (frID: string, frRequest: CreatableFR) => {
+    return getStandardResponse<FR>(
+      new Promise((resolve, reject) => {
+        axios
+          .patch('/fr/customEdit/' + frID, {
             ...frRequest,
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {

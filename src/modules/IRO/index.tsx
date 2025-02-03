@@ -134,17 +134,22 @@ const IRODashboard = () => {
         <Grid item xs={12} md={4} xl={3}>
           <DashboardCardButton primaryText="Rejected IRO" color="#fff" targetRoute="/iro/rejected" />
         </Grid>
-        <Grid item xs={12} md={4} xl={3}>
-          <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/iro/reopened" />
-        </Grid>
-        {/* <PermissionChecks
+        <PermissionChecks
+          permissions={[]}
+          granted={(
+            <Grid item xs={12} md={4} xl={3}>
+              <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                primaryText="Re Opened" secondaryText="IRO" color="#fff" targetRoute="/iro/reopened" />
+            </Grid>
+          )} />
+
+        <PermissionChecks
           permissions={['CUSTOM_FR_IRO']}
           granted={(
             <Grid item xs={12} md={4} xl={3}>
               <DashboardCardButton primaryText="Custom IRO" color="#fff" targetRoute="/iro/custom" />
             </Grid>
-          )} /> */}
+          )} />
       </Grid>
     </CommonPageLayout>
   );
