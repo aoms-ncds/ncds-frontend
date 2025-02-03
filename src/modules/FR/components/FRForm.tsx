@@ -67,7 +67,9 @@ const FRForm = (props: FormComponentProps<any>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const { user } = useAuth();
   const [addSignature, toggleAddSignature] = useState(false);
+  const [addSignaturePr, toggleAddSignaturePr] = useState(false);
   const [eSignCoordinator, seteSignCoordinator] = useState(false);
+  const [eSignPresidentIRO, setePresidentIRO] = useState(false);
   const [eSignJrLeader, seteSignJrLeader] = useState(false);
   const [eSignSrLeader, seteSignSrLeader] = useState(false);
   const [eSignPresident, setePresident] = useState(false);
@@ -102,6 +104,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [open, setOpen] = useState(false);
 
   const [showCoordinatorName, setCoordinatorName] = useState(false);
+  const [showPresidentIROName, setPresidentIROName] = useState(false);
   const [showJrLeaderName, setJrLeaderName] = useState(false);
   const [showSrLeaderName, setSrLeaderName] = useState(false);
   const [showPresidentName, setPresidentName] = useState(false);
@@ -129,7 +132,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(props.value.division?._id, 'newParticular');
+  console.log(props.action, 'newParticular');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -470,8 +473,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 </Grid>
 
               ) : ''}
-              {(props.action === 'edit' &&
-  (props.value?.purpose === 'Division' || props.value?.purpose === 'Subdivision')) && (
+              {((props.value?.purpose === 'Division' || props.value?.purpose === 'Subdivision' )) && (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.division ?? null}
@@ -503,7 +505,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 </Grid>
               ) : null}
 
-              {props.value?.purpose === 'Coordinator' && props.action =='edit' ? (
+              {props.value?.purpose === 'Coordinator'? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props?.value.purposeCoordinator}
@@ -896,7 +898,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     </Select>
                   </FormControl>
                 </Grid>
-                {props.action =='custom' ||props.action === 'customEdit' && props.value.isPresident &&(
+                {props.action =='custom' ||props.action === 'customEdit' ?(
 
                   <Grid item xs={12} md={6}>
                     <DatePicker
@@ -904,6 +906,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       value={(props.value as any)?.PresidentApprovedDate}
                       format="DD/MM/YYYY"
                       sx={{ width: '100%' }}
+                      disabled={!props.value.isPresident}
                       slotProps={{
                         textField: {
                           required: true,
@@ -918,8 +921,8 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     />
 
                   </Grid>
-                )}
-                {props.action =='custom' || props.action === 'customEdit' &&(
+                ):[]}
+                {props.action =='custom' || props.action === 'customEdit' ?(
                   <><Grid item md={12}>
                     <FormControlLabel
                       label="President sanction"
@@ -938,7 +941,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           Add Signature
                     </Button>
                   </Grid></>
-                )}
+                ):[]}
                 </>
               ) : ''}
 
@@ -1047,6 +1050,31 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       Office manager Sign
                   </Button>
                 </Grid>
+                {props.action === 'customIRO'||props.value.specialSanction || props.action =='custom' &&(
+                  <Grid item xs={12} md={2} lg={4}>
+                    <Button variant="contained" onClick={() => toggleAddSignaturePr(true)} startIcon={<AttachmentIcon />}>
+                      President details
+                    </Button>
+                  </Grid>
+                )}
+                {props.action =='customIRO' || props.action == 'custom'&&(
+                  <><Grid item md={12}>
+                    <FormControlLabel
+                      label="President sanction"
+                      checked={props.value.specialSanction || false} // Ensure it's always a boolean
+                      onChange={(e:any) =>
+                        props.onChange({
+                          ...props.value,
+                          specialSanction: e.target.checked, // Directly assign boolean value
+                        })
+                      }
+                      control={<Checkbox />}
+                    />
+                  </Grid><br /><Grid>
+
+                  </Grid></>
+                )}
+
 
                 </>
               ) : ''}
@@ -1658,6 +1686,59 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           </Grid>
         </DialogContent>
       </Dialog>
+      <Dialog open={addSignaturePr} sx={{ width: 400, margin: '0 auto' }} >
+        <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+            <Grid item>
+              <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Add Signatures
+              </Typography>
+              <Divider />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setPresidentIROName(true);
+                }}
+              >
+                {' '}
+                    President Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setePresidentIRO(true);
+                }}
+              >
+                {' '}
+                President Sign
+              </Button>
+            </Grid>
+
+
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  toggleAddSignaturePr(false);
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+                // endIcon={<CloseIcon />}
+              >
+                        Close
+              </Button>
+            </Grid>
+
+          </Grid>
+        </DialogContent>
+      </Dialog>
       <FileUploader
         title="Attachments"
         action="add"
@@ -1759,7 +1840,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             type="text"
             fullWidth
             variant="standard"
-            value={props.value.names?.coordinator}
+            value={props.value.coordinatorName}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -1771,6 +1852,39 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         <DialogActions>
           <Button onClick={()=>setCoordinatorName(false)}>Cancel</Button>
           <Button onClick={()=>setCoordinatorName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showPresidentIROName}
+        onClose={() => setPresidentIROName(false)}
+      >
+        <DialogTitle>President Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={props.value?.president}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                president: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setPresidentIROName(false)}>Cancel</Button>
+          <Button onClick={()=>setPresidentIROName(false)}>Add</Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -1792,7 +1906,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             type="text"
             fullWidth
             variant="standard"
-            value={props.value.names?.jrLeader}
+            value={props.value?.jrLeaderName}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -1825,7 +1939,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             type="text"
             fullWidth
             variant="standard"
-            value={props.value.names?.president}
+            value={props.value?.presidentName}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -1966,7 +2080,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             type="text"
             fullWidth
             variant="standard"
-            value={props.value.names?.srLeader}
+            value={props.value?.srLeaderName}
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -2035,7 +2149,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={eSignCoordinator}
         onClose={() => seteSignCoordinator(false)}
         // getFiles={TestServices.getBills}
-        getFiles={props.value.signature?.coordinator}
+        getFiles={props.value?.CoordinatorSign}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
             // console.log(res.data._id);
@@ -2073,10 +2187,51 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           maxTotalSize: 30 * MB,
         }}
         // accept={['video/*']}
+        open={eSignPresidentIRO}
+        onClose={() => setePresidentIRO(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={props.value.signature?.coordinator}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              presidentSign: [...(props.value.presidentSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
         open={eSignJrLeader}
         onClose={() => seteSignJrLeader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={props.value.signature?.jrLeader}
+        getFiles={props.value?.jrLeaderSign}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
             // console.log(res.data._id);
@@ -2117,7 +2272,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={eSignSrLeader}
         onClose={() => seteSignSrLeader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={props.value.signature?.srLeader}
+        getFiles={props.value?.srLeaderSign}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
             // console.log(res.data._id);
@@ -2158,14 +2313,14 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={eSignPresident}
         onClose={() => setePresident(false)}
         // getFiles={TestServices.getBills}
-        getFiles={props.value.signature?.president}
+        getFiles={props.value?.presidentSign}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
             // console.log(res.data._id);
 
             props.onChange({
               ...props.value,
-              presidentSign: [...(props.value.srLeaderSign || []), res.data],
+              presidentSign: [...(props.value.presidentSign || []), res.data],
             });
             return res;
           });

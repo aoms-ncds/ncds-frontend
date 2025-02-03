@@ -14,6 +14,8 @@ import FRFormPage from '../../FR/FRFormPage';
 import ReopenedIRO from '../ReopenedIRO';
 import EditIROForRevert from '../EditIROForRevert';
 import AccountApprove from '../AccountApprovel';
+import EditForCustom from '../EditForCustom';
+import EditIROCustom from '../EditIROCustom';
 
 
 const iroPageRoutes: ModuleRoute = {
@@ -132,6 +134,13 @@ const iroPageRoutes: ModuleRoute = {
       title: 'Edit IRO',
       path: '/:iroID/edit',
       element: <EditIRO />,
+      private: true,
+      requiredAccessRights: ['MANAGE_IRO'],
+    },
+    {
+      title: 'Edit Custom',
+      path: '/:iroID/editCustom',
+      element: <EditIROCustom/>,
       private: true,
       requiredAccessRights: ['MANAGE_IRO'],
     },

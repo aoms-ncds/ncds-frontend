@@ -260,7 +260,7 @@ const ReconciliationIRO = () => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
-    if (permissions?.FCRA_ACCOUNTS_ACCESS) {
+    if (permissions?.FCRA_ACCOUNTS_ACCESS && !permissions?.LOCAL_ACCOUNT_ACCESS) {
       console.log('FRDD');
       IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'FCRA' })
         .then((res) => {
@@ -270,7 +270,7 @@ const ReconciliationIRO = () => {
           console.error(error);
         });
     }
-    if (permissions?.LOCAL_ACCOUNT_ACCESS) {
+    if (permissions?.LOCAL_ACCOUNT_ACCESS && !permissions?.FCRA_ACCOUNTS_ACCESS) {
       IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'Local' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);

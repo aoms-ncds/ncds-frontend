@@ -26,6 +26,9 @@ import {
   DialogContent,
   Typography,
   Box,
+  FormControlLabel,
+  Checkbox,
+  Divider,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -59,9 +62,12 @@ const ViewIRO = (props: any) => {
   const navigate = useNavigate();
   const { iroID } = useParams();
   const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
+  const [showPresidentIROName, setPresidentIROName] = useState(false);
+  const [eSignPresidentIRO, setePresidentIRO] = useState(false);
 
   const [Data, setData] = useState<any>();
   const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
+  const [addSignaturePr, toggleAddSignaturePr] = useState(false);
 
   const [IRO, setIRO] = useState<IROrder>({
     _id: '',
@@ -896,6 +902,30 @@ const ViewIRO = (props: any) => {
                                   Office manager Sign
                           </Button>
                         </Grid>
+                        {props.action === 'custom'&&IRO?.specialSanction as any &&(
+                          <Grid item xs={12} md={2} lg={4}>
+                            <Button variant="contained" onClick={() => toggleAddSignaturePr(true)} startIcon={<AttachmentIcon />}>
+                                              President details
+                            </Button>
+                          </Grid>
+                        )}
+                        {props.action =='customIRO' || props.action == 'custom'&&(
+                          <><Grid item md={12}>
+                            <FormControlLabel
+                              label="President sanction"
+                              checked={IRO?.specialSanction as any || false} // Ensure it's always a boolean
+                              // onChange={(e:any) =>
+                              //   props.onChange({
+                              //     ...props.value,
+                              //     specialSanction: e.target.checked, // Directly assign boolean value
+                              //   })
+                              // }
+                              control={<Checkbox />}
+                            />
+                          </Grid><br /><Grid>
+
+                          </Grid></>
+                        )}
                         </>
                       ):''}
                       {/* <Grid item xs={12} md={6}>
@@ -981,7 +1011,13 @@ const ViewIRO = (props: any) => {
                           </Button>
                           &nbsp;
                           {/* { IRO.status < IROLifeCycleStates.ACCOUNTS_MNGR_APPROVED ?(
-                            <>
+                            <>Indian Evangelical Team
+                            View And Manage IRO
+                            Last Login: 11:05 AM 03/02/2025
+
+                            Joyal Mock Mathew
+                            IT Division
+
                               &nbsp;
                               <PermissionChecks
                                 permissions={['WRITE_IRO']}
@@ -1295,6 +1331,92 @@ const ViewIRO = (props: any) => {
           </Grid>
         )}
       />
+      <Dialog open={addSignaturePr} sx={{ width: 400, margin: '0 auto' }} >
+        <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
+            <Grid item>
+              <Typography variant="h6" fontWeight={700} sx={{ textAlign: 'center' }}>
+                        Add Signatures
+              </Typography>
+              <Divider />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setPresidentIROName(true);
+                }}
+              >
+                {' '}
+                    President Name
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: 260 }}
+                onClick={() => {
+                  setePresidentIRO(true);
+                }}
+              >
+                {' '}
+                President Sign
+              </Button>
+            </Grid>
+
+
+            <Grid item xs={12}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  toggleAddSignaturePr(false);
+                }}
+                sx={{ marginBottom: 3, width: 260 }}
+                // endIcon={<CloseIcon />}
+              >
+                        Close
+              </Button>
+            </Grid>
+
+          </Grid>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={showPresidentIROName}
+        onClose={() => setPresidentIROName(false)}
+      >
+        <DialogTitle>President Name</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={IRO?.president as unknown as any}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                president: e.target.value,
+              })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setPresidentIROName(false)}>Cancel</Button>
+          <Button onClick={()=>setPresidentIROName(false)}>Add</Button>
+        </DialogActions>
+      </Dialog>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>
@@ -1525,6 +1647,47 @@ const ViewIRO = (props: any) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <FileUploader
+        title="Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 10,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={eSignPresidentIRO}
+        onClose={() => setePresidentIRO(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={IRO?.presidentSign}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            props.onChange({
+              ...props.value,
+              presidentSign: [...(props.value.presidentSign || []), res.data],
+            });
+            return res;
+          });
+        }}
+        // renameFile={(fileId: string, newName: string) => {
+        //   setNewParticular((particularDetails) => ({
+        //     ...particularDetails,
+        //     attachment: particularDetails.attachment.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+        //   }));
+        //   return FileUploaderServices.renameFile(fileId, newName);
+        // }}
+        deleteFile={(fileId: string) => {
+          props.onChange({
+            ...props.value,
+            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
       <FileUploader
         title="Attachments"
         action="view"
