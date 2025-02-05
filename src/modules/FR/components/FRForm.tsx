@@ -28,7 +28,7 @@ import {
   Divider,
   Tooltip,
 } from '@mui/material';
-import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
+import { AttachFile as AttachmentIcon, Delete as DeleteIcon, Edit as EditIcon, History as HistoryIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import FRServices from '../extras/FRServices';
@@ -49,6 +49,7 @@ import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import AddIcon from '@mui/icons-material/Add';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
+import TransactionLogDialog from './TransactionLogDialog';
 
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
@@ -73,6 +74,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [eSignJrLeader, seteSignJrLeader] = useState(false);
   const [eSignSrLeader, seteSignSrLeader] = useState(false);
   const [eSignPresident, setePresident] = useState(false);
+  const [openLog, setOpenLog] = useState(false);
 
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [newParticular, setNewParticular] = useState<CreatableParticular>({
@@ -297,7 +299,7 @@ const FRForm = (props: FormComponentProps<any>) => {
           message: res.message,
           variant: 'success',
         });
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -1175,6 +1177,15 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       Remark
                     </Button> : null}
                   &nbsp;
+                  {props.action === 'custom' &&hasPermissions(['ADMIN_ACCESS'])&&(
+
+                    <Button variant="outlined" color="primary" startIcon={<HistoryIcon/>}
+                      onClick={async ()=>setOpenLog(true)}>
+                            Log
+                    </Button>
+                  )}
+                  &nbsp;
+
                   {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
@@ -1739,6 +1750,8 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           </Grid>
         </DialogContent>
       </Dialog>
+      {props.value._id && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={props.value._id}/>}
+
       <FileUploader
         title="Attachments"
         action="add"

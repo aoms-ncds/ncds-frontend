@@ -37,7 +37,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { AttachFile as AttachmentIcon, History as HistoryIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Key, ReactChild, ReactFragment, ReactPortal, SetStateAction } from 'react';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import { purposes } from '../FR/extras/FRConfig';
@@ -69,7 +69,7 @@ const ViewIRO = (props: any) => {
   const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
   const [addSignaturePr, toggleAddSignaturePr] = useState(false);
 
-  const [IRO, setIRO] = useState<IROrder>({
+  const [IRO, setIRO] = useState<any>({
     _id: '',
     IROno: '',
     IRODate: moment(),
@@ -347,7 +347,7 @@ const ViewIRO = (props: any) => {
 
 
   let total = 0;
-  IRO?.particulars?.forEach((particular) => {
+  IRO?.particulars?.forEach((particular: { sanctionedAmount: number }) => {
     if (particular?.sanctionedAmount) {
       total += particular?.sanctionedAmount;
     }
@@ -355,7 +355,7 @@ const ViewIRO = (props: any) => {
   const [openRelease, setOpenRelease] = useState(false);
 
   console.log(props, 'ORRO');
-  const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total: number, item: { requestedAmount: any}) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
@@ -556,7 +556,7 @@ const ViewIRO = (props: any) => {
                             </TableHead>
                             <TableBody>
                               {IRO?.particulars &&
-                                IRO?.particulars.map((item, index) => (
+                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
                                   <TableRow key={item._id} >
                                     <TableCell component="th" sx={{ display: 'flex' }}>
                                       <IconButton
@@ -596,7 +596,7 @@ const ViewIRO = (props: any) => {
                           onChange={(e) => {
                             if (IRO) {
                               // eslint-disable-next-line @typescript-eslint/naming-convention
-                              setIRO((IRO) => ({
+                              setIRO((IRO: any) => ({
                                 ...IRO,
                                 sanctionedAmount: Number(e.target.value),
                               }));
