@@ -3,6 +3,7 @@ import LoginPage from '../../User/Login';
 import HomePage from '../../Home';
 import CustomReport from '../CustomReport';
 import IROReportFilter from '../CustomReportIROFilterPage';
+import CustomReportTable from '../CustomReportTable';
 
 const customFrIroRoute: ModuleRoute = {
   base: '/custom-report',
@@ -13,7 +14,7 @@ const customFrIroRoute: ModuleRoute = {
       element: <CustomReport />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
-      showInDrawer: false,
+      showInDrawer: true,
       // icon: <HomeIcon />,
       icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },
@@ -21,6 +22,16 @@ const customFrIroRoute: ModuleRoute = {
       title: 'Custom Filter',
       path: '/custom-filter-iro',
       element: <IROReportFilter />,
+      private: true,
+      requiredAccessRights: ['READ_ACCESS'],
+      // showInDrawer: true,
+      // icon: <HomeIcon />,
+      // icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
+    },
+    {
+      title: 'Custom Report Table',
+      path: '/custom-report-table',
+      element: <CustomReportTable />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
       // showInDrawer: true,

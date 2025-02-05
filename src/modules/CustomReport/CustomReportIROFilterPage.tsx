@@ -4,8 +4,10 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import { useAuth } from '../../hooks/Authentication';
 import { enqueueSnackbar } from 'notistack';
 import FRServices from '../FR/extras/FRServices';
+import { useNavigate } from 'react-router-dom';
 
 const IROReportFilter = () => {
+  const navigate = useNavigate();
   // State management for filters
   const [divisions, setDivisions] = useState<any[] | null>(null);
   const [division, setDivision] = useState<any[] | null>(null);
@@ -629,7 +631,7 @@ const IROReportFilter = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => console.log(filters)}
+              onClick={() => navigate('/custom-report/custom-report-table')}
             >
             Apply Filters
             </Button>
