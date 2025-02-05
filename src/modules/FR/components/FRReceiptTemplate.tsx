@@ -287,9 +287,9 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             {props.rowData?.names?.srLeader?.basicDetails?.firstName ?
               `${props.rowData.names.srLeader.basicDetails.firstName} ${props.rowData.names.srLeader.basicDetails.lastName || ''}` :
               props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?
-                `${props.rowData.division.details.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details.juniorLeader?.name?.basicDetails.lastName || ''}` :
-                typeof props.rowData?.division?.details?.additionalSeniorLeader?.name === 'string' ?
-                  props.rowData.division.details.additionalSeniorLeader.name :
+                `${props.rowData.division.details.seniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details.seniorLeader?.name?.basicDetails.lastName || ''}` :
+                typeof props.rowData?.division?.details?.additionalJuniorLeader?.name === 'string' ?
+                  props.rowData.division.details.additionalJuniorLeader.name :
                   ''}
           </Text>
 
@@ -297,10 +297,10 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
             {props.rowData.names?.jrLeader?.basicDetails?.firstName ?
               `${props.rowData.names.jrLeader.basicDetails.firstName} ${props.rowData.names.jrLeader.basicDetails.lastName || ''}` :
-              props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?
-                `${props.rowData.division.details.seniorLeader.name.basicDetails.firstName} ${props.rowData.division.details.seniorLeader.name.basicDetails.lastName || ''}` :
-                typeof props.rowData?.division?.details.additionalJuniorLeader?.name === 'string' ?
-                  props.rowData?.division?.details.additionalJuniorLeader?.name :
+              props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName ?
+                `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details.juniorLeader.name.basicDetails.lastName || ''}` :
+                typeof props.rowData?.division?.details.additionalSeniorLeader?.name === 'string' ?
+                  props.rowData?.division?.details.additionalSeniorLeader?.name :
                   ''}
 
           </Text>
