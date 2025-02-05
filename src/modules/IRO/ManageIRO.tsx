@@ -434,7 +434,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //       console.error(error);
       //     });
       // }
-      if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+      if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
         IROServices.getAll({ dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
@@ -445,7 +445,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             console.error(error);
           });
       }
-      if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
+      if (userPermissions?.LOCAL_ACCOUNT_ACCESS && !userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAll({ dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;

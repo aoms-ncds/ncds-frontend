@@ -272,6 +272,33 @@ export default {
       }),
     );
   },
+  updateIROCustom: (IROId:string, IRORequest: IROrder, notify?:boolean, flag?:boolean)=>{
+    console.log('🚀 ~ file: IROServices.ts:142 ~ IROId:', IROId);
+    return getStandardResponse<IROrder>(
+      new Promise((resolve, reject) => {
+        axios
+        .patch('/iro/custom/' + IROId, {
+          IRORequest, notify, flag,
+        }, { headers: { ...getAuthHeader() } })
+        .then(async (updatedIRO) => {
+          try {
+            if (IRORequest.particulars) {
+              for (let i = 0; i < IRORequest.particulars.length; i++) {
+                const particulars = IRORequest.particulars[i];
+                await axios.patch(`/fr/particulars/${particulars._id}`, {
+                  ...particulars,
+                }, { headers: { ...getAuthHeader() } });
+              }
+            }
+            resolve(updatedIRO); // Resolve with the updated division
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .catch(reject);
+      }),
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/naming-convention
 
   releaseAmount: (iros:IROrder[], releaseAmount: IReleaseAmount) =>

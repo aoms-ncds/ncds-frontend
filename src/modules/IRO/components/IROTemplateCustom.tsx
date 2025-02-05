@@ -138,7 +138,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
   const totalSacntion = props.rowData?.particulars.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(props, 'total');
+  console.log(props.rowData, 'total');
 
   NewTot += props?.rowData?.sanctionedAmount != undefined ? props?.rowData?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
@@ -500,7 +500,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
 
           <div style={{ marginTop: 5 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-              {props.rowData?.specialsanction == 'Yes' ? (
+              {props.rowData?.specialSanction == true ? (
                 <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                   <Text style={{
                     ...styles.text,
@@ -520,8 +520,8 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                         height: 78,
                         width: 128,
                       }}
-                      src={`data:${props.rowData.president?.type ?? props.president.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props.president.presidentSignature?.base64} `} />
-                  </View>
+                      src={`data:${props.rowData?.presidentSign?.[0]?.type};base64,${props.rowData?.presidentSign?.[0]?.base64}`}
+                    />                  </View>
                   <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={{
                       ...styles.text1,
@@ -531,7 +531,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                       fontWeight: 500,
                       fontFamily: 'CourierPrime',
                     }}>
-                      {(props.president as any).presidentName?? props.rowData.names?.president}
+                      {(props.rowData.president as any)?? props.rowData.president}
 
                       {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
                     </Text>
@@ -555,82 +555,43 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 }}>
                   E Signature protected.
                 </Text>
-                {props.prev != true ? (
 
-                  <View style={{
-                    ...styles.box5,
-                    width: 130,
-                    alignItems: 'center',
+                <View style={{
+                  ...styles.box5,
+                  width: 130,
+                  alignItems: 'center',
+                }}>
+                  <Image
+                    style={{
+                      height: 78,
+                      width: 128,
+                    }}
+                    src={`data:${props.rowData?.officeManagerSign?.[0]?.type};base64,${props.rowData?.officeManagerSign?.[0]?.base64}`}
+                  />
+
+
+                </View>
+
+                <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                  <Text style={{
+                    ...styles.text1,
+                    fontSize: 11,
+                    textAlign: 'center',
+                    //
+                    fontWeight: 500,
+                    fontFamily: 'CourierPrime',
                   }}>
-                    <Image
-                      style={{
-                        height: 78,
-                        width: 128,
-                      }}
-                      src={`data:${props.officeMngrSign?.type};base64, ${props.officeMngrSign?.base64}`}
-                    />
-                  </View>
-                ) : (
-                  <View style={{
-                    ...styles.box5,
-                    width: 130,
-                    alignItems: 'center',
+                    {props.officeMngrName ?? props.officeMngrName}                      </Text>
+                  <Text style={{
+                    ...styles.text1,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    fontFamily: 'CourierPrime',
+                    textAlign: 'center',
                   }}>
-                    <Image
-                      style={{
-                        height: 78,
-                        width: 128,
-                      }}
-                      src={`data:${props.officeMngrSign?.prevOfficeManagerSignature?.type};base64, ${props.officeMngrSign?.prevOfficeManagerSignature?.base64}`}
-                    />
-                  </View>
-
-                )}
-                {props.prev != true ? (
-                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      textAlign: 'center',
-                      //
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                    }}>
-                      {props.officeMngrName ?? props.officeMngrName}                      </Text>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                      textAlign: 'center',
-                    }}>
                       Office Manager
-                    </Text>
-                  </View>
-                ) : (
-
-                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      textAlign: 'center',
-                      //
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                    }}>
-                      {props?.officeMngrName}
-                    </Text>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                      textAlign: 'center',
-                    }}>
-                      Office Manager
-                    </Text>
-                  </View>
-                )}
+                  </Text>
+                </View>
 
               </View>
             </View>

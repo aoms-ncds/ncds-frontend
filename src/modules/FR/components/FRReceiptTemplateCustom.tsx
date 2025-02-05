@@ -119,7 +119,7 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props.rowData.signature.coordinator[0], 'proww');
+  console.log(props.rowData, 'popo');
 
 
   const additionalJr = props.rowData?.division?.details.additionalJuniorLeader?.name;
@@ -229,17 +229,17 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props?.rowData?.signature?.coordinator?.[0]?.type};base64, ${props?.rowData?.signature?.coordinator?.[0]?.base64} `}/>
+          src={`data:${props?.rowData?.CoordinatorSign?.[0]?.type};base64, ${props?.rowData?.CoordinatorSign?.[0]?.base64} `}/>
           <Image style={{ left: 260,
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData?.signature?.srLeader?.type ?? props.rowData?.division?.details.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.type};base64, ${props.rowData?.signature?.srLeader?.base64 ?? props.rowData?.division?.details.seniorLeader?.sign?.base64 ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.base64} `}/>
+          src={`data:${props.rowData?.jrLeaderSign?.[0]?.type};base64, ${props.rowData?.jrLeaderSign?.[0]?.base64} `}/>
           <Image style={{ left: 460,
             height: 50,
             width: 50,
           }}
-          src={`data:${props.rowData?.signature?.jrLeader?.type ?? props.rowData?.division?.details.juniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.signature?.jrLeader?.base64 ?? props.rowData?.division?.details.juniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
+          src={`data:${props.rowData?.srLeaderSign?.[0]?.type};base64, ${props.rowData?.srLeaderSign?.[0]?.base64} `} />
           {props.rowData?.specialsanction == 'Yes' ? (
             <Image style={{
               left: 60,
@@ -277,17 +277,17 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.names?.coordinator}
+            {props.rowData?.coordinatorName}
           </Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-            {props.rowData?.names?.jrLeader}
+            {props.rowData?.jrLeaderName}
 
           </Text>
 
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-            {props.rowData?.names?.srLeader}
+            {props.rowData?.srLeaderName}
 
           </Text>
           {props.rowData?.specialsanction == 'Yes' ? (

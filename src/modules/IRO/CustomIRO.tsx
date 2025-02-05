@@ -306,6 +306,16 @@ const CustomIRO = () => {
                 window.open( `/iro/${props.row._id}/custom`, '_blank');
               },
             },
+            {
+              id: 'edit',
+              text: 'Edit',
+              component: Link,
+              // to: `/iro/${params.row._id}/edit`,
+              onClick: () => {
+                window.open(`/iro/${props.row._id}/editCustom`, '_blank');
+              },
+              icon: EditIcon,
+            },
             // ...(props.row.closedIroPdf ?
             // [
             {

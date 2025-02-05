@@ -1035,7 +1035,7 @@ const ReopenedIRO = () => {
         postApprove={() => IROServices.reconciliationCompleted(selectedIRO._id)}
         onClose={() => {
           setAttachment(false), setFile(false);
-          window.location.reload();
+          // window.location.reload();
         }}
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
@@ -1052,7 +1052,10 @@ const ReopenedIRO = () => {
         }}
         deleteFile={(fileId: string) => {
           setSelectedIRO(() => ({ ...selectedIRO, billAttachment: selectedIRO?.billAttachment.filter((file) => file._id !== fileId) }));
-          return FileUploaderServices.deleteFile(fileId);
+          return FileUploaderServices.deleteFile(fileId).then((res) => {
+            setSelectedIRO(() => ({ ...selectedIRO, billAttachment: []}));
+            return res;
+          });
         }}
       />
       <FileUploader
