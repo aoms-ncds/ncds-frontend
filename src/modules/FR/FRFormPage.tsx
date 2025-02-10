@@ -220,8 +220,17 @@ const FRFormPage = (props: FRFormPageProps) => {
   // const { frID }=useParams();
 
   return (
-    <CommonPageLayout title={props.action === 'add' ? 'Apply New FR' : props.action === 'edit' ? 'Edit FR' : 'View And Manage FR'}>
-      <PermissionChecks
+    <CommonPageLayout
+      title={
+        props.action === 'add' ?
+          'Apply New FR' :
+          props.action === 'edit' ?
+            'Edit FR' :
+            props.action === 'customIRO' ?
+              'Custom IRO' :
+              'View And Manage FR'
+      }
+    >      <PermissionChecks
         permissions={['READ_FR']}
         granted={
           <>

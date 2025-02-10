@@ -34,12 +34,12 @@ const CustomReport = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report IRO" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            count={staffCount ? staffCount?.toString() : undefined} targetRoute="/custom-report/custom-filter-iro" />
+            targetRoute="/custom-report/custom-filter-iro" />
         </Grid>
-        <Grid item xs={12} md={4} xl={3}>
+        {/* <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report FR" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
-        </Grid>
+        </Grid> */}
 
 
         {/* <Grid item xs={12} md={6} xl={3}>

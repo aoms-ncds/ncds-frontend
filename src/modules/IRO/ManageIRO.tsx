@@ -768,7 +768,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               []),
 
 
-            ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED && !isCoordinator ?
+            ...(params.row.status >= IROLifeCycleStates.AMOUNT_RELEASED ?
               [
                 {
                   id: 'Release',
@@ -1180,7 +1180,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     //     <p
     //       style={{
     //         maxWidth: 200,
-    //         whiteSpace: 'normal',
+    //         whiteSviewpace: 'normal',
     //         wordBreak: 'break-word',
     //         justifyContent: 'center',
     //         textAlign: 'center',

@@ -391,7 +391,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   }
                   format="DD/MM/YYYY"
                   slotProps={{ textField: { fullWidth: true } }}
-                  disabled={FRLifeCycleStates.REOPENED !== props.value.status}
+                  disabled={FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='customIRO'}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -702,8 +702,8 @@ onOpen={() => setOpen(true)}
 title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                   <TextField
                     label="Sanctioned Amount"
-                    type={'number'}
-                    value={props?.value.sanctionedAmount ?? total}
+                    // type={'number'}
+                    value={(props?.value.sanctionedAmount !== 0 ? props?.value.sanctionedAmount : null) ?? (total !== 0 ? total : null)}
                     title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                     autoComplete='off'
                     onChange={(e) => props.onChange({
@@ -973,7 +973,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     required />
                 </Grid><Grid item xs={12} md={6}>
                   <DatePicker
-                    label="Date"
+                    label=" Amount Transferred Date"
                     value={(props.value as any)?.transferredDate}
                     format="DD/MM/YYYY"
                     sx={{ width: '100%' }}
@@ -1378,7 +1378,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice}
+                    value={newParticular?.unitPrice !==0? newParticular?.unitPrice: null}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
