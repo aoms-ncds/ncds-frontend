@@ -13,7 +13,7 @@ const customFrIroRoute: ModuleRoute = {
       element: <CustomReport />,
       private: true,
       requiredAccessRights: ['READ_ACCESS'],
-      showInDrawer: true,
+      showInDrawer: false,
       // icon: <HomeIcon />,
       icon: <img src="/mod_icons/Applications.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,
     },

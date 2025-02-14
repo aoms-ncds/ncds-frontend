@@ -13,6 +13,7 @@ import IROServices from '../IRO/extras/IROServices';
 import FRFormEdit from './components/FRFormEdit';
 interface FRFormPageProps {
   action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen'| 'customEdit';
+  actionAd?: 'view';
 }
 const FRFormPage = (props: FRFormPageProps) => {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         }
       }
       enqueueSnackbar({
-        message: 'Creating FR Request',
+        message: 'Creating Request',
         variant: 'info',
       });
       if (props.action === 'custom') {
@@ -130,23 +131,16 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
-      if (requisition.status ==FRLifeCycleStates.REOPENED) {
-        navigate('/fr/reopened');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        navigate('/fr/manage');
-      }
-
-      enqueueSnackbar({
-        message: 'Updating FR Request',
-        variant: 'info',
-      });
-
       if (frID) {
         if (props.action === 'customEdit') {
           const res = await FRServices.updateFRRequestsCustom(frID, requisition);
+          if (res) {
+
+            // FRServices.addParticularscustomFR(addNewParticulars, frID).then((res)=>{
+            //   console.log(res.data);
+            // });
+          }
+          navigate('/fr/CustomFR');
           enqueueSnackbar({
             message: res.message,
             variant: 'success',
@@ -159,6 +153,21 @@ const FRFormPage = (props: FRFormPageProps) => {
           });
         }
       }
+      if (requisition.status ==FRLifeCycleStates.REOPENED) {
+        navigate('/fr/reopened');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else if (props.action === 'customEdit') {
+        navigate('/fr/CustomFR');
+      } else {
+        navigate('/fr/manage');
+      }
+
+      enqueueSnackbar({
+        message: 'Updating FR Request',
+        variant: 'info',
+      });
     } catch (err) {
       console.log(err);
       // Handle error conditions if needed
@@ -265,6 +274,7 @@ const FRFormPage = (props: FRFormPageProps) => {
                   value={requisition}
                   onChange={(newReq) => setRequisition(newReq)}
                   action={props.action}
+                  actionAdi={props.actionAd}
                   onSubmit={addFR} // Pass the addFR function to the onSubmit prop
                 />
               ) : props.action === 'customEdit' ? (

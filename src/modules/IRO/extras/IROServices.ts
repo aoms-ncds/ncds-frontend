@@ -188,7 +188,7 @@ export default {
                 if (frRequest.particulars) {
                   for (let i = 0; i < frRequest.particulars.length; i++) {
                     const particulars = frRequest.particulars[i];
-                    await axios.post('/fr/particulars/customIRO/', {
+                    await axios.post('/fr/particulars/customAdd/', {
                       FR: createdFR.data.data._id,
                       mainCategory: particulars.mainCategory,
                       subCategory1: particulars.subCategory1,
@@ -197,6 +197,8 @@ export default {
                       quantity: particulars.quantity,
                       month: particulars.month,
                       unitPrice: particulars.unitPrice,
+                      sanctionedAmount: particulars.sanctionedAmount,
+                      sanctionedAsPer: particulars.sanctionedAsPer,
                       requestedAmount: particulars.requestedAmount,
                       narration: particulars.narration,
                       attachment: particulars.attachment,
@@ -272,13 +274,13 @@ export default {
       }),
     );
   },
-  updateIROCustom: (IROId:string, IRORequest: IROrder, notify?:boolean, flag?:boolean)=>{
+  updateIROCustom: (IROId:string, IRORequest: IROrder, newparty: any, notify?:boolean, flag?:boolean)=>{
     console.log('🚀 ~ file: IROServices.ts:142 ~ IROId:', IROId);
     return getStandardResponse<IROrder>(
       new Promise((resolve, reject) => {
         axios
         .patch('/iro/custom/' + IROId, {
-          IRORequest, notify, flag,
+          IRORequest, newparty, notify, flag,
         }, { headers: { ...getAuthHeader() } })
         .then(async (updatedIRO) => {
           try {

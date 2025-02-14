@@ -30,6 +30,8 @@
     "exceljs": "^4.4.0",
     "firebase": "^9.22.2",
     "firebase-tools": "^13.4.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "moment": "^2.29.4",
     "mongoose": "^7.2.1",
     "notistack": "^3.0.1",

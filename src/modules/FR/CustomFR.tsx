@@ -506,67 +506,67 @@ const CustomFR = () => {
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      cellClassName: (params) => {
-        console.log('CellClassName params:', params);
-        const statusName = params.formattedValue;
-        console.log('Status Name###:', statusName);
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'REVERTED':
-          return clsx('red-light');
-        case 'WAITING FOR ACCOUNTS':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'FR VERIFIED':
-          return clsx('green');
-        case 'FR CLOSED':
-          return clsx('green');
-        case ' FR_REJECTED':
-          return clsx('red');
-        case 'WAITING FOR PRESIDENT':
-          return clsx('orange');
-        case 'IRO DISAPPROVED':
-          return clsx('red-dark');
-        default:
-          console.log('No class applied');
-          return '';
-        }
-      },
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        console.log(statusName, 'lolpß');
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+    // {
+    //   field: 'status',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Status</b>,
+    //   cellClassName: (params) => {
+    //     console.log('CellClassName params:', params);
+    //     const statusName = params.formattedValue;
+    //     console.log('Status Name###:', statusName);
+    //     if (params.value == null) {
+    //       return '';
+    //     }
+    //     switch (statusName) {
+    //     case 'REVERTED':
+    //       return clsx('red-light');
+    //     case 'WAITING FOR ACCOUNTS':
+    //       return clsx('orange');
+    //     case 'IRO CLOSED':
+    //       return clsx('green');
+    //     case 'FR VERIFIED':
+    //       return clsx('green');
+    //     case 'FR CLOSED':
+    //       return clsx('green');
+    //     case ' FR_REJECTED':
+    //       return clsx('red');
+    //     case 'WAITING FOR PRESIDENT':
+    //       return clsx('orange');
+    //     case 'IRO DISAPPROVED':
+    //       return clsx('red-dark');
+    //     default:
+    //       console.log('No class applied');
+    //       return '';
+    //     }
+    //   },
+    //   width: 205,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+    //     console.log(statusName, 'lolpß');
+    //     // Check if the status name needs to be changed
+    //     switch (statusName) {
+    //     case 'SEND_BACK':
+    //       statusName = 'REVERTED';
+    //       break;
+    //     case 'FR_APPROVED':
+    //       statusName = 'FR VERIFIED'; // Change to whatever new name you want
+    //       break;
+    //     case 'FR_REJECTED':
+    //       statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //     case 'IRO_REJECTED':
+    //       statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+    //       break;
+    //       // Add more cases for other status names you want to change
+    //     default:
+    //       statusName = statusName.replaceAll('_', ' ');
+    //       break;
+    //     }
+    //     return statusName;
+    //   },
+    // },
     {
       field: 'divisionName',
       headerClassName: 'super-app-theme--cell',
@@ -714,48 +714,48 @@ const CustomFR = () => {
       align: 'center',
       headerAlign: 'center',
     },
-    {
-      field: 'reasonForSentBack',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Revert</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForSentBack}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'reasonForReject',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Reason For Reject</b>,
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 200,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row.reasonForReject}
-        </p>
-      ),
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'reasonForSentBack',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Revert</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForSentBack}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+    // {
+    //   field: 'reasonForReject',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Reason For Reject</b>,
+    //   renderCell: (props) => (
+    //     <p
+    //       style={{
+    //         maxWidth: 200,
+    //         whiteSpace: 'normal',
+    //         wordBreak: 'break-word',
+    //         justifyContent: 'center',
+    //         textAlign: 'center',
+    //       }}
+    //     >
+    //       {props.row.reasonForReject}
+    //     </p>
+    //   ),
+    //   width: 200,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'updatedAt',
       headerClassName: 'super-app-theme--cell',

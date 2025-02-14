@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable max-len */
 import {
   Container,
@@ -30,7 +31,7 @@ import {
 } from '@mui/material';
 import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import { useNavigate, useParams } from 'react-router-dom';
 import CommonPageLayout from '../../components/CommonPageLayout';
@@ -52,16 +53,21 @@ import AddIcon from '@mui/icons-material/Add';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import PaymentMethodService from '../Settings/extras/PaymentMethodService';
+import { log } from 'console';
 
 const EditIROCustom = () => {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
   console.log(user, 'user');
+  const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
 
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [particulars, setParticulars] = useState<Particular[]>([]);
+  const [addNewParticulars, setAddNewParticulers] = useState<Particular[]>([]);
   const { iroID } = useParams();
   const [divisions, setDivisions] = useState<any | null>(null);
   const [allSubDivisions, setAllSubDivisions] = useState<any | null>(null);
@@ -72,6 +78,7 @@ const EditIROCustom = () => {
   const [addSignaturePr, toggleAddSignaturePr] = useState(false);
   const [showPresidentIROName, setPresidentIROName] = useState(false);
   const [eSignPresidentIRO, setePresidentIRO] = useState(false);
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
 
   const [IRO, setIRO] = useState<any>({
     _id: '',
@@ -397,7 +404,56 @@ const EditIROCustom = () => {
     .catch((res) => {
       console.log(res);
     });
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
   }, []);
+
+  console.log(IRO, 'selectedParticularIndex');
+  const addParticulars = () => {
+    // handleClose();
+    let newParticulars: Particular[];
+    newParticulars = [newParticular as Particular];
+    if (particularDialog === 'edit') {
+      setParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)));
+      setIRO({
+        ...IRO,
+        particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+      });
+    } else {
+      console.log(newParticulars, 'newParticulars');
+
+      setAddNewParticulers((prev:any) => [
+        ...prev,
+        ...newParticulars.map((particular) => ({
+          ...particular,
+          sanctionedAmount: null,
+          sanctionedAsPer: null,
+        })),
+      ]);
+
+      console.log(addNewParticulars, 'addNewParticulars');
+      // setIRO({
+      //   ...props.value,
+      //   particulars: newParticulars,
+      // });
+    }
+    setNewParticular((particularDetails) => ({
+      ...particularDetails,
+      subCategory1: '',
+      subCategory2: '',
+      subCategory3: '',
+      month: '',
+      narration: '',
+      quantity: undefined,
+      unitPrice: undefined,
+      requestedAmount: undefined,
+      attachment: [],
+    }));
+    // Reset the form fields
+    setShowAddParticularDialog(false);
+    // Other logic for API calls, snackbar, etc.
+  };
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(IRO.division?._id ?? '')
         .then((res2) => setAllSubDivisions(res2.data))
@@ -410,36 +466,46 @@ const EditIROCustom = () => {
         );
   }, [IRO.division]);
   const [open, setOpen] = useState(false);
-  console.log(IRO?.releaseAmount, 'dq');
+  console.log(IRO, 'dq');
   // console.log(props, 'wdqw');
   const deleteParticular = (particularId: string | undefined, index: number) => {
     // if (!particularId) {
     // Delete by index if the particularId is not available
     const updatedParticulars = IRO.particulars.filter((_item: any, i: number) => i !== index);
-    console.log(updatedParticulars, 'updatedParticulars');
     IRO.particulars = updatedParticulars;
     setNewParticular(updatedParticulars[0]);
     return;
     // }
   };
+  console.log(addNewParticulars, 'updatedParticulars');
   let total = 0;
   IRO?.particulars?.forEach((particular: { sanctionedAmount: number }) => {
     if (particular?.sanctionedAmount) {
-      total += particular?.sanctionedAmount;
+      total += Number(particular?.sanctionedAmount);
     }
   });
-  console.log(total, 'total');
-  const handleClickOpen = (particular: Particular) => {
+  let total2 = 0;
+  addNewParticulars.forEach((particular: Particular) => {
+    if (particular.sanctionedAmount !== null && particular.sanctionedAmount !== undefined) {
+      total2 += Number(particular.sanctionedAmount);
+    }
+  });
+  const grandTotal = total + total2;
+  console.log(total, 'grandTotal');
+  console.log(total2, 'grandTotal1');
+  console.log(grandTotal, 'grandTotal2');
+  const handleClickOpen = (particular: Particular, index: SetStateAction<number | null>) => {
     setOpen(true);
-    // setSelectedParticularIndex(index);
+    setSelectedParticularIndex(index);
     setNewParticular(particular);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-  const editParticular = (particular: Particular) => {
-    // setParticularDialog('edit');
+  const editParticular = (particular: Particular, index: number) => {
+    setParticularDialog('edit');
+    setSelectedParticularIndex(index);
     setShowAddParticularDialog(true);
     setNewParticular(particular);
   };
@@ -503,10 +569,15 @@ const EditIROCustom = () => {
     IROServices.getByIdCustom(iroID).then((res) =>{
       console.log(res.data, 'frdata');
       setIRO(res.data);
+      // setAddNewParticulers(res.data.particulars);
     } ); // TODO: Implement REST API Call
   }, [iroID]);
 
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmtotal= addNewParticulars && addNewParticulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const grandTotalReust= totalRequestedAmount+totalRequestedAmtotal;
+  console.log(grandTotalReust, 'grandTotalReust');
+
   return (
     <>
       <CommonPageLayout title="Edit IRO">
@@ -523,8 +594,18 @@ const EditIROCustom = () => {
                   // } else if (submit == 2) {
                   //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
                   // }
-                  IROServices.updateIROCustom(iroID ?? '', IRO, true)
+                  // setIRO({
+                  //   ...IRO,
+                  //   particulars: [],
+                  // });
+
+                  IROServices.updateIROCustom(iroID ?? '', IRO, newParticular, true)
                     .then((res) => {
+                      if (res.data) {
+                        FRServices.addParticularscustomIRO(addNewParticulars, iroID).then((res)=>{
+                          console.log(res.data);
+                        });
+                      }
                       enqueueSnackbar({
                         message: res.message,
                         variant: 'success',
@@ -539,12 +620,73 @@ const EditIROCustom = () => {
                       label="IRO No"
                       value={IRO.IROno}
                       fullWidth
-                      disabled
+                      // disabled
+                      onChange={(_e) => {
+                        if (_e) {
+                          setIRO({
+                            ...IRO,
+                            IROno: _e.target.value as any,
+                          });
+                        }
+                      }}
                       InputLabelProps={{
                         shrink: true,
                       }}
                     />
                   </Grid>
+                  <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label={'FR No'}
+                      value={IRO.FRNumber}
+                      autoComplete="off"
+                      onChange={(e) =>
+                        setIRO({
+                          ...IRO,
+                          FRNumber: e.target.value,
+                        })
+                      }
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01, // Allows up to two decimal places
+                      }}
+                      // InputProps={{
+                      //   startAdornment: <InputAdornment position="start">{ 'FRno'}</InputAdornment>,
+                      // }}
+                    />
+                    {/* </Tooltip> */}
+                  </Grid>
+                  {/* {props.action =='customIRO' &&( */}
+
+                  <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label={'Coordinator Name'}
+                      value={IRO?.coordinatorName}
+                      autoComplete="off"
+                      onChange={(e) =>
+                        setIRO({
+                          ...IRO,
+                          coordinatorName: e.target.value,
+                        })
+                      }
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                    />
+                    {/* </Tooltip> */}
+                  </Grid>
+                  {/* // )} */}
                   <Grid item xs={12} md={6}>
                     <DatePicker label="Date" value={IRO?.IRODate}
                       format="DD/MM/YYYY"
@@ -556,7 +698,7 @@ const EditIROCustom = () => {
                           });
                         }
                       }}
-                      slotProps={{ textField: { fullWidth: true } }} disabled={IROLifeCycleStates.REOPENED !==IRO.status} />
+                      slotProps={{ textField: { fullWidth: true } }} />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Autocomplete
@@ -702,11 +844,11 @@ const EditIROCustom = () => {
                                   {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
                                   // Content to render if the user has access
                                     <IconButton>
-                                      <EditIcon onClick={() => editParticular(item)} />
+                                      <EditIcon onClick={() => editParticular(item, index)} />
                                     </IconButton>
                                   ): []}
                                   <IconButton>
-                                    <AddIcon onClick={() => handleClickOpen(item)} />
+                                    <AddIcon onClick={() => handleClickOpen(item, index)} />
                                   </IconButton>
                                   <IconButton
                                     onClick={() => {
@@ -718,6 +860,7 @@ const EditIROCustom = () => {
                                     <AttachmentIcon />
                                   </IconButton>
                                 </TableCell>
+
                                 <TableCell align="center">{index + 1}</TableCell>
                                 <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
                             > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
@@ -730,12 +873,90 @@ const EditIROCustom = () => {
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                               </TableRow>
                             ))}
+                          {addNewParticulars &&
+                            addNewParticulars?.map((item:any, index:any) => (
+                              <TableRow key={item._id} >
+                                <TableCell component="th" sx={{ display: 'flex' }}>
+                                  <PermissionChecks
+                                    permissions={['WRITE_IRO']}
+                                    granted={
+                                      <IconButton>
+                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                      </IconButton>
+                                    }
+                                  />
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
+                                  // Content to render if the user has access
+                                    <IconButton>
+                                      <EditIcon onClick={() => editParticular(item, index)} />
+                                    </IconButton>
+                                  ): []}
+                                  <IconButton>
+                                    <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                  </IconButton>
+                                  <IconButton
+                                    onClick={() => {
+                                      setShowFileUploader(true);
+                                      setAttachments(newParticular.attachment);
+                                      setNewParticular(item);
+                                    }}
+                                  >
+                                    <AttachmentIcon />
+                                  </IconButton>
+                                </TableCell>
+
+                                <TableCell align="center">{IRO?.particulars.length + 1}</TableCell>
+                                <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
+                            > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2 == 'Select' ? '' : item.subCategory2} > ${item.subCategory3 == 'Select' ? '' : item.subCategory3}`}</TableCell>
+                                <TableCell align="center">{item.narration}</TableCell>
+                                <TableCell align="center">{item.quantity}</TableCell>
+                                <TableCell align="center">{item.month}</TableCell>
+                                <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
+                                <TableCell align="center">{item.sanctionedAmount}</TableCell>
+                                <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                              </TableRow>
+                            ))}
+                          <Grid item xs={12} md={4} lg={4}>
+                          </Grid>
+                          <Button
+                            sx={{ height: '45px' }}
+                            variant="contained"
+                            onClick={() => {
+                              setParticularDialog('add');
+                              setNewParticular((particularDetails) => ({
+                                ...particularDetails,
+                                subCategory1: '',
+                                subCategory2: '',
+                                subCategory3: '',
+                                month: '',
+                                narration: '',
+                                quantity: undefined,
+                                unitPrice: undefined,
+                                requestedAmount: undefined,
+                                attachment: [],
+                              }));
+                              setShowAddParticularDialog(true);
+                              setSelectedSubCategory1(null);
+                              setSelectedSubCategory2(null);
+                              setSelectedSubCategory3(null);
+                            }}
+                            // disabled={!selectedMainCategory}
+                          >
+                                                    Add particulars
+                          </Button>
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </Grid>
+                  <Grid item xs={12} md={12}>
+                    <span style={{ fontWeight: 600, fontSize: 20 }}> Sanctioned Details</span>
+                  </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
+                    <TextField label="Requested Amount"
+                      InputLabelProps={{ shrink: true }}
+                      value={grandTotalReust.toFixed(2)}
+                      fullWidth disabled />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     {/* <Tooltip open={isFocused?true:false}
@@ -743,9 +964,10 @@ const EditIROCustom = () => {
                       onOpen={() => setOpen(true)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                     <TextField
+                      disabled
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={IRO?.sanctionedAmount?.toFixed(2) ?? total.toFixed(2)}
+                      value={grandTotal.toFixed(2)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       onChange={(e) => {
@@ -778,175 +1000,147 @@ const EditIROCustom = () => {
                   </Grid>
 
                   <Grid item xs={12} md={6}>
-                    <FormControl fullWidth>
-                      <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
-                      <Select
-                        labelId="sanctioned_bank"
-                        label="Sanctioned Bank"
-                        value={IRO?.sanctionedBank ?? null}
-                        disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS'])&& !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
-                        onChange={(e) =>
-                          setIRO({
-                            ...IRO,
-                            sanctionedBank: e.target.value,
-                          })
-                        }
-                      >
-                        <MenuItem value={IRO?.sanctionedBank}>{IRO?.sanctionedBank}</MenuItem>
-                        {IRO?.division?.DivisionBankFCRA?.bankName !='' || IRO?.division?.FCRABankDetails?.bankName!='' ? (
-                          <MenuItem value={`FCRA-${IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}`}>
-    Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
+                    {/* <Grid item xs={12} md={6}> */}
+                    <TextField
+                      fullWidth
+                      label="Sanctioned Bank"
+                      value={IRO.sanctionedBank || ''}
+                      onChange={(e) =>
+                        setIRO({
+                          ...IRO,
+                          sanctionedBank: e.target.value,
+                        })
+                      }
+                    >
+                      {/* Add MenuItem options here */}
+                    </TextField>
+                    {/* </Grid> */}
 
-                        {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? (
-                          <MenuItem value={`Local Bank-${IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}`}>
-    Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank1?.bankName || IRO?.division?.otherBankDetails?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 1-${IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}`}>
-    Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank2?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 2-${IRO?.division?.BeneficiaryBank2?.beneficiary}`}>
-    Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank3?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 3-${IRO?.division?.BeneficiaryBank3?.beneficiary}`}>
-    Beneficiary Bank 3 - {IRO?.division?.BeneficiaryBank3?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank4?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 4-${IRO?.division?.BeneficiaryBank4?.beneficiary}`}>
-    Beneficiary Bank 4 - {IRO?.division?.BeneficiaryBank4?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank5?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 5-${IRO?.division?.BeneficiaryBank5?.beneficiary}`}>
-    Beneficiary Bank 5 - {IRO?.division?.BeneficiaryBank5?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank6?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 6-${IRO?.division?.BeneficiaryBank6?.beneficiary}`}>
-    Beneficiary Bank 6 - {IRO?.division?.BeneficiaryBank6?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank7?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 7-${IRO?.division?.BeneficiaryBank7?.beneficiary}`}>
-    Beneficiary Bank 7 - {IRO?.division?.BeneficiaryBank7?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank8?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 8-${IRO?.division?.BeneficiaryBank8?.beneficiary}`}>
-    Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank9?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 9-${IRO?.division?.BeneficiaryBank9?.beneficiary}`}>
-    Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-
-                        {IRO?.division?.BeneficiaryBank10?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 10-${IRO?.division?.BeneficiaryBank10?.beneficiary}`}>
-    Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank10?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 11-${IRO?.division?.BeneficiaryBank11?.beneficiary}`}>
-    Beneficiary Bank 11 - {IRO?.division?.BeneficiaryBank11?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank12?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 12-${IRO?.division?.BeneficiaryBank12?.beneficiary}`}>
-    Beneficiary Bank 12 - {IRO?.division?.BeneficiaryBank12?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank13?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 13-${IRO?.division?.BeneficiaryBank13?.beneficiary}`}>
-    Beneficiary Bank 13 - {IRO?.division?.BeneficiaryBank13?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank14?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 14-${IRO?.division?.BeneficiaryBank14?.beneficiary}`}>
-    Beneficiary Bank 14 - {IRO?.division?.BeneficiaryBank14?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank15?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 15-${IRO?.division?.BeneficiaryBank15?.beneficiary}`}>
-    Beneficiary Bank 15 - {IRO?.division?.BeneficiaryBank15?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank16?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 16-${IRO?.division?.BeneficiaryBank16?.beneficiary}`}>
-    Beneficiary Bank 16 - {IRO?.division?.BeneficiaryBank16?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank17?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 17-${IRO?.division?.BeneficiaryBank17?.beneficiary}`}>
-    Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank18?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 18-${IRO?.division?.BeneficiaryBank18?.beneficiary}`}>
-    Beneficiary Bank 18- {IRO?.division?.BeneficiaryBank18?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank19?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 19-${IRO?.division?.BeneficiaryBank19?.beneficiary}`}>
-    Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {IRO?.division?.BeneficiaryBank20?.bankName ? (
-                          <MenuItem value={`Beneficiary Bank 20-${IRO?.division?.BeneficiaryBank20?.beneficiary}`}>
-    Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
-                          </MenuItem>
-                        ) : ''}
-                        {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                        <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
-                        <MenuItem value={'Other Bank'}>Other Bank</MenuItem>
-                        <MenuItem value={'Other Bank 1'}>Other Bank1</MenuItem>
-                        <MenuItem value={'Other Bank 2'}>Other Bank2</MenuItem>
-                        <MenuItem value={'Other Bank 3'}>Other Bank3</MenuItem>
-                        <MenuItem value={'Other Bank 4'}>Other Bank4</MenuItem> */}
-                        {/* {IRO?.division?.DivisionBankFCRA?.bankName || IRO?.division?.FCRABankDetails?.bankName ? <MenuItem value={IRO?.division?.FCRABankDetails?.bankName ? 'FCRA' : 'Division Bank FCRA'}>Division Bank FCRA - {IRO?.division?.DivisionBankFCRA?.beneficiary || IRO?.division?.FCRABankDetails?.beneficiary}</MenuItem> : '' }
-                        {IRO?.division?.DivisionBankLocal?.bankName || IRO?.division?.localBankDetails?.bankName ? <MenuItem value={IRO?.division?.localBankDetails?.bankName? 'Local Bank' :'Division Bank Local'}>Division Bank Local - {IRO?.division?.DivisionBankLocal?.beneficiary || IRO?.division?.localBankDetails?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank1?.bankName ||IRO?.division?.otherBankDetails?.bankName? <MenuItem value={'Beneficiary Bank 1'}>Beneficiary Bank 1 - {IRO?.division?.BeneficiaryBank1?.beneficiary || IRO?.division?.otherBankDetails?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank2?.bankName? <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO?.division?.BeneficiaryBank2?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank3?.bankName? <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {IRO?.division?.BeneficiaryBank3?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank4?.bankName? <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {IRO?.division?.BeneficiaryBank4?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank5?.bankName? <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {IRO?.division?.BeneficiaryBank5?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank6?.bankName? <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {IRO?.division?.BeneficiaryBank6?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank7?.bankName? <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {IRO?.division?.BeneficiaryBank7?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank8?.bankName? <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {IRO?.division?.BeneficiaryBank8?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank9?.bankName? <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {IRO?.division?.BeneficiaryBank9?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank10?.bankName? <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {IRO?.division?.BeneficiaryBank10?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank11?.bankName? <MenuItem value={'Beneficiary Bank 11'}>Beneficiary Bank 11 - {IRO?.division?.BeneficiaryBank11?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank12?.bankName? <MenuItem value={'Beneficiary Bank 12'}>Beneficiary Bank 12 - {IRO?.division?.BeneficiaryBank12?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank13?.bankName? <MenuItem value={'Beneficiary Bank 13'}>Beneficiary Bank 13 - {IRO?.division?.BeneficiaryBank13?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank14?.bankName? <MenuItem value={'Beneficiary Bank 14'}>Beneficiary Bank 14 - {IRO?.division?.BeneficiaryBank14?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank15?.bankName? <MenuItem value={'Beneficiary Bank 15'}>Beneficiary Bank 15 - {IRO?.division?.BeneficiaryBank15?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank16?.bankName? <MenuItem value={'Beneficiary Bank 16'}>Beneficiary Bank 16 - {IRO?.division?.BeneficiaryBank16?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank17?.bankName? <MenuItem value={'Beneficiary Bank 17'}>Beneficiary Bank 17 - {IRO?.division?.BeneficiaryBank17?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank18?.bankName? <MenuItem value={'Beneficiary Bank 18'}>Beneficiary Bank 18 - {IRO?.division?.BeneficiaryBank18?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank19?.bankName? <MenuItem value={'Beneficiary Bank 19'}>Beneficiary Bank 19 - {IRO?.division?.BeneficiaryBank19?.beneficiary}</MenuItem> :'' }
-                        {IRO?.division?.BeneficiaryBank20?.bankName? <MenuItem value={'Beneficiary Bank 20'}>Beneficiary Bank 20 - {IRO?.division?.BeneficiaryBank20?.beneficiary}</MenuItem> :'' } */}
-                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                      </Select>
-                    </FormControl>
                   </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Beneficiary Name"
+                      value={IRO.beneficiaryName || ''}
+                      onChange={(e) =>
+                        setIRO({
+                          ...IRO,
+                          beneficiaryName: e.target.value,
+                        })
+                      }
+                    >
+                      {/* Add MenuItem options here */}
+                    </TextField>
+                  </Grid>
+
+                  <><Grid item xs={12} md={12}>
+                    <span style={{ fontWeight: 600, fontSize: 20 }}> Bank Details</span>
+                  </Grid><Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label="Bank name"
+                      value={(IRO.bankName)}
+                      autoComplete='off'
+                      onChange={(e) => setIRO({
+                        ...IRO,
+                        bankName: String(e.target.value),
+                      })}
+
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+
+                      inputProps={{
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01,
+                      }} />
+
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label="Branch name"
+                      value={(IRO.branchName)}
+                      autoComplete='off'
+                      onChange={(e) => setIRO({
+                        ...IRO,
+                        branchName: String(e.target.value),
+                      })}
+
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+
+                      inputProps={{
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01,
+                      }} />
+                    {/* </Tooltip> */}
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label="IFSC Code"
+                      value={(IRO.ifscCode)}
+                      autoComplete='off'
+                      onChange={(e) => setIRO({
+                        ...IRO,
+                        ifscCode: String(e.target.value),
+                      })}
+
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+
+                      inputProps={{
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01,
+                      }} />
+                    {/* </Tooltip> */}
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                    <TextField
+                      label="Account number"
+                      value={(IRO.accNumber)}
+                      autoComplete='off'
+                      onChange={(e) => setIRO({
+                        ...IRO,
+                        accNumber: String(e.target.value),
+                      })}
+
+                      variant="outlined"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+
+                      inputProps={{
+                        max: totalRequestedAmount,
+                        min: 0,
+                        step: 0.01,
+                      }} />
+                    {/* </Tooltip> */}
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <span style={{ fontWeight: 600, fontSize: 20 }}> Amount Transfer Details
+                    </span>
+                  </Grid>
+                  </>
+
                   {/* <Grid item xs={12} md={6}>
                     <Autocomplete
                       value={IRO?.sanctionedAsPer as ISanctionedAsPer}
@@ -991,16 +1185,19 @@ const EditIROCustom = () => {
                     <TextField
                       label="Amount Transferred"
                       type="number"
-                      value={IRO?.releaseAmount}
+                      value={IRO?.transferredAmount}
                       onChange={(e) =>
                         setIRO({
                           ...IRO,
-                          releaseAmount: String(e.target.value),
+                          transferredAmount: String(e.target.value),
                         })
                       }
                       fullWidth
-                      // inputProps={{
-                      //   max: (props.value as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      // inputProps={F{
+                      //   max: (IRO as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
                       //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
                       //     event.preventDefault();
                       //     event.currentTarget.blur();
@@ -1009,9 +1206,9 @@ const EditIROCustom = () => {
                       variant="outlined"
 
                       required />
-                  </Grid><Grid item xs={12} md={6}>
+                  </Grid><Grid item xs={12} md={4}>
                     <DatePicker
-                      label="Date"
+                      label="Amount Transferred Date"
                       value={IRO?.transferredDate}
                       format="DD/MM/YYYY"
                       sx={{ width: '100%' }}
@@ -1030,17 +1227,25 @@ const EditIROCustom = () => {
 
                   </Grid>
                   <Grid item xs={12} md={6} lg={4}>
-                    <TextField
-                      label="Payment Method"
-                      value={IRO?.modeOfPayment}
-                      variant="outlined"
-                      fullWidth
-                      disabled
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
+                    <Autocomplete
+                      disablePortal
+                      id="Payment_method"
+                      getOptionLabel={(method) => method?.paymentMethod || ''} // Ensure it returns a string
+                      options={paymnetMethod ?? []} // Ensure options are populated
+                      value={paymnetMethod?.find((option) => option.paymentMethod === IRO?.modeOfPayment) || null} // Find the matching object
+                      isOptionEqualToValue={(option, value) => option.paymentMethod === value?.paymentMethod} // Ensure correct comparison
+                      onChange={(event, newValue) =>
+                        setIRO({
+                          ...IRO,
+                          modeOfPayment: newValue?.paymentMethod || '', // Store string in state
+                        })
+                      }
+                      renderInput={(params) => <TextField {...params} label="Mode of payment" required />}
                     />
+
+
                   </Grid>
+
                   <Grid item xs={12} md={6} lg={4}>
                     <TextField
                       label="Transaction No:"
@@ -1060,6 +1265,11 @@ const EditIROCustom = () => {
 
                     />
 
+                  </Grid>
+
+                  <Grid item xs={12} md={12}>
+                    <span style={{ fontWeight: 600, fontSize: 20 }}> Signature and Manager details
+                    </span>
                   </Grid>
                   <Grid item xs={12} md={6} lg={4}>
                     <TextField
@@ -1081,10 +1291,28 @@ const EditIROCustom = () => {
                     />
 
                   </Grid>
+                  {/* {props.action == 'custom' &&( */}
+
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      label="Prepared By"
+                      value={IRO.preparedBy}
+                      onChange={(e) =>
+                        setIRO({
+                          ...IRO,
+                          preparedBy: String(e.target.value),
+                        })
+                      }
+                      InputLabelProps={{
+                        shrink: !!IRO?.officeManagerName, // Explicitly control shrinking
+                      }}
+                      variant="outlined"
+                      fullWidth
+                    />
+                  </Grid>
+                  {/* )} */}
                   <Grid item xs={12} md={6} lg={2}>
-                    <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
-                                  Attachments
-                    </Button>
+
                   </Grid>
                   <Grid item xs={12} md={4} lg={4}>
                     <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
@@ -1098,8 +1326,12 @@ const EditIROCustom = () => {
                       </Button>
                     </Grid>
                   )}
+
                   {/* {props.action =='customIRO' || props.action == 'custom'&&( */}
                   <><Grid item md={12}>
+                    <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
+                                  Attachments
+                    </Button>
                     <FormControlLabel
                       label="President sanction"
                       checked={IRO?.specialSanction as any || false} // Ensure it's always a boolean
@@ -1109,6 +1341,7 @@ const EditIROCustom = () => {
                           specialSanction: e.target.checked, // Directly assign boolean value
                         })
                       }
+                      sx={{ pl: 2 }}
                       control={<Checkbox />}
                     />
                   </Grid><br /><Grid>
@@ -1291,7 +1524,7 @@ const EditIROCustom = () => {
         action="add"
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={attachments}
+        getFiles={newParticular?.attachment}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
           const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
             setNewParticular((particularDetails) => ({
@@ -1327,29 +1560,24 @@ const EditIROCustom = () => {
 
       <Dialog
         open={showAddParticularDialog}
-        onClose={() => setShowAddParticularDialog(false)}
+        onClose={handleClose}
         PaperProps={{
           style: {
             width: '1000px',
           },
         }}
       >
-        <DialogTitle>Edit Particular</DialogTitle>
+        <DialogTitle>Add Particular</DialogTitle>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            setShowAddParticularDialog(false);
-            setIRO({
-              ...IRO,
-              particulars: IRO.particulars?.map((part: { _id: string }) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
-            });
-            // addParticulars();
+            addParticulars();
           }}
         >
           <DialogContent>
             <Container>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                   <Autocomplete
                     value={selectedMainCategory ?? null}
                     options={mainCategories ?? []}
@@ -1360,16 +1588,23 @@ const EditIROCustom = () => {
                           ...particularDetails,
                           mainCategory: selectedMainCategory.name,
                         }));
+                        setIRO({
+                          ...IRO,
+                          mainCategory: selectedMainCategory.name,
+                        });
                         setSelectedMainCategory(selectedMainCategory);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
+                        setSelectedSubCategory1(null);
                       }
                     }}
-                    disabled={IROLifeCycleStates.REVERTED_TO_DIVISION == IRO.status && !hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) }
                     renderInput={(params) => <TextField {...params} label="Choose Main Category" />}
                     fullWidth
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    // disabled={props.disable == true}
                     value={selectedSubCategory1}
                     options={selectedMainCategory?.subcategory1 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name}
@@ -1383,12 +1618,12 @@ const EditIROCustom = () => {
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 1" required />}
-                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    // disabled={props.disable == true}
                     value={selectedSubCategory2}
                     options={selectedSubCategory1?.subcategory2 ?? []}
                     getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
@@ -1399,28 +1634,27 @@ const EditIROCustom = () => {
                           subCategory2: selectedSubCategory2.name,
                         }));
                         setSelectedSubCategory2(selectedSubCategory2);
-                        const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
+                      }
+                      const subcat2 = selectedSubCategory2?.subcategory3.map((e) => e.name);
 
-                        if (subcat2?.includes('Select')) {
-                          console.log('Select');
-                          if (selectedSubCategory2) {
-                            setNewParticular((particularDetails) => ({
-                              ...particularDetails,
-                              narration: selectedSubCategory2?.subcategory3[0].narration,
-                            }));
-                            setSelectedSubCategory3(selectedSubCategory3);
-                          }
+                      if (subcat2?.includes('Select')) {
+                        console.log('Select');
+                        if (selectedSubCategory2) {
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            narration: selectedSubCategory2?.subcategory3[0].narration,
+                          }));
+                          setSelectedSubCategory3(selectedSubCategory3);
                         }
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                     fullWidth
-                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
-
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    // disabled={props.disable == true}
                     value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
                     getOptionLabel={(subCategory3) => subCategory3.name}
@@ -1435,7 +1669,6 @@ const EditIROCustom = () => {
                       }
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
-                    // disabled={!hasPermissions(['ADMIN_ACCESS'])}
                     fullWidth
                   />
                 </Grid>
@@ -1450,10 +1683,13 @@ const EditIROCustom = () => {
                         quantity: Number(e.target.value),
                       }))
                     }
-                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS']) && !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
                     inputProps={{
-                      onWheel: handleWheel,
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
                     }}
+                    // disabled={props.disable == true}
                     fullWidth
                   />
                 </Grid>
@@ -1461,7 +1697,7 @@ const EditIROCustom = () => {
                   <TextField
                     label="Requested Amount"
                     type="number"
-                    value={newParticular?.unitPrice}
+                    value={newParticular?.unitPrice !==0? newParticular?.unitPrice: null}
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -1469,20 +1705,23 @@ const EditIROCustom = () => {
                         requestedAmount: Number(e.target.value),
                       }))
                     }
-                    disabled={!hasPermissions(['ADMIN_ACCESS']) &&IROLifeCycleStates.REOPENED !== IRO.status}
-                    required
-                    fullWidth
                     inputProps={{
-                      onWheel: handleWheel,
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
                     }}
+                    required
+                    // disabled={props.disable == true}
+                    fullWidth
                   />
                 </Grid>
-                {/* {hasPermissions(['ADMIN_ACCESS']) && ( */}
                 <Grid item md={12}>
                   <FormControlLabel
                     label="Multiply By Quantity"
                     control={
                       <Checkbox
+                        // disabled={props.disable == true}
                         onChange={(e) =>
                           setNewParticular((particularDetails) => ({
                             ...particularDetails,
@@ -1493,7 +1732,6 @@ const EditIROCustom = () => {
                     }
                   />
                 </Grid>
-                {/* // )} */}
                 <Grid item md={12}>
                   <TextField
                     label="Total Amount"
@@ -1507,19 +1745,22 @@ const EditIROCustom = () => {
                     }
                     fullWidth
                     required
-                    disabled={!hasPermissions(['ADMIN_ACCESS'])}
-                    InputLabelProps={{ shrink: true }}
+                    disabled
                     inputProps={{
-                      onWheel: handleWheel,
+                      onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                        event.preventDefault();
+                        event.currentTarget.blur();
+                      },
                     }}
+                    InputLabelProps={{ shrink: true }}
                   />
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+                    // disabled={props.disable==true}
                     value={newParticular?.month}
                     options={monthNames ?? []}
                     getOptionLabel={(monthName) => monthName}
-                    disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS']) && !hasPermissions(['FCRA_ACCOUNTS_ACCESS']) && !hasPermissions(['LOCAL_ACCOUNT_ACCESS'])&& !hasPermissions(['ACCOUNTS_MNGR_ACCESS'])}
                     onChange={(e, selectedMonth) => {
                       if (selectedMonth) {
                         setNewParticular((particularDetails) => ({
@@ -1530,6 +1771,22 @@ const EditIROCustom = () => {
                     }}
                     renderInput={(params) => <TextField {...params} label="For the Month" required />}
                     fullWidth
+                  />
+                </Grid>
+                <Grid item md={12}>
+                  <FormControlLabel
+                    label="Upcoming Year"
+                    control={
+                      <Checkbox
+                        // disabled={props.disable==true}
+                        onChange={(e) =>
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            isUpcomingYear: e.target.checked,
+                          }))
+                        }
+                      />
+                    }
                   />
                 </Grid>
 
@@ -1549,9 +1806,7 @@ const EditIROCustom = () => {
                   />
                 </Grid>
                 <Grid item md={12}>
-                  <Button disabled={IRO.status != IROLifeCycleStates.REOPENED && !hasPermissions(['ADMIN_ACCESS'])} variant="contained" onClick={() => {
-                    setViewFileUploader(true); setAttachments(newParticular.attachment);
-                  }} startIcon={<AttachmentIcon />}>
+                  <Button variant="contained" onClick={() => setViewFileUploader(true)} startIcon={<AttachmentIcon />}>
                     Attachments
                   </Button>
                 </Grid>
@@ -1559,7 +1814,7 @@ const EditIROCustom = () => {
             </Container>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowAddParticularDialog(false)}>Cancel</Button>
+            <Button onClick={()=>setShowAddParticularDialog(false)}>Cancel</Button>
             <Button type="submit" variant="contained">
               Save
             </Button>
@@ -1576,10 +1831,12 @@ const EditIROCustom = () => {
           onSubmit={(e) => {
             e.preventDefault();
             handleClose();
-            setIRO({
-              ...IRO,
-              particulars: IRO.particulars?.map((part: { _id: string }) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
-            });
+            if (particularDialog === 'edit'|| addNewParticulars.length ==0) {
+              setIRO({
+                ...IRO,
+                particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+              });
+            }
             // addParticulars();
           }}
         >
@@ -1597,7 +1854,7 @@ const EditIROCustom = () => {
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
-                  value={newParticular?.sanctionedAmount ?? total}
+                  value={newParticular?.sanctionedAmount !==0 ?newParticular?.sanctionedAmount: null}
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
@@ -1607,12 +1864,20 @@ const EditIROCustom = () => {
                   // disabled={!hasPermissions(['ADMIN_ACCESS']) &&!hasPermissions(['OFFICE_MNGR_ACCESS']) && IROLifeCycleStates.REOPENED !== IRO.status}
 
                   onChange={(e) => {
-                    if (totalRequestedAmount) {
-                      setNewParticular((amount: any) => ({
-                        ...amount,
-                        sanctionedAmount: Number(e.target.value),
-                      }));
-                    }
+                    // if (totalRequestedAmount) {
+                    setNewParticular((amount: any) => ({
+                      ...amount,
+                      sanctionedAmount: Number(e.target.value),
+                    }));
+
+                    setAddNewParticulers((prev: any) =>
+                      prev.map((particular: any, index: number) =>
+                        index === selectedParticularIndex ? { ...particular, sanctionedAmount: e.target.value } : particular,
+                      ),
+                    );
+
+
+                    // }
                   }
                   }
                   // onFocus={() => setFocused(true)}
@@ -1640,12 +1905,17 @@ const EditIROCustom = () => {
                 options={sanctionedAsPer ?? []}
                 getOptionLabel={(option:any) => option ?? ''}
                 onChange={(_e, selectedSanction) => {
-                  if (selectedSanction) {
-                    setNewParticular((asper: any) => ({
-                      ...asper,
-                      sanctionedAsPer: selectedSanction,
-                    }));
-                  }
+                  // if (selectedSanction) {
+                  setNewParticular((asper: any) => ({
+                    ...asper,
+                    sanctionedAsPer: selectedSanction,
+                  }));
+                  // }
+                  setAddNewParticulers((prev: any) =>
+                    prev.map((particular: any, index: number) =>
+                      index === selectedParticularIndex ? { ...particular, sanctionedAsPer: selectedSanction } : particular,
+                    ),
+                  );
                 }}
                 disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO?.status}
                 renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}
@@ -1787,6 +2057,13 @@ const EditIROCustom = () => {
         //   });
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
+        deleteFile={(fileId: string) => {
+          setIRO({
+            ...IRO,
+            attachment: IRO.presidentSign.filter((file: any) => file._id !== fileId),
+          });
+          return FileUploaderServices.deleteFile(fileId);
+        }}
       />
       <FileUploader
         title="Attachments"

@@ -464,6 +464,9 @@ return (
                 </Table>
               </TableContainer>
             </Grid>
+   
+
+
             <Grid item xs={12} md={6}>
               <TextField
                 label="Requested Amount"
@@ -672,6 +675,7 @@ return (
                     </Select>
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
                     <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>

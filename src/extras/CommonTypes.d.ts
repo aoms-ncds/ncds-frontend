@@ -67,7 +67,8 @@ declare global {
     value: T;
     onChange: (newState: T) => void;
     action: 'view' | 'add' | 'edit'| 'custom'|'customIRO'| 'reopen'| 'customEdit';
-    onSubmit?: (data: T) => Promise<void>;
+    actionAdi?: 'view';
+    onSubmit?: (data: T,) => Promise<void>;
     options?: Options;
   }
 
