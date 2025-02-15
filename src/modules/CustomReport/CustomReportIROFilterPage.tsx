@@ -67,6 +67,7 @@ const IROReportFilter = () => {
     transactionId: '',
   });
   const [data, setData] = useState<any[] | null>(null);
+  const [page, setPage] = useState<boolean>(false);
 
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [loading, setLoading] = useState(false);
@@ -86,9 +87,48 @@ const IROReportFilter = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
-  const options = ['Sub-Division', 'IAO Status', 'For the month', 'Mode of Payment'];
+  const options = [
+    // 'Sub-Division',
+    // 'Status',
+    'For the month',
+    'Mode of Payment',
+    // 'Requested Amount',
+    'Amount Release Date',
+    'Sanction as per',
+    'Narration',
+    'IroClosedOn',
+    'SourceOfAccount',
+    'ReleaseAmount',
+    'TransactionNumber',
+    'TransferredAmount',
+    'TransferredDate',
+    'TransferredBank Name',
+    'TransferredBank branchName',
+    'TransferredBank accountNumber',
+    'TransferredBank IFSCCode',
+    // 'Sanctioned Bank',
+    // 'UnitPrice',
+    // 'Sanctioned Amount',
+    // 'Beneficiary Name',
+    'Last Updated',
+    // 'Amount Release Date',
+    // 'ApprovedBy',
 
-  const [selectedData, setSelectedData] = useState<any[]>([]);
+
+  ];
+
+  const [selectedData, setSelectedData] = useState<any[]>([
+    'IRO No',
+    'Date',
+    'Status',
+    'Division',
+    'Sub-Division',
+    'Main Category',
+    'Sub Category',
+    'Requested Amount',
+    'Sanction Amount',
+    'Sanctioned Bank',
+    'Beneficiary Name']);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(selectedData, 'options');
 
@@ -172,7 +212,7 @@ const IROReportFilter = () => {
   console.log(totalRequestedAmount);
 
 
-  console.log(totalRequestedAmount, 'newData');
+  console.log(data, 'newData');
 
 
   const attach = async (blob: Blob) => {
@@ -237,6 +277,8 @@ const IROReportFilter = () => {
     }
     return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
   });
+  console.log(filteredRows, 'filteredRows');
+
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
@@ -737,7 +779,7 @@ const IROReportFilter = () => {
 
   return (
     <>
-      {!data && <Container>
+      {!page && <Container>
 
         <div style={{ padding: '16px' }}>
           <Typography sx={{ fontWeight: '600' }} variant="h4" gutterBottom>
@@ -1280,6 +1322,7 @@ const IROReportFilter = () => {
 
           {/* Action Buttons */}
           <Grid container spacing={2} style={{ marginTop: '16px' }}>
+
             <Grid item>
               <Button
                 variant="contained"
@@ -1289,6 +1332,7 @@ const IROReportFilter = () => {
                   event.preventDefault(); // Prevents form submission
                   CustomReportServices.filterData(filters).then((res) => {
                     if (res.data.length >=1) {
+                      setPage(true);
                       setData(res.data);
                       setLoading1(false);
                     } else {
@@ -1341,11 +1385,20 @@ const IROReportFilter = () => {
               Reset
               </Button>
             </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() =>setPage(true)}
+              >
+              Go back
+              </Button>
+            </Grid>
           </Grid>
         </div>
       </Container>}
 
-      { data && <CommonPageLayout title="Custom report" momentFilter={{
+      { page && <CommonPageLayout title="Custom report" momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
@@ -1400,47 +1453,58 @@ const IROReportFilter = () => {
               <Button
                 onClick={async () => {
                   const sheet = data ?
-                    data.map((iro: any) => ([
-                      iro.IROno,
-                      iro.IRODate,
-                      iro.divisionData?.details?.name,
-                      iro.purposeSubdivision?.name,
-                      iro.particularsData.mainCategory,
-                      iro.particularsData.requestAmount,
-                      iro.particularsData.sanctionedAmount,
-                      iro.sanctionedBank,
-                      iro.particularsData.sanctionedAsPer,
-                      iro.releaseAmount?.releaseAmount,
-                      iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                      IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                    ])) :
+                    data.map((iro: any) => {
+                      const row = [
+                        iro.IROno,
+                        iro.IRODate,
+                        IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                        iro.divisionData?.details?.name,
+                        iro.purposeSubdivision?.name,
+                        iro.particularsData.mainCategory,
+                        iro.particularsData?.subCategory1,
+                        iro.particularsData?.requestedAmount,
+                        iro.particularsData.sanctionedAmount,
+                        iro.sanctionedBank,
+                        iro.sanctionedBank?.split('-').slice(1).join('-').trim(),
+                        selectedData.includes('For the month') && iro.particularsData?.month,
+                        selectedData.includes('Mode of Payment') && iro.releaseAmountData?.modeOfPayment,
+                        selectedData.includes('Amount Release Date') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
+                        selectedData.includes('Sanction as per') && iro.particularsData.sanctionedAsPer,
+                        selectedData.includes('Narration') && iro.particularsData?.narration,
+                        selectedData.includes('IroClosedOn') && moment(iro.iroClosedOn).format('DD/MM/YYYY'),
+                        selectedData.includes('SourceOfAccount') && iro.sourceOfAccount,
+                        selectedData.includes('ReleaseAmount') && iro.releaseAmountData?.releaseAmount,
+                        selectedData.includes('TransactionNumber') && iro.releaseAmountData?.transactionNumber,
+                        selectedData.includes('TransferredAmount') && iro.releaseAmountData?.transferredAmount,
+                        selectedData.includes('TransferredDate') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
+                        selectedData.includes('TransferredBank Name') && iro.releaseAmountData?.transferredBank?.bankName,
+                        selectedData.includes('TransferredBank branchName') && iro.releaseAmountData?.transferredBank?.branchName,
+                        selectedData.includes('TransferredBank accountNumber') && iro.releaseAmountData?.transferredBank?.accountNumber,
+                        selectedData.includes('TransferredBank IFSCCode') && iro.releaseAmountData?.transferredBank?.IFSCCode,
+                        selectedData.includes('Last Updated') && moment(iro.updatedAt).format('DD/MM/YYYY'),
+                      ].filter((value) => value !== false); // Remove only `false`, keep others
+
+                      return row;
+                    }) :
                     [];
-                  const headers = [
-                    'IRO No',
-                    'Date',
-                    'Division',
-                    'Sub Division',
-                    'Main Category',
-                    'Requested Amt',
-                    'Sanctioned Amt',
-                    'Sanctioned Bank',
-                    'Sanctioned As per',
-                    'Released Amt',
-                    'Released Date',
-                    'Status',
-                  ];
+
                   const worksheet = XLSX.utils.json_to_sheet(sheet);
                   const workbook = XLSX.utils.book_new();
+
+                  // Add column headers dynamically based on `selectedData`
+                  XLSX.utils.sheet_add_aoa(worksheet, [selectedData], { origin: 'A1' });
+
                   XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                  XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
                   XLSX.writeFile(workbook, 'Custom_IRO_Report.xlsx', { compression: true });
-                } }
+                }}
                 startIcon={<DownloadIcon />}
-                color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+                color="primary"
+                sx={{ float: 'right', mr: 2, mt: 2 }}
                 variant="contained"
               >
-                Export
+  Export
               </Button>
+
             </Grid>
 
 
@@ -1456,7 +1520,7 @@ const IROReportFilter = () => {
             <Box sx={{ width: '95%', margin: 'auto', mt: 2, p: 2 }}>
               {/* Top Action Buttons */}
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                <Button onClick={() => setData(null)} variant="contained">FILTERS</Button>
+                <Button onClick={() => setPage(false)} variant="contained">FILTERS</Button>
                 <Button
                   onClick={async () => {
                     const sheet = data ?
@@ -1479,15 +1543,18 @@ const IROReportFilter = () => {
                     const headers = [
                       'IRO No',
                       'Date',
+                      'Status',
                       'Division',
                       'Sub Division',
                       'Main Category',
+                      'Sub Category',
                       'Requested Amt',
                       'Sanctioned Amt',
                       'Sanctioned Bank',
-                      'Sanctioned As per',
-                      'Released Amt',
-                      'Released Date',
+                      'Beneficiary Name',
+                      // 'Sanctioned As per',
+                      // 'Released Amt',
+                      // 'Released Date',
                     ];
 
                     // eslint-disable-next-line new-cap
@@ -1501,7 +1568,7 @@ const IROReportFilter = () => {
                     doc.text('Custom IRO Report', 14, 10);
 
                     (doc as any).autoTable({
-                      head: [headers],
+                      head: [selectedData],
                       body: sheet,
                       startY: 20,
                       theme: 'grid',
@@ -1561,15 +1628,36 @@ const IROReportFilter = () => {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>
-                      {selectedData.includes('IRO Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
+                      <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                      {/* {selectedData.includes('IRO Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>} */}
                       <TableCell sx={{ fontWeight: 'bold' }}>Division Name</TableCell>
-                      {selectedData.includes('Sub-Division') &&<TableCell sx={{ fontWeight: 'bold' }}>Sub Division Name</TableCell>}
+                      {selectedData.includes('Sub-Division') &&<TableCell sx={{ fontWeight: 'bold', width: '150px' }}>Sub Division Name</TableCell>}
                       <TableCell sx={{ fontWeight: 'bold' }}>Main Category</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sub Category</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Requested Amount</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sanction Amount</TableCell>
-                      {selectedData.includes('For the month') && <TableCell sx={{ fontWeight: 'bold' }}>For the month</TableCell>}
+                      <TableCell sx={{ fontWeight: 'bold' }}>Sanctioned Bank</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>
+                      {selectedData.includes('For the month') && <TableCell sx={{ fontWeight: 'bold', width: '150px' }}>For the month</TableCell>}
                       {selectedData.includes('Mode of Payment') && <TableCell sx={{ fontWeight: 'bold' }}>Mode of Payment</TableCell>}
+                      {selectedData.includes('Amount Release Date') && <TableCell sx={{ fontWeight: 'bold' }}>Amount Release Date</TableCell>}
+                      {selectedData.includes('Sanction as per') && <TableCell sx={{ fontWeight: 'bold' }}>Sanction as per</TableCell>}
+                      {selectedData.includes('Narration') && <TableCell sx={{ fontWeight: 'bold' }}>Narration</TableCell>}
+                      {/* {selectedData.includes('UnitPrice') && <TableCell sx={{ fontWeight: 'bold' }}>UnitPrice</TableCell>} */}
+                      {/* {selectedData.includes('Beneficiary Name') && <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>} */}
+                      {selectedData.includes('IroClosedOn') && <TableCell sx={{ fontWeight: 'bold' }}>Iro Closed On</TableCell>}
+                      {/* {selectedData.includes('ApprovedBy') && <TableCell sx={{ fontWeight: 'bold' }}>Approved By</TableCell>} */}
+                      {selectedData.includes('SourceOfAccount') && <TableCell sx={{ fontWeight: 'bold' }}>Source Of Account</TableCell>}
+                      {selectedData.includes('ReleaseAmount') && <TableCell sx={{ fontWeight: 'bold' }}>Release Amount</TableCell>}
+                      {selectedData.includes('TransactionNumber') && <TableCell sx={{ fontWeight: 'bold' }}>Transaction Number</TableCell>}
+                      {selectedData.includes('TransferredAmount') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Amount</TableCell>}
+                      {selectedData.includes('TransferredDate') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Date</TableCell>}
+                      {selectedData.includes('TransferredBank Name') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank Name</TableCell>}
+                      {selectedData.includes('TransferredBank branchName') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank branchName</TableCell>}
+                      {selectedData.includes('TransferredBank accountNumber') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank account Number</TableCell>}
+                      {selectedData.includes('TransferredBank IFSCCode') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank IFSCCode</TableCell>}
+
+                      <TableCell sx={{ fontWeight: 'bold' }}>Last Updated</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1585,15 +1673,34 @@ const IROReportFilter = () => {
                       >
                         <TableCell>{row.IROno}</TableCell>
                         <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>
-                        {selectedData.includes('IRO Status') && <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}
+                        <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>
                         <TableCell>{row.divisionData?.details?.name}</TableCell>
                         {selectedData.includes('Sub-Division') && <TableCell>{row.purposeSubdivision?.name}</TableCell>}
                         <TableCell>{row.particularsData?.mainCategory}</TableCell>
                         <TableCell>{row.particularsData?.subCategory1}</TableCell>
                         <TableCell>{row.particularsData?.requestedAmount}</TableCell>
                         <TableCell>{row.particularsData?.sanctionedAmount}</TableCell>
-                        {selectedData.includes('For the month') && <TableCell>{row.particularsData?.sanctionedAmount}</TableCell>}
+                        <TableCell>{row.sanctionedBank}</TableCell>
+                        <TableCell>{row.sanctionedBank?.split('-').slice(1).join('-').trim()}</TableCell>
+                        {selectedData.includes('For the month') && <TableCell>{row.particularsData?.month}</TableCell>}
                         {selectedData.includes('Mode of Payment') && <TableCell>{row.releaseAmountData?.modeOfPayment}</TableCell>}
+                        {selectedData.includes('Amount Release Date') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
+                        {selectedData.includes('Sanction as per') && <TableCell>{row.particularsData?.sanctionedAsPer}</TableCell>}
+                        {selectedData.includes('Narration') && <TableCell>{row.particularsData?.narration}</TableCell>}
+                        {/* {selectedData.includes('UnitPrice') && <TableCell>{row.particularsData?.unitPrice}</TableCell>} */}
+                        {selectedData.includes('IroClosedOn') && <TableCell>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</TableCell>}
+                        {selectedData.includes('SourceOfAccount') && <TableCell>{row.sourceOfAccount}</TableCell>}
+                        {selectedData.includes('ReleaseAmount') && <TableCell>{row.releaseAmountData?.releaseAmount}</TableCell>}
+                        {selectedData.includes('TransactionNumber') && <TableCell>{row.releaseAmountData?.transactionNumber}</TableCell>}
+                        {selectedData.includes('TransferredAmount') && <TableCell>{row.releaseAmountData?.transferredAmount}</TableCell>}
+                        {selectedData.includes('TransferredDate') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
+                        {selectedData.includes('TransferredBank Name') && <TableCell>{row.releaseAmountData?.transferredBank?.bankName}</TableCell>}
+                        {selectedData.includes('TransferredBank branchName') && <TableCell>{row.releaseAmountData?.transferredBank?.branchName}</TableCell>}
+                        {selectedData.includes('TransferredBank accountNumber') && <TableCell>{row.releaseAmountData?.transferredBank?.accountNumber}</TableCell>}
+                        {selectedData.includes('TransferredBank IFSCCode') && <TableCell>{row.releaseAmountData?.transferredBank?.IFSCCode}</TableCell>}
+                        <TableCell>{moment(row.updatedAt).format('DD/MM/YYYY')}</TableCell>
+                        {/* <TableCell>{row.approvedBy  }</TableCell> */}
+
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1604,17 +1711,16 @@ const IROReportFilter = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
                 <span>Total:</span>
                 <span>
-                  {`Requested amt : ${
-                    data?.reduce((total, e) =>
-                      total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0)
-                    , 0)
-                  }`}
+                  {`Requested amt : $${data?.reduce(
+                    (total, e) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
+                    0,
+                  ).toFixed(2)}`}
+
                 </span>
                 <span>{`Sanctioned amt : ${
                   data?.reduce((total, e) =>
                     total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
-                  , 0)
-                }`}</span>
+                  , 0).toFixed(2)}`}</span>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 <Button
@@ -1821,14 +1927,36 @@ const IROReportFilter = () => {
           <DialogContent>
             <Autocomplete
               multiple
-              options={options}
+              options={['All', ...options]}
               value={selectedData}
-              onChange={(event, newValue) => setSelectedData(newValue)}
-              renderInput={(params) => <TextField {...params} placeholder="Search..." />} />
+              onChange={(event, newValue) => {
+                if (newValue.includes('All')) {
+                  // If "All" is selected, select all options except "All" itself
+                  setSelectedData((prev) => [ // Keep existing selected options
+
+                    'IRO No',
+                    'Date',
+                    'Status',
+                    'Division',
+                    'Sub-Division',
+                    'Main Category',
+                    'Sub Category',
+                    'Requested Amount',
+                    'Sanction Amount',
+                    'Sanctioned Bank',
+                    'Beneficiary Name',
+                    ...options,
+                  ]);
+                } else {
+                  setSelectedData(newValue);
+                }
+              }}
+              renderInput={(params) => <TextField {...params} placeholder="Search..." />}
+            />
             <Box mt={2}>
               <strong>Selected Data</strong>
               <Button onClick={() => setSelectedData([])} sx={{ float: 'right' }}>
-                Clear All
+        Clear All
               </Button>
               <Box mt={1} sx={{ border: '1px solid gray', padding: 1 }}>
                 {selectedData.map((item) => (
@@ -1836,7 +1964,8 @@ const IROReportFilter = () => {
                     key={item}
                     label={item}
                     onDelete={() => setSelectedData(selectedData.filter((i) => i !== item))}
-                    sx={{ margin: 0.5 }} />
+                    sx={{ margin: 0.5 }}
+                  />
                 ))}
               </Box>
             </Box>
@@ -1844,10 +1973,11 @@ const IROReportFilter = () => {
           <DialogActions>
             <Button onClick={() => setOpen(false)}>Cancel</Button>
             <Button variant="contained" onClick={() => setOpen(false)}>
-              Continue →
+      Continue →
             </Button>
           </DialogActions>
         </Dialog>
+
         {loading &&
           <Lottie
             options={{

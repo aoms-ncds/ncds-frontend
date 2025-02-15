@@ -52,6 +52,7 @@ declare global {
     WAITTING_FOR_RELEASE_AMOUNT: boolean;
     AUDIT_VIEW: boolean;
     CUSTOM_FR_IRO: boolean;
+    CUSTOM_REPORT: boolean;
     REOPEN_FR_IRO: boolean;
 
   }
