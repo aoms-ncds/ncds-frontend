@@ -44,6 +44,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
+import PDFTemplateCustom from './components/PDFTemplateCustom';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -67,6 +68,7 @@ const IROReportFilter = () => {
     transactionId: '',
   });
   const [data, setData] = useState<any[] | null>(null);
+  const [print, setPrint] = useState<boolean>(false);
   const [page, setPage] = useState<boolean>(false);
 
   const [newTest, setNewTest] = useState<IROrder[]>([]);
@@ -130,7 +132,7 @@ const IROReportFilter = () => {
     'Sanctioned Bank',
     'Beneficiary Name']);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
-  console.log(selectedData, 'options');
+  console.log(loading1, 'options');
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -688,14 +690,34 @@ const IROReportFilter = () => {
     // },
   ];
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.IRO_CLOSED })
+    // IROServices.getAll({ dateRange: dateRange })
+    //   .then((res) => {
+    //     setIROrder(res.data);
+    //     setData(res.data);
+    //   })
+    //   .catch((res) => {
+    //     console.log(res);
+    //   });
+
+    CustomReportServices.filterData( { filters, dateRange })
       .then((res) => {
-        setIROrder(res.data);
+        // setIROrder(res.data);
+        setData(res.data);
       })
       .catch((res) => {
         console.log(res);
       });
+    // setData((iroReq) =>
+    //   iroReq ?
+    //     iroReq.filter((iro) =>
+    //       moment(iro.IRODate).isSameOrAfter(moment(dateRange.startDate)) &&
+    //           moment(iro.IRODate).isSameOrBefore(moment(dateRange.endDate)),
+    //     ) :
+    //     [],
+    // );
   }, [dateRange]);
+  console.log(dateRange, 'dateRange');
+
   const navigate = useNavigate();
   // State management for filters
   const [divisions, setDivisions] = useState<any[] | null>(null);
@@ -779,17 +801,17 @@ const IROReportFilter = () => {
 
   return (
     <>
-      {!page && <Container>
+      {!page && <><Container>
 
         <div style={{ padding: '16px' }}>
           <Typography sx={{ fontWeight: '600' }} variant="h4" gutterBottom>
-          IRO Report Filter
+            IRO Report Filter
           </Typography>
 
           {/* Division Details Section */}
           <section>
             <Typography sx={{ fontWeight: '600' }} variant="h6" gutterBottom>
-            Division Details:
+              Division Details:
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
@@ -802,7 +824,7 @@ const IROReportFilter = () => {
                     ...prev,
                     division: newValue ?? '', // Store the ID of the selected division
                   }))
-                  // setDivision(newValue),
+                    // setDivision(newValue),
                   }
                   disabled={filters.allDivisions}
                   renderInput={(params) => (
@@ -852,7 +874,7 @@ const IROReportFilter = () => {
           {/* IRO Details Section */}
           <section>
             <Typography sx={{ fontWeight: '600' }} variant="h6" gutterBottom>
-            IRO Details:
+              IRO Details:
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -887,9 +909,9 @@ const IROReportFilter = () => {
                     ...prev,
                     sanctionedAsPer: newValue ?? '', // Store the ID of the selected division
                   }))
-                  // setDivision(newValue),
+                    // setDivision(newValue),
                   }
-                  disabled={filters.allDivisions}
+                  // disabled={filters.allDivisions}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -962,7 +984,7 @@ const IROReportFilter = () => {
           {/* Category Details Section */}
           <section>
             <Typography sx={{ fontWeight: '600' }} variant="h6" gutterBottom>
-            Category Wise:
+              Category Wise:
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -1000,7 +1022,7 @@ const IROReportFilter = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Autocomplete
-                // disabled={props.disable==true}
+                  // disabled={props.disable==true}
                   value={selectedSubCategory2}
                   options={selectedSubCategory1?.subcategory2 ?? []}
                   getOptionLabel={(subcategory2) => subcategory2.name ?? ''}
@@ -1012,24 +1034,24 @@ const IROReportFilter = () => {
                       }));
                       setSelectedSubCategory2(selectedSubCategory2);
                     }
-                  //   const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
-                  //   if (subcat2?.includes('Select')) {
-                  //     console.log('Select');
-                  //     if (selectedSubCategory2) {
-                  //       setNewParticular((particularDetails) => ({
-                  //         ...particularDetails,
-                  //         narration: selectedSubCategory2?.subcategory3[0].narration,
-                  //       }));
-                  //       setSelectedSubCategory3(selectedSubCategory3);
-                  //     }
-                  //   }
+                    //   const subcat2 =selectedSubCategory2?.subcategory3.map((e)=>e.name);
+                    //   if (subcat2?.includes('Select')) {
+                    //     console.log('Select');
+                    //     if (selectedSubCategory2) {
+                    //       setNewParticular((particularDetails) => ({
+                    //         ...particularDetails,
+                    //         narration: selectedSubCategory2?.subcategory3[0].narration,
+                    //       }));
+                    //       setSelectedSubCategory3(selectedSubCategory3);
+                    //     }
+                    //   }
                   } }
                   renderInput={(params) => <TextField {...params} label="Sub Category 2" required />}
                   fullWidth />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Autocomplete
-                // disabled={props.disable==true}
+                  // disabled={props.disable==true}
                   value={selectedSubCategory3}
                   options={selectedSubCategory2?.subcategory3 ?? []}
                   getOptionLabel={(subCategory3) => subCategory3.name}
@@ -1051,7 +1073,7 @@ const IROReportFilter = () => {
           {/* Bank Details Section */}
           <section>
             <Typography sx={{ fontWeight: '600' }} variant="h6" gutterBottom>
-            Bank Details:
+              Bank Details:
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -1214,102 +1236,102 @@ const IROReportFilter = () => {
                     <MenuItem value={filters.sanctionedBank}>{filters.sanctionedBank}</MenuItem>
                     {filters.division?.DivisionBankFCRA?.bankName != '' || filters.division?.FCRABankDetails?.bankName != '' ? (
                       <MenuItem value={`FCRA-${filters.division?.DivisionBankFCRA?.beneficiary || filters.division?.FCRABankDetails?.beneficiary}`}>
-                      Division Bank FCRA                   </MenuItem>
+                        Division Bank FCRA                   </MenuItem>
                     ) : ''}
 
                     {filters.division?.DivisionBankLocal?.bankName || filters.division?.localBankDetails?.bankName ? (
                       <MenuItem value={`Local Bank-${filters.division?.DivisionBankLocal?.beneficiary || filters.division?.localBankDetails?.beneficiary}`}>
-                      Division Bank Local                     </MenuItem>
+                        Division Bank Local                     </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank1?.bankName || filters.division?.otherBankDetails?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 1-${filters.division?.BeneficiaryBank1?.beneficiary || filters.division?.otherBankDetails?.beneficiary}`}>
-                      Beneficiary Bank 1                    </MenuItem>
+                        Beneficiary Bank 1                    </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank2?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 2-${filters.division?.BeneficiaryBank2?.beneficiary}`}>
-                      Beneficiary Bank 2                 </MenuItem>
+                        Beneficiary Bank 2                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank3?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 3-${filters.division?.BeneficiaryBank3?.beneficiary}`}>
-                      Beneficiary Bank 3                 </MenuItem>
+                        Beneficiary Bank 3                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank4?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 4-${filters.division?.BeneficiaryBank4?.beneficiary}`}>
-                      Beneficiary Bank 4                 </MenuItem>
+                        Beneficiary Bank 4                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank5?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 5-${filters.division?.BeneficiaryBank5?.beneficiary}`}>
-                      Beneficiary Bank 5                 </MenuItem>
+                        Beneficiary Bank 5                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank6?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 6-${filters.division?.BeneficiaryBank6?.beneficiary}`}>
-                      Beneficiary Bank 6                 </MenuItem>
+                        Beneficiary Bank 6                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank7?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 7-${filters.division?.BeneficiaryBank7?.beneficiary}`}>
-                      Beneficiary Bank 7                 </MenuItem>
+                        Beneficiary Bank 7                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank8?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 8-${filters.division?.BeneficiaryBank8?.beneficiary}`}>
-                      Beneficiary Bank 8                 </MenuItem>
+                        Beneficiary Bank 8                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank9?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 9-${filters.division?.BeneficiaryBank9?.beneficiary}`}>
-                      Beneficiary Bank 9                 </MenuItem>
+                        Beneficiary Bank 9                 </MenuItem>
                     ) : ''}
 
                     {filters.division?.BeneficiaryBank10?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 10-${filters.division?.BeneficiaryBank10?.beneficiary}`}>
-                      Beneficiary Bank 10                  </MenuItem>
+                        Beneficiary Bank 10                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank10?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 11-${filters.division?.BeneficiaryBank11?.beneficiary}`}>
-                      Beneficiary Bank 11                  </MenuItem>
+                        Beneficiary Bank 11                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank12?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 12-${filters.division?.BeneficiaryBank12?.beneficiary}`}>
-                      Beneficiary Bank 12                  </MenuItem>
+                        Beneficiary Bank 12                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank13?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 13-${filters.division?.BeneficiaryBank13?.beneficiary}`}>
-                      Beneficiary Bank 13                  </MenuItem>
+                        Beneficiary Bank 13                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank14?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 14-${filters.division?.BeneficiaryBank14?.beneficiary}`}>
-                      Beneficiary Bank 14                  </MenuItem>
+                        Beneficiary Bank 14                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank15?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 15-${filters.division?.BeneficiaryBank15?.beneficiary}`}>
-                      Beneficiary Bank 15                  </MenuItem>
+                        Beneficiary Bank 15                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank16?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 16-${filters.division?.BeneficiaryBank16?.beneficiary}`}>
-                      Beneficiary Bank 16                  </MenuItem>
+                        Beneficiary Bank 16                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank17?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 17-${filters.division?.BeneficiaryBank17?.beneficiary}`}>
-                      Beneficiary Bank 17                  </MenuItem>
+                        Beneficiary Bank 17                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank18?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 18-${filters.division?.BeneficiaryBank18?.beneficiary}`}>
-                      Beneficiary Bank 18                 </MenuItem>
+                        Beneficiary Bank 18                 </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank19?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 19-${filters.division?.BeneficiaryBank19?.beneficiary}`}>
-                      Beneficiary Bank 19                  </MenuItem>
+                        Beneficiary Bank 19                  </MenuItem>
                     ) : ''}
                     {filters.division?.BeneficiaryBank20?.bankName ? (
                       <MenuItem value={`Beneficiary Bank 20-${filters.division?.BeneficiaryBank20?.beneficiary}`}>
-                      Beneficiary Bank 20
+                        Beneficiary Bank 20
                       </MenuItem>
                     ) : ''}
 
@@ -1328,10 +1350,10 @@ const IROReportFilter = () => {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  setLoading1(true);
                   event.preventDefault(); // Prevents form submission
+                  setLoading1(true);
                   CustomReportServices.filterData(filters).then((res) => {
-                    if (res.data.length >=1) {
+                    if (res.data.length >= 1) {
                       setPage(true);
                       setData(res.data);
                       setLoading1(false);
@@ -1343,17 +1365,15 @@ const IROReportFilter = () => {
                       });
                     }
                     console.log(res.data, 'ee');
-                  // if (res.data) {
-                  //   navigate('/custom-report/custom-report-table', {
-                  //     state: { reportData: JSON.stringify(res.data) }, // Convert to string
-                  //   });
-                  // }
+                    // if (res.data) {
+                    //   navigate('/custom-report/custom-report-table', {
+                    //     state: { reportData: JSON.stringify(res.data) }, // Convert to string
+                    //   });
+                    // }
                   });
                 } }
               >
-                {loading1 ? <Box sx={{ display: 'flex' }}>
-                  <CircularProgress color="secondary" />
-                </Box> : 'Apply Filters'}
+                Apply Filters
               </Button>
 
 
@@ -1382,27 +1402,46 @@ const IROReportFilter = () => {
                   sanctionedBank: '',
                 })}
               >
-              Reset
+                Reset
               </Button>
             </Grid>
             <Grid item>
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() =>setPage(true)}
+                onClick={() => setPage(true)}
               >
-              Go back
+                Go back
               </Button>
             </Grid>
           </Grid>
         </div>
-      </Container>}
+      </Container><Dialog open={loading1} maxWidth="xs" fullWidth>
+        <DialogTitle>Loading...</DialogTitle>
+        <DialogContent>
+          <Container>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        Wait for a while...
+              <CircularProgress color="secondary" sx={{ mt: 2 }} />
+            </Box>
+          </Container>
+        </DialogContent>
+      </Dialog>
+      </>
+      }
 
       { page && <CommonPageLayout title="Custom report" momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(newDateRange.startDate) && iro.IRODate.isSameOrBefore(newDateRange.endDate)) : []));
+          setData((iroReq) =>
+            iroReq ?
+              iroReq.filter((iro) =>
+                moment(iro.IRODate).isSameOrAfter(moment(newDateRange.startDate)) &&
+                  moment(iro.IRODate).isSameOrBefore(moment(newDateRange.endDate)),
+              ) :
+              [],
+          );
         },
         rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
         initialRange: 'months',
@@ -1450,60 +1489,7 @@ const IROReportFilter = () => {
               {/* </div> */}
             </Grid>
             <Grid item xs={6}>
-              <Button
-                onClick={async () => {
-                  const sheet = data ?
-                    data.map((iro: any) => {
-                      const row = [
-                        iro.IROno,
-                        iro.IRODate,
-                        IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                        iro.divisionData?.details?.name,
-                        iro.purposeSubdivision?.name,
-                        iro.particularsData.mainCategory,
-                        iro.particularsData?.subCategory1,
-                        iro.particularsData?.requestedAmount,
-                        iro.particularsData.sanctionedAmount,
-                        iro.sanctionedBank,
-                        iro.sanctionedBank?.split('-').slice(1).join('-').trim(),
-                        selectedData.includes('For the month') && iro.particularsData?.month,
-                        selectedData.includes('Mode of Payment') && iro.releaseAmountData?.modeOfPayment,
-                        selectedData.includes('Amount Release Date') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
-                        selectedData.includes('Sanction as per') && iro.particularsData.sanctionedAsPer,
-                        selectedData.includes('Narration') && iro.particularsData?.narration,
-                        selectedData.includes('IroClosedOn') && moment(iro.iroClosedOn).format('DD/MM/YYYY'),
-                        selectedData.includes('SourceOfAccount') && iro.sourceOfAccount,
-                        selectedData.includes('ReleaseAmount') && iro.releaseAmountData?.releaseAmount,
-                        selectedData.includes('TransactionNumber') && iro.releaseAmountData?.transactionNumber,
-                        selectedData.includes('TransferredAmount') && iro.releaseAmountData?.transferredAmount,
-                        selectedData.includes('TransferredDate') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
-                        selectedData.includes('TransferredBank Name') && iro.releaseAmountData?.transferredBank?.bankName,
-                        selectedData.includes('TransferredBank branchName') && iro.releaseAmountData?.transferredBank?.branchName,
-                        selectedData.includes('TransferredBank accountNumber') && iro.releaseAmountData?.transferredBank?.accountNumber,
-                        selectedData.includes('TransferredBank IFSCCode') && iro.releaseAmountData?.transferredBank?.IFSCCode,
-                        selectedData.includes('Last Updated') && moment(iro.updatedAt).format('DD/MM/YYYY'),
-                      ].filter((value) => value !== false); // Remove only `false`, keep others
 
-                      return row;
-                    }) :
-                    [];
-
-                  const worksheet = XLSX.utils.json_to_sheet(sheet);
-                  const workbook = XLSX.utils.book_new();
-
-                  // Add column headers dynamically based on `selectedData`
-                  XLSX.utils.sheet_add_aoa(worksheet, [selectedData], { origin: 'A1' });
-
-                  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                  XLSX.writeFile(workbook, 'Custom_IRO_Report.xlsx', { compression: true });
-                }}
-                startIcon={<DownloadIcon />}
-                color="primary"
-                sx={{ float: 'right', mr: 2, mt: 2 }}
-                variant="contained"
-              >
-  Export
-              </Button>
 
             </Grid>
 
@@ -1522,83 +1508,139 @@ const IROReportFilter = () => {
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                 <Button onClick={() => setPage(false)} variant="contained">FILTERS</Button>
                 <Button
-                  onClick={async () => {
-                    const sheet = data ?
-                      data.map((iro: any) => [
-                        iro.IROno,
-                        moment(iro.IRODate).format('DD/MM/YYYY'),
-                        iro.divisionData?.details?.name,
-                        iro.purposeSubdivision?.name,
-                        iro.particularsData.mainCategory,
-                        iro.particularsData.requestAmount,
-                        iro.particularsData.sanctionedAmount,
-                        iro.sanctionedBank,
-                        iro.particularsData.sanctionedAsPer,
-                        iro.releaseAmount?.releaseAmount,
-                        iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                        IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                      ]) :
-                      [];
-
-                    const headers = [
-                      'IRO No',
-                      'Date',
-                      'Status',
-                      'Division',
-                      'Sub Division',
-                      'Main Category',
-                      'Sub Category',
-                      'Requested Amt',
-                      'Sanctioned Amt',
-                      'Sanctioned Bank',
-                      'Beneficiary Name',
-                      // 'Sanctioned As per',
-                      // 'Released Amt',
-                      // 'Released Date',
-                    ];
-
-                    // eslint-disable-next-line new-cap
-                    const doc = new jsPDF({
-                      orientation: 'landscape', // Use landscape for better table fitting
-                      unit: 'mm',
-                      format: 'a4',
-                    });
-
-                    doc.setFontSize(14);
-                    doc.text('Custom IRO Report', 14, 10);
-
-                    (doc as any).autoTable({
-                      head: [selectedData],
-                      body: sheet,
-                      startY: 20,
-                      theme: 'grid',
-                      styles: { fontSize: 9, cellPadding: 2 }, // Reduce font size & padding
-                      headStyles: { fillColor: [22, 160, 133], halign: 'center', fontSize: 10 },
-                      columnStyles: {
-                        0: { cellWidth: 16 }, // IRO No
-                        1: { cellWidth: 26 }, // Date
-                        2: { cellWidth: 25 }, // Division
-                        3: { cellWidth: 16 }, // Sub Division
-                        4: { cellWidth: 35 }, // Main Category
-                        5: { cellWidth: 16 }, // Requested Amt
-                        6: { cellWidth: 16 }, // Sanctioned Amt
-                        7: { cellWidth: 30 }, // Sanctioned Bank
-                        8: { cellWidth: 30 }, // Sanctioned As per
-                        9: { cellWidth: 25 }, // Released Amt
-                        10: { cellWidth: 25 }, // Released Date
-                        11: { cellWidth: 25 }, // Status
-                      },
-                      margin: { top: 20, left: 10, right: 10 }, // Reduce left/right margins
-                    });
-                    doc.save('Custom_IRO_Report.pdf');
+                  onClick={()=>{
+                    setPrint(true);
                   }}
+                  // onClick={async () => {
+                  //   const sheet = data ?
+                  //     data.map((iro: any) => [
+                  //       iro.IROno,
+                  //       moment(iro.IRODate).format('DD/MM/YYYY'),
+                  //       iro.divisionData?.details?.name,
+                  //       iro.purposeSubdivision?.name,
+                  //       iro.particularsData.mainCategory,
+                  //       iro.particularsData.requestAmount,
+                  //       iro.particularsData.sanctionedAmount,
+                  //       iro.sanctionedBank,
+                  //       iro.particularsData.sanctionedAsPer,
+                  //       iro.releaseAmount?.releaseAmount,
+                  //       iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+                  //       IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                  //     ]) :
+                  //     [];
+
+                  //   const headers = [
+                  //     'IRO No',
+                  //     'Date',
+                  //     'Status',
+                  //     'Division',
+                  //     'Sub Division',
+                  //     'Main Category',
+                  //     'Sub Category',
+                  //     'Requested Amt',
+                  //     'Sanctioned Amt',
+                  //     'Sanctioned Bank',
+                  //     'Beneficiary Name',
+                  //     // 'Sanctioned As per',
+                  //     // 'Released Amt',
+                  //     // 'Released Date',
+                  //   ];
+
+                  //   // eslint-disable-next-line new-cap
+                  //   const doc = new jsPDF({
+                  //     orientation: 'landscape', // Use landscape for better table fitting
+                  //     unit: 'mm',
+                  //     format: 'a4',
+                  //   });
+
+                  //   doc.setFontSize(14);
+                  //   doc.text('Custom IRO Report', 14, 10);
+
+                  //   (doc as any).autoTable({
+                  //     head: [selectedData],
+                  //     body: sheet,
+                  //     startY: 20,
+                  //     theme: 'grid',
+                  //     headStyles: { fontSize: 9, halign: 'center', fillColor: [22, 160, 133], cellPadding: 2, rotation: 45 },
+                  //     pageBreak: 'auto',
+
+                  //     styles: { fontSize: 8, cellPadding: 2, overflow: 'linebreak' },
+                  //     columnStyles: {
+                  //       0: { cellWidth: 'auto' },
+                  //       1: { cellWidth: 20 }, // Adjust width manually for some columns
+                  //       2: { cellWidth: 20 },
+                  //       3: { cellWidth: 25 },
+                  //       4: { cellWidth: 25 },
+                  //       // Set other columns to auto-fit
+                  //     },
+                  //     margin: { top: 20, left: 5, right: 5 },
+                  //   });
+
+
+                  //   doc.save('Custom_IRO_Report.pdf');
+                  // }
+                  // }
                   startIcon={<DownloadIcon />}
                   color="primary"
                   sx={{ float: 'right', mr: 0, mt: 0 }}
                   variant="contained"
                 >
   Export PDF
-                </Button>;
+                </Button>
+                <Button
+                  onClick={async () => {
+                    const sheet = data ?
+                      data.map((iro: any) => {
+                        const row = [
+                          iro.IROno,
+                          iro.IRODate,
+                          IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+                          iro.divisionData?.details?.name,
+                          iro.purposeSubdivision?.name,
+                          iro.particularsData.mainCategory,
+                          iro.particularsData?.subCategory1,
+                          iro.particularsData?.requestedAmount,
+                          iro.particularsData.sanctionedAmount,
+                          iro.sanctionedBank,
+                          iro.sanctionedBank?.split('-').slice(1).join('-').trim(),
+                          selectedData.includes('For the month') && iro.particularsData?.month,
+                          selectedData.includes('Mode of Payment') && iro.releaseAmountData?.modeOfPayment,
+                          selectedData.includes('Amount Release Date') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
+                          selectedData.includes('Sanction as per') && iro.particularsData.sanctionedAsPer,
+                          selectedData.includes('Narration') && iro.particularsData?.narration,
+                          selectedData.includes('IroClosedOn') && moment(iro.iroClosedOn).format('DD/MM/YYYY'),
+                          selectedData.includes('SourceOfAccount') && iro.sourceOfAccount,
+                          selectedData.includes('ReleaseAmount') && iro.releaseAmountData?.releaseAmount,
+                          selectedData.includes('TransactionNumber') && iro.releaseAmountData?.transactionNumber,
+                          selectedData.includes('TransferredAmount') && iro.releaseAmountData?.transferredAmount,
+                          selectedData.includes('TransferredDate') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
+                          selectedData.includes('TransferredBank Name') && iro.releaseAmountData?.transferredBank?.bankName,
+                          selectedData.includes('TransferredBank branchName') && iro.releaseAmountData?.transferredBank?.branchName,
+                          selectedData.includes('TransferredBank accountNumber') && iro.releaseAmountData?.transferredBank?.accountNumber,
+                          selectedData.includes('TransferredBank IFSCCode') && iro.releaseAmountData?.transferredBank?.IFSCCode,
+                          selectedData.includes('Last Updated') && moment(iro.updatedAt).format('DD/MM/YYYY'),
+                        ].filter((value) => value !== false); // Remove only `false`, keep others
+
+                        return row;
+                      }) :
+                      [];
+
+                    const worksheet = XLSX.utils.json_to_sheet(sheet);
+                    const workbook = XLSX.utils.book_new();
+
+                    // Add column headers dynamically based on `selectedData`
+                    XLSX.utils.sheet_add_aoa(worksheet, [selectedData], { origin: 'A1' });
+
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                    XLSX.writeFile(workbook, 'Custom_IRO_Report.xlsx', { compression: true });
+                  }}
+                  startIcon={<DownloadIcon />}
+                  color="primary"
+                  // sx={{ float: 'right', mr: 2, mt: 2 }}
+                  variant="contained"
+                >
+  Export Excel
+                </Button>
                 {/* <Button variant="contained" startIcon={<Print />}>
           PRINT
                 </Button> */}
@@ -1711,13 +1753,13 @@ const IROReportFilter = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
                 <span>Total:</span>
                 <span>
-                  {`Requested amt : $${data?.reduce(
+                  {`Requested amt : ₹${data?.reduce(
                     (total, e) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
                     0,
                   ).toFixed(2)}`}
 
                 </span>
-                <span>{`Sanctioned amt : ${
+                <span>{`Sanctioned amt : ₹${
                   data?.reduce((total, e) =>
                     total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
                   , 0).toFixed(2)}`}</span>
@@ -1922,6 +1964,7 @@ const IROReportFilter = () => {
             </>
           </DialogActions>
         </Dialog>
+
         <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
           <DialogTitle>Select Data to Show:</DialogTitle>
           <DialogContent>
@@ -2007,6 +2050,30 @@ const IROReportFilter = () => {
           // getFiles={TestServices.getBills}
           getFiles={attachments} />
         <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+        <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
+          <DialogTitle> Print Fr</DialogTitle>
+          <DialogContent>
+            <Container>
+                  Downloading Custom report iro
+              <br />
+              {data && (
+                <PDFDownloadLink document={<PDFTemplateCustom rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
+                  {({ loading }) => ('CustomReport.pdf')}
+                </PDFDownloadLink>
+              )}{' '}
+            </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setPrint(false);
+              }}
+              variant="text"
+            >
+                  Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
 
       </CommonPageLayout> }
 

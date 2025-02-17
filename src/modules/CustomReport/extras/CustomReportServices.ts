@@ -5,8 +5,8 @@ import moment from 'moment';
 export default {
 
 
-  filterData: (filter: any) =>
-    getStandardResponse<any[]>(axios.post('/custom-report/', filter, { headers: { ...getAuthHeader() } }),
+  filterData: (filter: any, dateRange?: any ) =>
+    getStandardResponse<any[]>(axios.post('/custom-report/', { filter, dateRange }, { headers: { ...getAuthHeader() } }),
       (data) =>
         data.map((item: { createdAt: moment.MomentInput; updatedAt: moment.MomentInput; someDateField: moment.MomentInput }) => ({
           ...item,

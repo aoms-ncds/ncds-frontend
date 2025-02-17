@@ -396,11 +396,12 @@ const FRForm = (props: FormComponentProps<any>) => {
 
 
                   await props?.onSubmit(updatedValue); // Ensure it completes before moving forward
-
-                  await FRServices.addParticularscustomFR(addsParticulars, props.value._id)
-                    .then((res) => {
-                      console.log(res.data);
-                    });
+                  if (props.action == 'custom'|| props.action == 'customEdit') {
+                    await FRServices.addParticularscustomFR(addsParticulars, props.value._id)
+    .then((res) => {
+      console.log(res.data);
+    });
+                  }
                 } else {
                   enqueueSnackbar({
                     message: 'Total requested Amount can\'t be 0',
