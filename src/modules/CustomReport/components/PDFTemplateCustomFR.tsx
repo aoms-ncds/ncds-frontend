@@ -134,7 +134,7 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplateCustom = (props:any) => {
+const PDFTemplateCustomFR = (props:any) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -348,7 +348,7 @@ const PDFTemplateCustom = (props:any) => {
         <div>
           {/* <Image src="/3D Logo 3.png" style={styles.image} /> */}
           <Text style={styles.title}>
-            {'Custom Report'}
+            {'Custom Report FR'}
           </Text>
           {/* <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
           <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
@@ -369,10 +369,12 @@ const PDFTemplateCustom = (props:any) => {
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableHead}>{row.IROno}</Text>
+              <Text style={styles.tableHead}>{row.FRno}</Text>
+              <div style={styles.grid}></div>
+              <Text style={styles.tableHead}>{row.IROdata?.IROno}</Text>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableCell}>{moment(row.IRODate).format('DD/MM/YYYY')}</Text>
+              <Text style={styles.tableCell}>{moment(row.FRdate).format('DD/MM/YYYY')}</Text>
               <div style={styles.grid}></div>
 
               <Text style={styles.tableCell}>
@@ -383,7 +385,7 @@ const PDFTemplateCustom = (props:any) => {
               <Text style={styles.tableCell}>{row.divisionData?.details?.name}</Text>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableCell}>{row?.subDivData?.name}</Text>
+              <Text style={styles.tableCell}>{row.subDivData?.name}</Text>
               <div style={styles.grid}></div>
 
               <Text style={styles.tableCell}>{row.particularsData?.mainCategory}</Text>
@@ -787,4 +789,4 @@ const PDFTemplateCustom = (props:any) => {
 };
 
 
-export default PDFTemplateCustom;
+export default PDFTemplateCustomFR;

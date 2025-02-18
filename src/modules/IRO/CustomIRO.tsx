@@ -183,25 +183,26 @@ const CustomIRO = () => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
-    if (permissions?.FCRA_ACCOUNTS_ACCESS) {
-      console.log('FRDD');
-      IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'FCRA' })
+    // if (permissions?.FCRA_ACCOUNTS_ACCESS) {
+    console.log('FRDD');
+    IROServices.getAllCustom({ dateRange: dateRange })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
         .catch((error) => {
           console.error(error);
         });
-    }
-    if (permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'Local' })
-        .then((res) => {
-          setReconcilationIRO(() => [...res.data]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    // }
+    // if (permissions?.LOCAL_ACCOUNT_ACCESS) {
+    //   IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'Local' })
+    //     .then((res) => {
+    //       setReconcilationIRO(() => [...res.data]);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
+
     // if (permissions?.OTHER_ACCOUNTS_ACCESS) {
     //   IROServices.getAllCustom({ sanctionedBank: 'Other Bank' })
     //     .then((res) => {
@@ -247,12 +248,12 @@ const CustomIRO = () => {
     //       console.error(error);
     //     });
     // }
-    if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getAllCustom({ dateRange: dateRange })
-        .then((res) => {
-          setReconcilationIRO(() => [...res.data]);
-        });
-    }
+    // if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
+    //   IROServices.getAllCustom({ dateRange: dateRange })
+    //     .then((res) => {
+    //       setReconcilationIRO(() => [...res.data]);
+    //     });
+    // }
     // IROServices.getAllCustom()
     //   .then((res) => {
     //     setReconcilationIRO(res.data);
@@ -532,8 +533,8 @@ const CustomIRO = () => {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
       width: 200,
-      valueGetter: (params) => {
-        const transferredDate = params.row.releaseAmount?.transferredDate;
+      valueGetter: (params:any) => {
+        const transferredDate = params.row?.transferredDate;
         if (transferredDate) {
           const formattedDate = moment(transferredDate).format('DD/MM/YYYY'); // Adjust the format as needed
           return formattedDate;
@@ -582,7 +583,7 @@ const CustomIRO = () => {
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+      valueGetter: (params:any) => params.row?.transferredAmount,
     },
     // {
     //   field: 'status',

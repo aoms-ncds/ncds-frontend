@@ -223,10 +223,11 @@ const FRForm = (props: FormComponentProps<any>) => {
   console.log(props.action, 'propd');
 
   const addParticulars = () => {
+    // setParticularDialog('add');
     handleClose();
     let newParticulars: Particular[];
     let newParticulars1: Particular[];
-    if (particularDialog === 'edit') {
+    if (particularDialog === 'edit' ) {
       setParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)));
       props.onChange({
         ...props.value,
@@ -234,7 +235,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       });
     } else {
       newParticulars = [newParticular as Particular];
-      if (props.action =='add'|| props.action =='custom') {
+      if (props.action =='add'|| props.action =='custom'|| props.action =='customIRO') {
         newParticulars = [...particulars, newParticular as Particular];
         setParticulars(newParticulars);
 

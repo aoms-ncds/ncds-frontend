@@ -36,6 +36,10 @@ const CustomReport = () => {
           <ButtonCard secondaryText="Custom Report IRO" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             targetRoute="/custom-report/custom-filter-iro" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3}>
+          <ButtonCard secondaryText="Custom Report FR" color={'#fff'} icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            targetRoute="/custom-report/custom-filter-fr" />
+        </Grid>
         {/* <Grid item xs={12} md={4} xl={3}>
           <ButtonCard secondaryText="Custom Report FR" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
