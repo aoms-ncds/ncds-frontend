@@ -240,7 +240,7 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
             width: 50,
           }}
           src={`data:${props.rowData?.srLeaderSign?.[0]?.type};base64, ${props.rowData?.srLeaderSign?.[0]?.base64} `} />
-          {props.rowData?.specialsanction == 'Yes' ? (
+          {props.rowData?.isPresident ? (
             <Image style={{
               left: 60,
               top: 150,
@@ -248,7 +248,7 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
               height: 35,
               width: 50,
             }}
-            src={`data:${props.rowData?.signature?.president?.type?? props.president.presidentSignature?.type};base64, ${props.rowData?.signature?.president?.base64?? props.president.presidentSignature?.base64} `} />
+            src={`data:${props.rowData?.presidentSign?.[0]?.type};base64, ${props.rowData?.presidentSign?.[0]?.base64} `} />
           ) : (
             []
           )}
@@ -290,14 +290,14 @@ const FRReceiptTemplateCustom = (props: { rowData: any; president: EsignaturePre
             {props.rowData?.srLeaderName}
 
           </Text>
-          {props.rowData?.specialsanction == 'Yes' ? (
+          {props.rowData?.isPresident ? (
             <>
               <Text style={{ left: 60, top: 100, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
-              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.names?.president?? (props.president as any).presidentName?? ''}</Text>
+              <Text style={{ left: 60, top: 90, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.presidentName?? ''}</Text>
 
               <Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President Approved Date :</Text>
               <Text style={{ left: 165, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-                {props?.rowData?.presidentApproveDate ? moment(props?.rowData?.presidentApproveDate).format('DD-MM-yyyy') : ''}
+                {props?.rowData?.PresidentApprovedDate ? moment(props?.rowData?.PresidentApprovedDate).format('DD-MM-yyyy') : ''}
               </Text>
               <Text style={{ left: 60, top: 140, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Special Sanction: Yes</Text>
 

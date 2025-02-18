@@ -190,7 +190,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
             <View style={{ ...styles.box, marginTop: 15 }}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
-                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO NO</Text>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, top: 2, fontFamily: 'CourierPrime', fontSize: 10 }}>IRO No</Text>
                   <Text style={{ ...styles.text, marginTop: 5, left: 74 }}>:&nbsp;{props.rowData?.IROno}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
@@ -205,7 +205,13 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Div. Co-ordinator</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>
+  : {props.rowData?.coordinatorName ||
+     `${(props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || '').trim()} 
+      ${(props.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName || '').trim()} 
+      ${(props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || '').trim()}`.replace(/\s+/g, ' ')}
+                  </Text>
+
                 </View>
               </View>
             </View>
@@ -216,14 +222,14 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 <View style={{ width: 500, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Beneficiary Name</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 15 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.sanctionedBank.split('-').slice(1).join('-').trim() ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 17 }}>:&nbsp;{props.rowData?.beneficiaryName?? ''}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Account No</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 48 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.accountNumber ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 48 }}>:&nbsp;{props.rowData?.accNumber ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 5, left: 5, fontFamily: 'CourierPrime' }}>Source of Fund</Text>
@@ -235,7 +241,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>IFSC Code</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 42 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 55 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.IFSCCode ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 55 }}>:&nbsp;{props.rowData?.ifscCode ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Mode of Payment </Text>
@@ -247,20 +253,27 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Bank Name</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 37 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 51 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.bankName}</Text>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 51 }}>:&nbsp;{props.rowData?.bankName}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>Amt Released on</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>:&nbsp;{props.rowData.releaseAmount?.transferredDate.format('DD/MM/YYYY')}</Text>
-                </View>
+                  <Text style={{ ...styles.text, marginTop: 5, left: 19 }}>
+  : {moment(props.rowData?.transferredDate).format('DD/MM/YYYY')}
+                  </Text>                </View>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, marginBottom: 3 }}>Branch Name</Text>
                   {/* <Text style={{ ...styles.text, marginTop: 5, left: 29 }}>:</Text> */}
-                  <Text style={{ ...styles.text, marginTop: 6, left: 40, marginBottom: 3 }}>:&nbsp;{props.rowData?.releaseAmount?.transferredBank?.branchName}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 40, marginBottom: 3 }}>:&nbsp;{props.rowData?.branchName}</Text>
                 </View>
+                <View style={{ width: 300, flexDirection: 'row' }}>
+                  <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime' }}>FR No</Text>
+                  {/* <Text style={{ ...styles.text, marginTop: 5, left: 20 }}>:</Text> */}
+                  <Text style={{ ...styles.text, marginTop: 5, left: 75 }}>
+                    : {props.rowData.FRNumber}
+                  </Text>                </View>
               </View>
             </View>
           </div>
@@ -427,7 +440,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                   </PDFCell>
                   <div style={{ borderRight: 1, height: 100 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
-                    {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
+                    {String(item?.sanctionedAmount)}
                   </PDFCell>
 
                   {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
@@ -454,7 +467,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
                 <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'50%'}>
-                  <br />{NewTot != 0 ? NewTot : totalAmount2}
+                  <br />{totalAmount2 as any}
                 </PDFCell>
               </PDFTableRow>
               <PDFTableRow key={props.rowData.particulars.length} >
@@ -600,10 +613,7 @@ const IROTemplateCustom = (props: { rowData?: any; prev?: boolean; fr?: FR; offi
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
               <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>
-                {props?.rowData?.approvedBy?.basicDetails?.firstName ?
-                  `${props.rowData.approvedBy.basicDetails.firstName} ${props.rowData.approvedBy.basicDetails.middleName || ''
-                  } ${props.rowData.approvedBy.basicDetails.lastName || ''}` :
-                  'Daut Kumar'}
+                {props.rowData.preparedBy}
               </Text>
 
             </View>

@@ -85,7 +85,13 @@ export default {
   // getParticulars: ()=>getStandardResponse<Particular[]>(axios.get('/fr/particular', { headers: { ...getAuthHeader() } })),
 
   addParticulars: (particularData: CreatableParticular) => getStandardResponse<Particular>(
-    axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
+    axios.post('/fr/particulars', { ...particularData}, { headers: { ...getAuthHeader() } }),
+  ),
+  addParticularscustomIRO: (particularData: any, id:any) => getStandardResponse<Particular>(
+    axios.post('/fr/particulars/customIRO', { ...particularData, id }, { headers: { ...getAuthHeader() } }),
+  ),
+  addParticularscustomFR: (particularData: any, id:any) => getStandardResponse<Particular>(
+    axios.post('/fr/particulars/customFR', { ...particularData, id }, { headers: { ...getAuthHeader() } }),
   ),
   getById: (fRId?: string) =>
     getStandardResponse<FR>(
@@ -171,6 +177,8 @@ export default {
                     mainCategory: particulars.mainCategory,
                     subCategory1: particulars.subCategory1,
                     subCategory2: particulars.subCategory2,
+                    sanctionedAsPer: particulars.sanctionedAsPer,
+                    sanctionedAmount: particulars.sanctionedAmount,
                     subCategory3: particulars.subCategory3,
                     quantity: particulars.quantity,
                     month: particulars.month,

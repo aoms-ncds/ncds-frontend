@@ -45,6 +45,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
+import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -55,7 +56,7 @@ const CustomFooter = () => (
 );
 
 // eslint-disable-next-line react/no-multi-comp
-const IROReportFilter = () => {
+const CustomReportFRFilterPage = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>();
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
@@ -93,21 +94,21 @@ const IROReportFilter = () => {
     // 'Sub-Division',
     // 'Status',
     'For the month',
-    'Mode of Payment',
+    // 'Mode of Payment',
     // 'Requested Amount',
-    'Amount Release Date',
+    // 'Amount Release Date',
     'Sanction as per',
     'Narration',
-    'IroClosedOn',
+    // 'IroClosedOn',
     'Source Of Account',
-    'ReleaseAmount',
-    'TransactionNumber',
-    'TransferredAmount',
-    'TransferredDate',
-    'TransferredBank Name',
-    'TransferredBank branchName',
-    'TransferredBank accountNumber',
-    'TransferredBank IFSCCode',
+    // 'ReleaseAmount',
+    // 'TransactionNumber',
+    // 'TransferredAmount',
+    // 'TransferredDate',
+    // 'TransferredBank Name',
+    // 'TransferredBank branchName',
+    // 'TransferredBank accountNumber',
+    // 'TransferredBank IFSCCode',
     // 'Sanctioned Bank',
     // 'UnitPrice',
     // 'Sanctioned Amount',
@@ -120,6 +121,7 @@ const IROReportFilter = () => {
   ];
 
   const [selectedData, setSelectedData] = useState<any[]>([
+    'FR No',
     'IRO No',
     'Date',
     'Status',
@@ -736,10 +738,10 @@ const IROReportFilter = () => {
     division: '',
     subdivision: '',
     allDivisions: false,
-    iroStatus: '',
+    frStatus: '',
     sanctionedAsPer: '',
-    iroDateFrom: '',
-    iroDateTo: '',
+    frDateFrom: '',
+    frDateTo: '',
     reqAmountFrom: '',
     reqAmountTo: '',
     sanctAmountFrom: '',
@@ -753,7 +755,7 @@ const IROReportFilter = () => {
   });
   const [sanctionedAsPers, setSanctionedAsPers] = useState<any[]>([]);
 
-  console.log(filters, 'filters');
+  console.log(filters, '323');
 
   useEffect(()=>{
     DivisionsServices.getDivisions().then((res) => {
@@ -807,7 +809,7 @@ const IROReportFilter = () => {
 
         <div style={{ padding: '16px' }}>
           <Typography sx={{ fontWeight: '600' }} variant="h4" gutterBottom>
-            IRO Report Filter
+            FR Report Filter
           </Typography>
 
           {/* Division Details Section */}
@@ -876,35 +878,32 @@ const IROReportFilter = () => {
           {/* IRO Details Section */}
           <section>
             <Typography sx={{ fontWeight: '600' }} variant="h6" gutterBottom>
-              IRO Details:
+              FR Details:
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   select
                   fullWidth
-                  label="IRO Status"
-                  name="iroStatus"
-                  value={filters.iroStatus|| ''}
+                  label="FR Status"
+                  name="frStatus"
+                  value={filters.frStatus}
                   onChange={handleInputChange}
                 >
-                  <MenuItem value="211">WAITING FOR OFFICE MNGR</MenuItem>
-                  <MenuItem value="212">WAITING FOR ACCOUNTS MNGR</MenuItem>
-                  <MenuItem value="213">WAITING FOR ACCOUNTS STATE</MenuItem>
-                  <MenuItem value="214">AMOUNT RELEASED</MenuItem>
-                  <MenuItem value="215">RECONCILIATION DONE</MenuItem>
-                  <MenuItem value="216">WAITTING FOR RELEASE AMOUNT</MenuItem>
-                  <MenuItem value="217">IRO REJECTED</MenuItem>
-                  <MenuItem value="218">IRO IN PROCESS</MenuItem>
-                  <MenuItem value="219">REVERTED TO DIVISION</MenuItem>
+                  <MenuItem value="-200">FR CLOSED</MenuItem>
+                  <MenuItem value="-201">REVERT</MenuItem>
                   <MenuItem value="220">REOPENED</MenuItem>
-                  <MenuItem value="-210">IRO CLOSED</MenuItem>
+                  <MenuItem value="201">WAITING FOR PRESIDENT</MenuItem>
+                  <MenuItem value="202">WAITING FOR ACCOUNTS</MenuItem>
+                  <MenuItem value="203">FR APPROVED</MenuItem>
+                  <MenuItem value="-102">FR DISAPPROVED</MenuItem>
+                  <MenuItem value="217">IRO DISAPPROVED</MenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Autocomplete
                   aria-required
-                  options={sanctionedAsPers ?? []}
+                  options={sanctionedAsPers ?? []} // Ensure options are not null or undefined
                   getOptionLabel={(option) => option || ''} // Fallback to an empty string if name is undefined
                   value={filters.sanctionedAsPer} // Match the value to an option in the divisions array
                   onChange={(event, newValue) => setFilters((prev: any) => ({
@@ -928,9 +927,9 @@ const IROReportFilter = () => {
                 <TextField
                   type="date"
                   fullWidth
-                  label="IRO Date From"
-                  name="iroDateFrom"
-                  value={filters.iroDateFrom}
+                  label="FR Date From"
+                  name="frDateFrom"
+                  value={filters.frDateFrom}
                   onChange={handleInputChange}
                   InputLabelProps={{ shrink: true }} />
               </Grid>
@@ -938,9 +937,9 @@ const IROReportFilter = () => {
                 <TextField
                   type="date"
                   fullWidth
-                  label="IRO Date To"
-                  name="iroDateTo"
-                  value={filters.iroDateTo}
+                  label="FR Date To"
+                  name="frDateTo"
+                  value={filters.frDateTo}
                   onChange={handleInputChange}
                   InputLabelProps={{ shrink: true }} />
               </Grid>
@@ -1354,7 +1353,7 @@ const IROReportFilter = () => {
                 onClick={(event) => {
                   event.preventDefault(); // Prevents form submission
                   setLoading1(true);
-                  CustomReportServices.filterData(filters).then((res) => {
+                  CustomReportServices.filterDataFR(filters).then((res) => {
                     if (res.data.length >= 1) {
                       setPage(true);
                       setData(res.data);
@@ -1388,10 +1387,10 @@ const IROReportFilter = () => {
                   division: '',
                   subdivision: '',
                   allDivisions: false,
-                  iroStatus: '',
+                  frStatus: '',
                   sanctionedAsPer: '',
-                  iroDateFrom: '',
-                  iroDateTo: '',
+                  frDateFrom: '',
+                  frDateTo: '',
                   reqAmountFrom: '',
                   reqAmountTo: '',
                   sanctAmountFrom: '',
@@ -1594,8 +1593,9 @@ const IROReportFilter = () => {
                     const sheet = data ?
                       data.map((iro: any) => {
                         const row = [
-                          iro.IROno,
-                          iro.IRODate,
+                          iro.FRno,
+                          iro.IROdata?.IROno,
+                          iro.FRdate,
                           IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
                           iro.divisionData?.details?.name,
                           iro.subDivData?.name,
@@ -1615,13 +1615,6 @@ const IROReportFilter = () => {
                           selectedData.includes('IroClosedOn') && moment(iro.iroClosedOn).format('DD/MM/YYYY'),
                           selectedData.includes('Source Of Account') && iro.sourceOfAccount,
                           selectedData.includes('ReleaseAmount') && iro.releaseAmountData?.releaseAmount,
-                          selectedData.includes('TransactionNumber') && iro.releaseAmountData?.transactionNumber,
-                          selectedData.includes('TransferredAmount') && iro.releaseAmountData?.transferredAmount,
-                          selectedData.includes('TransferredDate') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
-                          selectedData.includes('TransferredBank Name') && iro.releaseAmountData?.transferredBank?.bankName,
-                          selectedData.includes('TransferredBank branchName') && iro.releaseAmountData?.transferredBank?.branchName,
-                          selectedData.includes('TransferredBank accountNumber') && iro.releaseAmountData?.transferredBank?.accountNumber,
-                          selectedData.includes('TransferredBank IFSCCode') && iro.releaseAmountData?.transferredBank?.IFSCCode,
                           selectedData.includes('Last Updated') && moment(iro.updatedAt).format('DD/MM/YYYY'),
                         ].filter((value) => value !== false); // Remove only `false`, keep others
 
@@ -1672,8 +1665,9 @@ const IROReportFilter = () => {
                 <Table stickyHeader> {/* Ensure header stays visible */}
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
+                      <TableCell sx={{ fontWeight: 'bold' }}>FR No</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>FR Date</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
                       {/* {selectedData.includes('IRO Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>} */}
                       <TableCell sx={{ fontWeight: 'bold' }}>Division Name</TableCell>
@@ -1682,8 +1676,8 @@ const IROReportFilter = () => {
                       <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 1</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 2</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 3</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Requested Amt</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sanction Amt</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Requested Amount</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Sanction Amount</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Sanctioned Bank</TableCell>
                       <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>
                       {selectedData.includes('For the month') && <TableCell sx={{ fontWeight: 'bold', width: '150px' }}>For the month</TableCell>}
@@ -1696,16 +1690,7 @@ const IROReportFilter = () => {
                       {selectedData.includes('IroClosedOn') && <TableCell sx={{ fontWeight: 'bold' }}>Iro Closed On</TableCell>}
                       {/* {selectedData.includes('ApprovedBy') && <TableCell sx={{ fontWeight: 'bold' }}>Approved By</TableCell>} */}
                       {selectedData.includes('Source Of Account') && <TableCell sx={{ fontWeight: 'bold' }}>Source Of Account</TableCell>}
-                      {selectedData.includes('ReleaseAmount') && <TableCell sx={{ fontWeight: 'bold' }}>Release Amount</TableCell>}
-                      {selectedData.includes('TransactionNumber') && <TableCell sx={{ fontWeight: 'bold' }}>Transaction Number</TableCell>}
-                      {selectedData.includes('TransferredAmount') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Amount</TableCell>}
-                      {selectedData.includes('TransferredDate') && <TableCell sx={{ fontWeight: 'bold' }}>Transferred Date</TableCell>}
-                      {selectedData.includes('TransferredBank Name') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank Name</TableCell>}
-                      {selectedData.includes('TransferredBank branchName') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank branchName</TableCell>}
-                      {selectedData.includes('TransferredBank accountNumber') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank account Number</TableCell>}
-                      {selectedData.includes('TransferredBank IFSCCode') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank IFSCCode</TableCell>}
-
-                      <TableCell sx={{ fontWeight: 'bold' }}>Last Updated</TableCell>
+                      {selectedData.includes('Last Updated') &&<TableCell sx={{ fontWeight: 'bold' }}>Last Updated</TableCell>}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1719,12 +1704,13 @@ const IROReportFilter = () => {
                           '&:hover': { backgroundColor: '#f0f0f0' },
                         }}
                       >
-                        <TableCell>{row.IROno}</TableCell>
-                        <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>
+                        <TableCell>{row.FRno}</TableCell>
+                        <TableCell>{row.IROdata?.IROno}</TableCell>
+                        <TableCell>{moment(row.FRdate).format('DD/MM/YYYY')}</TableCell>
                         <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>
                         <TableCell>{row.divisionData?.details?.name}</TableCell>
                         {selectedData.includes('Sub-Division') && <TableCell>{row.subDivData?.name}</TableCell>}
-                        <TableCell >{row.particularsData?.mainCategory}</TableCell>
+                        <TableCell>{row.particularsData?.mainCategory}</TableCell>
                         <TableCell>{row.particularsData?.subCategory1}</TableCell>
                         <TableCell>{row.particularsData?.subCategory2}</TableCell>
                         <TableCell>{row.particularsData?.subCategory3}</TableCell>
@@ -1737,18 +1723,9 @@ const IROReportFilter = () => {
                         {selectedData.includes('Amount Release Date') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Sanction as per') && <TableCell>{row.particularsData?.sanctionedAsPer}</TableCell>}
                         {selectedData.includes('Narration') && <TableCell>{row.particularsData?.narration}</TableCell>}
-                        {/* {selectedData.includes('UnitPrice') && <TableCell>{row.particularsData?.unitPrice}</TableCell>} */}
                         {selectedData.includes('IroClosedOn') && <TableCell>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</TableCell>}
                         {selectedData.includes('Source Of Account') && <TableCell>{row.sourceOfAccount}</TableCell>}
-                        {selectedData.includes('ReleaseAmount') && <TableCell>{row.releaseAmountData?.releaseAmount}</TableCell>}
-                        {selectedData.includes('TransactionNumber') && <TableCell>{row.releaseAmountData?.transactionNumber}</TableCell>}
-                        {selectedData.includes('TransferredAmount') && <TableCell>{row.releaseAmountData?.transferredAmount}</TableCell>}
-                        {selectedData.includes('TransferredDate') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
-                        {selectedData.includes('TransferredBank Name') && <TableCell>{row.releaseAmountData?.transferredBank?.bankName}</TableCell>}
-                        {selectedData.includes('TransferredBank branchName') && <TableCell>{row.releaseAmountData?.transferredBank?.branchName}</TableCell>}
-                        {selectedData.includes('TransferredBank accountNumber') && <TableCell>{row.releaseAmountData?.transferredBank?.accountNumber}</TableCell>}
-                        {selectedData.includes('TransferredBank IFSCCode') && <TableCell>{row.releaseAmountData?.transferredBank?.IFSCCode}</TableCell>}
-                        <TableCell>{moment(row.updatedAt).format('DD/MM/YYYY')}</TableCell>
+                        {selectedData.includes('Last Updated') && <TableCell>{moment(row.updatedAt).format('DD/MM/YYYY')}</TableCell>}
                         {/* <TableCell>{row.approvedBy  }</TableCell> */}
 
                       </TableRow>
@@ -1984,7 +1961,7 @@ const IROReportFilter = () => {
                 if (newValue.includes('All')) {
                   // If "All" is selected, select all options except "All" itself
                   setSelectedData((prev) => [ // Keep existing selected options
-
+                    'FR No',
                     'IRO No',
                     'Date',
                     'Status',
@@ -2061,13 +2038,13 @@ const IROReportFilter = () => {
           getFiles={attachments} />
         <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
         <Dialog open={print} onClose={() => setPrint(false)} maxWidth="xs" fullWidth>
-          <DialogTitle> Print IRO</DialogTitle>
+          <DialogTitle> Print Fr</DialogTitle>
           <DialogContent>
             <Container>
-                  Downloading Custom report iro
+                  Downloading Custom report fr
               <br />
               {data && (
-                <PDFDownloadLink document={<PDFTemplateCustom rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
+                <PDFDownloadLink document={<PDFTemplateCustomFR rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
                   {({ loading }) => ('CustomReport.pdf')}
                 </PDFDownloadLink>
               )}{' '}
@@ -2091,5 +2068,5 @@ const IROReportFilter = () => {
   );
 };
 
-export default IROReportFilter;
+export default CustomReportFRFilterPage;
 

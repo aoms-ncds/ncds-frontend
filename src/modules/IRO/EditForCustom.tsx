@@ -899,7 +899,7 @@ const EditForCustom = (props: any) => {
                             value={Data?.modeOfPayment}
                             variant="outlined"
                             fullWidth
-                            disabled
+                            // disabled
                             InputLabelProps={{
                               shrink: true,
                             }}

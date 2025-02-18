@@ -125,17 +125,7 @@ const ViewIRO = (props: any) => {
       createdAt: moment(),
       updatedAt: moment(),
     },
-    releaseAmount: {
-      _id: '',
-      transferredBank: {
-        bankName: '',
-        branchName: '',
-        accountNumber: '',
-        IFSCCode: '',
-      },
-      attachment: [],
-      division: '',
-    },
+    releaseAmount: '',
     division: {
       _id: '',
       details: {
@@ -325,6 +315,7 @@ const ViewIRO = (props: any) => {
     updatedAt: moment(),
     signature: {},
     specialsanction: '',
+    beneficiaryName: '',
   });
 
   const user = useAuth();
@@ -354,7 +345,7 @@ const ViewIRO = (props: any) => {
   });
   const [openRelease, setOpenRelease] = useState(false);
 
-  console.log(props, 'ORRO');
+  console.log(Data, 'ORRO');
   const totalRequestedAmount = IRO?.particulars && IRO?.particulars.reduce((total: number, item: { requestedAmount: any}) => total + Number(item.requestedAmount), 0);
   const IROstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(IRO?.status));
   const [sanctionedAsPer, setSanctionedAsPer] = useState<ISanctionedAsPer[]>([]);
@@ -430,6 +421,64 @@ const ViewIRO = (props: any) => {
                           }}
                         />
                       </Grid>
+                      {props.action === 'custom' &&(
+
+                        <Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            label={'FR No'}
+                            value={IRO?.FRNumber}
+                            autoComplete="off"
+                            // onChange={(e) =>
+                            //   props.onChange({
+                            //     ...props.value,
+                            //     FRNumber: e.target.value,
+                            //   })
+                            // }
+                            variant="outlined"
+                            fullWidth
+                            disabled
+                            InputLabelProps={{ shrink: true }}
+                            inputProps={{
+                              max: totalRequestedAmount,
+                              min: 0,
+                              step: 0.01, // Allows up to two decimal places
+                            }}
+                          // InputProps={{
+                          //   startAdornment: <InputAdornment position="start">{ 'FRno'}</InputAdornment>,
+                          // }}
+                          />
+                          {/* </Tooltip> */}
+                        </Grid>
+                      )}
+                      {props.action =='custom' &&(
+
+                        <Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            label={'Coordinator Name'}
+                            value={IRO?.coordinatorName}
+                            autoComplete="off"
+                            // onChange={(e) =>
+                            //   props.onChange({
+                            //     ...props.value,
+                            //     coordinatorName: e.target.value,
+                            //   })
+                            // }
+                            variant="outlined"
+                            fullWidth
+                            disabled
+                            InputLabelProps={{ shrink: true }}
+                          />
+                          {/* </Tooltip> */}
+                        </Grid>
+                      )}
                       <Grid item xs={12} md={6}>
                         <DatePicker label="Date" value={IRO?.IRODate} format="DD/MM/YYYY" slotProps={{ textField: { fullWidth: true } }} disabled />
                       </Grid>
@@ -584,6 +633,11 @@ const ViewIRO = (props: any) => {
                           </Table>
                         </TableContainer>
                       </Grid>
+                      {props.action == 'custom' ?(
+                        <Grid item xs={12} md={12}>
+                          <span style={{ fontWeight: 600, fontSize: 20 }}> Sanctioned Details</span>
+                        </Grid>
+                      ):[]}
                       <Grid item xs={12} md={6}>
                         <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
                       </Grid>
@@ -775,6 +829,142 @@ const ViewIRO = (props: any) => {
                           </Select>
                         </FormControl>
                       </Grid>
+                      {props.action == 'custom' ?(
+
+                        <Grid item xs={12} md={6}>
+                          <TextField
+                            fullWidth
+                            disabled
+                            label="Beneficiary Name"
+                            value={IRO?.beneficiaryName || ''}
+                            onChange={(e) =>
+                              setIRO({
+                                ...IRO,
+                                beneficiaryName: e.target.value,
+                              })
+                            }
+                          >
+
+                            {/* Add MenuItem options here */}
+                          </TextField>
+                        </Grid>
+                      ):[]}
+
+                      {props.action == 'custom' ?(
+
+                        <><Grid item xs={12} md={12}>
+                          <span style={{ fontWeight: 600, fontSize: 20 }}> Bank Details</span>
+                        </Grid><Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            label="Bank name"
+                            value={(IRO?.bankName)}
+                            autoComplete='off'
+                            onChange={(e) => props.onChange({
+                              ...props.value,
+                              bankName: String(e.target.value),
+                            })}
+
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                            disabled
+                            inputProps={{
+                              max: totalRequestedAmount,
+                              min: 0,
+                              step: 0.01,
+                            }} />
+
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            label="Branch name"
+                            value={(IRO?.branchName)}
+                            autoComplete='off'
+                            onChange={(e) => props.onChange({
+                              ...props.value,
+                              branchName: String(e.target.value),
+                            })}
+                            disabled
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+
+                            inputProps={{
+                              max: totalRequestedAmount,
+                              min: 0,
+                              step: 0.01,
+                            }} />
+                          {/* </Tooltip> */}
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            label="IFSC Code"
+                            value={(IRO?.ifscCode)}
+                            autoComplete='off'
+                            onChange={(e) => props.onChange({
+                              ...props.value,
+                              ifscCode: String(e.target.value),
+                            })}
+                            disabled
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+
+                            inputProps={{
+                              max: totalRequestedAmount,
+                              min: 0,
+                              step: 0.01,
+                            }} />
+                          {/* </Tooltip> */}
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                          {/* <Tooltip open={isFocused?true:false}
+onClose={() => setOpen(false)}
+onOpen={() => setOpen(true)}
+title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+                          <TextField
+                            disabled
+                            label="Account number"
+                            value={(IRO?.accNumber)}
+                            autoComplete='off'
+                            onChange={(e) => props.onChange({
+                              ...props.value,
+                              accNumber: String(e.target.value),
+                            })}
+
+                            variant="outlined"
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+
+                            inputProps={{
+                              max: totalRequestedAmount,
+                              min: 0,
+                              step: 0.01,
+                            }} />
+                          {/* </Tooltip> */}
+                        </Grid>
+
+                        </>
+                      ):[]}
+                      {props.action == 'custom' ?(
+
+                        <Grid item xs={12} md={12}>
+                          <span style={{ fontWeight: 600, fontSize: 20 }}> Amount Transfer Details
+                          </span>
+                        </Grid>
+                      ):[]}
                       <Grid item xs={12} md={6}>
                         <FormControl fullWidth>
                           <InputLabel id="sourceOfAccount">Source Of Account</InputLabel>
@@ -802,14 +992,18 @@ const ViewIRO = (props: any) => {
                           <TextField
                             label="Amount Transferred"
                             type="number"
-                            value={Data?.releaseAmount}
+                            disabled
+                            value={IRO?.transferredAmount}
                             onChange={(e) =>
                               props.onChange({
                                 ...props.value,
-                                releaseAmount: String(e.target.value),
+                                transferredAmount: String(e.target.value),
                               })
                             }
                             fullWidth
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
                             // inputProps={{
                             //   max: (props.value as any)?.releaseAmount?.releaseAmount ?? 0, min: 0, step: 0.01,
                             //   onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
@@ -820,9 +1014,9 @@ const ViewIRO = (props: any) => {
                             variant="outlined"
 
                             required />
-                        </Grid><Grid item xs={12} md={6}>
+                        </Grid><Grid item xs={12} md={4}>
                           <DatePicker
-                            label="Date"
+                            label="Amount Transferred Date"
                             value={Data?.transferredDate}
                             format="DD/MM/YYYY"
                             sx={{ width: '100%' }}
@@ -831,6 +1025,7 @@ const ViewIRO = (props: any) => {
                                 required: true,
                               },
                             }}
+                            disabled
                             onChange={(newValue) =>
                               props.onChange({
                                 ...props?.value,
@@ -862,6 +1057,7 @@ const ViewIRO = (props: any) => {
                                 transactionNumber: String(e.target.value),
                               })
                             }
+                            disabled
                             variant="outlined"
                             fullWidth
                             // required
@@ -872,6 +1068,13 @@ const ViewIRO = (props: any) => {
                           />
 
                         </Grid>
+                        {props.action == 'custom' ?(
+
+                          <Grid item xs={12} md={12}>
+                            <span style={{ fontWeight: 600, fontSize: 20 }}> Signature and Manager details
+                            </span>
+                          </Grid>
+                        ):[]}
                         <Grid item xs={12} md={6} lg={4}>
                           <TextField
                             label="Office Manager Name"
@@ -882,6 +1085,7 @@ const ViewIRO = (props: any) => {
                                 officeManagerName: String(e.target.value),
                               })
                             }
+                            disabled
                             variant="outlined"
                             fullWidth
                             InputLabelProps={{
@@ -892,11 +1096,27 @@ const ViewIRO = (props: any) => {
                           />
 
                         </Grid>
-                        <Grid item xs={12} md={6} lg={2}>
-                          <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
-                                  Attachments
-                          </Button>
-                        </Grid>
+                        {props.action == 'custom' &&(
+
+                          <Grid item xs={12} md={4}>
+                            <TextField
+                              label="Prepared By"
+                              value={IRO.preparedBy}
+                              onChange={(e) =>
+                                setIRO({
+                                  ...IRO,
+                                  preparedBy: String(e.target.value),
+                                })
+                              }
+                              disabled
+                              variant="outlined"
+                              fullWidth
+                              InputLabelProps={{
+                                shrink: true, // Explicitly control shrinking
+                              }}
+                            />
+                          </Grid>
+                        )}
                         <Grid item xs={12} md={4} lg={4}>
                           <Button variant="contained" onClick={() => setShowFileUploaderCustomOfficeMngr(true)} startIcon={<AttachmentIcon />}>
                                   Office manager Sign
@@ -909,22 +1129,31 @@ const ViewIRO = (props: any) => {
                             </Button>
                           </Grid>
                         )}
-                        {props.action =='customIRO' || props.action == 'custom'&&(
-                          <><Grid item md={12}>
-                            <FormControlLabel
-                              label="President sanction"
-                              checked={IRO?.specialSanction as any || false} // Ensure it's always a boolean
-                              // onChange={(e:any) =>
-                              //   props.onChange({
-                              //     ...props.value,
-                              //     specialSanction: e.target.checked, // Directly assign boolean value
-                              //   })
-                              // }
-                              control={<Checkbox />}
-                            />
-                          </Grid><br /><Grid>
+                        <Grid item xs={12} md={6} lg={2}>
 
-                          </Grid></>
+                        </Grid>
+                        {props.action =='customIRO' || props.action == 'custom'&&(
+                          <>
+                            <Grid item xs={12} md={4}>
+                              <Button variant="contained" onClick={() => setShowFileUploaderCustom(true)} startIcon={<AttachmentIcon />}>
+                                  Attachments
+                              </Button>
+                              <FormControlLabel
+                                label="President sanction"
+                                checked={IRO?.specialSanction as any || false} // Ensure it's always a boolean
+                                // onChange={(e:any) =>
+                                //   props.onChange({
+                                //     ...props.value,
+                                //     specialSanction: e.target.checked, // Directly assign boolean value
+                                //   })
+                                // }
+                                sx={{ pl: 2 }}
+                                control={<Checkbox />}
+                              />
+
+                            </Grid><br /><Grid>
+
+                            </Grid></>
                         )}
                         </>
                       ):''}

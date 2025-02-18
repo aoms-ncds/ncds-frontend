@@ -27,17 +27,20 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import PermissionChecks from '../User/components/PermissionChecks';
 import { Link } from 'react-router-dom';
 import IROTemplateCustom from './components/IROTemplateCustom';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const CustomIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
   const user = useAuth();
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [iroId, setiroId] = useState('');
   const [attachments, setAttachments] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [openRelease, setOpenRelease] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
+  const [openLog, setOpenLog] = useState(false);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -180,25 +183,26 @@ const CustomIRO = () => {
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
-    if (permissions?.FCRA_ACCOUNTS_ACCESS) {
-      console.log('FRDD');
-      IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'FCRA' })
+    // if (permissions?.FCRA_ACCOUNTS_ACCESS) {
+    console.log('FRDD');
+    IROServices.getAllCustom({ dateRange: dateRange })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
         .catch((error) => {
           console.error(error);
         });
-    }
-    if (permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'Local' })
-        .then((res) => {
-          setReconcilationIRO(() => [...res.data]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+    // }
+    // if (permissions?.LOCAL_ACCOUNT_ACCESS) {
+    //   IROServices.getAllCustom({ dateRange: dateRange, sourceOfAccount: 'Local' })
+    //     .then((res) => {
+    //       setReconcilationIRO(() => [...res.data]);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
+
     // if (permissions?.OTHER_ACCOUNTS_ACCESS) {
     //   IROServices.getAllCustom({ sanctionedBank: 'Other Bank' })
     //     .then((res) => {
@@ -244,12 +248,12 @@ const CustomIRO = () => {
     //       console.error(error);
     //     });
     // }
-    if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getAllCustom({ dateRange: dateRange })
-        .then((res) => {
-          setReconcilationIRO(() => [...res.data]);
-        });
-    }
+    // if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
+    //   IROServices.getAllCustom({ dateRange: dateRange })
+    //     .then((res) => {
+    //       setReconcilationIRO(() => [...res.data]);
+    //     });
+    // }
     // IROServices.getAllCustom()
     //   .then((res) => {
     //     setReconcilationIRO(res.data);
@@ -400,44 +404,12 @@ const CustomIRO = () => {
               },
             },
             {
-              id: 'Close IRO',
-              text: 'Close IRO',
+              id: 'log',
+              text: 'IRO Log',
               icon: PreviewIcon,
               onClick: () => {
-                setIroData(props.row);
-                setConform1(true);
-                if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
-                    setFrData(res.data);
-                    console.log(res.data, 'fr');
-                  });
-                }
-                setPrintIroLoading(true);
-                setTimeout(() => {
-                  setPrintIroLoading(false);
-                }, 2000);
-                //   IROServices.close(props.row._id)
-                //     .then((res) => {
-                //       if (reconciliationIRO) {
-                //         // eslint-disable-next-line @typescript-eslint/naming-convention
-                //         const filterIRO = reconciliationIRO?.filter((reconciliationIROs) => {
-                //           return reconciliationIROs._id !== props.row._id;
-                //         });
-                //         setReconcilationIRO(filterIRO);
-                //       }
-
-                //       enqueueSnackbar({
-                //         message: res.message,
-                //         variant: 'success',
-                //       });
-                //     })
-
-              //     .catch((err) => {
-              //       enqueueSnackbar({
-              //         message: err.message,
-              //         variant: 'error',
-              //       });
-              //     });
+                setiroId(props.row._id);
+                setOpenLog(true);
               },
             },
           ]}
@@ -561,8 +533,8 @@ const CustomIRO = () => {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
       width: 200,
-      valueGetter: (params) => {
-        const transferredDate = params.row.releaseAmount?.transferredDate;
+      valueGetter: (params:any) => {
+        const transferredDate = params.row?.transferredDate;
         if (transferredDate) {
           const formattedDate = moment(transferredDate).format('DD/MM/YYYY'); // Adjust the format as needed
           return formattedDate;
@@ -611,29 +583,29 @@ const CustomIRO = () => {
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => (<b>Sanctioned Bank</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'released amount ', headerName: 'Amount Transferred ', width: 150, renderHeader: () => <b>Amount Transferred</b>, align: 'center', headerAlign: 'center',
-      valueGetter: (params) => params.row.releaseAmount?.transferredAmount,
+      valueGetter: (params:any) => params.row?.transferredAmount,
     },
-    {
-      field: 'status',
-      renderHeader: () => (<b>Status</b>),
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 205,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      align: 'center',
-      width: 250,
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
+    // {
+    //   field: 'status',
+    //   renderHeader: () => (<b>Status</b>),
+    //   // renderCell: (props) => (
+    //   //   <p
+    //   //     style={{
+    //   //       maxWidth: 205,
+    //   //       whiteSpace: 'normal',
+    //   //       wordBreak: 'break-word',
+    //   //     }}
+    //   //   >
+    //   //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+    //   //   </p>
+    //   // ),
+    //   align: 'center',
+    //   width: 250,
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+    //   },
+    // },
     {
       field: 'updatedAt', headerName: 'Last Updated', width: 130, renderHeader: () => (<b>Last Updated</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',
@@ -1036,6 +1008,8 @@ const CustomIRO = () => {
         </DialogActions>
 
       </Dialog>
+      {iroId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroId}/>}
+
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
       <Dialog open={Boolean(openPrintIro)} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>

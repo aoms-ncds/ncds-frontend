@@ -101,7 +101,7 @@ const divisionsPageRoutes: ModuleRoute = {
     {
       title: 'View FR',
       path: '/:frID/viewCustom',
-      element: <FRFormPage action="custom" />,
+      element: <FRFormPage action="custom" actionAd='view' />,
       private: true,
       requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,

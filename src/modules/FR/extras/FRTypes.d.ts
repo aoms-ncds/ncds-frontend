@@ -59,6 +59,7 @@ declare global {
     releaseAmount?:string;
     transferredDate?:Moment;
     modeOfPayment?:string;
+    beneficiaryName?:string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 
