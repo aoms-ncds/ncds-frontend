@@ -28,6 +28,10 @@ import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import { hasPermissions } from '../User/components/PermissionChecks';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
+import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
+import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -57,6 +61,11 @@ const ClosedIRO = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [data, setData] = useState<any | null>(null);
+  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
+  const [data2, setData2] = useState<any | null>(null);
+
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -121,6 +130,13 @@ const ClosedIRO = () => {
         console.log(res);
       });
     console.log(selectedSignature);
+    LeaderDetailsService.getAll()
+    .then((res) => {
+      setLeaderHeading(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
   }, []);
 
   const attach = async (blob: Blob) => {
@@ -228,7 +244,7 @@ const ClosedIRO = () => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
               },
 
             },
@@ -268,6 +284,51 @@ const ClosedIRO = () => {
                   onClick: () => {
                     setIroData(props.row);
                     setOpenPrintIro(true);
+                  },
+                },
+              ] :
+              []),
+            {
+              id: 'print',
+              text: 'Print FR',
+              icon: PrintIcon,
+              onClick: () => {
+                if (!props.row.FR) {
+                  enqueueSnackbar({
+                    message: 'FR not found',
+                    variant: 'warning',
+                  });
+                } else {
+                  setData2(props.row.FR);
+                  setOpenPrintFr(true);
+                  setTimeout(() => {
+                    setOpenPrintFr(false);
+                  }, 2000);
+                }
+              },
+            },
+            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
+              [
+                {
+                  id: 'print',
+                  text: 'Print FR HQ DELHI',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
                   },
                 },
               ] :
@@ -782,6 +843,57 @@ const ClosedIRO = () => {
           // sx={{ ml: 'auto' }}
           >
             close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+            <br />
+            {data2 && (
+              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={signaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData2(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Download the FR Receipt, Delhi for {data?.FRno} <br />
+            {data && (
+              <PDFDownloadLink
+                document={<FRReceiptTempForDelhiDivision label={Label} president={signaturePresident} rowData={data as unknown as FR} />}
+                fileName="FRReceiptDelhi.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
           </Button>
         </DialogActions>
       </Dialog>

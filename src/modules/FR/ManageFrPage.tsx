@@ -37,6 +37,8 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
+import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -47,6 +49,8 @@ const ManageFrPage = () => {
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
   const [data, setData] = useState<FR | null>(null);
   const [data2, setData2] = useState<FR | null>(null);
+  const [data4, setData4] = useState<FR | null>(null);
+  const [data5, setData5] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -84,6 +88,8 @@ const ManageFrPage = () => {
   const [open, setOpen] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [openPrintFrPrev, setOpenPrintFrPrev] = useState(false);
+  const [openPrintFrPrevDelhi, setOpenPrintFrPrevDelhi] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -339,6 +345,32 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
+            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
+              [
+                {
+                  id: 'print',
+                  text: 'Previous Print FR HQ DELHI',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData4({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
+                    setOpenPrintFrPrevDelhi(true);
+                    setTimeout(() => {
+                      setOpenPrintFrPrevDelhi(false);
+                    }, 2000);
+                  },
+                },
+              ] :
+              []),
 
             {
               id: 'print',
@@ -349,6 +381,18 @@ const ManageFrPage = () => {
                 setOpenPrintFr(true);
                 setTimeout(() => {
                   setOpenPrintFr(false);
+                }, 2000);
+              },
+            },
+            {
+              id: 'print',
+              text: 'Previous Print FR',
+              icon: PrintIcon,
+              onClick: () => {
+                setData5(props.row);
+                setOpenPrintFrPrev(true);
+                setTimeout(() => {
+                  setOpenPrintFrPrev(false);
                 }, 2000);
               },
             },
@@ -1265,6 +1309,33 @@ const ManageFrPage = () => {
                 </Button>
               </DialogActions>
             </Dialog>
+            <Dialog open={Boolean(data4)} onClose={() => setData4(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Prev Fr</DialogTitle>
+              <DialogContent>
+                <Container>
+                  Download the FR Receipt, Delhi for {data4?.FRno} <br />
+                  {data4 && (
+                    <PDFDownloadLink
+                      document={<FRReceiptTempForHelhiDevisionPrev label={Label} president={selectedSignaturePresident} rowData={data4 as unknown as FR} />}
+                      fileName="FRReceiptDelhi.pdf"
+                      style={{ color: 'blue' }}
+                    >
+                      {({ loading }) => (loading || openPrintFrPrevDelhi ? '....' : 'FRReceiptDelhi.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData(null);
+                  }}
+                  variant="text"
+                >
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
@@ -1282,6 +1353,30 @@ const ManageFrPage = () => {
                 <Button
                   onClick={() => {
                     setData2(null);
+                  }}
+                  variant="text"
+                >
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={Boolean(data5)} onClose={() => setData5(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Prev Fr</DialogTitle>
+              <DialogContent>
+                <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+                  <br />
+                  {data5 && (
+                    <PDFDownloadLink document={<FRReceiptTemplatePrev rowData={data5 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                      {({ loading }) => (loading || openPrintFrPrev ? '....' : 'FRReceipt.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData5(null);
                   }}
                   variant="text"
                 >

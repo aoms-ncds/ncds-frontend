@@ -93,7 +93,7 @@ export default {
   addParticularscustomFR: (particularData: any, id:any) => getStandardResponse<Particular>(
     axios.post('/fr/particulars/customFR', { ...particularData, id }, { headers: { ...getAuthHeader() } }),
   ),
-  getById: (fRId?: string) =>
+  getById: (fRId?: string|null) =>
     getStandardResponse<FR>(
       axios.get(`/fr/${fRId}`, { headers: { ...getAuthHeader() } }),
       (data) => ({

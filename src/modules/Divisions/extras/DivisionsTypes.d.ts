@@ -67,6 +67,20 @@ declare global {
       name?:User;
       sign?:FileObject;
     };
+    prevCoordinator?:{
+      name?:string;
+      sign?:FileObject;
+    };
+    prevJuniorLeader1?:{
+
+      name?:string;
+      sign?:FileObject;
+    };
+    prevJuniorLeader2?:{
+
+      name?:string;
+      sign?:FileObject;
+    };
     additionalJuniorLeader?:{
 
       name?:User;

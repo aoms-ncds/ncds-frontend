@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;president:EsignaturePresident}) => {
+const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;president:EsignaturePresident}) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
@@ -282,20 +282,55 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
           <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[0]?.name}</Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName} </Text>
+          <Text
+            style={{
+              left: 290,
+              top: 20,
+              position: 'absolute',
+              fontSize: 10,
+              fontWeight: 'bold',
+              fontFamily: 'Oswald',
+            }}
+          >
+
+            {props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              props.rowData?.division?.details?.prevCoordinator?.name :
+              `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`
+            }
+
+          </Text>
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480, top: 20,
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `}/>
+          src={
+            props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              `data:${props.rowData?.division?.details?.prevCoordinator?.sign?.type};base64,${props.rowData?.division?.details?.prevCoordinator?.sign?.base64}` :
+              `data:${props.rowData?.division?.details?.coordinator?.sign?.type};base64,${props.rowData?.division?.details?.coordinator?.sign?.base64}`
+          }
+          />
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name}</Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
           <Text style={{ left: 260, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text
+            style={{
+              left: 290,
+              top: 40,
+              position: 'absolute',
+              fontSize: 10,
+              fontWeight: 'bold',
+              fontFamily: 'Oswald',
+            }}
+          >
+            {props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              props.rowData?.division?.details?.prevJuniorLeader1?.name :
+              `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
+            }
+          </Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
           <Text style={{ left: 460, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
@@ -303,21 +338,45 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.seniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.seniorLeader?.sign?.base64} `}/>
+          src={
+            props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              `data:${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.base64}` :
+              `data:${props.rowData?.division?.details?.juniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.juniorLeader?.sign?.base64}`
+          }
+          />
 
           <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
           <Text style={{ left: 115, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[2]?.name}</Text>
 
           {/* Modified juniorLeader with Delhi HQ's juniorLeader.'s details*/}
           <Text style={{ left: 260, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName} {props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName} </Text>
+          <Text
+            style={{
+              left: 290,
+              top: 60,
+              position: 'absolute',
+              fontSize: 10,
+              fontWeight: 'bold',
+              fontFamily: 'Oswald',
+            }}
+          >
+            {props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              props.rowData?.division?.details?.prevJuniorLeader2?.name :
+              `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName || ''}`
+            }
+          </Text>
           {/* Modified juniorLeader with Delhi HQ's juniorLeader.'s details*/}
           <Text style={{ left: 460, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480, top: 60,
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.juniorLeader?.sign?.type};base64, ${props.rowData?.division?.details.juniorLeader?.sign?.base64} `}/>
+          src={
+            props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+              `data:${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.base64}` :
+              `data:${props.rowData?.division?.details?.seniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.seniorLeader?.sign?.base64}`
+          }
+          />
           {/* {props.label[3]?.name && (
             <><Text style={{ left: 60, top: 80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
               <Text style={{ left: 115, top: 80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label[3]?.name}</Text>
@@ -395,4 +454,4 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
   );
 };
 
-export default FRReceiptTempForHelhiDevision;
+export default FRReceiptTempForHelhiDevisionPrev;

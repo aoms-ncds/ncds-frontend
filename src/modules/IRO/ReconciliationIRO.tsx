@@ -44,6 +44,8 @@ const ReconciliationIRO = () => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
+  const [data, setData] = useState<any | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -387,13 +389,25 @@ const ReconciliationIRO = () => {
               },
             },
             {
+              id: 'print',
+              text: 'Print IRO',
+              icon: PrintIcon,
+              onClick: () => {
+                setData(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
+              },
+            },
+            {
               id: 'View',
               text: 'View Fr ',
               icon: PreviewIcon,
               // component: Link,
               // to: `/fr/${(props.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
               },
 
             },
@@ -407,6 +421,7 @@ const ReconciliationIRO = () => {
                 },
               ] :
               []),
+
             // ...(props.row.status == IROLifeCycleStates.AMOUNT_RELEASED ? [
             //   {
             //     id: 'Reconciliation',
@@ -475,7 +490,7 @@ const ReconciliationIRO = () => {
                 setIroData(props.row);
                 setConform1(true);
                 if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
+                  FRServices.getById((props.row as any).FR._id).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });
@@ -992,6 +1007,30 @@ const ReconciliationIRO = () => {
       </Grid> */}
           </Grid>
         </DialogContent>
+      </Dialog>
+      <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print IRO</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the IROReceipt for {data?.IRONo}
+            <br />
+            {data && (
+              <PDFDownloadLink document={<IROTemplate rowData={data as FR} fr={data.FR} president={signaturePresident} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'IROReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
       </Dialog>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>

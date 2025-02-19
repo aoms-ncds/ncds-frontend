@@ -119,10 +119,10 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log((props.president as any).presidentName, 'pro');
+  console.log(props, 'pro');
 
 
-  const additionalJr = props.rowData?.division?.details.additionalJuniorLeader?.name;
+  const additionalJr = props.rowData?.division?.details?.additionalJuniorLeader?.name;
   let totalAmount=0;
   return (
     <Document>

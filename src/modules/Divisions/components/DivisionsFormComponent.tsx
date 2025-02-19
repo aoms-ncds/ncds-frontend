@@ -16,8 +16,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
+  const [showFileUploaderPrev1, setShowFileUploaderPrev1] = useState(false);
   const [showFileUploader2, setShowFileUploader2] = useState(false);
+  const [showFileUploaderPrev2, setShowFileUploader2Prev] = useState(false);
   const [showFileUploader3, setShowFileUploader3] = useState(false);
+  const [showFileUploaderPrev3, setShowFileUploaderPrev3] = useState(false);
   const [showFileUploader4, setShowFileUploader4] = useState(false);
   const [showFileUploader5, setShowFileUploader5] = useState(false);
 
@@ -194,6 +197,136 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               </Grid>
             </Grid>
           )}
+          {Label?.[2]?.name && props.value.name == 'DELHI OFFICE' && (
+
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.juniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          juniorLeader: {
+                            ...props.value.juniorLeader,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[2]?.name || '' : '')}
+                    required={false}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+
+          {Label?.[3]?.name && props.value.name == 'DELHI OFFICE' && (
+
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.president?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          president: {
+                            ...props.value.president,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[3]?.name || '' : '')}
+                    required={false} />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader4(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+          {Label?.[4]?.name && props.value.name == 'DELHI OFFICE' && (
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    disabled={props.action == 'view'}
+                    value={props.value.officeManager?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          officeManager: {
+                            ...props.value.officeManager,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    // label={'Junior Leader 2'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[4]?.name || '' : '')}
+                    required={false} />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader5(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+          {Label?.[1]?.name && props.value.name == 'DELHI OFFICE' && (
+            <Grid item xs={12} md={4}>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <UsersDropdown
+                    users={users ?? []}
+                    value={props.value.seniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
+                      if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          seniorLeader: {
+                            ...props.value.seniorLeader,
+                            name: newValue,
+                          },
+                        });
+                      }
+                    }}
+                    disabled={props.action == 'view'}
+                    // label={'Junior Leader 1'}
+                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[1]?.name || '' : '')}
+
+                    required={false}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                  E-signature
+                </Button>
+              </Grid>
+            </Grid>
+          )}
           {props.value.name != 'DELHI OFFICE' && (
             <>
               <Grid item xs={12} md={4}>
@@ -360,137 +493,108 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             </>
 
           )}
-          {Label?.[1]?.name && props.value.name == 'DELHI OFFICE' && (
-            <Grid item xs={12} md={4}>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth>
-                  <UsersDropdown
-                    users={users ?? []}
-                    value={props.value.seniorLeader?.name ?? null}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
+          {props.action =='view' || props.action =='edit' ?(
+
+            <>
+              <Grid item xs={12} md={4}>
+                <Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label={ props.value.name != 'DELHI OFFICE'? 'Prev Co-ordinator Name' :Label?.[0]?.name}
+                      value={props.value?.prevCoordinator?.name ?? ''}
+                      onChange={(e) => {
                         props.onChange({
                           ...props.value,
-                          seniorLeader: {
-                            ...props.value.seniorLeader,
-                            name: newValue,
+                          prevCoordinator: {
+                            ...(props.value?.prevCoordinator || {}), // Ensure it's an object
+                            name: e.target.value,
                           },
                         });
-                      }
-                    }}
-                    disabled={props.action == 'view'}
-                    // label={'Junior Leader 1'}
-                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[1]?.name || '' : '')}
+                      }}
+                      disabled={props.action === 'view'}
+                    />
 
-                    required={false}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                  E-signature
-                </Button>
-              </Grid>
-            </Grid>
-          )}
+                  </FormControl>
 
-          {Label?.[2]?.name && props.value.name == 'DELHI OFFICE' && (
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderPrev1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                    E-signature
+                  </Button>
+                </Grid>
+              </Grid><Grid item xs={12} md={4}>
 
-            <Grid item xs={12} md={4}>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth>
-                  <UsersDropdown
-                    users={users ?? []}
-                    disabled={props.action == 'view'}
-                    value={props.value.juniorLeader?.name ?? null}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
+                <><Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label={props.value.name != 'DELHI OFFICE'? 'Prev Junior Leader 1': Label?.[1]?.name }
+                      value={props.value?.prevJuniorLeader1?.name ?? ''}
+                      onChange={(e) => {
                         props.onChange({
                           ...props.value,
-                          juniorLeader: {
-                            ...props.value.juniorLeader,
-                            name: newValue,
+                          prevJuniorLeader1: {
+                            ...(props.value?.prevJuniorLeader1 || {}), // Ensure seniorLeader is an object
+                            name: e.target.value,
                           },
                         });
-                      }
-                    }}
-                    // label={'Junior Leader 2'}
-                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[2]?.name || '' : '')}
-                    required={false}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                  E-signature
-                </Button>
-              </Grid>
-            </Grid>
-          )}
+                      }}
+                      disabled={props.action === 'view'}
+                    />
+                  </FormControl>
 
-          {Label?.[3]?.name && props.value.name == 'DELHI OFFICE' && (
+                </Grid><Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploader2Prev(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                        E-signature
+                  </Button>
+                </Grid>
+                {/* <IconButton onClick={() => setNewJr(true)} aria-label="add" size="small">
+                    <AddIcon fontSize="inherit" /> <small style={{ fontSize: 11 }}>Add Custom</small>
+                  </IconButton> */}
+                </>
 
-            <Grid item xs={12} md={4}>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth>
-                  <UsersDropdown
-                    users={users ?? []}
-                    disabled={props.action == 'view'}
-                    value={props.value.president?.name ?? null}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
+
+              </Grid>
+              <Grid item xs={12} md={4}>
+                {/* {newSr ==false &&( */}
+
+                <><Grid item xs={12}>
+                  <FormControl variant="outlined" fullWidth>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label={ props.value.name != 'DELHI OFFICE'? 'Prev Junior Leader 2': Label?.[2]?.name}
+                      value={props.value.prevJuniorLeader2?.name ?? ''}
+                      onChange={(e) => {
                         props.onChange({
                           ...props.value,
-                          president: {
-                            ...props.value.president,
-                            name: newValue,
+                          prevJuniorLeader2: {
+                            ...props.value.prevJuniorLeader2,
+                            name: e.target.value,
                           },
                         });
-                      }
-                    }}
-                    // label={'Junior Leader 2'}
-                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[3]?.name || '' : '')}
-                    required={false} />
-                </FormControl>
+                      }}
+                      disabled={props.action === 'view'}
+                    />
+                  </FormControl>
+
+                </Grid><Grid item xs={12}>
+                  <Button variant="contained" onClick={() => setShowFileUploaderPrev3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                        E-signature
+                  </Button>
+                </Grid>
+                </>
+                {/* )} */}
+
+
               </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader4(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                  E-signature
-                </Button>
-              </Grid>
-            </Grid>
-          )}
-          {Label?.[4]?.name && props.value.name == 'DELHI OFFICE' && (
-            <Grid item xs={12} md={4}>
-              <Grid item xs={12}>
-                <FormControl variant="outlined" fullWidth>
-                  <UsersDropdown
-                    users={users ?? []}
-                    disabled={props.action == 'view'}
-                    value={props.value.officeManager?.name ?? null}
-                    onChange={(e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          officeManager: {
-                            ...props.value.officeManager,
-                            name: newValue,
-                          },
-                        });
-                      }
-                    }}
-                    // label={'Junior Leader 2'}
-                    label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[4]?.name || '' : '')}
-                    required={false} />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader5(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                  E-signature
-                </Button>
-              </Grid>
-            </Grid>
-          )}
+            </>
+          ):[]}
+
+
           {/* {props?.value?.name === 'DELHI OFFICE' && (
 
 
@@ -557,6 +661,61 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
         })}
       />
       <FileUploader
+        title=" Prev Coordinator Signature"
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderPrev1}
+        onClose={() => setShowFileUploaderPrev1(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.prevCoordinator?.sign ? [props.value.prevCoordinator?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              prevCoordinator: {
+                ...props.value.prevCoordinator,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            prevCoordinator: {
+              ...props.value.prevCoordinator,
+              sign: props.value.prevCoordinator?.sign ?
+                {
+                  ...props.value.prevCoordinator?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              prevCoordinator: {
+                ...props.value.prevCoordinator,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+      <FileUploader
         title="Leader Signature 1"
         types={['image/png', 'image/jpeg', 'image/jpg']}
         limits={{
@@ -603,6 +762,60 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               ...props.value,
               seniorLeader: {
                 ...props.value.seniorLeader,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+      <FileUploader
+        title="Prev Leader Signature 1"
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        open={showFileUploaderPrev2}
+        onClose={() => setShowFileUploader2Prev(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.prevJuniorLeader1?.sign ? [props.value.prevJuniorLeader1?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              prevJuniorLeader1: {
+                ...props.value.prevJuniorLeader1,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            prevJuniorLeader1: {
+              ...props.value.prevJuniorLeader1,
+              sign: props.value.prevJuniorLeader1?.sign ?
+                {
+                  ...props.value.prevJuniorLeader1?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              prevJuniorLeader1: {
+                ...props.value.prevJuniorLeader1,
                 sign: undefined,
               },
             });
@@ -658,6 +871,61 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
               ...props.value,
               juniorLeader: {
                 ...props.value.juniorLeader,
+                sign: undefined,
+              },
+            });
+            return FileUploaderServices.deleteFile(fileId);
+          },
+        })}
+      />
+      <FileUploader
+        title="Prev Leader Signature 2"
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        // accept={['video/*']}
+        open={showFileUploaderPrev3}
+        onClose={() => setShowFileUploaderPrev3(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.prevJuniorLeader2?.sign ? [props.value.prevJuniorLeader2?.sign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              prevJuniorLeader2: {
+                ...props.value.prevJuniorLeader2,
+                sign: res.data,
+              },
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            prevJuniorLeader2: {
+              ...props.value.prevJuniorLeader2,
+              sign: props.value.prevJuniorLeader2?.sign ?
+                {
+                  ...props.value.prevJuniorLeader2?.sign,
+                  filename: newName,
+                } :
+                undefined,
+            },
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              prevJuniorLeader2: {
+                ...props.value.prevJuniorLeader2,
                 sign: undefined,
               },
             });
