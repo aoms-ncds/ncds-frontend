@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -148,7 +149,7 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; mont
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Educational Assistance ${div?.[0]}`}
+            {`IET Child Educational Assistance ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.month}`}</Text>
           {/* <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}

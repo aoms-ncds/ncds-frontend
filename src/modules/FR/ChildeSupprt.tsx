@@ -53,6 +53,7 @@ interface TotalSupportStructure {
 const ChildeSupportPage = () => {
   const user = useAuth();
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
+  const [coordinatorId, setCoordinator] = useState<any>(null);
   const [workersSelect, setWorkersSelect] = useState<IWorker | null>(null);
   const [childList, setChildList] = useState<Child[]>([]);
   const [coordinators, setCoordinators] = useState<IWorker[] | null>([]);
@@ -76,6 +77,7 @@ const ChildeSupportPage = () => {
   const [filterdId, setFilterdId] = useState<string[]>([]);
   console.log(selectedRowIds, 'selectedRowIds');
   const [modal, setModal] = useState<boolean>(false);
+  const [subDivisions, setSubDivisions] = useState<SubDivision[] | null>(null);
 
   const navigate = useNavigate();
   // const supportEnabledWorkers = childList?.filter(item => item.supportStructure.supportEnabled === true);
@@ -93,6 +95,7 @@ const ChildeSupportPage = () => {
   const [confirmAttach, setConfirmAttach] = useState(false);
   const [requisition2, setRequisition2] = useState<FR | null>(null);
   const [frAction, setFrAction] = useState<'add' | 'view' | null>(null);
+  const [subDivision, setSubDivision] = useState<SubDivision | null>(null);
 
   const addFR = async (requisition: CreatableFR) => {
     console.log('fn FUc');
@@ -173,7 +176,22 @@ const ChildeSupportPage = () => {
     });
     console.log(tot, 'tot');
   }, [childList]);
-
+  useEffect(() => {
+    if (division) {
+      DivisionsServices.getSubDivisionsByDivisionId(division?._id as string)
+        // .then((res) => console.log(res.data, 'data'))
+        .then((res) => setSubDivisions(res.data))
+        .catch((error) =>
+          enqueueSnackbar({
+            variant: 'error',
+            message: error.message,
+          }),
+        );
+    } else {
+      setSubDivisions([]);
+    }
+    // console.log(props.value.divisionHistory);
+  }, [division]);
   useEffect(() => {
     ChildrenServices.getAll({ status: UserLifeCycleStates.ACTIVE })
       .then((res) => {
@@ -351,6 +369,11 @@ const ChildeSupportPage = () => {
     {
       field: 'division', width: 130,
       headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Division</b>, valueGetter: (params) => params.row.division?.details?.name,
+    },
+    {
+      field: 'Sub-division', width: 130,
+      headerClassName: 'column-header', align: 'center', headerAlign: 'center', renderHeader: () => <b>Sub Division</b>, valueGetter: (params) => params.row.childOf?.officialDetails?.divisionHistory[params.row?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name,
+
     },
     // {
     //   field: 'sub_division',
@@ -586,6 +609,7 @@ const ChildeSupportPage = () => {
                     console.log(newVal, 'roro');
                     if (newVal) {
                       const coordinator: any = newVal.details?.coordinator?.name;
+                      setCoordinator(coordinator);
                       setChildList(() => allChild?.filter((child: any) =>
                         child.division?._id == newVal?._id &&
                         child.childOf?._id != coordinator?._id && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator') ?? []);
@@ -604,6 +628,56 @@ const ChildeSupportPage = () => {
                       required />
                   )}
                   disabled={loadingDiv != true}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Autocomplete
+                  options={subDivisions ?? []}
+                  value={subDivision ?? null}
+                  getOptionLabel={(subDiv) => subDiv.name}
+                  onChange={(event, newVal) => {
+                    if (newVal) {
+                      setChildList(() =>
+                        allChild ?
+                          allChild.filter((child: any) => {
+                            const lastDivisionHistory =
+                                child.childOf?.officialDetails?.divisionHistory?.[
+                                  child.childOf?.officialDetails?.divisionHistory?.length - 1
+                                ];
+
+                            return (
+                              lastDivisionHistory?.subDivision?._id?.toString() === newVal?._id?.toString() &&
+                                child.childOf?._id !== coordinatorId?._id &&
+                                child.childSupport?.amount !== 0 &&
+                                child.childOf?.supportDetails?.designation?.name !== 'Officiating Co-Ordinator'
+                            );
+                          }) :
+                          [], // Ensure setChildList always gets an array
+                      );
+                      setRequisition((requisition:any) => ({
+                        ...requisition,
+                        purpose: 'Subdivision' as FRPurpose,
+                        purposeSubdivision: newVal,
+
+                      }));
+                    } else {
+                      setChildList(allChild ?? []);
+                      // setDivision(null);
+                      setRequisition((requisition) => ({
+                        ...requisition,
+                        purpose: 'Division',
+                        purposeSubdivision: undefined,
+                        designationParticular: undefined,
+                        purposeWorker: undefined,
+                        purposeCoordinator: undefined,
+                      }));
+                    }
+                    setSubDivision(newVal);
+                  }}
+                  renderInput={(params) => <TextField {...params}
+                    label="Subdivision"
+                    helperText={!subDivisions ? 'Loading sub-divisions...' : 'Select a sub-division'}
+                    variant='standard' />}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -924,7 +998,7 @@ const ChildeSupportPage = () => {
               &nbsp; and &nbsp;
             <PDFDownloadLink
               document={<ChildeSupportSignSheet
-                month={getMonth()} total={total} data={childList}
+                month={getMonth()} total={total} data={childList} subDiv={subDivision||null}
               />} fileName="ChildrenSignatureSheet.pdf"
               style={{ color: 'blue' }}
             >

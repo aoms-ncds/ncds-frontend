@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null}) => {
+const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null; subDiv?:any | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const rowsPerPage = 6;
@@ -140,7 +140,7 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
   const div= props?.data?.map((e:any)=>e.division?.details?.name);
-  console.log(props, 'pop');
+  console.log(props.subDiv, 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
@@ -177,6 +177,10 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}>Division</Text>
                 <div style={styles.headGrid}></div>
+                {props.subDiv &&(
+
+                  <><Text style={styles.tableHead}>Sub Division</Text><div style={styles.headGrid}></div></>
+                )}
                 <Text style={styles.tableHead}>Net Amount</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}></Text>
@@ -202,6 +206,11 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
                     <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {row?.childOf?.basicDetails?.lastName}</Text>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
+                    {props.subDiv &&(
+
+                      <><div style={styles.cellGrid}></div><Text style={styles.tableCell}>{row.childOf?.officialDetails?.divisionHistory[row?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}</Text></>
+                    )}
+
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{row.childSupport?.amount !== 0 ? row.childSupport?.amount : ''}</Text>
                     <div style={styles.cellGrid}></div>
