@@ -895,6 +895,7 @@ const IROReportFilter = () => {
                   <MenuItem value="215">RECONCILIATION DONE</MenuItem>
                   <MenuItem value="216">WAITTING FOR RELEASE AMOUNT</MenuItem>
                   <MenuItem value="217">IRO REJECTED</MenuItem>
+                  <MenuItem value="-102">FR REJECTED</MenuItem>
                   <MenuItem value="218">IRO IN PROCESS</MenuItem>
                   <MenuItem value="219">REVERTED TO DIVISION</MenuItem>
                   <MenuItem value="220">REOPENED</MenuItem>

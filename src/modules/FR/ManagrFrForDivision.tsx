@@ -255,7 +255,7 @@ const ManageFrForDivision = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ?
+            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK&& !hasPermissions(['PRESIDENT_ACCESS']) ?
               [
                 {
                   id: 'edit',

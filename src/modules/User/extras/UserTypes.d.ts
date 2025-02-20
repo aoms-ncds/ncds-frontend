@@ -148,6 +148,8 @@ declare global {
     department?: Department;
     selfSupport: boolean;
     percentageofSelfSupport: number;
+    totalAmount?: number;
+    monthlyDeduction?: number;
   }
 
   interface Insurance {

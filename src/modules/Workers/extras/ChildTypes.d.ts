@@ -31,6 +31,10 @@ declare global {
     deactivationDate?:Moment;
     prevCeaAmountDate?:Moment;
     studyHelp?:number;
+    supportEnabled?:boolean;
+    reason?:string;
+    disabledFrom?:Moment;
+    disabledTo?:Moment;
 
 
   }

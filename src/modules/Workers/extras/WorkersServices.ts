@@ -240,6 +240,8 @@ export default {
         data.children.map((child: Child) => ({
           ...child,
           dateOfBirth: child.dateOfBirth ? moment(child.dateOfBirth) : undefined,
+          disabledTo: child.disabledTo ? moment(child.disabledTo) : undefined,
+          disabledFrom: child.disabledFrom ? moment(child.dateOfBirth) : undefined,
           createdAt: moment(data.createdAt),
           updatedAt: moment(data.updatedAt),
         })),

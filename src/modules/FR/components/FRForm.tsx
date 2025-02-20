@@ -402,6 +402,11 @@ const FRForm = (props: FormComponentProps<any>) => {
     .then((res) => {
       console.log(res.data);
     });
+                  } else if (props.action == 'edit') {
+                    await FRServices.addParticularsFR(addsParticulars, props.value._id)
+                  .then((res) => {
+                    console.log(res.data);
+                  });
                   }
                 } else {
                   enqueueSnackbar({
@@ -682,7 +687,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   </Grid>
                 </>
               ) : ''}
-              {(props.actionAdi !== 'view') && (props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' || props.action === 'customEdit') ? (
+              {(props.actionAdi !== 'view') && (props.action === 'add' || props.action === 'custom' || props.action === 'customIRO' || props.action === 'customEdit' ||props.action === 'edit' ) ? (
                 <Grid item xs={12} md={4} lg={4}>
                   <Button
                     variant="contained"

@@ -265,7 +265,7 @@ const ManageFrPage = () => {
               to: `/fr/${props.row._id}/view`,
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK ?
+            ...(hasPermissions(['WRITE_FR']) && !hasPermissions(['PRESIDENT_ACCESS'])&& props.row.status == FRLifeCycleStates.FR_SEND_BACK|| hasPermissions(['ADMIN_ACCESS'])?
               [
                 {
                   id: 'edit',

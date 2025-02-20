@@ -76,6 +76,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
     courseName: '',
     totalAmountforCourse: 0,
     childProfile: '',
+    supportEnabled: true,
   });
   const [index, setIndex] = useState<number>(0);
   const [childAction, setChildAction] = useState<'add' | 'edit'>('add');
@@ -170,12 +171,12 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           {/* <Step>
             <StepLabel>Support Structure</StepLabel>
           </Step> */}
-          {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus === 'Married' && (
+          {props.options?.kind === 'worker' && props.value.basicDetails?.martialStatus === 'Married' && (
             <Step>
               <StepLabel>Spouse Details</StepLabel>
             </Step>
           )}
-          {props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {props.options?.kind === 'worker' && props.value.basicDetails?.martialStatus == 'Married' && (
             <Step>
               <StepLabel>Offsprings Details</StepLabel>
             </Step>
@@ -307,7 +308,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               onSubmit={(e) => {
                 e.preventDefault();
                 if (props.options?.kind == 'worker') {
-                  if (props.value.basicDetails.martialStatus == 'Married') {
+                  if (props.value.basicDetails?.martialStatus == 'Married') {
                     setActiveStep((currentStep) => currentStep + 1);
                   } else {
                     if (props.value.status && (props.value.status == UserLifeCycleStates.CREATED || props.value.status == UserLifeCycleStates.ACTIVE)) {
@@ -347,13 +348,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   Go back{' '}
                 </Button>
                 <Button type="submit" variant="contained" sx={{ padding: '16px 64px' }}>
-                  {props.options?.kind === 'worker' && !props.value.status && props.value.basicDetails.martialStatus !== 'Married' ? 'Submit' : 'Next'}
+                  {props.options?.kind === 'worker' && !props.value.status && props.value.basicDetails?.martialStatus !== 'Married' ? 'Submit' : 'Next'}
                 </Button>
               </div>
             </form>
           )}
 
-          {activeStep === 2 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 2 && props.options?.kind === 'worker' && props.value.basicDetails?.martialStatus == 'Married' && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -389,7 +390,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
               </div>
             </form>
           )}
-          {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails.martialStatus == 'Married' && (
+          {activeStep === 3 && props.options?.kind === 'worker' && props.value.basicDetails?.martialStatus == 'Married' && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -612,6 +613,50 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                   />
                 </Grid>
               </Grid>
+              <Grid item xs={12}>
+                <br />
+                <Divider textAlign="left">Advance Support</Divider>
+                <br />
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Total Amount"
+                    value={props.value.supportDetails?.totalAmount}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        supportDetails: {
+                          ...props.value.supportDetails,
+                          totalAmount: e.target.value,
+                        },
+                      })
+                    }
+                    variant={props.options?.textField?.variant}
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Monthly Deduction"
+                    value={props.value.supportDetails?.monthlyDeduction}
+                    onChange={(e) =>
+                      props.onChange({
+                        ...props.value,
+                        supportDetails: {
+                          ...props.value.supportDetails,
+
+                          monthlyDeduction: e.target.value,
+                        },
+
+                      })
+                    }
+                    variant={props.options?.textField?.variant}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
 
               <div
                 style={{
@@ -628,7 +673,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
 
                 {props.options?.kind == 'worker' ? (
                   <Button
-                    onClick={() => setActiveStep(props.value.basicDetails.martialStatus !== 'Married' ? (step) => step - 3 : (step) => step - 1)}
+                    onClick={() => setActiveStep(props.value.basicDetails?.martialStatus !== 'Married' ? (step) => step - 3 : (step) => step - 1)}
                     variant="outlined"
                     sx={{ padding: '16px 64px', mr: 1 }}
                   >
@@ -1137,6 +1182,85 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     color="primary"
                   />
                 </Grid>
+                {props.action =='edit' &&(
+
+                  <Grid item xs={12} >
+                    <FormControlLabel
+                      label="Support Enabled"
+                      control={
+                        <Checkbox
+                          checked={newChild.supportEnabled}
+                          onChange={(e) =>
+                            setNewChild((newchild) => ({
+                              ...newchild,
+                              supportEnabled: e.target.checked,
+                            }))
+                          }
+                        />
+                      }
+                    />
+                  </Grid>
+                )}
+                {!newChild?.supportEnabled&&<>
+
+                  <Grid item xs={12} md={6} lg={4}>
+                    <TextField
+                      label="Reason"
+                      value={ newChild?.reason }
+                      onChange={(e) =>
+                        setNewChild((newchild) => ({
+                          ...newchild,
+                          reason: e.target.value,
+                        }))
+                      }
+                      variant={props.options?.textField.variant}
+                      fullWidth
+                      disabled={newChild?.supportEnabled}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4}>
+                    <DatePicker
+                      label="Disabled From"
+                      value={newChild?.disabledFrom}
+                      onChange={(newDate) =>
+                        setNewChild({
+                          ...newChild,
+                          disabledFrom: newDate?? undefined,
+                        })
+                      }
+                      format="DD/MM/YYYY"
+                      slotProps={{
+                        textField: {
+                          variant: props.options?.textField?.variant,
+                          fullWidth: true,
+                        },
+                      }}
+                      disabled={newChild?.supportEnabled}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={4}>
+                    <DatePicker
+                      label="Disabled To"
+                      value={newChild?.disabledTo}
+                      onChange={(newDate) =>
+                        setNewChild({
+                          ...newChild,
+                          disabledTo: newDate?? undefined,
+                        })
+                      }
+                      format="DD/MM/YYYY"
+                      slotProps={{
+                        textField: {
+                          variant: props.options?.textField?.variant,
+                          fullWidth: true,
+                        },
+                      }}
+                      disabled={newChild?.supportEnabled}
+
+                    />
+                  </Grid>
+                </>}
               </Grid>
             </Container>
           </DialogContent>

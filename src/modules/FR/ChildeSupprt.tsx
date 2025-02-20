@@ -73,6 +73,8 @@ const ChildeSupportPage = () => {
     sanctionedAsPer: '',
     childSupport: true,
   });
+  const supportEnabledChilds = childList?.filter((item) => item.supportEnabled === true);
+
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [filterdId, setFilterdId] = useState<string[]>([]);
   console.log(selectedRowIds, 'selectedRowIds');
@@ -412,13 +414,23 @@ const ChildeSupportPage = () => {
       valueGetter: (params) => params.row?.gender,
     },
     {
+      field: 'CEA Amount',
+      width: 180,
+      headerClassName: 'column-header',
+      align: 'center',
+      cellClassName: 'row-current',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'CEA Amount'}</b>,
+      valueGetter: (params) => params.row.childSupport?.amount != 0 ? params.row.childSupport?.amount : '',
+    },
+    {
       field: 'CEA Amount update date ',
       width: 180,
       headerClassName: 'column-header',
       align: 'center',
       cellClassName: 'row-current',
       headerAlign: 'center',
-      renderHeader: () => <b>{'Prev CEA Amount update date'}</b>,
+      renderHeader: () => <b>{'Updated at'}</b>,
       valueGetter: (params) => params.row.prevCeaAmountDate?.format('DD/MM/YYYY') ?? '',
     },
     {
@@ -431,15 +443,47 @@ const ChildeSupportPage = () => {
       renderHeader: () => <b>{'Prev CEA Amount'}</b>,
       valueGetter: (params) => params.row.prevCeaAmount != 0 ? params.row.prevCeaAmount : '',
     },
+
     {
-      field: 'CEA Amount',
+      field: 'EnableStatus',
       width: 180,
       headerClassName: 'column-header',
       align: 'center',
       cellClassName: 'row-current',
       headerAlign: 'center',
-      renderHeader: () => <b>{'CEA Amount'}</b>,
-      valueGetter: (params) => params.row.childSupport?.amount != 0 ? params.row.childSupport?.amount : '',
+      renderHeader: () => <b>{'Support Status'}</b>,
+      valueGetter: (params) => params.row.supportEnabled?'Yes' : 'No',
+    },
+    {
+      field: 'disabledFrom',
+      width: 180,
+      headerClassName: 'column-header',
+      align: 'center',
+      cellClassName: 'row-current',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Disabled from'}</b>,
+      valueGetter: (params) => params.row.disabledFrom?.format('DD/MM/YYYY'),
+    },
+    {
+      field: 'disable',
+      width: 180,
+      headerClassName: 'column-header',
+      align: 'center',
+      cellClassName: 'row-current',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Disable to'}</b>,
+      valueGetter: (params) => params.row.disabledTo?.format('DD/MM/YYYY'),
+    },
+
+    {
+      field: 'reason',
+      width: 180,
+      headerClassName: 'column-header',
+      align: 'center',
+      cellClassName: 'row-current',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Reason'}</b>,
+      valueGetter: (params) => params.row.reason,
     },
     // {
     //   field: 'supportEnabled',
@@ -516,7 +560,7 @@ const ChildeSupportPage = () => {
         narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
         requestedAmount: total,
         unitPrice: total,
-        quantity: childList?.length,
+        quantity: supportEnabledChilds?.length,
         attachment: fileObj ? [fileObj] : [],
       }],
     }));
@@ -582,7 +626,9 @@ const ChildeSupportPage = () => {
       <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
-          const tot = childList.reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
+          const tot = childList
+          .filter((child) => child.supportEnabled) // Filter only enabled children
+          .reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
           handleAction();
           // if (fileObj) {
           // setTimeout(() => {
@@ -603,7 +649,7 @@ const ChildeSupportPage = () => {
               narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
               requestedAmount: tot,
               unitPrice: tot,
-              quantity: childList?.length,
+              quantity: supportEnabledChilds?.length,
               attachment: fileObj ? [fileObj] : [],
             }],
           }));
@@ -1018,7 +1064,7 @@ const ChildeSupportPage = () => {
               &nbsp; and &nbsp;
             <PDFDownloadLink
               document={<ChildeSupportSignSheet
-                month={getMonth()} total={total} data={childList} subDiv={subDivision||null}
+                month={getMonth()} total={total} data={childList.filter((e)=>e.supportEnabled ==true)} subDiv={subDivision||null}
               />} fileName="ChildrenSignatureSheet.pdf"
               style={{ color: 'blue' }}
             >

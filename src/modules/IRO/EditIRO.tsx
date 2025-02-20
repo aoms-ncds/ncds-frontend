@@ -55,6 +55,9 @@ const EditIRO = () => {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
   console.log(user, 'user');
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
+  const [addNewParticulars, setAddNewParticulers] = useState<Particular[]>([]);
+  const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
 
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
@@ -420,20 +423,28 @@ const EditIRO = () => {
       total += particular?.sanctionedAmount;
     }
   });
+  let total2 = 0;
+  addNewParticulars.forEach((particular: Particular) => {
+    if (particular.sanctionedAmount !== null && particular.sanctionedAmount !== undefined) {
+      total2 += Number(particular.sanctionedAmount);
+    }
+  });
+  const grandTotal = total + total2;
   console.log(total, 'total');
-  const handleClickOpen = (particular: Particular) => {
+  const handleClickOpen = (particular: Particular, index?: any) => {
     setOpen(true);
-    // setSelectedParticularIndex(index);
+    setSelectedParticularIndex(index);
     setNewParticular(particular);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-  const editParticular = (particular: Particular) => {
-    // setParticularDialog('edit');
+  const editParticular = (particular: Particular, index?: any) => {
+    setParticularDialog('edit');
     setShowAddParticularDialog(true);
     setNewParticular(particular);
+    setSelectedParticularIndex(index);
   };
 
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -459,7 +470,47 @@ const EditIRO = () => {
   //   }
   // };
   console.log(IRO.purposeWorker, 'ziro');
+  const addParticulars = () => {
+    // handleClose();
+    let newParticulars: Particular[];
+    newParticulars = [newParticular as Particular];
+    if (particularDialog === 'edit') {
+      setIRO({
+        ...IRO,
+        particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
+      });
+    } else {
+      setAddNewParticulers((prev:any) => [
+        ...prev,
+        ...newParticulars.map((particular) => ({
+          ...particular,
+          sanctionedAmount: null,
+          sanctionedAsPer: null,
+        })),
+      ]);
 
+      console.log(addNewParticulars, 'addNewParticulars');
+      // setIRO({
+      //   ...props.value,
+      //   particulars: newParticulars,
+      // });
+    }
+    setNewParticular((particularDetails) => ({
+      ...particularDetails,
+      subCategory1: '',
+      subCategory2: '',
+      subCategory3: '',
+      month: '',
+      narration: '',
+      quantity: undefined,
+      unitPrice: undefined,
+      requestedAmount: undefined,
+      attachment: [],
+    }));
+    // Reset the form fields
+    setShowAddParticularDialog(false);
+    // Other logic for API calls, snackbar, etc.
+  };
   useEffect(() => {
     const selectedMainCategoryObj = mainCategories?.find((category) => category.name === IRO.mainCategory);
     setSelectedMainCategory(selectedMainCategoryObj);
@@ -498,7 +549,10 @@ const EditIRO = () => {
     } ); // TODO: Implement REST API Call
   }, [iroID]);
 
+  // const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const totalRequestedAmount = particulars && particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const totalRequestedAmtotal= addNewParticulars && addNewParticulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
+  const grandTotalReust= totalRequestedAmount+totalRequestedAmtotal;
   return (
     <>
       <CommonPageLayout title="Edit IRO">
@@ -507,7 +561,7 @@ const EditIRO = () => {
           <Container>
             <CardContent>
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   // const SubmitStatus = null;
                   // if (submit == 1) {
@@ -515,14 +569,17 @@ const EditIRO = () => {
                   // } else if (submit == 2) {
                   //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
                   // }
-                  IROServices.updateIRO(iroID ?? '', IRO, true)
-                    .then((res) => {
-                      enqueueSnackbar({
-                        message: res.message,
-                        variant: 'success',
-                      });
-                      navigate(`/iro/${iroID}`);
+                  await IROServices.updateIRO(iroID ?? '', IRO, true)
+                  .then(async (res) => {
+                    enqueueSnackbar({
+                      message: res.message,
+                      variant: 'success',
                     });
+                    await FRServices.addParticularsIRO(addNewParticulars, iroID ?? '').then((res) => {
+                      console.log(res, 'res');
+                    });
+                    navigate(`/iro/${iroID}`);
+                  });
                 }}
               >
                 <Grid container spacing={3}>
@@ -661,8 +718,36 @@ const EditIRO = () => {
                       <TextField label="Others" value={IRO?.purposeOthers} variant="outlined" fullWidth disabled />
                     </Grid>
                   ) : null}
-
                   <Grid item xs={12}>
+                    {hasPermissions(['ADMIN_ACCESS'])|| IRO.status ===IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR || IRO.status== IROLifeCycleStates.IRO_IN_PROCESS ?(
+
+                      <Button
+                        sx={{ height: '45px' }}
+                        variant="contained"
+                        onClick={() => {
+                          setParticularDialog('add');
+                          setNewParticular((particularDetails) => ({
+                            ...particularDetails,
+                            subCategory1: '',
+                            subCategory2: '',
+                            subCategory3: '',
+                            month: '',
+                            narration: '',
+                            quantity: undefined,
+                            unitPrice: undefined,
+                            requestedAmount: undefined,
+                            attachment: [],
+                          }));
+                          setShowAddParticularDialog(true);
+                          setSelectedSubCategory1(null);
+                          setSelectedSubCategory2(null);
+                          setSelectedSubCategory3(null);
+                        }}
+                        // disabled={!selectedMainCategory}
+                      >
+                                                    Add particulars
+                      </Button>
+                    ):[]}
                     <TableContainer>
                       <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
@@ -722,12 +807,56 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                               </TableRow>
                             ))}
+                          {addNewParticulars &&
+                            addNewParticulars?.map((item:any, index:any) => (
+                              <TableRow key={item._id} >
+                                <TableCell component="th" sx={{ display: 'flex' }}>
+                                  <PermissionChecks
+                                    permissions={['WRITE_IRO']}
+                                    granted={
+                                      <IconButton>
+                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                      </IconButton>
+                                    }
+                                  />
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
+                                  // Content to render if the user has access
+                                    <IconButton>
+                                      <EditIcon onClick={() => editParticular(item, index)} />
+                                    </IconButton>
+                                  ): []}
+                                  <IconButton>
+                                    <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                  </IconButton>
+                                  <IconButton
+                                    onClick={() => {
+                                      setShowFileUploader(true);
+                                      setAttachments(newParticular.attachment);
+                                      setNewParticular(item);
+                                    }}
+                                  >
+                                    <AttachmentIcon />
+                                  </IconButton>
+                                </TableCell>
+
+                                <TableCell align="center">{IRO?.particulars.length + 1}</TableCell>
+                                <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
+                            > ${item.subCategory1 == 'Select' ? '' : item.subCategory1} > 
+                            ${item.subCategory2 == 'Select' ? '' : item.subCategory2} > ${item.subCategory3 == 'Select' ? '' : item.subCategory3}`}</TableCell>
+                                <TableCell align="center">{item.narration}</TableCell>
+                                <TableCell align="center">{item.quantity}</TableCell>
+                                <TableCell align="center">{item.month}</TableCell>
+                                <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
+                                <TableCell align="center">{item.sanctionedAmount}</TableCell>
+                                <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                              </TableRow>
+                            ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={totalRequestedAmount.toFixed(2)} fullWidth disabled />
+                    <TextField label="Requested Amount" InputLabelProps={{ shrink: true }} value={grandTotalReust.toFixed(2)} fullWidth disabled />
                   </Grid>
                   <Grid item xs={12} md={6}>
                     {/* <Tooltip open={isFocused?true:false}
@@ -737,7 +866,7 @@ const EditIRO = () => {
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={IRO?.sanctionedAmount?.toFixed(2) ?? total.toFixed(2)}
+                      value={IRO?.sanctionedAmount?.toFixed(2) ?? grandTotal.toFixed(2)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       onChange={(e) => {
@@ -1201,11 +1330,16 @@ const EditIRO = () => {
           onSubmit={(e) => {
             e.preventDefault();
             setShowAddParticularDialog(false);
-            setIRO({
-              ...IRO,
-              particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
-            });
-            // addParticulars();
+            // if(particularDialog === 'add'){
+            //   addParticulars();
+            // }else{
+
+            // setIRO({
+            //   ...IRO,
+            //   particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
+            // });
+            // }
+            addParticulars();
           }}
         >
           <DialogContent>
@@ -1438,10 +1572,12 @@ const EditIRO = () => {
           onSubmit={(e) => {
             e.preventDefault();
             handleClose();
-            setIRO({
-              ...IRO,
-              particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
-            });
+            if (particularDialog =='edit' || addNewParticulars.length ==0) {
+              setIRO({
+                ...IRO,
+                particulars: IRO.particulars?.map((part) => (part._id === newParticular._id ? (newParticular as Particular) : part)),
+              });
+            }
             // addParticulars();
           }}
         >
@@ -1459,7 +1595,7 @@ const EditIRO = () => {
                 <TextField
                   label="Sanctioned Amount"
                   type={'number'}
-                  value={newParticular?.sanctionedAmount ?? total}
+                  value={newParticular?.sanctionedAmount}
                   // required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                   autoComplete='off'
@@ -1475,6 +1611,11 @@ const EditIRO = () => {
                         sanctionedAmount: Number(e.target.value),
                       }));
                     }
+                    setAddNewParticulers((prev: any) =>
+                      prev.map((particular: any, index: number) =>
+                        index === selectedParticularIndex ? { ...particular, sanctionedAmount: e.target.value } : particular,
+                      ),
+                    );
                   }
                   }
                   // onFocus={() => setFocused(true)}
@@ -1508,6 +1649,11 @@ const EditIRO = () => {
                       sanctionedAsPer: selectedSanction,
                     }));
                   }
+                  setAddNewParticulers((prev: any) =>
+                    prev.map((particular: any, index: number) =>
+                      index === selectedParticularIndex ? { ...particular, sanctionedAsPer: selectedSanction } : particular,
+                    ),
+                  );
                 }}
                 disabled={IROLifeCycleStates.REVERTED_TO_DIVISION === IRO?.status}
                 renderInput={(params) => <TextField {...params} label="Sanctioned As Per" />}

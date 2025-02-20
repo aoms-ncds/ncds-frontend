@@ -395,6 +395,7 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Insurance Date: </Typography>{(user as unknown as IWorker)?.spouse?.insurance?.dojInsurance?.format('DD/MM/YYYY')} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.nominee}</Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with Nominee: </Typography>  {(user as unknown as IWorker)?.spouse?.insurance?.relation}</Grid>
+
                 </Grid>}
               </TabPanel>
 
@@ -514,6 +515,11 @@ const Profile = () => {
 
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Nominee: </Typography> {user?.insurance?.nominee} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Relation with nominee: </Typography> {user?.insurance?.relation} </Grid>
+                  <Grid item xs={12}> <Divider textAlign='left' sx={{ fontWeight: 600, fontSize: 20 }}>Advance Support  </Divider> </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Amount: </Typography> {user?.supportDetails?.totalAmount} </Grid>
+
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Monthly Deduction: </Typography> {user?.supportDetails?.monthlyDeduction} </Grid>
+
                 </Grid>
               </TabPanel>
             </Box>

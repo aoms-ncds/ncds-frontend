@@ -84,8 +84,14 @@ export default {
 
   // getParticulars: ()=>getStandardResponse<Particular[]>(axios.get('/fr/particular', { headers: { ...getAuthHeader() } })),
 
-  addParticulars: (particularData: CreatableParticular) => getStandardResponse<Particular>(
-    axios.post('/fr/particulars', { ...particularData}, { headers: { ...getAuthHeader() } }),
+  addParticulars: (particularData: any) => getStandardResponse<Particular>(
+    axios.post('/fr/particulars', { ...particularData }, { headers: { ...getAuthHeader() } }),
+  ),
+  addParticularsFR: (particularData: any, id:any) => getStandardResponse<Particular>(
+    axios.post('/fr/particulars/fr/', { ...particularData, id }, { headers: { ...getAuthHeader() } }),
+  ),
+  addParticularsIRO: (particularData: any, id:any) => getStandardResponse<Particular>(
+    axios.post('/fr/particulars/IRO/', { ...particularData, id }, { headers: { ...getAuthHeader() } }),
   ),
   addParticularscustomIRO: (particularData: any, id:any) => getStandardResponse<Particular>(
     axios.post('/fr/particulars/customIRO', { ...particularData, id }, { headers: { ...getAuthHeader() } }),

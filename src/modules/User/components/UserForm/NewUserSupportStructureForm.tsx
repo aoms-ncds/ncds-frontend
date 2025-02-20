@@ -287,7 +287,7 @@ const NewUserSupportStructureForm = (
         <Grid item xs={12} md={6} lg={4}>
           <TextField
             label="Reason"
-            value={ props.value.reason }
+            value={ props.value?.reason }
             onChange={(e) =>
               props.onChange({
                 ...props.value,
@@ -296,13 +296,13 @@ const NewUserSupportStructureForm = (
             }
             variant={props.options?.textField.variant}
             fullWidth
-            disabled={props.value.supportEnabled}
+            disabled={props.value?.supportEnabled}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <DatePicker
             label="Disabled From"
-            value={props.value.disabledFrom}
+            value={props.value?.disabledFrom}
             onChange={(newDate) =>
               props.onChange({
                 ...props.value,
@@ -316,14 +316,14 @@ const NewUserSupportStructureForm = (
                 fullWidth: true,
               },
             }}
-            disabled={props.value.supportEnabled}
+            disabled={props.value?.supportEnabled}
 
           />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <DatePicker
             label="Disabled To"
-            value={props.value.disabledTo}
+            value={props.value?.disabledTo}
             onChange={(newDate) =>
               props.onChange({
                 ...props.value,
@@ -337,7 +337,7 @@ const NewUserSupportStructureForm = (
                 fullWidth: true,
               },
             }}
-            disabled={props.value.supportEnabled}
+            disabled={props.value?.supportEnabled}
 
           />
         </Grid>

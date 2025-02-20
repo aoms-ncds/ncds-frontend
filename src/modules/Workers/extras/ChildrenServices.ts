@@ -14,6 +14,8 @@ export default {
       children.map((children: Child) => ({
         ...children,
         dateOfBirth: children.dateOfBirth ? moment(children.dateOfBirth) : undefined,
+        disabledFrom: children.disabledFrom ? moment(children.disabledFrom) : undefined,
+        disabledTo: children.disabledTo ? moment(children.disabledTo) : undefined,
         prevCeaAmountDate: children.prevCeaAmountDate ? moment(children.prevCeaAmountDate) : undefined,
         profileAddedOn: children.profileAddedOn ? moment(children.profileAddedOn) : undefined,
         createdAt: moment(children.createdAt),
