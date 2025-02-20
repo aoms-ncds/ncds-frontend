@@ -434,6 +434,7 @@ const Profile = () => {
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Level: </Typography> </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}></Typography> {child.childSupport?.name} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Child Support Amount: </Typography> {child.childSupport?.amount} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Study Help: </Typography> {child.studyHelp} </Grid>
 
                           {/* <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Profile Added On: </Typography> {child?.profileAddedOn?.format('DD/MM/YYYY')} </Grid> */}
                           <Grid item xs={12} lg={4}>

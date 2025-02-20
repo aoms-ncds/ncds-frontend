@@ -153,7 +153,6 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
     <Document>
       <Page size={'A4'} style={styles.page} orientation='landscape'>
         <div>
-
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
             {`IET Child Education Assistance- ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}

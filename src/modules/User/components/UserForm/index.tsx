@@ -1108,6 +1108,22 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     disabled
                   />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label="Study help"
+                    value={newChild?.studyHelp}
+                    fullWidth
+                    onChange={(e) =>
+                      setNewChild((newchild:any) => ({
+                        ...newchild,
+                        studyHelp: e.target.value,
+                      }))
+                    }
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+
+                  />
+                </Grid>
                 <Grid item xs={12} md={3.5}>
                   <FormLabel id="demo-radio-buttons-group-label">Age OverRide</FormLabel>
                   <Checkbox

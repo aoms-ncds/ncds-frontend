@@ -14,6 +14,7 @@ export default {
       children.map((children: Child) => ({
         ...children,
         dateOfBirth: children.dateOfBirth ? moment(children.dateOfBirth) : undefined,
+        prevCeaAmountDate: children.prevCeaAmountDate ? moment(children.prevCeaAmountDate) : undefined,
         profileAddedOn: children.profileAddedOn ? moment(children.profileAddedOn) : undefined,
         createdAt: moment(children.createdAt),
         updatedAt: moment(children.updatedAt),

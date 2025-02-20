@@ -29,6 +29,8 @@ declare global {
     endingYear: Moment;
     reasonForDeactivation?: DeactivationReason;
     deactivationDate?:Moment;
+    prevCeaAmountDate?:Moment;
+    studyHelp?:number;
 
 
   }
@@ -46,6 +48,7 @@ declare global {
     gender?: Gender;
     profileAddedOn?: Moment;
     adharCardNo?: number;
+    studyHelp?: number;
     phoneNumber?: number;
     emailId?: string;
     higherEducation?: boolean;
