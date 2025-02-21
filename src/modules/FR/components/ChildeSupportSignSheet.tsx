@@ -130,27 +130,11 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
   const rowsPerPage = 6;
   const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
-
-  const groupedData = props.data?.reduce((acc: any, child: any) => {
-    const parentId = child.childOf?._id; // Assuming 'id' is unique for each parent
-    if (!acc[parentId]) {
-      acc[parentId] = [];
-    }
-    acc[parentId].push(child);
-    return acc;
-  }, {});
-  const groupedArray = Object.values(groupedData);
-  console.log(groupedArray, 'groupedArray');
-
-  const getRowsForPage = (page: any) => {
-    const start = page * rowsPerPage;
-    return groupedArray.slice(start, start + rowsPerPage);
-  };
   // Function to get rows for a specific page
-  // const getRowsForPage = (page:any) => {
-  //   const start = page * rowsPerPage;
-  //   return props?.data?.slice(start, start + rowsPerPage);
-  // };
+  const getRowsForPage = (page:any) => {
+    const start = page * rowsPerPage;
+    return props?.data?.slice(start, start + rowsPerPage);
+  };
 
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
@@ -205,65 +189,34 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
               </View>
 
 
-              {getRowsForPage(pageIndex).map((group: any, index: any) => {
+              {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
                 const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
                 return (
-                  <View style={styles.tableRow} key={group[0]._id}>
+                  <View style={styles.tableRow} key={row._id}>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{globalIndex}</Text>
                     <div style={styles.cellGrid}></div>
-
-                    {/* Child Code */}
-                    {/* <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode}>
-                          {child.childCode}
-                          {'\n'}
-                        </Text>
-                      ))}
-                    </Text> */}
-
+                    <Text style={styles.tableCell}>{row.childCode}</Text>
                     <div style={styles.cellGrid}></div>
-
-                    {/* Child Names */}
                     <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode}>
-                          {child.firstName} {child.lastName}
-                          {'\n'}
-                        </Text>
-                      ))}
+                      {row.firstName} <Text style={styles.tableCell}>{row.lastName}</Text>
                     </Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {row?.childOf?.basicDetails?.lastName}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text>
+                    {props.subDiv &&(
+
+                      <><div style={styles.cellGrid}></div><Text style={styles.tableCell}>{row.childOf?.officialDetails?.divisionHistory[row?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}</Text></>
+                    )}
 
                     <div style={styles.cellGrid}></div>
-
-                    {/* Parent Name */}
-                    <Text style={styles.tableCell}>
-                      {group[0]?.childOf?.basicDetails?.firstName}{' '}
-                      {group[0]?.childOf?.basicDetails?.lastName}
-                    </Text>
-
+                    <Text style={styles.tableCell}>{row.childSupport?.amount !== 0 ? row.childSupport?.amount : ''}</Text>
                     <div style={styles.cellGrid}></div>
-
-                    {/* Division */}
-                    <Text style={styles.tableCell}>{group[0].division?.details?.name ?? ''}</Text>
-
-                    <div style={styles.cellGrid}></div>
-
-                    {/* Child Support Amount */}
-                    <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode}>
-                          {child.childSupport?.amount !== 0 ? child.childSupport?.amount : ''}
-                          {'\n'}
-                        </Text>
-                      ))}
-                    </Text>
-
-                    <div style={styles.cellGrid}></div>
-
-                    {/* Signature */}
                     <Text style={styles.tableCell}></Text>
+                    {/* <div style={styles.cellGrid}></div> */}
+                    <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+                    <div style={styles.cellGrid}></div>
                   </View>
                 );
               })}

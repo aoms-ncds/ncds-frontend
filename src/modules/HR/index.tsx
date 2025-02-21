@@ -40,6 +40,10 @@ const HRDashboard = () => {
           <ButtonCard secondaryText="Manage Workers" icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
             count={workersCount?.toString()} color="#fff" targetRoute="/workers" />
         </Grid>
+        <Grid item xs={12} md={4} xl={3}>
+          <ButtonCard secondaryText="PMA deduction master file " icon={<img src="/mod_icons/manageWorker.jpeg" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+            count={workersCount?.toString()} color="#fff" targetRoute="/hr/pmaDeduction" />
+        </Grid>
         <PermissionChecks
           permissions={['ADMIN_ACCESS']}
           granted={(

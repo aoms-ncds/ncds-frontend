@@ -18,6 +18,11 @@ export default {
   create: (staff: CreatableStaff, userPhoto: File | undefined) =>
     getStandardResponse<Staff>(axios.post('/hr/staffs', { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
+  createPMADeduction: (option:any) =>
+    getStandardResponse<Staff>(axios.post('/hr/staffs/addPmaDeduction', option, { headers: { ...getAuthHeader() } })),
+  getPMADeduction: () =>
+    getStandardResponse<Staff>(axios.get('/hr/staffs/getPmaDeduction', { headers: { ...getAuthHeader() } })),
+
   /**
    * Edits a staff member.
    * @param {CreatableNewUser} staff - The staff member to be edited.
