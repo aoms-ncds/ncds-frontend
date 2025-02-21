@@ -368,62 +368,129 @@ const PDFTemplateCustom = (props:any) => {
           {props.rowData?.map((row: any, index: number) => (
             <View style={styles.tableRow} key={row._id}>
               <div style={styles.grid}></div>
-
-              <Text style={styles.tableHead}>{row.IROno}</Text>
+              <Text style={styles.tableHead}>{index +1}</Text>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableCell}>{moment(row.IRODate).format('DD/MM/YYYY')}</Text>
-              <div style={styles.grid}></div>
+              {props.headers.includes('IRO No') && (
+                <>
+                  <Text style={styles.tableHead}>{row.IROno}</Text>
+                  <div style={styles.grid}></div>
 
-              <Text style={styles.tableCell}>
-                {IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}
-              </Text>
-              <div style={styles.grid}></div>
+                </>
+              )}
 
-              <Text style={styles.tableCell}>{row.divisionData?.details?.name}</Text>
-              <div style={styles.grid}></div>
+              {props.headers.includes('Date') && (
+                <>
+                  <Text style={styles.tableCell}>{moment(row.IRODate).format('DD/MM/YYYY')}</Text>
+                  <div style={styles.grid}></div>
 
-              <Text style={styles.tableCell}>{row?.subDivData?.name}</Text>
-              <div style={styles.grid}></div>
+                </>
+              )}
 
-              <Text style={styles.tableCell}>{row.particularsData?.mainCategory}</Text>
-              <div style={styles.grid}></div>
+              {props.headers.includes('Division') && (
+                <>
 
-              <Text style={styles.tableCell}>{row.particularsData?.subCategory1}</Text>
-              <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.particularsData?.subCategory2}</Text>
-              <div style={styles.grid}></div>
-              <Text style={styles.tableCell}>{row.particularsData?.subCategory3}</Text>
-              <div style={styles.grid}></div>
+                  <Text style={styles.tableCell}>{row.divisionData?.details?.name}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sanction Amount') && (
+                <>
 
-              <Text style={styles.tableCell}>{row.particularsData?.requestedAmount}</Text>
-              <div style={styles.grid}></div>
+                  <Text style={styles.tableCell}>{row.particularsData?.sanctionedAmount}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sanction as per') && (
+                <>
+                  <Text style={styles.tableCell}>{row.particularsData?.sanctionedAsPer}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Narration') && (
+                <>
+                  <Text style={styles.tableCell}>{row.particularsData?.narration}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sanctioned Bank') && (
+                <>
 
-              <Text style={styles.tableCell}>{row.particularsData?.sanctionedAmount}</Text>
-              <div style={styles.grid}></div>
+                  <Text style={styles.tableCell}>{row.sanctionedBank}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Beneficiary Name') && (
+                <>
 
-              <Text style={styles.tableCell}>{row.sanctionedBank}</Text>
-              <div style={styles.grid}></div>
+                  <Text style={styles.tableCell}>
+                    {row.sanctionedBank?.split('-').slice(1).join('-').trim()}
+                  </Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub-Division') && (
+                <>
 
-              <Text style={styles.tableCell}>
-                {row.sanctionedBank?.split('-').slice(1).join('-').trim()}
-              </Text>
-              <div style={styles.grid}></div>
+                  <Text style={styles.tableCell}>{row?.subDivData?.name}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Main Category') && (
+                <>
 
+                  <Text style={styles.tableCell}>{row.particularsData?.mainCategory}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 1') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory1}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 2') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory2}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 3') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory3}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Requested Amount') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.requestedAmount}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Status') && (
+                <>
+
+                  <Text style={styles.tableCell}>
+                    {IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
               {props.headers.includes('For the month') && (
                 <>
                   <Text style={styles.tableCell}>{row.particularsData?.month}</Text>
                   <div style={styles.grid}></div>
                 </>
               )}
-
               {props.headers.includes('Mode of Payment') && (
                 <>
                   <Text style={styles.tableCell}>{row.releaseAmountData?.modeOfPayment}</Text>
                   <div style={styles.grid}></div>
                 </>
               )}
-
               {props.headers.includes('Amount Release Date') && (
                 <>
                   <Text style={styles.tableCell}>
@@ -432,21 +499,6 @@ const PDFTemplateCustom = (props:any) => {
                   <div style={styles.grid}></div>
                 </>
               )}
-
-              {props.headers.includes('Sanction as per') && (
-                <>
-                  <Text style={styles.tableCell}>{row.particularsData?.sanctionedAsPer}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-
-              {props.headers.includes('Narration') && (
-                <>
-                  <Text style={styles.tableCell}>{row.particularsData?.narration}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-
               {props.headers.includes('IroClosedOn') && (
                 <>
                   <Text style={styles.tableCell}>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</Text>

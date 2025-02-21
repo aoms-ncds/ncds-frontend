@@ -164,7 +164,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
-          <Text style={styles.frno}>{props.rowData?.FRno}</Text>
+          <Text style={styles.frno}>{(props.rowData as any)?.FR?.FRno}</Text>
 
           <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>

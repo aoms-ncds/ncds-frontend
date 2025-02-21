@@ -279,46 +279,18 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-
-            // {
-            //   id: 'sendBackDivision1',
-            //   text: 'Send Back to Division',
-            //   onClick: () => {
-            //     enqueueSnackbar({
-            //       message: 'Sent back to division',
-            //       variant: 'success',
-            //     });
-            //   },
-            //   icon: PreviewIcon,
-            // },
             {
-              id: 'remarks',
-              text: 'Remarks',
-              component: Link,
-              // to: '/fr/view_FR/' + props.row._id,
+              id: 'print',
+              text: 'Print FR',
+              icon: PrintIcon,
               onClick: () => {
-                toggleOpenRemarks(true);
-                setSelectedFR(props.row._id);
-                FRServices.getAllRemarksById(props.row._id)
-                  .then((res) => setRemarks(res.data ?? []))
-                  .catch((error) => {
-                    enqueueSnackbar({
-                      variant: 'error',
-                      message: error.message,
-                    });
-                  });
+                setData2(props.row);
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
               },
-              icon: EditNoteIcon,
             },
-
-            // {
-            //   id: 'print',
-            //   text: 'Print FR',
-            //   component: PDFDownloadLink,
-            //   document: <FRReceiptTemplate rowData={props.row as FR} />,
-            //   fileName: 'FRReceipt.pdf',
-            //   icon: PrintIcon,
-            // },
             ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
               [
                 {
@@ -345,11 +317,51 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
+            {
+              id: 'remarks',
+              text: 'Remarks',
+              component: Link,
+              // to: '/fr/view_FR/' + props.row._id,
+              onClick: () => {
+                toggleOpenRemarks(true);
+                setSelectedFR(props.row._id);
+                FRServices.getAllRemarksById(props.row._id)
+                    .then((res) => setRemarks(res.data ?? []))
+                    .catch((error) => {
+                      enqueueSnackbar({
+                        variant: 'error',
+                        message: error.message,
+                      });
+                    });
+              },
+              icon: EditNoteIcon,
+            },
+            {
+              id: 'notification',
+              text: 'Send notification',
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                toggleSendNotification(true);
+              },
+              icon: MessageIcon,
+            },
+            {
+              id: 'print',
+              text: 'Prev Cord Print FR',
+              icon: PrintIcon,
+              onClick: () => {
+                setData5(props.row);
+                setOpenPrintFrPrev(true);
+                setTimeout(() => {
+                  setOpenPrintFrPrev(false);
+                }, 2000);
+              },
+            },
             ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
               [
                 {
                   id: 'print',
-                  text: 'Previous Print FR HQ DELHI',
+                  text: 'Prev Cord Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
@@ -372,30 +384,29 @@ const ManageFrPage = () => {
               ] :
               []),
 
-            {
-              id: 'print',
-              text: 'Print FR',
-              icon: PrintIcon,
-              onClick: () => {
-                setData2(props.row);
-                setOpenPrintFr(true);
-                setTimeout(() => {
-                  setOpenPrintFr(false);
-                }, 2000);
-              },
-            },
-            {
-              id: 'print',
-              text: 'Previous Print FR',
-              icon: PrintIcon,
-              onClick: () => {
-                setData5(props.row);
-                setOpenPrintFrPrev(true);
-                setTimeout(() => {
-                  setOpenPrintFrPrev(false);
-                }, 2000);
-              },
-            },
+            // {
+            //   id: 'sendBackDivision1',
+            //   text: 'Send Back to Division',
+            //   onClick: () => {
+            //     enqueueSnackbar({
+            //       message: 'Sent back to division',
+            //       variant: 'success',
+            //     });
+            //   },
+            //   icon: PreviewIcon,
+            // },
+
+
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   document: <FRReceiptTemplate rowData={props.row as FR} />,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
+
+
             ...(hasPermissions(['HR_DPARTMENT_ACCESS'])&&props.row.workerSupport ?
               [
                 {
@@ -465,15 +476,7 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-            {
-              id: 'notification',
-              text: 'Send notification',
-              onClick: () => {
-                setSelectedFR(props.row._id);
-                toggleSendNotification(true);
-              },
-              icon: MessageIcon,
-            },
+
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
                 {

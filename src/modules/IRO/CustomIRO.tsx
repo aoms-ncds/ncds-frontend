@@ -416,7 +416,7 @@ const CustomIRO = () => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
+    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: () => (<b>IRO No</b>), align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate', headerName: 'IRO Date', width: 130, renderHeader: () => (<b>IRO Date</b>),
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'), align: 'center', headerAlign: 'center',

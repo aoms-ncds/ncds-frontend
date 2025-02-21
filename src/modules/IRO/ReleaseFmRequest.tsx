@@ -906,7 +906,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       field: 'IROno',
       headerClassName: 'super-app-theme--cell',
       headerName: 'IRO No',
-      width: 100,
+      width: 130,
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
       align: 'center',
       headerAlign: 'center',

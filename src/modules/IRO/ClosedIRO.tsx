@@ -461,7 +461,7 @@ const ClosedIRO = () => {
       ),
     },
     {
-      field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 100, align: 'center',
+      field: 'IROno', renderHeader: () => (<b>IRO No</b>), width: 130, align: 'center',
       headerAlign: 'center',
     },
     // {

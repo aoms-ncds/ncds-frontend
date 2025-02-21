@@ -605,7 +605,7 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 100, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
       headerName: 'IRO Date',

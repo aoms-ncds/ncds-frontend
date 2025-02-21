@@ -90,14 +90,18 @@ const IROReportFilter = () => {
     rangeType: 'months',
   });
   const options = [
-    // 'Sub-Division',
-    // 'Status',
+    'Sanctioned Bank',
+    'Beneficiary Name',
+    'Sub-Division',
+    'Main Category',
+    'Sub Category 1',
+    'Sub Category 2',
+    'Sub Category 3',
+    'Requested Amount',
+    'Status',
     'For the month',
     'Mode of Payment',
-    // 'Requested Amount',
     'Amount Release Date',
-    'Sanction as per',
-    'Narration',
     'IroClosedOn',
     'Source Of Account',
     'ReleaseAmount',
@@ -108,31 +112,18 @@ const IROReportFilter = () => {
     'TransferredBank branchName',
     'TransferredBank accountNumber',
     'TransferredBank IFSCCode',
-    // 'Sanctioned Bank',
-    // 'UnitPrice',
-    // 'Sanctioned Amount',
-    // 'Beneficiary Name',
     'Last Updated',
-    // 'Amount Release Date',
-    // 'ApprovedBy',
-
-
   ];
 
   const [selectedData, setSelectedData] = useState<any[]>([
+    'SL No',
     'IRO No',
     'Date',
-    'Status',
     'Division',
-    'Sub-Division',
-    'Main Category',
-    'Sub Category 1',
-    'Sub Category 2',
-    'Sub Category 3',
-    'Requested Amount',
     'Sanction Amount',
-    'Sanctioned Bank',
-    'Beneficiary Name']);
+    'Sanction as per',
+    'Narration',
+  ]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(loading1, 'options');
 
@@ -1593,26 +1584,27 @@ const IROReportFilter = () => {
                 <Button
                   onClick={async () => {
                     const sheet = data ?
-                      data.map((iro: any) => {
+                      data.map((iro: any, index) => {
                         const row = [
-                          iro.IROno,
-                          iro.IRODate,
-                          IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          iro.divisionData?.details?.name,
-                          iro.subDivData?.name,
-                          iro.particularsData.mainCategory,
-                          iro.particularsData?.subCategory1,
-                          iro.particularsData?.subCategory2,
-                          iro.particularsData?.subCategory3,
-                          iro.particularsData?.requestedAmount,
-                          iro.particularsData.sanctionedAmount,
-                          iro.sanctionedBank,
-                          iro.sanctionedBank?.split('-').slice(1).join('-').trim(),
+                          index +1,
+                          selectedData.includes('IRO No') && iro.IROno,
+                          selectedData.includes('Date') &&iro.IRODate,
+                          selectedData.includes('Division') && iro.divisionData?.details?.name,
+                          selectedData.includes('Sanction Amount') && iro.particularsData?.sanctionedAmount,
+                          selectedData.includes('Sanction as per') && iro.particularsData?.sanctionedAsPer,
+                          selectedData.includes('Narration') && iro.particularsData?.narration,
+                          selectedData.includes('Sanctioned Bank') && iro.sanctionedBank,
+                          selectedData.includes('Beneficiary Name') && iro.sanctionedBank?.split('-').slice(1).join('-').trim(),
+                          selectedData.includes('Sub-Division') && iro.subDivData?.name,
+                          selectedData.includes('Main Category') && iro.particularsData?.mainCategory,
+                          selectedData.includes('Sub Category 1') && iro.particularsData?.subCategory1,
+                          selectedData.includes('Sub Category 2') && iro.particularsData?.subCategory2,
+                          selectedData.includes('Sub Category 3') && iro.particularsData?.subCategory3,
+                          selectedData.includes('Requested Amount') && iro.particularsData?.requestedAmount,
+                          selectedData.includes('Status') && IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
                           selectedData.includes('For the month') && iro.particularsData?.month,
                           selectedData.includes('Mode of Payment') && iro.releaseAmountData?.modeOfPayment,
                           selectedData.includes('Amount Release Date') && moment(iro.releaseAmountData?.transferredDate).format('DD/MM/YYYY'),
-                          selectedData.includes('Sanction as per') && iro.particularsData.sanctionedAsPer,
-                          selectedData.includes('Narration') && iro.particularsData?.narration,
                           selectedData.includes('IroClosedOn') && moment(iro.iroClosedOn).format('DD/MM/YYYY'),
                           selectedData.includes('Source Of Account') && iro.sourceOfAccount,
                           selectedData.includes('ReleaseAmount') && iro.releaseAmountData?.releaseAmount,
@@ -1673,20 +1665,21 @@ const IROReportFilter = () => {
                 <Table stickyHeader> {/* Ensure header stays visible */}
                   <TableHead sx={{ height: 10, backgroundColor: '#f5f5f5' }}>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Sl No</TableCell>
+                      {selectedData.includes('IRO No') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO No</TableCell>}
+                      {selectedData.includes('Date') &&<TableCell sx={{ fontWeight: 'bold' }}>IRO Date</TableCell>}
+                      {selectedData.includes('Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>}
                       {/* {selectedData.includes('IRO Status') && <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>} */}
-                      <TableCell sx={{ fontWeight: 'bold' }}>Division Name</TableCell>
+                      {selectedData.includes('Division') && <TableCell sx={{ fontWeight: 'bold' }}>Division Name</TableCell>}
                       {selectedData.includes('Sub-Division') &&<TableCell sx={{ fontWeight: 'bold', width: '150px' }}>Sub Division Name</TableCell>}
-                      <TableCell sx={{ fontWeight: 'bold' }}>Main Category</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 1</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 2</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 3</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Requested Amt</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sanction Amt</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Sanctioned Bank</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>
+                      {selectedData.includes('Main Category') && <TableCell sx={{ fontWeight: 'bold' }}>Main Category</TableCell>}
+                      {selectedData.includes('Sub Category 1') && <TableCell sx={{ fontWeight: 'bold' }}>Sub Category 1</TableCell>}
+                      {selectedData.includes('Sub Category 2') &&<TableCell sx={{ fontWeight: 'bold' }}>Sub Category 2</TableCell>}
+                      {selectedData.includes('Sub Category 3') &&<TableCell sx={{ fontWeight: 'bold' }}>Sub Category 3</TableCell>}
+                      {selectedData.includes('Requested Amount') && <TableCell sx={{ fontWeight: 'bold' }}>Requested Amt</TableCell>}
+                      {selectedData.includes('Sanction Amount') &&<TableCell sx={{ fontWeight: 'bold' }}>Sanction Amt</TableCell>}
+                      {selectedData.includes('Sanctioned Bank') &&<TableCell sx={{ fontWeight: 'bold' }}>Sanctioned Bank</TableCell>}
+                      {selectedData.includes('Beneficiary Name') && <TableCell sx={{ fontWeight: 'bold' }}>Beneficiary Name</TableCell>}
                       {selectedData.includes('For the month') && <TableCell sx={{ fontWeight: 'bold', width: '150px' }}>For the month</TableCell>}
                       {selectedData.includes('Mode of Payment') && <TableCell sx={{ fontWeight: 'bold' }}>Mode of Payment</TableCell>}
                       {selectedData.includes('Amount Release Date') && <TableCell sx={{ fontWeight: 'bold' }}>Amount Release Date</TableCell>}
@@ -1706,11 +1699,11 @@ const IROReportFilter = () => {
                       {selectedData.includes('TransferredBank accountNumber') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank account Number</TableCell>}
                       {selectedData.includes('TransferredBank IFSCCode') && <TableCell sx={{ fontWeight: 'bold' }}>TransferredBank IFSCCode</TableCell>}
 
-                      <TableCell sx={{ fontWeight: 'bold' }}>Last Updated</TableCell>
+                      {selectedData.includes('Last Updated') &&<TableCell sx={{ fontWeight: 'bold' }}>Last Updated</TableCell>}
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {filteredRows.map((row: any) => (
+                    {filteredRows.map((row: any, index) => (
                       <TableRow
                         key={row.id}
                         onClick={() => setSelectedRow(row.id)}
@@ -1720,19 +1713,20 @@ const IROReportFilter = () => {
                           '&:hover': { backgroundColor: '#f0f0f0' },
                         }}
                       >
-                        <TableCell>{row.IROno}</TableCell>
-                        <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>
-                        <TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>
-                        <TableCell>{row.divisionData?.details?.name}</TableCell>
+                        <TableCell>{index +1}</TableCell>
+                        {selectedData.includes('IRO No') &&<TableCell>{row.IROno}</TableCell>}
+                        {selectedData.includes('Date') && <TableCell>{moment(row.IRODate).format('DD/MM/YYYY')}</TableCell>}
+                        {selectedData.includes('Status') &&<TableCell>{IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</TableCell>}
+                        {selectedData.includes('Division') && <TableCell>{row.divisionData?.details?.name}</TableCell>}
                         {selectedData.includes('Sub-Division') && <TableCell>{row.subDivData?.name}</TableCell>}
-                        <TableCell >{row.particularsData?.mainCategory}</TableCell>
-                        <TableCell>{row.particularsData?.subCategory1}</TableCell>
-                        <TableCell>{row.particularsData?.subCategory2}</TableCell>
-                        <TableCell>{row.particularsData?.subCategory3}</TableCell>
-                        <TableCell>{row.particularsData?.requestedAmount}</TableCell>
-                        <TableCell>{row.particularsData?.sanctionedAmount}</TableCell>
-                        <TableCell>{row.sanctionedBank}</TableCell>
-                        <TableCell>{row.sanctionedBank?.split('-').slice(1).join('-').trim()}</TableCell>
+                        {selectedData.includes('Main Category') &&<TableCell >{row.particularsData?.mainCategory}</TableCell>}
+                        {selectedData.includes('Sub Category 1') &&<TableCell>{row.particularsData?.subCategory1}</TableCell>}
+                        {selectedData.includes('Sub Category 2') &&<TableCell>{row.particularsData?.subCategory2}</TableCell>}
+                        {selectedData.includes('Sub Category 3') &&<TableCell>{row.particularsData?.subCategory3}</TableCell>}
+                        {selectedData.includes('Requested Amount') &&<TableCell>{row.particularsData?.requestedAmount}</TableCell>}
+                        {selectedData.includes('Sanction Amount') &&<TableCell>{row.particularsData?.sanctionedAmount}</TableCell>}
+                        {selectedData.includes('Sanctioned Bank') &&<TableCell>{row.sanctionedBank}</TableCell>}
+                        {selectedData.includes('Beneficiary Name') &&<TableCell>{row.sanctionedBank?.split('-').slice(1).join('-').trim()}</TableCell>}
                         {selectedData.includes('For the month') && <TableCell>{row.particularsData?.month}</TableCell>}
                         {selectedData.includes('Mode of Payment') && <TableCell>{row.releaseAmountData?.modeOfPayment}</TableCell>}
                         {selectedData.includes('Amount Release Date') && <TableCell>{moment(row.releaseAmountData?.transferredDate).format('DD/MM/YYYY')}</TableCell>}
@@ -1749,7 +1743,7 @@ const IROReportFilter = () => {
                         {selectedData.includes('TransferredBank branchName') && <TableCell>{row.releaseAmountData?.transferredBank?.branchName}</TableCell>}
                         {selectedData.includes('TransferredBank accountNumber') && <TableCell>{row.releaseAmountData?.transferredBank?.accountNumber}</TableCell>}
                         {selectedData.includes('TransferredBank IFSCCode') && <TableCell>{row.releaseAmountData?.transferredBank?.IFSCCode}</TableCell>}
-                        <TableCell>{moment(row.updatedAt).format('DD/MM/YYYY')}</TableCell>
+                        {selectedData.includes('Last Updated') &&<TableCell>{moment(row.updatedAt).format('DD/MM/YYYY')}</TableCell>}
                         {/* <TableCell>{row.approvedBy  }</TableCell> */}
 
                       </TableRow>
@@ -1985,20 +1979,13 @@ const IROReportFilter = () => {
                 if (newValue.includes('All')) {
                   // If "All" is selected, select all options except "All" itself
                   setSelectedData((prev) => [ // Keep existing selected options
-
+                    'SL No',
                     'IRO No',
                     'Date',
-                    'Status',
                     'Division',
-                    'Sub-Division',
-                    'Main Category',
-                    'Sub Category 1',
-                    'Sub Category 2',
-                    'Sub Category 3',
-                    'Requested Amount',
                     'Sanction Amount',
-                    'Sanctioned Bank',
-                    'Beneficiary Name',
+                    'Sanction as per',
+                    'Narration',
                     ...options,
                   ]);
                 } else {
