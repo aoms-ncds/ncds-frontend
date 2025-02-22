@@ -6,7 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import ChildSupportService from '../Settings/extras/ChildSupportService';
 import StaffServices from './extras/StaffServices';
-interface IPmaDedution{
+export interface IPmaDedution{
     option?: string;
     amount?: number;
     deductions?:[{
@@ -28,24 +28,37 @@ const PnaDeductionPage = () => {
       monthTo: 0,
     }],
   });
-  const [initialAmount, setInitialAmount] = useState(8000);
-  const [rows, setRows] = useState([
-    { id: 1, deducted: 2500, startTonnage: 19, endTonnage: 24 },
-    { id: 2, deducted: 1667, startTonnage: 25, endTonnage: 30 },
-    { id: 3, deducted: 834, startTonnage: 3, endTonnage: 36 },
-  ]);
 
+  // const handleAddRow = () => {
+  //   setRows([...rows, { id: rows.length + 1, deducted: '', startTonnage: '', endTonnage: '' }]);
+  // };
+  console.log(newChildSupport, 'newChildSupport');
   const handleAddRow = () => {
-    setRows([...rows, { id: rows.length + 1, deducted: '', startTonnage: '', endTonnage: '' }]);
+    setNewChildSupport((prev:any) => ({
+      ...prev,
+      deductions: [
+        ...prev.deductions,
+        {
+          deductionAmount: 0,
+          monthFrom: 0,
+          monthTo: 0,
+        },
+      ],
+    }));
   };
 
-  const handleChange = (id: number, field: string, value: string) => {
-    setRows(
-      rows.map((row) => (row.id === id ? { ...row, [field]: value } : row)),
-    );
+  // Function to handle changes in the deduction array
+  const handleDeductionChange = (index: number, field: keyof IPmaDedution['deductions'][0], value: number) => {
+    setNewChildSupport((prev:any) => ({
+      ...prev,
+      deductions: prev.deductions.map((deduction: any, i: number) =>
+        i === index ? { ...deduction, [field]: value } : deduction,
+      ),
+    }));
   };
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
   const [edit, setEdit] = React.useState<boolean>(false);
+  const [rowId, setRowID] = React.useState<number>(0);
   const removeChildSupport = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing ChildSupport',
@@ -108,7 +121,7 @@ const PnaDeductionPage = () => {
             startIcon={<EditIcon />}
             onClick={() => {
               setEdit(true);
-
+              setRowID(params.row._id);
               setNewChildSupport(params.row);
             }}
           >
@@ -191,88 +204,85 @@ const PnaDeductionPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={edit !== false} onClose={()=>setEdit(false)} fullWidth maxWidth="md">
+      <Dialog open={edit !== false} onClose={() => setEdit(false)} fullWidth maxWidth="md">
         <DialogTitle>{childSupport?.option}</DialogTitle>
         <DialogContent>
           <TextField
             label="Initial Amount"
             fullWidth
             type="number"
-            value={initialAmount}
-            onChange={(e) => setInitialAmount(e.target.value)}
+            value={newChildSupport.amount}
+            onChange={(e) => setNewChildSupport((prev: any) => ({ ...prev, amount: Number(e.target.value) }))}
             margin="dense"
           />
-          {/* {newChildSupport?.deductions?.map((row) => ( */}
-          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-            <TextField
-              label="Deducted Amount"
-              type="number"
-              value={newChildSupport.deductions?.[0]?.deductionAmount || ''}
-              onChange={(e) => {
-                setNewChildSupport((prev: any) => ({
-                  ...prev,
-                  deductions: prev.deductions ?
-                    [{ ...prev.deductions[0], deductionAmount: Number(e.target.value) }] :
-                    [{ deductionAmount: Number(e.target.value) }],
-                }));
-              }}
-            />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="pmaOption"
+            label="option"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={newChildSupport.option}
+            onChange={(e) => setNewChildSupport((prev: any) => ({ ...prev, option: e.target.value }))}
+            required
+          />
 
-            <TextField
-              label="Start Tonnage"
-              type="number"
-              value={newChildSupport.deductions?.[0]?.deductionAmount}
-              onChange={(e) => {
-                setNewChildSupport((prev: any) => ({
-                  ...prev,
-                  deductions: prev.deductions ?
-                    [{ ...prev.deductions[0], deductionAmount: Number(e.target.value) }] :
-                    [{ deductionAmount: Number(e.target.value) }],
-                }));
-              }} />
-            <TextField
-              label="End Tonnage"
-              type="number"
-              value={newChildSupport.deductions?.[0]?.deductionAmount}
-              onChange={(e) => {
-                setNewChildSupport((prev: any) => ({
-                  ...prev,
-                  deductions: prev.deductions ?
-                    [{ ...prev.deductions[0], deductionAmount: Number(e.target.value) }] :
-                    [{ deductionAmount: Number(e.target.value) }],
-                }));
-              }} />
-          </div>
-          {/* ))} */}
+          {/* Render multiple deduction rows */}
+          {newChildSupport.deductions.map((row, index) => (
+            <div key={index} style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <TextField
+                label="Deducted Amount"
+                type="number"
+                value={row.deductionAmount}
+                onChange={(e) => handleDeductionChange(index, 'deductionAmount', Number(e.target.value))}
+              />
+
+              <TextField
+                label="Start Tonnage"
+                type="number"
+                value={row.monthFrom}
+                onChange={(e) => handleDeductionChange(index, 'monthFrom', Number(e.target.value))}
+              />
+
+              <TextField
+                label="End Tonnage"
+                type="number"
+                value={row.monthTo}
+                onChange={(e) => handleDeductionChange(index, 'monthTo', Number(e.target.value))}
+              />
+            </div>
+          ))}
+
+          {/* Add new deduction row */}
           <IconButton onClick={handleAddRow} color="primary">
             <AddIcon /> Add
           </IconButton>
         </DialogContent>
+
         <DialogActions>
-          <Button onClick={()=>setEdit(false)}>Cancel</Button>
-          <Button onClick={handleClose} variant="contained" color="primary">
-          Save
+          <Button onClick={() => setEdit(false)}>Cancel</Button>
+          <Button onClick={()=>{
+            StaffServices.editPmaDeduction(newChildSupport, rowId).then((res) => {
+              console.log(res);
+              res.data && setEdit(false);
+              window.location.reload();
+            });
+          }} variant="contained" color="primary">
+      Save
           </Button>
         </DialogActions>
       </Dialog>
+
       <Dialog open={dialogAction !== false} onClose={handleClose} PaperProps={{ style: { width: '500px' } }}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (dialogAction === 'add') {
               StaffServices.createPMADeduction(newChildSupport).then((res) => {
-                setChildSupport((prevChildSupport) => (prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data]));
+                setChildSupport((prevChildSupport:any) => (prevChildSupport === null ? [res.data] : [...prevChildSupport, res.data]));
                 setNewChildSupport({
                   option: '',
-                  amount: 0,
-                });
-              });
-            } else {
-              ChildSupportService.edit(newChildSupport).then((res) => {
-                setChildSupport((childSupport) => (childSupport === null ? null : childSupport?.map((childsprt: { _id: any }) => (childsprt._id === newChildSupport._id ? res.data : childsprt))));
-                setNewChildSupport({
-                  name: '',
-                  status: 0,
                   amount: 0,
                 });
               });

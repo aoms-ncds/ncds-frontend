@@ -31,6 +31,8 @@ export default {
    */
   edit: (staff: CreatableStaff, userPhoto: File | undefined): Promise<StandardResponse<Staff>> =>
     getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+  editPmaDeduction: (data:any, id:number): Promise<StandardResponse<Staff>> =>
+    getStandardResponse<Staff>(axios.patch(`/hr/staffs/addPmaDeduction/${id}`, data, { headers: { ...getAuthHeader() } })),
 
   /**
    * Deletes a staff member.

@@ -1,6 +1,10 @@
-import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
+import StaffServices from '../../../HR/extras/StaffServices';
+import { useEffect, useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
+import { IPmaDedution } from '../../../HR/PnaDeductionPage';
 
 const NewUserSupportStructureForm = (
   props: FormComponentProps<
@@ -10,6 +14,15 @@ const NewUserSupportStructureForm = (
     }
   >,
 ) => {
+  const [designations, setDesignations] = useState<IPmaDedution[]| null>(null);
+
+  useEffect(() => {
+    StaffServices.getPMADeduction()
+        .then((res) => setDesignations(res.data))
+        .catch((error) => {
+          enqueueSnackbar({ variant: 'error', message: error.message });
+        });
+  }, []);
   return (
     <>
       <Grid item xs={12} md={6} lg={4}>
@@ -216,6 +229,25 @@ const NewUserSupportStructureForm = (
               event.currentTarget.blur();
             },
           }}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Autocomplete
+          options={designations ?? []}
+          value={props.value?.pmaDeduction}
+          onChange={(e, newValue) => props.onChange({ ...props.value, pmaDeduction: newValue ?? undefined })}
+          getOptionLabel={(option) => `${option.option} - ${option.amount}`}
+          renderInput={(params:any) => (
+            <TextField
+              {...params}
+              label="Pma deduction"
+              disabled={designations === null}
+              // helperText={designationsFetchError || (designations === null && 'Loading...')}
+              variant={props.options?.textField.variant}
+              fullWidth
+              // required
+            />
+          )}
         />
       </Grid>
 
