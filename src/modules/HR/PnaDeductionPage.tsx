@@ -51,20 +51,20 @@ const PnaDeductionPage = () => {
   const handleDeductionChange = (index: number, field: keyof IPmaDedution['deductions'][0], value: number) => {
     setNewChildSupport((prev:any) => ({
       ...prev,
-      deductions: prev.deductions.map((deduction: any, i: number) =>
+      deductions: prev.deductions?.map((deduction: any, i: number) =>
         i === index ? { ...deduction, [field]: value } : deduction,
       ),
     }));
   };
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
   const [edit, setEdit] = React.useState<boolean>(false);
-  const [rowId, setRowID] = React.useState<number>(0);
+  const [rowId, setRowID] = React.useState<string>('');
   const removeChildSupport = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing ChildSupport',
       variant: 'info',
     });
-    ChildSupportService.delete(id)
+    StaffServices.deletePma(rowId)
       .then((res) => {
         if (childSupport) {
           const newChildSupport = childSupport?.filter((childSupport: { _id: string }) => {
@@ -142,6 +142,8 @@ const PnaDeductionPage = () => {
             color="error"
             startIcon={<DeleteIcon />}
             onClick={() => {
+              setRowID(params.row._id);
+
               setConfirmDelete(true);
               setChildSupportToDelete(params.row);
             }}
@@ -184,7 +186,7 @@ const PnaDeductionPage = () => {
       <Dialog open={confirmDelete} onClose={handleDeleteCancel} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
-          <Container>Do you want to delete this Child Support?</Container>
+          <Container>Do you want to delete this ?</Container>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => {
@@ -229,26 +231,26 @@ const PnaDeductionPage = () => {
           />
 
           {/* Render multiple deduction rows */}
-          {newChildSupport.deductions.map((row, index) => (
+          {newChildSupport.deductions?.map((row, index) => (
             <div key={index} style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
               <TextField
                 label="Deducted Amount"
                 type="number"
-                value={row.deductionAmount}
+                value={row.deductionAmount !=0 ? row.deductionAmount: null}
                 onChange={(e) => handleDeductionChange(index, 'deductionAmount', Number(e.target.value))}
               />
 
               <TextField
                 label="Start Tonnage"
                 type="number"
-                value={row.monthFrom}
+                value={row.monthFrom != 0 ? row.monthFrom: null}
                 onChange={(e) => handleDeductionChange(index, 'monthFrom', Number(e.target.value))}
               />
 
               <TextField
                 label="End Tonnage"
                 type="number"
-                value={row.monthTo}
+                value={row.monthTo != 0 ? row.monthTo: null}
                 onChange={(e) => handleDeductionChange(index, 'monthTo', Number(e.target.value))}
               />
             </div>
@@ -256,7 +258,7 @@ const PnaDeductionPage = () => {
 
           {/* Add new deduction row */}
           <IconButton onClick={handleAddRow} color="primary">
-            <AddIcon /> Add
+            <Button variant='contained' type='button'> <AddIcon /> Add</Button>
           </IconButton>
         </DialogContent>
 
@@ -313,7 +315,7 @@ const PnaDeductionPage = () => {
               type="number"
               fullWidth
               variant="outlined"
-              value={newChildSupport.amount}
+              value={newChildSupport.amount != 0 ? newChildSupport.amount : null}
               onChange={(e) => setNewChildSupport((prev: any) => ({ ...prev, amount: Number(e.target.value) }))}
               required
               inputProps={{

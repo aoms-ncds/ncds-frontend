@@ -41,6 +41,8 @@ export default {
    */
   delete: (staffId: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`, { headers: { ...getAuthHeader() } })),
 
+  deletePma: (id: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/pmaDeduction/${id}`, { headers: { ...getAuthHeader() } })),
+
   /**
    * Retrieves all staff members.
    * @return {Promise<StandardResponse<Staff[]>>} A promise that resolves to the response containing the list of all staff members.
