@@ -16,7 +16,7 @@ export interface IPmaDedution{
       }];
 }
 const PnaDeductionPage = () => {
-  const [childSupport, setChildSupport] = useState<IPmaDedution | null>(null);
+  const [childSupport, setChildSupport] = useState<IPmaDedution[] | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const [childSupportToDelete, setChildSupportToDelete] = useState<ILanguage | null>(null);
   const [newChildSupport, setNewChildSupport] = useState<IPmaDedution>({
@@ -48,7 +48,7 @@ const PnaDeductionPage = () => {
   };
 
   // Function to handle changes in the deduction array
-  const handleDeductionChange = (index: number, field: keyof IPmaDedution['deductions'][0], value: number) => {
+  const handleDeductionChange = (index: number, field: any, value: number) => {
     setNewChildSupport((prev:any) => ({
       ...prev,
       deductions: prev.deductions?.map((deduction: any, i: number) =>
@@ -58,7 +58,7 @@ const PnaDeductionPage = () => {
   };
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
   const [edit, setEdit] = React.useState<boolean>(false);
-  const [rowId, setRowID] = React.useState<string>('');
+  const [rowId, setRowID] = React.useState<any>('');
   const removeChildSupport = (id: string) => {
     const snackbarId = enqueueSnackbar({
       message: 'Removing ChildSupport',
@@ -67,7 +67,7 @@ const PnaDeductionPage = () => {
     StaffServices.deletePma(rowId)
       .then((res) => {
         if (childSupport) {
-          const newChildSupport = childSupport?.filter((childSupport: { _id: string }) => {
+          const newChildSupport = childSupport?.filter((childSupport: any) => {
             return childSupport._id !== id;
           });
           setChildSupport(newChildSupport);
@@ -91,7 +91,7 @@ const PnaDeductionPage = () => {
     setChildSupportToDelete(null);
   };
 
-  const columns: GridColDef<IChildSupport>[] = [
+  const columns: GridColDef<IPmaDedution>[] = [
     {
       field: 'ChildSupport',
       headerName: 'Option',
@@ -113,7 +113,7 @@ const PnaDeductionPage = () => {
       headerName: 'Edit',
       width: 100,
       headerAlign: 'center',
-      renderCell: (params) => {
+      renderCell: (params:any) => {
         return (
           <Button
             variant="text"
@@ -135,7 +135,7 @@ const PnaDeductionPage = () => {
       headerName: 'Delete',
       width: 100,
       headerAlign: 'center',
-      renderCell: (params) => {
+      renderCell: (params:any) => {
         return (
           <Button
             variant="text"
@@ -207,7 +207,7 @@ const PnaDeductionPage = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={edit !== false} onClose={() => setEdit(false)} fullWidth maxWidth="md">
-        <DialogTitle>{childSupport?.option}</DialogTitle>
+        <DialogTitle>{newChildSupport.option}</DialogTitle>
         <DialogContent>
           <TextField
             label="Initial Amount"
@@ -357,6 +357,10 @@ const PnaDeductionPage = () => {
               sx={{ float: 'right', marginBottom: 3 }}
               startIcon={<AddIcon />}
               onClick={() => {
+                setNewChildSupport({
+                  option: '',
+                  amount: 0,
+                });
                 setDialogAction('add');
               }}
             >
@@ -367,7 +371,7 @@ const PnaDeductionPage = () => {
         <DataGrid
           sx={{ height: '80vh', width: '100%' }}
 
-          rows={childSupport ?? []} columns={columns} getRowId={(row) => row._id} loading={childSupport === null} />
+          rows={childSupport ?? []} columns={columns} getRowId={(row:any) => row._id} loading={childSupport === null} />
       </Card>
     </CommonPageLayout>
   );

@@ -234,8 +234,8 @@ const NewUserSupportStructureForm = (
       <Grid item xs={12} md={6} lg={4}>
         <Autocomplete
           options={designations ?? []}
-          value={props.value?.pmaDeduction}
-          onChange={(e, newValue) => props.onChange({ ...props.value, pmaDeduction: newValue ?? undefined })}
+          value={props.value?.pmaDeduction??null}
+          onChange={(e, newValue) => props.onChange({ ...props.value, pmaDeduction: newValue ?? null })}
           getOptionLabel={(option) => `${option.option} - ${option.amount}`}
           renderInput={(params:any) => (
             <TextField

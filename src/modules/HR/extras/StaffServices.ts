@@ -21,7 +21,7 @@ export default {
   createPMADeduction: (option:any) =>
     getStandardResponse<Staff>(axios.post('/hr/staffs/addPmaDeduction', option, { headers: { ...getAuthHeader() } })),
   getPMADeduction: () =>
-    getStandardResponse<Staff>(axios.get('/hr/staffs/getPmaDeduction', { headers: { ...getAuthHeader() } })),
+    getStandardResponse<any>(axios.get('/hr/staffs/getPmaDeduction', { headers: { ...getAuthHeader() } })),
 
   /**
    * Edits a staff member.

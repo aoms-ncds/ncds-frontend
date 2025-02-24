@@ -17,7 +17,7 @@ const DivisionsList = (arg: any) => {
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const auth = useAuth();
-  const [logOpen, setLogOpen] = useState<string | null>(null)
+  const [logOpen, setLogOpen] = useState<string | null>(null);
 
 
   // useEffect(() => {e
@@ -110,7 +110,10 @@ const DivisionsList = (arg: any) => {
               id: 'View',
               text: 'View and Manage',
               component: Link,
-              to: `/divisions/details/${props.row._id}`,
+              // to: `/divisions/details/${props.row._id}`,
+              onClick: () => {
+                window.open(`/divisions/details/${props.row._id}`, '_blank');
+              },
               icon: PreviewIcon,
             },
             // {
