@@ -54,6 +54,14 @@ const NotificationService = {
         },
       }),
   ),
+  getMyMessagesCountForBill: (): Promise<StandardResponse<number>> => getStandardResponse(
+    axios.get(
+      '/notification/my_messages/countForBill', {
+        headers: {
+          ...getAuthHeader(),
+        },
+      }),
+  ),
   getMessageById: (_id: string): Promise<StandardResponse<Message>> => getStandardResponse(
     axios.get(
       `/notification/${_id}`, {
@@ -75,6 +83,15 @@ const NotificationService = {
   markAllAsRead: (): Promise<StandardResponse<void>> => getStandardResponse(
     axios.patch(
       '/notification/mark_all_as_read', {}, {
+        headers: {
+          ...getAuthHeader(),
+        },
+      },
+    ),
+  ),
+  markAllAsReadForBill: (): Promise<StandardResponse<void>> => getStandardResponse(
+    axios.patch(
+      '/notification/mark_all_as_read_for_bill', {}, {
         headers: {
           ...getAuthHeader(),
         },

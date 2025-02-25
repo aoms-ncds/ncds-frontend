@@ -32,6 +32,7 @@ import IROTemplate from './components/IROTemplate';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import FRServices from '../FR/extras/FRServices';
 import ReleaseAmount from './components/ReleaseAmountDialog';
+import NotificationService from '../Notification/extras/NotificationService';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -46,6 +47,7 @@ const ReconciliationIRO = () => {
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
   const [data, setData] = useState<any | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [messages, setMessages] = useState<number | null>(0);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -136,6 +138,7 @@ const ReconciliationIRO = () => {
   const [FrData, setFrData] = useState<FR | null>(null);
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [mngrName, setMngrName] = useState('');
+  const [count, setCount] = useState(0);
   // const [openPrintIro, setOpenPrintIro] = useState(false);
   const [FR, setFR] = useState<FR>();
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -190,6 +193,22 @@ const ReconciliationIRO = () => {
       });
     console.log(selectedSignature);
   }, []);
+
+  useEffect(() => {
+    // setLoading((loading) => loading + 1);
+    NotificationService.getMyMessagesCountForBill()
+      .then((res) => {
+        setMessages(res.data);
+        setCount(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'error',
+        });
+      });
+  }, [count]);
   // useEffect(()=>{
   //   FRServices.getById(iroData?.FR ?? '').then((res)=>{
   //     setFR(res.data);
@@ -759,69 +778,114 @@ const ReconciliationIRO = () => {
     } >
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
-          <Grid item xs={6}>
-            {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-            <TextField
-              label="Search"
-              variant="outlined"
-              value={searchText}
-              placeholder='Enter IROno or IRODate or Division or SubCategory'
-              onChange={handleSearchChange}
-              fullWidth
-              // style={{ width: '80%' }}
-            />
-            {/* </div> */}
+          <Grid item xs={12}>
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 3 }}>
+
+                {/* Search Field */}
+                <TextField
+                  label="Search"
+                  variant="outlined"
+                  value={searchText}
+                  placeholder="Enter IROno, IRODate, Division, or SubCategory"
+                  onChange={handleSearchChange}
+                  sx={{ width: '40%' }}
+                />
+
+                {/* Count Box with Reset Button */}
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        backgroundColor: '#f5f5f5',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        boxShadow: 1,
+                      }}
+                    >
+                      <Typography variant="subtitle1" fontWeight="bold">
+        New Bills Attached:
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        color="primary"
+                        sx={{ background: '#fff', px: 2, py: 1, borderRadius: '4px', boxShadow: 1 }}
+                      >
+                        {count}
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="small"
+                        onClick={async () => await NotificationService.markAllAsReadForBill().then((res) => setCount(0))}
+                      >
+        Reset
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+
+
+                {/* Export Button */}
+                <Button
+                  onClick={async () => {
+                    const sheet =
+          reconciliationIRO ?
+            reconciliationIRO.map((iro: IROrder) => [
+              iro.IROno,
+              iro.IRODate.format('DD/MM/YYYY'),
+              iro.division?.details.name,
+              iro.purposeSubdivision?.name,
+              iro.mainCategory,
+              iro.particulars?.reduce(
+                (total, particular) => total + Number(particular.requestedAmount),
+                0,
+              ),
+              iro.sanctionedAmount,
+              iro.sanctionedBank,
+              iro.sanctionedAsPer,
+              iro.releaseAmount?.releaseAmount,
+              iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
+              IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
+            ]) :
+            [];
+                    const headers = [
+                      'IRO No',
+                      'Date',
+                      'Division',
+                      'Sub Division',
+                      'Main Category',
+                      'Requested Amt',
+                      'Sanctioned Amt',
+                      'Sanctioned Bank',
+                      'Sanctioned As per',
+                      'Released Amt',
+                      'Released Date',
+                      'Status',
+                    ];
+                    const worksheet = XLSX.utils.json_to_sheet(sheet);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                    XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
+                  }}
+                  startIcon={<DownloadIcon />}
+                  color="primary"
+                  variant="contained"
+                  sx={{ whiteSpace: 'normal' }}
+                >
+      Export
+                </Button>
+
+              </Box>
+            </Grid>
+
           </Grid>
-          <Grid item xs={6}>
-            <Button
-              onClick={async () => {
-                const sheet =
-                  reconciliationIRO ?
-                    reconciliationIRO.map((iro: IROrder) => ([
-                      iro.IROno,
-                      iro.IRODate.format('DD/MM/YYYY'),
-                      iro.division?.details.name,
-                      iro.purposeSubdivision?.name,
-                      iro.mainCategory,
-                      iro.particulars?.reduce(
-                        (total, particular) => total + Number(particular.requestedAmount),
-                        0,
-                      ),
-                      iro.sanctionedAmount,
-                      iro.sanctionedBank,
-                      iro.sanctionedAsPer,
-                      iro.releaseAmount?.releaseAmount,
-                      iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                      IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                    ])) :
-                    [];
-                const headers = [
-                  'IRO No',
-                  'Date',
-                  'Division',
-                  'Sub Division',
-                  'Main Category',
-                  'Requested Amt',
-                  'Sanctioned Amt',
-                  'Sanctioned Bank',
-                  'Sanctioned As per',
-                  'Released Amt',
-                  'Released Date',
-                  'Status',
-                ];
-                const worksheet = XLSX.utils.json_to_sheet(sheet);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                XLSX.writeFile(workbook, 'FRReport.xlsx', { compression: true });
-              }}
-              startIcon={<DownloadIcon />}
-              color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
-              variant="contained"
-            >
-              Export
-            </Button>
-          </Grid>
+
           <Grid item xs={12}>
             <Box
               sx={{
