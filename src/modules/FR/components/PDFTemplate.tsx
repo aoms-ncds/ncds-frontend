@@ -130,6 +130,8 @@ interface TotalSupportStructure {
   prevDeduction?: number;
   net?: number;
   prevNet?: number;
+  pmaDeduction?:number;
+  prevPmaDeduction?:number;
 }
 // Create Document Component
 const PDFTemplate = (props: {
@@ -163,6 +165,8 @@ const PDFTemplate = (props: {
     prevDeduction: 0,
     net: 0,
     prevNet: 0,
+    pmaDeduction: 0,
+    prevPmaDeduction: 0,
   });
   const [purpose, setPurpose] = useState('Division');
   useEffect(() => {
@@ -303,6 +307,14 @@ const PDFTemplate = (props: {
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction ? total + Number(worker.supportStructure?.prevMUTDeduction) : total,
       0,
     );
+    const pmaDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.pmaDeduction?.amount ? total + Number(worker.supportStructure?.pmaDeduction?.amount) : total,
+      0,
+    );
+    const prevPmaDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPmaDeduction ? total + Number(worker.supportStructure?.prevPmaDeduction) : total,
+      0,
+    );
     setTotal({
       basic: basic,
       prevBasic: prevBasic,
@@ -322,13 +334,16 @@ const PDFTemplate = (props: {
       prevPIONMissionaryFund: prevPIONMissionaryFund,
       MUTDeduction: MUTDeduction,
       prevMUTDeduction: prevMUTDeduction,
+      pmaDeduction: pmaDeduction,
+      prevPmaDeduction: prevPmaDeduction,
       total: (basic ?? 0) +
         (HRA ?? 0) +
         (spouseAllowance ?? 0) +
         (positionalAllowance ?? 0) +
         (specialAllowance ?? 0) +
         (PIONMissionaryFund ?? 0) +
-        (telAllowance ?? 0),
+        (telAllowance ?? 0)+
+        (pmaDeduction ?? 0),
       deduction: (impactDeduction ?? 0) +
         (MUTDeduction ?? 0),
       net: (basic ?? 0) +
@@ -337,6 +352,7 @@ const PDFTemplate = (props: {
         (positionalAllowance ?? 0) +
         (specialAllowance ?? 0) +
         (PIONMissionaryFund ?? 0) +
+        (pmaDeduction ?? 0) +
         (telAllowance ?? 0) -
         (
           (impactDeduction ?? 0) +
@@ -424,6 +440,12 @@ const PDFTemplate = (props: {
             <Text style={styles.tableHead}>Updated At</Text>
             <div style={styles.grid}></div>
             <Text style={styles.tableHead}>MUT Deduction</Text>
+            <div style={styles.grid}></div>
+            <Text style={styles.tableHead}>Prev PMA Allowance</Text>
+            <div style={styles.grid}></div>
+            <Text style={styles.tableHead}>Updated At</Text>
+            <div style={styles.grid}></div>
+            <Text style={styles.tableHead}>PMA Allowance</Text>
             <div style={styles.grid}></div>
             <Text style={styles.tableHead}>Total Amount</Text>
             <div style={styles.grid}></div>
@@ -513,11 +535,18 @@ const PDFTemplate = (props: {
               <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.MUTDeduction}</Text>
               <div style={styles.grid}></div>
+              <Text style={styles.tableCell}>{row.supportStructure?.pmaDeduction?.amount}</Text>
+              <div style={styles.grid}></div>
+              <Text style={styles.tableCell}>{row.supportStructure?.pmaDeductionLastUpdatedAt ? moment(row.supportStructure?.pmaDeductionLastUpdatedAt)?.format('DD/MM/YYYY') : null}</Text>
+              <div style={styles.grid}></div>
+              <Text style={styles.tableCell}>{row.supportStructure?.prevPmaDeduction}</Text>
+              <div style={styles.grid}></div>
               <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ? (row.supportStructure?.basic ?? 0) +
                 (row.supportStructure?.HRA ?? 0) +
                 (row.supportStructure?.spouseAllowance ?? 0) +
                 (row.supportStructure?.positionalAllowance ?? 0) +
                 (row.supportStructure?.specialAllowance ?? 0) +
+                (row.supportStructure?.pmaDeduction?.amount ?? 0) +
               (row.supportStructure?.PIONMissionaryFund ?? 0) +
                 (row.supportStructure?.telAllowance ?? 0) : 0}</Text>
               <div style={styles.grid}></div>
@@ -530,6 +559,7 @@ const PDFTemplate = (props: {
                 (row.supportStructure?.positionalAllowance ?? 0) +
                 (row.supportStructure?.specialAllowance ?? 0) +
                 (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                (row.supportStructure?.pmaDeduction?.amount ?? 0) +
                 (row.supportStructure?.telAllowance ?? 0) -
                 (
                   (row.supportStructure?.impactDeduction ?? 0) +
@@ -613,6 +643,12 @@ const PDFTemplate = (props: {
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
             <div style={styles.grid}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.MUTDeduction}</Text>
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevPmaDeduction}</Text>
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
+            <div style={styles.grid}></div>
+            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.pmaDeduction}</Text>
             <div style={styles.grid}></div>
             <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>
               {total.total}

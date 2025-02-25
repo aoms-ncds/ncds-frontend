@@ -156,7 +156,7 @@ const SpouseForm = (
             />
           }
         /> */}
-        <FormLabel>Working</FormLabel>
+        <FormLabel sx={{ marginRight: '1rem' }}>Working</FormLabel>
         <Checkbox
           checked={props.value.working}
           onChange={(e) =>
@@ -167,6 +167,20 @@ const SpouseForm = (
           }
           color="primary"
         />
+
+        <FormLabel sx={{ float: 'right', pt: 1 }}>Widow Care</FormLabel>
+        <Checkbox
+          checked={props.value.widowCare}
+          onChange={(e) =>
+            props.onChange({
+              ...props.value,
+              widowCare: e.target.checked,
+            })
+          }
+          sx={{ float: 'right' }}
+          color="primary"
+        />
+
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
@@ -210,6 +224,30 @@ const SpouseForm = (
           renderInput={(params) => <TextField {...params} label="Known Languages" variant={props.options?.textField.variant} />}
         />
       </Grid>
+      {props.value.widowCare ? (
+
+        <Grid item xs={12} md={6} lg={4}>
+          <TextField
+            label=" Aadhar No"
+            type="number"
+            value={props.value.aadharNo}
+            onChange={(e) =>
+              props.onChange({
+                ...props.value,
+                aadharNo: Number(e.target.value),
+              })
+            }
+            variant={props.options?.textField.variant}
+            fullWidth
+            inputProps={{
+              onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+                event.preventDefault();
+                event.currentTarget.blur();
+              },
+            }}
+          />
+        </Grid>
+      ):[]}
       <Grid item xs={12}>
         <br />
         <Divider textAlign="left">Welfare Scheme Details</Divider>

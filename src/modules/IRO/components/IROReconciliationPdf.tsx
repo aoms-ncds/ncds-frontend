@@ -307,6 +307,10 @@ const IROReconciliationPdf = (props: {
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction ? total + Number(worker.supportStructure?.MUTDeduction) : total,
       0,
     );
+    const pmaDeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.pmaDeduction?.amount ? total + Number(worker.supportStructure?.pmaDeduction?.amount) : total,
+      0,
+    );
     setTotal(
       (basic ?? 0) +
       (HRA ?? 0) +
@@ -314,6 +318,7 @@ const IROReconciliationPdf = (props: {
       (positionalAllowance ?? 0) +
       (specialAllowance ?? 0) +
       (PIONMissionaryFund ?? 0) +
+      (pmaDeduction ?? 0) +
       (telAllowance ?? 0) -
       (
         (impactDeduction ?? 0) +
@@ -381,6 +386,7 @@ const IROReconciliationPdf = (props: {
                     (row.supportStructure?.positionalAllowance ?? 0) +
                     (row.supportStructure?.specialAllowance ?? 0) +
                     (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                    (row.supportStructure?.pmaDeduction?.amount ?? 0) +
                     (row.supportStructure?.telAllowance ?? 0) -
                     (
                       (row.supportStructure?.impactDeduction ?? 0) +

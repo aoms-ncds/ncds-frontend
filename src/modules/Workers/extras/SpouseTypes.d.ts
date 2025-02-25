@@ -18,6 +18,8 @@ declare global {
     insurance?: Insurance;
     reasonForDeactivation?: DeactivationReason;
     deactivationDate?:Moment;
+    aadharNo?:number;
+    widowCare?:boolean;
   }
 
   interface CreatableSpouse extends Creatable<Spouse> {

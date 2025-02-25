@@ -387,6 +387,8 @@ const Profile = () => {
                     {((user as unknown as IWorker)?.spouse?.dateOfBirth?.fromNow() || '').replace(' ago', '')}
                   </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Working: </Typography> {(user as unknown as IWorker)?.spouse?.working ? 'Yes' : 'No'} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Widow Care: </Typography> {(user as unknown as IWorker)?.spouse?.widowCare ? 'Yes' : 'No'} </Grid>
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar No: </Typography> {(user as unknown as IWorker)?.spouse?.aadharNo?? 'N/A'} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Occupation: </Typography> {(user as unknown as IWorker)?.spouse?.occupation} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Qualification: </Typography> {(user as unknown as IWorker)?.spouse?.qualification} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Known Languages: </Typography> {(user as unknown as IWorker)?.spouse?.knownLanguages?.map((lang) => lang.name).join(', ')} </Grid>
@@ -476,7 +478,6 @@ const Profile = () => {
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Tel Allowance: </Typography> {user?.supportStructure?.telAllowance} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PNRM Allowance: </Typography> {user?.supportStructure?.PIONMissionaryFund} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>WS Deduction: </Typography> {user?.supportStructure?.MUTDeduction} </Grid>
-                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>PMA Deduction: </Typography> {(user?.supportStructure?.pmaDeduction as any)?.amount} </Grid>
                   <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Total Amount: </Typography>
                     {
                       (user?.supportStructure?.basic ?? 0) +

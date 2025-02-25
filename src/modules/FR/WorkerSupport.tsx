@@ -50,6 +50,8 @@ interface TotalSupportStructure {
   prevDeduction?: number;
   net?: number;
   prevNet?: number;
+  pmaDeduction?: number;
+  prevPmaDeduction?: number;
 }
 const WorkerSupportPage = () => {
   const navigate = useNavigate();
@@ -81,6 +83,8 @@ const WorkerSupportPage = () => {
     prevDeduction: 0,
     net: 0,
     prevNet: 0,
+    pmaDeduction: 0,
+    prevPmaDeduction: 0,
   });
   const [divisions, setDivisions] = useState<Division[] | null>(null);
   const [division, setDivision] = useState<Division | null>(null);
@@ -392,6 +396,14 @@ const WorkerSupportPage = () => {
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction ? total + Number(worker.supportStructure?.prevMUTDeduction) : total,
       0,
     );
+    const PMADeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.pmaDeduction?.amount ? total + Number(worker.supportStructure?.pmaDeduction?.amount) : total,
+      0,
+    );
+    const prevPMADeduction = workers?.reduce(
+      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPmaDeduction ? total + Number(worker.supportStructure?.prevPmaDeduction) : total,
+      0,
+    );
     setTotal({
       basic: basic,
       prevBasic: prevBasic,
@@ -408,6 +420,8 @@ const WorkerSupportPage = () => {
       telAllowance: telAllowance,
       prevTelAllowance: prevTelAllowance,
       PIONMissionaryFund: PIONMissionaryFund,
+      pmaDeduction: PMADeduction,
+      prevDeduction: prevPMADeduction,
       prevPIONMissionaryFund: prevPIONMissionaryFund,
       MUTDeduction: MUTDeduction,
       prevMUTDeduction: prevMUTDeduction,
@@ -418,6 +432,7 @@ const WorkerSupportPage = () => {
         (specialAllowance ?? 0) +
         (PIONMissionaryFund ?? 0) +
         (telAllowance ?? 0),
+      // (PMADeduction?? 0),
       deduction: (impactDeduction ?? 0) +
         (MUTDeduction ?? 0),
       net: (basic ?? 0) +
@@ -426,6 +441,7 @@ const WorkerSupportPage = () => {
         (positionalAllowance ?? 0) +
         (specialAllowance ?? 0) +
         (PIONMissionaryFund ?? 0) +
+        (PMADeduction ?? 0) +
         (telAllowance ?? 0) -
         (
           (impactDeduction ?? 0) +
@@ -813,6 +829,34 @@ const WorkerSupportPage = () => {
       renderHeader: () => <b>{'Current'}</b>,
       valueGetter: (params) => params.row.supportStructure?.PIONMissionaryFund,
     },
+    {
+      field: 'prevDeduction',
+      width: 100,
+      headerClassName: 'column-header',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Prev '}</b>,
+      valueGetter: (params) => params.row.supportStructure?.prevPmaDeduction,
+    },
+    {
+      field: 'last_updated_PMAMissionaryFund',
+      width: 100,
+      headerClassName: 'column-header',
+      align: 'center',
+      headerAlign: 'center',
+      renderHeader: () => <b>{'Updated At '}</b>,
+      valueGetter: (params) => params.row.supportStructure?.pmaDeductionLastUpdatedAt ? moment(params.row.supportStructure?.pmaDeductionLastUpdatedAt)?.format('DD/MM/YYYY') : null,
+    },
+    {
+      field: 'pmaDeduction',
+      width: 100,
+      headerClassName: 'column-header',
+      align: 'center',
+      headerAlign: 'center',
+      cellClassName: 'row-current',
+      renderHeader: () => <b>{'Current'}</b>,
+      valueGetter: (params) => params.row.supportStructure?.pmaDeduction?.amount,
+    },
 
     {
       field: 'prevMUTDeduction',
@@ -856,7 +900,8 @@ const WorkerSupportPage = () => {
         (params.row.supportStructure?.positionalAllowance ?? 0) +
         (params.row.supportStructure?.specialAllowance ?? 0) +
         (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
-        (params.row.supportStructure?.telAllowance ?? 0) : 0,
+        (params.row.supportStructure?.telAllowance ?? 0) : 0+
+        (params.row.supportStructure?.pmaDeduction?.amount ?? 0),
     },
     {
       field: 'deduction',
@@ -884,6 +929,7 @@ const WorkerSupportPage = () => {
         (params.row.supportStructure?.positionalAllowance ?? 0) +
         (params.row.supportStructure?.specialAllowance ?? 0) +
         (params.row.supportStructure?.PIONMissionaryFund ?? 0) +
+        (params.row.supportStructure?.pmaDeduction?.amount ?? 0) +
         (params.row.supportStructure?.telAllowance ?? 0) -
         (
           (params.row.supportStructure?.impactDeduction ?? 0) +
@@ -997,6 +1043,13 @@ const WorkerSupportPage = () => {
       renderHeaderGroup: () => <b>{'PNRM Allowance'}</b>,
       headerClassName: 'column-grp',
       children: [{ field: 'prevPIONMissionaryFund' }, { field: 'PIONMissionaryFund' }, { field: 'last_updated_PIONMissionaryFund' }],
+    },
+    {
+      groupId: 'pmaDeduction',
+      description: '',
+      renderHeaderGroup: () => <b>{'PMA Allowance'}</b>,
+      headerClassName: 'column-grp',
+      children: [{ field: 'prevDeduction' }, { field: 'pmaDeduction' }, { field: 'last_updated_PMAMissionaryFund' }],
     },
     {
       groupId: 'MUTDeduction',

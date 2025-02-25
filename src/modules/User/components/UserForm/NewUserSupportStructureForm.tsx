@@ -236,11 +236,11 @@ const NewUserSupportStructureForm = (
           options={designations ?? []}
           value={props.value?.pmaDeduction??null}
           onChange={(e, newValue) => props.onChange({ ...props.value, pmaDeduction: newValue ?? null })}
-          getOptionLabel={(option) => `${option.option} - ${option.amount}`}
+          getOptionLabel={(option) => `${option.amount}`}
           renderInput={(params:any) => (
             <TextField
               {...params}
-              label="Pma deduction"
+              label="PMA Allowance"
               disabled={designations === null}
               // helperText={designationsFetchError || (designations === null && 'Loading...')}
               variant={props.options?.textField.variant}

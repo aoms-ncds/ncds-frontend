@@ -195,6 +195,8 @@ declare global {
     disabledFrom?:Moment|null;
     disabledTo?:Moment|null;
     pmaDeduction?:IPmaDedution|null;
+    prevPmaDeduction?:number;
+    pmaDeductionLastUpdatedAt?: Moment | null;
 
   }
   interface User extends MongooseDocument {

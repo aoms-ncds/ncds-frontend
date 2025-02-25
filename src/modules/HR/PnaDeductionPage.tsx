@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, TextField } from '@mui/material';
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import ChildSupportService from '../Settings/extras/ChildSupportService';
 import StaffServices from './extras/StaffServices';
+import InfoIcon from '@mui/icons-material/Info';
 export interface IPmaDedution{
     option?: string;
     amount?: number;
@@ -94,7 +95,7 @@ const PnaDeductionPage = () => {
   const columns: GridColDef<IPmaDedution>[] = [
     {
       field: 'ChildSupport',
-      headerName: 'Option',
+      headerName: 'Initial Tenure',
       align: 'left',
       width: 150,
       headerAlign: 'center',
@@ -221,7 +222,7 @@ const PnaDeductionPage = () => {
             autoFocus
             margin="dense"
             id="pmaOption"
-            label="option"
+            label="Initial Tenure"
             type="text"
             fullWidth
             variant="outlined"
@@ -253,6 +254,11 @@ const PnaDeductionPage = () => {
                 value={row.monthTo != 0 ? row.monthTo: null}
                 onChange={(e) => handleDeductionChange(index, 'monthTo', Number(e.target.value))}
               />
+              <Tooltip title="Warning: Do not enter a tenure that is less than or equal to the tenure entered in the previous options. End Tenure should always be higher than Start Tenure">
+                <IconButton>
+                  <InfoIcon sx={{ color: 'orange' }}/>
+                </IconButton>
+              </Tooltip>
             </div>
           ))}
 
@@ -299,7 +305,7 @@ const PnaDeductionPage = () => {
               autoFocus
               margin="dense"
               id="pmaOption"
-              label="option"
+              label="Initial Tenure"
               type="text"
               fullWidth
               variant="outlined"
