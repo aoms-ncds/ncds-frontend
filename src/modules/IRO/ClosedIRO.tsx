@@ -234,7 +234,10 @@ const ClosedIRO = () => {
               id: 'View',
               text: 'View Details ',
               component: Link,
-              to: `/iro/${props.row._id}`,
+              // to: `/iro/${props.row._id}`,
+              onClick: () => {
+                window.open(`/iro/${props.row._id}`, '_blank');
+              },
               icon: PreviewIcon,
             },
             {

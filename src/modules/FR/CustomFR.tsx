@@ -260,7 +260,10 @@ const CustomFR = () => {
               id: 'View',
               text: 'View And Manage',
               component: Link,
-              to: `/fr/${props.row._id}/viewCustom`,
+              // to: `/fr/${props.row._id}/viewCustom`,
+              onClick: () => {
+                window.open(`/fr/${props.row._id}/viewCustom`, '_blank');
+              },
               icon: PreviewIcon,
             },
             {

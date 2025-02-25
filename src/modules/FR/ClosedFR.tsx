@@ -127,7 +127,10 @@ const ClosedFR = () => {
               id: 'View',
               text: 'View Details ',
               component: Link,
-              to: `/fr/${props.row._id}/view`,
+              // to: `/fr/${props.row._id}/view`,
+              onClick: () => {
+                window.open(`/fr/${props.row._id}/view`, '_blank');
+              },
               icon: PreviewIcon,
             },
             ...(hasPermissions(['REOPEN_FR_IRO']) ?[

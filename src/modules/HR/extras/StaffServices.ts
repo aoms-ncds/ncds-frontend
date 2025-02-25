@@ -18,6 +18,11 @@ export default {
   create: (staff: CreatableStaff, userPhoto: File | undefined) =>
     getStandardResponse<Staff>(axios.post('/hr/staffs', { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
 
+  createPMADeduction: (option:any) =>
+    getStandardResponse<Staff>(axios.post('/hr/staffs/addPmaDeduction', option, { headers: { ...getAuthHeader() } })),
+  getPMADeduction: () =>
+    getStandardResponse<any>(axios.get('/hr/staffs/getPmaDeduction', { headers: { ...getAuthHeader() } })),
+
   /**
    * Edits a staff member.
    * @param {CreatableNewUser} staff - The staff member to be edited.
@@ -26,6 +31,8 @@ export default {
    */
   edit: (staff: CreatableStaff, userPhoto: File | undefined): Promise<StandardResponse<Staff>> =>
     getStandardResponse<Staff>(axios.patch(`/hr/staffs/${staff._id}`, { staff, image: userPhoto }, { headers: { ...getAuthHeader(), 'Content-Type': 'multipart/form-data' } })),
+  editPmaDeduction: (data:any, id:number): Promise<StandardResponse<Staff>> =>
+    getStandardResponse<Staff>(axios.patch(`/hr/staffs/addPmaDeduction/${id}`, data, { headers: { ...getAuthHeader() } })),
 
   /**
    * Deletes a staff member.
@@ -33,6 +40,8 @@ export default {
    * @return {Promise<StandardResponse<Staff[]>>} A promise that resolves to the response containing the updated list of staff members.
    */
   delete: (staffId: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/${staffId}`, { headers: { ...getAuthHeader() } })),
+
+  deletePma: (id: string) => getStandardResponse<Staff[]>(axios.delete(`/hr/staffs/pmaDeduction/${id}`, { headers: { ...getAuthHeader() } })),
 
   /**
    * Retrieves all staff members.

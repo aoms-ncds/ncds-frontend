@@ -1,5 +1,8 @@
 import { Moment } from 'moment';
 import UserLifeCycleStates from './UserLifeCycleStates';
+import { FabTypeMap } from '@mui/material';
+import { ObjectId } from 'mongoose';
+import { IPmaDedution } from '../../HR/PnaDeductionPage';
 
 export default {};
 
@@ -191,6 +194,7 @@ declare global {
     reason?:string;
     disabledFrom?:Moment|null;
     disabledTo?:Moment|null;
+    pmaDeduction?:IPmaDedution|null;
 
   }
   interface User extends MongooseDocument {

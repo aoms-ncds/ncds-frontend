@@ -60,7 +60,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
   // const [reason, setReason] = useState<IReason[]>([]);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [reasonDialog, setReasonDialog] = useState(false);
-  const [logOpen, setLogOpen] = useState<string | null>(null)
+  const [logOpen, setLogOpen] = useState<string | null>(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -145,7 +145,10 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
   };
 
   const handleView = () => {
-    navigate(`/users/worker/${user._id}`);
+    // navigate(`/users/worker/${user._id}`);
+    // onClick={() => {
+    window.open(`/users/worker/${user._id}`);
+    // }}
   };
 
   return (
@@ -234,7 +237,10 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
               hasPermissions(['ADMIN_ACCESS']) && (
                 <MenuItem
                   onClick={() => {
-                    navigate(`/users/${user._id}/permission_manager`);
+                    // navigate(`/users/${user._id}/permission_manager`);
+                    // onClick={() => {
+                    window.open(`/users/${user._id}/permission_manager`);
+                    // }}
                   }}
                 >Permission Manager</MenuItem>
               ),

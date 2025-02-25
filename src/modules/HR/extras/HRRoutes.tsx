@@ -2,6 +2,7 @@ import HRDashboard from '..';
 import HRManagePage from '../ManagePage';
 import StaffFormPage from '../StaffFormPage';
 import Log from '../Log';
+import PnaDeductionPage from '../PnaDeductionPage';
 
 const hrPageRoutes: ModuleRoute = {
   base: '/hr',
@@ -26,6 +27,13 @@ const hrPageRoutes: ModuleRoute = {
       title: 'Add New Staff',
       path: '/add',
       element: <StaffFormPage action="add" />,
+      private: true,
+      requiredAccessRights: ['WRITE_STAFFS'],
+    },
+    {
+      title: 'PNM Management',
+      path: '/pmaDeduction',
+      element: <PnaDeductionPage/>,
       private: true,
       requiredAccessRights: ['WRITE_STAFFS'],
     },

@@ -252,7 +252,10 @@ const ManageFrForDivision = () => {
               id: 'View',
               text: 'View And Manage',
               component: Link,
-              to: `/fr/${props.row._id}/view`,
+              // to: `/fr/${props.row._id}/view`,
+              onClick: () => {
+                window.open(`/fr/${props.row._id}/view`, '_blank');
+              },
               icon: PreviewIcon,
             },
             ...(hasPermissions(['WRITE_FR']) && props.row.status == FRLifeCycleStates.FR_SEND_BACK&& !hasPermissions(['PRESIDENT_ACCESS']) ?
