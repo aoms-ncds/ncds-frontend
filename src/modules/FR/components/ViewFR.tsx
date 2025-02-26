@@ -56,6 +56,7 @@ import { useAuth } from '../../../hooks/Authentication';
 import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import TransactionLogDialog from './TransactionLogDialog';
+import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -66,6 +67,8 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     remark: '',
     transactionId: '',
   });
+  const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showName, setShowName] = useState(false);
   const [Err, setErr] = useState(false);
@@ -100,6 +103,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
   // console.log(props, 'newParticular');
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
+  }, []);
   const [openLog, setOpenLog] = useState(false);
 interface AsPer{
   asPer:[];
@@ -464,7 +472,6 @@ return (
                 </Table>
               </TableContainer>
             </Grid>
-   
 
 
             <Grid item xs={12} md={6}>
@@ -659,10 +666,12 @@ return (
     Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
                         </MenuItem>
                       ) : ''}
+                      {paymnetMethods.map((e) => (
+                        <MenuItem key={e._id} value={e.paymentMethod}>{e.paymentMethod}</MenuItem>
+                      ))}
 
 
-                      {/* <MenuItem value={'Beneficiary Bank 2'}>Beneficiary Bank 2 - {IRO.division?.BeneficiaryBank2?.beneficiary}</MenuItem>
-                        <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
+                      {/* <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
                         <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem>
