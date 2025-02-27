@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -68,6 +68,8 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
+  const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -576,11 +578,11 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
-    IROServices.groupedIRO().then((res)=>{
+    IROServices.groupedIRO({ Exstatus: exstatusFilter, dateRange }).then((res)=>{
       console.log(res, 'res90');
       setGroupIro(res.data);
     });
-  }, []);
+  }, [statusFilter, exstatusFilter, dateRange]);
 
   const deleteIRO = (id: string) => {
     console.log(id, 'as is');
@@ -1234,7 +1236,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -1247,7 +1249,34 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid
+                  item
+                >
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={
+                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === 'NonBankTransfers') {
+                          setExStatusFilter([69]);
+                        } else {
+                          setExStatusFilter([]);
+                          setStatusFilter([]);
+                          // setStatusFilter([]);
+                        }
+                      }}
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={4}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={

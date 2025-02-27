@@ -1,6 +1,7 @@
+/* eslint-disable max-len */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Edit as EditIcon,
@@ -318,6 +319,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
 
   // const userPermissions = (user.user as User)?.permissions;
@@ -389,11 +392,17 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     });
   }
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: [IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]})
+    IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       });
-  }, [dateRange]);
+  }, [dateRange, statusFilter, exstatusFilter]);
+  useEffect(() => {
+    IROServices.getAll({ dateRange: dateRange, status: statusFilter })
+      .then((res) => {
+        setIROrder(res.data);
+      });
+  }, []);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -856,7 +865,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -869,7 +878,35 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid
+                  item
+                  sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={
+                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === 'NonBankTransfers') {
+                          setExStatusFilter([69]);
+                        } else {
+                          setExStatusFilter([]);
+                          setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
+                          // setStatusFilter([]);
+                        }
+                      }}
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={4}>
                   <Button
                     onClick={async () => {
                       const sheet =

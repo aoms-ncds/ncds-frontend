@@ -8,7 +8,8 @@ import {
   Message as MessageIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography } from '@mui/material';
+// eslint-disable-next-line max-len
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -48,6 +49,8 @@ const ReconciliationIRO = () => {
   const [data, setData] = useState<any | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [messages, setMessages] = useState<number | null>(0);
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.AMOUNT_RELEASED, IROLifeCycleStates.RECONCILIATION_DONE]); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -283,7 +286,7 @@ const ReconciliationIRO = () => {
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS && !permissions?.LOCAL_ACCOUNT_ACCESS) {
       console.log('FRDD');
-      IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'FCRA' })
+      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -292,7 +295,7 @@ const ReconciliationIRO = () => {
         });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS && !permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ dateRange: dateRange, sourceOfAccount: 'Local' })
+      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'Local' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -346,7 +349,7 @@ const ReconciliationIRO = () => {
     //     });
     // }
     if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ dateRange: dateRange })
+      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         });
@@ -358,7 +361,7 @@ const ReconciliationIRO = () => {
     //   .catch((res) => {
     //     console.log(res);
     //   });
-  }, [attachment, dateRange, selectedIRO]);
+  }, [attachment, dateRange, selectedIRO, statusFilter, exstatusFilter]);
 
   const columns: GridColDef<IROrder>[] = [
     {
@@ -791,15 +794,43 @@ const ReconciliationIRO = () => {
                   onChange={handleSearchChange}
                   sx={{ width: '40%' }}
                 />
-
                 {/* Count Box with Reset Button */}
                 <Grid container justifyContent="flex-end">
+                  <Grid
+                    item
+                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={
+                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+
+                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                          // setStatusFilter([]);
+                          }
+                        }}
+                        name="Filter"
+                        row
+                      >
+                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
+                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                   <Grid item>
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 2,
+                        gap: 4,
                         backgroundColor: '#f5f5f5',
                         padding: '8px 16px',
                         borderRadius: '8px',
