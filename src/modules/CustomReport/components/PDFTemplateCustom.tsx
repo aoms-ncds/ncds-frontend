@@ -344,7 +344,7 @@ const PDFTemplateCustom = (props:any) => {
   }, [workers]);
   return (
     <Document>
-      <Page size={'A2'} style={styles.page} orientation='landscape'>
+      <Page size={'A4'} style={styles.page} orientation='landscape'>
         <div>
           {/* <Image src="/3D Logo 3.png" style={styles.image} /> */}
           <Text style={styles.title}>

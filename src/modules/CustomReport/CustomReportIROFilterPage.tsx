@@ -89,6 +89,8 @@ const IROReportFilter = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  // const user = useAuth();
+
   const options = [
     'Sanctioned Bank',
     'Beneficiary Name',
@@ -274,7 +276,7 @@ const IROReportFilter = () => {
   });
   console.log(filteredRows, 'filteredRows');
 
-  if (searchText && filteredRows.length ===0) {
+  if (searchText && filteredRows?.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
       variant: 'warning',
@@ -715,6 +717,7 @@ const IROReportFilter = () => {
   // State management for filters
   const [divisions, setDivisions] = useState<any[] | null>(null);
   const [division, setDivision] = useState<any[] | null>(null);
+  const [singleDivision, setSingleDivision] = useState<any | null>(null);
   const [subDivisions, setSubDivisions] = useState<any[] | null>(null);
   const [mainCategories, setMainCategories] = useState<any[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
@@ -745,12 +748,21 @@ const IROReportFilter = () => {
   const [sanctionedAsPers, setSanctionedAsPers] = useState<any[]>([]);
 
   console.log(filters, 'filters');
+  useEffect(()=>{
+    DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
+      console.log(res.data, 'resrrsa');
+      setSingleDivision(res.data);
+    });
+  }, []);
+  // console.log(user?.user.permissions, 'user');
 
   useEffect(()=>{
-    DivisionsServices.getDivisions().then((res) => {
-    //   setDivision(res.data ?? null);
-      setDivisions(res.data);
-    });
+    if ((user?.user as any).permissions.READ_ALL_DIVISIONS) {
+      DivisionsServices.getDivisions().then((res) => {
+      //   setDivision(res.data ?? null);
+        setDivisions(res.data);
+      });
+    }
     FRServices.getMainCategory()
           .then((res) => {
             setMainCategories(res.data);
@@ -810,7 +822,7 @@ const IROReportFilter = () => {
               <Grid item xs={12} sm={4}>
                 <Autocomplete
                   aria-required
-                  options={divisions ?? []} // Ensure options are not null or undefined
+                  options={divisions ?? [singleDivision]} // Ensure options are not null or undefined
                   getOptionLabel={(option) => option.details?.name || ''} // Fallback to an empty string if name is undefined
                   value={filters.division} // Match the value to an option in the divisions array
                   onChange={(event, newValue) => setFilters((prev: any) => ({
@@ -1347,7 +1359,7 @@ const IROReportFilter = () => {
                   event.preventDefault(); // Prevents form submission
                   setLoading1(true);
                   CustomReportServices.filterData(filters).then((res) => {
-                    if (res.data.length >= 1) {
+                    if (res.data?.length >= 1) {
                       setPage(true);
                       setData(res.data);
                       setLoading1(false);
@@ -1588,7 +1600,7 @@ const IROReportFilter = () => {
                         const row = [
                           index +1,
                           selectedData.includes('IRO No') && iro.IROno,
-                          selectedData.includes('Date') &&iro.IRODate,
+                          selectedData.includes('Date') &&moment(iro.IRODate).format('DD/MM/YYYY'),
                           selectedData.includes('Division') && iro.divisionData?.details?.name,
                           selectedData.includes('Sanction Amount') && iro.particularsData?.sanctionedAmount,
                           selectedData.includes('Sanction as per') && iro.particularsData?.sanctionedAsPer,
@@ -1784,7 +1796,7 @@ const IROReportFilter = () => {
         <Dialog open={openRemarks} fullWidth maxWidth="md">
           <DialogTitle>Remarks</DialogTitle>
           <DialogContent>
-            {remarks.length > 0 ? remarks.map((remark) => (
+            {remarks?.length > 0 ? remarks.map((remark) => (
               <MessageItem key={remark._id} sender={remark.createdBy?.basicDetails?.firstName + ' ' + remark.createdBy?.basicDetails?.lastName}
                 time={remark.updatedAt} body={remark.remark} isSent={true} />
             )) : 'No Data Found '}
