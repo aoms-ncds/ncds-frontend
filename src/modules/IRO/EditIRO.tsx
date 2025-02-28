@@ -50,6 +50,7 @@ import AddIcon from '@mui/icons-material/Add';
 import WorkersServices from '../Workers/extras/WorkersServices';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import PaymentMethodService from '../Settings/extras/PaymentMethodService';
 
 const EditIRO = () => {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ const EditIRO = () => {
   const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
   const [addNewParticulars, setAddNewParticulers] = useState<Particular[]>([]);
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
+  const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
 
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
@@ -340,7 +342,11 @@ const EditIRO = () => {
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [Allworkers, setAllWorkers] = useState<IWorker[] | Staff[]>();
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
-
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
+  }, []);
   useEffect(() => {
     if (IRO.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
@@ -1035,6 +1041,9 @@ const EditIRO = () => {
     Beneficiary Bank 20 - {IRO.division?.BeneficiaryBank20?.beneficiary}
                           </MenuItem>
                         ) : ''}
+                        {paymnetMethods.map((e) => (
+                          <MenuItem key={e._id} value={e.paymentMethod}>{e.paymentMethod}</MenuItem>
+                        ))}
                         {/* <MenuItem value={'FCRA'}>FCRA</MenuItem>
                         <MenuItem value={'Local Bank'}>Local Bank</MenuItem>
                         <MenuItem value={'Other Bank'}>Other Bank</MenuItem>

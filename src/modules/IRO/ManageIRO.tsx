@@ -52,6 +52,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -73,6 +74,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
   const [isCoordinator, setisCoordinator] = useState<any>(false);
+  console.log(exstatusFilter, 'exstatusFilter');
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -435,7 +437,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
+        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -446,7 +448,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && !userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
+        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
             setNotFound(true);
@@ -512,19 +514,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
+        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
           // console.log(res.data, 'datgajdfj');
         });
       }
     } else {
-      IROServices.getAll({ dateRange: dateRange, status: statusFilter }).then((res) => {
+      IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [openRelease, attachment, addSignature, dateRange, iroData, statusFilter]);
+  }, [openRelease, attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
   // console.log(mngrName, 'mngrName');
 
 
@@ -1415,7 +1417,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         Export
                       </Button>
                     }
-                  />{props.action =='manage' && (
+                  />
+                  {props.action =='manage' && (
 
                     <Grid
                       item
@@ -1425,17 +1428,24 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         <RadioGroup
                           aria-labelledby="Filter"
                           value={
-                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                              statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                'ALL'
+                            exstatusFilter.includes(69) ? 'NonBankTransfers' :
+                              statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                  'ALL'
                           }
                           onChange={(e) => {
                             const value = e.target.value;
                             if (value === 'WFA') {
+                              setExStatusFilter([]);
                               setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
                             } else if (value === 'RTD') {
+                              setExStatusFilter([]);
                               setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                            } else if (value === 'NonBankTransfers') {
+                              setExStatusFilter([69]);
+                              setStatusFilter([]); // Use an empty array for "ALL" to show all items
                             } else {
+                              setExStatusFilter([]);
                               setStatusFilter([]); // Use an empty array for "ALL" to show all items
                             }
                           }}
@@ -1445,6 +1455,40 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                           <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
                           <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
+                          <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+
+                  )}
+                  {props.action =='release' && (
+
+                    <Grid
+                      item
+                      sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={
+                            exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+
+                          }
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === 'NonBankTransfers') {
+                              setExStatusFilter([69]);
+                            } else {
+                              setExStatusFilter([]);
+                              setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                              // setStatusFilter([]);
+                            }
+                          }}
+                          name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="All" control={<Radio />} label="ALL" />
+                          <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>

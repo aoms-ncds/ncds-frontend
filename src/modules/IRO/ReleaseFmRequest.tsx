@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -68,6 +68,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const user = useAuth();
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
+  const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -445,10 +447,10 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   useEffect(() => {
     if (props.action === 'release') {
       if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
-        IROServices.getAll({ dateRange: dateRange, status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+        IROServices.getAll({ Exstatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
           .then((res) => {
             // console.log(res.data, 'sds');
-            setIROrder(() => [...res.data]);
+            // setIROrder(() => [...res.data]);
           })
           .catch((error) => {
             console.error(error);
@@ -540,7 +542,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     //     setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
     //   });
     }
-  }, [openRelease, attachment, addSignature, dateRange, iroData]);
+  }, [openRelease, attachment, addSignature, dateRange, iroData, exstatusFilter, statusFilter]);
   // console.log(mngrName, 'mngrName');
 
   useEffect(() => {
@@ -576,11 +578,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
-    IROServices.groupedIRO().then((res)=>{
+    IROServices.groupedIRO({ Exstatus: exstatusFilter, dateRange }).then((res)=>{
       console.log(res, 'res90');
       setGroupIro(res.data);
     });
-  }, []);
+  }, [statusFilter, exstatusFilter, dateRange]);
 
   const deleteIRO = (id: string) => {
     console.log(id, 'as is');
@@ -1369,7 +1371,19 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
+          setGroupIro((iroReq: any) =>
+            iroReq ?
+              iroReq.filter((iro:any) => {
+                if (!iro?.IRODate) return false; // Skip invalid entries
+
+                const iroDate = moment(iro.IRODate); // Convert to moment object
+                return (
+                  iroDate.isSameOrAfter(moment(dateRange?.startDate)) &&
+                    iroDate.isSameOrBefore(moment(dateRange?.endDate))
+                );
+              }) :
+              [],
+          );
         },
         rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
         initialRange: 'months',
@@ -1381,7 +1395,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -1394,7 +1408,34 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid
+                  item
+                >
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={
+                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === 'NonBankTransfers') {
+                          setExStatusFilter([69]);
+                        } else {
+                          setExStatusFilter([]);
+                          setStatusFilter([]);
+                          // setStatusFilter([]);
+                        }
+                      }}
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={4}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={

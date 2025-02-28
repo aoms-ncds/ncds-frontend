@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
 import moment from 'moment';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
@@ -5,12 +6,12 @@ import axios from 'axios';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
-  groupedIRO: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
+  groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
   getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  getAll: (conditions?: { status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
+  getAll: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,
@@ -217,7 +218,7 @@ export default {
   },
   sendNotifications: (name: string, id: string) => getStandardResponse<void>(axios.post(`/iro/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
-  getReconciliation: (conditions?: {dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',
+  getReconciliation: (conditions?: {ExStatus?:any;status?:any; dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',
     { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,

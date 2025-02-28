@@ -1294,13 +1294,18 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                         ...props.value,
                         sanctionedBank: e.target.value,
                       })
+                        sanctionedBank: e.target.value,
+                      })
                     }
                     required
                   >
                     <MenuItem value={'FCRA'}>FCRA</MenuItem>
                     <MenuItem value={'Normal Bank'}>Normal Bank</MenuItem>
 
-                  </Select>
+                  </Select>_
+                  </Select>_
+                  </Select>_
+                  </Select>_
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
