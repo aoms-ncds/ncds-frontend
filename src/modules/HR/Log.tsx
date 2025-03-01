@@ -7,19 +7,24 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import UserServices from '../User/extras/UserServices';
 import { Avatar, Grid, Card, Box } from '@mui/material';
 import { useState, useEffect } from 'react';
+import moment from 'moment';
 
 const Log = () => {
   const [users, setUsers] = useState<ILog[]>([]);
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   useEffect(() => {
-    UserServices.getAllLog()
+    UserServices.getAllLog(dateRange)
       .then((log) => setUsers(log.data))
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  console.log(users,'dd');
-  
+  }, [dateRange]);
+  console.log(users, 'dd');
+
   const columns: GridColDef<ILog>[] = [
     {
       field: 'actions',
@@ -108,8 +113,8 @@ const Log = () => {
             return lastDivision.subDivision.name;
           }
         }
-        return ''; 
-      }
+        return '';
+      },
     },
     //
     //   field: 'highestQualification',
@@ -180,7 +185,7 @@ const Log = () => {
       headerAlign: 'center',
       align: 'center',
       renderHeader: () => <b>{'Login At'}</b>,
-      valueGetter: (params) => params.row.createdAt.format('hh:mm A DD/MM/YYYY'),
+      valueGetter: (params) => params.row.createdAt?.format('hh:mm A DD/MM/YYYY'),
     },
     // {
     //   field: 'PANnumber',
@@ -208,7 +213,15 @@ const Log = () => {
     // },
   ];
   return (
-    <CommonPageLayout title="Login Logs">
+    <CommonPageLayout title="Login Logs" momentFilter={{
+      dateRange: dateRange,
+      onChange: (newDateRange) => {
+        setDateRange(newDateRange);
+        setUsers((user) => (user ? user.filter((u) => u.createdAt.isSameOrAfter(newDateRange.startDate) && u.createdAt.isSameOrBefore(newDateRange.endDate)) : []));
+      },
+      rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+      initialRange: 'months',
+    }}>
 
       {/* </Grid> */}
 

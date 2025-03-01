@@ -46,6 +46,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
+import PDFTemplateCustomFRAll from './components/PDFTemplateCustomFRAll';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -71,6 +72,7 @@ const CustomReportFRFilterPage = () => {
   const [data, setData] = useState<any[] | null>(null);
   const [print, setPrint] = useState<boolean>(false);
   const [page, setPage] = useState<boolean>(false);
+  const [singleDivision, setSingleDivision] = useState<any | null>(null);
 
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [loading, setLoading] = useState(false);
@@ -200,7 +202,12 @@ const CustomReportFRFilterPage = () => {
 
 
   console.log(data, 'newData');
-
+  useEffect(()=>{
+    DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
+      console.log(res.data, 'resrrsa');
+      setSingleDivision(res.data);
+    });
+  }, []);
 
   const attach = async (blob: Blob) => {
     try {
@@ -739,10 +746,12 @@ const CustomReportFRFilterPage = () => {
   console.log(filters, '323');
 
   useEffect(()=>{
-    DivisionsServices.getDivisions().then((res) => {
-    //   setDivision(res.data ?? null);
-      setDivisions(res.data);
-    });
+    if ((user?.user as any).permissions.READ_ALL_DIVISIONS) {
+      DivisionsServices.getDivisions().then((res) => {
+        //   setDivision(res.data ?? null);
+        setDivisions(res.data);
+      });
+    }
     FRServices.getMainCategory()
           .then((res) => {
             setMainCategories(res.data);
@@ -802,8 +811,8 @@ const CustomReportFRFilterPage = () => {
               <Grid item xs={12} sm={4}>
                 <Autocomplete
                   aria-required
-                  options={divisions ?? []} // Ensure options are not null or undefined
-                  getOptionLabel={(option) => option.details?.name || ''} // Fallback to an empty string if name is undefined
+                  options={divisions ?? [singleDivision]} // Ensure options are not null or undefined
+                  getOptionLabel={(option) => option?.details?.name || ''} // Fallback to an empty string if name is undefined
                   value={filters.division} // Match the value to an option in the divisions array
                   onChange={(event, newValue) => setFilters((prev: any) => ({
                     ...prev,
@@ -850,6 +859,7 @@ const CustomReportFRFilterPage = () => {
                   control={<Checkbox
                     name="allDivisions"
                     checked={filters.allDivisions}
+                    disabled={(user?.user as any)?.permissions?.READ_ALL_DIVISIONS !==true}
                     onChange={handleCheckboxChange} />}
                   label="All Divisions" />
               </Grid>
@@ -2020,8 +2030,12 @@ const CustomReportFRFilterPage = () => {
             <Container>
                   Downloading Custom report fr
               <br />
-              {data && (
+              {selectedData.length ==7 ? (
                 <PDFDownloadLink document={<PDFTemplateCustomFR rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
+                  {({ loading }) => ('CustomReport.pdf')}
+                </PDFDownloadLink>
+              ):(
+                <PDFDownloadLink document={<PDFTemplateCustomFRAll rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
                   {({ loading }) => ('CustomReport.pdf')}
                 </PDFDownloadLink>
               )}{' '}

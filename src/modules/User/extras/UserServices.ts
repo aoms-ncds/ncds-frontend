@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import axios from 'axios';
 import { FilterQuery } from 'mongoose';
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
@@ -36,10 +36,10 @@ export default {
           updatedAt: moment(user.updatedAt),
         })),
     ),
-  getAllLog: (): Promise<StandardResponse<ILog[]>> =>
+  getAllLog: (date?:any): Promise<StandardResponse<ILog[]>> =>
     getStandardResponse<ILog[]>(
       axios.get('/users/log', {
-        // params: { filterQuery: JSON.stringify(conditions) },
+        params: { date },
         headers: { ...getAuthHeader() },
       }),
       (logs) =>
@@ -59,8 +59,8 @@ export default {
             createdAt: moment(log.user?.createdAt),
             updatedAt: moment(log.user?.updatedAt),
           },
-          createdAt: moment(log.user?.createdAt),
-          updatedAt: moment(log.user?.updatedAt),
+          createdAt: moment(log?.createdAt),
+          updatedAt: moment(log?.updatedAt),
         })),
     ),
   getLastLog: (): Promise<StandardResponse<ILog | null>> =>

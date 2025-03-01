@@ -10,61 +10,69 @@ Font.register({
   family: 'Teko',
   src: 'https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap',
 });
+
 const styles = StyleSheet.create({
   page: {
     backgroundColor: 'white',
   },
   image: {
     position: 'absolute',
-    left: 385,
+    left: 825,
     height: 50,
     width: 50,
-    marginTop: 15,
+    marginTop: 20,
   },
   title: {
-    marginTop: 65,
-    fontSize: 14,
+    marginTop: 70,
+    fontSize: 12,
     position: 'absolute',
-    left: 350,
+    left: 720,
     color: 'darkblue',
   },
 
-  month: {
-    marginTop: 2,
+  frno: {
+    marginTop: 83,
     fontSize: 10,
     position: 'absolute',
-    left: 600,
-    color: 'black',
-  },
-  IRONo: {
-    marginTop: 90,
-    fontSize: 12,
-    position: 'absolute',
-    left: 365,
+    left: 820,
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
-  line1: {
-    height: 1,
-    backgroundColor: 'black',
-    marginVertical: 4, // Adjust the spacing as needed
+  month: {
+    marginTop: 95,
+    fontSize: 10,
+    position: 'absolute',
+    left: 790,
+    color: 'black',
+  },
+  heading: {
+    position: 'absolute',
+    left: '800',
+    marginTop: 60,
+    fontWeight: 100,
+  },
+  headingLine: {
+    position: 'absolute',
+    left: '0',
+    right: '0',
+    top: 85,
+    borderBottom: 1,
+    borderColor: 'black',
   },
   line: {
     position: 'absolute',
     left: '20',
-    right: 22,
-    top: 108,
+    right: 15,
+    top: 106,
     borderBottom: 1,
     borderColor: 'black',
   },
   tableContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 108, // Adjust this value to set the table's position
-    width: 800,
-    flex: 1, // This will make the table fill the width of the page
-    flexShrink: 0,
+    marginTop: 107, // Adjust this value to set the table's position
+    width: 1650,
   },
   tableRow: {
     display: 'flex',
@@ -73,135 +81,31 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
     alignItems: 'center',
-    height: 70,
-    paddingRight: 70,
-
+    height: 30,
     left: 20,
-  },
-  tableRow2: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    borderBottomStyle: 'solid',
-    alignItems: 'center',
-    height: 40,
-    paddingRight: 70,
-    left: 20,
-    // flex: 0.3, // Decrease width
-  },
-  tableRow1: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    borderBottomStyle: 'solid',
-    alignItems: 'center',
-    height: 70,
-    left: 20,
-    marginBottom: '280px',
   },
   tableHead: {
-    flex: 0.1,
-    fontSize: 12,
-    padding: 1.3,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-    color: 'red',
-  },
-  tableHead1: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 6,
     padding: 2,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
-  },
-  tableHead2: {
-    flex: 1,
-    fontSize: 12,
-    padding: 2,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-  },
-  tableHeadCopy: {
-    flex: 1,
-    fontSize: 12,
-    padding: 2,
-    // textAlign: 'justify',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-    // paddingLeft: '60vh',
   },
   tableCell: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 6,
     padding: 2,
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
   },
-  narrationColumn: {
-    flex: 4, // Increase width for better visibility
-    textAlign: 'left',
-    padding: 4,
-    flexWrap: 'wrap',
-    wordBreak: 'break-word',
-  },
-  tableCell1: {
+  bottomTableCell: {
     flex: 1,
-    fontSize: 14,
-    padding: 4, // Increase padding for better spacing
-    textAlign: 'left', // Align text to left for better readability
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-    flexWrap: 'wrap', // Enable text wrapping
-    wordBreak: 'break-word', // Ensure long words wrap properly
-    maxWidth: 200, // Adjust based on available space
-  },
-
-  tableCell2: {
-    flex: 5,
-    fontSize: 14,
+    fontSize: 6,
     padding: 2,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
-  },
-  headGrid: {
-    borderRight: 1,
-    height: 30,
-    // paddingRight: 50,
-  },
-  cellGrid: {
-    borderRight: 1,
-    height: 70,
   },
   grid: {
     borderRight: 1,
-    height: 70,
+    height: 30,
   },
-  grid4: {
-    borderRight: 1,
-    height: 70,
-    left: 70, // Ensure this doesn't push it outside the page
-
-  },
-  grid2: {
-    borderRight: 1,
-    height: 40,
-  },
-  grid34444: {
-    borderRightWidth: 1, // Use borderRightWidth instead of borderRight
-    borderColor: 'black', // Required for the border to appear
-    borderStyle: 'solid', // Ensures the border is visible
-    height: 38,
-    left: 281, // Ensure this doesn't push it outside the page
-  },
-
-
 });
 interface TotalSupportStructure {
   basic?: number;
@@ -230,7 +134,7 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplateCustomFR = (props:any) => {
+const PDFTemplateCustomAll = (props:any) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -324,16 +228,6 @@ const PDFTemplateCustomFR = (props:any) => {
       setWorkers([]);
     }
   }, [props.FrNo]);
-  const [selectedData, setSelectedData] = useState<any[]>([
-    'Sl No',
-    'FR No',
-    'Date',
-    'Division',
-    'Sanction Amount',
-    'Sanction as per',
-    'Narration',
-
-  ]);
   useEffect(() => {
     const basic = workers?.reduce(
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
@@ -448,54 +342,51 @@ const PDFTemplateCustomFR = (props:any) => {
         ),
     });
   }, [workers]);
-  const date= new Date().toLocaleString();
-
   return (
     <Document>
-      <Page size={'A4'} style={styles.page} orientation='landscape'>
+      <Page size={'A2'} style={styles.page} orientation='landscape'>
         <div>
           {/* <Image src="/3D Logo 3.png" style={styles.image} /> */}
           <Text style={styles.title}>
-            {'Custom Report FR'}
+            {'Custom Report'}
           </Text>
-          <Text style={styles.month}>{date}</Text>
-
           {/* <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
           <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
         <View style={styles.line} />
         <View style={styles.tableContainer} >
-          <View style={styles.tableRow2} key={0}>
-            {selectedData.map((header: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
+          <View style={styles.tableRow} key={0}>
+            {props.headers.map((header: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
               <React.Fragment key={index}>
-                <div style={styles.grid2}></div>
+                <div style={styles.grid}></div>
                 <Text style={styles.tableHead}>{header}</Text>
               </React.Fragment>
             ))}
-            <div style={styles.grid34444}></div> {/* This will now be displayed */}
           </View>
 
 
           {props.rowData?.map((row: any, index: number) => (
-            <View style={styles.tableRow } key={row._id}>
+            <View style={styles.tableRow} key={row._id}>
+              <div style={styles.grid}></div>
+              <Text style={styles.tableHead}>{index +1}</Text>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableHead2}>{index +1}</Text>
-              <div style={styles.grid}></div>
-
-              {props.headers.includes('FR No') && (
+              {props.headers.includes('IRO No') && (
                 <>
-                  <Text style={styles.tableHead1}>{row.FRno}</Text>
+                  <Text style={styles.tableHead}>{row.IROno}</Text>
                   <div style={styles.grid}></div>
+
                 </>
               )}
+
               {props.headers.includes('Date') && (
                 <>
-
-                  <Text style={styles.tableCell}>{moment(row.FRdate).format('DD/MM/YYYY')}</Text>
+                  <Text style={styles.tableCell}>{moment(row.IRODate).format('DD/MM/YYYY')}</Text>
                   <div style={styles.grid}></div>
+
                 </>
               )}
+
               {props.headers.includes('Division') && (
                 <>
 
@@ -503,7 +394,6 @@ const PDFTemplateCustomFR = (props:any) => {
                   <div style={styles.grid}></div>
                 </>
               )}
-
               {props.headers.includes('Sanction Amount') && (
                 <>
 
@@ -519,74 +409,7 @@ const PDFTemplateCustomFR = (props:any) => {
               )}
               {props.headers.includes('Narration') && (
                 <>
-                  <View style={[styles.tableCell, styles.narrationColumn]}>
-                    <Text>{row.particularsData?.narration}</Text>
-                  </View>
-                  <div style={styles.grid4}></div>
-                </>
-              )}
-              {props.headers.includes('IRO No') && (
-                <>
-
-                  <Text style={styles.tableHead}>{row.IROdata?.IROno}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('Status') && (
-                <>
-
-                  <Text style={styles.tableCell}>
-                    {IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}
-                  </Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-
-              {props.headers.includes('Sub-Division') && (
-                <>
-
-                  <Text style={styles.tableCell}>{row.subDivData?.name}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('Main Category') && (
-                <>
-
-                  <Text style={styles.tableCell}>{row.particularsData?.mainCategory}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('Sub Category 1') && (
-                <>
-
-                  <Text style={styles.tableCell}>{row.particularsData?.subCategory1}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('Sub Category 2') && (
-                <>
-                  <Text style={styles.tableCell}>{row.particularsData?.subCategory2}</Text>
-                  <div style={styles.grid}></div>
-
-                </>
-              )}
-              {props.headers.includes('Sub Category 3') && (
-                <>
-
-                  <Text style={styles.tableCell}>{row.particularsData?.subCategory3}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('For the month') && (
-                <>
-                  <Text style={styles.tableCell}>{row.particularsData?.month}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
-              {props.headers.includes('Requested Amount') && (
-                <>
-
-                  <Text style={styles.tableCell}>{row.particularsData?.requestedAmount}</Text>
+                  <Text style={styles.tableCell}>{row.particularsData?.narration}</Text>
                   <div style={styles.grid}></div>
                 </>
               )}
@@ -606,15 +429,68 @@ const PDFTemplateCustomFR = (props:any) => {
                   <div style={styles.grid}></div>
                 </>
               )}
+              {props.headers.includes('Sub-Division') && (
+                <>
 
+                  <Text style={styles.tableCell}>{row?.subDivData?.name}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Main Category') && (
+                <>
 
+                  <Text style={styles.tableCell}>{row.particularsData?.mainCategory}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 1') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory1}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 2') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory2}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Sub Category 3') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.subCategory3}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Requested Amount') && (
+                <>
+
+                  <Text style={styles.tableCell}>{row.particularsData?.requestedAmount}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Status') && (
+                <>
+
+                  <Text style={styles.tableCell}>
+                    {IROLifeCycleStates.getStatusNameByCodeTransaction(row.status).replaceAll('_', ' ')}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('For the month') && (
+                <>
+                  <Text style={styles.tableCell}>{row.particularsData?.month}</Text>
+                  <div style={styles.grid}></div>
+                </>
+              )}
               {props.headers.includes('Mode of Payment') && (
                 <>
                   <Text style={styles.tableCell}>{row.releaseAmountData?.modeOfPayment}</Text>
                   <div style={styles.grid}></div>
                 </>
               )}
-
               {props.headers.includes('Amount Release Date') && (
                 <>
                   <Text style={styles.tableCell}>
@@ -623,8 +499,6 @@ const PDFTemplateCustomFR = (props:any) => {
                   <div style={styles.grid}></div>
                 </>
               )}
-
-
               {props.headers.includes('IroClosedOn') && (
                 <>
                   <Text style={styles.tableCell}>{moment(row.iroClosedOn).format('DD/MM/YYYY')}</Text>
@@ -965,4 +839,4 @@ const PDFTemplateCustomFR = (props:any) => {
 };
 
 
-export default PDFTemplateCustomFR;
+export default PDFTemplateCustomAll;
