@@ -614,7 +614,7 @@ const ReopenedIRO = () => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
               },
 
             },
@@ -626,7 +626,7 @@ const ReopenedIRO = () => {
                 // to: `/iro/${params.row._id}/edit`,
                 onClick: () => {
                   if (props?.row.FR) {
-                    FRServices.getById(props.row.FR).then((res) => {
+                    FRServices.getById((props.row.FR as any)._id).then((res) => {
                       setFrData(res.data);
                       setFrNo(res.data.FRno);
                       console.log(res.data, 'fr');

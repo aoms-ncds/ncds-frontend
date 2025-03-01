@@ -722,7 +722,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
+                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
               },
 
             },
@@ -928,7 +928,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   component: Link,
                   icon: DeleteIcon,
                   onClick: () => {
-                    FRServices.getById(params.row.FR?? '').then((res) => {
+                    FRServices.getById((params.row?.FR as any)?._id?? '').then((res) => {
                       console.log(res.data, 'daa');
                       setFR(res.data);
                     });
