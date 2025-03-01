@@ -46,6 +46,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
 import PDFTemplateCustomFR from './components/PDFTemplateCustomFR';
+import PDFTemplateCustomFRAll from './components/PDFTemplateCustomFRAll';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -2029,8 +2030,12 @@ const CustomReportFRFilterPage = () => {
             <Container>
                   Downloading Custom report fr
               <br />
-              {data && (
+              {selectedData.length ==7 ? (
                 <PDFDownloadLink document={<PDFTemplateCustomFR rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
+                  {({ loading }) => ('CustomReport.pdf')}
+                </PDFDownloadLink>
+              ):(
+                <PDFDownloadLink document={<PDFTemplateCustomFRAll rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
                   {({ loading }) => ('CustomReport.pdf')}
                 </PDFDownloadLink>
               )}{' '}

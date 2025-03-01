@@ -324,6 +324,16 @@ const PDFTemplateCustomFR = (props:any) => {
       setWorkers([]);
     }
   }, [props.FrNo]);
+  const [selectedData, setSelectedData] = useState<any[]>([
+    'Sl No',
+    'FR No',
+    'Date',
+    'Division',
+    'Sanction Amount',
+    'Sanction as per',
+    'Narration',
+
+  ]);
   useEffect(() => {
     const basic = workers?.reduce(
       (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
@@ -438,6 +448,8 @@ const PDFTemplateCustomFR = (props:any) => {
         ),
     });
   }, [workers]);
+  const date= new Date().toLocaleString();
+
   return (
     <Document>
       <Page size={'A4'} style={styles.page} orientation='landscape'>
@@ -446,31 +458,34 @@ const PDFTemplateCustomFR = (props:any) => {
           <Text style={styles.title}>
             {'Custom Report FR'}
           </Text>
+          <Text style={styles.month}>{date}</Text>
+
           {/* <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
           <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
         <View style={styles.line} />
         <View style={styles.tableContainer} >
-          <View style={styles.tableRow} key={0}>
-            {props.headers.map((header: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
+          <View style={styles.tableRow2} key={0}>
+            {selectedData.map((header: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
               <React.Fragment key={index}>
-                <div style={styles.grid}></div>
+                <div style={styles.grid2}></div>
                 <Text style={styles.tableHead}>{header}</Text>
               </React.Fragment>
             ))}
+            <div style={styles.grid34444}></div> {/* This will now be displayed */}
           </View>
 
 
           {props.rowData?.map((row: any, index: number) => (
-            <View style={styles.tableRow2 } key={row._id}>
+            <View style={styles.tableRow } key={row._id}>
               <div style={styles.grid}></div>
 
-              <Text style={styles.tableHead}>{index +1}</Text>
+              <Text style={styles.tableHead2}>{index +1}</Text>
               <div style={styles.grid}></div>
 
               {props.headers.includes('FR No') && (
                 <>
-                  <Text style={styles.tableHead}>{row.FRno}</Text>
+                  <Text style={styles.tableHead1}>{row.FRno}</Text>
                   <div style={styles.grid}></div>
                 </>
               )}
@@ -488,12 +503,7 @@ const PDFTemplateCustomFR = (props:any) => {
                   <div style={styles.grid}></div>
                 </>
               )}
-              {props.headers.includes('Narration') && (
-                <>
-                  <Text style={styles.tableCell}>{row.particularsData?.narration}</Text>
-                  <div style={styles.grid}></div>
-                </>
-              )}
+
               {props.headers.includes('Sanction Amount') && (
                 <>
 
@@ -505,6 +515,14 @@ const PDFTemplateCustomFR = (props:any) => {
                 <>
                   <Text style={styles.tableCell}>{row.particularsData?.sanctionedAsPer}</Text>
                   <div style={styles.grid}></div>
+                </>
+              )}
+              {props.headers.includes('Narration') && (
+                <>
+                  <View style={[styles.tableCell, styles.narrationColumn]}>
+                    <Text>{row.particularsData?.narration}</Text>
+                  </View>
+                  <div style={styles.grid4}></div>
                 </>
               )}
               {props.headers.includes('IRO No') && (

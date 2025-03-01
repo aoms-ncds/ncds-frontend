@@ -134,7 +134,7 @@ interface TotalSupportStructure {
   prevNet?: number;
 }
 // Create Document Component
-const PDFTemplateCustomFR = (props:any) => {
+const PDFTemplateCustomFRAll = (props:any) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState<TotalSupportStructure>({
     basic: 0,
@@ -851,4 +851,4 @@ const PDFTemplateCustomFR = (props:any) => {
 };
 
 
-export default PDFTemplateCustomFR;
+export default PDFTemplateCustomFRAll;
