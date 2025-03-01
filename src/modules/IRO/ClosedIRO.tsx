@@ -424,7 +424,7 @@ const ClosedIRO = () => {
                 setOpenAttachReceipt(true);
                 setIroData(props.row);
                 if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
+                  FRServices.getById((props.row.FR as any)._id).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });
@@ -442,7 +442,7 @@ const ClosedIRO = () => {
                 setOpenAttachReceipt1(true);
                 setIroData(props.row);
                 if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
+                  FRServices.getById((props.row.FR as any)._id).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });

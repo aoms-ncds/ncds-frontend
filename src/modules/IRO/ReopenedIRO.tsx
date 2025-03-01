@@ -594,7 +594,7 @@ const ReopenedIRO = () => {
                   setIroData(props.row);
                   setConform1(true);
                   if (props?.row.FR) {
-                    FRServices.getById(props.row.FR).then((res) => {
+                    FRServices.getById((props.row.FR as any)._id).then((res) => {
                       setFrData(res.data);
                       console.log(res.data, 'fr');
                     });
@@ -925,7 +925,7 @@ const ReopenedIRO = () => {
           <Container>
             {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
             <br />
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+            {iroData && mngrName&&selectedSignature&& (
               <PDFDownloadLink
                 document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
@@ -944,7 +944,7 @@ const ReopenedIRO = () => {
             Cancel
           </Button>
           <>
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+            {iroData && mngrName&&selectedSignature&& (
 
               <>
                 <PDFDownloadLink document={<IROTemplate
