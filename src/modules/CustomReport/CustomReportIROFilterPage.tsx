@@ -45,6 +45,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/material/CircularProgress';
 import PDFTemplateCustom from './components/PDFTemplateCustom';
+import PDFTemplateCustomAll from './components/PDFTemplateCustomAll';
 
 const CustomFooter = () => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '10px', background: '#f0f0f0', fontWeight: 'bold', borderTop: '1px solid black' }}>
@@ -127,7 +128,7 @@ const IROReportFilter = () => {
     'Narration',
   ]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
-  console.log(loading1, 'options');
+  console.log(selectedData.length, 'options');
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -823,7 +824,7 @@ const IROReportFilter = () => {
                 <Autocomplete
                   aria-required
                   options={divisions ?? [singleDivision]} // Ensure options are not null or undefined
-                  getOptionLabel={(option) => option.details?.name || ''} // Fallback to an empty string if name is undefined
+                  getOptionLabel={(option) => option?.details?.name || ''} // Fallback to an empty string if name is undefined
                   value={filters.division} // Match the value to an option in the divisions array
                   onChange={(event, newValue) => setFilters((prev: any) => ({
                     ...prev,
@@ -869,6 +870,7 @@ const IROReportFilter = () => {
                 <FormControlLabel
                   control={<Checkbox
                     name="allDivisions"
+                    disabled={(user?.user as any)?.permissions?.READ_ALL_DIVISIONS !==true}
                     checked={filters.allDivisions}
                     onChange={handleCheckboxChange} />}
                   label="All Divisions" />
@@ -2066,8 +2068,12 @@ const IROReportFilter = () => {
             <Container>
                   Downloading Custom report iro
               <br />
-              {data && (
+              {selectedData.length ==7 ? (
                 <PDFDownloadLink document={<PDFTemplateCustom rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
+                  {({ loading }) => ('CustomReport.pdf')}
+                </PDFDownloadLink>
+              ):(
+                <PDFDownloadLink document={<PDFTemplateCustomAll rowData={data as any} headers={selectedData} />} fileName="CustomReport.pdf" style={{ color: 'blue' }}>
                   {({ loading }) => ('CustomReport.pdf')}
                 </PDFDownloadLink>
               )}{' '}

@@ -811,7 +811,7 @@ const CustomReportFRFilterPage = () => {
                 <Autocomplete
                   aria-required
                   options={divisions ?? [singleDivision]} // Ensure options are not null or undefined
-                  getOptionLabel={(option) => option.details?.name || ''} // Fallback to an empty string if name is undefined
+                  getOptionLabel={(option) => option?.details?.name || ''} // Fallback to an empty string if name is undefined
                   value={filters.division} // Match the value to an option in the divisions array
                   onChange={(event, newValue) => setFilters((prev: any) => ({
                     ...prev,
@@ -858,6 +858,7 @@ const CustomReportFRFilterPage = () => {
                   control={<Checkbox
                     name="allDivisions"
                     checked={filters.allDivisions}
+                    disabled={(user?.user as any)?.permissions?.READ_ALL_DIVISIONS !==true}
                     onChange={handleCheckboxChange} />}
                   label="All Divisions" />
               </Grid>
