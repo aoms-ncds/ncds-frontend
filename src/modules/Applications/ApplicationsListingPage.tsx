@@ -273,6 +273,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       setReason(res.data);
     });
   }, []);
+  console.log(applications?.map((e)=>e.createdAt), '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -536,7 +537,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 250,
     },
     {
-      field: 'appledDate', align: 'center', headerClassName: 'super-app-theme--header',
+      field: 'createdAt', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Applied Date</b>),
       renderCell: (params) => (
         <p style={{
@@ -547,7 +548,10 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: 3,
         }}>
-          {moment(params.value?.createdAt).format('DD/MM/YYYY hh:mm A')}</p>),
+          {params.row.createdAt ?
+            moment(params.row.createdAt).format('DD/MM/YYYY hh:mm A') :
+            'N/A'}
+        </p>),
       width: 250,
     },
     {

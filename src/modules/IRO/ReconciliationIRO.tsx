@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import {
@@ -1110,7 +1111,7 @@ const ReconciliationIRO = () => {
                   Downloading the IROReceipt for {data?.IRONo}
             <br />
             {data && (
-              <PDFDownloadLink document={<IROTemplate rowData={data as FR} fr={data.FR} president={signaturePresident} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
+              <PDFDownloadLink document={<IROTemplate rowData={data as FR} fr={data.FR} president={signaturePresident} officeMngrSign={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
                 {({ loading }) => (loading || openPrintFr ? '....' : 'IROReceipt.pdf')}
               </PDFDownloadLink>
             )}{' '}
