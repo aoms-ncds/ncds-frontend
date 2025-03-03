@@ -35,6 +35,7 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import FRServices from '../FR/extras/FRServices';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import NotificationService from '../Notification/extras/NotificationService';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -52,6 +53,7 @@ const ReconciliationIRO = () => {
   const [messages, setMessages] = useState<number | null>(0);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.AMOUNT_RELEASED, IROLifeCycleStates.RECONCILIATION_DONE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [openAttachReceipt1, setOpenAttachReceipt1] = useState(false);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -423,6 +425,24 @@ const ReconciliationIRO = () => {
                 }, 2000);
               },
             },
+            {
+              id: 'Attach IRO receipt',
+              text: 'Prev Regenerate IRO',
+              icon: AttachFileIcon,
+              onClick: () => {
+                setOpenAttachReceipt1(true);
+                setIroData(props.row);
+                if (props?.row.FR) {
+                  FRServices.getById((props.row.FR as any)._id).then((res) => {
+                    setFrData(res.data);
+                    console.log(res.data, 'fr');
+                  });
+                }
+                setPrintIroLoading(true);
+                setTimeout(() => {
+                  setPrintIroLoading(false);
+                }, 2000);
+              } },
             {
               id: 'View',
               text: 'View Fr ',
@@ -1103,6 +1123,58 @@ const ReconciliationIRO = () => {
       </Grid> */}
           </Grid>
         </DialogContent>
+      </Dialog>
+      <Dialog open={ openAttachReceipt1 } onClose={() => setOpenAttachReceipt1(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Are you sure</DialogTitle>
+        <DialogContent>
+          <Container>
+          Do you want to download receipt for {iroData?.IROno}?
+            <br />
+            {iroData && mngrName&&selectedSignature&&FrData&& (
+              <PDFDownloadLink
+                document={<IROTemplate prev={true} rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setIroData(null);
+              setOpenAttachReceipt1(false);
+            }}
+            variant="text"
+          >
+            Cancel
+          </Button>
+          <>
+            {/* {iroData && mngrName&&selectedSignature&&FrData&& (
+              <>
+                <PDFDownloadLink document={<IROTemplate
+                  rowData={iroData} mngrName={mngrName} prev={true} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
+                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
+                  {({ blob, loading }) =>
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                    </Button> }
+                </PDFDownloadLink>
+
+              </>
+            )} */}
+          </>
+        </DialogActions>
       </Dialog>
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
