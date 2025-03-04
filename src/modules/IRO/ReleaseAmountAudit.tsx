@@ -1219,12 +1219,24 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   }
   return (
     <CommonPageLayout
-      title={'IRO Release Audit'}
+      title={props.action == 'manage' ? 'Manage IRO' : 'Audit view'}
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
           setDateRange(newDateRange);
-          setIROrder((iroReq) => (iroReq ? iroReq.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)) : []));
+          setGroupIro((iroReq: any) =>
+            iroReq ?
+              iroReq.filter((iro:any) => {
+                if (!iro?.IRODate) return false; // Skip invalid entries
+
+                const iroDate = moment(iro.IRODate); // Convert to moment object
+                return (
+                  iroDate.isSameOrAfter(moment(dateRange?.startDate)) &&
+                  iroDate.isSameOrBefore(moment(dateRange?.endDate))
+                );
+              }) :
+              [],
+          );
         },
         rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
         initialRange: 'months',
@@ -1403,7 +1415,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                           rows={filteredRows}
                           columns={columns}
                           getRowId={(row) => row._id}
-                          // checkboxSelection={props.action === 'release'}
+                          checkboxSelection={props.action === 'release'}
                           disableRowSelectionOnClick={props.action === 'release'}
                           onRowSelectionModelChange={(newRowSelectionModel) => {
                             console.log(newRowSelectionModel, 'newRowSelectionModel');

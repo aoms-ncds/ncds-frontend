@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  // console.log(props.rowData?.releaseAmount?.transferredBank.accountNumber , 'prop');
+  console.log(props.rowData, 'prop');
 
   let totalAmount=0;
   return (
