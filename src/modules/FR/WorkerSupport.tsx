@@ -1331,7 +1331,7 @@ const WorkerSupportPage = () => {
                           }));
                         }
                       }}
-                      renderInput={(params) => <TextField {...params} label="Designation Particulars" variant='standard' />}
+                      renderInput={(params) => <TextField {...params} label="Designation Particulars" required variant='standard' />}
                       fullWidth
                     />
                   </Grid>

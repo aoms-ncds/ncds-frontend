@@ -212,7 +212,38 @@ const IROReportFilter = () => {
 
   console.log(data, 'newData');
 
-
+  const originalOrder = [
+    'SL No',
+    'IRO No',
+    'Date',
+    'Division',
+    'Sanction Amount',
+    'Sanction as per',
+    'Narration',
+    'Sanctioned Bank',
+    'Beneficiary Name',
+    'Sub-Division',
+    'Main Category',
+    'Sub Category 1',
+    'Sub Category 2',
+    'Sub Category 3',
+    'Requested Amount',
+    'Status',
+    'For the month',
+    'Mode of Payment',
+    'Amount Release Date',
+    'IroClosedOn',
+    'Source Of Account',
+    'ReleaseAmount',
+    'TransactionNumber',
+    'TransferredAmount',
+    'TransferredDate',
+    'TransferredBank Name',
+    'TransferredBank branchName',
+    'TransferredBank accountNumber',
+    'TransferredBank IFSCCode',
+    'Last Updated',
+  ];
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
@@ -1987,23 +2018,16 @@ const IROReportFilter = () => {
           <DialogContent>
             <Autocomplete
               multiple
-              options={['All', ...options]}
+              options={['All', ...originalOrder]} // Ensure correct order
               value={selectedData}
               onChange={(event, newValue) => {
                 if (newValue.includes('All')) {
-                  // If "All" is selected, select all options except "All" itself
-                  setSelectedData((prev) => [ // Keep existing selected options
-                    'SL No',
-                    'IRO No',
-                    'Date',
-                    'Division',
-                    'Sanction Amount',
-                    'Sanction as per',
-                    'Narration',
-                    ...options,
-                  ]);
+                  // Select all options except "All" itself
+                  setSelectedData(originalOrder);
                 } else {
-                  setSelectedData(newValue);
+                  // Maintain original order
+                  const sortedSelection = originalOrder.filter((item) => newValue.includes(item));
+                  setSelectedData(sortedSelection);
                 }
               }}
               renderInput={(params) => <TextField {...params} placeholder="Search..." />}
@@ -2011,14 +2035,16 @@ const IROReportFilter = () => {
             <Box mt={2}>
               <strong>Selected Data</strong>
               <Button onClick={() => setSelectedData([])} sx={{ float: 'right' }}>
-        Clear All
+      Clear All
               </Button>
               <Box mt={1} sx={{ border: '1px solid gray', padding: 1 }}>
                 {selectedData.map((item) => (
                   <Chip
                     key={item}
                     label={item}
-                    onDelete={() => setSelectedData(selectedData.filter((i) => i !== item))}
+                    onDelete={() =>
+                      setSelectedData((prev) => prev.filter((i) => i !== item))
+                    }
                     sx={{ margin: 0.5 }}
                   />
                 ))}

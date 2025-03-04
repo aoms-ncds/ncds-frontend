@@ -67,6 +67,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   // eslint-disable-next-line prefer-const
   saveReleaseAmount = (e: { preventDefault: () => void }) => {// TODO: on release datagrid should updated
     e.preventDefault();
+    props.onClose();
     const approvalSnack = enqueueSnackbar({ message: 'Releasing Amount ', variant: 'info' });
 
     IROServices.releaseAmount(releaseAmount.IRO?? [], releaseAmount).then((res) => {
@@ -74,7 +75,6 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
         message: res.message,
         variant: 'success',
       });
-      props.onClose();
       setTimeout(() => {
         window.location.reload();
       }, 500);

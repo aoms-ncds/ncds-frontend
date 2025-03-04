@@ -171,6 +171,7 @@ const ChildeSupportPage = () => {
     </div>
   );
   useEffect(() => {
+    setTotal(0);
     const tot = 0;
     childList.map((i) => {
       const tot = childList.reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
@@ -682,6 +683,7 @@ const ChildeSupportPage = () => {
 
 
                       setDivision(newVal);
+                      setSubDivision(null);
                     } else {
                       setChildList(allChild ?? []);
                       setDivision(null);

@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props, 'prop');
+  // console.log(props.rowData?.releaseAmount?.transferredBank.accountNumber , 'prop');
 
   let totalAmount=0;
   return (
@@ -179,7 +179,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
             <Text style={styles.divisiontitle1 }>Name of the Bank:</Text>
             <Text style={styles.bank}>{props?.rowData?.sanctionedBank}</Text>
             <Text style={styles.divisiontitle2}>Account No:</Text>
-            <Text style={styles.date1 }>0</Text>
+            <Text style={styles.date1 }>{(props.rowData as any)?.releaseAmount?.transferredBank.accountNumber}</Text>
           </div>
         </div>
         <div style={{ marginTop: 230, width: 560, left: 20, right: 20 }}>

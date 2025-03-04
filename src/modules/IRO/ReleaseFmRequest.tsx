@@ -444,106 +444,106 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   // }, [releaseAmountIROs]);
 
   const userPermissions = (user.user as User)?.permissions;
-  useEffect(() => {
-    if (props.action === 'release') {
-      if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
-        IROServices.getAll({ Exstatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
-          .then((res) => {
-            // console.log(res.data, 'sds');
-            // setIROrder(() => [...res.data]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-      //   if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-      //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
-      //       .then((res) => {
-      //         // console.log(res.data, 'KKK');
-      //         setIROrder(() => [...res.data]);
-      //       })
-      //       .catch((error) => {
-      //         console.error(error);
-      //       });
-      //   }
-      //   if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-      //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Local' })
-      //       .then((res) => {
-      //         // console.log(res?.data, 'KKK');;
+  // useEffect(() => {
+  //   if (props.action === 'release') {
+  //     // if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
+  //     //   IROServices.getAll({ Exstatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
+  //     //     .then((res) => {
+  //     //       // console.log(res.data, 'sds');
+  //     //       // setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //     //   if (userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+  //     //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'FCRA' })
+  //     //       .then((res) => {
+  //     //         // console.log(res.data, 'KKK');
+  //     //         setIROrder(() => [...res.data]);
+  //     //       })
+  //     //       .catch((error) => {
+  //     //         console.error(error);
+  //     //       });
+  //     //   }
+  //     //   if (userPermissions?.LOCAL_ACCOUNT_ACCESS) {
+  //     //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sourceOfAccount: 'Local' })
+  //     //       .then((res) => {
+  //     //         // console.log(res?.data, 'KKK');;
 
-      //         setIROrder(() => [...res.data]);
-      //       })
-      //       .catch((error) => {
-      //         console.error(error);
-      //       });
-      //   }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
+  //     //         setIROrder(() => [...res.data]);
+  //     //       })
+  //     //       .catch((error) => {
+  //     //         console.error(error);
+  //     //       });
+  //     //   }
+  //     // if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
+  //     //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
+  //     //     .then((res) => {
+  //     //       console.log(res.data, 'UIOP');
+  //     //       setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //     // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
+  //     //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
+  //     //     .then((res) => {
+  //     //       console.log(res.data, 'UIOP');
 
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
+  //     //       setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //     // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
+  //     //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
+  //     //     .then((res) => {
+  //     //       console.log(res.data, 'UIOP');
 
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
+  //     //       setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //     // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
+  //     //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
+  //     //     .then((res) => {
+  //     //       console.log(res.data, 'UIOP');
 
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
+  //     //       setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //     // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
+  //     //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
+  //     //     .then((res) => {
+  //     //       console.log(res.data, 'UIOP');
 
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-    //   if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS && userPermissions.ACCOUNTS_MNGR_ACCESS) {
-    //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
-    //       setIROrder(res.data);
-    //       // console.log(res.data, 'datgajdfj');
-    //     });
-    //   }
-    // } else {
-    //   IROServices.getAll().then((res) => {
-    //     setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-    //   });
-    }
-  }, [openRelease, attachment, addSignature, dateRange, iroData, exstatusFilter, statusFilter]);
-  // console.log(mngrName, 'mngrName');
+  //     //       setIROrder(() => [...res.data]);
+  //     //     })
+  //     //     .catch((error) => {
+  //     //       console.error(error);
+  //     //     });
+  //     // }
+  //   //   if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS && userPermissions.ACCOUNTS_MNGR_ACCESS) {
+  //   //     IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE }).then((res) => {
+  //   //       setIROrder(res.data);
+  //   //       // console.log(res.data, 'datgajdfj');
+  //   //     });
+  //   //   }
+  //   // } else {
+  //   //   IROServices.getAll().then((res) => {
+  //   //     setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+  //   //   });
+  //   }
+  // }, [openRelease, attachment, addSignature, dateRange, iroData, exstatusFilter, statusFilter]);
+  // // console.log(mngrName, 'mngrName');
 
   useEffect(() => {
     ESignatureService.getESignature().then((res) => {

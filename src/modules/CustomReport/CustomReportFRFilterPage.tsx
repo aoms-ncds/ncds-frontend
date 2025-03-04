@@ -120,7 +120,28 @@ const CustomReportFRFilterPage = () => {
   ]);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   console.log(loading1, 'options');
-
+  const originalOrder = [
+    'Sl No',
+    'FR No',
+    'Date',
+    'Division',
+    'Narration',
+    'Sanction Amount',
+    'Sanction as per',
+    'IRO No',
+    'Status',
+    'Sub-Division',
+    'Main Category',
+    'Sub Category 1',
+    'Sub Category 2',
+    'Sub Category 3',
+    'For the month',
+    'Requested Amount',
+    'Sanctioned Bank',
+    'Beneficiary Name',
+    'Source Of Account',
+    'Last Updated',
+  ];
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -198,10 +219,6 @@ const CustomReportFRFilterPage = () => {
     return grandTotal + subtotal;
   }, 0);
 
-  console.log(totalRequestedAmount);
-
-
-  console.log(data, 'newData');
   useEffect(()=>{
     DivisionsServices.getDivisionById((user?.user as any)?.division).then((res) => {
       console.log(res.data, 'resrrsa');
@@ -1949,23 +1966,16 @@ const CustomReportFRFilterPage = () => {
           <DialogContent>
             <Autocomplete
               multiple
-              options={['All', ...options]}
+              options={['All', ...originalOrder]} // Ensuring correct order
               value={selectedData}
               onChange={(event, newValue) => {
                 if (newValue.includes('All')) {
-                  // If "All" is selected, select all options except "All" itself
-                  setSelectedData((prev) => [ // Keep existing selected options
-                    'Sl No',
-                    'FR No',
-                    'Date',
-                    'Division',
-                    'Narration',
-                    'Sanction Amount',
-                    'Sanction as per',
-                    ...options,
-                  ]);
+                  // Select all options except "All" itself
+                  setSelectedData(originalOrder);
                 } else {
-                  setSelectedData(newValue);
+                  // Maintain original order while filtering selected values
+                  const sortedSelection = originalOrder.filter((item) => newValue.includes(item));
+                  setSelectedData(sortedSelection);
                 }
               }}
               renderInput={(params) => <TextField {...params} placeholder="Search..." />}
@@ -1973,14 +1983,16 @@ const CustomReportFRFilterPage = () => {
             <Box mt={2}>
               <strong>Selected Data</strong>
               <Button onClick={() => setSelectedData([])} sx={{ float: 'right' }}>
-        Clear All
+      Clear All
               </Button>
               <Box mt={1} sx={{ border: '1px solid gray', padding: 1 }}>
                 {selectedData.map((item) => (
                   <Chip
                     key={item}
                     label={item}
-                    onDelete={() => setSelectedData(selectedData.filter((i) => i !== item))}
+                    onDelete={() =>
+                      setSelectedData((prev) => prev.filter((i) => i !== item))
+                    }
                     sx={{ margin: 0.5 }}
                   />
                 ))}

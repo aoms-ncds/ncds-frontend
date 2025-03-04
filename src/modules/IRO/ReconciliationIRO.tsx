@@ -36,6 +36,11 @@ import FRServices from '../FR/extras/FRServices';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import NotificationService from '../Notification/extras/NotificationService';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { hasPermissions } from '../User/components/PermissionChecks';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
+import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
+import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -54,6 +59,9 @@ const ReconciliationIRO = () => {
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.AMOUNT_RELEASED, IROLifeCycleStates.RECONCILIATION_DONE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openAttachReceipt1, setOpenAttachReceipt1] = useState(false);
+  const [data2, setData2] = useState<any | null>(null);
+  const [data5, setData5] = useState<any | null>(null);
+  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -198,6 +206,13 @@ const ReconciliationIRO = () => {
         console.log(res);
       });
     console.log(selectedSignature);
+    LeaderDetailsService.getAll()
+    .then((res) => {
+      setLeaderHeading(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
   }, []);
 
   useEffect(() => {
@@ -286,9 +301,9 @@ const ReconciliationIRO = () => {
   }
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
+  console.log(data2, 'FRDD');
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS && !permissions?.LOCAL_ACCOUNT_ACCESS) {
-      console.log('FRDD');
       IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
@@ -425,6 +440,51 @@ const ReconciliationIRO = () => {
                 }, 2000);
               },
             },
+            {
+              id: 'print',
+              text: 'Print FR',
+              icon: PrintIcon,
+              onClick: () => {
+                if (!props.row.FR) {
+                  enqueueSnackbar({
+                    message: 'FR not found',
+                    variant: 'warning',
+                  });
+                } else {
+                  setData2(props.row.FR);
+                  setOpenPrintFr(true);
+                  setTimeout(() => {
+                    setOpenPrintFr(false);
+                  }, 2000);
+                }
+              },
+            },
+            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
+              [
+                {
+                  id: 'print',
+                  text: 'Print FR HQ DELHI',
+                  icon: PrintIcon,
+                  onClick: async () => {
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData5({ ...props.row,
+                      division: {
+                        ...props.row.division,
+                        details: {
+                          ...props.row.division?.details,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
+                        },
+                      },
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ] :
+              []),
             {
               id: 'Attach IRO receipt',
               text: 'Prev Regenerate IRO',
@@ -1124,6 +1184,30 @@ const ReconciliationIRO = () => {
           </Grid>
         </DialogContent>
       </Dialog>
+      <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+            <br />
+            {data2 && (
+              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={signaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData2(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog open={ openAttachReceipt1 } onClose={() => setOpenAttachReceipt1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
@@ -1174,6 +1258,33 @@ const ReconciliationIRO = () => {
               </>
             )} */}
           </>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(data5)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Download the FR Receipt, Delhi for {data5?.FRno} <br />
+            {data5 && (
+              <PDFDownloadLink
+                document={<FRReceiptTempForDelhiDivision label={Label} president={signaturePresident} rowData={data5 as unknown as FR} />}
+                fileName="FRReceiptDelhi.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData5(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
         </DialogActions>
       </Dialog>
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
