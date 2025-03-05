@@ -157,7 +157,7 @@ const ManageFrPage = () => {
   };
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         console.log(res, 'rr');
         setFRRequests(res.data);
@@ -174,7 +174,7 @@ const ManageFrPage = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         if (res.data) {
           setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
@@ -288,7 +288,10 @@ const ManageFrPage = () => {
               text: 'Print FR',
               icon: PrintIcon,
               onClick: () => {
-                setData2(props.row);
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
                 setOpenPrintFr(true);
                 setTimeout(() => {
                   setOpenPrintFr(false);
@@ -303,11 +306,12 @@ const ManageFrPage = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    props.row.division?.details&& setData({ ...props.row,
+                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
+                    rowData.division?.details&& setData({ ...props.row,
                       division: {
-                        ...props.row.division,
+                        ...rowData.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...rowData.division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -354,7 +358,10 @@ const ManageFrPage = () => {
               text: 'Prev Cord Print FR',
               icon: PrintIcon,
               onClick: () => {
-                setData5(props.row);
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData5(res.data);
+                });
                 setOpenPrintFrPrev(true);
                 setTimeout(() => {
                   setOpenPrintFrPrev(false);
@@ -369,11 +376,13 @@ const ManageFrPage = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    props.row.division?.details&& setData4({ ...props.row,
+                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
+
+                    rowData.division?.details&& setData4({ ...props.row,
                       division: {
-                        ...props.row.division,
+                        ...rowData.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...rowData.division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },

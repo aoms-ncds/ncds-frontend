@@ -35,6 +35,7 @@ const ReopenedFr = () => {
   const [searchText, setSearchText] = useState('');
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data, setData] = useState<FR | null>(null);
+  const [data2, setData2] = useState<FR | null>(null);
 
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
@@ -143,7 +144,13 @@ const ReopenedFr = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR }/>,
+              onClick: ()=>{
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
+              },
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR }/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
@@ -155,11 +162,13 @@ const ReopenedFr = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    props.row.division?.details&& setData({ ...props.row,
+                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
+
+                    rowData.division?.details&& setData({ ...props.row,
                       division: {
-                        ...props.row.division,
+                        ...rowData.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...rowData.division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -349,7 +358,7 @@ const ReopenedFr = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
+    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
       .then((res) => {
         setClosedFRs(res.data);
       })

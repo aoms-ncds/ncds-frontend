@@ -137,7 +137,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
-          <Text style={styles.frno}>{props.rowData?.FRno}</Text>
+          <Text style={styles.frno}>{(props.rowData as any)?.FR?.FRno}</Text>
 
           <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>
@@ -229,7 +229,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
             position: 'absolute',
             height: 50,
             width: 50 }}
-          src={`data:${props.rowData?.signature?.coordinator?.type?? props.rowData?.signature?.srLeader?.type?? props.rowData.division?.details?.coordinator?.sign?.type};base64, ${props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.srLeader?.type?? props.rowData?.division?.details?.coordinator?.sign?.base64} `}/>
+          src={`data:${props.rowData?.signature?.coordinator?.type?? props.rowData?.signature?.srLeader?.type?? props.rowData?.division?.details?.coordinator?.sign?.type};base64, ${props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.srLeader?.type?? props.rowData?.division?.details?.coordinator?.sign?.base64} `}/>
           <Image style={{ left: 260,
             position: 'absolute',
             height: 50,
@@ -279,26 +279,26 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
           >
             {props.rowData?.names?.coordinator?.basicDetails?.firstName ?
               `${props.rowData.names.coordinator.basicDetails.firstName} ${props.rowData.names.coordinator.basicDetails.lastName}` :
-              `${props.rowData.division?.details?.coordinator?.name?.basicDetails?.firstName} ${props.rowData.division?.details?.coordinator?.name?.basicDetails?.lastName}`
+              `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName}`
             }
           </Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
           <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
             {props.rowData?.names?.srLeader?.basicDetails?.firstName ?
-              `${props.rowData.names.srLeader.basicDetails.firstName} ${props.rowData.names.srLeader.basicDetails.lastName || ''}` :
+              `${props.rowData?.names.srLeader.basicDetails.firstName} ${props.rowData?.names.srLeader.basicDetails.lastName || ''}` :
               props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?
-                `${props.rowData.division.details?.seniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details?.seniorLeader?.name?.basicDetails.lastName || ''}` :
+                `${props.rowData?.division.details?.seniorLeader?.name?.basicDetails.firstName} ${props.rowData?.division.details?.seniorLeader?.name?.basicDetails.lastName || ''}` :
                 typeof props.rowData?.division?.details?.additionalJuniorLeader?.name === 'string' ?
-                  props.rowData.division.details?.additionalJuniorLeader.name :
+                  props.rowData?.division.details?.additionalJuniorLeader?.name :
                   ''}
           </Text>
 
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
           <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-            {props.rowData.names?.jrLeader?.basicDetails?.firstName ?
-              `${props.rowData.names.jrLeader?.basicDetails.firstName} ${props.rowData.names.jrLeader?.basicDetails.lastName || ''}` :
+            {props.rowData?.names?.jrLeader?.basicDetails?.firstName ?
+              `${props.rowData?.names.jrLeader?.basicDetails.firstName} ${props.rowData?.names.jrLeader?.basicDetails.lastName || ''}` :
               props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName ?
-                `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details?.juniorLeader.name?.basicDetails.lastName || ''}` :
+                `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details?.juniorLeader?.name?.basicDetails.lastName || ''}` :
                 typeof props.rowData?.division?.details?.additionalSeniorLeader?.name === 'string' ?
                   props.rowData?.division?.details?.additionalSeniorLeader?.name :
                   ''}

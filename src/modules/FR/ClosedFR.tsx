@@ -35,6 +35,8 @@ const ClosedFR = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [data2, setData2] = useState<FR | null>(null);
+
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -118,8 +120,14 @@ const ClosedFR = () => {
             {
               id: 'print',
               text: 'Print FR',
+              onClick: () => {
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
+              },
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR }/>,
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR }/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
@@ -298,7 +306,7 @@ const ClosedFR = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.FR_CLOSED]})
+    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.FR_CLOSED]})
       .then((res) => {
         setClosedFRs(res.data);
       })

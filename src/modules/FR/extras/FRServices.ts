@@ -18,6 +18,26 @@ export default {
     updatedAt: moment(fr.updatedAt),
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
+  getAllOptimized: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/optimized/',
+    { params: conditions, headers: { ...getAuthHeader() } }),
+  (data) => data.map((fr: FR) => ({
+    ...fr,
+    FRdate: moment(fr.FRdate),
+    createdAt: moment(fr.createdAt),
+    updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
+  }))),
+  getAllOptimizedById: (fRId: any) => getStandardResponse<FR>(
+    axios.get(`/fr/optimized/${fRId}`, { headers: { ...getAuthHeader() } }),
+    (data) => ({
+      ...data,
+      FRdate: moment(data.FRdate),
+      createdAt: moment(data.createdAt),
+      updatedAt: moment(data.updatedAt),
+      frVerifiedOn: data.frVerifiedOn ? moment(data.frVerifiedOn) : null,
+    }),
+  ),
+
   getAllCustom: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/custom/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({

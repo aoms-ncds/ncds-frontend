@@ -73,7 +73,7 @@ const PresidentApproval = () => {
   }
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
+    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT]})
       .then((res) => {
         setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
       })

@@ -16,6 +16,8 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 const RejectedFr = () => {
+  const [data2, setData2] = useState<FR | null>(null);
+
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
@@ -95,7 +97,13 @@ const RejectedFr = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR}/>,
+              onClick: ()=>{
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
+              },
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
@@ -298,7 +306,7 @@ const RejectedFr = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.REJECTED]})
+    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.REJECTED]})
       .then((res) => {
         setClosedFRs(res.data);
       })

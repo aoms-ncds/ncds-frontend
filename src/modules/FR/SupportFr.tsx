@@ -150,7 +150,7 @@ const SupportFrPage = () => {
   };
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
             .then((res) => {
               console.log(res, 'rr');
               setFRRequests(res.data);
@@ -167,7 +167,7 @@ const SupportFrPage = () => {
             });
   }, []);
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
             .then((res) => {
               if (res.data) {
                 setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
@@ -320,12 +320,14 @@ const SupportFrPage = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ = (await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    props.row.division?.details && setData({
-                      ...props.row,
+                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
+
+                    rowData.division?.details && setData({
+                      ...rowData,
                       division: {
-                        ...props.row.division,
+                        ...rowData.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...rowData.division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -345,7 +347,10 @@ const SupportFrPage = () => {
               text: 'Print FR',
               icon: PrintIcon,
               onClick: () => {
-                setData2(props.row);
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
                 setOpenPrintFr(true);
                 setTimeout(() => {
                   setOpenPrintFr(false);

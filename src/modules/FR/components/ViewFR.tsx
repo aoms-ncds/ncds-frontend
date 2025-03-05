@@ -68,6 +68,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     transactionId: '',
   });
   const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+  const [data2, setData2] = useState<FR | null>(null);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showName, setShowName] = useState(false);
@@ -741,9 +742,13 @@ return (
                 style={{
                   textAlign: 'left', textDecoration: 'none',
                 }}
-                // onClick={() => {
-                //   toggleOpenRemarks(true);
-                // }}
+                onClick={() => {
+                  FRServices.getAllOptimizedById(props.value?._id).then((res)=>{
+                    console.log(res.data, 'daa98');
+                    setData2(res.data);
+                  });
+                }}
+
               >
                 <PDFDownloadLink
                   document={<FRReceiptTemplate president={selectedSignaturePresident} rowData={props.value as FR} />}

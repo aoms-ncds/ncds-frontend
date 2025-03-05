@@ -21,6 +21,8 @@ const SentBack = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
+  const [data2, setData2] = useState<FR | null>(null);
+
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -95,7 +97,13 @@ const SentBack = () => {
               id: 'print',
               text: 'Print FR',
               component: PDFDownloadLink,
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={props.row as FR}/>,
+              onClick: ()=>{
+                FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                  console.log(res.data, 'daa98');
+                  setData2(res.data);
+                });
+              },
+              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
               fileName: 'FRReceipt.pdf',
               icon: PrintIcon,
             },
@@ -298,7 +306,7 @@ const SentBack = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.FR_SEND_BACK]} )
+    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.FR_SEND_BACK]} )
       .then((res) => {
         setClosedFRs(res.data);
       })
