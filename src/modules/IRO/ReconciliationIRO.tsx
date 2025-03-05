@@ -304,7 +304,7 @@ const ReconciliationIRO = () => {
   console.log(data2, 'FRDD');
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS && !permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA' })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -313,7 +313,7 @@ const ReconciliationIRO = () => {
         });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS && !permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'Local' })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'Local' })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -367,7 +367,7 @@ const ReconciliationIRO = () => {
     //     });
     // }
     if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliation({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         });
@@ -433,7 +433,10 @@ const ReconciliationIRO = () => {
               text: 'Print IRO',
               icon: PrintIcon,
               onClick: () => {
-                setData(props.row);
+                IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  setData(res.data[0]);
+                });
+                // setData(props.row);
                 setOpenPrintFr(true);
                 setTimeout(() => {
                   setOpenPrintFr(false);
@@ -451,7 +454,11 @@ const ReconciliationIRO = () => {
                     variant: 'warning',
                   });
                 } else {
-                  setData2(props.row.FR);
+                  IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                    console.log(res.data, 'res98');
+                    setData2(res.data[0]);
+                    // console.log(props.row.fr, 'res98');
+                  });
                   setOpenPrintFr(true);
                   setTimeout(() => {
                     setOpenPrintFr(false);
@@ -467,11 +474,13 @@ const ReconciliationIRO = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
+                    // console.log(dataDiv.division?.details, 'res98');
                     props.row.division?.details&& setData5({ ...props.row,
                       division: {
                         ...props.row.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...dataDiv[0].division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -493,7 +502,7 @@ const ReconciliationIRO = () => {
                 setOpenAttachReceipt1(true);
                 setIroData(props.row);
                 if (props?.row.FR) {
-                  FRServices.getById((props.row.FR as any)._id).then((res) => {
+                  FRServices.getById(props.row.FR).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });
@@ -510,7 +519,7 @@ const ReconciliationIRO = () => {
               // component: Link,
               // to: `/fr/${(props.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
               },
 
             },
@@ -593,7 +602,7 @@ const ReconciliationIRO = () => {
                 setIroData(props.row);
                 setConform1(true);
                 if (props?.row.FR) {
-                  FRServices.getById((props.row as any).FR._id).then((res) => {
+                  FRServices.getById((props.row as any).FR).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });

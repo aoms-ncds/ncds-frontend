@@ -140,7 +140,7 @@ const RejectedIRO = () => {
         variant: 'error',
       });
     } finally {
-      IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
+      IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       })
@@ -215,7 +215,7 @@ const RejectedIRO = () => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
               },
 
             },
@@ -301,7 +301,7 @@ const RejectedIRO = () => {
                 setOpenAttachReceipt(true);
                 setIroData(props.row);
                 if (props?.row.FR) {
-                  FRServices.getById(props.row.FR).then((res) => {
+                  FRServices.getById((props.row as any).FR?._id).then((res) => {
                     setFrData(res.data);
                     console.log(res.data, 'fr');
                   });
@@ -533,7 +533,7 @@ const RejectedIRO = () => {
     },
   ];
   useEffect(() => {
-    IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
+    IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       })

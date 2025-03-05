@@ -27,6 +27,38 @@ export default {
         }:undefined,
       })),
     ),
+  getAllOptimized: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
+    getStandardResponse<IROrder[]>(axios.get('/iro/optimized', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+      IROrders.map((IRO) => ({
+        ...IRO,
+        iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
+        reconciliationOn: IRO.reconciliationOn ? moment(IRO.reconciliationOn) : undefined,
+        iroClosedOn: IRO.iroClosedOn ? moment(IRO.iroClosedOn) : undefined,
+        IRODate: moment(IRO.IRODate),
+        createdAt: moment(IRO.createdAt),
+        updatedAt: moment(IRO.updatedAt),
+        releaseAmount: IRO.releaseAmount ? {
+          ...IRO.releaseAmount,
+          transferredDate: moment(IRO.releaseAmount?.transferredDate),
+        }:undefined,
+      })),
+    ),
+  getByIdOptimized: (IROId:any): Promise<StandardResponse<IROrder[]>> =>
+    getStandardResponse<IROrder[]>(axios.get(`/iro/optimized/${IROId}`, { headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+      IROrders.map((IRO) => ({
+        ...IRO,
+        iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
+        reconciliationOn: IRO.reconciliationOn ? moment(IRO.reconciliationOn) : undefined,
+        iroClosedOn: IRO.iroClosedOn ? moment(IRO.iroClosedOn) : undefined,
+        IRODate: moment(IRO.IRODate),
+        createdAt: moment(IRO.createdAt),
+        updatedAt: moment(IRO.updatedAt),
+        releaseAmount: IRO.releaseAmount ? {
+          ...IRO.releaseAmount,
+          transferredDate: moment(IRO.releaseAmount?.transferredDate),
+        }:undefined,
+      })),
+    ),
   getAllCustom: (conditions?: { status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro/custom/', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
@@ -109,6 +141,71 @@ export default {
       createdAt: moment(data.createdAt),
       updatedAt: moment(data.updatedAt),
     })),
+  // getByIdOptimized: (IROId: string) =>
+  //   getStandardResponse<IROrder>(axios.get(`/iro/optimized/${IROId}`, { headers: { ...getAuthHeader() } }), (data) => ({
+  //     ...data,
+  //     IRODate: moment(data.IRODate),
+  //     // workerCode: ,
+  //     releaseAmount: data.releaseAmount ? {
+  //       ...data.releaseAmount,
+  //       transferredDate: moment(data.releaseAmount?.transferredDate),
+  //     }:undefined,
+  //     purposeWorker: {
+  //       ...data.purposeWorker,
+  //       basicDetails: {
+  //         ...data.purposeWorker?.basicDetails,
+  //         // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+  //         // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+  //         dateOfBirth: moment(data.createdBy?.basicDetails.dateOfBirth),
+  //       },
+  //       officialDetails: {
+  //         ...data?.createdBy?.officialDetails,
+  //         dateOfJoining: data.createdBy?.officialDetails?.dateOfJoining ? moment(data.createdBy?.officialDetails.dateOfJoining) : undefined,
+  //         dateOfLeaving: data.createdBy?.officialDetails?.dateOfLeaving ? moment(data.createdBy?.officialDetails.dateOfLeaving) : undefined,
+  //         divisionHistory: data.createdBy?.officialDetails?.divisionHistory.map((divHis: DivisionHistory) => ({
+  //           ...divHis,
+  //           dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+  //           dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+  //         })),
+  //       },
+  //       createdAt: moment(data.createdBy?.createdAt),
+  //       updatedAt: moment(data.createdBy?.updatedAt),
+  //       iroVerifiedOn: data?.iroVerifiedOn ? moment(data?.iroVerifiedOn) : null,
+  //       reconciliationOn: data?.reconciliationOn ? moment(data?.reconciliationOn) : null,
+  //       iroClosedOn: data?.iroClosedOn ? moment(data?.iroClosedOn) : null,
+  //     },
+  //     createdBy: {
+  //       ...data.createdBy,
+  //       basicDetails: {
+  //         ...data.createdBy?.basicDetails,
+  //         // gender: data.createdBy.basicDetails.gender as Gender|undefined,
+  //         // martialStatus: data.createdBy.basicDetails.martialStatus as Gender|undefined,
+  //         dateOfBirth: moment(data.createdBy?.basicDetails.dateOfBirth),
+  //       },
+  //       officialDetails: {
+  //         ...data.createdBy?.officialDetails,
+  //         dateOfJoining: data.createdBy?.officialDetails.dateOfJoining ? moment(data.createdBy?.officialDetails.dateOfJoining) : undefined,
+  //         dateOfLeaving: data.createdBy?.officialDetails.dateOfLeaving ? moment(data.createdBy?.officialDetails.dateOfLeaving) : undefined,
+  //         divisionHistory: data.createdBy?.officialDetails.divisionHistory.map((divHis: DivisionHistory) => ({
+  //           ...divHis,
+  //           dateOfDivisionJoining: divHis.dateOfDivisionJoining ? moment(divHis.dateOfDivisionJoining) : undefined,
+  //           dateOfDivisionLeaving: divHis.dateOfDivisionLeaving ? moment(divHis.dateOfDivisionLeaving) : undefined,
+  //         })),
+  //       },
+  //       signature: {
+  //         ...data.signature,
+  //         hrSignature: data.signature?.hrSignature ? data.signature.hrSignature: undefined,
+  //         accountManagerSignature: data.signature?.accountManagerSignature ? data.signature.accountManagerSignature : undefined,
+  //         accountantSignature: data.signature?.accountantSignature ? data.signature.accountantSignature : undefined,
+
+
+  //       },
+  //       createdAt: moment(data.createdBy?.createdAt),
+  //       updatedAt: moment(data.createdBy?.updatedAt),
+  //     },
+  //     createdAt: moment(data?.createdAt),
+  //     updatedAt: moment(data?.updatedAt),
+  //   })),
   getByIdCustom: (IROId: string) =>
     getStandardResponse<IROrder>(axios.get(`/iro/${IROId}/custom`, { headers: { ...getAuthHeader() } }), (data) => ({
       ...data,
@@ -219,6 +316,18 @@ export default {
   sendNotifications: (name: string, id: string) => getStandardResponse<void>(axios.post(`/iro/sent/${name}/${id}`, null, { headers: { ...getAuthHeader() } })),
 
   getReconciliation: (conditions?: {ExStatus?:any;status?:any; dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliation',
+    { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+    IROrders.map((IRO) => ({
+      ...IRO,
+      releaseAmount: IRO.releaseAmount ? {
+        ...IRO.releaseAmount,
+        transferredDate: moment(IRO.releaseAmount?.transferredDate),
+      }:undefined,
+      IRODate: moment(IRO.IRODate),
+      createdAt: moment(IRO.createdAt),
+      updatedAt: moment(IRO.updatedAt),
+    }))),
+  getReconciliationOptimized: (conditions?: {ExStatus?:any;status?:any; dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliationOptimized',
     { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,

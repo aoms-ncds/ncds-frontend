@@ -392,13 +392,13 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     });
   }
   useEffect(() => {
-    IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
+    IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       });
   }, [dateRange, statusFilter, exstatusFilter]);
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: statusFilter })
+    IROServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       });

@@ -614,7 +614,7 @@ const ReopenedIRO = () => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(props.row as any).FR._id}/view`, '_blank');
+                window.open( `/fr/${(props.row as any).FR?._id}/view`, '_blank');
               },
 
             },
@@ -795,7 +795,7 @@ const ReopenedIRO = () => {
   ];
 
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
+    IROServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
       .then((res) => {
         setClosedFRs(res.data);
       })

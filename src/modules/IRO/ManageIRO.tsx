@@ -74,7 +74,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [searchText, setSearchText] = useState('');
   const [mngrName, setMngrName] = useState('');
   const [isCoordinator, setisCoordinator] = useState<any>(false);
-  console.log(exstatusFilter, 'exstatusFilter');
+  console.log(releaseAmountIROs, 'exstatusFilter');
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -437,7 +437,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -448,7 +448,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           });
       }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && !userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, sourceOfAccount: 'Local' })
           .then((res) => {
             // console.log(res?.data, 'KKK');;
             setNotFound(true);
@@ -514,19 +514,19 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
-        IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
           setIROrder(res.data);
           setNotFound(true);
           // console.log(res.data, 'datgajdfj');
         });
       }
     } else {
-      IROServices.getAll({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
+      IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
         setNotFound(true);
         setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
       });
     }
-  }, [openRelease, attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
+  }, [attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
   // console.log(mngrName, 'mngrName');
 
 
@@ -1840,7 +1840,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         onClick={() => {
                           setSelectedIROId('');
                           toggleAddSignature(false);
-                          IROServices.getAll().then((res) => {
+                          IROServices.getAllOptimized().then((res) => {
                             setIROrder(res.data);
                             setNotFound(true);
                           });

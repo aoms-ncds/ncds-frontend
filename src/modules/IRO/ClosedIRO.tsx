@@ -174,7 +174,7 @@ const ClosedIRO = () => {
         variant: 'error',
       });
     } finally {
-      IROServices.getAll({ dateRange: dateRange, status: statusFilter })
+      IROServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setIROrder(res.data);
       })
@@ -304,7 +304,12 @@ const ClosedIRO = () => {
                     variant: 'warning',
                   });
                 } else {
-                  setData2(props.row.FR);
+                  IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                    console.log(res.data, 'res98');
+                    setData2(res.data[0]);
+                    console.log(res.data[0].FR, 'res98');
+                  });
+                  // setData2(props.row.FR);
                   setOpenPrintFr(true);
                   setTimeout(() => {
                     setOpenPrintFr(false);
@@ -319,12 +324,13 @@ const ClosedIRO = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
+                    const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     props.row.division?.details&& setData({ ...props.row,
                       division: {
                         ...props.row.division,
                         details: {
-                          ...props.row.division?.details,
+                          ...dataDiv[0].division?.details,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -661,7 +667,7 @@ const ClosedIRO = () => {
     },
   ];
   useEffect(() => {
-    IROServices.getAll({ dateRange: dateRange, status: statusFilter, Exstatus: exstatusFilter })
+    IROServices.getAllOptimized({ dateRange: dateRange, status: statusFilter, Exstatus: exstatusFilter })
       .then((res) => {
         setIROrder(res.data);
       })
