@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommonPageLayout from '../../../components/CommonPageLayout';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, Grid, TextField, Typography } from '@mui/material';
 import DivisionsServices from '../extras/DivisionsServices';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -10,6 +10,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
 import { useAuth } from '../../../hooks/Authentication';
 import DivisionLogDialog from './DivisionLogDialog';
+import FR from '../../FR';
 
 
 const DivisionsList = (arg: any) => {
@@ -18,6 +19,8 @@ const DivisionsList = (arg: any) => {
   const [searchText, setSearchText] = useState('');
   const auth = useAuth();
   const [logOpen, setLogOpen] = useState<string | null>(null);
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [rowID, setRowID] = useState('');
 
 
   // useEffect(() => {e
@@ -75,6 +78,7 @@ const DivisionsList = (arg: any) => {
           });
           setDivisions(newDivisions);
         }
+        setDeleteModel(false);
         // closeSnackbar(snackbarId);
         enqueueSnackbar({
           message: res.message,
@@ -155,7 +159,9 @@ const DivisionsList = (arg: any) => {
                 component: Link,
                 icon: DeleteIcon,
                 onClick: () => {
-                  removeDivisions(props.row._id);
+                  setDeleteModel(true);
+                  setRowID(props.row._id)
+                  // removeDivisions(props.row._id);
                 },
               },
 
@@ -308,6 +314,26 @@ const DivisionsList = (arg: any) => {
 
 
       </Grid>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>{'Are you sure you want to delete this division ?'}</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              removeDivisions(rowID);
+            } }
+          >
+                 Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>
       <Box
         sx={{
           'height': 300,

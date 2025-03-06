@@ -1097,7 +1097,7 @@ const ManageFrPage = () => {
                         variant="contained"
                         onClick={() => {
                           toggleSendNotification(false);
-                          setSelectedFR(null);
+                          // setSelectedFR(null);
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}
@@ -1181,7 +1181,7 @@ const ManageFrPage = () => {
                       variant="contained"
                       onClick={() => {
                         toggleOpenRemarks(false);
-                        setSelectedFR(null);
+                        // setSelectedFR(null);
                       }}
                       sx={{ ml: 1, height: '60px' }}
                     >
@@ -1344,7 +1344,7 @@ const ManageFrPage = () => {
               <DialogActions>
                 <Button
                   onClick={() => {
-                    setData(null);
+                    setData4(null);
                   }}
                   variant="text"
                 >

@@ -1762,7 +1762,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         variant="contained"
                         onClick={() => {
                           toggleSendNotification(false);
-                          setSelectedIROId('');
+                          // setSelectedIROId('');
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}

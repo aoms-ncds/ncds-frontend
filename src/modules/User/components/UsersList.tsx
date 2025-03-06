@@ -10,7 +10,7 @@ import {
 } from '@mui/icons-material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
-import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import StaffServices from '../../HR/extras/StaffServices';
 import UserLifeCycleStates from '../extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
@@ -46,6 +46,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     remark: '',
     transactionId: '',
   });
+  const [deleteModel, setDeleteModel] = useState(false);
 
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -249,17 +250,20 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               icon={<DeleteIcon />}
               showInMenu
               onClick={() => {
-                StaffOrWorkerServices.delete(params.row._id)
-                  .then((res) => {
-                    if (props.value) {
-                      props.onChange(props.value.filter((user) => user._id !== params.row._id));
-                    }
+                setRowID(params.row._id);
 
-                    enqueueSnackbar({ message: res.message, variant: 'success' });
-                  })
-                  .catch((err) => {
-                    enqueueSnackbar({ message: err.message, variant: 'error' });
-                  });
+                setDeleteModel(true);
+                // StaffOrWorkerServices.delete(params.row._id)
+                //   .then((res) => {
+                //     if (props.value) {
+                //       props.onChange(props.value.filter((user) => user._id !== params.row._id));
+                //     }
+
+                //     enqueueSnackbar({ message: res.message, variant: 'success' });
+                //   })
+                //   .catch((err) => {
+                //     enqueueSnackbar({ message: err.message, variant: 'error' });
+                //   });
               }}
             // to={`/${props.options?.kind === 'worker' ? 'workers' : 'hr'}/edit/${params.row._id}`}
             />
@@ -685,7 +689,39 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
           </Box>
         </Card>
       </Grid>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>{'Are you sure you want to delete this staff ?'}</Typography>
+        </DialogContent>
 
+        <DialogActions>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              StaffOrWorkerServices.delete(rowID)
+                  .then((res) => {
+                    if (props.value) {
+                      props.onChange(props.value.filter((user) => user._id !== rowID));
+                    }
+
+                    enqueueSnackbar({ message: res.message, variant: 'success' });
+                  })
+                  .catch((err) => {
+                    enqueueSnackbar({ message: err.message, variant: 'error' });
+                  });
+              setDeleteModel(false);
+            }
+            }
+
+          >
+                 Delete
+          </Button>
+        </DialogActions>
+
+      </Dialog>
       <Dialog open={openRemarks} fullWidth maxWidth="md">
         <DialogTitle>Remarks</DialogTitle>
         <DialogContent>

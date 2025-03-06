@@ -25,6 +25,7 @@ import {
   DialogContent,
   FormControlLabel,
   Checkbox,
+  Alert,
 } from '@mui/material';
 import { AttachFile as AttachmentIcon, Send as SendIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -60,6 +61,7 @@ const EditIRO = () => {
   const [addNewParticulars, setAddNewParticulers] = useState<Particular[]>([]);
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
+  const [Err, setErr] = useState(false);
 
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
   // const [mainCategories, setMainCategories] = useState<MainCategory[]>();
@@ -569,24 +571,27 @@ const EditIRO = () => {
               <form
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  // const SubmitStatus = null;
-                  // if (submit == 1) {
-                  //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_ACCOUNTS;
-                  // } else if (submit == 2) {
-                  //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
-                  // }
-                  await IROServices.updateIRO(iroID ?? '', IRO, true)
-                  .then(async (res) => {
-                    enqueueSnackbar({
-                      message: res.message,
-                      variant: 'success',
+                  if (IRO.particulars.every((e) => e.sanctionedAmount !== null)) {
+                    console.log(IRO, 'IRO');
+                    await IROServices.updateIRO(iroID ?? '', IRO, true)
+                    .then(async (res) => {
+                      enqueueSnackbar({
+                        message: res.message,
+                        variant: 'success',
+                      });
+                      await FRServices.addParticularsIRO(addNewParticulars, iroID ?? '').then((res) => {
+                        console.log(res, 'res');
+                      });
+                      navigate(`/iro/${iroID}`);
                     });
-                    await FRServices.addParticularsIRO(addNewParticulars, iroID ?? '').then((res) => {
-                      console.log(res, 'res');
-                    });
-                    navigate(`/iro/${iroID}`);
-                  });
-                }}
+                  } else {
+                    setTimeout(() => {
+                      setErr(false);
+                    }, 5000);
+                    setErr(true);
+                  }
+                }
+                }
               >
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={6}>
@@ -1168,6 +1173,9 @@ const EditIRO = () => {
                   </Grid>
                 </Grid>
               </form>
+              {Err && <Alert sx={{ width: '30vw' }} variant="filled" severity="error">
+              Sanctioned fields must be fill   !
+              </Alert>}
             </CardContent>
 
           </Container>   </Card></CommonPageLayout>
@@ -1612,7 +1620,7 @@ const EditIRO = () => {
                   //   IRO?.status === IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT ||
                   //   IRO?.status !== IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR}
                   disabled={!hasPermissions(['ADMIN_ACCESS']) &&!hasPermissions(['OFFICE_MNGR_ACCESS']) && IROLifeCycleStates.REOPENED !== IRO.status}
-
+                  required
                   onChange={(e) => {
                     if (totalRequestedAmount) {
                       setNewParticular((amount: any) => ({

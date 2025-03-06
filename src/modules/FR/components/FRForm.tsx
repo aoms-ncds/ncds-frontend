@@ -227,13 +227,17 @@ const FRForm = (props: FormComponentProps<any>) => {
     handleClose();
     let newParticulars: Particular[];
     let newParticulars1: Particular[];
+    console.log(particularDialog, 'particularDialog');
+
     if (particularDialog === 'edit' ) {
+      console.log('editttt');
       setParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)));
       props.onChange({
         ...props.value,
         particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
       });
     } else {
+      console.log(props.action, 'ioioi');
       newParticulars = [newParticular as Particular];
       if (props.action =='add'|| props.action =='custom'|| props.action =='customIRO') {
         newParticulars = [...particulars, newParticular as Particular];
@@ -245,18 +249,35 @@ const FRForm = (props: FormComponentProps<any>) => {
         });
       } else {
         newParticulars1 = [newParticular as Particular];
+        console.log(newParticulars1, 'newParticulars1');
+        newParticulars = [newParticular as Particular];
+
+        setParticulars(newParticulars1);
 
         setAddParticulars((prev:any) => [
           ...prev,
-          ...newParticulars1.map((particular) => ({
+          ...particulars.map((particular) => ({
             ...particular,
             sanctionedAmount: null,
             sanctionedAsPer: null,
           })),
         ]);
+        // setAddParticulars(particulars);
+        // setAddParticulars((prev) => [...prev, newParticular as Particular]);
+        // props.onChange({
+        //   ...props.value,
+        //   particulars: newParticulars,
+        // });
+
+
+        // setParticulars([]);
+
+        console.log(particulars, 'newParticulars1');
       }
     }
-    // Reset the form fields
+    console.log(addsParticulars, 'addsParticulars');
+
+    // Reset the form fieldshttp://localhost:3002/divisions/
     setNewParticular((particularDetails) => ({
       ...particularDetails,
       subCategory1: '',
@@ -403,7 +424,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       console.log(res.data);
     });
                   } else if (props.action == 'edit') {
-                    await FRServices.addParticularsFR(addsParticulars, props.value._id)
+                    await FRServices.addParticularsFR(particulars, props.value._id)
                   .then((res) => {
                     console.log(res.data);
                   });
@@ -430,7 +451,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   }
                   format="DD/MM/YYYY"
                   slotProps={{ textField: { fullWidth: true } }}
-                  disabled={FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='customIRO' && props.action !=='customEdit'&& props.action !=='custom'}
+                  disabled={FRLifeCycleStates.REOPENED !== props.value.status&& props.action !=='customIRO' && props.action !=='customEdit'&& props.action !=='custom'|| props.actionAdi =='view'}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -664,6 +685,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                     <Autocomplete
                       value={selectedMainCategory ?? null}
                       options={mainCategories ?? []}
+                      disabled={props.actionAdi =='view'}
                       getOptionLabel={(mainCategory) => mainCategory.name}
                       onChange={(e, selectedMainCategory) => {
                         if (selectedMainCategory) {
@@ -1068,7 +1090,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                         //     required: true,
                         //   },
                         // }}
-                        disabled={!props.value.isPresident}
+                        disabled={!props.value.isPresident|| props.actionAdi == 'view'}
                         onChange={(newValue) =>
                           props.onChange({
                             ...props?.value,
