@@ -726,8 +726,10 @@ const IROReportFilter = () => {
     //     console.log(res);
     //   });
 
-    CustomReportServices.filterData( { filters, dateRange })
+    CustomReportServices.filterData(filters, dateRange)
       .then((res) => {
+        console.log(res.data, 'eyruy5');
+
         // setIROrder(res.data);
         setData(res.data);
       })

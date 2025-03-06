@@ -708,7 +708,7 @@ const CustomReportFRFilterPage = () => {
     //     console.log(res);
     //   });
 
-    CustomReportServices.filterData( { filters, dateRange })
+    CustomReportServices.filterDataFR(filters, dateRange)
       .then((res) => {
         // setIROrder(res.data);
         setData(res.data);
