@@ -15,11 +15,14 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import TransactionLogDialog from './components/TransactionLogDialog';
 const RejectedFr = () => {
   const [data2, setData2] = useState<FR | null>(null);
+  const [openLog, setOpenLog] = useState(false);
 
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFRId] = useState('');
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -129,6 +132,15 @@ const RejectedFr = () => {
                 icon: PreviewIcon,
               },
             ] : []),
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -427,6 +439,8 @@ const RejectedFr = () => {
           </Grid>
         </Grid>
       </Card>
+      {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
+
     </CommonPageLayout>
 
   );

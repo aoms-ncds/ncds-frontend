@@ -20,10 +20,13 @@ import IROTemplate from '../IRO/components/IROTemplate';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ReopenedFr = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [id, setID] = useState('');
+  const [openLog, setOpenLog] = useState(false);
+
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
@@ -237,6 +240,15 @@ const ReopenedFr = () => {
                   icon: PreviewIcon,
                 },
               ]:[]),
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setID(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -570,6 +582,8 @@ const ReopenedFr = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {id&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={id}/>}
+
     </CommonPageLayout>
   );
 };

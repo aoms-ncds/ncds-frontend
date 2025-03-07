@@ -47,6 +47,7 @@ import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -75,6 +76,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [mngrName, setMngrName] = useState('');
   const [isCoordinator, setisCoordinator] = useState<any>(false);
   console.log(releaseAmountIROs, 'exstatusFilter');
+  const [openLog, setOpenLog] = useState(false);
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -920,6 +922,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //     });
             //   },
             // },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(params.row._id);
+                setOpenLog(true);
+              },
+            },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
                 {
@@ -2287,6 +2298,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         // isStopped={.state.isStopped}
         // isPaused={.state.isPaused}
         />}
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
+
     </CommonPageLayout>
   );
 };

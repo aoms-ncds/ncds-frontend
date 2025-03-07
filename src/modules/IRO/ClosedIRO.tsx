@@ -32,6 +32,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -67,6 +68,7 @@ const ClosedIRO = () => {
   const [data2, setData2] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.IRO_CLOSED]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [openLog, setOpenLog] = useState(false);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -465,6 +467,15 @@ const ClosedIRO = () => {
               onClick: () => {
                 setAttachments(props.row.billAttachment);
                 setViewFileUploader(true);
+              },
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
               },
             },
           ]}
@@ -1099,6 +1110,7 @@ const ClosedIRO = () => {
 
       />
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
 
     </CommonPageLayout>
   );

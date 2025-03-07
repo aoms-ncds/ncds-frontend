@@ -16,6 +16,7 @@ import FRServices from './extras/FRServices';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ClosedFR = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
@@ -28,8 +29,10 @@ const ClosedFR = () => {
     sanctionedAsPer: '',
   });
   console.log(requisition, 'jfdfhn88');
+  const [openLog, setOpenLog] = useState(false);
 
   const [searchText, setSearchText] = useState('');
+  const [frID, setFRId] = useState('');
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -184,6 +187,15 @@ const ClosedFR = () => {
               },
 
             ]:[]),
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
+            },
 
           ]}
         />
@@ -430,6 +442,8 @@ const ClosedFR = () => {
         </Grid>
 
       </Card>
+      {frID && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frID}/>}
+
     </CommonPageLayout>
   );
 };

@@ -41,6 +41,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -62,6 +63,7 @@ const ReconciliationIRO = () => {
   const [data2, setData2] = useState<any | null>(null);
   const [data5, setData5] = useState<any | null>(null);
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
+  const [openLog, setOpenLog] = useState(false);
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -643,6 +645,15 @@ const ReconciliationIRO = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
+              },
             },
           ]}
         />
@@ -1600,6 +1611,7 @@ const ReconciliationIRO = () => {
 
       </Dialog>
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
 
     </CommonPageLayout>
   );

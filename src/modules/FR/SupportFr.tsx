@@ -38,10 +38,14 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const SupportFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFrId] = useState('');
+  const [openLog, setOpenLog] = useState(false);
+
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
@@ -434,6 +438,15 @@ const SupportFrPage = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFrId(props.row._id);
+                setOpenLog(true);
+              },
             },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
@@ -1254,6 +1267,8 @@ const SupportFrPage = () => {
           </Grid>
         )}
       />
+      {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
+
     </CommonPageLayout>
   );
 };

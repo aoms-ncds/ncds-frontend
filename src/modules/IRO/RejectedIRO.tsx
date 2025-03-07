@@ -28,6 +28,7 @@ import FRServices from '../FR/extras/FRServices';
 import InfoIcon from '@mui/icons-material/Info';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const RejectedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -58,6 +59,7 @@ const RejectedIRO = () => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.REJECTED]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [openLog, setOpenLog] = useState(false);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -318,6 +320,15 @@ const RejectedIRO = () => {
               onClick: () => {
                 setAttachments(props.row.billAttachment);
                 setViewFileUploader(true);
+              },
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
               },
             },
           ]}
@@ -862,6 +873,7 @@ const RejectedIRO = () => {
 
       />
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
 
     </CommonPageLayout>
   );

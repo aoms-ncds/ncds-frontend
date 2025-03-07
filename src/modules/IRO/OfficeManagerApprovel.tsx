@@ -33,6 +33,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import clsx from 'clsx';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -49,6 +50,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [openLog, setOpenLog] = useState(false);
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -563,6 +566,15 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(params.row._id);
+                setOpenLog(true);
+              },
             },
             // {
             //   id: 'signature',
@@ -1516,6 +1528,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           </Grid>
         )}
       />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
+
     </CommonPageLayout>
   );
 };

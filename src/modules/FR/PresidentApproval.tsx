@@ -32,14 +32,17 @@ import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const PresidentApproval = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
+  const [openLog, setOpenLog] = useState(false);
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFRId] = useState('');
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -222,6 +225,15 @@ const PresidentApproval = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
             },
 
           ]}
@@ -698,6 +710,7 @@ const PresidentApproval = () => {
         )}
       />
 
+      {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
 
     </CommonPageLayout>
   );

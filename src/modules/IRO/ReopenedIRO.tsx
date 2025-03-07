@@ -26,6 +26,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
@@ -40,6 +41,8 @@ const ReopenedIRO = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [openLog, setOpenLog] = useState(false);
+
   const [mngrName, setMngrName] = useState('');
   const [attachment, setAttachment] = useState<boolean>(false);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
@@ -638,7 +641,15 @@ const ReopenedIRO = () => {
                 icon: EditIcon,
               },
             ]:[]),
-
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIRO(props.row);
+                setOpenLog(true);
+              },
+            },
             // {
             //   id: 'View',
             //   text: 'Close IRO ',
@@ -1074,6 +1085,8 @@ const ReopenedIRO = () => {
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
+      {selectedIRO._id&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIRO._id}/>}
+
     </CommonPageLayout>
   );
 };

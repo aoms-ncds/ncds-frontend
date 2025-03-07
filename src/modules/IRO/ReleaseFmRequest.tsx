@@ -46,6 +46,7 @@ import Animations from '../../Animations';
 import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -70,6 +71,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [mngrName, setMngrName] = useState('');
   const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [openLog, setOpenLog] = useState(false);
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -869,6 +871,15 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(params.row._id);
+                setOpenLog(true);
+              },
+            },
 
             // {
             //   id: 'Send Back',
@@ -2266,6 +2277,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         // isStopped={.state.isStopped}
         // isPaused={.state.isPaused}
       />}
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
+
     </CommonPageLayout>
   );
 };

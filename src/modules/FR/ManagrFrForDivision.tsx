@@ -37,6 +37,7 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrForDivision = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -63,6 +64,7 @@ const ManageFrForDivision = () => {
     date: string | null;
   } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
+  const [openLog, setOpenLog] = useState(false);
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -398,6 +400,15 @@ const ManageFrForDivision = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                setOpenLog(true);
+              },
             },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
@@ -1201,6 +1212,8 @@ const ManageFrForDivision = () => {
           </Grid>
         )}
       />
+      {selectedFR && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedFR}/>}
+
     </CommonPageLayout>
   );
 };

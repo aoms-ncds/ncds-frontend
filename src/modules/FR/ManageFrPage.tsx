@@ -39,6 +39,7 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrPage = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
@@ -90,6 +91,7 @@ const ManageFrPage = () => {
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [openPrintFrPrev, setOpenPrintFrPrev] = useState(false);
   const [openPrintFrPrevDelhi, setOpenPrintFrPrevDelhi] = useState(false);
+  const [openLog, setOpenLog] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -489,7 +491,15 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                setOpenLog(true);
+              },
+            },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
                 {
@@ -1430,6 +1440,8 @@ const ManageFrPage = () => {
           </Grid>
         )}
       />
+      {selectedFR&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedFR}/>}
+
     </CommonPageLayout>
   );
 };
