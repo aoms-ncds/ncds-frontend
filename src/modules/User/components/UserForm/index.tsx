@@ -928,6 +928,21 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                     InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
                   />
                 </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label=" Remark :"
+                    value={newChild?.remark}
+                    onChange={(e) =>
+                      setNewChild((newchild: any) => ({
+                        ...newchild,
+                        remark: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                  />
+                </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <FormControl>
                     <FormLabel id="Gender">Gender</FormLabel>

@@ -453,6 +453,7 @@ Edit
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Aadhaar NO : </Typography> {child.adharCardNo} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Phone: </Typography> {child.phoneNumber} </Grid>
                           <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Email: </Typography> {child.emailId} </Grid>
+                          <Grid key={child._id} item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Remark: </Typography> {child?.remark} </Grid>
                         </Grid>
                       </Grid>
                     ))}

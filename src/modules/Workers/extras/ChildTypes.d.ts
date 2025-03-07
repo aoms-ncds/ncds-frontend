@@ -35,6 +35,7 @@ declare global {
     reason?:string;
     disabledFrom?:Moment;
     disabledTo?:Moment;
+    remark?:string;
 
 
   }
@@ -63,6 +64,7 @@ declare global {
     endingYear?: Moment;
     reasonForDeactivation?: DeactivationReason;
     deactivationDate?:Moment;
+    remark?:string;
   }
 
   // interface IChildSupport extends MongooseDocument{
