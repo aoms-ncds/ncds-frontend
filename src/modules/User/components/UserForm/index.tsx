@@ -101,9 +101,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       _id: (props.value as CreatableIWorker).children.length.toString(),
     });
   };
-  if (props?.options?.tab) {
+  if (props?.options?.tab==3) {
     useEffect(() => {
       setActiveStep(3);
+    }, []);
+  } else if (props?.options?.tab==2) {
+    useEffect(() => {
+      setActiveStep(2);
     }, []);
   }
   const deleteChild = (_index: number) => {

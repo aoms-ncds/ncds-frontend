@@ -1441,8 +1441,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           value={
                             exstatusFilter.includes(69) ? 'NonBankTransfers' :
                               statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                  'ALL'
+                                statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                  statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                    'ALL'
                           }
                           onChange={(e) => {
                             const value = e.target.value;
@@ -1452,6 +1453,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             } else if (value === 'RTD') {
                               setExStatusFilter([]);
                               setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                            } else if (value === 'AMT') {
+                              setExStatusFilter([]);
+                              setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
                             } else if (value === 'NonBankTransfers') {
                               setExStatusFilter([69]);
                               setStatusFilter([]); // Use an empty array for "ALL" to show all items
@@ -1466,6 +1470,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                           <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
                           <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
+                          <FormControlLabel value="AMT" control={<Radio />} label="AMOUNT RELEASED" />
                           <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
                         </RadioGroup>
                       </FormControl>

@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import GridLinkAction from '../../../components/GridLinkAction';
@@ -11,6 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import SpousesServices from '../extras/SpousesServices';
 
 const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
   const [reasonDialog, setReasonDialog] = useState(false);
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
   const [searchText, setSearchText] = useState('');
+  const [rowData, setRow] = useState<any>(null);
+  const [deleteModel, setDeleteModel] = useState(false);
 
 
   const deactivateSpouse = (id: string, reason: string) => {
@@ -130,6 +134,16 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
     );
   });
 
+  const handleEdit = (rowId: any) => {
+    console.log(rowId, 'rowId');
+    WorkersServices.getById(rowId.row.spouseOf._id)
+      .then((res) => {
+        navigate(`/workers/edit/${rowId.row.spouseOf._id}/2`);
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      });
+  };
   console.log(filteredRows, 'filteredRows');
 
   const columns: GridColDef<Spouse>[] = [
@@ -167,6 +181,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
                 onClick={() => {
                   activateSpouse(params.row._id);
                 }}
+
               />
             ))
           )),
@@ -184,8 +199,23 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
             label="Delete"
             icon={<DeleteIcon />}
             showInMenu
-            onClick={() => handleDelete(params)}
+            onClick={() =>{
+              setDeleteModel(true), setRow(params);
+            }}
+
           />,
+          ...(hasPermissions(['HR_DPARTMENT_ACCESS']) ?
+            [
+              <GridLinkAction
+                key={5}
+                label="Edit"
+                icon={<EditIcon />}
+                showInMenu
+                onClick={() => handleEdit(params)}
+              />,
+            ] :
+            []),
+
         ].filter((action) => action !== false) as JSX.Element[]
       ),
     },
@@ -385,6 +415,29 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
               rows={filteredRows ?? []}
               sx={{ height: '55vh', width: '100%' }} columns={columns} getRowId={(row) => row._id} loading={props.value === null} />
           </Box>
+          <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+            {/* <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
+        </DialogContent> */}
+            <DialogContent>
+              <Typography sx={{ color: 'red' }}>Are sure want to delete this spouse</Typography>
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={() => setDeleteModel(false)}>Close</Button>
+              <Button
+                endIcon={<DeleteIcon />}
+                variant="contained"
+                color="info"
+                onClick={async () => {
+                  handleDelete(rowData);
+                }}
+              >
+                 Delete
+              </Button>
+            </DialogActions>
+
+          </Dialog>;
         </Card>
       </Grid>
     </>

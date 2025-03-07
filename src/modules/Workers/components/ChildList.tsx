@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Avatar, Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,6 +21,8 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
   const [reasonForDeactivation, setReasonForDeactivation] = useState<string | null>('');
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [rowData, setRow] = useState<any>(null);
 
   const deactivateChild = (id: string, reason: string) => {
     const snackbarId = enqueueSnackbar({
@@ -90,7 +92,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
   const handleEdit = (rowId: any) => {
     ChildrenServices.getById(rowId.id)
       .then((res) => {
-        navigate(`/workers/edit/${res.data.childOf}/4`);
+        navigate(`/workers/edit/${res.data.childOf}/3`);
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
@@ -187,7 +189,9 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
             label="Delete"
             icon={<DeleteIcon />}
             showInMenu
-            onClick={() => handleDelete(params)}
+            onClick={() =>{
+              setDeleteModel(true), setRow(params);
+            } }
           />,
 
           ...(hasPermissions(['HR_DPARTMENT_ACCESS']) ?
@@ -458,7 +462,29 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
 
             />
           </Box>
+          <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+            {/* <DialogContent>
+          <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
+        </DialogContent> */}
+            <DialogContent>
+              <Typography sx={{ color: 'red' }}>Are sure want to delete this Child</Typography>
+            </DialogContent>
 
+            <DialogActions>
+              <Button onClick={() => setDeleteModel(false)}>Close</Button>
+              <Button
+                endIcon={<DeleteIcon />}
+                variant="contained"
+                color="info"
+                onClick={async () => {
+                  handleDelete(rowData);
+                }}
+              >
+                 Delete
+              </Button>
+            </DialogActions>
+
+          </Dialog>;
         </Card>
       </Grid>
     </>
