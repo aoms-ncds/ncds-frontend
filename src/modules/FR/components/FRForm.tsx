@@ -136,7 +136,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(props.actionAdi, 'newParticular');
+  console.log(particulars, 'newParticular');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -424,7 +424,7 @@ const FRForm = (props: FormComponentProps<any>) => {
       console.log(res.data);
     });
                   } else if (props.action == 'edit') {
-                    await FRServices.addParticularsFR(particulars, props.value._id)
+                    await FRServices.addParticularsFR(particulars.filter((e)=>!e._id), props.value._id)
                   .then((res) => {
                     console.log(res.data);
                   });
