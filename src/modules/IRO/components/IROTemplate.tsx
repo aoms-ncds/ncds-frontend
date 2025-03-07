@@ -319,7 +319,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <Text
                   style={{
                     fontWeight: 500,
-                    width: '635px px', // Set fixed width,
+                    width: '650px px', // Set fixed width,
                     textAlign: 'center', fontSize: 10,
                     fontFamily: 'CourierPrime',
                   }}
@@ -379,21 +379,25 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 // totalAmount2 += props.rowData.sanctionedAmount ?? 0;
 
 
-                return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='100' >
+                return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='116' >
+                  <>
+                    {index % 5 ===0 && <Text break/>}
+                  </>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'12%'}>
                     {String(index + 1)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+
+                  <div style={{ borderRight: 1, height: 116 }}></div>
                   {/* <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
                     {`${item.mainCategory == 'Select' ? '' : item.mainCategory}${item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1}${item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2}${item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}`}
                   </PDFCell> */}
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <div style={{ borderRight: 1, height: 116 }}></div>
                   <View
                     style={{
                       flexDirection: 'column',
                       alignItems: 'flex-start',
-                      height: '100',
-                      width: '635px',
+                      height: '116',
+                      width: '650px',
                       padding: 5,
                     }}
                   >
@@ -417,20 +421,20 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                     </Text>
                   </View>
 
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <div style={{ borderRight: 1, height: 116 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
                     {String(item?.sanctionedAsPer ?? '')}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <div style={{ borderRight: 1, height: 116 }}></div>
 
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'13%'}>
                     {String(item.quantity)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <div style={{ borderRight: 1, height: 116 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(item.requestedAmount)}
                   </PDFCell>
-                  <div style={{ borderRight: 1, height: 100 }}></div>
+                  <div style={{ borderRight: 1, height: 116 }}></div>
                   <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
                     {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
                   </PDFCell>
@@ -446,8 +450,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </PDFCell>
                 {/* <PDFCell width={'20%'} ></PDFCell> */}
                 {/* <PDFCell width={'90%'} ></PDFCell> */}
-                <PDFCell width={'637 px'} ></PDFCell>
-                <PDFCell width={'637 px'} ></PDFCell>
+                <PDFCell width={'650 px'} ></PDFCell>
+                <PDFCell width={'650 px'} ></PDFCell>
                 {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
@@ -643,7 +647,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
-              <Text style={{ ...styles.text, marginTop: 3, left: 7, marginBottom: 3 }}>
+              <Text style={{ ...styles.text, marginTop: 0, left: 7, marginBottom: 3 }}>
                 {props?.rowData?.approvedBy?.basicDetails?.firstName ?
                   `${props.rowData.approvedBy.basicDetails.firstName} ${props.rowData.approvedBy.basicDetails.middleName || ''
                   } ${props.rowData.approvedBy.basicDetails.lastName || ''}` :
