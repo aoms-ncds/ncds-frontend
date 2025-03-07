@@ -119,7 +119,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props, 'pro');
+  // console.log(props.rowData.FRno, 'pro');
 
 
   const additionalJr = props.rowData?.division?.details?.additionalJuniorLeader?.name;
@@ -137,7 +137,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
         <div>
           <Text style={styles.title}>REQUISITION FOR FINANCE</Text>
           <Text style={styles.address}>126.Andheri Modh- Chhatarpur, New Delhi-110074</Text>
-          <Text style={styles.frno}>{(props.rowData as any)?.FR?.FRno}</Text>
+          <Text style={styles.frno}>{props.rowData?.FRno?? (props.rowData as any)?.FR?.FRno}</Text>
 
           <Text style={styles.month}>For the Month of {props.rowData?.particulars[0]?.month}</Text>
           <div>

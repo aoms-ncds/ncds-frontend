@@ -473,10 +473,9 @@ const ReconciliationIRO = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
-                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
-                    // console.log(dataDiv.division?.details, 'res98');
-                    props.row.division?.details&& setData5({ ...props.row,
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData5({ ...dataDiv[0],
                       division: {
                         ...props.row.division,
                         details: {
