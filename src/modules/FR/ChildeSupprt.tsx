@@ -330,7 +330,18 @@ const ChildeSupportPage = () => {
   const handleClick = (rowId: any) => {
     ChildrenServices.getById(rowId.id)
       .then((res) => {
-        navigate(`/users/worker/${res.data.childOf}/3`);
+        // navigate(`/users/worker/${res.data.childOf}/3`);
+        window.open(`/users/worker/${res.data.childOf}/3`, '_blank', 'noopener,noreferrer');
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      });
+  };
+  const handleClickEdit = (rowId: any) => {
+    ChildrenServices.getById(rowId.id)
+      .then((res) => {
+        // navigate(`/workers/edit/${res.data.childOf}/3`);
+        window.open(`/workers/edit/${res.data.childOf}/3`, '_blank', 'noopener,noreferrer');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
@@ -346,6 +357,8 @@ const ChildeSupportPage = () => {
         [
           <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu onClick={() => handleClick(params)} />,
           // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
+          <GridLinkAction key={2} label="Edit" icon={<PreviewIcon />} showInMenu onClick={() => handleClickEdit(params)}/>,
+
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },

@@ -547,8 +547,22 @@ const WorkerSupportPage = () => {
       headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
-          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
-          // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
+          <GridLinkAction
+            key={1}
+            label="View"
+            icon={<PreviewIcon />}
+            showInMenu
+            onClick={() => window.open(`/users/worker/${params.row._id}`, '_blank', 'noopener,noreferrer')}
+          />,
+          // <GridLinkAction key={1} label="Edit" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
+          <GridLinkAction
+            key={2}
+            label="Edit"
+            icon={<PreviewIcon />}
+            showInMenu
+            onClick={() => window.open(`/workers/edit/${params.row._id}`, '_blank', 'noopener,noreferrer')}
+          />,
+
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
