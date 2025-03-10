@@ -320,6 +320,7 @@ const ViewIRO = (props: any) => {
 
   const user = useAuth();
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [reasonForRevertToDivision, setReasonForRevertToDivision] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -331,6 +332,7 @@ const ViewIRO = (props: any) => {
   const [rejectDialog, setrejectDialog] = useState(false);
   const [reverDialog, setRevertDialog] = useState(false);
   const [reasonForReject, setReasonForReject] = useState<string | null>('');
+  const [reasonForRevertToDiv, setReasonForRevertToDiv] = useState<string | null>('');
   const [reasonForRevert, setReasonForRevert] = useState<string | null>('');
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
@@ -987,6 +989,14 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           </Select>
                         </FormControl>
                       </Grid>
+                      &nbsp;
+                       &nbsp;
+                      &nbsp;
+                       &nbsp;
+                      {IRO?.reasonForRevertToDivision && (
+                        <> <br /><span style={{ fontWeight: 'bold', color: 'red' }}> Reason For Revert To Division: </span><span style={{ color: 'red' }}>{IRO?.reasonForRevertToDivision ?? 'N/A'}</span></>
+
+                      )}
                       {props.action === 'custom' ?(
                         <><Grid item xs={12} md={6}>
                           <TextField
@@ -1492,11 +1502,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
-                                        const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
-                                        IROServices.revertToDivision(iroID as string)
-                                                                  .then((res) => {
-                                                                    navigate('/iro/manage');
-                                                                  });
+                                        setReasonForRevertToDivision(true);
                                       }}
                                     >
                                       Revert to division
@@ -1788,6 +1794,55 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
               false;
               setrejectDialog(false);
               navigate('/IRO/office_approve');
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+                            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={reasonForRevertToDivision} fullWidth maxWidth="md">
+        <DialogTitle> Reason for revert to division</DialogTitle>
+        <DialogContent>
+          <br />
+          {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+          <TextField
+            id="reasonForReject"
+            placeholder="Reason for revert"
+            multiline
+            value={reasonForRevertToDiv}
+            onChange={(e)=>setReasonForRevertToDiv(e.target?.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonForRevertToDivision(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            disabled={reasonForRevertToDiv==''}
+            onClick={() => {
+              const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
+              IROServices.revertToDivision(iroID as string, reasonForRevertToDiv as string)
+                                        .then((res) => {
+                                          navigate('/iro/manage');
+                                        });
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >

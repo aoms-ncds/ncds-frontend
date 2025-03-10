@@ -1302,6 +1302,32 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         },
       ] :
       []),
+    ...(props.action !== 'release' ?
+      [
+        {
+          field: 'reasonForRevertToDivision',
+          headerClassName: 'super-app-theme--cell',
+          headerName: 'Beneficiary Name',
+          width: 250,
+          renderHeader: () => <b>Reason For Revert To Division</b>,
+          renderCell: (props:any) => (
+            <p
+              style={{
+                maxWidth: 300,
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                justifyContent: 'center',
+                textAlign: 'center',
+              }}
+            >
+              {props.row.reasonForRevertToDivision}
+            </p>
+          ),
+          align: 'center' as const, // Explicitly cast to `GridAlignment`
+          headerAlign: 'center' as const,
+        },
+      ] :
+      []),
 
     {
       field: 'updatedAt',
