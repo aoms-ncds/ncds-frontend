@@ -12,6 +12,7 @@ import SupportFrPage from '../SupportFr';
 import RejectedFr from '../RejectedFr';
 import ReopenedFr from '../ReopenedFr';
 import CustomFR from '../CustomFR';
+import NonSupport from '../Non-Support';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -166,6 +167,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Support FR',
       path: '/support',
       element: <SupportFrPage/>,
+      private: true,
+      requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Non Support FR',
+      path: '/Non-support',
+      element: <NonSupport/>,
       private: true,
       requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,
