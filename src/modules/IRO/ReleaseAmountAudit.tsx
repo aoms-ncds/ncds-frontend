@@ -580,7 +580,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
-    IROServices.groupedIRO({ Exstatus: exstatusFilter, dateRange }).then((res)=>{
+    IROServices.groupedIROView({ Exstatus: exstatusFilter, dateRange }).then((res)=>{
       console.log(res, 'res90');
       setGroupIro(res.data);
     });
