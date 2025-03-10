@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import moment from 'moment';
 import { dummyRequest, getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import { purposes } from './FRConfig';
@@ -19,6 +20,15 @@ export default {
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
   getAllOptimized: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/optimized/',
+    { params: conditions, headers: { ...getAuthHeader() } }),
+  (data) => data.map((fr: FR) => ({
+    ...fr,
+    FRdate: moment(fr.FRdate),
+    createdAt: moment(fr.createdAt),
+    updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
+  }))),
+  getAllOptimizedDiv: (conditions?: { status?: number[]; dateRange?: DateRange; searchKey?: string; support?: 'worker' | 'child' | 'all' }) => getStandardResponse<FR[]>(axios.get('/fr/optimizedForDiv/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({
     ...fr,
