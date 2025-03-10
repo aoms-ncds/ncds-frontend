@@ -7,6 +7,7 @@ import axios from 'axios';
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
+  groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
   getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
