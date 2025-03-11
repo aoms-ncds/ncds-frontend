@@ -141,7 +141,7 @@ const frDashboard = () => {
                       primaryText="Support" secondaryText="FR" color="#fff" targetRoute="/fr/support" />
                   </Grid><Grid item xs={12} md={4} xl={3}>
                     <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                      primaryText="Non Support" secondaryText="FR" color="#fff" targetRoute="/fr/Non-support" />
+                      primaryText="Expanse" secondaryText="FR" color="#fff" targetRoute="/fr/Non-support" />
                   </Grid></>
                 )} />
               <Grid item xs={12} md={4} xl={3}>

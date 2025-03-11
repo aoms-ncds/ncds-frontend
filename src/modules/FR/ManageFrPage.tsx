@@ -112,6 +112,7 @@ const ManageFrPage = () => {
     },
   });
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| null>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -185,7 +186,18 @@ const ManageFrPage = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, [dateRange, statusFilter]);
+  }, [dateRange, statusFilter, statusFilter]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1 })
+      .then((res) => {
+        if (res.data) {
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [statusFilter1]);
 
   const columns: GridColDef<FR>[] = [
     {
@@ -967,6 +979,21 @@ const ManageFrPage = () => {
                           <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
                           <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
                           <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
+
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter1}
+                          onChange={(e) =>setStatusFilter1(e.target.value==='Support'? 'Support':'Expanse')}
+                          name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>

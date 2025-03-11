@@ -27,6 +27,15 @@ export default {
     updatedAt: moment(fr.updatedAt),
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
+  getAllOptimizedExSupprt: (conditions?: { dateRange?: DateRange; support?: 'Expanse' | 'Support'| null}) => getStandardResponse<FR[]>(axios.get('/fr/support-expanse/',
+    { params: conditions, headers: { ...getAuthHeader() } }),
+  (data) => data.map((fr: FR) => ({
+    ...fr,
+    FRdate: moment(fr.FRdate),
+    createdAt: moment(fr.createdAt),
+    updatedAt: moment(fr.updatedAt),
+    frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
+  }))),
   getAllOptimizedById: (fRId: any) => getStandardResponse<FR>(
     axios.get(`/fr/optimized/${fRId}`, { headers: { ...getAuthHeader() } }),
     (data) => ({
