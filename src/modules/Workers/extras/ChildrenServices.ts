@@ -8,6 +8,7 @@ export default {
    * @return {Promise<StandardResponse<Child[]>>} A promise that resolves to the response containing the list of all child records.
    */
   // getAll: (): Promise<StandardResponse<Child[]>> => getStandardResponse<Child[]>(axios.get('/workers/children/', { headers: { ...getAuthHeader() } })),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/children/count', { params: conditions, headers: { ...getAuthHeader() } })),
 
   getAll: (conditions?: { status?: number;division?:string }) =>
     getStandardResponse<Child[]>(axios.get('/workers/children/', { params: conditions, headers: { ...getAuthHeader() } }), (children) =>
