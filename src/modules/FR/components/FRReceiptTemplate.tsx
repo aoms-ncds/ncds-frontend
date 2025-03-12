@@ -16,6 +16,11 @@ Font.register({ family: 'Oswald', fonts: [
 // });
 
 const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+    padding: 10, // Add some padding inside the bordered container
+  },
   image: {
     position: 'absolute',
     left: 260,
@@ -126,7 +131,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   let totalAmount=0;
   return (
     <Document>
-      <Page size="A4">
+      <Page size="A4" style={styles.page}>
         <Image src="/3D Logo.png" style={styles.image} />
 
         {/* <Image

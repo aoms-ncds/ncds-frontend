@@ -283,6 +283,20 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
+            ...(hasPermissions(['ADMIN_ACCESS']) && props.row.status == FRLifeCycleStates.FR_APPROVED?
+              [
+                {
+                  id: 'edit',
+                  text: 'Edit for admin',
+                  // component: Link,
+                  // to: `/fr/${props.row._id}/edit`,
+                  icon: EditIcon,
+                  onClick: () => {
+                    window.open(`/fr/${props.row._id}/editAdmin`, '_blank');
+                  },
+                },
+              ] :
+              []),
             {
               id: 'print',
               text: 'Print FR',
