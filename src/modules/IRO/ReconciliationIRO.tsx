@@ -434,6 +434,8 @@ const ReconciliationIRO = () => {
               icon: PrintIcon,
               onClick: () => {
                 IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  console.log(res.data[0], '090');
+
                   setData(res.data[0]);
                 });
                 // setData(props.row);
@@ -1302,7 +1304,7 @@ const ReconciliationIRO = () => {
                   Downloading the IROReceipt for {data?.IRONo}
             <br />
             {data && (
-              <PDFDownloadLink document={<IROTemplate rowData={data as FR} fr={data.FR} president={signaturePresident} officeMngrSign={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
+              <PDFDownloadLink document={<IROTemplate rowData={data as IROrder} fr={data.FR} president={signaturePresident} officeMngrSign={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
                 {({ loading }) => (loading || openPrintFr ? '....' : 'IROReceipt.pdf')}
               </PDFDownloadLink>
             )}{' '}

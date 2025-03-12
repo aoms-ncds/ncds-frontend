@@ -138,7 +138,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   const totalSacntion = props.rowData.particulars?.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(props, 'total');
+  console.log(props.rowData, 'total');
 
   NewTot += props?.rowData.particulars?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
@@ -201,7 +201,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Division Name</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 34, marginBottom: 3 }}>: {props?.rowData?.division?.details.name ?? ''}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 34, marginBottom: 3 }}>: {props?.rowData?.division?.details?.name ?? ''}</Text>
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Div. Co-ordinator</Text>
