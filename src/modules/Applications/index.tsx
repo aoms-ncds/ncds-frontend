@@ -22,47 +22,46 @@ const APPDashboard = () => {
 
   const auth :any = useAuth();
   useEffect(() => {
-    ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
+    ApplicationServices.getCountByDiv({ status: UserLifeCycleStates.CREATED })
       .then((res) =>{
         console.log(res?.data);
 
-        setApplicationCreatedCount(()=>res.data.filter((dd)=>dd.division?._id==auth?.user?.division ).length);
+        setApplicationCreatedCount(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
-      .then((res) =>setApplicationActiveCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
+    ApplicationServices.getCountByDiv({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
+      .then((res) =>setApplicationActiveCount(res.data))
 
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.APPROVED })
-      .then((res) =>setApplicationApprovedCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
-
+    ApplicationServices.getCountByDiv({ status: UserLifeCycleStates.APPROVED })
+      .then((res) =>setApplicationApprovedCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.REJECTED })
-      .then((res) =>setApplicationRejectedCount(()=>res.data.filter((dd)=>dd.division?._id==(auth?.user?.division)).length))
+    ApplicationServices.getCountByDiv({ status: UserLifeCycleStates.REJECTED })
+      .then((res) =>setApplicationRejectedCount(res.data))
       .catch((error) => {
         console.log(error);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
+    ApplicationServices.getCount({ status: UserLifeCycleStates.CREATED })
       .then((res) => {
-        setApplications(res.data.length);
+        setApplications(res.data);
       });
-    ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
+    ApplicationServices.getCount({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
       .then((res) => {
-        setApplicationsPresident(res.data.length);
+        setApplicationsPresident(res.data);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.APPROVED })
+    ApplicationServices.getCount({ status: UserLifeCycleStates.APPROVED })
       .then((res) => {
-        setApplicationsApprove(res.data.length);
+        setApplicationsApprove(res.data);
       });
-    ApplicationServices.getAll({ status: UserLifeCycleStates.REJECTED })
+    ApplicationServices.getCount({ status: UserLifeCycleStates.REJECTED })
       .then((res) => {
-        setApplicationsReject(res.data.length);
+        setApplicationsReject(res.data);
       });
   }, []);
   return (
