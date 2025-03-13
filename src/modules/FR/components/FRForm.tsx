@@ -58,6 +58,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [Allworkers, setAllWorkers] = useState<IWorker[] | Staff[]>();
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
+  const [selectedParticularIndex2, setSelectedParticularIndex2] = useState<number | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [AllSubDivisions, setAllSubDivisions] = useState<SubDivision[]>();
   const [AllDivisions, setAllDivisions] = useState<Division[]>();
@@ -104,7 +105,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     transactionId: '',
   });
   const [submit, setSubmit] = useState(0);
-  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'| 'edit2'>('add');
   const [open, setOpen] = useState(false);
 
   const [showCoordinatorName, setCoordinatorName] = useState(false);
@@ -236,6 +237,8 @@ const FRForm = (props: FormComponentProps<any>) => {
         ...props.value,
         particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
       });
+    } else if (particularDialog === 'edit2' ) {
+      setAddParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex2 ? (newParticular as Particular) : part)));
     } else {
       console.log(props.action, 'ioioi');
       newParticulars = [newParticular as Particular];
@@ -304,6 +307,34 @@ const FRForm = (props: FormComponentProps<any>) => {
     //     particulars.map((part, _ind)=>_ind===index?particular:part)
     //   ));
     setSelectedParticularIndex(index);
+    setShowAddParticularDialog(true);
+    setNewParticular(particular);
+    // Perform delete logic
+    // const updatedParticulars = particulars.filter((item) => item._id !== particularId);
+    // setParticulars(updatedParticulars);
+    // FRServices.editParticulars(particularId)
+    //   .then((res) => {
+    //     enqueueSnackbar({
+    //       message: res.message,
+    //       variant: 'success',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar({
+    //       message: err.message,
+    //       variant: 'error',
+    //     });
+    //   });
+  };
+
+  const editParticular2 = (particular: Particular, index: number) => {
+    setParticularDialog('edit2');
+    // setParticulars((particulars)=>
+    //   (
+    //     particulars.map((part, _ind)=>_ind===index?particular:part)
+    //   ));
+    setSelectedParticularIndex2(index);
     setShowAddParticularDialog(true);
     setNewParticular(particular);
     // Perform delete logic
@@ -854,7 +885,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                                     }
                                   />
                                   <IconButton>
-                                    <EditIcon onClick={() => editParticular(item, index)} />
+                                    <EditIcon onClick={() => editParticular2(item, index)} />
                                   </IconButton>
                                   {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
                                     <Tooltip title="Add Sanction as per">
