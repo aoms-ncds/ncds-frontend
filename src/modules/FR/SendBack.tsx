@@ -332,7 +332,7 @@ const SentBack = () => {
   }, [dateRange]);
   return (
 
-    <CommonPageLayout title="Reverted IRO" momentFilter={{
+    <CommonPageLayout title="Reverted Fr" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);
@@ -436,7 +436,7 @@ const SentBack = () => {
             >
 
 
-              <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
               }/>
             </Box>

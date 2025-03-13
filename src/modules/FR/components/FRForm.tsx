@@ -249,19 +249,22 @@ const FRForm = (props: FormComponentProps<any>) => {
         });
       } else {
         newParticulars1 = [newParticular as Particular];
-        console.log(newParticulars1, 'newParticulars1');
+        console.log(addsParticulars, 'newParticulars1');
         newParticulars = [newParticular as Particular];
 
-        setParticulars(newParticulars1);
+        if (particulars.length !==0) {
+          setAddParticulars((prev:any) => [
+            ...prev,
+            ...newParticulars1.map((particular) => ({
+              ...particular,
+              sanctionedAmount: null,
+              sanctionedAsPer: null,
+            })),
+          ]);
+        } else {
+          setParticulars(newParticulars1);
+        }
 
-        setAddParticulars((prev:any) => [
-          ...prev,
-          ...particulars.map((particular) => ({
-            ...particular,
-            sanctionedAmount: null,
-            sanctionedAsPer: null,
-          })),
-        ]);
         // setAddParticulars(particulars);
         // setAddParticulars((prev) => [...prev, newParticular as Particular]);
         // props.onChange({
@@ -332,6 +335,35 @@ const FRForm = (props: FormComponentProps<any>) => {
     // Perform delete logic
     const updatedParticulars = particulars.filter((item) => item._id !== particularId);
     setParticulars(updatedParticulars);
+    FRServices.deleteParticulars(particularId)
+      .then((res) => {
+        enqueueSnackbar({
+          message: res.message,
+          variant: 'success',
+        });
+        // window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          message: err.message,
+          variant: 'error',
+        });
+      });
+  };
+  console.log(addsParticulars, 'addsParticulars');
+
+  const deleteParticular2 = (particularId: string | undefined, index: number) => {
+    if (!particularId) {
+      // Delete by index if the particularId is not available
+      const updatedParticulars = addsParticulars.filter((_item, i) => i !== index);
+      setAddParticulars(updatedParticulars);
+      return;
+    }
+
+    // Perform delete logic
+    const updatedParticulars = addsParticulars.filter((item) => item._id !== particularId);
+    setAddParticulars(updatedParticulars);
     FRServices.deleteParticulars(particularId)
       .then((res) => {
         enqueueSnackbar({
@@ -420,14 +452,21 @@ const FRForm = (props: FormComponentProps<any>) => {
                   await props?.onSubmit(updatedValue); // Ensure it completes before moving forward
                   if (props.action == 'custom'|| props.action == 'customEdit') {
                     await FRServices.addParticularscustomFR(addsParticulars, props.value._id)
-    .then((res) => {
-      console.log(res.data);
-    });
+         .then((res) => {
+           console.log(res.data);
+         });
                   } else if (props.action == 'edit') {
-                    await FRServices.addParticularsFR(particulars.filter((e)=>!e._id), props.value._id)
-                  .then((res) => {
-                    console.log(res.data);
-                  });
+                    if (particulars.length !==0&& addsParticulars.length ==0) {
+                      await FRServices.addParticularsFR(particulars.filter((e)=>!e._id), props.value._id)
+                    .then((res) => {
+                      console.log(res.data);
+                    });
+                    } else if (addsParticulars.length !==0) {
+                      await FRServices.addParticularsFR(addsParticulars, props.value._id)
+                    .then((res) => {
+                      console.log(res.data);
+                    });
+                    }
                   }
                 } else {
                   enqueueSnackbar({
@@ -810,7 +849,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                                     permissions={['WRITE_FR']}
                                     granted={
                                       <IconButton>
-                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                        <DeleteIcon onClick={() => deleteParticular2(item._id, index)} />
                                       </IconButton>
                                     }
                                   />

@@ -27,6 +27,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     reasonForSentBack: '',
     reasonForReject: '',
     sanctionedAsPer: '',
+    status: 0,
   });
   console.log(requisition, 'props.action');
 
@@ -132,6 +133,8 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
+      console.log(requisition.status, 'requisition.status');
+      
       if (frID) {
         if (props.action === 'customEdit') {
           const res = await FRServices.updateFRRequestsCustom(frID, requisition);
@@ -163,8 +166,10 @@ const FRFormPage = (props: FRFormPageProps) => {
         }, 1000);
       } else if (props.action === 'customEdit') {
         navigate('/fr/CustomFR');
+      } else if (requisition.status ==FRLifeCycleStates.FR_SEND_BACK) {
+        navigate('/fr/sentBack');
       } else {
-        navigate('/fr/manage');
+        navigate('/fr');
       }
 
       enqueueSnackbar({
