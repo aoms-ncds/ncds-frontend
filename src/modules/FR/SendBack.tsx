@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
-import { Grid, Button, Card, Box, TextField } from '@mui/material';
+import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
@@ -22,6 +22,7 @@ const SentBack = () => {
     setSearchText(event.target.value);
   };
   const [data2, setData2] = useState<FR | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
@@ -93,19 +94,34 @@ const SentBack = () => {
             //   to: '/view' + props.row._id,
             //   icon: PrintIcon,
             // },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   onClick: ()=>{
+            //     FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+            //       console.log(res.data, 'daa98');
+            //       setData2(res.data);
+            //     });
+            //   },
+            //   document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
             {
               id: 'print',
               text: 'Print FR',
-              component: PDFDownloadLink,
-              onClick: ()=>{
+              icon: PrintIcon,
+              onClick: () => {
                 FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
                   console.log(res.data, 'daa98');
                   setData2(res.data);
                 });
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
               },
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
             },
             {
               id: 'View',
@@ -427,6 +443,30 @@ const SentBack = () => {
           </Grid>
         </Grid>
       </Card>
+      <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+            <br />
+            {data2 && (
+              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData2(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
 
   );
