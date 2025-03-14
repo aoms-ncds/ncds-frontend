@@ -5,351 +5,381 @@ import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
+const getPageSize = (columnCount: number): 'A4' | 'A3' | 'A2' => {
+  if (columnCount <= 7) return 'A4';
+  if (columnCount <= 17) return 'A3';
+  return 'A2';
+};
 
+// Function to determine font size based on column count
+const getFontSize = (columnCount: number): number => {
+  if (columnCount <= 7) return 12;
+  if (columnCount <= 17) return 10; // Adjusted from 11 to 10 for better spacing
+  return 9; // Reduced further for A2
+};
+// Function to generate column widths dynamically
+
+const getColumnWidths = (headers: string[], pageSize: 'A4' | 'A3' | 'A2'): string[] => {
+  const baseWidthMap: { [key: string]: number } = {
+    'Sl No': 6,
+    'FR No': 6,
+    'Date': 6,
+    'Division': 8,
+    'Narration': 8,
+    'Sanction Amount': 6,
+    'Sanction as per': 8,
+    'IRO No': 6,
+    'Status': 6,
+    'Sub-Division': 7,
+    'Main Category': 6,
+    'Sub Category 1': 6,
+    'Sub Category 2': 6,
+    'Sub Category 3': 6,
+    'For the month': 8,
+    'Requested Amount': 6,
+    'Sanctioned Bank': 7,
+    'Beneficiary Name': 7,
+    'Source Of Account': 8,
+    'Last Updated': 7,
+
+
+  };
+
+
+  // Scale widths down for smaller pages
+
+
+  const sizeMultiplier = pageSize === 'A2' ? 1.2 : pageSize === 'A3' ? 1.0 : 0.8;
+
+
+  return headers.map((header) => {
+    const baseWidth = baseWidthMap[header] || 5;
+
+
+    return `${(baseWidth * sizeMultiplier).toFixed(1)}%`; // Keep width percentages precise
+  });
+};
 Font.register({
-  family: 'Teko',
-  src: 'https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap',
+  family: 'NotoSans',
+  src: '/NotoSans-Regular.ttf', // Make sure this file is correctly placed in your project
 });
 
 const styles = StyleSheet.create({
+
+
   page: {
+
+
     backgroundColor: 'white',
+
+
+    padding: 10, // Reduce margins for more space
+
+
   },
+
+
   image: {
+
+
     position: 'absolute',
+
+
     left: 825,
+
+
     height: 50,
+
+
     width: 50,
+
+
     marginTop: 20,
+
+
   },
+
+
   title: {
-    marginTop: 70,
+
+
+    marginTop: 40,
+
+
     fontSize: 12,
+
+
     position: 'absolute',
+
+
     left: 720,
+
+
     color: 'darkblue',
+
+
   },
+
 
   frno: {
+
+
     marginTop: 83,
+
+
     fontSize: 10,
+
+
     position: 'absolute',
+
+
     left: 820,
+
+
     color: 'black',
+
+
     fontWeight: 'bold',
+
+
     fontFamily: 'Oswald',
+
+
   },
+
+
   month: {
-    marginTop: 95,
+    marginTop: 2,
     fontSize: 10,
     position: 'absolute',
-    left: 790,
+    left: 1200,
     color: 'black',
   },
+
+
   heading: {
+
+
     position: 'absolute',
+
+
     left: '800',
+
+
     marginTop: 60,
+
+
     fontWeight: 100,
+
+
   },
+
+
   headingLine: {
+
+
     position: 'absolute',
+
+
     left: '0',
+
+
     right: '0',
+
+
     top: 85,
+
+
     borderBottom: 1,
+
+
     borderColor: 'black',
+
+
   },
+
+
   line: {
+
+
     position: 'absolute',
-    left: '20',
-    right: 15,
-    top: 106,
+
+
+    left: 15,
+
+
+    right: 6,
+
+
+    top: 116,
+
+
     borderBottom: 1,
+
+
     borderColor: 'black',
+
+
   },
+
+
   tableContainer: {
+
+
     display: 'flex',
+
+
     flexDirection: 'column',
-    marginTop: 107, // Adjust this value to set the table's position
-    width: 1650,
+
+
+    marginTop: 107,
+
+
+    width: '100%', // Change from fixed 1650px to full width
+
+
   },
+
+
   tableRow: {
+
+
     display: 'flex',
+
+
     flexDirection: 'row',
+
+
     borderBottomWidth: 1,
+
+
     borderBottomColor: '#000',
+
+
     borderBottomStyle: 'solid',
+
+
     alignItems: 'center',
-    height: 30,
-    left: 20,
+
+
+    height: 130,
+
+
+    left: 5,
+
+
+    break: 'avoid',
+
+
   },
+
+
   tableHead: {
+
+
     flex: 1,
-    fontSize: 6,
+
+
+    fontSize: 9,
+
+
     padding: 2,
+
+
     textAlign: 'center',
+
+
     fontWeight: 'bold',
+
+
   },
-  tableCell: {
+  tableHeadFOrHead: {
+    color: 'red',
+
     flex: 1,
-    fontSize: 6,
+
+
+    fontSize: 12,
+
+
     padding: 2,
+
+
     textAlign: 'center',
+
+
+    fontWeight: 'bold',
+
+
   },
-  bottomTableCell: {
+
+
+  tableCell: {
+
+
     flex: 1,
-    fontSize: 6,
+
+
+    fontSize: 9,
+
+
     padding: 2,
+
+
+    textAlign: 'center',
+
+
   },
+
+
+  bottomTableCell: {
+
+
+    flex: 1,
+
+
+    fontSize: 6,
+
+
+    padding: 2,
+
+
+  },
+
+
   grid: {
+
+
     borderRight: 1,
-    height: 30,
+
+
+    height: 130,
+
+
   },
+
+
 });
-interface TotalSupportStructure {
-  basic?: number;
-  prevBasic?: number;
-  HRA?: number;
-  prevHRA?: number;
-  spouseAllowance?: number;
-  prevSpouseAllowance?: number;
-  positionalAllowance?: number;
-  prevPositionalAllowance?: number;
-  specialAllowance?: number;
-  prevSpecialAllowance?: number;
-  impactDeduction?: number;
-  prevImpactDeduction?: number;
-  telAllowance?: number;
-  prevTelAllowance?: number;
-  PIONMissionaryFund?: number;
-  prevPIONMissionaryFund?: number;
-  MUTDeduction?: number;
-  prevMUTDeduction?: number;
-  total?: number;
-  prevTotal?: number;
-  deduction?: number;
-  prevDeduction?: number;
-  net?: number;
-  prevNet?: number;
-}
+
 // Create Document Component
 const PDFTemplateCustomFRAll = (props:any) => {
-  const [workers, setWorkers] = useState<IWorker[] | null>(null);
-  const [total, setTotal] = useState<TotalSupportStructure>({
-    basic: 0,
-    prevBasic: 0,
-    HRA: 0,
-    prevHRA: 0,
-    spouseAllowance: 0,
-    prevSpouseAllowance: 0,
-    positionalAllowance: 0,
-    prevPositionalAllowance: 0,
-    specialAllowance: 0,
-    prevSpecialAllowance: 0,
-    impactDeduction: 0,
-    prevImpactDeduction: 0,
-    telAllowance: 0,
-    prevTelAllowance: 0,
-    PIONMissionaryFund: 0,
-    prevPIONMissionaryFund: 0,
-    MUTDeduction: 0,
-    prevMUTDeduction: 0,
-    total: 0,
-    prevTotal: 0,
-    deduction: 0,
-    prevDeduction: 0,
-    net: 0,
-    prevNet: 0,
-  });
-  const [purpose, setPurpose] = useState('Division');
-  useEffect(() => {
-    console.log(props, 'props');
-    if ((props.purpose == 'Coordinator' || props.purpose == 'Worker') && props.workerId) {
-      WorkersServices.getById(props.workerId).then((res) => {
-        if (res?.data) {
-          // Check if supportEnabled is true before updating the state
-          // if (res.data.supportStructure.supportEnabled === true) {
-          setWorkers([res.data]);
-          // } else {
-          //   setWorkers([]); // Optionally set to an empty array if condition is not met
-          // }
-        }
-      });
-      props.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
-    } else if (props.purpose == 'Subdivision' && props.divisionId && props.subDivisionId) {
-      WorkersServices.getWorkersBySubDivision({ division: props.divisionId, subDiv: props.subDivisionId, designationParticular: props.designationParticularID ?? null })
-        .then((res) => {
-          console.log(res);
-          setWorkers(res.data);
-          // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-          // setWorkers(filteredWorkers);
-          setPurpose(res.data[0].division?.details.name ?? 'Division');
-        })
-        .catch((res) => {
-          console.log(res);
-        });
-    } else if (props.purpose == 'Division' && props.divisionId) {
-      if (props.designationParticularID) {
-        console.log('');
-        WorkersServices.getWorkersByDesignation({
-          division: props.divisionId,
-          designationParticular: props.designationParticularID,
-        })
-          .then((res) => {
-            console.log(res);
-            // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-            setWorkers(res.data);
+  const columnCount = props.headers.length;
 
-            setPurpose(res.data[0].division?.details.name ?? 'Division');
-          })
-          .catch((res) => {
-            console.log(res);
-          });
-      } else {
-        WorkersServices.getAll({
-          status: UserLifeCycleStates.ACTIVE,
-          division: props.divisionId,
-          withoutCoordinator: true,
-          withoutSubDivision: true,
-        })
-          .then((res) => {
-            console.log(res);
-            setWorkers(res.data);
-            // const filteredWorkers = res.data.filter((item) => item.supportStructure.supportEnabled === true);
-            // setWorkers(filteredWorkers);
-            setPurpose(res.data[0].division?.details.name ?? 'Division');
-          })
-          .catch((res) => {
-            console.log(res);
-          });
-      }
-    } else {
-      setWorkers([]);
-    }
-  }, [props.FrNo]);
-  useEffect(() => {
-    const basic = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.basic ? total + Number(worker.supportStructure?.basic) : total,
-      0,
-    );
-    const prevBasic = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevBasic ? total + Number(worker.supportStructure?.prevBasic) : total,
-      0,
-    );
-    const HRA = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.HRA ? total + Number(worker.supportStructure?.HRA) : total,
-      0,
-    );
-    const prevHRA = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevHRA ? total + Number(worker.supportStructure?.prevHRA) : total,
-      0,
-    );
-    const spouseAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.spouseAllowance ? total + Number(worker.supportStructure?.spouseAllowance) : total,
-      0,
-    );
-    const prevSpouseAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpouseAllowance ? total + Number(worker.supportStructure?.prevSpouseAllowance) : total,
-      0,
-    );
-    const positionalAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.positionalAllowance ? total + Number(worker.supportStructure?.positionalAllowance) : total,
-      0,
-    );
-    const prevPositionalAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPositionalAllowance ? total + Number(worker.supportStructure?.prevPositionalAllowance) : total,
-      0,
-    );
-    const specialAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.specialAllowance ? total + Number(worker.supportStructure?.specialAllowance) : total,
-      0,
-    );
-    const prevSpecialAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevSpecialAllowance ? total + Number(worker.supportStructure?.prevSpecialAllowance) : total,
-      0,
-    );
-    const impactDeduction = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.impactDeduction ? total + Number(worker.supportStructure?.impactDeduction) : total,
-      0,
-    );
-    const prevImpactDeduction = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevImpactDeduction ? total + Number(worker.supportStructure?.prevImpactDeduction) : total,
-      0,
-    );
-    const telAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.telAllowance ? total + Number(worker.supportStructure?.telAllowance) : total,
-      0,
-    );
-    const prevTelAllowance = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevTelAllowance ? total + Number(worker.supportStructure?.prevTelAllowance) : total,
-      0,
-    );
-    const PIONMissionaryFund = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.PIONMissionaryFund ? total + Number(worker.supportStructure?.PIONMissionaryFund) : total,
-      0,
-    );
-    const prevPIONMissionaryFund = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevPIONMissionaryFund ? total + Number(worker.supportStructure?.prevPIONMissionaryFund) : total,
-      0,
-    );
-    const MUTDeduction = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.MUTDeduction ? total + Number(worker.supportStructure?.MUTDeduction) : total,
-      0,
-    );
-    const prevMUTDeduction = workers?.reduce(
-      (total, worker) => worker.supportStructure?.supportEnabled && worker.supportStructure?.prevMUTDeduction ? total + Number(worker.supportStructure?.prevMUTDeduction) : total,
-      0,
-    );
-    setTotal({
-      basic: basic,
-      prevBasic: prevBasic,
-      HRA: HRA,
-      prevHRA: prevHRA,
-      spouseAllowance: spouseAllowance,
-      prevSpouseAllowance: prevSpouseAllowance,
-      positionalAllowance: positionalAllowance,
-      prevPositionalAllowance: prevPositionalAllowance,
-      specialAllowance: specialAllowance,
-      prevSpecialAllowance: prevSpecialAllowance,
-      impactDeduction: impactDeduction,
-      prevImpactDeduction: prevImpactDeduction,
-      telAllowance: telAllowance,
-      prevTelAllowance: prevTelAllowance,
-      PIONMissionaryFund: PIONMissionaryFund,
-      prevPIONMissionaryFund: prevPIONMissionaryFund,
-      MUTDeduction: MUTDeduction,
-      prevMUTDeduction: prevMUTDeduction,
-      total: (basic ?? 0) +
-        (HRA ?? 0) +
-        (spouseAllowance ?? 0) +
-        (positionalAllowance ?? 0) +
-        (specialAllowance ?? 0) +
-        (PIONMissionaryFund ?? 0) +
-        (telAllowance ?? 0),
-      deduction: (impactDeduction ?? 0) +
-        (MUTDeduction ?? 0),
-      net: (basic ?? 0) +
-        (HRA ?? 0) +
-        (spouseAllowance ?? 0) +
-        (positionalAllowance ?? 0) +
-        (specialAllowance ?? 0) +
-        (PIONMissionaryFund ?? 0) +
-        (telAllowance ?? 0) -
-        (
-          (impactDeduction ?? 0) +
-          (MUTDeduction ?? 0)
-        ),
-    });
-  }, [workers]);
+
+  const pageSize = getPageSize(columnCount);
+  const columnWidths: string[] = getColumnWidths(props.headers, pageSize);
+  const date= new Date().toLocaleString();
+
   return (
     <Document>
-      <Page size={'A2'} style={styles.page} orientation='landscape'>
+      <Page size={pageSize} style={styles.page} orientation='landscape'>
         <div>
           {/* <Image src="/3D Logo 3.png" style={styles.image} /> */}
           <Text style={styles.title}>
             {'Custom Report FR'}
           </Text>
+          <Text style={styles.month}>{date}</Text>
+
           {/* <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
           <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
@@ -359,9 +389,10 @@ const PDFTemplateCustomFRAll = (props:any) => {
             {props.headers.map((header: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined, index: React.Key | null | undefined) => (
               <React.Fragment key={index}>
                 <div style={styles.grid}></div>
-                <Text style={styles.tableHead}>{header}</Text>
+                <Text style={styles.tableHeadFOrHead}>{header}</Text>
               </React.Fragment>
             ))}
+            <div style={styles.grid}></div>
           </View>
 
 
@@ -593,257 +624,23 @@ const PDFTemplateCustomFRAll = (props:any) => {
           ))}
 
 
-          {/* <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={1} >
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>Total</Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevBasic}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.basic}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevHRA}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.HRA}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevSpouseAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.spouseAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevPositionalAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.positionalAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevSpecialAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.specialAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevImpactDeduction}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.impactDeduction}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevTelAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.telAllowance}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevPIONMissionaryFund}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.PIONMissionaryFund}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.prevMUTDeduction}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.MUTDeduction}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>
-              {total.total}
-            </Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.deduction}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}>{total.net}</Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-          </View> */}
+        </View>
+        <View style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', fontWeight: 'bold', borderTop: '1px solid black' }}>
+          {/* <Text>Total:</Text>
+                     */}
+          <br />
+          <Text style={{ fontFamily: 'NotoSans', fontWeight: 800 }}>
+            {`Requested amt :₹ ${props.rowData?.reduce(
+              (total: number, e: { particularsData: { requestedAmount: any } }) => total + (e.particularsData?.requestedAmount ? Number(e.particularsData.requestedAmount) : 0),
+              0,
+            ).toFixed(2)}`}
+          </Text>
+          <Text style={{ fontFamily: 'NotoSans', fontWeight: 800 }}>
 
-          {/* <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={2} >
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total No of Workers: </Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{workers?.filter((worker)=>worker.supportStructure?.supportEnabled).length ?? 0}</Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-          </View> */}
-
-          {/* <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd' }} key={3} >
-            <div style={styles.grid}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>Total Net Amount: </Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.bottomTableCell, fontWeight: 'bold' }}>{total.net}</Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={{ ...styles.grid, borderColor: '#bdbdbd' }}></div>
-            <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-            <div style={styles.grid}></div>
-          </View> */}
-
-
+            {`Sanctioned amt :₹ ${
+              props.rowData?.reduce((total: number, e: { particularsData: { sanctionedAmount: any } }) =>
+                total + (e.particularsData?.sanctionedAmount ? Number(e.particularsData.sanctionedAmount) : 0)
+              , 0).toFixed(2)}`}</Text>
         </View>
       </Page>
     </Document>
