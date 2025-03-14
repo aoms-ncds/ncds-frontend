@@ -356,35 +356,44 @@ const FRForm = (props: FormComponentProps<any>) => {
     //   });
   };
   const deleteParticular = (particularId: string | undefined, index: number) => {
-    if (!particularId) {
-      // Delete by index if the particularId is not available
-      const updatedParticulars = particulars.filter((_item, i) => i !== index);
-      setParticulars(updatedParticulars);
-      return;
-    }
+    console.log('9009');
+    // if (!particularId) {
+    //   // Delete by index if the particularId is not available
+    //   const updatedParticulars = particulars.filter((_item, i) => i !== index);
+    //   setParticulars(updatedParticulars);
+    //   return;
+    // }
 
-    // Perform delete logic
-    const updatedParticulars = particulars.filter((item) => item._id !== particularId);
+    const updatedParticulars = particulars.filter((item, q) =>q !== index);
+    console.log(particulars, '9009');
     setParticulars(updatedParticulars);
-    FRServices.deleteParticulars(particularId)
-      .then((res) => {
-        enqueueSnackbar({
-          message: res.message,
-          variant: 'success',
+    console.log('9009');
+    props.onChange({
+      ...props.value,
+      particulars: updatedParticulars,
+    });
+    if (particularId) {
+      FRServices.deleteParticulars(particularId)
+        .then((res) => {
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+          // window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
         });
-        // window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar({
-          message: err.message,
-          variant: 'error',
-        });
-      });
+    }
   };
   console.log(addsParticulars, 'addsParticulars');
 
   const deleteParticular2 = (particularId: string | undefined, index: number) => {
+    console.log(particularId, 'addsParticulars');
     if (!particularId) {
       // Delete by index if the particularId is not available
       const updatedParticulars = addsParticulars.filter((_item, i) => i !== index);
@@ -470,6 +479,8 @@ const FRForm = (props: FormComponentProps<any>) => {
               // } else if (submit == 2) {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
+              console.log(props.value, 'props.value');
+              
               if (props.onSubmit) {
                 if (totalRequestedAmount > 0) {
                   const updatedValue = {
