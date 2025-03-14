@@ -233,11 +233,15 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [remark, setRemark] = useState<IReason | null | string>();
   const navigate = useNavigate();
 
-
+  const [dateRange, setDateRange] = useState<DateRange>({
+    startDate: moment().startOf('M'),
+    endDate: moment().endOf('M'),
+    rangeType: 'months',
+  });
   const showLinkAction = props.action === 'manage';
   useEffect(() => {
     if (props.action == 'hr') {
-      ApplicationServices.getAll({ status: UserLifeCycleStates.CREATED })
+      ApplicationServices.getAll({ dateRange: dateRange, status: UserLifeCycleStates.CREATED })
         .then((res) => {
           setApplications(res.data);
         }).catch((error) => {
@@ -247,7 +251,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     } else if (props.action == 'president') {
-      ApplicationServices.getAll({ status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
+      ApplicationServices.getAll({ dateRange: dateRange, status: ApplicationLifeCycleStates.SENT_TO_PRESIDENT })
         .then((res) => {
           setApplications(res.data);
         })
@@ -258,7 +262,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           });
         });
     } else {
-      ApplicationServices.getAll()
+      ApplicationServices.getAll({ dateRange: dateRange })
         .then((res) => {
           setApplications(res.data);
         })
@@ -272,7 +276,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     ReasonforDeactivationService.getAll().then((res) => {
       setReason(res.data);
     });
-  }, []);
+  }, [dateRange]);
   console.log(applications?.map((e)=>e.createdAt), '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
@@ -625,7 +629,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     // },
   ];
   return (
-    <CommonPageLayout title="Application Manages ">
+    <CommonPageLayout title="Application Manages " momentFilter={{
+      dateRange: dateRange,
+      onChange: (newDateRange) => {
+        setDateRange(newDateRange);
+        setApplications((fr) =>
+          fr ?
+            fr.filter((fr) =>
+              moment(fr.createdAt).isSameOrAfter(moment(newDateRange.startDate)) &&
+                moment(fr.createdAt).isSameOrBefore(moment(newDateRange.endDate)),
+            ) :
+            [],
+        );
+      },
+      rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
+      initialRange: 'months',
+    }}>
 
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
