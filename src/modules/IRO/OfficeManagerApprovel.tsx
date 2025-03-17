@@ -323,7 +323,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRelease, setOpenRelease] = useState(false);
   const [IROrder, setIROrder] = useState<IROrder[]>([]);
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
-  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
 
@@ -913,7 +913,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           setExStatusFilter([69]);
                         } else {
                           setExStatusFilter([]);
-                          setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
+                          setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]);
                           // setStatusFilter([]);
                         }
                       }}

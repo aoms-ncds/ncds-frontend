@@ -74,6 +74,7 @@ export default {
           ...IRO.releaseAmount,
           transferredDate: moment(IRO.releaseAmount?.transferredDate),
         }:undefined,
+        FRdate: (IRO.FR as any)?.FRdate ? moment((IRO.FR as any).FRdate).format('YYYY-MM-DD HH:mm:ss') : undefined,
       })),
     ),
   getAllCustom: (conditions?: { status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>

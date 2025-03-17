@@ -36,6 +36,7 @@ const ReopenedFr = () => {
     reasonForReject: '',
     sanctionedAsPer: '',
   });
+
   const [searchText, setSearchText] = useState('');
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data, setData] = useState<FR | null>(null);
@@ -144,19 +145,34 @@ const ReopenedFr = () => {
             //   to: '/view' + props.row._id,
             //   icon: PrintIcon,
             // },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   onClick: ()=>{
+            //     FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+            //       console.log(res.data, 'daa98');
+            //       setData2(res.data);
+            //     });
+            //   },
+            //   document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR }/>,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
             {
               id: 'print',
               text: 'Print FR',
-              component: PDFDownloadLink,
-              onClick: ()=>{
+              icon: PrintIcon,
+              onClick: () => {
                 FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
                   console.log(res.data, 'daa98');
                   setData2(res.data);
                 });
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
               },
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR }/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
             },
             ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
               [
@@ -608,6 +624,30 @@ const ReopenedFr = () => {
           <Button
             onClick={() => {
               setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+            <br />
+            {data2 && (
+              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData2(null);
             }}
             variant="text"
           >

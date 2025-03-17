@@ -386,6 +386,8 @@ const ReconciliationIRO = () => {
               icon: PrintIcon,
               onClick: () => {
                 IROServices.getByIdOptimized(props.row._id).then((res)=>{
+                  console.log(res.data[0], '090');
+
                   setData(res.data[0]);
                 });
                 // setData(props.row);
@@ -425,10 +427,9 @@ const ReconciliationIRO = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
-                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
-                    // console.log(dataDiv.division?.details, 'res98');
-                    props.row.division?.details&& setData5({ ...props.row,
+                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
+                    props.row.division?.details&& setData5({ ...dataDiv[0],
                       division: {
                         ...props.row.division,
                         details: {
@@ -1287,7 +1288,7 @@ const ReconciliationIRO = () => {
                   Downloading the IROReceipt for {data?.IRONo}
             <br />
             {data && (
-              <PDFDownloadLink document={<IROTemplate rowData={data as FR} fr={data.FR} president={signaturePresident} officeMngrSign={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
+              <PDFDownloadLink document={<IROTemplate rowData={data as IROrder} fr={data.FR} president={signaturePresident} officeMngrSign={selectedSignature} />} fileName="IROReceipt.pdf" style={{ color: 'blue' }}>
                 {({ loading }) => (loading || openPrintFr ? '....' : 'IROReceipt.pdf')}
               </PDFDownloadLink>
             )}{' '}

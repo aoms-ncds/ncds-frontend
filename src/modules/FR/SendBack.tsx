@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
-import { Grid, Button, Card, Box, TextField, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
@@ -24,6 +24,7 @@ const SentBack = () => {
     setSearchText(event.target.value);
   };
   const [data2, setData2] = useState<FR | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
   const [openLog, setOpenLog] = useState(false);
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
@@ -97,19 +98,34 @@ const SentBack = () => {
             //   to: '/view' + props.row._id,
             //   icon: PrintIcon,
             // },
+            // {
+            //   id: 'print',
+            //   text: 'Print FR',
+            //   component: PDFDownloadLink,
+            //   onClick: ()=>{
+            //     FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+            //       console.log(res.data, 'daa98');
+            //       setData2(res.data);
+            //     });
+            //   },
+            //   document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
+            //   fileName: 'FRReceipt.pdf',
+            //   icon: PrintIcon,
+            // },
             {
               id: 'print',
               text: 'Print FR',
-              component: PDFDownloadLink,
-              onClick: ()=>{
+              icon: PrintIcon,
+              onClick: () => {
                 FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
                   console.log(res.data, 'daa98');
                   setData2(res.data);
                 });
+                setOpenPrintFr(true);
+                setTimeout(() => {
+                  setOpenPrintFr(false);
+                }, 2000);
               },
-              document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR}/>,
-              fileName: 'FRReceipt.pdf',
-              icon: PrintIcon,
             },
             {
               id: 'View',
@@ -338,7 +354,7 @@ const SentBack = () => {
   }, [statusFilter1]);
   return (
 
-    <CommonPageLayout title="Reverted IRO" momentFilter={{
+    <CommonPageLayout title="Reverted Fr" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);
@@ -470,13 +486,37 @@ const SentBack = () => {
             >
 
 
-              <DataGrid rows={closedFRs ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} loading={closedFRs === null} style={{ height: '65vh', width: '100%' }} getRowClassName={(params) =>
                 params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
               }/>
             </Box>
           </Grid>
         </Grid>
       </Card>
+      <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Downloading the FRReceipt for {data2?.FRno}
+            <br />
+            {data2 && (
+              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
+                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData2(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
       {frId && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
 
     </CommonPageLayout>

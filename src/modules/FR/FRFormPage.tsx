@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card, Grid, Alert } from '@mui/material';
 import FRForm from './components/FRForm';
+import FRFormAdmin from './components/FRFormAdmin';
 import ViewFR from './components/ViewFR';
 import FRServices from './extras/FRServices';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +13,7 @@ import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import IROServices from '../IRO/extras/IROServices';
 import FRFormEdit from './components/FRFormEdit';
 interface FRFormPageProps {
-  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen'| 'customEdit';
+  action: 'add' | 'edit' | 'view'| 'custom'| 'customIRO' | 'reopen'| 'customEdit'| 'editAdmin';
   actionAd?: 'view';
 }
 const FRFormPage = (props: FRFormPageProps) => {
@@ -26,6 +27,7 @@ const FRFormPage = (props: FRFormPageProps) => {
     reasonForSentBack: '',
     reasonForReject: '',
     sanctionedAsPer: '',
+    status: 0,
   });
   console.log(requisition, 'props.action');
 
@@ -37,7 +39,7 @@ const FRFormPage = (props: FRFormPageProps) => {
         }
       }
     }
-    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom'||props.action === 'reopen'||props.action === 'customEdit' ) {
+    if (props.action === 'edit' || props.action === 'view'|| props.action === 'custom'||props.action === 'reopen'||props.action === 'customEdit'|| props.action =='editAdmin' ) {
       if (props.action as any === 'custom' ||props.action === 'customEdit' ) {
         console.log('A1');
         // if (frID) {
@@ -131,6 +133,8 @@ const FRFormPage = (props: FRFormPageProps) => {
   };
   const editFR = async (requisition: CreatableFR) => {
     try {
+      console.log(requisition.status, 'requisition.status');
+      
       if (frID) {
         if (props.action === 'customEdit') {
           const res = await FRServices.updateFRRequestsCustom(frID, requisition);
@@ -146,6 +150,8 @@ const FRFormPage = (props: FRFormPageProps) => {
             variant: 'success',
           });
         } else {
+          console.log(requisition, '0990');
+
           const res = await FRServices.updateFRRequests(frID, requisition);
           enqueueSnackbar({
             message: res.message,
@@ -160,8 +166,10 @@ const FRFormPage = (props: FRFormPageProps) => {
         }, 1000);
       } else if (props.action === 'customEdit') {
         navigate('/fr/CustomFR');
+      } else if (requisition.status ==FRLifeCycleStates.FR_SEND_BACK) {
+        navigate('/fr/sentBack');
       } else {
-        navigate('/fr/manage');
+        navigate('/fr');
       }
 
       enqueueSnackbar({
@@ -279,6 +287,13 @@ const FRFormPage = (props: FRFormPageProps) => {
                 />
               ) : props.action === 'customEdit' ? (
                 <FRForm
+                  value={requisition}
+                  onChange={(newReq) => setRequisition(newReq)}
+                  action={props.action}
+                  onSubmit={editFR} // Pass the addFR function to the onSubmit prop
+                />
+              ) : props.action === 'editAdmin' ? (
+                <FRFormAdmin
                   value={requisition}
                   onChange={(newReq) => setRequisition(newReq)}
                   action={props.action}

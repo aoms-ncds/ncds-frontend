@@ -421,7 +421,7 @@ const EditIRO = () => {
     const updatedParticulars = IRO.particulars.filter((_item, i) => i !== index);
     console.log(updatedParticulars, 'updatedParticulars');
     IRO.particulars = updatedParticulars;
-    setNewParticular(updatedParticulars[0]);
+    setParticulars(updatedParticulars);
     return;
     // }
   };

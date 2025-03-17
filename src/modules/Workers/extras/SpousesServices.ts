@@ -20,6 +20,8 @@ export default {
         updatedAt: moment(spouse.updatedAt),
       })),
     ),
+  getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/workers/spouse/count', { params: conditions, headers: { ...getAuthHeader() } })),
+
   /**
    * Creates a new spouse record.
    * @param {Spouse} spouse - The spouse record to be created.

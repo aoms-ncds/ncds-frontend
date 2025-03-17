@@ -58,6 +58,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [workers, setWorkers] = useState<IWorker[] | Staff[]>();
   const [Allworkers, setAllWorkers] = useState<IWorker[] | Staff[]>();
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
+  const [selectedParticularIndex2, setSelectedParticularIndex2] = useState<number | null>(null);
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [AllSubDivisions, setAllSubDivisions] = useState<SubDivision[]>();
   const [AllDivisions, setAllDivisions] = useState<Division[]>();
@@ -104,7 +105,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     transactionId: '',
   });
   const [submit, setSubmit] = useState(0);
-  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'>('add');
+  const [particularDialog, setParticularDialog] = useState<'add' | 'edit' | 'custom' | 'customIRO'| 'edit2'>('add');
   const [open, setOpen] = useState(false);
 
   const [showCoordinatorName, setCoordinatorName] = useState(false);
@@ -136,7 +137,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(props.actionAdi, 'newParticular');
+  console.log(particulars, 'newParticular');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -236,6 +237,8 @@ const FRForm = (props: FormComponentProps<any>) => {
         ...props.value,
         particulars: particulars.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
       });
+    } else if (particularDialog === 'edit2' ) {
+      setAddParticulars((particulars) => particulars.map((part, _ind) => (_ind === selectedParticularIndex2 ? (newParticular as Particular) : part)));
     } else {
       console.log(props.action, 'ioioi');
       newParticulars = [newParticular as Particular];
@@ -249,19 +252,22 @@ const FRForm = (props: FormComponentProps<any>) => {
         });
       } else {
         newParticulars1 = [newParticular as Particular];
-        console.log(newParticulars1, 'newParticulars1');
+        console.log(addsParticulars, 'newParticulars1');
         newParticulars = [newParticular as Particular];
 
-        setParticulars(newParticulars1);
+        if (particulars.length !==0) {
+          setAddParticulars((prev:any) => [
+            ...prev,
+            ...newParticulars1.map((particular) => ({
+              ...particular,
+              sanctionedAmount: null,
+              sanctionedAsPer: null,
+            })),
+          ]);
+        } else {
+          setParticulars(newParticulars1);
+        }
 
-        setAddParticulars((prev:any) => [
-          ...prev,
-          ...particulars.map((particular) => ({
-            ...particular,
-            sanctionedAmount: null,
-            sanctionedAsPer: null,
-          })),
-        ]);
         // setAddParticulars(particulars);
         // setAddParticulars((prev) => [...prev, newParticular as Particular]);
         // props.onChange({
@@ -321,17 +327,83 @@ const FRForm = (props: FormComponentProps<any>) => {
     //     });
     //   });
   };
+
+  const editParticular2 = (particular: Particular, index: number) => {
+    setParticularDialog('edit2');
+    // setParticulars((particulars)=>
+    //   (
+    //     particulars.map((part, _ind)=>_ind===index?particular:part)
+    //   ));
+    setSelectedParticularIndex2(index);
+    setShowAddParticularDialog(true);
+    setNewParticular(particular);
+    // Perform delete logic
+    // const updatedParticulars = particulars.filter((item) => item._id !== particularId);
+    // setParticulars(updatedParticulars);
+    // FRServices.editParticulars(particularId)
+    //   .then((res) => {
+    //     enqueueSnackbar({
+    //       message: res.message,
+    //       variant: 'success',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar({
+    //       message: err.message,
+    //       variant: 'error',
+    //     });
+    //   });
+  };
   const deleteParticular = (particularId: string | undefined, index: number) => {
+    console.log('9009');
+    // if (!particularId) {
+    //   // Delete by index if the particularId is not available
+    //   const updatedParticulars = particulars.filter((_item, i) => i !== index);
+    //   setParticulars(updatedParticulars);
+    //   return;
+    // }
+
+    const updatedParticulars = particulars.filter((item, q) =>q !== index);
+    console.log(particulars, '9009');
+    setParticulars(updatedParticulars);
+    console.log('9009');
+    props.onChange({
+      ...props.value,
+      particulars: updatedParticulars,
+    });
+    if (particularId) {
+      FRServices.deleteParticulars(particularId)
+        .then((res) => {
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+          // window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
+        });
+    }
+  };
+  console.log(addsParticulars, 'addsParticulars');
+
+  const deleteParticular2 = (particularId: string | undefined, index: number) => {
+    console.log(particularId, 'addsParticulars');
     if (!particularId) {
       // Delete by index if the particularId is not available
-      const updatedParticulars = particulars.filter((_item, i) => i !== index);
-      setParticulars(updatedParticulars);
+      const updatedParticulars = addsParticulars.filter((_item, i) => i !== index);
+      setAddParticulars(updatedParticulars);
       return;
     }
 
     // Perform delete logic
-    const updatedParticulars = particulars.filter((item) => item._id !== particularId);
-    setParticulars(updatedParticulars);
+    const updatedParticulars = addsParticulars.filter((item) => item._id !== particularId);
+    setAddParticulars(updatedParticulars);
     FRServices.deleteParticulars(particularId)
       .then((res) => {
         enqueueSnackbar({
@@ -407,6 +479,8 @@ const FRForm = (props: FormComponentProps<any>) => {
               // } else if (submit == 2) {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
+              console.log(props.value, 'props.value');
+              
               if (props.onSubmit) {
                 if (totalRequestedAmount > 0) {
                   const updatedValue = {
@@ -420,14 +494,21 @@ const FRForm = (props: FormComponentProps<any>) => {
                   await props?.onSubmit(updatedValue); // Ensure it completes before moving forward
                   if (props.action == 'custom'|| props.action == 'customEdit') {
                     await FRServices.addParticularscustomFR(addsParticulars, props.value._id)
-    .then((res) => {
-      console.log(res.data);
-    });
+         .then((res) => {
+           console.log(res.data);
+         });
                   } else if (props.action == 'edit') {
-                    await FRServices.addParticularsFR(particulars, props.value._id)
-                  .then((res) => {
-                    console.log(res.data);
-                  });
+                    if (particulars.length !==0&& addsParticulars.length ==0) {
+                      await FRServices.addParticularsFR(particulars.filter((e)=>!e._id), props.value._id)
+                    .then((res) => {
+                      console.log(res.data);
+                    });
+                    } else if (addsParticulars.length !==0) {
+                      await FRServices.addParticularsFR(addsParticulars, props.value._id)
+                    .then((res) => {
+                      console.log(res.data);
+                    });
+                    }
                   }
                 } else {
                   enqueueSnackbar({
@@ -810,12 +891,12 @@ const FRForm = (props: FormComponentProps<any>) => {
                                     permissions={['WRITE_FR']}
                                     granted={
                                       <IconButton>
-                                        <DeleteIcon onClick={() => deleteParticular(item._id, index)} />
+                                        <DeleteIcon onClick={() => deleteParticular2(item._id, index)} />
                                       </IconButton>
                                     }
                                   />
                                   <IconButton>
-                                    <EditIcon onClick={() => editParticular(item, index)} />
+                                    <EditIcon onClick={() => editParticular2(item, index)} />
                                   </IconButton>
                                   {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
                                     <Tooltip title="Add Sanction as per">

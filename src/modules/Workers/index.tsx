@@ -18,9 +18,9 @@ const WorkersDashboard = () => {
   const [rejectedWorkersCount, setRejectedWorkersCount] = useState<number | null>(null);
   const [deactivateWorkersCount, setDeactivateWorkersCount] = useState<number | null>(null);
   const [activeWorker, setActiveWorker] = useState<number | null>(null);
-  const [activeSpouse, setActiveSpouse] = useState<Spouse[] | null>([]);
-  const [activeChild, setActiveChild] = useState<Child[] | null>([]);
-  console.log(activeChild?.length, 'activeSpouse');
+  const [activeSpouse, setActiveSpouse] = useState<number | null>(0);
+  const [activeChild, setActiveChild] = useState<number | null>(0);
+  // console.log(activeChild?.length, 'activeSpouse');
 
   const user = useAuth();
   console.log(user);
@@ -50,12 +50,12 @@ const WorkersDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    SpousesServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
-      .then((res) => setActiveSpouse(res.data) as unknown as Spouse[])
+    SpousesServices.getCount({ status: CommonLifeCycleStates.ACTIVE })
+      .then((res) => setActiveSpouse(res.data))
       .catch((error) => {
         console.log(error);
       });
-    ChildrenServices.getAll({ status: CommonLifeCycleStates.ACTIVE })
+    ChildrenServices.getCount({ status: CommonLifeCycleStates.ACTIVE })
       .then((res) => setActiveChild(res.data))
       .catch((error) => {
         console.log(error);
@@ -72,10 +72,10 @@ const WorkersDashboard = () => {
         </Grid>
         <Grid item xs={6} md={4} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Total Active Spouse Counter Card.png"
-            alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeSpouse?.length.toString()} secondaryText={'Active Spouse'} color={'#fff'} />
+            alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeSpouse?.toString()} secondaryText={'Active Spouse'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={4} xl={3}>
-          <FRCountCard icon={<img src="/mod_icons/Total Active Child Counter Cards.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeChild?.length.toString()}
+          <FRCountCard icon={<img src="/mod_icons/Total Active Child Counter Cards.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} count={activeChild?.toString()}
             secondaryText={'Active Child'}
             color={'#fff'} />
         </Grid>

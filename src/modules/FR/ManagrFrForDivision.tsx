@@ -160,7 +160,7 @@ const ManageFrForDivision = () => {
       });
   }, [statusFilter1]);
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAllOptimizedDiv({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         console.log(res, 'rr');
         setFRRequests(res.data);
@@ -177,7 +177,7 @@ const ManageFrForDivision = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
+    FRServices.getAllOptimizedDiv({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
         if (res.data) {
           setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));

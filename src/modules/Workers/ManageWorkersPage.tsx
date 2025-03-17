@@ -21,6 +21,7 @@ import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivati
 
 const ManageWorkerPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
+  const [loadingg, setLoadingg] = useState(false);
 
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
@@ -48,17 +49,6 @@ const ManageWorkerPage = () => {
   const fetchData = (args: { skip?: number }) => {
     setLoading(true);
     if (currentTab === 0&&searchText==='') {
-      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-      .then((res) => {
-        console.log('sso');
-        console.log(res.data, 'pores');
-        setUsersAll(res.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching workers:', error);
-      });
-
-
       WorkersServices.getWorkers({ status: UserLifeCycleStates.ACTIVE, skip: args.skip ?? skip, limit: 300 })
         .then((res) => {
           console.log('OLD USER');
@@ -167,75 +157,89 @@ handleSearchChange(searchKey); setSearchText(searchKey);
                 granted={
                   (currentTab === 0 && (
                     <>
-                      <Button
-                        onClick={async () => {
-                          const sheet = allusers ?
-                            allusers.map((user: IWorker) => [
-                                user.workerCode,
-                                user.basicDetails.firstName,
-                                user.basicDetails.lastName,
-                                user.division?.details.name,
-                                user?.officialDetails?.divisionHistory[user?.officialDetails?.divisionHistory?.length - 1]?.subDivision,
-                                user.basicDetails.phone,
-                                user.basicDetails.email,
-                                user.basicDetails.alternativePhone,
-                                user.basicDetails.dateOfBirth,
-                                user.basicDetails.field,
-                                user.basicDetails.martialStatus,
-                                user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
-                                user.basicDetails.highestQualification,
-                                user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
-                                user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
-                                user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
-                                  moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true) :
-                                  moment(user.officialDetails.dateOfJoining)?.fromNow(true),
-                                user.spouse?.spouseCode,
-                                user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
-                                (user.supportStructure?.basic ?? 0) +
-                                  (user.supportStructure?.HRA ?? 0) +
-                                  (user.supportStructure?.spouseAllowance ?? 0) +
-                                  (user.supportStructure?.positionalAllowance ?? 0) +
-                                  (user.supportStructure?.specialAllowance ?? 0) +
-                                  (user.supportStructure?.PIONMissionaryFund ?? 0) +
-                                  (user.supportStructure?.telAllowance ?? 0),
-                                user.insurance?.impactNo,
-                              ]) :
-                            [];
-                          const headers = [
-                            'Workers Code',
-                            'First Name',
-                            'Last Name',
-                            'Division',
-                            'Sub Division',
-                            'Mobile No',
-                            'Email ID',
-                            'Alt Phone',
-                            'DOB',
-                            'Field',
-                            'Marital Status',
-                            'Known Languages',
-                            'Highest Qualifications',
-                            'Status',
-                            'Date of Joining',
-                            'No of year in Org',
-                            'Spouse Code',
-                            'Spouse Name',
-                            'Net Support',
-                            'Insurance No',
-                          ];
-                          const worksheet = XLSX.utils.json_to_sheet(sheet);
-                          const workbook = XLSX.utils.book_new();
-                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                          XLSX.writeFile(workbook, 'WorkerReport.xlsx', { compression: true });
-                        }}
-                        startIcon={<DownloadIcon />}
-                        color="primary"
-                        sx={{ float: 'right', mt: 2, mr: 2 }}
-                        variant="contained"
-                      >
-                        Export
-                      </Button>
+                   <Button
+  onClick={async () => {
+    setLoadingg(true); // Start loading
+    try {
+      const res = await WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE });
+      console.log('sso');
+      console.log(res.data, 'pores');
+      setUsersAll(res.data);
+
+      // Wait for state update before processing
+      const sheet = res.data.map((user: IWorker) => [
+        user.workerCode,
+        user.basicDetails.firstName,
+        user.basicDetails.lastName,
+        user.division?.details.name,
+        user?.officialDetails?.divisionHistory[user?.officialDetails?.divisionHistory?.length - 1]?.subDivision,
+        user.basicDetails.phone,
+        user.basicDetails.email,
+        user.basicDetails.alternativePhone,
+        user.basicDetails.dateOfBirth,
+        user.basicDetails.field,
+        user.basicDetails.martialStatus,
+        user.basicDetails.knownLanguages?.map((lang) => lang.name)?.join(', '),
+        user.basicDetails.highestQualification,
+        user.status && UserLifeCycleStates.getStatusNameByCode(user.status as number),
+        user.officialDetails.dateOfJoining?.format('DD/MM/YYYY'),
+        user.officialDetails.status == 'Left' && user.officialDetails.dateOfLeaving ?
+          moment(user.officialDetails.dateOfLeaving)?.from(user.officialDetails.dateOfJoining, true) :
+          moment(user.officialDetails.dateOfJoining)?.fromNow(true),
+        user.spouse?.spouseCode,
+        user.spouse && user.spouse?.firstName + ' ' + user.spouse?.lastName,
+        (user.supportStructure?.basic ?? 0) +
+          (user.supportStructure?.HRA ?? 0) +
+          (user.supportStructure?.spouseAllowance ?? 0) +
+          (user.supportStructure?.positionalAllowance ?? 0) +
+          (user.supportStructure?.specialAllowance ?? 0) +
+          (user.supportStructure?.PIONMissionaryFund ?? 0) +
+          (user.supportStructure?.telAllowance ?? 0),
+        user.insurance?.impactNo,
+      ]);
+
+      const headers = [
+        'Workers Code',
+        'First Name',
+        'Last Name',
+        'Division',
+        'Sub Division',
+        'Mobile No',
+        'Email ID',
+        'Alt Phone',
+        'DOB',
+        'Field',
+        'Marital Status',
+        'Known Languages',
+        'Highest Qualifications',
+        'Status',
+        'Date of Joining',
+        'No of year in Org',
+        'Spouse Code',
+        'Spouse Name',
+        'Net Support',
+        'Insurance No',
+      ];
+
+      const worksheet = XLSX.utils.json_to_sheet(sheet);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+      XLSX.writeFile(workbook, 'WorkerReport.xlsx', { compression: true });
+    } catch (error) {
+      console.error('Error fetching workers:', error);
+    } finally {
+      setLoadingg(false); // Stop loading
+    }
+  }}
+  startIcon={loadingg ? <CircularProgress size={20} color="inherit" /> : <DownloadIcon />}
+  color="primary"
+  sx={{ float: 'right', mt: 2, mr: 2 }}
+  variant="contained"
+  disabled={loadingg} // Disable button while loading
+>
+  {loadingg ? 'Fetching data...' : 'Export'}
+</Button>
                       <Button variant="contained" sx={{ float: 'right', mt: 2, mr: 2 }} startIcon={<AddIcon />} component={Link} to={'/workers/add'}>
                         Add New
                       </Button>

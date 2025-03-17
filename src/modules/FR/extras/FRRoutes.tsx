@@ -117,6 +117,14 @@ const divisionsPageRoutes: ModuleRoute = {
     },
     {
       title: 'Edit FR',
+      path: '/:frID/editAdmin',
+      element: <FRFormPage action="editAdmin" />,
+      private: true,
+      requiredAccessRights: ['WRITE_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Edit FR',
       path: '/:frID/editReopen',
       element: <FRFormPage action="reopen" />,
       private: true,
