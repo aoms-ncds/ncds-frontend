@@ -834,10 +834,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             //   icon: FingerprintIcon,
             // },
             ...(hasPermissions(['WRITE_IRO']) ||
-            params.row.status == IROLifeCycleStates.REVERTED_TO_DIVISION ||
             params.row.status == IROLifeCycleStates.AMOUNT_RELEASED) ?
               (
-                isCoordinator ?
+                isCoordinator && params.row.status == IROLifeCycleStates.AMOUNT_RELEASED ?
                   [
                     {
                       id: 'Attachments',
