@@ -159,7 +159,7 @@ const WorkerSupportPage = () => {
       const isUpcomingYear = particulars.some((part) => part.isUpcomingYear);
       const _month = particulars[0]?.month ?? null;
 
-      const month = `${_month} ${isUpcomingYear ? currentYear + 1 : currentYear}`;
+      const month = `${_month} ${particulars[0]?.year?? currentYear}`;
 
       setPdfProps(({
         purpose: purpose ?? 'Division',
@@ -1149,6 +1149,7 @@ const WorkerSupportPage = () => {
               requestedAmount: total.net,
               unitPrice: total.net,
               quantity: supportEnabledWorkers?.length,
+              year: requisition?.particulars[0].year,
               attachment: [],
             }] : [],
           }));

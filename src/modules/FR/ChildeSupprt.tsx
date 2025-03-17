@@ -633,7 +633,7 @@ const ChildeSupportPage = () => {
     const isUpcomingYear = particulars.some((part) => part.isUpcomingYear);
     const month = particulars[0]?.month ?? null;
 
-    return `${month} ${isUpcomingYear ? currentYear + 1 : currentYear}`;
+    return `${month} ${particulars[0]?.year?? currentYear}`;
   };
   return (
     <CommonPageLayout title="Child Support">

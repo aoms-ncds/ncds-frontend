@@ -51,7 +51,8 @@ import AddIcon from '@mui/icons-material/Add';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import TransactionLogDialog from './TransactionLogDialog';
-
+import moment from 'moment';
+import InfoIcon from '@mui/icons-material/Info';
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
@@ -137,7 +138,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(particulars, 'newParticular');
+  console.log(newParticular, 'newParticular');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -480,7 +481,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               console.log(props.value, 'props.value');
-              
+
               if (props.onSubmit) {
                 if (totalRequestedAmount > 0) {
                   const updatedValue = {
@@ -1748,7 +1749,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     fullWidth
                   />
                 </Grid>
-                <Grid item md={12}>
+                {/* <Grid item md={12}>
                   <FormControlLabel
                     label="Upcoming Year"
                     control={
@@ -1763,6 +1764,25 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       />
                     }
                   />
+                </Grid> */}
+                <Grid item md={12}>
+                  <DatePicker
+                    views={['year']}
+                    openTo="year"
+                    label="Select Year"
+                    value={newParticular.year ? moment().year(newParticular.year) : null} // Show selected year
+                    onChange={(date: any | null) =>
+                      setNewParticular((prev) => ({
+                        ...prev,
+                        year: date ? date.year() : null, // Extract and store as a number
+                      }))
+                    }
+                  />
+                  <Tooltip title="If not selected, it will display the current year by default.">
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
 
                 <Grid item md={12}>

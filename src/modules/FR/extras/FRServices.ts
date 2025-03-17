@@ -191,6 +191,7 @@ export default {
                     narration: particulars.narration,
                     attachment: particulars.attachment,
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
+                    year: particulars.year,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }
@@ -232,6 +233,8 @@ export default {
                     narration: particulars.narration,
                     attachment: particulars.attachment,
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
+                    year: particulars.year,
+
                   }, { headers: { ...getAuthHeader() } });
                 }
               }
