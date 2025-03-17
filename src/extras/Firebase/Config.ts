@@ -1,10 +1,10 @@
 const firebaseConfig = {
-  apiKey: 'AIzaSyAkriizbMaf1Oso6Wx1Op05-55pc2Dx2ec',
-  authDomain: 'iet-pro910.firebaseapp.com',
-  projectId: 'iet-pro910',
-  storageBucket: 'iet-pro910.appspot.com',
-  messagingSenderId: '410931323574',
-  appId: '1:410931323574:web:b71cb9bc191e7bfaa87c17',
-  measurementId: 'G-FB99QM7SQ6',
+  apiKey: 'AIzaSyA_qT1TuIR8j5xLPBbb7c49kHTJOj9Ad1o',
+  authDomain: 'pro910-iet.firebaseapp.com',
+  projectId: 'pro910-iet',
+  storageBucket: 'pro910-iet.firebasestorage.app',
+  messagingSenderId: '422953949855',
+  appId: '1:422953949855:web:28768ad3ec1edc9daee0aa',
+  measurementId: 'G-V0VWYYPEN9',
 };
 export default firebaseConfig;
