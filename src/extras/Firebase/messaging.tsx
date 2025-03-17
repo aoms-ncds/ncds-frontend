@@ -115,7 +115,7 @@ export const unsubscribe = async () => {
         console.log('Notification Permission granted');
         const token = await getToken(messaging, {
           vapidKey:
-            'BMBunDqnkoypocH4FxNXgINPbcuRnAHQi7XvuIV7RgNQGHH0zuQ2dmO3-yMBQuEcB_G9bVDtBrl2xFettL2eiU4',
+            'BI-OOak0cIS1DJk1uLlSXMIQxg73BTLShc-Su-UfHDNAS49xQtKwtXIOaK-j2swyjYkk_i7Dlernvhqe3DV3YaQ',
         });
         const res = await UserServices.deleteFCMToken(token);
         localStorage.removeItem('fcm_token');
