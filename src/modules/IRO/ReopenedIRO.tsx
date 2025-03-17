@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -48,6 +48,9 @@ const ReopenedIRO = () => {
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [file, setFile] = useState<boolean>(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [statusFilter, setStatusFilter] = useState<any>(IROLifeCycleStates.REOPENED); // default WFA: Waiting for access or Reverted
+  const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -806,14 +809,23 @@ const ReopenedIRO = () => {
   ];
 
   useEffect(() => {
-    IROServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
+    IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter })
       .then((res) => {
         setClosedFRs(res.data);
       })
       .catch((err) => {
         console.log({ err });
       });
-  }, [dateRange]);
+  }, [dateRange, statusFilter, exstatusFilter]);
+  useEffect(() => {
+    IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1 })
+      .then((res) => {
+        setClosedFRs(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, [dateRange, statusFilter1, exstatusFilter]);
   return (
     <CommonPageLayout title="Reopened IRO" momentFilter={{
       dateRange: dateRange,
@@ -839,6 +851,61 @@ const ReopenedIRO = () => {
             />
             {/* </div> */}
           </Grid>
+          <Grid
+            item
+            sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+          >
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={
+                  exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === 'NonBankTransfers') {
+                    setExStatusFilter([69]);
+                  } else {
+                    setExStatusFilter([]);
+                    setStatusFilter([IROLifeCycleStates.REOPENED]);
+                    // setStatusFilter([]);
+                  }
+                }}
+                name="Filter"
+                row
+              >
+                <FormControlLabel value="All" control={<Radio />} label="All" />
+                <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item >
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={statusFilter1}
+                onChange={(e) =>
+                  setStatusFilter1(
+                    e.target.value === 'Support' ?
+                      'Support' :
+                      e.target.value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  )
+                }
+                name="Filter"
+                row
+              >
+                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+
+          {/* <Grid item>
+
+          </Grid> */}
           {/* <Grid item xs={6} sx={{ px: 2 }}>
             <PermissionChecks
               permissions={['MANAGE_FR']}

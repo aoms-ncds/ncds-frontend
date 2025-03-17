@@ -27,7 +27,7 @@ export default {
     updatedAt: moment(fr.updatedAt),
     frVerifiedOn: fr.frVerifiedOn ? moment(fr.frVerifiedOn) : null,
   }))),
-  getAllOptimizedExSupprt: (conditions?: { dateRange?: DateRange; support?: 'Expanse' | 'Support'| null}) => getStandardResponse<FR[]>(axios.get('/fr/support-expanse/',
+  getAllOptimizedExSupprt: (conditions?: {dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null; status?: any}) => getStandardResponse<FR[]>(axios.get('/fr/support-expanse/',
     { params: conditions, headers: { ...getAuthHeader() } }),
   (data) => data.map((fr: FR) => ({
     ...fr,

@@ -69,6 +69,7 @@ const ClosedIRO = () => {
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.IRO_CLOSED]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -686,6 +687,15 @@ const ClosedIRO = () => {
         console.log(res);
       });
   }, [dateRange, exstatusFilter, statusFilter]);
+  useEffect(() => {
+    IROServices.getAllOptimizedSuportEx({ dateRange: dateRange, status: statusFilter, Exstatus: exstatusFilter, support: statusFilter1 })
+      .then((res) => {
+        setIROrder(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [dateRange, exstatusFilter, statusFilter1]);
   return (
     <CommonPageLayout title="Closed IRO" momentFilter={
 
@@ -743,7 +753,30 @@ const ClosedIRO = () => {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={statusFilter1}
+                onChange={(e) =>
+                  setStatusFilter1(
+                    e.target.value === 'Support' ?
+                      'Support' :
+                      e.target.value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  )
+                }
+                name="Filter"
+                row
+              >
+                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
             <Button
               onClick={async () => {
                 const sheet =

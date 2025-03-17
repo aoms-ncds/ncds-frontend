@@ -188,7 +188,7 @@ const ManageFrPage = () => {
       });
   }, [dateRange, statusFilter, statusFilter]);
   useEffect(() => {
-    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1 })
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
       .then((res) => {
         if (res.data) {
           setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));

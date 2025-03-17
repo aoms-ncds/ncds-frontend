@@ -54,6 +54,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -461,60 +462,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             console.error(error);
           });
       }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_1) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 1' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
 
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_2) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 2' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
-
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_3) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 3' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
-
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
-      // if (userPermissions?.OTHER_ACCOUNTS_ACCESS_4) {
-      //   IROServices.getAll({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE, sanctionedBank: 'Other Bank 4' })
-      //     .then((res) => {
-      //       console.log(res.data, 'UIOP');
-
-      //       setIROrder(() => [...res.data]);
-      //     })
-      //     .catch((error) => {
-      //       console.error(error);
-      //     });
-      // }
       if (userPermissions?.LOCAL_ACCOUNT_ACCESS && userPermissions?.FCRA_ACCOUNTS_ACCESS) {
         IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
           setIROrder(res.data);
@@ -530,7 +478,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
   // console.log(mngrName, 'mngrName');
-
+  useEffect(()=>{
+    IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1 }).then((res) => {
+      setNotFound(true);
+      setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+    });
+  }, [statusFilter1]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -1503,6 +1456,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     </Grid>
 
                   )}
+                  <Grid item>
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={statusFilter1}
+                        onChange={(e) =>
+                          setStatusFilter1(
+                            e.target.value === 'Support' ?
+                              'Support' :
+                              e.target.value === 'Expanse' ?
+                                'Expanse' :
+                                'All',
+                          )
+                        }
+                        name="Filter"
+                        row
+                      >
+                        {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                        <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
+                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPANSE" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                   {props.action =='release' && (
 
                     <Grid

@@ -15,9 +15,13 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  FormControl,
+  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from '@mui/material';
@@ -37,6 +41,7 @@ import TransactionLogDialog from './components/TransactionLogDialog';
 const PresidentApproval = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
@@ -84,6 +89,15 @@ const PresidentApproval = () => {
         console.log(res);
       });
   }, [dateRange]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, status: [FRLifeCycleStates.WAITING_FOR_PRESIDENT], support: statusFilter1 })
+      .then((res) => {
+        setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [statusFilter1]);
   const columns: GridColDef<FR>[] = [
     {
       field: '_manage',
@@ -447,7 +461,7 @@ const PresidentApproval = () => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
               <Grid container padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -460,7 +474,30 @@ const PresidentApproval = () => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid item xs={6} sx={{ px: 2 }}>
+                <Grid item p={1}>
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={statusFilter1}
+                      onChange={(e) =>
+                        setStatusFilter1(
+                          e.target.value === 'Support' ?
+                            'Support' :
+                            e.target.value === 'Expanse' ?
+                              'Expanse' :
+                              'All',
+                        )
+                      }
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={4} sx={{ px: -0 }}>
                   <PermissionChecks
                     permissions={['PRESIDENT_ACCESS']}
                     granted={(

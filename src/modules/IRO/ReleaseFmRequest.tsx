@@ -72,6 +72,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [statusFilter, setStatusFilter] = useState([]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -446,7 +447,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   // }, [releaseAmountIROs]);
 
   const userPermissions = (user.user as User)?.permissions;
-  // useEffect(() => {
   //   if (props.action === 'release') {
   //     // if (userPermissions?.ACCOUNTS_MNGR_ACCESS) {
   //     //   IROServices.getAll({ Exstatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
@@ -580,11 +580,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         console.log(res);
       });
     console.log(selectedSignature);
-    IROServices.groupedIRO({ Exstatus: exstatusFilter, dateRange }).then((res)=>{
+    IROServices.groupedIRO({ Exstatus: exstatusFilter, dateRange, support: statusFilter1 }).then((res)=>{
       console.log(res, 'res90');
       setGroupIro(res.data);
     });
-  }, [statusFilter, exstatusFilter, dateRange]);
+  }, [statusFilter, exstatusFilter, dateRange, statusFilter1]);
 
   const deleteIRO = (id: string) => {
     console.log(id, 'as is');
@@ -1446,7 +1446,30 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item>
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={statusFilter1}
+                      onChange={(e) =>
+                        setStatusFilter1(
+                          e.target.value === 'Support' ?
+                            'Support' :
+                            e.target.value === 'Expanse' ?
+                              'Expanse' :
+                              'All',
+                        )
+                      }
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} >
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={

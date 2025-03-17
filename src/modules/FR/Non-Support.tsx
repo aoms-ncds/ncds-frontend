@@ -775,7 +775,7 @@ const NonSupport = () => {
 
   return (
     <CommonPageLayout
-      title="Expanse FR"
+      title="Expense FR"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {

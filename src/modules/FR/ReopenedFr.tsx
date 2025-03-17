@@ -1,5 +1,5 @@
 
-import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -26,6 +26,7 @@ const ReopenedFr = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [id, setID] = useState('');
   const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
@@ -378,6 +379,15 @@ const ReopenedFr = () => {
         console.log({ err });
       });
   }, [dateRange]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED], support: statusFilter1 })
+      .then((res) => {
+        setClosedFRs(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, [statusFilter1]);
   return (
     <CommonPageLayout title="Reopened FR" momentFilter={{
       dateRange: dateRange,
@@ -390,7 +400,7 @@ const ReopenedFr = () => {
     }}>
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2} >
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -403,7 +413,30 @@ const ReopenedFr = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid item xs={6} sx={{ px: 2 }}>
+          <Grid item>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={statusFilter1}
+                onChange={(e) =>
+                  setStatusFilter1(
+                    e.target.value === 'Support' ?
+                      'Support' :
+                      e.target.value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  )
+                }
+                name="Filter"
+                row
+              >
+                <FormControlLabel value="All" control={<Radio />} label="All" />
+                <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4} sx={{ px: 2 }}>
             <PermissionChecks
               permissions={['MANAGE_FR']}
               granted={(
