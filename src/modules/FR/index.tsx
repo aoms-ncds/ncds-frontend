@@ -129,6 +129,14 @@ const frDashboard = () => {
                       secondaryText="Approval" color="#fff" targetRoute="/fr/Approve" />
                   </Grid>
                 )} />
+              <PermissionChecks
+                permissions={['MANAGE_FR']}
+                granted={(
+                  <Grid item xs={12} md={4} xl={3}>
+                    <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+                      primaryText="Re " secondaryText="Submitted" color="#fff" targetRoute="/fr/resubmitted" />
+                  </Grid>
+                )} />
               <Grid item xs={12} md={4} xl={3}>
                 <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   primaryText="Closed" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />

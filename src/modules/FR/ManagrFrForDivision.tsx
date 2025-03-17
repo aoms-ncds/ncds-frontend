@@ -96,7 +96,7 @@ const ManageFrForDivision = () => {
   const [isCoordinator, setisCoordinator] = useState<any>(false);
 
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| null>(null); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'| null>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -855,12 +855,21 @@ const ManageFrForDivision = () => {
                         <RadioGroup
                           aria-labelledby="Filter"
                           value={statusFilter1}
-                          onChange={(e) =>setStatusFilter1(e.target.value==='Support'? 'Support':'Expanse')}
-                          name="Filter"
+                          onChange={(e) =>
+                            setStatusFilter1(
+                              e.target.value === 'Support' ?
+                                'Support' :
+                                e.target.value === 'Resubmitted' ?
+                                  'Resubmitted' :
+                                  'Expanse',
+                            )
+                          } name="Filter"
                           row
                         >
                           <FormControlLabel value="Support" control={<Radio />} label="Support" />
                           <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
+
                         </RadioGroup>
                       </FormControl>
                     </Grid>
