@@ -1055,7 +1055,7 @@ const ChildeSupportPage = () => {
           <Container>FR created. Do you want to add attachment &nbsp;
             {pdfProps &&
               <PDFDownloadLink
-                document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+                document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled==true)}/>}
 
                 fileName="ChildSupport.pdf"
                 style={{ color: 'blue' }}

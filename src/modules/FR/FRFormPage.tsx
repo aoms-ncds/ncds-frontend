@@ -43,7 +43,7 @@ const FRFormPage = (props: FRFormPageProps) => {
       if (props.action as any === 'custom' ||props.action === 'customEdit' ) {
         console.log('A1');
         // if (frID) {
-        FRServices.getByIdCustom(frID as string)
+        frID && FRServices.getByIdCustom(frID as string)
   .then((res) => {
     const convertedData: CreatableFR = {
       ...res.data,
@@ -134,7 +134,7 @@ const FRFormPage = (props: FRFormPageProps) => {
   const editFR = async (requisition: CreatableFR) => {
     try {
       console.log(requisition.status, 'requisition.status');
-      
+
       if (frID) {
         if (props.action === 'customEdit') {
           const res = await FRServices.updateFRRequestsCustom(frID, requisition);

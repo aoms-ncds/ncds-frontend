@@ -396,9 +396,9 @@ const CustomIRO = () => {
               onClick: () => {
                 // console.log(props.row.particulars );
                 // props.row.particulars.map((item)=>{
-                setAttachments(props.row.billAttachment);
+                setAttachments((props.row as any).attachment);
                 // });
-                console.log(attachments, 'setAttachments(item.attachment);');
+                // console.log(props.row.attachment, 'setAttachments(item.attachment);');
 
                 setViewFileUploader(true);
               },
@@ -868,7 +868,7 @@ const CustomIRO = () => {
         action="view"
         onClose={() => setViewFileUploader(false)}
         // getFiles={TestServices.getBills}
-        getFiles={attachments}
+        getFiles={attachments?? []}
       // uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
       //   const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
       //     setNewParticular((particularDetails) => ({
