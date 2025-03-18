@@ -6,8 +6,11 @@ import IROServices from './extras/IROServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
+import { useNavigate } from 'react-router-dom';
 
 const IRODashboard = () => {
+  const navigate = useNavigate();
+
   interface Icounts {
     IRAppliedCount:number;
   }
@@ -58,23 +61,38 @@ const IRODashboard = () => {
             permissions={['MANAGE_IRO']}
             granted={(
               <><FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-                style={{ width: '70px', height: '70px' }} />} count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
+                style={{ width: '70px', height: '70px' }} />}
+              onClick={()=>{
+                navigate('/iro/manage'); // Pass numbers as query string
+              }}
+              count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
             )} />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()} secondaryText={'New Applied'} color="#fff" />
+            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()}
+          onClick={()=>{
+            navigate('/iro/manage'); // Pass numbers as query string
+          }} secondaryText={'New Applied'} color="#fff" />
 
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={amountReleasedCount?.toString()} secondaryText={'Amount Released'} color={'#fff'} />
+            style={{ width: '70px', height: '70px' }} />}
+          onClick={()=>{
+            navigate(`/iro/manage/?id=${1}`); // Pass numbers as query string
+          }}
+          count={amountReleasedCount?.toString()} secondaryText={'Amount Released'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Reconciliation on Process.png"
-            alt="Logo" style={{ width: '70px', height: '70px' }} />} count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#fff'} />
+            alt="Logo" style={{ width: '70px', height: '70px' }} />} onClick={()=>{
+            navigate(`/iro/manage/?id=${2}`); // Pass numbers as query string
+          }}count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#fff'} />
         </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Closed .png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#fff'} />
+            count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#fff'} onClick={()=>{
+              navigate('/iro/closed'); // Pass numbers as query string
+            }} />
         </Grid>
       </Grid>
       <br />

@@ -6,12 +6,16 @@ import FRCountCard from './components/FRCountCard';
 import FRServices from './extras/FRServices';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import PermissionChecks from '../User/components/PermissionChecks';
+import { useNavigate } from 'react-router-dom';
+import DivisionsServices from '../Divisions/extras/DivisionsServices';
 const frDashboard = () => {
   const [appliedFrCount, setAppliedFrCount] = useState<number | null>(null);
   const [approvedFrCount, setApprovedFrCount] = useState<number | null>(null);
   const [waitingForPresidentFrCount, setWaitingForPresidentFrCount] = useState<number | null>(null);
   const [waitingForAccountFrCount, setWaitingForAccountFrCount] = useState<number | null>(null);
   const [reverted, setReverted] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
 
   useEffect(() => {
     FRServices.getCount()
@@ -39,6 +43,13 @@ const frDashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+    DivisionsServices.isCoordinator()
+      .then((res) => {
+        setisCoordinator(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   }, []);
 
   return (
@@ -51,25 +62,58 @@ const frDashboard = () => {
             <Grid container spacing={3}>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/APPLIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff" />
+                  count={appliedFrCount?.toString()} secondaryText="Applied" color="#fff"
+                  onClick={()=>{
+                    if (isCoordinator) {
+                      navigate('/fr/manageForDivision/');
+                    } else {
+                      navigate('/fr/manage/');
+                    }
+                  }}
+                />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/VERIFIED.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  count={approvedFrCount?.toString()} secondaryText={'Verified'} color={'#fff'} />
+                  onClick={()=>{
+                    if (isCoordinator) {
+                      navigate(`/fr/manageForDivision/?id=${1}`); // Pass numbers as query string
+                    } else {
+                      navigate(`/fr/manage/?id=${1}`); // Pass numbers as query string
+                    }
+                  }} count={approvedFrCount?.toString()} secondaryText={'Verified'} color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   count={waitingForPresidentFrCount?.toString()}
                   secondaryText={'Waiting for President'}
+                  onClick={()=>{
+                    if (isCoordinator) {
+                      navigate(`/fr/manageForDivision/?id=${2}`); // Pass numbers as query string
+                    } else {
+                      navigate(`/fr/manage/?id=${2}`); // Pass numbers as query string
+                    }
+                  }}
                   color={'#fff'} />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'} />
+                  count={waitingForAccountFrCount?.toString()} secondaryText={'Waiting for Account'} color={'#fff'}
+                  onClick={()=>{
+                    if (isCoordinator) {
+                      navigate(`/fr/manageForDivision/?id=${3}`); // Pass numbers as query string
+                    } else {
+                      navigate(`/fr/manage/?id=${3}`); // Pass numbers as query string
+                    }
+                  }}
+                />
               </Grid>
               <Grid item xs={6} md={3} xl={3}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-                  count={reverted?.toString()} secondaryText={'Reverted '} color={'#fff'} />
+                  count={reverted?.toString()} secondaryText={'Reverted '} color={'#fff'}
+                  onClick={()=>{
+                    navigate('/fr/sentBack');
+                  }}
+                />
               </Grid>
             </Grid>
             <br />

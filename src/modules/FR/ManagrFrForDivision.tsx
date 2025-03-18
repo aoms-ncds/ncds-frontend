@@ -15,7 +15,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -40,6 +40,10 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrForDivision = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const finder =Number(params.get('id'));
+  console.log(finder, 'oo5');
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -95,6 +99,7 @@ const ManageFrForDivision = () => {
   });
   const [isCoordinator, setisCoordinator] = useState<any>(false);
 
+
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
   const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'| null>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
@@ -115,7 +120,15 @@ const ManageFrForDivision = () => {
                   });
   }, []);
   console.log(statusFilter, 'statusFilter');
-
+  useEffect(() => {
+    if (finder === 1|| 0) {
+      setStatusFilter([FRLifeCycleStates.FR_APPROVED]);
+    } else if (finder === 2|| 0) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_PRESIDENT]);
+    } else if (finder === 3) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]);
+    }
+  }, [finder]); // Runs only when finder changes
   const deleteFR = (id: string) => {
     console.log(id, 'log');
 

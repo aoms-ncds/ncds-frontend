@@ -17,7 +17,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -50,6 +50,10 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const finder =Number(params.get('id'));
+  console.log(finder, 'oo5');
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
@@ -377,7 +381,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   console.log(props.action, 'selectedIROId');
-
+  useEffect(() => {
+    if (finder === 1|| 0) {
+      setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+    } else if (finder === 2|| 0) {
+      setStatusFilter([IROLifeCycleStates.RECONCILIATION_DONE]);
+    } else if (finder === 3) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]);
+    }
+  }, [finder]);
   const attach = async (blob: Blob) => {
     try {
       if (iroData) {
