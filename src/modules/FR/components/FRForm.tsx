@@ -834,6 +834,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                           { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
                             <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
                           ):[]}
+                          <TableCell align="center">Application Reference No</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -879,8 +880,10 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
-                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                            ):[]}
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                         {addsParticulars.map((item, index) => (
@@ -925,8 +928,10 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
-                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                            ):[]}
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1784,7 +1789,21 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     </IconButton>
                   </Tooltip>
                 </Grid>
-
+                <Grid item md={12}>
+                  <TextField
+                    label="Application Reference No"
+                    value={newParticular.applicationReferenceNo}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        applicationReferenceNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Narration"

@@ -750,7 +750,8 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>
                           <TableCell align="center">Requested Amount</TableCell>
-                            <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
+                          <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
+                          <TableCell align="center">Application Reference No</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -770,11 +771,11 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
 
                                 </>
                               )}
@@ -782,7 +783,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                 // sx={{ px: 10 }}
                                 onClick={() => {
                                   setViewFileUploader(true);
-                                 setAttachments(item.attachment);
+                                  setAttachments(item.attachment);
                                 }}
                               >
                                 <AttachmentIcon />
@@ -797,6 +798,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                             <TableCell align="center">{item.sanctionedAmount}</TableCell>
                             <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                         {addsParticulars.map((item, index) => (
@@ -815,12 +817,12 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
-                                  
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
+
                                 </>
                               )}
                               <IconButton
@@ -842,6 +844,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                             <TableCell align="center">{item.sanctionedAmount}</TableCell>
                             <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1681,6 +1684,21 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   />
                 </Grid>
 
+                <Grid item md={12}>
+                  <TextField
+                    label="Application Reference No"
+                    value={newParticular.applicationReferenceNo}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        applicationReferenceNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Narration"

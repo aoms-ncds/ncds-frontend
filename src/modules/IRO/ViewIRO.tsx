@@ -603,11 +603,12 @@ const ViewIRO = (props: any) => {
                                 <TableCell align="center">Requested Amount</TableCell>
                                 <TableCell align="center">Sanctioned Amount</TableCell>
                                 <TableCell align="center">Sanctioned as per</TableCell>
+                                <TableCell align="center">Application Reference No</TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
                               {IRO?.particulars &&
-                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
+                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; applicationReferenceNo:any; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
                                   <TableRow key={item._id} >
                                     <TableCell component="th" sx={{ display: 'flex' }}>
                                       <IconButton
@@ -629,6 +630,7 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                     <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                                    <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                                   </TableRow>
                                 ))}
                             </TableBody>
