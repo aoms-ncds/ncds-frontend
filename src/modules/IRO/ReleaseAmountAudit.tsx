@@ -482,11 +482,16 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       });
     console.log(selectedSignature);
     IROServices.groupedIROView({ Exstatus: exstatusFilter, dateRange, support: statusFilter1 }).then((res)=>{
-      console.log(res, 'res90');
       setGroupIro(res.data);
+      console.log(groupIro, 'res90');
     });
   }, [statusFilter, exstatusFilter, dateRange, statusFilter1]);
-
+  useEffect(()=>{
+    IROServices.groupedIROView({ Exstatus: exstatusFilter, dateRange, support: statusFilter1 }).then((res)=>{
+      setGroupIro(res.data);
+      console.log(groupIro, 'res90');
+    });
+  }, []);
   const deleteIRO = (id: string) => {
     console.log(id, 'as is');
 
@@ -529,7 +534,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       })) :
       []; // If IRO is not an array, return an empty array
 
-    return [...acc, ...iros.filter((e)=>e.status == IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT)];
+    return [...acc, ...iros];
   }, []);
   // Rest of your component code...
   useEffect(() => {
@@ -1223,7 +1228,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
