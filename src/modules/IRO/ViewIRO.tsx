@@ -604,6 +604,10 @@ const ViewIRO = (props: any) => {
                                 <TableCell align="center">Sanctioned Amount</TableCell>
                                 <TableCell align="center">Sanctioned as per</TableCell>
                                 <TableCell align="center">Application Reference No</TableCell>
+                                {IRO.particulars?.some((e:any) => e.presidentSanctionAmt) && (
+                                  <TableCell align="center">Pres Approved Amt</TableCell>
+                                )}
+
                               </TableRow>
                             </TableHead>
                             <TableBody>
@@ -631,6 +635,8 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                     <TableCell align="center">{item.applicationReferenceNo}</TableCell>
+                                    {(item as any).presidentSanctionAmt && <TableCell align="center">{(item as any).presidentSanctionAmt}</TableCell> }
+
                                   </TableRow>
                                 ))}
                             </TableBody>

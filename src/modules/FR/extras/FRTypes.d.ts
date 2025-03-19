@@ -107,6 +107,7 @@ declare global {
     sanctionedAmount?: number | null;
     year?: number | null;
     applicationReferenceNo?: string | null;
+    presidentSanctionAmt?:number;
 
 
   }

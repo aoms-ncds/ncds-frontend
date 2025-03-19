@@ -193,6 +193,7 @@ export default {
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
                     year: particulars.year,
                     applicationReferenceNo: particulars.applicationReferenceNo,
+                    presidentSanctionAmt: particulars.presidentSanctionAmt,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }
@@ -236,6 +237,7 @@ export default {
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
                     year: particulars.year,
                     applicationReferenceNo: particulars.applicationReferenceNo,
+                    presidentSanctionAmt: particulars.presidentSanctionAmt,
 
                   }, { headers: { ...getAuthHeader() } });
                 }
@@ -326,6 +328,7 @@ export default {
                       sanctionedAmount: particulars.sanctionedAmount,
                       year: particulars.year,
                       applicationReferenceNo: particulars.applicationReferenceNo,
+                      presidentSanctionAmt: particulars.presidentSanctionAmt,
 
                     }, { headers: { ...getAuthHeader() } });
                   } else {
@@ -445,6 +448,7 @@ export default {
                     narration: particulars.narration,
                     sanctionedAsPer: particulars?.sanctionedAsPer,
                     sanctionedAmount: particulars?.sanctionedAmount,
+                    presidentSanctionAmt: particulars?.presidentSanctionAmt,
                   }, { headers: { ...getAuthHeader() } });
                 }
               }
