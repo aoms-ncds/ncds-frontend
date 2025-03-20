@@ -39,7 +39,7 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
-import TransactionLogDialog from './components/TransactionLogDialog';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrPage = () => {
   const location = useLocation();
