@@ -23,7 +23,7 @@ const settingsRoutes: ModuleRoute = {
       path: '/',
       element: <SettingsDashboard />,
       private: true,
-      requiredAccessRights: ['SETTINGS_BASE_ACCESS'],
+      requiredAccessRights: ['SETTINGS_SETTINGS_BASE_ACCESS'],
       showInDrawer: true,
       // icon: <SettingsIcon />,
       icon: <img src="/mod_icons/settings.png" alt="Logo" style={{ width: '30px', height: '30px' }} />,

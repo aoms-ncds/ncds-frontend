@@ -58,7 +58,7 @@ declare global {
     CUSTOM_REPORT: boolean;
     REOPEN_FR_IRO: boolean;
 
-    SETTINGS_BASE_ACCESS: boolean;
+    SETTINGS_SETTINGS_BASE_ACCESS: boolean;
 
     SETTINGS_MANAGE_LANGUAGES_ACCESS: boolean;
     SETTINGS_DESIGNATION_ACCESS: boolean;
