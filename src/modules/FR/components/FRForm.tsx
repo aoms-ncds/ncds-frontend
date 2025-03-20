@@ -1485,7 +1485,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   )}
                   &nbsp;
 
-                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
+                  {props.action === 'add' || props.action === 'multi'|| props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
