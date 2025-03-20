@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import ChildSupportService from './extras/ChildSupportService';
 import ButtonCard from '../../components/ButtonCard';
+import PermissionChecks from '../User/components/PermissionChecks';
 
 
 const SettingsDashboard = () => {
@@ -65,51 +66,122 @@ const SettingsDashboard = () => {
   return (
     <CommonPageLayout title="Settings">
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#fff" targetRoute="/settings/Languages" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#fff" targetRoute="/settings/Designation" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#fff " targetRoute="/settings/ChildSupport" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="E-Signature" color="#fff" targetRoute="/settings/Esignature" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Department" color="#fff" targetRoute="/settings/Department" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Child Support Age Edit" color="#fff" onClick={handleClickOpen} />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Add Gender" color="#fff" targetRoute="/settings/Gender" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Add Religion" color="#fff" targetRoute="/settings/Relogion" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Reason for Deactivation" color="#fff" targetRoute="/settings/ReasonforDeactivation" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Add Sanctioned as  per" color="#fff" targetRoute="/settings/SanctionedAsPer" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText=" Add Particulars" color="#fff" targetRoute="/settings/Particulars" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Add Payment methods" color="#fff" targetRoute="/settings/PaymentMethods" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Designation Category" color="#fff" targetRoute="/settings/designationParticulars" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="Leader Details" color="#fff" targetRoute="/settings/leaderDetails" />
-        </Grid>
-        <Grid item xs={12} md={4} xl={3} width={350}>
-          <DashboardCardButton primaryText="FR/IRO Log" color="#fff" targetRoute="/settings/transactionLog" />
-        </Grid>
+        <PermissionChecks
+          permissions={['SETTINGS_MANAGE_LANGUAGES_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <ButtonCard secondaryText="Manage Languages" count={LanguageCount?.toString()} color="#fff" targetRoute="/settings/Languages" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_DESIGNATION_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <ButtonCard secondaryText="Manage Designation" count={DesignationCount?.toString()} color="#fff" targetRoute="/settings/Designation" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_CHILD_SUPPORT_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <ButtonCard secondaryText="Child support" count={ChildSupportCount?.toString()} color="#fff " targetRoute="/settings/ChildSupport" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_E_SIGN_ACCESS']}
+          granted={(
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="E-Signature" color="#fff" targetRoute="/settings/Esignature" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_DEPARTMENT_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Department" color="#fff" targetRoute="/settings/Department" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_CHILD_SUPPORT_AGE_EDIT_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Child Support Age Edit" color="#fff" onClick={handleClickOpen} />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_ADD_GENDER_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText=" Add Gender" color="#fff" targetRoute="/settings/Gender" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_ADD_RELIGION_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText=" Add Religion" color="#fff" targetRoute="/settings/Relogion" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_REASON_FOR_DEACTIVATION_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText=" Reason for Deactivation" color="#fff" targetRoute="/settings/ReasonforDeactivation" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_ADD_SANCTION_ASS_PER_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText=" Add Sanctioned as  per" color="#fff" targetRoute="/settings/SanctionedAsPer" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_PARTICULARS_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText=" Add Particulars" color="#fff" targetRoute="/settings/Particulars" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_ADD_PAYMENT_METHOD_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Add Payment methods" color="#fff" targetRoute="/settings/PaymentMethods" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_DESIGNATION_CATEGORY_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Designation Category" color="#fff" targetRoute="/settings/designationParticulars" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_LEADER_DETAILS_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Leader Details" color="#fff" targetRoute="/settings/leaderDetails" />
+            </Grid>
+          )} />
+        <PermissionChecks
+          permissions={['SETTINGS_FR_IRO_LOG_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="FR/IRO Log" color="#fff" targetRoute="/settings/transactionLog" />
+            </Grid>
+          )} />
       </Grid>
 
 
