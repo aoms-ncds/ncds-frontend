@@ -427,7 +427,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )}
 
         </Grid>
-        <Button sx={{backgroundColor: 'orange'}} variant='contained' onClick={() => window.history.back()}><ArrowBackIcon /></Button>
+        <Button sx={{ backgroundColor: 'orange' }} variant='contained' onClick={() => window.history.back()}><ArrowBackIcon /></Button>
 
         <br />
         <Divider />
