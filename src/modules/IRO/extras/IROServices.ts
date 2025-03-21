@@ -431,6 +431,22 @@ export default {
           });
       }),
     ),
+  updateReleaseAmount: (iros:IROrder[], releaseAmount: IReleaseAmount) =>
+    getStandardResponse<IROrder>(
+      new Promise((resolve, reject) => {
+        axios
+          .patch('/iro/release_amount', {
+            releaseAmount, iros,
+          }, { headers: { ...getAuthHeader() } })
+          .then(async (releaseAmount) => {
+            try {
+              resolve(releaseAmount);
+            } catch (error) {
+              reject(error);
+            }
+          });
+      }),
+    ),
 
   getReleaseAmountById: (id?: string) =>
     getStandardResponse<IReleaseAmount>(axios.get(`/iro/release_amount/${id}`, { headers: { ...getAuthHeader() } }), (releaseAmount)=>({

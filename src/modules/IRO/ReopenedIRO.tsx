@@ -26,6 +26,8 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { MB } from '../../extras/CommonConfig';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
+import ReleaseAmountDialog from './components/ReleaseAmountDialog';
 
 const ReopenedIRO = () => {
   const [closedFRs, setClosedFRs] = useState<IROrder[] | null>(null);
@@ -45,6 +47,9 @@ const ReopenedIRO = () => {
   const [fileUploaderAction, setFileUploaderAction] = useState<'add' | 'manage'>('add');
   const [file, setFile] = useState<boolean>(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [openReleaseEdit, setOpenReleaseEdit] = useState(false);
+  const [openRelease, setOpenRelease] = useState(false);
+  const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
 
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
@@ -618,6 +623,26 @@ const ReopenedIRO = () => {
               },
 
             },
+            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
+              [
+                {
+                  id: 'Release',
+                  text: 'Edit Release Amount',
+                  onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
+            ...(
+              [
+                {
+                  id: 'Release',
+                  text: 'View Release Amount',
+                  onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ]
+            ),
             ...(!isCoordinator || hasPermissions(['ADMIN_ACCESS']) ?[
               {
                 id: 'edit',
@@ -1074,6 +1099,9 @@ const ReopenedIRO = () => {
         // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
+      <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseEdit} data={ releaseAmountIROs?.length === 0 ? [] : releaseAmountIROs} />
+      <ReleaseAmountDialog action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? [] : releaseAmountIROs} />
+
     </CommonPageLayout>
   );
 };

@@ -41,6 +41,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
+import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -50,6 +51,7 @@ const ReconciliationIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [openRelease, setOpenRelease] = useState(false);
+  const [openReleaseEdit, setOpenReleaseEdit] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
   const [sendNotification, toggleSendNotification] = useState<boolean>(false);
@@ -530,6 +532,16 @@ const ReconciliationIRO = () => {
                   id: 'Release',
                   text: 'View Release Amount',
                   onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
+            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
+              [
+                {
+                  id: 'Release',
+                  text: 'Edit Release Amount',
+                  onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])],
                   icon: PreviewIcon,
                 },
               ] :
@@ -1601,6 +1613,7 @@ const ReconciliationIRO = () => {
 
       </Dialog>
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseEdit} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
 
     </CommonPageLayout>
   );

@@ -32,6 +32,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
+import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -55,6 +56,7 @@ const ClosedIRO = () => {
   const [openAttachReceipt, setOpenAttachReceipt] = useState(false);
   const [openAttachReceipt1, setOpenAttachReceipt1] = useState(false);
   const [openRelease, setOpenRelease] = useState(false);
+  const [openReleaseedit, setOpenReleaseEdit] = useState(false);
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
@@ -259,6 +261,16 @@ const ClosedIRO = () => {
                   id: 'Release',
                   text: 'View Release Amount',
                   onClick: () => [setOpenRelease(true), setReleaseAmountIROs([props.row])],
+                  icon: PreviewIcon,
+                },
+              ] :
+              []),
+            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS']) ?
+              [
+                {
+                  id: 'Release',
+                  text: 'Edit Release Amount',
+                  onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([props.row])],
                   icon: PreviewIcon,
                 },
               ] :
@@ -1099,6 +1111,7 @@ const ClosedIRO = () => {
 
       />
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseedit} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
 
     </CommonPageLayout>
   );
