@@ -354,7 +354,8 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
     setNewParticular((prev: any) => ({
       ...prev,
       ...particular,
-      sanctionedAmount: null,
+      sanctionedAmount: particular.sanctionedAmount ?? null,
+      sanctionedAsPer: particular.sanctionedAsPer ?? null,
     }));
     setOpen(true);
     // setNewParticular(particular);
@@ -750,7 +751,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>
                           <TableCell align="center">Requested Amount</TableCell>
-                            <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
+                          <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -770,11 +771,11 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
 
                                 </>
                               )}
@@ -782,7 +783,7 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                 // sx={{ px: 10 }}
                                 onClick={() => {
                                   setViewFileUploader(true);
-                                 setAttachments(item.attachment);
+                                  setAttachments(item.attachment);
                                 }}
                               >
                                 <AttachmentIcon />
@@ -815,12 +816,12 @@ const FRFormAdmin = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
-                                  
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
+
                                 </>
                               )}
                               <IconButton

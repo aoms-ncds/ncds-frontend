@@ -125,10 +125,11 @@ const handleClickOpen = (particular: Particular, index: number) => {
   setNewParticular((prev: any) => ({
     ...prev,
     ...particular,
-    sanctionedAmount: null,
+    sanctionedAmount: particular.sanctionedAmount ?? null,
+    sanctionedAsPer: particular.sanctionedAsPer ?? null,
   }));
-  setOpen(true);
   setSelectedParticularIndex(index);
+  setOpen(true);
   // setNewParticular(particular);
 };
 const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -803,7 +804,7 @@ return (
                     Add Extra sign
                 </Button>
                   &nbsp;
-                {props.action === 'view' && (FRstatus != 'FR_APPROVED'&&FRstatus!='FR_REJECTED'&&FRstatus!='REOPENED') ? (
+                {props.action === 'view' && (FRstatus != 'FR_APPROVED'&&FRstatus!='FR_REJECTED'&&FRstatus!='REOPENED' && props.value.status !== FRLifeCycleStates.FR_SEND_BACK) ? (
                   <>
                     {/* Only display buttons if props.action is 'view' */}
                       &nbsp;

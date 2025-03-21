@@ -425,7 +425,8 @@ const FRForm = (props: FormComponentProps<any>) => {
     setNewParticular((prev: any) => ({
       ...prev,
       ...particular,
-      sanctionedAmount: null,
+      sanctionedAmount: particular.sanctionedAmount ?? null,
+      sanctionedAsPer: particular.sanctionedAsPer ?? null,
     }));
     setOpen(true);
     // setNewParticular(particular);
@@ -480,7 +481,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               //   const SubmitStatus = FRLifeCycleStates.WAITING_FOR_PRESIDENT;
               // }
               console.log(props.value, 'props.value');
-              
+
               if (props.onSubmit) {
                 if (totalRequestedAmount > 0) {
                   const updatedValue = {

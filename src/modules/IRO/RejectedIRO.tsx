@@ -782,7 +782,7 @@ const RejectedIRO = () => {
           <Container>
           Do you want to attach receipt for {iroData?.IROno}?
             <br />
-            {iroData && mngrName&&selectedSignature&&FrData&& (
+            {iroData && mngrName&&selectedSignature&& (
               <PDFDownloadLink
                 document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
                 fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
