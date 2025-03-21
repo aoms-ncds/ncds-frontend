@@ -182,6 +182,15 @@ const SettingsDashboard = () => {
               <DashboardCardButton primaryText="FR/IRO Log" color="#fff" targetRoute="/settings/transactionLog" />
             </Grid>
           )} />
+
+        <PermissionChecks
+          permissions={['SETTINGS_APPLICATION_ACCESS']}
+          granted={(
+
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <DashboardCardButton primaryText="Application Settings" color="#fff" targetRoute="/settings/applicationSettings" />
+            </Grid>
+          )} />
       </Grid>
 
 

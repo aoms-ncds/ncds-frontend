@@ -75,6 +75,7 @@ declare global {
     SETTINGS_DESIGNATION_CATEGORY_ACCESS: boolean;
     SETTINGS_LEADER_DETAILS_ACCESS: boolean;
     SETTINGS_FR_IRO_LOG_ACCESS: boolean;
+    SETTINGS_APPLICATION_ACCESS: boolean;
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {

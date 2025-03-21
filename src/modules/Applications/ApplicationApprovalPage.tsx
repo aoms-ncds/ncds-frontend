@@ -10,6 +10,8 @@ import { MB } from '../../extras/CommonConfig';
 import PermissionChecks from '../User/components/PermissionChecks';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import CloseIcon from '@mui/icons-material/Close';
+import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
+import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
 
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
@@ -17,6 +19,7 @@ const ApplicationApprovalPage = () => {
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [reasonDialog, setReasonDialog] = useState(false);
   const [applications, setApplications] = useState<Application >();
+  const [applicationsNames, setApplicationsNames] = useState<any >();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -36,6 +39,7 @@ const ApplicationApprovalPage = () => {
         });
       });
   }, []);
+  console.log(applications, 'applications');
 
   return (
     <CommonPageLayout title="Application Manages">
@@ -47,7 +51,7 @@ const ApplicationApprovalPage = () => {
                 <Grid item>
 
                   <Typography variant="h5" component="h2" align='left'>
-                    {applications?.name}
+                    <span style={{ fontWeight: 600 }}> Name:</span>    {applications?.name}
                   </Typography>
                 </Grid>
                 <Grid item sx={{ ml: 'auto' }}>
@@ -73,9 +77,37 @@ const ApplicationApprovalPage = () => {
             <Divider/>
             <br/>
             <Typography variant="body1" component="h2" align='left'>
-
-              {applications?.reason}
+              <span style={{ fontWeight: 800 }}>Applied For: </span>  {applications?.appliedFor?? 'N/A'}
             </Typography>
+            <br />
+            <Typography variant="body1" component="h2" align='left'>
+              <span style={{ fontWeight: 800 }}>Applicant Name: </span>  {applications?.applicantName?? 'N/A'}
+            </Typography>
+            <br />
+            <Typography variant="body1" component="h2" align='left'>
+              <span style={{ fontWeight: 800 }}>Requested Amount: </span>  {applications?.requestedAmount?? 'N/A'}
+            </Typography>
+            <br />
+            <Typography variant="body1" component="h2" align='left'>
+              <span style={{ fontWeight: 800 }}>Remark: </span>  {applications?.reason?? 'N/A'}
+            </Typography>
+            <br />
+            {/* {applications?.status == String(ApplicationLifeCycleStates.SENT_TO_PRESIDENT) &&( */}
+
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body1" component="h2" align="left">
+                <span style={{ fontWeight: 800 }}>Sanctioned Amount: </span>
+              </Typography>
+              <TextField
+                variant="outlined"
+                size="small"
+                disabled={applications?.status != String(ApplicationLifeCycleStates.SENT_TO_PRESIDENT)}
+                value={applications?.sanctionedAmount ?? ''}
+                onChange={(e) => setApplications(applications ? { ...applications, sanctionedAmount: Number(e.target.value) } : applications)}
+              />
+            </Box>
+            {/* )} */}
+
             <br/>
             {applications?.reasonForDeactivation && (
 
@@ -121,22 +153,32 @@ const ApplicationApprovalPage = () => {
                           message: 'Approving...',
                           variant: 'info',
                         });
-                        ApplicationServices.approve(applicationID as string)
-                .then((res) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: res.message,
-                    variant: 'success',
-                  });
-                  navigate('/application/manage');
-                })
-                .catch((err) => {
-                  closeSnackbar(snackbarId);
-                  enqueueSnackbar({
-                    message: err.message,
-                    variant: 'error',
-                  });
-                });
+                        ApplicationServices.editApplication(applicationID as string, applications as Application)
+                        .then((res) => {
+                          ApplicationServices.approve(applicationID as string)
+                          .then((res) => {
+                            closeSnackbar(snackbarId);
+                            enqueueSnackbar({
+                              message: res.message,
+                              variant: 'success',
+                            });
+                            navigate('/application/manage');
+                          })
+
+                          .catch((err) => {
+                            closeSnackbar(snackbarId);
+                            enqueueSnackbar({
+                              message: err.message,
+                              variant: 'error',
+                            });
+                          });
+                          closeSnackbar(snackbarId);
+                          enqueueSnackbar({
+                            message: res.message,
+                            variant: 'success',
+                          });
+                          // navigate('/application/manage');
+                        });
                       }}
                     >
             Approve

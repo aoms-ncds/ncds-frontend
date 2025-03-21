@@ -1,3 +1,5 @@
+import { Moment } from "moment";
+
 export default {};
 declare global {
   interface Application extends MongooseDocument {
@@ -11,6 +13,11 @@ declare global {
   presidentSanction?:boolean;
   createdBy?:User;
   attachment:FileObject[];
+  appliedFor?:string;
+  applicantName?:string;
+  requestedAmount?:number;
+  sanctionedAmount?:number;
+  approvedDate?:Moment;
   }
   type CreatableApplication = Creatable<Application>;
 

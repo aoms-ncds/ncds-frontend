@@ -14,6 +14,9 @@ import PaymentMethod from '../PaymentMethod';
 import DesignationParticulars from '../DesignationParticular';
 import LeaderDetails from '../LeaderDetails';
 import TransactionLog from '../TransactionLog';
+import ApplicationSettings from '../ApplicationSettings';
+import ApplicationNames from '../ApplicationNames';
+import AppliedFor from '../AppliedFor';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -65,6 +68,15 @@ const settingsRoutes: ModuleRoute = {
       icon: <Lang />,
     },
     {
+      title: 'ApplicationSettings',
+      path: '/applicationSettings',
+      element: <ApplicationSettings/>,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
       title: 'ChildSupport',
       path: '/ChildSupport',
       element: <ChildSupport />,
@@ -86,6 +98,24 @@ const settingsRoutes: ModuleRoute = {
       title: 'Department',
       path: '/Department',
       element: <Department />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'ApplicationNames',
+      path: '/applicationName',
+      element: <ApplicationNames />,
+      private: true,
+      requiredAccessRights: ['ADMIN_ACCESS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'AppliedFor',
+      path: '/appliedFor',
+      element: <AppliedFor />,
       private: true,
       requiredAccessRights: ['ADMIN_ACCESS'],
       showInDrawer: false,
