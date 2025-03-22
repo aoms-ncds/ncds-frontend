@@ -6,8 +6,8 @@ import axios from 'axios';
 
 export default {
   getCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count', { params: conditions, headers: { ...getAuthHeader() } })),
-  groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
-  groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support:any}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
+  groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
+  groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
   getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,6 +30,22 @@ export default {
     ),
   getAllOptimized: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string }): Promise<StandardResponse<IROrder[]>> =>
     getStandardResponse<IROrder[]>(axios.get('/iro/optimized', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
+      IROrders.map((IRO) => ({
+        ...IRO,
+        iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
+        reconciliationOn: IRO.reconciliationOn ? moment(IRO.reconciliationOn) : undefined,
+        iroClosedOn: IRO.iroClosedOn ? moment(IRO.iroClosedOn) : undefined,
+        IRODate: moment(IRO.IRODate),
+        createdAt: moment(IRO.createdAt),
+        updatedAt: moment(IRO.updatedAt),
+        releaseAmount: IRO.releaseAmount ? {
+          ...IRO.releaseAmount,
+          transferredDate: moment(IRO.releaseAmount?.transferredDate),
+        }:undefined,
+      })),
+    ),
+  getAllOptimizedSuportEx: (conditions?: { Exstatus?:any; status?: number[]| number;dateRange?: DateRange; sourceOfAccount?: string; support?: 'Expanse' | 'Support'|'All'| null}): Promise<StandardResponse<IROrder[]>> =>
+    getStandardResponse<IROrder[]>(axios.get('/iro/optimizedEx-support', { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
       IROrders.map((IRO) => ({
         ...IRO,
         iroVerifiedOn: IRO.iroVerifiedOn ? moment(IRO.iroVerifiedOn) : undefined,
@@ -329,7 +345,7 @@ export default {
       createdAt: moment(IRO.createdAt),
       updatedAt: moment(IRO.updatedAt),
     }))),
-  getReconciliationOptimized: (conditions?: {ExStatus?:any;status?:any; dateRange?: DateRange;sourceOfAccount?: string }) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliationOptimized',
+  getReconciliationOptimized: (conditions?: {ExStatus?:any;status?:any; dateRange?: DateRange;sourceOfAccount?: string; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<IROrder[]>(axios.get('/iro/reconciliationOptimized',
     { params: conditions, headers: { ...getAuthHeader() } }), (IROrders: IROrder[]) =>
     IROrders.map((IRO) => ({
       ...IRO,

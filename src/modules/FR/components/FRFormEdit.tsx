@@ -500,6 +500,7 @@ const FRFormEdit = (props: FormComponentProps<any>) => {
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>
                           <TableCell align="center">Requested Amount</TableCell>
+                          <TableCell align="center">Application Reference No</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -530,6 +531,7 @@ const FRFormEdit = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1255,6 +1257,22 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   />
                 </Grid>
 
+                <Grid item md={12}>
+                  <TextField
+                    label="Application Reference No"
+                    value={newParticular.applicationReferenceNo}
+                    multiline
+                    maxRows={4}
+                    disabled
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        applicationReferenceNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Narration"

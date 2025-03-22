@@ -38,11 +38,15 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import FRReceiptTemplateCustom from './components/FRReceiptTemplateCustom';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const CustomFR = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [FR, setFR] = useState<FR | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFRId] = useState('');
+  const [openLog, setOpenLog] = useState(false);
+
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [sendNotification, toggleSendNotification] = useState(false);
   const [selectedFR, setSelectedFR] = useState<string | null>(null);
@@ -463,6 +467,15 @@ const CustomFR = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
             },
           ]}
         />
@@ -1309,6 +1322,8 @@ const CustomFR = () => {
           </Grid>
         )}
       />
+      {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
+
     </CommonPageLayout>
   );
 };

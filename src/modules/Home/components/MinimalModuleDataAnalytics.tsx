@@ -12,8 +12,10 @@ import WorkersServices from '../../Workers/extras/WorkersServices';
 const MinimalModuleDataAnalytics = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [divisionsCount, setDivisionsCount] = useState<string | null>(null);
+  const [divisionsCountit, setDivisionsCountit] = useState<any | null>(null);
   const [curDivision, setCurDivision] = useState<string | null>(null);
   const [subDivisionsCount, setSubDivisionsCount] = useState<string | null>(null);
+  const [subDivisionsCountit, setSubDivisionsCountit] = useState<string | null>(null);
   const [staffsCount, setStaffsCount] = useState<string | null>(null);
   const [workersCount, setWorkersCount] = useState<string | null>(null);
   const [frCount, setFrCount] = useState<string | null>(null);
@@ -39,6 +41,15 @@ const MinimalModuleDataAnalytics = () => {
         setErrors((errors) => [...errors, error.message]);
         setDivisionsCount('Unable to load!');
       });
+    DivisionsServices.getCountIT()
+      .then((res) => {
+        setDivisionsCountit(res.data.filter((res:Division)=>res.details.isIT ==true).length);
+        // Get Sub-divisions count
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setDivisionsCountit('Unable to load!');
+      });
 
     // Get Sub-divisions count
     DivisionsServices.getSubDivisionsCount()
@@ -49,6 +60,14 @@ const MinimalModuleDataAnalytics = () => {
         setErrors((errors) => [...errors, error.message]);
         setSubDivisionsCount('Unable to load!');
       });
+    // DivisionsServices.getSubDivisionsCountIt()
+    //   .then((res) => {
+    //     setSubDivisionsCountit(res.data.toString());
+    //   })
+    //   .catch((error) => {
+    //     setErrors((errors) => [...errors, error.message]);
+    //     setSubDivisionsCountit('Unable to load!');
+    //   });
 
     // Get staffs count
     StaffServices.getCount()
@@ -96,18 +115,19 @@ const MinimalModuleDataAnalytics = () => {
 
       {(user.user as User).kind !== 'worker' ?
         <PermissionChecks permissions={['READ_ALL_DIVISIONS']} granted={
-          <Grid item xs={6} md={3} xl={4}>
+          <><Grid item xs={6} md={3} xl={4}>
             <DashBoardCard
               secondaryText='Divisions'
-              count={divisionsCount?.toString()}
+              count={divisionsCountit?.toString()}
               // dot={'.'}
               color={'#fff'}
               targetRoute="/divisions/"
               // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
-              icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            />
+              icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} />
 
-          </Grid>} /> :
+          </Grid>
+          </>
+        } /> :
         <PermissionChecks permissions={['READ_DIVISIONS']} granted={
           <Grid item xs={6} md={3} xl={4}>
 
@@ -126,16 +146,38 @@ const MinimalModuleDataAnalytics = () => {
         <>
           {
             (user.user as User).kind !== 'worker' ?
-              <Grid item xs={6} md={3} xl={4}>
+              <><Grid item xs={6} md={3} xl={4}>
 
                 <DashBoardCard secondaryText='Sub-Divisions'
+                  icon={<img src="/mod_icons/sub_division.png" alt="Logo"
+                    style={{ width: '70px', height: '70px' }} />}
+                  // dot={'.'}
+                  count={subDivisionsCountit?.toString()?? '0'}
+                  color={'#fff'} targetRoute="/divisions/" />
+
+              </Grid>
+              <Grid item xs={6} md={3} xl={4}>
+                <DashBoardCard
+                  secondaryText='Other Divisions'
+                  count={divisionsCount?.toString()}
+                  // dot={'.'}
+                  color={'#fff'}
+                  targetRoute="/divisions/"
+                  // icon={<NotificationsIcon color="secondary" sx={{ fontSize: 70 }} />}
+                  icon={<img src="/mod_icons/division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />} />
+
+              </Grid>
+              <Grid item xs={6} md={3} xl={4}>
+
+                <DashBoardCard secondaryText='Other Sub-Divisions'
                   icon={<img src="/mod_icons/sub_division.png" alt="Logo"
                     style={{ width: '70px', height: '70px' }} />}
                   // dot={'.'}
                   count={subDivisionsCount?.toString()}
                   color={'#fff'} targetRoute="/divisions/" />
 
-              </Grid> : <Grid item xs={6} md={3} xl={4}>
+              </Grid></> :
+              <Grid item xs={6} md={3} xl={4}>
                 <DashBoardCard secondaryText='Sub-Divisions' icon={<img src="/mod_icons/sub_division.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
                   // count={subDivisionsCount?.toString()}
                   dot={'.'}

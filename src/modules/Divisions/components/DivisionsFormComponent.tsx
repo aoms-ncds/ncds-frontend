@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-undef */
-import { Autocomplete, Button, Divider, FormControl, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Checkbox, Divider, FormControl, FormControlLabel, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import AddressForm from '../../../components/AddressForm';
 import FileUploader from '../../../components/FileUploader/FileUploader';
@@ -157,6 +157,20 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             disabled={props.action == 'view'}
           />
         </FormControl>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <FormControlLabel
+          label="IET's Division"
+          // disabled={props.action !== 'customEdit'}
+          checked={props.value.isIT || false}
+          onChange={(e: any) =>
+            props.onChange({
+              ...props.value,
+              isIT: e.target.checked,
+            })
+          }
+          control={<Checkbox />}
+        />
       </Grid>
       <AddressForm value={props.value.address} onChange={(newState: Address) => props.onChange({ ...props.value, address: newState })} action={props.action} />
       {((users && users.length > 0) || props.value.coordinator || props.value.seniorLeader || props.value.juniorLeader) && (

@@ -33,6 +33,7 @@ import ReleaseAmount from './components/ReleaseAmountDialog';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import clsx from 'clsx';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -49,6 +50,9 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [addSignature, toggleAddSignature] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -403,6 +407,12 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         setIROrder(res.data);
       });
   }, []);
+  useEffect(() => {
+    IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1 })
+      .then((res) => {
+        setIROrder(res.data);
+      });
+  }, [statusFilter1]);
 
   useEffect(() => {
     if (selectedIRO._id != '') {
@@ -563,6 +573,15 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(params.row._id);
+                setOpenLog(true);
+              },
             },
             // {
             //   id: 'signature',
@@ -906,7 +925,30 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item>
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={statusFilter1}
+                      onChange={(e) =>
+                        setStatusFilter1(
+                          e.target.value === 'Support' ?
+                            'Support' :
+                            e.target.value === 'Expanse' ?
+                              'Expanse' :
+                              'All',
+                        )
+                      }
+                      name="Filter"
+                      row
+                    >
+                      {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={3}>
                   <Button
                     onClick={async () => {
                       const sheet =
@@ -1516,6 +1558,8 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           </Grid>
         )}
       />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
+
     </CommonPageLayout>
   );
 };

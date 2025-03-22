@@ -42,6 +42,7 @@ import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ReconciliationIRO = () => {
   const [reconciliationIRO, setReconcilationIRO] = useState<IROrder[]>();
@@ -64,6 +65,8 @@ const ReconciliationIRO = () => {
   const [data2, setData2] = useState<any | null>(null);
   const [data5, setData5] = useState<any | null>(null);
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
+  const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [searchText, setSearchText] = useState('');
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -306,7 +309,7 @@ const ReconciliationIRO = () => {
   console.log(data2, 'FRDD');
   useEffect(() => {
     if (permissions?.FCRA_ACCOUNTS_ACCESS && !permissions?.LOCAL_ACCOUNT_ACCESS) {
-      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA' })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', support: statusFilter1 })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -315,7 +318,7 @@ const ReconciliationIRO = () => {
         });
     }
     if (permissions?.LOCAL_ACCOUNT_ACCESS && !permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'Local' })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, sourceOfAccount: 'Local', support: statusFilter1 })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         })
@@ -323,65 +326,14 @@ const ReconciliationIRO = () => {
           console.error(error);
         });
     }
-    // if (permissions?.OTHER_ACCOUNTS_ACCESS) {
-    //   IROServices.getReconciliation({ sanctionedBank: 'Other Bank' })
-    //     .then((res) => {
-    //       setReconcilationIRO(() => [...res.data]);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-    // if (permissions?.OTHER_ACCOUNTS_ACCESS_1) {
-    //   IROServices.getReconciliation({ sanctionedBank: 'Other Bank 1' })
-    //     .then((res) => {
-    //       setReconcilationIRO(() => [...res.data]);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-    // if (permissions?.OTHER_ACCOUNTS_ACCESS_2) {
-    //   IROServices.getReconciliation({ sanctionedBank: 'Other Bank 2' })
-    //     .then((res) => {
-    //       setReconcilationIRO(() => [...res.data]);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-    // if (permissions?.OTHER_ACCOUNTS_ACCESS_3) {
-    //   IROServices.getReconciliation({ sanctionedBank: 'Other Bank 3' })
-    //     .then((res) => {
-    //       setReconcilationIRO(() => [...res.data]);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-    // if (permissions?.OTHER_ACCOUNTS_ACCESS_4) {
-    //   IROServices.getReconciliation({ sanctionedBank: 'Other Bank 4' })
-    //     .then((res) => {
-    //       setReconcilationIRO(() => [...res.data]);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
+
     if (permissions?.LOCAL_ACCOUNT_ACCESS && permissions?.FCRA_ACCOUNTS_ACCESS) {
-      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange })
+      IROServices.getReconciliationOptimized({ ExStatus: exstatusFilter, status: statusFilter, dateRange: dateRange, support: statusFilter1 })
         .then((res) => {
           setReconcilationIRO(() => [...res.data]);
         });
     }
-    // IROServices.getReconciliation()
-    //   .then((res) => {
-    //     setReconcilationIRO(res.data);
-    //   })
-    //   .catch((res) => {
-    //     console.log(res);
-    //   });
-  }, [attachment, dateRange, selectedIRO, statusFilter, exstatusFilter]);
+  }, [attachment, dateRange, selectedIRO, statusFilter, exstatusFilter, statusFilter1]);
 
   const columns: GridColDef<IROrder>[] = [
     {
@@ -657,6 +609,15 @@ const ReconciliationIRO = () => {
               },
               icon: MessageIcon,
             },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -925,6 +886,29 @@ const ReconciliationIRO = () => {
                       >
                         <FormControlLabel value="All" control={<Radio />} label="ALL" />
                         <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={statusFilter1}
+                        onChange={(e) =>
+                          setStatusFilter1(
+                            e.target.value === 'Support' ?
+                              'Support' :
+                              e.target.value === 'Expanse' ?
+                                'Expanse' :
+                                'All',
+                          )
+                        }
+                        name="Filter"
+                        row
+                      >
+                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
+                        <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
+                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
                       </RadioGroup>
                     </FormControl>
                   </Grid>
@@ -1614,6 +1598,7 @@ const ReconciliationIRO = () => {
       </Dialog>
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
       <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseEdit} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
 
     </CommonPageLayout>
   );

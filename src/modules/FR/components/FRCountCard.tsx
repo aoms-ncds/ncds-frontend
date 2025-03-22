@@ -12,29 +12,30 @@ const FRCountCard = (props: {
   const countCard = (
 
     <Card
-      // onClick={props.onClick}
-      // {...(props.targetRoute && {
-      //   component: StyledLink,
-      //   to: props.targetRoute,
-      // })}
+      onClick={props.onClick}
+      {...(props.targetRoute && {
+        component: StyledLink,
+        to: props.targetRoute,
+      })}
       sx={{
+        'fontSize': '12px',
+        'border': '2px solid #3B32E6',
         'backgroundColor': props.color,
-        'color': 'black',
-        'borderRadius': '15px 0 15px 0', // Rounded corners on top sides only
+        // 'color': 'white',
+        'borderRadius': 3,
         'transition': 'all 0.3s',
-        // 'padding': 4,
-        'border': '2px solid #8833ff', // Adding red border
-        // '&:hover': {
-        //   boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.6)',
-        //   transform: 'translate(0, -2px)',
-        //   cursor: 'pointer',
-        // },
-        // '&:active': {
-        //   boxShadow: 'none !important',
-        //   transform: 'translate(0, 2px)',
-        //   cursor: 'pointer',
-        // },
-        'width': '100%',
+        'padding': 1,
+        'height': 190,
+        '&:hover': {
+          boxShadow: '0 8px 16px 0 rgba(0, 217, 255, 0.6)',
+          transform: 'translate(0, -2px)',
+          cursor: 'pointer',
+        },
+        '&:active': {
+          boxShadow: 'none !important',
+          transform: 'translate(0, 2px)',
+          cursor: 'pointer',
+        },
       }}
     >
       {/* <CardActionArea

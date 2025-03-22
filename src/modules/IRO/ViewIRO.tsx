@@ -320,6 +320,7 @@ const ViewIRO = (props: any) => {
 
   const user = useAuth();
   const [openRemarks, toggleOpenRemarks] = useState(false);
+  const [reasonForRevertToDivision, setReasonForRevertToDivision] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -331,6 +332,7 @@ const ViewIRO = (props: any) => {
   const [rejectDialog, setrejectDialog] = useState(false);
   const [reverDialog, setRevertDialog] = useState(false);
   const [reasonForReject, setReasonForReject] = useState<string | null>('');
+  const [reasonForRevertToDiv, setReasonForRevertToDiv] = useState<string | null>('');
   const [reasonForRevert, setReasonForRevert] = useState<string | null>('');
   const [releaseAmountIROs, setReleaseAmountIROs] = useState<IROrder[]>([]);
   const [newTest, setNewTest] = useState<IROrder[]>([]);
@@ -601,11 +603,16 @@ const ViewIRO = (props: any) => {
                                 <TableCell align="center">Requested Amount</TableCell>
                                 <TableCell align="center">Sanctioned Amount</TableCell>
                                 <TableCell align="center">Sanctioned as per</TableCell>
+                                <TableCell align="center">Application Reference No</TableCell>
+                                {IRO.particulars?.some((e:any) => e.presidentSanctionAmt) && (
+                                  <TableCell align="center">Pres Approved Amt</TableCell>
+                                )}
+
                               </TableRow>
                             </TableHead>
                             <TableBody>
                               {IRO?.particulars &&
-                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
+                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; applicationReferenceNo:any; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
                                   <TableRow key={item._id} >
                                     <TableCell component="th" sx={{ display: 'flex' }}>
                                       <IconButton
@@ -627,6 +634,9 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                     <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                                    <TableCell align="center">{item.applicationReferenceNo}</TableCell>
+                                    {(item as any).presidentSanctionAmt && <TableCell align="center">{(item as any).presidentSanctionAmt}</TableCell> }
+
                                   </TableRow>
                                 ))}
                             </TableBody>
@@ -987,6 +997,14 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           </Select>
                         </FormControl>
                       </Grid>
+                      &nbsp;
+                       &nbsp;
+                      &nbsp;
+                       &nbsp;
+                      {IRO?.reasonForRevertToDivision && (
+                        <> <br /><span style={{ fontWeight: 'bold', color: 'red' }}> Reason For Revert To Division: </span><span style={{ color: 'red' }}>{IRO?.reasonForRevertToDivision ?? 'N/A'}</span></>
+
+                      )}
                       {props.action === 'custom' ?(
                         <><Grid item xs={12} md={6}>
                           <TextField
@@ -1492,11 +1510,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                                       variant="contained"
                                       color="error"
                                       onClick={() => {
-                                        const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
-                                        IROServices.revertToDivision(iroID as string)
-                                                                  .then((res) => {
-                                                                    navigate('/iro/manage');
-                                                                  });
+                                        setReasonForRevertToDivision(true);
                                       }}
                                     >
                                       Revert to division
@@ -1788,6 +1802,55 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
               false;
               setrejectDialog(false);
               navigate('/IRO/office_approve');
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+          >
+                            submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={reasonForRevertToDivision} fullWidth maxWidth="md">
+        <DialogTitle> Reason for revert to division</DialogTitle>
+        <DialogContent>
+          <br />
+          {/* <Autocomplete<string>
+                            options={['Voluntarily Left', 'Retired', 'Dismissed', 'Death', 'Other']}
+                            value={reasonForSentBack}
+                            onChange={(e, selectedReason) => {
+                              setReasonForSentBack(selectedReason);
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
+                            fullWidth
+                          /> */}
+          <TextField
+            id="reasonForReject"
+            placeholder="Reason for revert"
+            multiline
+            value={reasonForRevertToDiv}
+            onChange={(e)=>setReasonForRevertToDiv(e.target?.value)}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setReasonForRevertToDivision(false);
+            }}
+            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+          >
+            <CloseIcon sx={{ color: 'white' }} />
+          </Button>
+
+          <Button
+            variant="contained"
+            disabled={reasonForRevertToDiv==''}
+            onClick={() => {
+              const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
+              IROServices.revertToDivision(iroID as string, reasonForRevertToDiv as string)
+                                        .then((res) => {
+                                          navigate('/iro/manage');
+                                        });
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >

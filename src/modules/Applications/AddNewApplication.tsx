@@ -17,6 +17,12 @@ const AddNewApplication = () => {
     attachment: [],
     createdAt: moment(),
     updatedAt: moment(),
+    applicantName: '',
+    appliedFor: '',
+    approvedDate: moment(),
+    requestedAmount: 0,
+    sanctionedAmount: 0,
+
   });
 
   // const snackbarId = enqueueSnackbar({
@@ -90,9 +96,33 @@ const AddNewApplication = () => {
                     fullWidth required />
                 </Grid>
                 <Grid item md={6}>
+                  <TextField label="Applied For" value={Request.name}
+                    onChange={(e)=>setRequest((prevRequest) => ({
+                      ...prevRequest,
+                      name: e.target.value,
+                    }))}
+                    fullWidth required />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField label="Applicant Name" value={Request.name}
+                    onChange={(e)=>setRequest((prevRequest) => ({
+                      ...prevRequest,
+                      name: e.target.value,
+                    }))}
+                    fullWidth required />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField label="Requested Amount" value={Request.name}
+                    onChange={(e)=>setRequest((prevRequest) => ({
+                      ...prevRequest,
+                      name: e.target.value,
+                    }))}
+                    fullWidth required />
+                </Grid>
+                <Grid item md={6}>
                   <TextField
                     id="outlined-textarea"
-                    label="Reason"
+                    label="Remark"
                     value={Request.reason}
                     onChange={(e)=> setRequest((prevRequest) => ({
                       ...prevRequest,

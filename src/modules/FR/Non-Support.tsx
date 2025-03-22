@@ -40,7 +40,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import TransactionLogDialog from './components/TransactionLogDialog';
 
-const SupportFrPage = () => {
+const NonSupport = () => {
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [frId, setFrId] = useState('');
@@ -154,10 +154,10 @@ const SupportFrPage = () => {
   };
 
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
             .then((res) => {
               console.log(res, 'rr');
-              setFRRequests(res.data);
+              setFRRequests(res.data.filter((e)=>e.childSupport !=true&& e.workerSupport!=true));
             })
             .catch((res) => {
               console.log(res);
@@ -171,10 +171,14 @@ const SupportFrPage = () => {
             });
   }, []);
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
             .then((res) => {
               if (res.data) {
-                setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+                setFRRequests(
+                  res.data
+                    .filter((e) => e.childSupport !== true && e.workerSupport !== true)
+                    .map((fr, index) => ({ ...fr, serialNumber: index + 1 })),
+                );
               }
             })
             .catch((res) => {
@@ -771,7 +775,7 @@ const SupportFrPage = () => {
 
   return (
     <CommonPageLayout
-      title="Support FR"
+      title="Expense FR"
       momentFilter={{
         dateRange: dateRange,
         onChange: (newDateRange) => {
@@ -1273,4 +1277,4 @@ const SupportFrPage = () => {
   );
 };
 
-export default SupportFrPage;
+export default NonSupport;

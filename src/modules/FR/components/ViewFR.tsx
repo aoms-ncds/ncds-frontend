@@ -101,6 +101,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   });
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
+  const [openPresident, setOpenPresident] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
   // console.log(props, 'newParticular');
@@ -130,6 +131,16 @@ const handleClickOpen = (particular: Particular, index: number) => {
   }));
   setSelectedParticularIndex(index);
   setOpen(true);
+  // setNewParticular(particular);
+};
+const handleClickOpenForPresident = (particular: Particular, index: number) => {
+  setNewParticular((prev: any) => ({
+    ...prev,
+    ...particular,
+    // sanctionedAmount: null,
+  }));
+  setOpenPresident(true);
+  setSelectedParticularIndex(index);
   // setNewParticular(particular);
 };
 const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -430,6 +441,10 @@ return (
                       <TableCell align="center">Requested Amount</TableCell>
                       <TableCell align="center">Sanctioned Amount</TableCell>
                       <TableCell align="center"> Sanction As per</TableCell>
+                      <TableCell align="center"> Application Reference No</TableCell>
+                      {props.value.particulars?.some((e) => e.presidentSanctionAmt) && (
+                        <TableCell align="center">Pres Approved Amt</TableCell>
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -451,6 +466,14 @@ return (
                                   </>}
                               />
                               )}
+                              {props.value.status ==FRLifeCycleStates.WAITING_FOR_PRESIDENT && hasPermissions(['PRESIDENT_ACCESS']) && (
+
+                                <Tooltip title="Add President sanction amount">
+                                  <IconButton>
+                                    <AddIcon onClick={() => handleClickOpenForPresident(item, index)} />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
                               <IconButton onClick={() => {
                                 setViewFileUploader(true);
                                 setAttachments(item.attachment);
@@ -468,6 +491,8 @@ return (
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                             <TableCell align="center">{item.sanctionedAmount}</TableCell>
                             <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
+                            {item.presidentSanctionAmt && <TableCell align="center">{item.presidentSanctionAmt}</TableCell> }
                           </TableRow>
                         ))}
                   </TableBody>
@@ -1331,6 +1356,22 @@ return (
               </Grid>
               <Grid item md={12}>
                 <TextField
+                  label="Application Reference No"
+                  value={newParticular.applicationReferenceNo}
+                  multiline
+                  disabled
+                  maxRows={4}
+                  onChange={(e) =>
+                    setNewParticular((particularDetails) => ({
+                      ...particularDetails,
+                      applicationReferenceNo: e.target.value,
+                    }))
+                  }
+                  fullWidth
+                />
+              </Grid>
+              <Grid item md={12}>
+                <TextField
                   label="Narration"
                   value={newParticular.narration}
                   multiline
@@ -1467,6 +1508,82 @@ return (
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
+              Cancel
+          </Button>
+          <Button type="submit">Add</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+    <Dialog
+      open={openPresident}
+      onClose={()=>setOpenPresident(false)}
+      // PaperComponent={PaperComponent}
+      aria-labelledby="draggable-dialog-title"
+      // sx={{ width: '30%', textAlign: 'center' }}
+    >
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.onChange({
+            ...props.value,
+            particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+          });
+          setOpenPresident(false);
+        }}
+
+      >
+
+        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+           President Sanctioned Amount
+        </DialogTitle>
+        <DialogContent>
+
+
+          <Grid item xs={12} md={6} width={'20rem'} padding={1}>
+            <Grid item xs={12} md={6}>
+              {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+              <TextField
+                label="President Sanctioned Amount"
+                type={'number'}
+                // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                value={
+                  newParticular.presidentSanctionAmt}
+                // required
+                // title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                autoComplete='off'
+                // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(e) => {
+                  // if (totalRequestedAmount) {
+                  setNewParticular((amount: any) => ({
+                    ...amount,
+                    presidentSanctionAmt: Number(e.target.value),
+                  }));
+                  // }
+                }
+                }
+                // onFocus={() => setFocused(true)}
+                // onBlur={() => setFocused(false)}
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                inputProps={{
+                  min: 0,
+                  step: 0.01, // Allows up to two decimal places
+                  onWheel: handleWheel,
+                }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+              />
+              {/* </Tooltip> */}
+            </Grid>
+            <br />
+          </Grid>
+
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={()=>setOpenPresident(false)}>
               Cancel
           </Button>
           <Button type="submit">Add</Button>

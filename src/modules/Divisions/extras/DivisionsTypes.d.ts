@@ -40,6 +40,8 @@ declare global {
   }
   interface DivisionDetails {
     name: string;
+    isIT?: boolean;
+
     // _id?: string;
     divisionId: string;
     contactNumber: string;
@@ -114,6 +116,7 @@ declare global {
     _id?: string;
     division?: Division;
     name: string;
+    isIT?: boolean;
     leader?: User;
   }
    interface IDivisionUpdateLog extends Document{

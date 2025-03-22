@@ -4,6 +4,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   CssBaseline,
   Divider,
   Drawer,
@@ -40,7 +41,7 @@ import StaffServices from '../modules/HR/extras/StaffServices';
 import WorkersServices from '../modules/Workers/extras/WorkersServices';
 import DivisionsServices from '../modules/Divisions/extras/DivisionsServices';
 import UserServices from '../modules/User/extras/UserServices';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const drawerWidth = 240;
 
 
@@ -143,6 +144,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
 
   const drawer = (
     <div>
+
       {/* <Toolbar /> */}
       <Grid sx={{ height: 100 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
@@ -227,6 +229,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
 
   return (
     <Box sx={{ display: 'flex' }}>
+
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -247,6 +250,8 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           ...props.appBarSx,
         }}
       >
+        {/* <ArrowBackIcon/> */}
+
         <Toolbar >
           <Typography variant="h6" noWrap component="div" sx={{ padding: '10px', fontSize: '17px', marginRight: '15px' }}>
             {CommonConstants.appName}
@@ -391,40 +396,43 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         }}
       >
         <Toolbar />
-        {props.title && !props.hidePageHeader && (
-          <>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={9}>
-                {/* <Typography variant="h4" color="color.secondary">
-                  {props.title}
-                </Typography> */}
-              </Grid>
-              <Grid item xs={12} md={3} >
-                {props.momentFilter && (
-                  <MomentFilter
-                    dateRange={props.momentFilter.dateRange}
-                    onChange={props.momentFilter.onChange}
-                    rangeTypes={props.momentFilter.rangeTypes}
-                    initialRange={props.momentFilter.initialRange}
-                    sx={{
-                      minHeight: 40,
-                      minWidth: 268,
-                      // width: "100%",
-                      justifyContent: 'flex-end',
-                    }}
-                    min={props.momentFilter.min}
-                    max={props.momentFilter.max}
-                  />
-                )}
-              </Grid>
+        {/* <br />
+        <br /> */}
+        <Grid sx={{ p: 2 }} container spacing={2} alignItems="start" justifyContent="space-between">
+          {/* Left Side: Back Icon + Title */}
+          <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {props.title && !props.hidePageHeader && (
+              <Typography variant="h5" color="text.secondary" sx={{ ml: 1 }}>
+                {props.title}
+              </Typography>
+            )} */}
+          </Grid>
+          {/* Right Side: MomentFilter */}
+          {props.momentFilter && (
+            <Grid item>
+              <MomentFilter
+                dateRange={props.momentFilter.dateRange}
+                onChange={props.momentFilter.onChange}
+                rangeTypes={props.momentFilter.rangeTypes}
+                initialRange={props.momentFilter.initialRange}
+                sx={{
+                  minHeight: 40,
+                  minWidth: 268,
+                  justifyContent: 'flex-end',
+                }}
+                min={props.momentFilter.min}
+                max={props.momentFilter.max}
+              />
             </Grid>
+          )}
 
-            <br />
-            <Divider />
-            <br />
-          </>
+        </Grid>
+        <Button sx={{ backgroundColor: 'orange' }} variant='contained' onClick={() => window.history.back()}><ArrowBackIcon /></Button>
 
-        )}
+        <br />
+        <Divider />
+        <br />
+
         {props.children}
       </Box>
     </Box>

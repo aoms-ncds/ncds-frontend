@@ -51,7 +51,8 @@ import AddIcon from '@mui/icons-material/Add';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import TransactionLogDialog from './TransactionLogDialog';
-
+import moment from 'moment';
+import InfoIcon from '@mui/icons-material/Info';
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();
@@ -137,7 +138,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(particulars, 'newParticular');
+  console.log(newParticular, 'newParticular');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -834,6 +835,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                           { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
                             <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
                           ):[]}
+                          <TableCell align="center">Application Reference No</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -879,8 +881,10 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
-                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                            ):[]}
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                         {addsParticulars.map((item, index) => (
@@ -925,8 +929,10 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
-                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                            ):[]}
+                            <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -1480,7 +1486,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   )}
                   &nbsp;
 
-                  {props.action === 'add' || props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
+                  {props.action === 'add' || props.action === 'multi'|| props.action === 'edit' || props.action === 'custom' || props.action === 'customIRO' ||props.action === 'customEdit' ? (
                     <>
                       {/* Only display buttons if props.action is 'view' */}
                       <PermissionChecks
@@ -1749,7 +1755,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     fullWidth
                   />
                 </Grid>
-                <Grid item md={12}>
+                {/* <Grid item md={12}>
                   <FormControlLabel
                     label="Upcoming Year"
                     control={
@@ -1764,8 +1770,41 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       />
                     }
                   />
+                </Grid> */}
+                <Grid item md={12}>
+                  <DatePicker
+                    views={['year']}
+                    openTo="year"
+                    label="Select Year"
+                    value={newParticular.year ? moment().year(newParticular.year) : null} // Show selected year
+                    onChange={(date: any | null) =>
+                      setNewParticular((prev) => ({
+                        ...prev,
+                        year: date ? date.year() : null, // Extract and store as a number
+                      }))
+                    }
+                  />
+                  <Tooltip title="If not selected, it will display the current year by default.">
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
-
+                <Grid item md={12}>
+                  <TextField
+                    label="Application Reference No"
+                    value={newParticular.applicationReferenceNo}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        applicationReferenceNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Narration"

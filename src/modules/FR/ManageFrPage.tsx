@@ -15,7 +15,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -39,8 +39,13 @@ import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const finder =Number(params.get('id'));
+  console.log(finder, 'oo5');
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [FR, setFR] = useState<FR | null>(null);
   const [searchText, setSearchText] = useState('');
@@ -90,6 +95,7 @@ const ManageFrPage = () => {
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [openPrintFrPrev, setOpenPrintFrPrev] = useState(false);
   const [openPrintFrPrevDelhi, setOpenPrintFrPrevDelhi] = useState(false);
+  const [openLog, setOpenLog] = useState(false);
 
   const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
@@ -109,7 +115,9 @@ const ManageFrPage = () => {
       updatedAt: moment(),
     },
   });
+
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'|null>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -120,6 +128,15 @@ const ManageFrPage = () => {
         console.log(res);
       });
   }, []);
+  useEffect(() => {
+    if (finder === 1) {
+      setStatusFilter([FRLifeCycleStates.FR_APPROVED]);
+    } else if (finder === 2) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_PRESIDENT]);
+    } else if (finder === 3) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]);
+    }
+  }, [finder]); // Runs only when finder changes
 
   console.log(selectedFR, 'statusFilter');
 
@@ -183,7 +200,18 @@ const ManageFrPage = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, [dateRange, statusFilter]);
+  }, [dateRange, statusFilter, statusFilter]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+      .then((res) => {
+        if (res.data) {
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [statusFilter1]);
 
   const columns: GridColDef<FR>[] = [
     {
@@ -503,7 +531,15 @@ const ManageFrPage = () => {
                 },
               ] :
               []),
-
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                setOpenLog(true);
+              },
+            },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
                 {
@@ -968,9 +1004,33 @@ const ManageFrPage = () => {
                           name="Filter"
                           row
                         >
-                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                          <FormControlLabel value="ALL" control={<Radio />} label="All" />
                           <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
                           <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
+
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                    <Grid item >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter1}
+                          onChange={(e) =>
+                            setStatusFilter1(
+                              e.target.value === 'Support' ?
+                                'Support' :
+                                e.target.value === 'Resubmitted' ?
+                                  'Resubmitted' :
+                                  'Expanse',
+                            )
+                          }
+                          name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
                         </RadioGroup>
                       </FormControl>
                     </Grid>
@@ -1444,6 +1504,8 @@ const ManageFrPage = () => {
           </Grid>
         )}
       />
+      {selectedFR&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedFR}/>}
+
     </CommonPageLayout>
   );
 };

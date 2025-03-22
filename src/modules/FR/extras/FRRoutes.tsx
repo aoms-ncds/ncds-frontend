@@ -12,6 +12,8 @@ import SupportFrPage from '../SupportFr';
 import RejectedFr from '../RejectedFr';
 import ReopenedFr from '../ReopenedFr';
 import CustomFR from '../CustomFR';
+import NonSupport from '../Non-Support';
+import Resubmitted from '../Resubmitted';
 
 
 const divisionsPageRoutes: ModuleRoute = {
@@ -80,6 +82,14 @@ const divisionsPageRoutes: ModuleRoute = {
       element: <ClosedFR />,
       private: true,
       requiredAccessRights: ['READ_FR'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Resubmitted FR',
+      path: '/resubmitted',
+      element: <Resubmitted />,
+      private: true,
+      requiredAccessRights: ['MANAGE_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -174,6 +184,14 @@ const divisionsPageRoutes: ModuleRoute = {
       title: 'Support FR',
       path: '/support',
       element: <SupportFrPage/>,
+      private: true,
+      requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
+      icon: <RequestPageOutlinedIcon />,
+    },
+    {
+      title: 'Non Support FR',
+      path: '/Non-support',
+      element: <NonSupport/>,
       private: true,
       requiredAccessRights: ['HR_DPARTMENT_ACCESS'],
       icon: <RequestPageOutlinedIcon />,

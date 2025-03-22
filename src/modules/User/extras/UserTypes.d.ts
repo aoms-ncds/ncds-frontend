@@ -58,6 +58,24 @@ declare global {
     CUSTOM_REPORT: boolean;
     REOPEN_FR_IRO: boolean;
 
+    SETTINGS_SETTINGS_BASE_ACCESS: boolean;
+
+    SETTINGS_MANAGE_LANGUAGES_ACCESS: boolean;
+    SETTINGS_DESIGNATION_ACCESS: boolean;
+    SETTINGS_CHILD_SUPPORT_ACCESS: boolean;
+    SETTINGS_E_SIGN_ACCESS: boolean;
+    SETTINGS_DEPARTMENT_ACCESS: boolean;
+    SETTINGS_CHILD_SUPPORT_AGE_EDIT_ACCESS: boolean;
+    SETTINGS_ADD_GENDER_ACCESS: boolean;
+    SETTINGS_ADD_RELIGION_ACCESS: boolean;
+    SETTINGS_REASON_FOR_DEACTIVATION_ACCESS: boolean;
+    SETTINGS_ADD_SANCTION_ASS_PER_ACCESS: boolean;
+    SETTINGS_PARTICULARS_ACCESS: boolean;
+    SETTINGS_ADD_PAYMENT_METHOD_ACCESS: boolean;
+    SETTINGS_DESIGNATION_CATEGORY_ACCESS: boolean;
+    SETTINGS_LEADER_DETAILS_ACCESS: boolean;
+    SETTINGS_FR_IRO_LOG_ACCESS: boolean;
+    SETTINGS_APPLICATION_ACCESS: boolean;
   }
   type Permission = keyof Omit<IUserPermissions, '_id' | '__v' | 'createdAt' | 'updatedAt'>;
   interface BasicDetails {

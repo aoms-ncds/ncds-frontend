@@ -13,21 +13,13 @@ import PermissionChecks, { hasPermissions } from '../User/components/PermissionC
 import FRReceiptTemplate from './components/FRReceiptTemplate';
 import FRLifeCycleStates from './extras/FRLifeCycleStates';
 import FRServices from './extras/FRServices';
-import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import IROTemplate from '../IRO/components/IROTemplate';
-import DivisionsServices from '../Divisions/extras/DivisionsServices';
-import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
-import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import TransactionLogDialog from './components/TransactionLogDialog';
 
-const ReopenedFr = () => {
+const Resubmitted = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
-  const [id, setID] = useState('');
-  const [openLog, setOpenLog] = useState(false);
-  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
-
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
@@ -36,24 +28,23 @@ const ReopenedFr = () => {
     reasonForReject: '',
     sanctionedAsPer: '',
   });
+  console.log(requisition, 'jfdfhn88');
+  const [openLog, setOpenLog] = useState(false);
 
   const [searchText, setSearchText] = useState('');
-  const [openPrintFr, setOpenPrintFr] = useState(false);
-  const [data, setData] = useState<FR | null>(null);
-  const [data2, setData2] = useState<FR | null>(null);
-
+  const [frID, setFRId] = useState('');
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const [data2, setData2] = useState<FR | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-  const [isCoordinator, setisCoordinator] = useState<any>(false);
-  const [Label, setLeaderHeading] = useState<ILeaderDetails[] | null>(null);
-
-  const [conform1, setConform1] = useState<boolean>(false);
   const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
     _id: '',
     presidentSignature: {
@@ -80,20 +71,6 @@ const ReopenedFr = () => {
       .catch((res) => {
         console.log(res);
       });
-    DivisionsServices.isCoordinator()
-            .then((res) => {
-              setisCoordinator(res.data);
-            })
-            .catch((res) => {
-              console.log(res);
-            });
-    LeaderDetailsService.getAll()
-            .then((res) => {
-              setLeaderHeading(res.data);
-            })
-            .catch((res) => {
-              console.log(res);
-            });
   }, []);
   const filteredRows = (closedFRs ?? []).filter((row) => {
     if ((row.FRno && row.FRno?.toLowerCase().includes(searchText?.toLowerCase())) ||
@@ -148,13 +125,13 @@ const ReopenedFr = () => {
             // {
             //   id: 'print',
             //   text: 'Print FR',
-            //   component: PDFDownloadLink,
-            //   onClick: ()=>{
+            //   onClick: () => {
             //     FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
             //       console.log(res.data, 'daa98');
             //       setData2(res.data);
             //     });
             //   },
+            //   component: PDFDownloadLink,
             //   document: <FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as FR }/>,
             //   fileName: 'FRReceipt.pdf',
             //   icon: PrintIcon,
@@ -174,34 +151,6 @@ const ReopenedFr = () => {
                 }, 2000);
               },
             },
-            ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
-              [
-                {
-                  id: 'print',
-                  text: 'Print FR HQ DELHI',
-                  icon: PrintIcon,
-                  onClick: async () => {
-                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
-
-                    rowData.division?.details&& setData({ ...props.row,
-                      division: {
-                        ...rowData.division,
-                        details: {
-                          ...rowData.division?.details,
-                          seniorLeader: delhiHQ.details.seniorLeader,
-                          juniorLeader: delhiHQ.details.juniorLeader,
-                        },
-                      },
-                    });
-                    setOpenPrintFr(true);
-                    setTimeout(() => {
-                      setOpenPrintFr(false);
-                    }, 2000);
-                  },
-                },
-              ] :
-              []),
             {
               id: 'View',
               text: 'View Details ',
@@ -212,60 +161,59 @@ const ReopenedFr = () => {
               },
               icon: PreviewIcon,
             },
-            ...(hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['MANAGE_FR'])?[
-
+            ...(hasPermissions(['REOPEN_FR_IRO']) ?[
               {
-                id: 'edit',
-                text: 'Edit',
-                // component: Link,
-                // to: `/fr/${props.row._id}/edit`,
-                icon: EditIcon,
-                onClick: () => {
-                  window.open(`/fr/${props.row._id}/edit`, '_blank');
+                id: 'View',
+                text: 'Reopen',
+                component: Link,
+                onClick: async () => {
+                  try {
+                    // Fetch the first API data
+                    const res1 = await FRServices.getById(props.row._id as string);
+                    const convertedData: CreatableFR = {
+                      ...res1.data,
+                      requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
+                    };
+
+                    // Update the state
+                    setRequisition(convertedData);
+                    console.log({ convertedData });
+
+                    // Wait for the state update to complete
+                    await new Promise((resolve) => setTimeout(resolve, 0));
+
+                    // Perform the second API call using the updated requisition
+                    const res2 = await FRServices.manageFRRequests(props.row._id, 'reopened', convertedData);
+                    console.log(res2);
+
+                    // Show success message
+                    enqueueSnackbar({
+                      message: 'FR Reopened',
+                      variant: 'success',
+                    });
+                    window.location.reload();
+                  } catch (error) {
+                    // Handle errors
+                    enqueueSnackbar({
+                      variant: 'error',
+                      // message: err.message,
+                    });
+                  }
                 },
+                icon: PreviewIcon,
               },
+
             ]:[]),
-            ...(isCoordinator ?
-
-              [
-
-                ...(!hasPermissions(['ADMIN_ACCESS']) || !hasPermissions(['MANAGE_FR'])?[
-
-                  {
-                    id: 'edit',
-                    text: 'Edit for coordinator',
-                    // component: Link,
-                    // to: `/fr/${props.row._id}/edit`,
-                    icon: EditIcon,
-                    onClick: () => {
-                      window.open(`/fr/${props.row._id}/editReopen`, '_blank');
-                    },
-                  },
-                ]:[]),
-
-              ]:[]),
-            ...(!isCoordinator ?
-              [
-                {
-                  id: 'View',
-                  text: 'Close Fr ',
-                  component: Link,
-                  onClick: async () => {
-                    setID(props.row._id);
-                    setConform1(true);
-                  },
-                  icon: PreviewIcon,
-                },
-              ]:[]),
             {
               id: 'log',
               text: 'FR Log',
               icon: PreviewIcon,
               onClick: () => {
-                setID(props.row._id);
+                setFRId(props.row._id);
                 setOpenLog(true);
               },
             },
+
           ]}
         />
       ),
@@ -387,25 +335,25 @@ const ReopenedFr = () => {
   ];
 
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED]})
+    FRServices.getAllOptimized({ dateRange: dateRange })
       .then((res) => {
-        setClosedFRs(res.data);
+        setClosedFRs(res.data.filter((e:any)=>e.isReverted ==true));
       })
       .catch((err) => {
         console.log({ err });
       });
   }, [dateRange]);
   useEffect(() => {
-    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, status: [FRLifeCycleStates.REOPENED], support: statusFilter1 })
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1 })
       .then((res) => {
-        setClosedFRs(res.data);
+        setClosedFRs(res.data.filter((e:any)=>e.isReverted ==true));
       })
       .catch((err) => {
         console.log({ err });
       });
   }, [statusFilter1]);
   return (
-    <CommonPageLayout title="Reopened FR" momentFilter={{
+    <CommonPageLayout title="Re submitted" momentFilter={{
       dateRange: dateRange,
       onChange: (newDateRange) => {
         setDateRange(newDateRange);
@@ -543,94 +491,6 @@ const ReopenedFr = () => {
         </Grid>
 
       </Card>
-      <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Warning</DialogTitle>
-        <DialogContent>
-          <Container>
-          Are you sure you want to close this FR ?</Container>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setConform1(false);
-            }}
-            variant="text"
-          >
-            Cancel
-          </Button>
-          <>
-
-            <Button
-              variant="contained"
-              color="info"
-              onClick={async () => {
-                try {
-                  // Fetch the first API data
-                  const res1 = await FRServices.getById(id as string);
-                  const convertedData: CreatableFR = {
-                    ...res1.data,
-                    requestAmount: (res1.data as any)?.requestedAmount, // Fix key access if needed
-                  };
-
-                  // Update the state
-                  setRequisition(convertedData);
-                  console.log({ convertedData });
-
-                  // Wait for the state update to complete
-                  await new Promise((resolve) => setTimeout(resolve, 0));
-
-                  // Perform the second API call using the updated requisition
-                  const res2 = await FRServices.manageFRRequests(id, 'close', convertedData);
-                  console.log(res2);
-
-                  // Show success message
-                  enqueueSnackbar({
-                    message: 'FR Closed',
-                    variant: 'success',
-                  });
-                  window.location.reload();
-                } catch (error) {
-                  // Handle errors
-                  enqueueSnackbar({
-                    variant: 'error',
-                    // message: err.message,
-                  });
-                }
-              }}
-            >
-              {'Yes, Close'}
-            </Button>
-
-          </>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
-        <DialogTitle> Print Fr</DialogTitle>
-        <DialogContent>
-          <Container>
-                  Download the FR Receipt, Delhi for {data?.FRno} <br />
-            {data && (
-              <PDFDownloadLink
-                document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
-                fileName="FRReceiptDelhi.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setData(null);
-            }}
-            variant="text"
-          >
-                  Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
@@ -655,10 +515,10 @@ const ReopenedFr = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {id&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={id}/>}
+      {frID && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frID}/>}
 
     </CommonPageLayout>
   );
 };
 
-export default ReopenedFr;
+export default Resubmitted;

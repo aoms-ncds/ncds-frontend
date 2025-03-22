@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
-import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormControl, Radio, RadioGroup } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
@@ -15,12 +15,16 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import TransactionLogDialog from './components/TransactionLogDialog';
 const RejectedFr = () => {
   const [data2, setData2] = useState<FR | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFRId] = useState('');
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
@@ -145,6 +149,15 @@ const RejectedFr = () => {
                 icon: PreviewIcon,
               },
             ] : []),
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -330,6 +343,15 @@ const RejectedFr = () => {
         console.log({ err });
       });
   }, [dateRange]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, status: [FRLifeCycleStates.REJECTED], support: statusFilter1 })
+      .then((res) => {
+        setClosedFRs(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, [statusFilter1]);
   return (
 
     <CommonPageLayout title="Rejected Fr" momentFilter={{
@@ -343,7 +365,7 @@ const RejectedFr = () => {
     }}>
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2} >
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -356,7 +378,30 @@ const RejectedFr = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid item xs={6} sx={{ px: 2 }}>
+          <Grid item>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={statusFilter1}
+                onChange={(e) =>
+                  setStatusFilter1(
+                    e.target.value === 'Support' ?
+                      'Support' :
+                      e.target.value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  )
+                }
+                name="Filter"
+                row
+              >
+                <FormControlLabel value="All" control={<Radio />} label="All" />
+                <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4} sx={{ px: 0 }}>
             <PermissionChecks
               permissions={['MANAGE_FR']}
               granted={(
@@ -467,6 +512,8 @@ const RejectedFr = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {frId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
+
     </CommonPageLayout>
 
   );

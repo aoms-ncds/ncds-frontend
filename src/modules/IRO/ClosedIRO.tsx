@@ -33,6 +33,7 @@ import FRReceiptTempForDelhiDivision from '../FR/components/FRReceiptTempForHelh
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
 import FRReceiptTemplate from '../FR/components/FRReceiptTemplate';
 import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
+import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 
 const ClosedIRO = () => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -69,6 +70,8 @@ const ClosedIRO = () => {
   const [data2, setData2] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.IRO_CLOSED]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
+  const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -479,6 +482,15 @@ const ClosedIRO = () => {
                 setViewFileUploader(true);
               },
             },
+            {
+              id: 'log',
+              text: 'IRO Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -687,6 +699,15 @@ const ClosedIRO = () => {
         console.log(res);
       });
   }, [dateRange, exstatusFilter, statusFilter]);
+  useEffect(() => {
+    IROServices.getAllOptimizedSuportEx({ dateRange: dateRange, status: statusFilter, Exstatus: exstatusFilter, support: statusFilter1 })
+      .then((res) => {
+        setIROrder(res.data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [dateRange, exstatusFilter, statusFilter1]);
   return (
     <CommonPageLayout title="Closed IRO" momentFilter={
 
@@ -744,7 +765,30 @@ const ClosedIRO = () => {
               </RadioGroup>
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="Filter"
+                value={statusFilter1}
+                onChange={(e) =>
+                  setStatusFilter1(
+                    e.target.value === 'Support' ?
+                      'Support' :
+                      e.target.value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  )
+                }
+                name="Filter"
+                row
+              >
+                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -1112,6 +1156,7 @@ const ClosedIRO = () => {
       />
       <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
       <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseedit} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+      {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
 
     </CommonPageLayout>
   );

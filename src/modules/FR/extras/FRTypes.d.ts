@@ -105,6 +105,9 @@ declare global {
     attachment: FileObject[];
     sanctionedAsPer?:string;
     sanctionedAmount?: number | null;
+    year?: number | null;
+    applicationReferenceNo?: string | null;
+    presidentSanctionAmt?:number;
 
 
   }

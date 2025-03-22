@@ -15,7 +15,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -37,8 +37,13 @@ import ESignatureService from '../Settings/extras/ESignatureService';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
+import TransactionLogDialog from './components/TransactionLogDialog';
 
 const ManageFrForDivision = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const finder =Number(params.get('id'));
+  console.log(finder, 'oo5');
   const [FRRequests, setFRRequests] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [openRemarks, toggleOpenRemarks] = useState(false);
@@ -63,6 +68,7 @@ const ManageFrForDivision = () => {
     date: string | null;
   } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
+  const [openLog, setOpenLog] = useState(false);
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -93,7 +99,9 @@ const ManageFrForDivision = () => {
   });
   const [isCoordinator, setisCoordinator] = useState<any>(false);
 
+
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'| null>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -112,7 +120,15 @@ const ManageFrForDivision = () => {
                   });
   }, []);
   console.log(statusFilter, 'statusFilter');
-
+  useEffect(() => {
+    if (finder === 1|| 0) {
+      setStatusFilter([FRLifeCycleStates.FR_APPROVED]);
+    } else if (finder === 2|| 0) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_PRESIDENT]);
+    } else if (finder === 3) {
+      setStatusFilter([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]);
+    }
+  }, [finder]); // Runs only when finder changes
   const deleteFR = (id: string) => {
     console.log(id, 'log');
 
@@ -145,7 +161,17 @@ const ManageFrForDivision = () => {
         });
       });
   };
-
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
+      .then((res) => {
+        if (res.data) {
+          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
+        }
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  }, [statusFilter1]);
   useEffect(() => {
     FRServices.getAllOptimizedDiv({ dateRange: dateRange, status: statusFilter })
       .then((res) => {
@@ -398,6 +424,15 @@ const ManageFrForDivision = () => {
                 toggleSendNotification(true);
               },
               icon: MessageIcon,
+            },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedFR(props.row._id);
+                setOpenLog(true);
+              },
             },
             ...(hasPermissions(['ADMIN_ACCESS']) ?
               [
@@ -828,6 +863,29 @@ const ManageFrForDivision = () => {
                         </RadioGroup>
                       </FormControl>
                     </Grid>
+                    <Grid item >
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter1}
+                          onChange={(e) =>
+                            setStatusFilter1(
+                              e.target.value === 'Support' ?
+                                'Support' :
+                                e.target.value === 'Resubmitted' ?
+                                  'Resubmitted' :
+                                  'Expanse',
+                            )
+                          } name="Filter"
+                          row
+                        >
+                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
+
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
                   </Grid>
 
                   <Box
@@ -1201,6 +1259,8 @@ const ManageFrForDivision = () => {
           </Grid>
         )}
       />
+      {selectedFR && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedFR}/>}
+
     </CommonPageLayout>
   );
 };

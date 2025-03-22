@@ -93,7 +93,7 @@ const WorkerSupportPage = () => {
   const [purpose, setPurpose] = useState<FRPurpose | null>(null);
   const [modal, setModal] = useState<boolean>(false);
 
-  const [frAction, setFrAction] = useState<'add' | 'view' | null>(null);
+  const [frAction, setFrAction] = useState<'add' | 'view' |'multi' |null>(null);
   const [requisition, setRequisition] = useState<CreatableFR>({
     FRdate: moment(),
     kind: 'FRs',
@@ -159,7 +159,7 @@ const WorkerSupportPage = () => {
       const isUpcomingYear = particulars.some((part) => part.isUpcomingYear);
       const _month = particulars[0]?.month ?? null;
 
-      const month = `${_month} ${isUpcomingYear ? currentYear + 1 : currentYear}`;
+      const month = `${_month} ${particulars[0]?.year?? currentYear}`;
 
       setPdfProps(({
         purpose: purpose ?? 'Division',
@@ -547,8 +547,22 @@ const WorkerSupportPage = () => {
       headerClassName: 'column-header',
       getActions: (params: GridRowParams) =>
         [
-          <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
-          // <GridLinkAction key={2} label="Edit" icon={<EditIcon />} showInMenu to={`/workers/edit/${params.row._id}`} />,
+          <GridLinkAction
+            key={1}
+            label="View"
+            icon={<PreviewIcon />}
+            showInMenu
+            onClick={() => window.open(`/users/worker/${params.row._id}`, '_blank', 'noopener,noreferrer')}
+          />,
+          // <GridLinkAction key={1} label="Edit" icon={<PreviewIcon />} showInMenu to={`/users/worker/${params.row._id}`} />,
+          <GridLinkAction
+            key={2}
+            label="Edit"
+            icon={<PreviewIcon />}
+            showInMenu
+            onClick={() => window.open(`/workers/edit/${params.row._id}`, '_blank', 'noopener,noreferrer')}
+          />,
+
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
@@ -1117,27 +1131,65 @@ const WorkerSupportPage = () => {
       <Card sx={{ width: '40%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
-          setFrAction('add');
-          setRequisition((requisition) => ({
-            ...requisition,
-            purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
-            purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
-            division: division ?? undefined,
-            mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
-            particulars: requisition?.particulars && requisition?.particulars?.length > 0 ? [{
-              _id: '',
-              mainCategory: requisition?.particulars[0]?.mainCategory,
-              subCategory1: requisition?.particulars[0]?.subCategory1,
-              subCategory2: requisition?.particulars[0]?.subCategory2,
-              subCategory3: requisition?.particulars[0]?.subCategory3,
-              month: moment().format('MMMM'),
-              narration: requisition?.particulars[0]?.narration,
-              requestedAmount: total.net,
-              unitPrice: total.net,
-              quantity: supportEnabledWorkers?.length,
-              attachment: [],
-            }] : [],
-          }));
+          if (frAction=='add') {
+            setRequisition((requisition) => ({
+              ...requisition,
+              purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
+              purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
+              division: division ?? undefined,
+              mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
+              particulars: requisition?.particulars && requisition?.particulars?.length > 0 ? [{
+                _id: '',
+                mainCategory: requisition?.particulars[0]?.mainCategory,
+                subCategory1: requisition?.particulars[0]?.subCategory1,
+                subCategory2: requisition?.particulars[0]?.subCategory2,
+                subCategory3: requisition?.particulars[0]?.subCategory3,
+                month: moment().format('MMMM'),
+                narration: requisition?.particulars[0]?.narration,
+                requestedAmount: total.net,
+                unitPrice: total.net,
+                quantity: supportEnabledWorkers?.length,
+                year: requisition?.particulars[0].year,
+                attachment: [],
+              }] : [],
+            }));
+          } else {
+            setRequisition((requisition:any) => ({
+              ...requisition,
+              purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
+              purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
+              division: division ?? undefined,
+              mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
+              particulars: supportEnabledWorkers && supportEnabledWorkers?.length > 0 ?
+                supportEnabledWorkers?.map((worker, index) => ({
+                  _id: '',
+                  mainCategory: requisition?.particulars?.[0]?.mainCategory,
+                  subCategory1: requisition?.particulars?.[0]?.subCategory1,
+                  subCategory2: requisition?.particulars?.[0]?.subCategory2,
+                  subCategory3: requisition?.particulars?.[0]?.subCategory3,
+                  month: moment().format('MMMM'),
+                  narration: requisition?.particulars?.[0]?.narration + worker.basicDetails.firstName + worker.basicDetails.lastName|| '',
+                  requestedAmount: worker?.supportStructure?.supportEnabled ? (worker?.supportStructure?.basic ?? 0) +
+                  (worker?.supportStructure?.HRA ?? 0) +
+                  (worker?.supportStructure?.spouseAllowance ?? 0) +
+                  (worker?.supportStructure?.positionalAllowance ?? 0) +
+                  (worker?.supportStructure?.specialAllowance ?? 0) +
+                  (worker?.supportStructure?.PIONMissionaryFund ?? 0) +
+                  (worker?.supportStructure?.pmaDeduction?.amount ?? 0) +
+                  (worker?.supportStructure?.telAllowance ?? 0) -
+                  (
+                    (worker?.supportStructure?.impactDeduction ?? 0) +
+                    (worker?.supportStructure?.MUTDeduction ?? 0)
+                  ) : 0,
+                  unitPrice: total.total,
+                  quantity: index+1, // Each entry represents one worker
+                  year: requisition?.particulars?.[0]?.year,
+                  attachment: [],
+                  worker: worker, // Add worker reference if needed
+                })) :
+                [],
+            }));
+          }
         }}>
           <CardContent>
             <Grid container spacing={2}>
@@ -1388,8 +1440,28 @@ const WorkerSupportPage = () => {
                         variant="contained"
                         color="info"
                         type='submit'
+                        onClick={() => setFrAction('add')}
                       >
                         Raise FR
+                      </Button>
+
+                    }
+
+                  />
+                  &nbsp;
+                  <PermissionChecks
+                    permissions={['WRITE_FR']}
+                    granted={
+
+                      <Button
+                        sx={{ backgroundColor: 'orange' }}
+                        onClick={() => setFrAction('multi')}
+
+                        variant="contained"
+                        color="info"
+                        type='submit'
+                      >
+                        Raise FR ( Multiple narration )
                       </Button>
 
                     }

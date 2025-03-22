@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
-import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
@@ -15,14 +15,18 @@ import CommonPageLayout from '../../components/CommonPageLayout';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
+import TransactionLogDialog from './components/TransactionLogDialog';
 const SentBack = () => {
   const [closedFRs, setClosedFRs] = useState<FR[] | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [frId, setFRId] = useState('');
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
   const [data2, setData2] = useState<FR | null>(null);
   const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [openLog, setOpenLog] = useState(false);
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
 
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
@@ -145,6 +149,15 @@ const SentBack = () => {
                 icon: PreviewIcon,
               },
             ] : []),
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setFRId(props.row._id);
+                setOpenLog(true);
+              },
+            },
           ]}
         />
       ),
@@ -330,6 +343,15 @@ const SentBack = () => {
         console.log({ err });
       });
   }, [dateRange]);
+  useEffect(() => {
+    FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: [FRLifeCycleStates.FR_SEND_BACK]} )
+      .then((res) => {
+        setClosedFRs(res.data);
+      })
+      .catch((err) => {
+        console.log({ err });
+      });
+  }, [statusFilter1]);
   return (
 
     <CommonPageLayout title="Reverted Fr" momentFilter={{
@@ -343,69 +365,97 @@ const SentBack = () => {
     }}>
       <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2} >
-          <Grid item xs={6}>
-            {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-            <TextField
-              label="Search"
-              variant="outlined"
-              value={searchText}
-              placeholder='Enter FRno or FRDate or Division or SubCategory'
-              onChange={handleSearchChange}
-              fullWidth
-              // style={{ width: '80%' }}
-            />
-            {/* </div> */}
-          </Grid>
-          <Grid item xs={6} sx={{ px: 2 }}>
-            <PermissionChecks
-              permissions={['MANAGE_FR']}
-              granted={(
-                <Button
-                  onClick={async () => {
-                    const sheet =
-              closedFRs ?
-                closedFRs.map((fr:FR) => ([
-                  fr.FRno,
-                  fr.FRdate.format('DD/MM/YYYY'),
-                  fr.division?.details.name,
-                  fr.purposeSubdivision?.name,
-                  fr.mainCategory,
-                  fr.particulars?.reduce(
-                    (total, particular) => total + Number(particular.requestedAmount),
-                    0,
-                  ),
-                  fr.sanctionedAmount,
-                  fr.sanctionedBank,
-                  fr.sanctionedAsPer,
-                  IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
-                ])) :
-                [];
-                    const headers=[
-                      'FR No',
-                      'Date',
-                      'Division',
-                      'Sub Division',
-                      'Main Category',
-                      'Requested Amt',
-                      'Sanctioned Amt',
-                      'Sanctioned Bank',
-                      'Sanctioned As per',
-                      'Status',
-                    ];
-                    const worksheet = XLSX.utils.json_to_sheet(sheet);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                    XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                    XLSX.writeFile(workbook, 'Closed_FR_Report.xlsx', { compression: true });
-                  }}
-                  startIcon={<DownloadIcon />}
-                  color="primary" sx={{ float: 'right', mt: 2, mr: 2 }}
-                  variant="contained"
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item xs={4} p={2}>
+              {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+              <TextField
+                label="Search"
+                variant="outlined"
+                value={searchText}
+                placeholder='Enter FRno or FRDate or Division or SubCategory'
+                onChange={handleSearchChange}
+                fullWidth
+                style={{ padding: 3 }}
+              />
+              {/* </div> */}
+            </Grid>
+            <Grid item>
+              <FormControl>
+                <RadioGroup
+                  aria-labelledby="Filter"
+                  value={statusFilter1}
+                  onChange={(e) =>
+                    setStatusFilter1(
+                      e.target.value === 'Support' ?
+                        'Support' :
+                        e.target.value === 'Expanse' ?
+                          'Expanse' :
+                          'All',
+                    )
+                  }
+                  name="Filter"
+                  row
                 >
-                        Export
-                </Button>
-              )}/>
+                  <FormControlLabel value="All" control={<Radio />} label="All" />
+                  <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                  <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
+            <Grid item sx={{ ml: 'auto' }}>
+              <PermissionChecks
+                permissions={['MANAGE_FR']}
+                granted={
+                  <Button
+                    onClick={async () => {
+                      const sheet = closedFRs ?
+                        closedFRs.map((fr: FR) => [
+                          fr.FRno,
+                          fr.FRdate.format('DD/MM/YYYY'),
+                          fr.division?.details.name,
+                          fr.purposeSubdivision?.name,
+                          fr.mainCategory,
+                          fr.particulars?.reduce(
+                            (total, particular) => total + Number(particular.requestedAmount),
+                            0,
+                          ),
+                          fr.sanctionedAmount,
+                          fr.sanctionedBank,
+                          fr.sanctionedAsPer,
+                          IROLifeCycleStates.getStatusNameByCodeTransaction(fr.status).replaceAll('_', ' '),
+                        ]) :
+                        [];
+                      const headers = [
+                        'FR No',
+                        'Date',
+                        'Division',
+                        'Sub Division',
+                        'Main Category',
+                        'Requested Amt',
+                        'Sanctioned Amt',
+                        'Sanctioned Bank',
+                        'Sanctioned As per',
+                        'Status',
+                      ];
+                      const worksheet = XLSX.utils.json_to_sheet(sheet);
+                      const workbook = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                      XLSX.writeFile(workbook, 'Closed_FR_Report.xlsx', { compression: true });
+                    }}
+                    startIcon={<DownloadIcon />}
+                    color="primary"
+                    sx={{ mt: 1 }}
+                    variant="contained"
+                  >
+          Export
+                  </Button>
+                }
+              />
+            </Grid>
           </Grid>
+
           <Grid item xs={12} >
             <Box
               sx={{
@@ -467,6 +517,8 @@ const SentBack = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {frId && <TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={frId}/>}
+
     </CommonPageLayout>
 
   );

@@ -772,6 +772,7 @@ const EditIRO = () => {
                             <TableCell align="center">Requested Amount</TableCell>
                             <TableCell align="center">Sanctioned Amount</TableCell>
                             <TableCell align="center">Sanctioned as per</TableCell>
+                            <TableCell align="center">Application Reference No</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -816,6 +817,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                 <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                                <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                               </TableRow>
                             ))}
                           {addNewParticulars &&
@@ -860,6 +862,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                                 <TableCell align="center">{item.sanctionedAmount}</TableCell>
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                                <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                               </TableRow>
                             ))}
                         </TableBody>
@@ -1546,6 +1549,21 @@ const EditIRO = () => {
                   />
                 </Grid>
 
+                <Grid item md={12}>
+                  <TextField
+                    label="Application Reference No"
+                    value={newParticular?.applicationReferenceNo}
+                    multiline
+                    maxRows={4}
+                    onChange={(e) =>
+                      setNewParticular((particularDetails) => ({
+                        ...particularDetails,
+                        applicationReferenceNo: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item md={12}>
                   <TextField
                     label="Narration"

@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import ApplicationServices from './extras/ApplicationServices';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
@@ -25,6 +25,8 @@ import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ReasonforDeactivationService from '../Settings/extras/ReasonforDeactivationService';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
+import AppliedForService from '../Settings/extras/AppliedForService';
 
 
 const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' }) => {
@@ -36,6 +38,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
   const [editid, setEditId] = useState<string>();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [statusId, setStatusId] = useState<string>();
+  const [applicationsNames, setApplicationsNames] = useState<any >();
+  const [appliedFor, setAppliedFor] = useState<any >();
+
   const [applicationFormState, setApplicationFormState] = useState<CreatableApplication>({
     applicationCode: '',
     name: '',
@@ -276,7 +281,27 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     ReasonforDeactivationService.getAll().then((res) => {
       setReason(res.data);
     });
-  }, [dateRange]);
+    ApplicationNamesService.getAll()
+    .then((res) => {
+      setApplicationsNames(res.data);
+    })
+    .catch((res) => {
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'error',
+      });
+    });
+    AppliedForService.getAll()
+    .then((res) => {
+      setAppliedFor(res.data);
+    })
+    .catch((res) => {
+      enqueueSnackbar({
+        message: res.message,
+        variant: 'error',
+      });
+    });
+  }, []);
   console.log(applications?.map((e)=>e.createdAt), '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
@@ -526,7 +551,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     },
     {
       field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Reason</b>),
+      headerAlign: 'center', renderHeader: () => (<b>Remark</b>),
       renderCell: (params) => (
         <p style={{
           maxWidth: 250,
@@ -537,6 +562,70 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           WebkitLineClamp: 3,
         }}>
           {params.value}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'appliedFor', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applied For</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.appliedFor}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'applicantName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Applicant Name</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.applicantName}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'requestedAmount', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Requested Amount</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.requestedAmount}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'sanctionedAmount', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.sanctionedAmount?? 'N/A'}
         </p>),
       width: 250,
     },
@@ -554,6 +643,24 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         }}>
           {params.row.createdAt ?
             moment(params.row.createdAt).format('DD/MM/YYYY hh:mm A') :
+            'N/A'}
+        </p>),
+      width: 250,
+    },
+    {
+      field: 'approvedDate', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Approved Date</b>),
+      renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row.approvedDate ?
+            moment(params.row.approvedDate).format('DD/MM/YYYY hh:mm A') :
             'N/A'}
         </p>),
       width: 250,
@@ -617,7 +724,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       valueGetter: (props) => props.row.division?.details?.name || '',
     },
     {
-      field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Remark</b>), renderCell: (props) =>
+      field: 'remark', headerClassName: 'super-app-theme--header', renderHeader: () => (<b>Addn. Remark</b>), renderCell: (props) =>
         <p> {props.row?.remark?? 'N/A'}</p>,
       width: 250, headerAlign: 'center', align: 'center',
     },
@@ -647,6 +754,12 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
     }}>
 
       <Dialog open={showApplicationFormDialog} onClose={() => setShowApplicationFormDialog(false)} PaperProps={{ style: { width: '500px' } }}>
+        {/* <Grid item md={2}>
+
+          <Typography sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+  X
+          </Typography>
+        </Grid> */}
         <form onSubmit={action === 'add' ? AddApplication : EditApplication}>
           <DialogTitle>{action === 'add' ? 'Add Request' : 'Edit Request:'}</DialogTitle>
           <DialogContent>
@@ -654,22 +767,72 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
               <Grid container spacing={2}>
                 <Grid item md={12}>
                   &ensp;
-                  <TextField
-                    label="Name"
-                    value={applicationFormState.name}
-                    onChange={(e) => {
-                      setApplicationFormState(() => ({
-                        ...applicationFormState,
-                        name: e.target.value,
+                  <Autocomplete
+                    disablePortal
+                    id="application-name"
+                    options={applicationsNames} // Array of available application names
+                    getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
+                    value={applicationFormState.name || null} // Ensure value is controlled
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prev) => ({
+                        ...prev,
+                        name: newValue ?? '',
                       }));
                     }}
-                    fullWidth
-                    required
+                    renderInput={(params) => (
+                      <TextField {...params} label="Name" fullWidth required />
+                    )}
                   />
+
                 </Grid>
                 <Grid item md={12}>
+                  <Autocomplete
+                    disablePortal
+                    id="applied-for"
+                    options={appliedFor} // Array of selectable options
+                    getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
+                    value={applicationFormState.appliedFor || null} // Handle empty values
+                    onChange={(_e, newValue) => {
+                      setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        appliedFor: newValue ?? '',
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Applied For" fullWidth required />
+                    )}
+                  />
+
+                </Grid>
+                <Grid item md={12}>
+                  <TextField label="Applicant Name" value={applicationFormState.applicantName}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      applicantName: e.target.value,
+                    }))}
+                    fullWidth />
+                </Grid>
+                <Grid item md={12}>
+                  <TextField type='number' label="Requested Amount" value={applicationFormState.requestedAmount}
+                    onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      ...prevRequest,
+                      requestedAmount: Number(e.target.value),
+                    }))}
+                    fullWidth />
+                </Grid>
+                {action == 'edit' &&(
+                  <Grid item md={12}>
+                    <TextField type='number' label="Sanctioned Amount" value={applicationFormState.sanctionedAmount}
+                      onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        sanctionedAmount: Number(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid>
+                )}
+                <Grid item md={12}>
                   <TextField
-                    label="Reason"
+                    label="Remark"
                     value={applicationFormState.reason}
                     onChange={(e) => {
                       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -688,28 +851,40 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     Attachments
                   </Button>
                 </Grid>
-                <Grid item md={6}>
-                  <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                    ApplicationServices.sentToPresident(applicationFormState)
-                     .then((res) => {
-                       // handleClose();
-                       // closeSnackbar(snackbarId);
-                       setShowApplicationFormDialog(false);
-                       enqueueSnackbar({
-                         message: res.message,
-                         variant: 'success',
-                       });
-                     });
-                  }}>
-                    Sent to president
-                  </Button>
-                </Grid>
+
               </Grid>
             </Container>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button>
-            <Button type="submit">{action === 'add' ? 'Sent to Hr' : 'Edit'}</Button>
+            <Grid item md={6}>
+              <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='' && applicationFormState.reason!='') {
+                  ApplicationServices.sentToPresident(applicationFormState)
+                       .then((res) => {
+                         // handleClose();
+                         window.location.reload();
+                         // closeSnackbar(snackbarId);
+                         setShowApplicationFormDialog(false);
+                         enqueueSnackbar({
+                           message: res.message,
+                           variant: 'success',
+                         });
+                       });
+                } else {
+                  enqueueSnackbar({
+                    message: 'Enter Required Fields',
+                    variant: 'info',
+                  });
+                }
+              }}>
+                    Send to president
+              </Button>
+            </Grid>
+            {/* <Button onClick={() => setShowApplicationFormDialog(false)}>Cancel</Button> */}
+            <Grid item md={6}>
+
+              <Button variant="contained" sx={{ backgroundColor: 'blue' }} type="submit">{action === 'add' ? 'Send to Hr' : 'Edit'}</Button>
+            </Grid>
           </DialogActions>
         </form>
       </Dialog>
@@ -902,7 +1077,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
 
       </Grid>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>Reason</DialogTitle>
+        <DialogTitle>Remark</DialogTitle>
         <DialogContent>
           <br />
           <TextField

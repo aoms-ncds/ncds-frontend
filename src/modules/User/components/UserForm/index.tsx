@@ -101,9 +101,13 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
       _id: (props.value as CreatableIWorker).children.length.toString(),
     });
   };
-  if (props?.options?.tab) {
+  if (props?.options?.tab==3) {
     useEffect(() => {
       setActiveStep(3);
+    }, []);
+  } else if (props?.options?.tab==2) {
+    useEffect(() => {
+      setActiveStep(2);
     }, []);
   }
   const deleteChild = (_index: number) => {
@@ -917,6 +921,21 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
                       setNewChild((newchild: any) => ({
                         ...newchild,
                         emailId: e.target.value,
+                      }))
+                    }
+                    fullWidth
+                    variant={props.options?.textField.variant}
+                    InputLabelProps={{ shrink: true, style: { fontSize: '20px' } }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    label=" Remark :"
+                    value={newChild?.remark}
+                    onChange={(e) =>
+                      setNewChild((newchild: any) => ({
+                        ...newchild,
+                        remark: e.target.value,
                       }))
                     }
                     fullWidth
