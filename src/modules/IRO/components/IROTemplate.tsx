@@ -374,76 +374,113 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   Sanctioned {'\n'} Amt
                 </Text>
               </View>
-              {props.rowData?.particulars && props.rowData?.particulars?.map((item: Particular, index: number) => {
-                totalAmount += item.requestedAmount ?? 0;
-                // totalAmount2 += props.rowData.sanctionedAmount ?? 0;
+              {props.rowData?.particulars &&
+  props.rowData?.particulars?.map((item: Particular, index: number) => {
+    const ROW_PADDING = 10;
+    const FONT_SIZE = 10;
+    const LINE_HEIGHT = 14;
+    const MAX_WIDTH = 80; // Approx. max characters per line based on font-size
+    const MAX_LINES_PER_ROW = 5;
+
+    const calculateRowHeight = (text: string, width: number, fontSize: number) => {
+      if (!text) return 50; // Default minimum height
+
+      const CHAR_WIDTH = fontSize * 0.6; // Rough estimate (depends on font)
+      const CHARS_PER_LINE = Math.floor(width / CHAR_WIDTH);
+      const LINE_HEIGHT = fontSize * 1.2; // Spacing for better readability
+
+      // Estimate how many lines the text will take
+      const totalLines = Math.ceil(text.length / CHARS_PER_LINE);
+
+      return totalLines * LINE_HEIGHT+10; // Add padding
+    };
+
+    // Calculate height based on the longest text field in the row
+    const rowHeight = Math.max(
+      calculateRowHeight(
+        `${item.mainCategory === 'Select' ? '' : item.mainCategory} ${
+          item.subCategory1 === 'Select' ? '' : ' > ' + item.subCategory1
+        } ${item.subCategory2 === 'Select' ? '' : ' > ' + item.subCategory2} ${
+          item.subCategory3 === 'Select' ? '' : ' > ' + item.subCategory3
+        }`,
+        500, // Text container width
+        18, // Font size
+      ),
+      calculateRowHeight(item.narration ?? '', 500, 18),
+      70, // Minimum height to avoid extra compression
+    );
 
 
-                return (<PDFTableRow key={index} style={{ borderBottomColor: 'initial' }} height='116' >
-                  <>
-                    {index % 5 ===0 && <Text break/>}
-                  </>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'12%'}>
-                    {String(index + 1)}
-                  </PDFCell>
+    totalAmount += item.requestedAmount ?? 0;
 
-                  <div style={{ borderRight: 1, height: 116 }}></div>
-                  {/* <PDFCell style={{ textAlign: 'center', fontSize: 10, padding: 5 }} width={'635px'}>
-                    {`${item.mainCategory == 'Select' ? '' : item.mainCategory}${item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1}${item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2}${item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}`}
-                  </PDFCell> */}
-                  <div style={{ borderRight: 1, height: 116 }}></div>
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      height: '116',
-                      width: '650px',
-                      padding: 5,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontWeight: 300,
-                        // width: '32%',
-                        fontSize: 10,
-                        fontFamily: 'CourierPrime', textAlign: 'left', padding: 5,
-                      }}
-                    >
-                      {item.mainCategory == 'Select' ? '' : item.mainCategory} {item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1} {item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2} {item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}
-                    </Text>
-                    <Text
-                      style={{
-                        textAlign: 'left', fontSize: 10, padding: 5,
-                      }}
-                    >
-                      {item.narration}
+    return (
+      <View wrap={false}>
+        <PDFTableRow key={index} style={{ borderBottomColor: 'initial', paddingBottom: 5 }} height={`${rowHeight}px`}>
 
-                    </Text>
-                  </View>
+          <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'12%'}>
+            {String(index+1)}
+          </PDFCell>
 
-                  <div style={{ borderRight: 1, height: 116 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'60%'}>
-                    {String(item?.sanctionedAsPer ?? '')}
-                  </PDFCell>
-                  <div style={{ borderRight: 1, height: 116 }}></div>
+          <div style={{ borderRight: 1, height: rowHeight }}></div>
 
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'13%'}>
-                    {String(item.quantity)}
-                  </PDFCell>
-                  <div style={{ borderRight: 1, height: 116 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
-                    {String(item.requestedAmount)}
-                  </PDFCell>
-                  <div style={{ borderRight: 1, height: 116 }}></div>
-                  <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'32%'}>
-                    {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
-                  </PDFCell>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              height: rowHeight,
+              width: '650px',
+              padding: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: 300,
+                fontSize: FONT_SIZE,
+                fontFamily: 'CourierPrime',
+                textAlign: 'left',
+                padding: 5,
+                flexWrap: 'wrap',
+              }}
+            >
+              {item.mainCategory == 'Select' ? '' : item.mainCategory}{' '}
+              {item.subCategory1 == 'Select' ? '' : ' > ' + item.subCategory1}{' '}
+              {item.subCategory2 == 'Select' ? '' : ' > ' + item.subCategory2}{' '}
+              {item.subCategory3 == 'Select' ? '' : ' > ' + item.subCategory3}
+            </Text>
+            <Text
+              style={{
+                textAlign: 'left',
+                fontSize: FONT_SIZE,
+                padding: 5,
+                flexWrap: 'wrap',
+              }}
+            >
+              {item.narration}
+            </Text>
+          </View>
 
-                  {/* <PDFCell style={{ textAlign: 'cent  er', fontSize: 10 }} width={'100'}>
-                    {item.sanctionedAmount?.toString()}
-                  </PDFCell> */}
-                </PDFTableRow>);
-              })}
+          <div style={{ borderRight: 1, height: rowHeight }}></div>
+          <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'60%'}>
+            {String(item?.sanctionedAsPer ?? '')}
+          </PDFCell>
+          <div style={{ borderRight: 1, height: rowHeight }}></div>
+
+          <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'13%'}>
+            {String(item.quantity)}
+          </PDFCell>
+          <div style={{ borderRight: 1, height: rowHeight }}></div>
+          <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'32%'}>
+            {String(item.requestedAmount)}
+          </PDFCell>
+          <div style={{ borderRight: 1, height: rowHeight }}></div>
+          <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'32%'}>
+            {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
+          </PDFCell>
+        </PDFTableRow>
+      </View>
+    );
+  })}
+
               <PDFTableRow key={props.rowData?.particulars?.length} style={{ borderBottomColor: 'initial' }}>
                 <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'85%'}>
                   Grand Total
@@ -466,184 +503,189 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   <br />{NewTot != 0 ? NewTot : totalAmount2}
                 </PDFCell>
               </PDFTableRow>
-              <PDFTableRow key={props.rowData?.particulars?.length} >
-                <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'30%'}>
+              <View wrap={false}>
+                <PDFTableRow key={props.rowData?.particulars?.length} >
+                  <PDFCell style={{ fontWeight: 500, textAlign: 'left', left: 5, fontSize: 10, fontFamily: 'CourierPrime' }} width={'30%'}>
                   Sanctioned Amount in Words:
-                </PDFCell>
-                <PDFCell width={'20%'} ></PDFCell>
-                {/* <PDFCell width={'100%'} ></PDFCell> */}
-                {/* <PDFCell width={'40%'} ></PDFCell> */}
-                {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
+                  </PDFCell>
+                  <PDFCell width={'20%'} ></PDFCell>
+                  {/* <PDFCell width={'100%'} ></PDFCell> */}
+                  {/* <PDFCell width={'40%'} ></PDFCell> */}
+                  {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div>
                 <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
-                {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
-                <PDFCell style={{ fontWeight: 500, textAlign: 'left', fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
-                  {sanctionedAmountWords}
-                </PDFCell>
-              </PDFTableRow>
+                  {/* <div style={{ borderRight: 1, borderRightColor: '#ffffff', height: 24 }}></div> */}
+                  <PDFCell style={{ fontWeight: 500, textAlign: 'left', fontSize: 11, fontFamily: 'CourierPrime' }} width={'100%'}>
+                    {sanctionedAmountWords}
+                  </PDFCell>
+                </PDFTableRow>
+              </View>
             </View>
           </div>
-          <div >
+          <View wrap={false}>
+            <div >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: 200 }}>
+                  <Text style={{
+                    ...styles.text, marginTop: 10, padding: 5, left: 5,
+                    fontFamily: 'CourierPrime', fontSize: 10,
+                  }} >Balance amount to be adjusted:</Text>
+                </View>
+                <View>
+                </View>
+              </View>
+            </div>
+            <br />
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 200 }}>
                 <Text style={{
-                  ...styles.text, marginTop: 10, padding: 5, left: 5,
+                  ...styles.text, left: 5, padding: 5,
                   fontFamily: 'CourierPrime', fontSize: 10,
-                }} >Balance amount to be adjusted:</Text>
-              </View>
+                }} >Adjusted to IRO No.:</Text></View>
               <View>
               </View>
             </View>
-          </div>
-          <br />
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ width: 200 }}>
-              <Text style={{
-                ...styles.text, left: 5, padding: 5,
-                fontFamily: 'CourierPrime', fontSize: 10,
-              }} >Adjusted to IRO No.:</Text></View>
-            <View>
-            </View>
-          </View>
 
-          <div style={{ marginTop: 5 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-              {props.rowData?.specialsanction == 'Yes' ? (
-                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ marginTop: 5 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                {props.rowData?.specialsanction == 'Yes' ? (
+                  <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <Text style={{
+                      ...styles.text,
+                      textAlign: 'center',
+                      fontSize: 10,
+                      fontWeight: 500,
+                    }}>
+                    E Signature protected.
+                    </Text>
+                    <View style={{
+                      ...styles.box5,
+                      width: 130,
+                      alignItems: 'center',
+                    }}>
+                      <Image
+                        style={{
+                          height: 78,
+                          width: 128,
+                        }}
+                        src={`data:${props.rowData.president?.type ?? props?.president?.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props?.president?.presidentSignature?.base64} `} />
+                    </View>
+                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        textAlign: 'center',
+                        // f
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                      }}>
+                        {(props?.president as any).presidentName?? props.rowData.names?.president}
+
+                        {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
+                      </Text>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                        textAlign: 'center',
+                      }}>
+                      President
+                      </Text>
+                    </View>
+                  </View>) :
+                  <View style={{ width: 300 }} />}<View style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
                   <Text style={{
                     ...styles.text,
                     textAlign: 'center',
                     fontSize: 10,
                     fontWeight: 500,
                   }}>
-                    E Signature protected.
-                  </Text>
-                  <View style={{
-                    ...styles.box5,
-                    width: 130,
-                    alignItems: 'center',
-                  }}>
-                    <Image
-                      style={{
-                        height: 78,
-                        width: 128,
-                      }}
-                      src={`data:${props.rowData.president?.type ?? props?.president?.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props?.president?.presidentSignature?.base64} `} />
-                  </View>
-                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      textAlign: 'center',
-                      // f
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                    }}>
-                      {(props?.president as any).presidentName?? props.rowData.names?.president}
-
-                      {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
-                    </Text>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                      textAlign: 'center',
-                    }}>
-                      President
-                    </Text>
-                  </View>
-                </View>) :
-                <View style={{ width: 300 }} />}<View style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
-                <Text style={{
-                  ...styles.text,
-                  textAlign: 'center',
-                  fontSize: 10,
-                  fontWeight: 500,
-                }}>
                   E Signature protected.
-                </Text>
-                {props.prev != true ? (
+                  </Text>
+                  {props.prev != true ? (
 
-                  <View style={{
-                    ...styles.box5,
-                    width: 130,
-                    alignItems: 'center',
-                  }}>
-                    <Image
-                      style={{
-                        height: 78,
-                        width: 128,
-                      }}
-                      src={`data:${props.rowData?.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
-                    />
-                  </View>
-                ) : (
-                  <View style={{
-                    ...styles.box5,
-                    width: 130,
-                    alignItems: 'center',
-                  }}>
-                    <Image
-                      style={{
-                        height: 78,
-                        width: 128,
-                      }}
-                      src={`data:${props.officeMngrSign?.prevOfficeManagerSignature?.type};base64, ${props.officeMngrSign?.prevOfficeManagerSignature?.base64}`}
-                    />
-                  </View>
+                    <View style={{
+                      ...styles.box5,
+                      width: 130,
+                      alignItems: 'center',
+                    }}>
+                      <Image
+                        style={{
+                          height: 78,
+                          width: 128,
+                        }}
+                        src={`data:${props.rowData?.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
+                      />
+                    </View>
+                  ) : (
+                    <View style={{
+                      ...styles.box5,
+                      width: 130,
+                      alignItems: 'center',
+                    }}>
+                      <Image
+                        style={{
+                          height: 78,
+                          width: 128,
+                        }}
+                        src={`data:${props.officeMngrSign?.prevOfficeManagerSignature?.type};base64, ${props.officeMngrSign?.prevOfficeManagerSignature?.base64}`}
+                      />
+                    </View>
 
-                )}
-                {props.prev != true ? (
-                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      textAlign: 'center',
-                      //
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                    }}>
-                      {props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}                      </Text>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                      textAlign: 'center',
-                    }}>
+                  )}
+                  {props.prev != true ? (
+                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        textAlign: 'center',
+                        //
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                      }}>
+                        {props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}                      </Text>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                        textAlign: 'center',
+                      }}>
                       Office Manager
-                    </Text>
-                  </View>
-                ) : (
+                      </Text>
+                    </View>
+                  ) : (
 
-                  <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      textAlign: 'center',
-                      //
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                    }}>
-                      {props.officeMngrSign?.prevOfficeManagerName}
-                    </Text>
-                    <Text style={{
-                      ...styles.text1,
-                      fontSize: 11,
-                      fontWeight: 500,
-                      fontFamily: 'CourierPrime',
-                      textAlign: 'center',
-                    }}>
+                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        textAlign: 'center',
+                        //
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                      }}>
+                        {props.officeMngrSign?.prevOfficeManagerName}
+                      </Text>
+                      <Text style={{
+                        ...styles.text1,
+                        fontSize: 11,
+                        fontWeight: 500,
+                        fontFamily: 'CourierPrime',
+                        textAlign: 'center',
+                      }}>
                       Office Manager
-                    </Text>
-                  </View>
-                )}
+                      </Text>
+                    </View>
+                  )}
 
+                </View>
               </View>
-            </View>
-          </div>
+            </div>
+          </View>
+          <View style={{ minHeight: 70 }} />
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
