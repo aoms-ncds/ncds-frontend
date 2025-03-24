@@ -523,169 +523,98 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
               </View>
             </View>
           </div>
-          <View wrap={false}>
-            <div >
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: 200 }}>
-                  <Text style={{
-                    ...styles.text, marginTop: 10, padding: 5, left: 5,
-                    fontFamily: 'CourierPrime', fontSize: 10,
-                  }} >Balance amount to be adjusted:</Text>
-                </View>
-                <View>
-                </View>
-              </View>
-            </div>
-            <br />
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ width: 200 }}>
-                <Text style={{
-                  ...styles.text, left: 5, padding: 5,
-                  fontFamily: 'CourierPrime', fontSize: 10,
-                }} >Adjusted to IRO No.:</Text></View>
+          <View wrap={false} style={{ marginTop: 20, minHeight: 100 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              {/* Left Section */}
               <View>
-              </View>
-            </View>
-
-            <div style={{ marginTop: 5 }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                {props.rowData?.specialsanction == 'Yes' ? (
-                  <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                    <Text style={{
-                      ...styles.text,
-                      textAlign: 'center',
-                      fontSize: 10,
-                      fontWeight: 500,
-                    }}>
-                    E Signature protected.
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ width: 200 }}>
+                    <Text
+                      style={{
+                        ...styles.text,
+                        marginTop: 10,
+                        padding: 5,
+                        left: 5,
+                        fontFamily: 'CourierPrime',
+                        fontSize: 10,
+                      }}
+                    >
+            Balance amount to be adjusted:
                     </Text>
-                    <View style={{
-                      ...styles.box5,
-                      width: 130,
-                      alignItems: 'center',
-                    }}>
-                      <Image
-                        style={{
-                          height: 78,
-                          width: 128,
-                        }}
-                        src={`data:${props.rowData.president?.type ?? props?.president?.presidentSignature?.type};base64, ${props.rowData.president?.type ?? props?.president?.presidentSignature?.base64} `} />
-                    </View>
-                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        textAlign: 'center',
-                        // f
-                        fontWeight: 500,
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ width: 200 }}>
+                    <Text
+                      style={{
+                        ...styles.text,
+                        left: 5,
+                        padding: 5,
                         fontFamily: 'CourierPrime',
-                      }}>
-                        {(props?.president as any).presidentName?? props.rowData.names?.president}
+                        fontSize: 10,
+                      }}
+                    >
+            Adjusted to IRO No.:
+                    </Text>
+                  </View>
+                </View>
+              </View>
 
-                        {/* {props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} */}
-                      </Text>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        fontFamily: 'CourierPrime',
-                        textAlign: 'center',
-                      }}>
-                      President
-                      </Text>
-                    </View>
-                  </View>) :
-                  <View style={{ width: 300 }} />}<View style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
-                  <Text style={{
+              {/* Right Section - Signature */}
+              <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <Text
+                  style={{
                     ...styles.text,
                     textAlign: 'center',
                     fontSize: 10,
                     fontWeight: 500,
-                  }}>
-                  E Signature protected.
-                  </Text>
-                  {props.prev != true ? (
-
-                    <View style={{
-                      ...styles.box5,
-                      width: 130,
-                      alignItems: 'center',
-                    }}>
-                      <Image
-                        style={{
-                          height: 78,
-                          width: 128,
-                        }}
-                        src={`data:${props.rowData?.sign?.officeMgr.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
-                      />
-                    </View>
-                  ) : (
-                    <View style={{
-                      ...styles.box5,
-                      width: 130,
-                      alignItems: 'center',
-                    }}>
-                      <Image
-                        style={{
-                          height: 78,
-                          width: 128,
-                        }}
-                        src={`data:${props.officeMngrSign?.prevOfficeManagerSignature?.type};base64, ${props.officeMngrSign?.prevOfficeManagerSignature?.base64}`}
-                      />
-                    </View>
-
-                  )}
-                  {props.prev != true ? (
-                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        textAlign: 'center',
-                        //
-                        fontWeight: 500,
-                        fontFamily: 'CourierPrime',
-                      }}>
-                        {props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}                      </Text>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        fontFamily: 'CourierPrime',
-                        textAlign: 'center',
-                      }}>
-                      Office Manager
-                      </Text>
-                    </View>
-                  ) : (
-
-                    <View style={{ textAlign: 'center', alignItems: 'center' }}>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        textAlign: 'center',
-                        //
-                        fontWeight: 500,
-                        fontFamily: 'CourierPrime',
-                      }}>
-                        {props.officeMngrSign?.prevOfficeManagerName}
-                      </Text>
-                      <Text style={{
-                        ...styles.text1,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        fontFamily: 'CourierPrime',
-                        textAlign: 'center',
-                      }}>
-                      Office Manager
-                      </Text>
-                    </View>
-                  )}
-
+                  }}
+                >
+        E Signature protected.
+                </Text>
+                <View
+                  style={{
+                    ...styles.box5,
+                    width: 130,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      height: 78,
+                      width: 128,
+                    }}
+                    src={`data:${props.rowData?.sign?.officeMgr?.type ?? props.officeMngrSign?.officeManagerSignature?.type};base64, ${props.rowData?.sign?.officeMgr?.base64 ?? props.officeMngrSign?.officeManagerSignature?.base64}`}
+                  />
                 </View>
+                <Text
+                  style={{
+                    ...styles.text1,
+                    fontSize: 11,
+                    textAlign: 'center',
+                    fontWeight: 500,
+                    fontFamily: 'CourierPrime',
+                  }}
+                >
+                  {props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}
+                </Text>
+                <Text
+                  style={{
+                    ...styles.text1,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    fontFamily: 'CourierPrime',
+                    textAlign: 'center',
+                  }}
+                >
+        Office Manager
+                </Text>
               </View>
-            </div>
+            </View>
           </View>
-          <View style={{ minHeight: 70 }} />
+
+
+          <View style={{ minHeight: 10 }} />
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
