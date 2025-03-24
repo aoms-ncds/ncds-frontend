@@ -634,7 +634,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           </View>
 
 
-          <View style={{ minHeight: 70 }} />
+          <View style={{ minHeight: 10 }} />
           <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
