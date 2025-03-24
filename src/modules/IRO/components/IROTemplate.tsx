@@ -544,7 +544,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   ...styles.text, left: 5, padding: 5,
                   fontFamily: 'CourierPrime', fontSize: 10,
                 }}>
-        Adjusted to IRO No.:
+        Adjusted to IRO No:
                 </Text>
               </View>
             </View>
