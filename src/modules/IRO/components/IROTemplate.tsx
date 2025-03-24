@@ -407,13 +407,14 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
         18, // Font size
       ),
       calculateRowHeight(item.narration ?? '', 500, 18),
-      70, // Minimum height to avoid extra compression
+      50, // Minimum height to avoid extra compression
     );
 
 
     totalAmount += item.requestedAmount ?? 0;
 
     return (
+      // eslint-disable-next-line react/jsx-key
       <View wrap={false}>
         <PDFTableRow key={index} style={{ borderBottomColor: 'initial', paddingBottom: 5 }} height={`${rowHeight}px`}>
 
@@ -524,12 +525,12 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
             </View>
           </div>
 
-          <View wrap={false} style={{ marginTop: 20 }}>
+          <View wrap={false} style={{ marginTop: 5 }}>
             {/* Balance amount section */}
             <View style={{ flexDirection: 'row' }}>
               <View style={{ width: 200 }}>
                 <Text style={{
-                  ...styles.text, marginTop: 10, padding: 5, left: 5,
+                  ...styles.text, marginTop: 0, padding: 5, left: 5,
                   fontFamily: 'CourierPrime', fontSize: 10,
                 }}>
         Balance amount to be adjusted:
@@ -550,7 +551,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
             </View>
 
             {/* Signatures Row */}
-            <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-evenly' }}>
               {props.rowData?.specialsanction === 'Yes' && (
                 <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                   <Text style={{
@@ -634,9 +635,9 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           </View>
 
 
-          <View style={{ minHeight: 10 }} />
-          <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }}>
-            <View style={{ flexDirection: 'row' }}>
+          <View style={{ minHeight: 20 }} wrap={false} />
+          <div style={{ marginTop: 'auto', marginBottom: 10, left: 5, position: 'absolute', bottom: 0, width: 560 }} >
+            <View style={{ flexDirection: 'row' }} wrap={false}>
               <Text style={{ ...styles.text, left: 5, fontFamily: 'CourierPrime' }}>Prepared By:</Text>
               <Text style={{ ...styles.text, marginTop: 0, left: 7, marginBottom: 3 }}>
                 {props?.rowData?.approvedBy?.basicDetails?.firstName ?
