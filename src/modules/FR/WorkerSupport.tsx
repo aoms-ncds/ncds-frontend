@@ -1440,7 +1440,11 @@ const WorkerSupportPage = () => {
                         variant="contained"
                         color="info"
                         type='submit'
-                        onClick={() => setFrAction('add')}
+                        onClick={() => {
+                          if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                            setFrAction('add');
+                          }
+                        }}
                       >
                         Raise FR
                       </Button>
@@ -1455,7 +1459,11 @@ const WorkerSupportPage = () => {
 
                       <Button
                         sx={{ backgroundColor: 'orange' }}
-                        onClick={() => setFrAction('multi')}
+                        onClick={() =>{
+                          if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                            setFrAction('multi');
+                          }
+                        } }
 
                         variant="contained"
                         color="info"

@@ -388,6 +388,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       setStatusFilter([IROLifeCycleStates.RECONCILIATION_DONE]);
     } else if (finder === 3) {
       setStatusFilter([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]);
+    } else if (finder === 4) {
+      setStatusFilter([]);
+    } else if (finder === 5) {
+      setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR]);
     }
   }, [finder]);
   const attach = async (blob: Blob) => {
@@ -495,7 +499,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       setNotFound(true);
       setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
     });
-  }, [statusFilter1]);
+  }, [statusFilter1, statusFilter, finder]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
@@ -1484,9 +1488,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         name="Filter"
                         row
                       >
-                        {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
                         <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPANSE" />
+                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
+                        <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
                       </RadioGroup>
                     </FormControl>
                   </Grid>

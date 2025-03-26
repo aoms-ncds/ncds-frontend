@@ -63,14 +63,14 @@ const IRODashboard = () => {
               <><FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
                 style={{ width: '70px', height: '70px' }} />}
               onClick={()=>{
-                navigate('/iro/manage'); // Pass numbers as query string
+                navigate(`/iro/manage?id=${4}`); // Pass numbers as query string
               }}
               count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
             )} />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
             style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()}
           onClick={()=>{
-            navigate('/iro/manage'); // Pass numbers as query string
+            navigate(`/iro/manage?id=${5}`); // Pass numbers as query string
           }} secondaryText={'New Applied'} color="#fff" />
 
         </Grid>

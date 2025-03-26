@@ -906,9 +906,11 @@ const ReconciliationIRO = () => {
                         name="Filter"
                         row
                       >
-                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
+                        {/* <FormControlLabel value="All" control={<Radio />} label="ALL" /> */}
                         <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
                         <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
+                        <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+
                       </RadioGroup>
                     </FormControl>
                   </Grid>

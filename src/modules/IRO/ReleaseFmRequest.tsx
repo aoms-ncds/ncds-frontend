@@ -1463,9 +1463,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                       name="Filter"
                       row
                     >
-                      <FormControlLabel value="All" control={<Radio />} label="All" />
+                      {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
                       <FormControlLabel value="Support" control={<Radio />} label="Support" />
                       <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+
                     </RadioGroup>
                   </FormControl>
                 </Grid>

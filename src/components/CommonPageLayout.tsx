@@ -427,7 +427,16 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )}
 
         </Grid>
-        <Button sx={{ backgroundColor: 'orange' }} variant='contained' onClick={() => window.history.back()}><ArrowBackIcon /></Button>
+        <Button
+          sx={{
+            backgroundColor: 'orange',
+            display: { xs: 'block', sm: 'none' }, // Show only on mobile (xs), hide on larger screens (sm and up)
+          }}
+          variant='contained'
+          onClick={() => window.history.back()}
+        >
+          <ArrowBackIcon />
+        </Button>
 
         <br />
         <Divider />

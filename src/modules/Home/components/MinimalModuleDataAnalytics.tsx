@@ -60,14 +60,14 @@ const MinimalModuleDataAnalytics = () => {
         setErrors((errors) => [...errors, error.message]);
         setSubDivisionsCount('Unable to load!');
       });
-    // DivisionsServices.getSubDivisionsCountIt()
-    //   .then((res) => {
-    //     setSubDivisionsCountit(res.data.toString());
-    //   })
-    //   .catch((error) => {
-    //     setErrors((errors) => [...errors, error.message]);
-    //     setSubDivisionsCountit('Unable to load!');
-    //   });
+    DivisionsServices.getSubDivisionsCountIt()
+      .then((res) => {
+        setSubDivisionsCountit(res.data.toString());
+      })
+      .catch((error) => {
+        setErrors((errors) => [...errors, error.message]);
+        setSubDivisionsCountit('Unable to load!');
+      });
 
     // Get staffs count
     StaffServices.getCount()
@@ -159,7 +159,7 @@ const MinimalModuleDataAnalytics = () => {
               <Grid item xs={6} md={3} xl={4}>
                 <DashBoardCard
                   secondaryText='Other Divisions'
-                  count={divisionsCount?.toString()}
+                  count={((Number(divisionsCount) || 0) - (Number(divisionsCountit) || 0)).toString()}
                   // dot={'.'}
                   color={'#fff'}
                   targetRoute="/divisions/"
@@ -173,7 +173,7 @@ const MinimalModuleDataAnalytics = () => {
                   icon={<img src="/mod_icons/sub_division.png" alt="Logo"
                     style={{ width: '70px', height: '70px' }} />}
                   // dot={'.'}
-                  count={subDivisionsCount?.toString()}
+                  count={((Number(subDivisionsCount) || 0) - (Number(subDivisionsCountit) || 0)).toString()}
                   color={'#fff'} targetRoute="/divisions/" />
 
               </Grid></> :

@@ -418,6 +418,23 @@ const EditIRO = () => {
   const deleteParticular = (particularId: string | undefined, index: number) => {
     // if (!particularId) {
     // Delete by index if the particularId is not available
+    if (particularId) {
+      FRServices.deleteParticulars(particularId)
+            .then((res) => {
+              enqueueSnackbar({
+                message: res.message,
+                variant: 'success',
+              });
+              // window.location.reload();
+            })
+            .catch((err) => {
+              console.log(err);
+              enqueueSnackbar({
+                message: err.message,
+                variant: 'error',
+              });
+            });
+    }
     const updatedParticulars = IRO.particulars.filter((_item, i) => i !== index);
     console.log(updatedParticulars, 'updatedParticulars');
     IRO.particulars = updatedParticulars;

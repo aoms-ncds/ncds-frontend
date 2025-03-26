@@ -945,10 +945,11 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
                       <FormControlLabel value="Support" control={<Radio />} label="Support" />
                       <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sx={{ float: 'right' }}>
                   <Button
                     onClick={async () => {
                       const sheet =
@@ -992,7 +993,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', { compression: true });
                     }}
                     startIcon={<DownloadIcon />}
-                    color="primary" sx={{ float: 'right', mr: 2, mt: 2 }}
+                    color="primary" sx={{ float: 'right' }}
                     variant="contained"
                   >
                     Export

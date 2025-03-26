@@ -78,6 +78,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [eSignSrLeader, seteSignSrLeader] = useState(false);
   const [eSignPresident, setePresident] = useState(false);
   const [openLog, setOpenLog] = useState(false);
+  const [paymnetMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
 
   const [particulars, setParticulars] = useState<Particular[]>([]);
   const [addsParticulars, setAddParticulars] = useState<Particular[]>([]);
@@ -119,6 +120,11 @@ const FRForm = (props: FormComponentProps<any>) => {
     setShowAddParticularDialog(false);
     ('add');
   };
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethods(res.data);
+    });
+  }, []);
   const handleCloses = () => {
     setOpen(false);
   };
@@ -832,7 +838,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                           <TableCell align="center">Quantity</TableCell>
                           <TableCell align="center">For the Month of</TableCell>
                           <TableCell align="center">Requested Amount</TableCell>
-                          { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                          { props.value.status == FRLifeCycleStates.REOPENED|| props.value.status == FRLifeCycleStates.FR_CLOSED|| props.value.status == FRLifeCycleStates.FR_APPROVED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
                             <><TableCell align="center">Sanctioned Amount</TableCell><TableCell align="center"> Sanction As per</TableCell></>
                           ):[]}
                           <TableCell align="center">Application Reference No</TableCell>
@@ -855,7 +861,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                  {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
+                                  {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED||props.value.status== FRLifeCycleStates.FR_APPROVED||props.value.status== FRLifeCycleStates.FR_CLOSED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
                                     <Tooltip title="Add Sanction as per">
                                       <IconButton>
                                         <AddIcon onClick={() => handleClickOpen(item, index)} />
@@ -881,7 +887,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
+                            { props.value.status == FRLifeCycleStates.REOPENED||props.value.status == FRLifeCycleStates.FR_APPROVED||props.value.status == FRLifeCycleStates.FR_CLOSED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
                               <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
                             ):[]}
                             <TableCell align="center">{item.applicationReferenceNo}</TableCell>
@@ -903,7 +909,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                                   <IconButton>
                                     <EditIcon onClick={() => editParticular2(item, index)} />
                                   </IconButton>
-                                  {hasPermissions(['MANAGE_FR']) &&props.value.status== FRLifeCycleStates.REOPENED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
+                                  {hasPermissions(['MANAGE_FR']) ||props.value.status == FRLifeCycleStates.REOPENED|| props.value.status == FRLifeCycleStates.FR_APPROVED||props.value.status == FRLifeCycleStates.FR_CLOSED|| props.action=='customIRO'|| props.action=='custom'|| props.action =='customEdit' ? (
                                     <Tooltip title="Add Sanction as per">
                                       <IconButton>
                                         <AddIcon onClick={() => handleClickOpen(item, index)} />
@@ -1025,7 +1031,167 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     </Grid></>
 
                   ):[]}
+                  {props.value.status == FRLifeCycleStates.FR_APPROVED||props.value.status == FRLifeCycleStates.FR_CLOSED ?(
 
+                    <Grid item xs={12} md={6}>
+                      <FormControl fullWidth required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}>
+                        <InputLabel id="sanctioned_bank">Sanctioned Bank</InputLabel>
+                        <Select
+                          labelId="sanctioned_bank"
+                          label="Sanctioned Bank"
+                          value={props.value.sanctionedBank || ''}
+                          // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+
+                          required
+                          onChange={(e) =>
+                            props.onChange({
+                              ...props.value,
+                              sanctionedBank: e.target.value,
+                            })
+                          }
+
+                        >
+                          <MenuItem value={props.value.sanctionedBank}>{props.value.sanctionedBank}</MenuItem>
+                          {props.value.division?.DivisionBankFCRA?.bankName !='' || props.value.division?.FCRABankDetails?.bankName!='' ? (
+                            <MenuItem value={`FCRA-${props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}`}>
+    Division Bank FCRA - {props.value.division?.DivisionBankFCRA?.beneficiary || props.value.division?.FCRABankDetails?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.DivisionBankLocal?.bankName || props.value.division?.localBankDetails?.bankName ? (
+                            <MenuItem value={`Local Bank-${props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}`}>
+    Division Bank Local - {props.value.division?.DivisionBankLocal?.beneficiary || props.value.division?.localBankDetails?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank1?.bankName || props.value.division?.otherBankDetails?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 1-${props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}`}>
+    Beneficiary Bank 1 - {props.value.division?.BeneficiaryBank1?.beneficiary || props.value.division?.otherBankDetails?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank2?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 2-${props.value.division?.BeneficiaryBank2?.beneficiary}`}>
+    Beneficiary Bank 2 - {props.value.division?.BeneficiaryBank2?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank3?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 3-${props.value.division?.BeneficiaryBank3?.beneficiary}`}>
+    Beneficiary Bank 3 - {props.value.division?.BeneficiaryBank3?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank4?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 4-${props.value.division?.BeneficiaryBank4?.beneficiary}`}>
+    Beneficiary Bank 4 - {props.value.division?.BeneficiaryBank4?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank5?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 5-${props.value.division?.BeneficiaryBank5?.beneficiary}`}>
+    Beneficiary Bank 5 - {props.value.division?.BeneficiaryBank5?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank6?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 6-${props.value.division?.BeneficiaryBank6?.beneficiary}`}>
+    Beneficiary Bank 6 - {props.value.division?.BeneficiaryBank6?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank7?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 7-${props.value.division?.BeneficiaryBank7?.beneficiary}`}>
+    Beneficiary Bank 7 - {props.value.division?.BeneficiaryBank7?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank8?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 8-${props.value.division?.BeneficiaryBank8?.beneficiary}`}>
+    Beneficiary Bank 8 - {props.value.division?.BeneficiaryBank8?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank9?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 9-${props.value.division?.BeneficiaryBank9?.beneficiary}`}>
+    Beneficiary Bank 9 - {props.value.division?.BeneficiaryBank9?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+
+                          {props.value.division?.BeneficiaryBank10?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 10-${props.value.division?.BeneficiaryBank10?.beneficiary}`}>
+    Beneficiary Bank 10 - {props.value.division?.BeneficiaryBank10?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank10?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 11-${props.value.division?.BeneficiaryBank11?.beneficiary}`}>
+    Beneficiary Bank 11 - {props.value.division?.BeneficiaryBank11?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank12?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 12-${props.value.division?.BeneficiaryBank12?.beneficiary}`}>
+    Beneficiary Bank 12 - {props.value.division?.BeneficiaryBank12?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank13?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 13-${props.value.division?.BeneficiaryBank13?.beneficiary}`}>
+    Beneficiary Bank 13 - {props.value.division?.BeneficiaryBank13?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank14?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 14-${props.value.division?.BeneficiaryBank14?.beneficiary}`}>
+    Beneficiary Bank 14 - {props.value.division?.BeneficiaryBank14?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank15?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 15-${props.value.division?.BeneficiaryBank15?.beneficiary}`}>
+    Beneficiary Bank 15 - {props.value.division?.BeneficiaryBank15?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank16?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 16-${props.value.division?.BeneficiaryBank16?.beneficiary}`}>
+    Beneficiary Bank 16 - {props.value.division?.BeneficiaryBank16?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank17?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 17-${props.value.division?.BeneficiaryBank17?.beneficiary}`}>
+    Beneficiary Bank 17 - {props.value.division?.BeneficiaryBank17?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank18?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 18-${props.value.division?.BeneficiaryBank18?.beneficiary}`}>
+    Beneficiary Bank 18- {props.value.division?.BeneficiaryBank18?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank19?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 19-${props.value.division?.BeneficiaryBank19?.beneficiary}`}>
+    Beneficiary Bank 19 - {props.value.division?.BeneficiaryBank19?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {props.value.division?.BeneficiaryBank20?.bankName ? (
+                            <MenuItem value={`Beneficiary Bank 20-${props.value.division?.BeneficiaryBank20?.beneficiary}`}>
+    Beneficiary Bank 20 - {props.value.division?.BeneficiaryBank20?.beneficiary}
+                            </MenuItem>
+                          ) : ''}
+                          {paymnetMethods.map((e) => (
+                            <MenuItem key={e._id} value={e.paymentMethod}>{e.paymentMethod}</MenuItem>
+                          ))}
+
+
+                          {/* <MenuItem value={'Beneficiary Bank 3'}>Beneficiary Bank 3 - {divisions?.BeneficiaryBank3?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 4'}>Beneficiary Bank 4 - {divisions?.BeneficiaryBank4?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 5'}>Beneficiary Bank 5 - {divisions?.BeneficiaryBank5?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 6'}>Beneficiary Bank 6 - {divisions?.BeneficiaryBank6?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 7'}>Beneficiary Bank 7 - {divisions?.BeneficiaryBank7?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 8'}>Beneficiary Bank 8 - {divisions?.BeneficiaryBank8?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 9'}>Beneficiary Bank 9 - {divisions?.BeneficiaryBank9?.beneficiary}</MenuItem>
+                        <MenuItem value={'Beneficiary Bank 10'}>Beneficiary Bank 10 - {divisions?.BeneficiaryBank10?.beneficiary}</MenuItem> */}
+
+                          {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  ):[]}
                   {props.action == 'customIRO' ?(
 
                     <><Grid item xs={12} md={12}>
@@ -1140,31 +1306,33 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       </span>
                     </Grid>
                   ):[]}
+                  {props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS &&(
 
-                  <Grid item xs={12} md={6}>
-                    <FormControl fullWidth>
-                      {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
-                      <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
-                      <Select
-                        labelId="sourceOfAccount"
-                        label="sourceOfAccount"
-                        disabled={props.actionAdi == 'view'}
+                    <Grid item xs={12} md={6}>
+                      <FormControl fullWidth>
+                        {/* <InputLabel shrink={true} id="sourceOfAccount">Source Of Account</InputLabel> */}
+                        <InputLabel id="sourceOfAccount" shrink={true}>Source Of Account</InputLabel>
+                        <Select
+                          labelId="sourceOfAccount"
+                          label="sourceOfAccount"
+                          disabled={props.actionAdi == 'view'}
 
-                        // disabled={props.action !== 'customEdit'}
-                        // disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
-                        value={props.value?.sourceOfAccount ?? null}
-                        onChange={(e) => props.onChange({
-                          ...props.value,
-                          sourceOfAccount: String(e.target.value),
-                        })}
-                      >
+                          // disabled={props.action !== 'customEdit'}
+                          // disabled={!hasPermissions(['ADMIN_ACCESS']) && !hasPermissions(['OFFICE_MNGR_ACCESS'])}
+                          value={props.value?.sourceOfAccount ?? null}
+                          onChange={(e) => props.onChange({
+                            ...props.value,
+                            sourceOfAccount: String(e.target.value),
+                          })}
+                        >
 
-                        <MenuItem value={'FCRA'}>FCRA</MenuItem>
-                        <MenuItem value={'Local'}>Local</MenuItem>
-                        {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
-                      </Select>
-                    </FormControl>
-                  </Grid>
+                          <MenuItem value={'FCRA'}>FCRA</MenuItem>
+                          <MenuItem value={'Local'}>Local</MenuItem>
+                          {/* <MenuItem value={"Widowed"}>Widowed</MenuItem> */}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
                   {props.action =='custom' ||props.action === 'customEdit' ?(
 
                     <Grid item xs={12} md={6}>

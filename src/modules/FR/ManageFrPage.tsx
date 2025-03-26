@@ -117,7 +117,7 @@ const ManageFrPage = () => {
   });
 
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'|null>(null); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'|null| 'All'>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -211,7 +211,7 @@ const ManageFrPage = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, [statusFilter1]);
+  }, [statusFilter1, finder]);
 
   const columns: GridColDef<FR>[] = [
     {
@@ -1005,7 +1005,7 @@ const ManageFrPage = () => {
                           row
                         >
                           <FormControlLabel value="ALL" control={<Radio />} label="All" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="Waiting for Accounts" />
+                          <FormControlLabel sx={{ m: 2 }} value="WFA" control={<Radio />} label="Waiting for Accounts" />
                           <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
 
                         </RadioGroup>
@@ -1022,15 +1022,18 @@ const ManageFrPage = () => {
                                 'Support' :
                                 e.target.value === 'Resubmitted' ?
                                   'Resubmitted' :
-                                  'Expanse',
+                                  e.target.value === 'All' ?
+                                    'All': 'Expanse',
                             )
                           }
                           name="Filter"
                           row
                         >
-                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
                           <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
+                          <FormControlLabel sx={{ m: 2 }} value="Support" control={<Radio />} label="Support" />
+                          <FormControlLabel sx={{ m: 2 }} value="Expanse" control={<Radio />} label="Expense" />
+                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+
                         </RadioGroup>
                       </FormControl>
                     </Grid>
