@@ -12,15 +12,27 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import CloseIcon from '@mui/icons-material/Close';
 import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
-
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import SanctionLetter from './components/authLatter';
+const dataaa = {
+  approvalDate: '2025-03-27',
+  coordinatorName: 'Jessen S. Philip',
+  division: { name: 'Meerut Division' }, // Ensure you handle objects correctly
+  purpose: '4 Wheel Vehicle',
+  amount: '₹10,000.00',
+  validity: '10/05/2025',
+  remarks: 'Funds must be utilized as per policy guidelines.',
+};
 const ApplicationApprovalPage = () => {
   const { applicationID } = useParams();
   const navigate = useNavigate();
   const [reasonForDeactivation, setReasonForDeactivation] = useState<IReason | null | string>();
   const [reasonDialog, setReasonDialog] = useState(false);
   const [applications, setApplications] = useState<Application >();
-  const [applicationsNames, setApplicationsNames] = useState<any >();
+  const [applicationsNames, setApplicationsNames] = useState<any >(null);
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState<Application| null>();
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   useEffect(() => {
     if (!applicationID) {
@@ -106,6 +118,35 @@ const ApplicationApprovalPage = () => {
                 onChange={(e) => setApplications(applications ? { ...applications, sanctionedAmount: Number(e.target.value) } : applications)}
               />
             </Box>
+            &nbsp;
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body1" component="h2" align="left">
+                <span style={{ fontWeight: 800 }}> Enter Validity: </span>
+              </Typography>
+              <TextField
+                sx={{ pl: 7 }}
+                variant="outlined"
+                size="small"
+                disabled={applications?.status != String(ApplicationLifeCycleStates.SENT_TO_PRESIDENT)}
+                value={applications?.validityDate ?? ''}
+                onChange={(e) => setApplications(applications ? { ...applications, validityDate: String(e.target.value) } : applications)}
+              />
+            </Box>
+            &nbsp;
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body1" component="h2" align="left">
+                <span style={{ fontWeight: 800 }}>President Remarks: </span>
+              </Typography>
+              <TextField
+                sx={{ pl: 1 }}
+
+                variant="outlined"
+                size="small"
+                disabled={applications?.status != String(ApplicationLifeCycleStates.SENT_TO_PRESIDENT)}
+                value={applications?.presidentRemark ?? ''}
+                onChange={(e) => setApplications(applications ? { ...applications, presidentRemark: String(e.target.value) } : applications)}
+              />
+            </Box>
             {/* )} */}
 
             <br/>
@@ -120,6 +161,20 @@ const ApplicationApprovalPage = () => {
             <br/>
             <Typography variant="h5" component="h2" align='left'>
                  &nbsp;
+              {applications?.presidentSanction && (
+
+                <Button component="span" variant="contained" onClick={()=>{
+                  setData(applications as any);
+                  setOpenPrintFr(true);
+                  setTimeout(() => {
+                    setOpenPrintFr(false);
+                  }, 2000);
+                }}>
+
+              Print Auth Letter
+                </Button>
+              )}
+              &nbsp;
               <Button component="span" variant="outlined" onClick={()=>setOpen(true)}>
 
                   View File
@@ -292,7 +347,33 @@ const ApplicationApprovalPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Sanction Letter</DialogTitle>
+        <DialogContent>
+          <Container>
+                  Download the SanctionLetter <br />
+            {data && (
+              <PDFDownloadLink
+                document={<SanctionLetter data={data} />}
+                fileName="SanctionLetter.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => (loading || openPrintFr ? '....' : 'SanctionLetter.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData(null);
+            }}
+            variant="text"
+          >
+                  Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CommonPageLayout>
   );
 };

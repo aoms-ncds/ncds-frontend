@@ -18,6 +18,12 @@ declare global {
   requestedAmount?:number;
   sanctionedAmount?:number;
   approvedDate?:Moment;
+   validityDate?:string;
+    presidentRemark?:string;
+    coordinatorName?:string;
+    presidentName?:string;
+    presidentSignature?: FileObject;
+    letterNumber?:string;
   }
   type CreatableApplication = Creatable<Application>;
 

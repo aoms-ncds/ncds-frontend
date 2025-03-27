@@ -302,7 +302,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       });
     });
   }, []);
-  console.log(applications?.map((e)=>e.createdAt), '787');
+  console.log(applicationFormState, '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -546,6 +546,34 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       headerAlign: 'center', renderHeader: () => (<b>Application No</b>), width: 150,
     },
     {
+      field: 'divisionName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Division Name</b>), renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.division?.details?.name}
+        </p>), width: 150,
+    },
+    {
+      field: 'coorName', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>Coordinator Name</b>), renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {(params.row as any)?.coordinatorName?.basicDetails?.firstName} {(params.row as any)?.coordinatorName?.basicDetails?.lastName}
+        </p>), width: 150,
+    },
+    {
       field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150,
     },
@@ -628,6 +656,20 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           {params.row?.sanctionedAmount?? 'N/A'}
         </p>),
       width: 250,
+    },
+    {
+      field: 'President Remarks', align: 'center', headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', renderHeader: () => (<b>President Remarks</b>), renderCell: (params) => (
+        <p style={{
+          maxWidth: 250,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+        }}>
+          {params.row?.presidentRemark}
+        </p>), width: 150,
     },
     {
       field: 'createdAt', align: 'center', headerClassName: 'super-app-theme--header',
@@ -820,16 +862,31 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     }))}
                     fullWidth />
                 </Grid>
-                {action == 'edit' &&(
-                  <Grid item md={12}>
+                {action == 'edit' && applicationFormState.presidentSanction&&(
+                  <><Grid item md={12}>
                     <TextField type='number' label="Sanctioned Amount" value={applicationFormState.sanctionedAmount}
-                      onChange={(e)=>setApplicationFormState((prevRequest) => ({
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
                         ...prevRequest,
                         sanctionedAmount: Number(e.target.value),
                       }))}
                       fullWidth />
-                  </Grid>
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="Enter Validity" value={applicationFormState.validityDate}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        validityDate: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid><Grid item md={12}>
+                    <TextField type='text' label="President Remarks" value={applicationFormState.presidentRemark}
+                      onChange={(e) => setApplicationFormState((prevRequest) => ({
+                        ...prevRequest,
+                        presidentRemark: String(e.target.value),
+                      }))}
+                      fullWidth />
+                  </Grid></>
                 )}
+
                 <Grid item md={12}>
                   <TextField
                     label="Remark"
