@@ -98,6 +98,7 @@ const ChildeSupportPage = () => {
   const [requisition2, setRequisition2] = useState<FR | null>(null);
   const [frAction, setFrAction] = useState<'add' | 'view' | null>(null);
   const [subDivision, setSubDivision] = useState<SubDivision | null>(null);
+  console.log(requisition2?.FRno, 'requisition2');
 
   const addFR = async (requisition: CreatableFR) => {
     console.log('fn FUc');
@@ -690,9 +691,22 @@ const ChildeSupportPage = () => {
                     if (newVal) {
                       const coordinator: any = newVal.details?.coordinator?.name;
                       setCoordinator(coordinator);
-                      setChildList(() => allChild?.filter((child: any) =>
-                        child.division?._id == newVal?._id &&
-                        child.childOf?._id != coordinator?._id && child.childSupport?.amount != 0 && child.childOf?.supportDetails?.designation?.name != 'Officiating Co-Ordinator') ?? []);
+                      setChildList(() =>
+                        allChild?.filter((child: any) => {
+                          const lastDivisionHistory =
+                            child.childOf?.officialDetails?.divisionHistory?.[
+                              child.childOf?.officialDetails?.divisionHistory?.length - 1
+                            ];
+
+                          return (
+                            child.division?._id === newVal?._id &&
+                            !lastDivisionHistory?.subDivision?.name && // Exclude children with a sub-division
+                            child.childOf?._id !== coordinator?._id &&
+                            child.childSupport?.amount !== 0 &&
+                            child.childOf?.supportDetails?.designation?.name !== 'Officiating Co-Ordinator'
+                          );
+                        }) ?? [],
+                      );
 
 
                       setDivision(newVal);
@@ -881,7 +895,7 @@ const ChildeSupportPage = () => {
                 <div style={{ float: 'left' }}>
                   {(selectedWorker || division) && (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList} />}
+                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList} />}
                       fileName="ChildeSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}
                     >
@@ -1068,7 +1082,7 @@ const ChildeSupportPage = () => {
           <Container>FR created. Do you want to add attachment &nbsp;
             {pdfProps &&
               <PDFDownloadLink
-                document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled==true)}/>}
+                document={<ChildePDFTemplate month={getMonth() ?? null} total={total}frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled==true)}/>}
 
                 fileName="ChildSupport.pdf"
                 style={{ color: 'blue' }}
@@ -1078,7 +1092,7 @@ const ChildeSupportPage = () => {
               </PDFDownloadLink>}
               &nbsp; and &nbsp;
             <PDFDownloadLink
-              document={<ChildeSupportSignSheet
+              document={<ChildeSupportSignSheet frNo={requisition2?.FRno?? ''}
                 month={getMonth()} total={total} data={childList.filter((e)=>e.supportEnabled ==true)} subDiv={subDivision||null}
               />} fileName="ChildrenSignatureSheet.pdf"
               style={{ color: 'blue' }}
@@ -1101,13 +1115,13 @@ const ChildeSupportPage = () => {
               <>
                 <PDFDownloadLink
                   document={<ChildeSupportSignSheet
-                    month={getMonth() ?? null} total={total} data={childList}
+                    month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} data={childList.filter((e)=>e.supportEnabled ==true)}
                   />} fileName="ChildSignatureSheet.pdf"
                   style={{ color: 'blue' }}
                 >
                   {({ blob: signBlob, loading: loading1 }) => (
                     <PDFDownloadLink
-                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList}/>}
+                      document={<ChildePDFTemplate frNo={requisition2?.FRno?? ''} month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled ==true)}/>}
 
                       fileName="ChildSupport.pdf"
                       style={{ textDecoration: 'none', color: 'blue' }}

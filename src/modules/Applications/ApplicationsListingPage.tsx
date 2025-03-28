@@ -808,44 +808,44 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             <Container>
               <Grid container spacing={2}>
                 <Grid item md={12}>
-                  &ensp;
+  &ensp;
                   <Autocomplete
                     disablePortal
                     id="application-name"
                     options={applicationsNames} // Array of available application names
                     getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
-                    value={applicationFormState.name || null} // Ensure value is controlled
+                    value={applicationsNames?.find((app: { name: string }) => app.name === applicationFormState.name) || null}
                     onChange={(_e, newValue) => {
                       setApplicationFormState((prev) => ({
                         ...prev,
-                        name: newValue ?? '',
+                        name: newValue ? newValue.name : '', // Preserve appliedFor
                       }));
                     }}
                     renderInput={(params) => (
                       <TextField {...params} label="Name" fullWidth required />
                     )}
                   />
-
                 </Grid>
+
                 <Grid item md={12}>
                   <Autocomplete
                     disablePortal
                     id="applied-for"
                     options={appliedFor} // Array of selectable options
                     getOptionLabel={(option) => (option as any).name || ''} // Ensure labels are strings
-                    value={applicationFormState.appliedFor || null} // Handle empty values
+                    value={appliedFor?.find((option: { name: string | undefined }) => option.name === applicationFormState.appliedFor) || null}
                     onChange={(_e, newValue) => {
                       setApplicationFormState((prevRequest) => ({
                         ...prevRequest,
-                        appliedFor: newValue ?? '',
+                        appliedFor: newValue ? newValue.name : '', // Preserve name
                       }));
                     }}
                     renderInput={(params) => (
                       <TextField {...params} label="Applied For" fullWidth required />
                     )}
                   />
-
                 </Grid>
+
                 <Grid item md={12}>
                   <TextField label="Applicant Name" value={applicationFormState.applicantName}
                     onChange={(e)=>setApplicationFormState((prevRequest) => ({

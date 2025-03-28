@@ -45,6 +45,13 @@ const styles = StyleSheet.create({
     left: 790,
     color: 'black',
   },
+  FRNO: {
+    marginTop: 85,
+    fontSize: 10,
+    position: 'absolute',
+    left: 825,
+    color: 'black',
+  },
   heading: {
     position: 'absolute',
     left: '800',
@@ -108,12 +115,12 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; month: string | null; total:number;
+const ChildePDFTemplate = (props:{frNo:string; divisionId:string|null;data:Child[]|null; month: string | null; total:number;
 }) => {
   const [workers, setWorkers] = useState<Child[] | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [purpose, setPurpose] = useState('Division');
-  console.log(props.data, '√poprosp');
+  console.log(props, '√poprosp');
 
   // console.log(props.total, 'prop.ttt');
   // console.log(workers, 'pop');
@@ -149,9 +156,11 @@ const ChildePDFTemplate = (props:{divisionId:string|null;data:Child[]|null; mont
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Educational Assistance ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
+            {`IET Child Educational Assistance ${div?.[0]}`}  - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.month}`}</Text>
+          <Text style={styles.FRNO}>{(props as any)?.frNo}</Text>
+
           {/* <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
         <View style={styles.line} />

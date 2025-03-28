@@ -76,16 +76,6 @@ const styles = StyleSheet.create({
     height: 70,
     left: 20,
   },
-  tableRow2: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    borderBottomStyle: 'solid',
-    alignItems: 'center',
-    height: 130,
-    left: 20,
-  },
   tableRow1: {
     display: 'flex',
     flexDirection: 'row',
@@ -105,20 +95,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
+  tableHeadName: {
+    flex: 1,
+    fontSize: 5,
+    padding: 1,
+    width: 20,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  FRNO: {
+    marginTop: 95,
+    fontSize: 10,
+    position: 'absolute',
+    left: 400,
+    color: 'black',
+  },
   tableHeadCopy: {
     flex: 1,
     fontSize: 12,
     padding: 2,
+    width: 50,
+    // marginRight: 10,
+    right: 20,
+
     // textAlign: 'justify',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
     // paddingLeft: '60vh',
   },
   tableCell: {
-    flex: 1,
+    flex: 2,
     fontSize: 14,
     padding: 2,
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  },
+  tableCellNew: {
+    flex: 2,
+    fontSize: 14,
+    padding: 0,
+    // right: 20,
+    textAlign: 'left',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
@@ -129,44 +148,28 @@ const styles = StyleSheet.create({
   },
   cellGrid: {
     borderRight: 1,
-    height: 130,
+    height: 70,
   },
 });
 
 // Create Document Component
-const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:string | null; subDiv?:any | null}) => {
+const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number; month:string | null; subDiv?:any | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const rowsPerPage = 3;
-  const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage)-5;
+  const rowsPerPage = 6;
+  const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
-
-  const groupedData = props.data?.reduce((acc: any, child: any) => {
-    const parentId = child.childOf?._id; // Assuming 'id' is unique for each parent
-    if (!acc[parentId]) {
-      acc[parentId] = [];
-    }
-    acc[parentId].push(child);
-    return acc;
-  }, {});
-  const groupedArray = Object.values(groupedData);
-  console.log(groupedArray, 'groupedArray');
-
-  const getRowsForPage = (page: any) => {
-    const start = page * rowsPerPage;
-    return groupedArray.slice(start, start + rowsPerPage);
-  };
   // Function to get rows for a specific page
-  // const getRowsForPage = (page:any) => {
-  //   const start = page * rowsPerPage;
-  //   return props?.data?.slice(start, start + rowsPerPage);
-  // };
+  const getRowsForPage = (page:any) => {
+    const start = page * rowsPerPage;
+    return props?.data?.slice(start, start + rowsPerPage);
+  };
 
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
   const div= props?.data?.map((e:any)=>e.division?.details?.name);
-  console.log(props.subDiv, 'pop');
+  console.log(props, 'pop');
   useEffect(() => {
     let tot = 0;
     props.data?.map((i) => {
@@ -181,9 +184,10 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Education Assistance- ${div?.[0]}`}  {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name? '/' :''} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[0]?.subDivision?.name}
+            {`IET Child Education Assistance- ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}
           </Text>
           <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`}</Text>
+          <Text style={styles.FRNO}>{(props as any)?.frNo}</Text>
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
@@ -196,16 +200,15 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}>Child Code</Text>
                 <div style={styles.headGrid}></div>
-                <Text style={styles.tableHead}>Child Name</Text>
+                <Text style={styles.tableHeadName}></Text>
+                <Text style={styles.tableHeadCopy}>Child Name</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}>Child Of</Text>
                 <div style={styles.headGrid}></div>
-                <Text style={styles.tableHead}>Division</Text>
-                <div style={styles.headGrid}></div>
-                {props.subDiv &&(
+                {/* {props.subDiv &&(
 
                   <><Text style={styles.tableHead}>Sub Division</Text><div style={styles.headGrid}></div></>
-                )}
+                )} */}
                 <Text style={styles.tableHead}>Net Amount</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}></Text>
@@ -215,68 +218,37 @@ const ChildeSupportSignSheet = (props:{data:Child[]|null; total:number; month:st
               </View>
 
 
-              {getRowsForPage(pageIndex).map((group: any, index: any) => {
+              {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
                 const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
                 return (
-                  <View style={styles.tableRow2} key={group[0]._id}>
+                  <View style={styles.tableRow} key={row._id}>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{globalIndex}</Text>
                     <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.childCode}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.firstName}</Text>
+                    <Text style={styles.tableCellNew}>{row.lastName}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row?.childOf?.basicDetails?.firstName} {row?.childOf?.basicDetails?.lastName}</Text>
+                    {/* <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.division?.details?.name ?? ''}</Text> */}
+                    {/* {props.subDiv &&(
+
+                      <><div style={styles.cellGrid}></div><Text style={styles.tableCell}>{row.childOf?.officialDetails?.divisionHistory[row?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}</Text></>
+                    )} */}
+
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}>{row.childSupport?.amount !== 0 ? row.childSupport?.amount : ''}</Text>
+                    <div style={styles.cellGrid}></div>
+                    <Text style={styles.tableCell}></Text>
                     {/* <div style={styles.cellGrid}></div> */}
-                    <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode} style={{ marginBottom: 8 }}>
-                          {child.childCode}{'\n'}
-                        </Text>
-                      ))}
-                    </Text>
-                    <div style={styles.cellGrid}></div>
-                    {/* Child Names */}
-                    <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode} style={{ marginBottom: 8 }}>
-                          {child.firstName} {child.lastName}{'\n'}
-                        </Text>
-                      ))}
-                    </Text>
-
-                    <div style={styles.cellGrid}></div>
-
-                    {/* Parent Name */}
-                    <Text style={styles.tableCell}>
-                      {group[0]?.childOf?.basicDetails?.firstName}{' '}
-                      {group[0]?.childOf?.basicDetails?.lastName}
-                    </Text>
-                    {'\n'}
-
-                    <div style={styles.cellGrid}></div>
-
-                    {/* Division */}
-                    <Text style={styles.tableCell}>{group[0].division?.details?.name ?? ''}</Text>
-
-                    <div style={styles.cellGrid}></div>
-
-                    {/* Child Support Amount */}
-                    <Text style={styles.tableCell}>
-                      {group.map((child: any) => (
-                        <Text key={child.childCode}>
-                          {child.childSupport?.amount !== 0 ? child.childSupport?.amount : ''}
-                          {'\n'}
-                          <br />
-                          {/* {'\n'} */}
-                        </Text>
-                      ))}
-                    </Text>
-                    <div style={styles.cellGrid}></div>
-
-                    <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                     <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                     <div style={styles.cellGrid}></div>
-
                   </View>
                 );
               })}
-              {pageIndex === totalPages -1 && (
+              {pageIndex === totalPages - 1 && (
                 <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
                   <div style={styles.headGrid}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
