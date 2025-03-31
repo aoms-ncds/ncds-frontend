@@ -40,6 +40,7 @@ import FileUploaderServices from '../../components/FileUploader/extras/FileUploa
 import FRReceiptTemplatePrev from './components/FRReceiptTemplatePrev';
 import FRReceiptTempForHelhiDevisionPrev from './components/FRReceiptTempForHelhiDevisionPrev';
 import TransactionLogDialog from './components/TransactionLogDialog';
+import SanctionLetter from './components/authLatter';
 
 const ManageFrPage = () => {
   const location = useLocation();
@@ -56,6 +57,7 @@ const ManageFrPage = () => {
   const [data2, setData2] = useState<FR | null>(null);
   const [data4, setData4] = useState<FR | null>(null);
   const [data5, setData5] = useState<FR | null>(null);
+  const [data6, setData6] = useState<FR | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: moment().startOf('M'),
     endDate: moment().endOf('M'),
@@ -340,6 +342,25 @@ const ManageFrPage = () => {
                 }, 2000);
               },
             },
+            ...(props.row.specialsanction =='Yes' ?
+              [
+
+                {
+                  id: 'print',
+                  text: 'Print FR Auth letter',
+                  icon: PrintIcon,
+                  onClick: () => {
+                    FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                      console.log(res.data, 'daa98');
+                      setData6(res.data);
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ]:[]),
             ...(hasPermissions(['DELHI_DIVISION_ACCESS']) ?
               [
                 {
@@ -1450,6 +1471,33 @@ const ManageFrPage = () => {
                   variant="text"
                 >
                   Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={Boolean(data6)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Fr</DialogTitle>
+              <DialogContent>
+                <Container>
+                              Download the FR Auth Letter for {data6?.FRno} <br />
+                  {data6 && (
+                    <PDFDownloadLink
+                      document={<SanctionLetter data={data6 as any}/>}
+                      fileName="AuthLetter.pdf"
+                      style={{ color: 'blue' }}
+                    >
+                      {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData6(null);
+                  }}
+                  variant="text"
+                >
+                              Cancel
                 </Button>
               </DialogActions>
             </Dialog>
