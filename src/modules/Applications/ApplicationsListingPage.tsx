@@ -821,7 +821,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         name: newValue ? newValue.name : '', // Preserve appliedFor
                       }));
                     }}
+                   
                     renderInput={(params) => (
+
                       <TextField {...params} label="Name" fullWidth required />
                     )}
                   />
@@ -852,6 +854,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       ...prevRequest,
                       applicantName: e.target.value,
                     }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth />
                 </Grid>
                 <Grid item md={12}>
@@ -860,6 +865,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       ...prevRequest,
                       requestedAmount: Number(e.target.value),
                     }))}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth />
                 </Grid>
                 {action == 'edit' && applicationFormState.presidentSanction&&(
@@ -869,6 +877,9 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                         ...prevRequest,
                         sanctionedAmount: Number(e.target.value),
                       }))}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       fullWidth />
                   </Grid><Grid item md={12}>
                     <TextField type='text' label="Enter Validity" value={applicationFormState.validityDate}
@@ -1066,6 +1077,13 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                       onClick={() => {
                         setShowApplicationFormDialog(true);
                         setAction('add');
+                        setApplicationFormState({
+                          applicationCode: '',
+                          name: '',
+                          reason: '',
+                          status: '',
+                          attachment: [],
+                        });
                       }}
                     >
                       Add new

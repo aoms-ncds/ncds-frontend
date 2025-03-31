@@ -231,7 +231,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   console.log(props.action, 'propd');
 
   const addParticulars = () => {
-    // setParticularDialog('add');
+    setParticularDialog('add');
     handleClose();
     let newParticulars: Particular[];
     let newParticulars1: Particular[];
@@ -284,7 +284,7 @@ const FRForm = (props: FormComponentProps<any>) => {
 
 
         // setParticulars([]);
-
+        setSelectedParticularIndex(null);
         console.log(particulars, 'newParticulars1');
       }
     }
