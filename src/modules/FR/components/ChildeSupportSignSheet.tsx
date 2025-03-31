@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     marginTop: 90,
     fontSize: 12,
     position: 'absolute',
-    left: 365,
+    left: 389,
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
@@ -93,14 +93,20 @@ const styles = StyleSheet.create({
   c4: { width: '25%', textAlign: 'center' },
   c5: { width: '10%', textAlign: 'center' },
   c6: { width: '20%', textAlign: 'center' },
-  tableCell: {
+  tableCellHead: {
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'Oswald',
     paddingVertical: 5,
+	color: 'darkblue',
     borderBottomWidth: 1,
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
+  },
+   tableCell: {
+    fontSize: 12,
+    fontFamily: 'Oswald',
+    paddingVertical: 5
   },
   tableCellBottom: {
     fontSize: 14,
@@ -108,12 +114,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
     flex: 1,
-	height:40,
+	height:30,
     flexWrap: 'wrap',
     paddingVertical: 5,
-    borderBottomWidth: 1, // Default bottom border for all cells
-    borderBottomColor: '#000',
-    borderBottomStyle: 'solid',
   },
 
   withBorder: {
@@ -121,18 +124,22 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
   },
-
+  withBorderBottom: {
+    borderBottomWidth: 1, // Border for last row of the group
+    borderBottomColor: '#000',
+    borderBottomStyle: 'solid',
+	backgroundColor: '#bdbdbd'
+  },
   noBottomBorder: {
     borderBottomWidth: 0, // Remove border for "Child Of" & "Signature" in all rows except last
   },
-
+  nill: {
+  },
   noBottomBorderForGroup: {
     borderBottomWidth: 0, // Remove bottom border from entire row unless it's the last one
   },
 
   childOfColumn: {
-    fontWeight: 'bold',
-    backgroundColor: '#F5F5F5', // Light gray background (optional)
   },
   cellGrid: {
     borderRightWidth: 1,
@@ -208,22 +215,22 @@ const groupByParent = (data: any[]) => {
             <View style={styles.line} />
 			<View style={styles.tableRow}>
 				<View style={styles.cellGrid} />
-				<Text style={[styles.tableCell,styles.c1]}>Sl No.</Text>
+				<Text style={[styles.tableCellHead,styles.c1]}>Sl No.</Text>
 				<View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCell,styles.c2]}>Child Code</Text>
+				<Text style={[styles.tableCellHead,styles.c2]}>Child Code</Text>
 				<View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCell,styles.c3]}>Child Name</Text>
+				<Text style={[styles.tableCellHead,styles.c3]}>Child Name</Text>
 				<View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCell,styles.c4]}>Child Of</Text>
+				<Text style={[styles.tableCellHead,styles.c4]}>Child Of</Text>
 				<View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCell,styles.c5]}>Net Amount</Text>
+				<Text style={[styles.tableCellHead,styles.c5]}>Net Amount</Text>
 				<View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCell,styles.c6]}>Signature</Text>
+				<Text style={[styles.tableCellHead,styles.c6]}>Signature</Text>
 				<View style={styles.cellGrid} />
 		    </View>
 
@@ -246,11 +253,11 @@ getRowsForPage()?.map((group, groupIndex) =>
         wrap={false}
       >
 	  <div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c1 ]}>{serialNumber ++}</Text>
+        <Text style={[styles.tableCell,styles.c1,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{serialNumber ++}</Text>
 		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c2 ]}>{row.childCode}</Text>
+        <Text style={[styles.tableCell,styles.c2,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.childCode}</Text>
 		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c3 ]}>{row.firstName} {row.lastName}</Text>
+        <Text style={[styles.tableCell,styles.c3,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.firstName} {row.lastName}</Text>
 		<div style={styles.cellGrid}></div>
         {/* Child Of Column - Border Only in Last Row of Group */}
         {isFirstInGroup ? (
@@ -258,23 +265,23 @@ getRowsForPage()?.map((group, groupIndex) =>
             style={[
               styles.tableCell,styles.c4,
               styles.childOfColumn,
-              isLastInGroup ? styles.withBorder : styles.noBottomBorder,
+              isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
             ]}
           >
             {row.childOf?.basicDetails?.firstName} {row.childOf?.basicDetails?.lastName}
           </Text>
         ) : (
-          <Text style={[styles.tableCell,styles.c4, styles.childOfColumn, styles.noBottomBorder]}></Text>
+          <Text style={[styles.tableCell,styles.c4, styles.childOfColumn]}></Text>
         )}
 		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c5 ]}>{row.childSupport?.amount ?? ''}</Text>
+        <Text style={[styles.tableCell,styles.c5,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.childSupport?.amount ?? ''}</Text>
 
         {/* Signature Column - Border Only in Last Row of Group */}
 		<div style={styles.cellGrid}></div>
         <Text
           style={[
             styles.tableCell,styles.c6,
-            isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
+            isLastInGroup ? styles.nill : styles.noBottomBorder,
           ]}
         ></Text>
 		<div style={styles.cellGrid}></div>
@@ -282,45 +289,37 @@ getRowsForPage()?.map((group, groupIndex) =>
     );
   })
 )}
-  <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 50 }} key={1} wrap={false}>
-  <div style={styles.cellGrid}></div>
-  
-  <Text style={[styles.tableCellBottom,  { fontWeight: 'bold' }]}></Text>
-  <div style={{ ...styles.cellGrid, borderColor: '#bdbdbd' }}></div>
-  
-  <Text style={[styles.tableCellBottom,  { fontWeight: 'bold' }]}></Text>
-  <div style={{ ...styles.cellGrid, borderColor: '#bdbdbd' }}></div>
-
-  <Text style={[styles.tableCellBottom,  { fontWeight: 'bold' }]}></Text>
-  <div style={{ ...styles.cellGrid, borderColor: '#bdbdbd' }}></div>
-
-  <Text style={[styles.tableCellBottom,  { fontWeight: 'bold' }]}></Text>
-  <div style={{ ...styles.cellGrid, borderColor: '#bdbdbd' }}></div>
-
-  <Text style={[
+  <View style={[styles.tableRow,styles.withBorderBottom]} key={1000} wrap={false}>
+    <View style={styles.cellGrid} />
+	<Text style={[styles.tableCellBottom,styles.c1]}></Text>
+	<Text style={[styles.tableCellBottom,styles.c2]}></Text>
+	<Text style={[styles.tableCellBottom,styles.c3]}></Text>
+	<Text style={[
     styles.tableCellBottom,
     
     {
-      flex: 2,
+	  padding: 0,
+	  width: '35%',
       fontSize: 14,
-      padding: 2,
       textAlign: 'center',
       fontWeight: 'bold',
+	  color: 'black',
       fontFamily: 'Oswald',
     }
   ]}>
     Total Net Amount
   </Text>
   
-  <div style={{ ...styles.cellGrid }}></div>
-  
-  <Text style={[
+	<View style={styles.cellGrid} />
+	
+	<Text style={[
     styles.tableCellBottom,
     
     {
-      flex: 2,
+	  padding: 0,
+	  width: '20%',
       fontSize: 16,
-      padding: 2,
+	  color: 'black',
       textAlign: 'center',
       fontFamily: 'Oswald',
 	  fontWeight: 'ultrabold'
@@ -329,11 +328,8 @@ getRowsForPage()?.map((group, groupIndex) =>
     {Number.isNaN(total) ? 0 : total}
   </Text>
   
-  <div style={{ ...styles.cellGrid, borderColor: '#bdbdbd' }}></div>
+	<View style={styles.cellGrid} />
   
-  <Text style={[styles.tableCellBottom,  { fontWeight: 'bold' }]}></Text>
-  
-  <div style={styles.cellGrid}></div>
 </View>
 
              
