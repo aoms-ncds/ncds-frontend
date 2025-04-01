@@ -551,9 +551,10 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
             </View>
 
             {/* Signatures Row */}
-            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+
+            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'space-evenly', right: 10 }}>
               {props.rowData?.specialsanction === 'Yes' && (
-                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'column', alignItems: 'center', right: 60 }}>
                   <Text style={{
                     ...styles.text,
                     textAlign: 'center',
@@ -593,19 +594,20 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </View>
               )}
 
-              <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'column', alignItems: 'flex-end', left: 90 }}>
                 <Text style={{
                   ...styles.text,
-                  textAlign: 'center',
+                  textAlign: 'left',
                   fontSize: 10,
                   fontWeight: 500,
+                  right: 15,
                 }}>
         E Signature protected.
                 </Text>
                 <View style={{
                   ...styles.box5,
                   width: 130,
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                 }}>
                   <Image
                     style={{ height: 78, width: 128 }}
@@ -617,6 +619,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   fontSize: 11,
                   textAlign: 'center',
                   fontWeight: 500,
+                  right: 14,
+
                   fontFamily: 'CourierPrime',
                 }}>
                   {props.prev ? props.officeMngrSign?.prevOfficeManagerName : props.rowData.names?.officeMgr ?? props.officeMngrSign?.officeManagerName}
@@ -627,6 +631,8 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   fontWeight: 500,
                   fontFamily: 'CourierPrime',
                   textAlign: 'center',
+                  right: 22,
+
                 }}>
         Office Manager
                 </Text>
