@@ -369,7 +369,7 @@ const PDFTemplate = (props: {
             {`WORKER SUPPORT- UPDATION DETAILS OF ${purpose}`}
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.FrMonth}`}</Text>
-          <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text>
+          <Text style={styles.frno}>{`IRO No: ${props.FrNo}`}</Text>
         </div>
         <View style={styles.line} />
         <View style={styles.tableContainer} >
