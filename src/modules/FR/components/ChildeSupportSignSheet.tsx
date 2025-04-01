@@ -199,11 +199,15 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Education Assistance- ${div?.[0]}`} - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}
+            {`IET Child Education Assistance - ${div?.[0]}`} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+              '- ' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+              ''}
+
           </Text>
           <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`}</Text>
-          <Text style={styles.IRONo}>{(props as any)?.frNo}</Text>
-          {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
+          <Text style={styles.IRONo}>
+            {'IRO' + (props as any)?.frNo?.slice(4)}
+          </Text>         {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
 
