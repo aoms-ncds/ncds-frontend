@@ -131,7 +131,7 @@ const IROReconciliationPdf = (props: {
   const [purpose, setPurpose] = useState('Division');
   const rowsPerPage = 6;
   const totalPages = Math.ceil((workers ?? []).length / rowsPerPage);
-  console.log(totalPages, 'totalPages');
+  console.log(props, 'totalPages');
 
   // Function to get rows for a specific page
   const getRowsForPage = (page: any) => {

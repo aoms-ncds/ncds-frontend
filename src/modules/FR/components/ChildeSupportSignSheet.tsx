@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     paddingVertical: 3,
   },
- tableRow: {
+  tableRow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -98,15 +98,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
     paddingVertical: 5,
-	color: 'darkblue',
+    color: 'darkblue',
     borderBottomWidth: 1,
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
   },
-   tableCell: {
+  tableCell: {
     fontSize: 12,
     fontFamily: 'Oswald',
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   tableCellBottom: {
     fontSize: 14,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
     flex: 1,
-	height:30,
+    height: 30,
     flexWrap: 'wrap',
     paddingVertical: 5,
   },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, // Border for last row of the group
     borderBottomColor: '#000',
     borderBottomStyle: 'solid',
-	backgroundColor: '#bdbdbd'
+    backgroundColor: '#bdbdbd',
   },
   noBottomBorder: {
     borderBottomWidth: 0, // Remove border for "Child Of" & "Signature" in all rows except last
@@ -150,37 +150,35 @@ const styles = StyleSheet.create({
 });
 
 
-
 // Create Document Component
 const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number; month:string | null; subDiv?:any | null}) => {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  //const rowsPerPage = 6;
-  //const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
-  //console.log(totalPages, 'totalPages');
+  // const rowsPerPage = 6;
+  // const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
+  console.log(props, 'totalPages');
   // Function to get rows for a specific page
-const groupByParent = (data: any[]) => {
-  const groupedData: Record<string, any[]> = {}; // Explicitly define object structure
+  const groupByParent = (data: any[]) => {
+    const groupedData: Record<string, any[]> = {}; // Explicitly define object structure
 
-  data.forEach((child) => {
-    const parentId = child.childOf?._id; // Use _id instead of basicDetails.id
-    if (parentId) {
-      if (!groupedData[parentId]) {
-        groupedData[parentId] = [];
+    data.forEach((child) => {
+      const parentId = child.childOf?._id; // Use _id instead of basicDetails.id
+      if (parentId) {
+        if (!groupedData[parentId]) {
+          groupedData[parentId] = [];
+        }
+        groupedData[parentId].push(child);
       }
-      groupedData[parentId].push(child);
-    }
-  });
+    });
 
-  console.log("Grouped Data:", groupedData);
-  return Object.values(groupedData);
-};
+    console.log('Grouped Data:', groupedData);
+    return Object.values(groupedData);
+  };
 
 
-
-	const getRowsForPage = () => {
+  const getRowsForPage = () => {
 	  return groupByParent(props?.data ?? []);
-	};
+  };
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
@@ -208,135 +206,133 @@ const groupByParent = (data: any[]) => {
           {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
-       
-          <>
-		  
-            <View style={styles.tableContainer}>
+
+        <>
+
+          <View style={styles.tableContainer}>
             <View style={styles.line} />
-			<View style={styles.tableRow}>
-				<View style={styles.cellGrid} />
-				<Text style={[styles.tableCellHead,styles.c1]}>Sl No.</Text>
-				<View style={styles.cellGrid} />
+            <View style={styles.tableRow}>
+              <View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c1]}>Sl No.</Text>
+              <View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCellHead,styles.c2]}>Child Code</Text>
-				<View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c2]}>Child Code</Text>
+              <View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCellHead,styles.c3]}>Child Name</Text>
-				<View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c3]}>Child Name</Text>
+              <View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCellHead,styles.c4]}>Child Of</Text>
-				<View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c4]}>Child Of</Text>
+              <View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCellHead,styles.c5]}>Net Amount</Text>
-				<View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c5]}>Net Amount</Text>
+              <View style={styles.cellGrid} />
 
-				<Text style={[styles.tableCellHead,styles.c6]}>Signature</Text>
-				<View style={styles.cellGrid} />
+              <Text style={[styles.tableCellHead, styles.c6]}>Signature</Text>
+              <View style={styles.cellGrid} />
 		    </View>
 
-					
-{
-getRowsForPage()?.map((group, groupIndex) =>
-  group.map((row, index) => {
-  
-    const isFirstInGroup = index === 0;
-    const isLastInGroup = index === group.length - 1;
-	
-    return (
-      <View
-        style={[
-          styles.tableRow,
-          // Apply border bottom only if it's the last row in the group
-          isLastInGroup ? styles.withBorder : styles.noBottomBorderForGroup,
-        ]}
-        key={row._id}
-        wrap={false}
-      >
-	  <div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c1,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{serialNumber ++}</Text>
-		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c2,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.childCode}</Text>
-		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c3,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.firstName} {row.lastName}</Text>
-		<div style={styles.cellGrid}></div>
-        {/* Child Of Column - Border Only in Last Row of Group */}
-        {isFirstInGroup ? (
-          <Text
-            style={[
-              styles.tableCell,styles.c4,
-              styles.childOfColumn,
-              isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
-            ]}
-          >
-            {row.childOf?.basicDetails?.firstName} {row.childOf?.basicDetails?.lastName}
-          </Text>
-        ) : (
-          <Text style={[styles.tableCell,styles.c4, styles.childOfColumn]}></Text>
-        )}
-		<div style={styles.cellGrid}></div>
-        <Text style={[styles.tableCell,styles.c5,isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder ]}>{row.childSupport?.amount ?? ''}</Text>
 
-        {/* Signature Column - Border Only in Last Row of Group */}
-		<div style={styles.cellGrid}></div>
-        <Text
-          style={[
-            styles.tableCell,styles.c6,
-            isLastInGroup ? styles.nill : styles.noBottomBorder,
-          ]}
-        ></Text>
-		<div style={styles.cellGrid}></div>
-      </View>
-    );
-  })
-)}
-  <View style={[styles.tableRow,styles.withBorderBottom]} key={1000} wrap={false}>
-    <View style={styles.cellGrid} />
-	<Text style={[styles.tableCellBottom,styles.c1]}></Text>
-	<Text style={[styles.tableCellBottom,styles.c2]}></Text>
-	<Text style={[styles.tableCellBottom,styles.c3]}></Text>
-	<Text style={[
-    styles.tableCellBottom,
-    
-    {
+            {
+              getRowsForPage()?.map((group, groupIndex) =>
+                group.map((row, index) => {
+                  const isFirstInGroup = index === 0;
+                  const isLastInGroup = index === group.length - 1;
+
+                  return (
+                    <View
+                      style={[
+                        styles.tableRow,
+                        // Apply border bottom only if it's the last row in the group
+                        isLastInGroup ? styles.withBorder : styles.noBottomBorderForGroup,
+                      ]}
+                      key={row._id}
+                      wrap={false}
+                    >
+	  <div style={styles.cellGrid}></div>
+                      <Text style={[styles.tableCell, styles.c1, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>{serialNumber ++}</Text>
+                      <div style={styles.cellGrid}></div>
+                      <Text style={[styles.tableCell, styles.c2, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>{row.childCode}</Text>
+                      <div style={styles.cellGrid}></div>
+                      <Text style={[styles.tableCell, styles.c3, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>{row.firstName} {row.lastName}</Text>
+                      <div style={styles.cellGrid}></div>
+                      {/* Child Of Column - Border Only in Last Row of Group */}
+                      {isFirstInGroup ? (
+                        <Text
+                          style={[
+                            styles.tableCell, styles.c4,
+                            styles.childOfColumn,
+                            isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
+                          ]}
+                        >
+                          {row.childOf?.basicDetails?.firstName} {row.childOf?.basicDetails?.lastName}
+                        </Text>
+                      ) : (
+                        <Text style={[styles.tableCell, styles.c4, styles.childOfColumn]}></Text>
+                      )}
+                      <div style={styles.cellGrid}></div>
+                      <Text style={[styles.tableCell, styles.c5, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>{row.childSupport?.amount ?? ''}</Text>
+
+                      {/* Signature Column - Border Only in Last Row of Group */}
+                      <div style={styles.cellGrid}></div>
+                      <Text
+                        style={[
+                          styles.tableCell, styles.c6,
+                          isLastInGroup ? styles.nill : styles.noBottomBorder,
+                        ]}
+                      ></Text>
+                      <div style={styles.cellGrid}></div>
+                    </View>
+                  );
+                }),
+              )}
+            <View style={[styles.tableRow, styles.withBorderBottom]} key={1000} wrap={false}>
+              <View style={styles.cellGrid} />
+              <Text style={[styles.tableCellBottom, styles.c1]}></Text>
+              <Text style={[styles.tableCellBottom, styles.c2]}></Text>
+              <Text style={[styles.tableCellBottom, styles.c3]}></Text>
+              <Text style={[
+                styles.tableCellBottom,
+
+                {
 	  padding: 0,
 	  width: '35%',
-      fontSize: 14,
-      textAlign: 'center',
-      fontWeight: 'bold',
+                  fontSize: 14,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
 	  color: 'black',
-      fontFamily: 'Oswald',
-    }
-  ]}>
+                  fontFamily: 'Oswald',
+                },
+              ]}>
     Total Net Amount
-  </Text>
-  
-	<View style={styles.cellGrid} />
-	
-	<Text style={[
-    styles.tableCellBottom,
-    
-    {
+              </Text>
+
+              <View style={styles.cellGrid} />
+
+              <Text style={[
+                styles.tableCellBottom,
+
+                {
 	  padding: 0,
 	  width: '20%',
-      fontSize: 16,
+                  fontSize: 16,
 	  color: 'black',
-      textAlign: 'center',
-      fontFamily: 'Oswald',
-	  fontWeight: 'ultrabold'
-    }
-  ]}>
-    {Number.isNaN(total) ? 0 : total}
-  </Text>
-  
-	<View style={styles.cellGrid} />
-  
-</View>
+                  textAlign: 'center',
+                  fontFamily: 'Oswald',
+	  fontWeight: 'ultrabold',
+                },
+              ]}>
+                {Number.isNaN(total) ? 0 : total}
+              </Text>
 
-             
+              <View style={styles.cellGrid} />
 
             </View>
-          </>
-      
+
+
+          </View>
+        </>
+
 
       </Page>
     </Document>

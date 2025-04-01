@@ -301,7 +301,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
         variant: 'error',
       });
     });
-  }, []);
+  }, [dateRange]);
   console.log(applicationFormState, '787');
 
   const EditApplication = (e: React.FormEvent<HTMLFormElement>) => {

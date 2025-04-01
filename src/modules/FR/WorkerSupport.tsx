@@ -177,7 +177,7 @@ const WorkerSupportPage = () => {
           res2.data.purpose=='Worker'&&res2.data.purposeWorker?._id?res2.data.purposeWorker?._id:null,
         subDivisionId: subDivision?._id ?? null,
         designationParticularID: designationParticular?._id ?? null,
-        IRONo: 'IRO'+res2.data.FRno.slice(-4),
+        IRONo: 'IRO'+res2.data.FRno.slice(-7),
         month: month,
       });
       setFrAction(null);
