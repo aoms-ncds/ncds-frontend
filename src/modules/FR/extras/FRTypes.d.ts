@@ -108,6 +108,7 @@ declare global {
     year?: number | null;
     applicationReferenceNo?: string | null;
     presidentSanctionAmt?:number;
+    applicationAttachment?:FileObject[];
 
 
   }

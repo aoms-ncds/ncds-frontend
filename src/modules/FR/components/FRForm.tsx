@@ -90,12 +90,14 @@ const FRForm = (props: FormComponentProps<any>) => {
     month: '',
     narration: '',
     attachment: [],
+    applicationAttachment: [],
   });
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
   const [sanctionedAsPers, setSanctionedAsPers] = useState<any[]>([]);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
+  const [ApplicationShowFileUploader, setApplicationShowFileUploader] = useState(false);
   const [showFileUploaderCustom, setShowFileUploaderCustom] = useState(false);
   const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -1974,6 +1976,11 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   />
                 </Grid>
                 <Grid item md={12}>
+                  <Button variant="contained" onClick={() => setApplicationShowFileUploader(true)} startIcon={<AttachmentIcon />}>
+                   Appl. Attachment
+                  </Button>
+                </Grid>
+                <Grid item md={12}>
                   <TextField
                     label="Narration"
                     value={newParticular.narration}
@@ -2291,6 +2298,47 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           setNewParticular((particularDetails) => ({
             ...particularDetails,
             attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
+      <FileUploader
+        title="Appl. Attachments"
+        action="add"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 6 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 30 * MB,
+        }}
+        // accept={['video/*']}
+        open={ApplicationShowFileUploader}
+        onClose={() => setApplicationShowFileUploader(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={newParticular.applicationAttachment?? []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'FR/Particulars', file.name).then((res) => {
+            // console.log(res.data._id);
+
+            setNewParticular(() => ({
+              ...newParticular,
+              applicationAttachment: [...(newParticular.applicationAttachment ?? []), res.data],
+            }));
+            return res;
+          });
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            applicationAttachment: particularDetails?.applicationAttachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            applicationAttachment: particularDetails?.applicationAttachment?.filter((file) => file._id !== fileId),
           }));
           return FileUploaderServices.deleteFile(fileId);
         }}

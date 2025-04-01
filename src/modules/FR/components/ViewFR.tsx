@@ -76,12 +76,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
 
   const [addSignature, toggleAddSignature] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [viewFileUploaderAppl, setViewFileUploaderAppl] = useState(false);
   const [reasonDialog, setReasonDialog] = useState(false);
   const [rejectDialog, setrejectDialog] = useState(false);
   const [reasonForSentBack, setReasonForSentBack] = useState<string | null>('');
   const [reasonForReject, setReasonForReject] = useState<string | null>('');
   const [sanctionedAsPers, setSanctionedAsPers] = useState<AsPer[]>([]);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [attachmentsAppl, setAttachmentsAppl] = useState<FileObject[]>([]);
   // const [isFocused, setFocused] = useState(false);
   const totalRequestedAmount = props.value.particulars && props.value.particulars.reduce((total, item) => total + Number(item.requestedAmount), 0);
   const FRstatus = IROLifeCycleStates.getStatusNameByCodeTransaction(Number(props.value.status));
@@ -1221,6 +1223,35 @@ return (
       //   return FileUploaderServices.deleteFile(fileId);
       // }}
     />
+    <FileUploader
+      title="Appl. Attachments"
+      types={[
+        'application/pdf',
+        'image/png',
+        'image/jpeg',
+        'image/jpg',
+
+      ]}
+      limits={{
+        // types: [],
+        maxItemSize: 1 * MB,
+        maxItemCount: 3,
+        maxTotalSize: 3 * MB,
+      }}
+      // accept={['video/*']}
+      open={viewFileUploaderAppl}
+      action='view'
+      onClose={() => setViewFileUploaderAppl(false)}
+      // getFiles={TestServices.getBills}
+      getFiles={attachmentsAppl}
+      // deleteFile={(fileId: string) => {
+      //   setNewParticular((particularDetails) => ({
+      //     ...particularDetails,
+      //     attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+      //   }));
+      //   return FileUploaderServices.deleteFile(fileId);
+      // }}
+    />
     <Dialog
       open={showAddParticularDialog}
       onClose={() => setShowAddParticularDialog(false)}
@@ -1369,6 +1400,13 @@ return (
                   }
                   fullWidth
                 />
+              </Grid>
+              <Grid item md={12}>
+                <Button variant="contained" onClick={() => {
+                  setViewFileUploaderAppl(true); setAttachmentsAppl(newParticular.applicationAttachment ?? []);
+                }} startIcon={<AttachmentIcon />}>
+                    Appl. Attachment
+                </Button>
               </Grid>
               <Grid item md={12}>
                 <TextField

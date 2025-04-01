@@ -56,7 +56,7 @@ import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import CloseIcon from '@mui/icons-material/Close';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const ViewIRO = (props: any) => {
   const navigate = useNavigate();
@@ -327,7 +327,9 @@ const ViewIRO = (props: any) => {
     transactionId: '',
   });
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [viewFileUploaderAppl, setViewFileUploaderAppl] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [attachmentsAppl, setAttachmentsAppl] = useState<FileObject[]>([]);
   const [divisions, setDivisions] = useState<Division | null>(null);
   const [rejectDialog, setrejectDialog] = useState(false);
   const [reverDialog, setRevertDialog] = useState(false);
@@ -612,7 +614,7 @@ const ViewIRO = (props: any) => {
                             </TableHead>
                             <TableBody>
                               {IRO?.particulars &&
-                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; applicationReferenceNo:any; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
+                                IRO?.particulars.map((item: { _id: Key | null | undefined; attachment: SetStateAction<FileObject[]>; applicationAttachment: SetStateAction<FileObject[]>; applicationReferenceNo:any; mainCategory: string; subCategory1: string; subCategory2: string; subCategory3: string; narration: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; quantity: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; month: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; requestedAmount: number; sanctionedAmount: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; sanctionedAsPer: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined }, index: number) => (
                                   <TableRow key={item._id} >
                                     <TableCell component="th" sx={{ display: 'flex' }}>
                                       <IconButton
@@ -623,6 +625,17 @@ const ViewIRO = (props: any) => {
                                       >
                                         <AttachmentIcon />
                                       </IconButton>
+                                      {item.applicationAttachment &&(
+
+                                        <IconButton
+                                          onClick={() => {
+                                            setViewFileUploaderAppl(true);
+                                            setAttachmentsAppl(item.applicationAttachment);
+                                          }}
+                                        >
+                                          <ReceiptIcon />
+                                        </IconButton>
+                                      )}
                                     </TableCell>
                                     <TableCell align="center">{index + 1}</TableCell>
                                     <TableCell align="center"> {`${item.mainCategory == 'Select' ? '' : item.mainCategory} 
@@ -1745,6 +1758,29 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   return FileUploaderServices.deleteFile(fileId);
         // }}
         getFiles={attachments}
+      />
+      <FileUploader
+        title="Appl. Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploaderAppl}
+        action="view"
+        onClose={() => setViewFileUploaderAppl(false)}
+        // getFiles={TestServices.getBills}
+        // deleteFile={(fileId: string) => {
+        //   // setNewParticular((particularDetails) => ({
+        //   //   ...particularDetails,
+        //   //   attachment: particularDetails.attachment.filter((file) => file._id !== fileId),
+        //   // }));
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
+        getFiles={attachmentsAppl}
       />
       {iroID&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={iroID}/>}
       <Dialog open={rejectDialog} fullWidth maxWidth="md">
