@@ -594,7 +594,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </View>
               )}
 
-              <View style={{ flexDirection: 'column', alignItems: 'flex-end', left: 90 }}>
+              <View style={{ flexDirection: 'column', alignItems: 'flex-end', left: 100 }}>
                 <Text style={{
                   ...styles.text,
                   textAlign: 'left',
