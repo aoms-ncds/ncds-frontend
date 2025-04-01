@@ -1182,7 +1182,7 @@ const WorkerSupportPage = () => {
                     (worker?.supportStructure?.MUTDeduction ?? 0)
                   ) : 0,
                   unitPrice: total.total,
-                  quantity: index+1, // Each entry represents one worker
+                  quantity: 1, // Each entry represents one worker
                   year: requisition?.particulars?.[0]?.year,
                   attachment: [],
                   worker: worker, // Add worker reference if needed
