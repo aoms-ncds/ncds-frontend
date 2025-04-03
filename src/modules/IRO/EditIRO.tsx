@@ -330,6 +330,7 @@ const EditIRO = () => {
     month: '',
     narration: '',
     attachment: [],
+    applicationAttachment: [],
     sanctionedAsPer: '',
   });
   interface AsPer{
@@ -474,7 +475,9 @@ const EditIRO = () => {
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
+  const [viewFileUploaderAppl, setViewFileUploaderAppl] = useState(false);
   const [attachments, setAttachments] = useState<FileObject[]>([]);
+  const [attachmentsAppl, setAttachmentsAppl] = useState<FileObject[]>([]);
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -1352,6 +1355,53 @@ const EditIRO = () => {
           return FileUploaderServices.deleteFile(fileId);
         }}
       />
+      <FileUploader
+        title="Appl Attachments"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 3 * MB,
+        }}
+        // accept={['video/*']}
+        open={viewFileUploaderAppl}
+        action="add"
+        onClose={() => setViewFileUploaderAppl(false)}
+        // getFiles={TestServices.getBills}
+        getFiles={attachmentsAppl}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'FR', file.name).then((res) => {
+            setNewParticular((particularDetails) => ({
+              ...particularDetails,
+              applicationAttachment: [...particularDetails.applicationAttachment??[], res.data],
+            }));
+            // setIRO((prevDetails: any) => ({
+            //   ...prevDetails, // Preserve the outer state structure
+            //   particulars: {
+            //     ...prevDetails.particulars, // Preserve existing properties inside `particulars`
+            //     attachment: res.data, // Update only the `attachment` field within `particulars`
+            //   },
+            // }));
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            applicationAttachment: particularDetails.applicationAttachment?.map((file) => (file._id === fileId ? { ...file, filename: newName } : file)),
+          }));
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        deleteFile={(fileId: string) => {
+          setNewParticular((particularDetails) => ({
+            ...particularDetails,
+            applicationAttachment: particularDetails?.applicationAttachment?.filter((file) => file._id !== fileId),
+          }));
+          return FileUploaderServices.deleteFile(fileId);
+        }}
+      />
 
       <Dialog
         open={showAddParticularDialog}
@@ -1580,6 +1630,13 @@ const EditIRO = () => {
                     }
                     fullWidth
                   />
+                </Grid>
+                <Grid item md={12}>
+                  <Button disabled={IRO.status != IROLifeCycleStates.REOPENED && !hasPermissions(['ADMIN_ACCESS'])} variant="contained" onClick={() => {
+                    setViewFileUploaderAppl(true); setAttachmentsAppl(newParticular.applicationAttachment?? []);
+                  }} startIcon={<AttachmentIcon />}>
+                   Appl. Attachments
+                  </Button>
                 </Grid>
                 <Grid item md={12}>
                   <TextField

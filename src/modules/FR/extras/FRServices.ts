@@ -190,6 +190,7 @@ export default {
                     requestedAmount: particulars.requestedAmount,
                     narration: particulars.narration,
                     attachment: particulars.attachment,
+                    applicationAttachment: particulars.applicationAttachment,
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
                     year: particulars.year,
                     applicationReferenceNo: particulars.applicationReferenceNo,
@@ -234,6 +235,7 @@ export default {
                     requestedAmount: particulars.requestedAmount,
                     narration: particulars.narration,
                     attachment: particulars.attachment,
+                    applicationAttachment: particulars.applicationAttachment,
                     isUpcomingYear: Boolean(particulars.isUpcomingYear),
                     year: particulars.year,
                     applicationReferenceNo: particulars.applicationReferenceNo,
@@ -325,6 +327,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      applicationAttachment: particulars.applicationAttachment,
                       sanctionedAmount: particulars.sanctionedAmount,
                       year: particulars.year,
                       applicationReferenceNo: particulars.applicationReferenceNo,
@@ -345,6 +348,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      applicationAttachment: particulars.applicationAttachment,
                       sanctionedAmount: particulars.sanctionedAmount,
 
                     }, { headers: { ...getAuthHeader() } });
@@ -392,6 +396,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      applicationAttachment: particulars.applicationAttachment,
                       sanctionedAmount: particulars.sanctionedAmount,
 
                     }, { headers: { ...getAuthHeader() } });
@@ -409,6 +414,7 @@ export default {
                       narration: particulars?.narration,
                       sanctionedAsPer: particulars.sanctionedAsPer,
                       attachment: particulars.attachment,
+                      applicationAttachment: particulars.applicationAttachment,
                       sanctionedAmount: particulars.sanctionedAmount,
 
                     }, { headers: { ...getAuthHeader() } });
