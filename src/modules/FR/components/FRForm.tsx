@@ -520,11 +520,13 @@ const FRForm = (props: FormComponentProps<any>) => {
                   } else if (props.action == 'edit') {
                     if (particulars.length !==0&& addsParticulars.length ==0) {
                       await FRServices.addParticularsFR(particulars.filter((e)=>!e._id), props.value._id)
+                      // await FRServices.addParticularsIRO(particulars.filter((e)=>!e._id), props.value.IRO)
                     .then((res) => {
                       console.log(res.data);
                     });
                     } else if (addsParticulars.length !==0) {
                       await FRServices.addParticularsFR(addsParticulars, props.value._id)
+                      // await FRServices.addParticularsIRO(addsParticulars, props.value.IRO)
                     .then((res) => {
                       console.log(res.data);
                     });
