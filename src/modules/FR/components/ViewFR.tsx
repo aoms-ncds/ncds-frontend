@@ -57,6 +57,7 @@ import DivisionsServices from '../../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import TransactionLogDialog from './TransactionLogDialog';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
+import SanctionLetter from './authLatter';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -69,10 +70,12 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   });
   const [paymnetMethods, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [data2, setData2] = useState<FR | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [showName, setShowName] = useState(false);
   const [Err, setErr] = useState(false);
+  const [data, setData] = useState<FR | null>(null);
 
   const [addSignature, toggleAddSignature] = useState(false);
   const [viewFileUploader, setViewFileUploader] = useState(false);
@@ -99,9 +102,19 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     sanctionedAmount: null,
 
   });
+  const [letterinput, setLetterinput] = useState<any>({
+    presidentRemarks: '',
+    Validity: '',
+    presidentSanctionedAmount: '',
+
+  });
+  let newAmount;
+  console.log(newAmount, 'newAmount');
+
   const [selectedParticularIndex, setSelectedParticularIndex] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
   const [openPresident, setOpenPresident] = useState(false);
+  const [authLetterinput, setAuthLetterinput] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [divisions, setDivisions] = useState<Division | null>(null);
   // console.log(props, 'newParticular');
@@ -121,6 +134,15 @@ props.value?.particulars?.forEach((particular) => {
     total += particular?.sanctionedAmount;
   }
 });
+let total2 : any = 0;
+
+props.value?.particulars?.forEach((particular) => {
+  if (particular?.presidentSanctionAmt) {
+    total2 += particular?.presidentSanctionAmt;
+  }
+});
+console.log(total2, 'total2');
+
 const user = useAuth();
 const handleClickOpen = (particular: Particular, index: number) => {
   setNewParticular((prev: any) => ({
@@ -141,7 +163,7 @@ const handleClickOpenForPresident = (particular: Particular, index: number) => {
   }));
   setOpenPresident(true);
   setSelectedParticularIndex(index);
-  // setNewParticular(particular);
+  // setNewParticular(particular);c
 };
 const [selectedSignaturePresident, setSignaturePresident] = useState<EsignaturePresident>({
   _id: '',
@@ -783,6 +805,47 @@ return (
                 >
                     Print FR
                 </PDFDownloadLink>
+              </Button>}
+              &nbsp;
+
+              {(hasPermissions(['PRESIDENT_ACCESS']))&& props.value.status==FRLifeCycleStates.WAITING_FOR_PRESIDENT ||props.value.specialsanction=='Yes' ? <Button
+                variant="contained"
+                color="info"
+                style={{
+                  textAlign: 'left', textDecoration: 'none',
+                }}
+                onClick={() => {
+                  setAuthLetterinput(true);
+                  // FRServices.getAllOptimizedById(props.value?._id).then((res)=>{
+                  //   console.log(res.data, 'daa98');
+                  //   setData2(res.data);
+                  // });
+                }}
+
+              >
+                Auth Letter input
+              </Button>:[]}
+              &nbsp;
+
+              {props.value.specialsanction=='Yes' && <Button
+                variant="contained"
+                color="secondary"
+                style={{
+                  textAlign: 'left', textDecoration: 'none',
+                }}
+                onClick={() => {
+                  FRServices.getAllOptimizedById(props.value?._id).then((res)=>{
+                    console.log(res.data, 'daa98');
+                    setData(res.data);
+                  });
+                  setOpenPrintFr(true);
+                  setTimeout(() => {
+                    setOpenPrintFr(false);
+                  }, 2000);
+                }}
+
+              >
+                Auth Letter print
               </Button>}
               &nbsp;
               &nbsp;
@@ -1590,7 +1653,179 @@ return (
         </DialogActions>
       </form>
     </Dialog>
+    <Dialog
+      open={authLetterinput}
+      onClose={()=>setAuthLetterinput(false)}
+      // PaperComponent={PaperComponent}
+      aria-labelledby="draggable-dialog-title"
+      // sx={{ width: '30%', textAlign: 'center' }}
+    >
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          // props.onChange({
+          //   ...props.value,
+          //   particulars: props.value.particulars?.map((part, _ind) => (_ind === selectedParticularIndex ? (newParticular as Particular) : part)),
+          // });
+          setAuthLetterinput(false);
+        }}
 
+      >
+
+        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+        Auth Letter input
+        </DialogTitle>
+        <DialogContent>
+
+
+          <Grid item xs={12} md={6} width={'20rem'} padding={1}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="President Sanctioned Amount"
+                // type={'number'}
+                // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                value={props.value.presidentSanctionedAmount?? total2 }
+                // required
+                // title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                autoComplete='off'
+                // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(e) => {
+                  props.onChange({
+                    ...props.value,
+                    presidentSanctionedAmount: e.target.value,
+                  });
+                  // }
+                }
+                }
+                // onFocus={() => setFocused(true)}
+                // onBlur={() => setFocused(false)}
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                inputProps={{
+                  min: 0,
+                  step: 0.01, // Allows up to two decimal places
+                  onWheel: handleWheel,
+                }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+              />
+              {/* </Tooltip> */}
+            </Grid>
+            <br />
+            <Grid item xs={12} md={6}>
+              {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+              <TextField
+                label="Validity"
+                type={'text'}
+                // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                value={ props.value.Validity}
+                // required
+                // title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                autoComplete='off'
+                // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(e) => {
+                  props.onChange({
+                    ...props.value,
+                    Validity: e.target.value,
+                  });
+                  // }
+                  // }
+                }
+                }
+                // onFocus={() => setFocused(true)}
+                // onBlur={() => setFocused(false)}
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                inputProps={{
+                  min: 0,
+                  step: 0.01, // Allows up to two decimal places
+                  onWheel: handleWheel,
+                }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+              />
+              {/* </Tooltip> */}
+            </Grid>
+            <br />
+            <Grid item xs={12} md={6}>
+              {/* <Tooltip open={isFocused?true:false}
+                      onClose={() => setOpen(false)}
+                      onOpen={() => setOpen(true)}
+                      title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
+              <TextField
+                label="President Remark"
+                // type={'number'}
+                // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                value={ props.value.presidentRemarks}
+                // required
+                // title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+                autoComplete='off'
+                // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                onChange={(e) => {
+                  // if (totalRequestedAmount) {
+                  props.onChange({
+                    ...props.value,
+                    presidentRemarks: e.target.value,
+                  });
+                  // }
+                }
+                }
+                // onFocus={() => setFocused(true)}
+                // onBlur={() => setFocused(false)}
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                inputProps={{
+                  min: 0,
+                  step: 0.01, // Allows up to two decimal places
+                  onWheel: handleWheel,
+                }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
+              />
+              {/* </Tooltip> */}
+            </Grid>
+            <br />
+          </Grid>
+
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={()=>setAuthLetterinput(false)}>
+              Cancel
+          </Button>
+          <Button type="submit">Add</Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+    <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+      <DialogTitle> Print Fr</DialogTitle>
+      <DialogContent>
+        <Container>
+                  Download the FR Auth Letter for {data?.FRno} <br />
+          {data && (
+            <PDFDownloadLink
+              document={<SanctionLetter data={data as any}/>}
+              fileName="AuthLetter.pdf"
+              style={{ color: 'blue' }}
+            >
+              {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
+            </PDFDownloadLink>
+          )}{' '}
+        </Container>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            setData(null);
+          }}
+          variant="text"
+        >
+                  Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
     <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }} >
       <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
         <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>

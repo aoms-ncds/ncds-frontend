@@ -48,6 +48,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import FRLifeCycleStates from '../FR/extras/FRLifeCycleStates';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import SanctionLetter from '../FR/components/authLatter';
 
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const location = useLocation();
@@ -59,6 +60,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [openPrintFr, setOpenPrintFr] = useState(false);
+  const [data6, setData6] = useState<FR | null>(null);
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -784,6 +787,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
+            ...(params.row.specialsanction =='Yes' ?
+              [
+
+                {
+                  id: 'print',
+                  text: 'Print FR Auth letter',
+                  icon: PrintIcon,
+                  onClick: () => {
+                    FRServices.getAllOptimizedById((params.row as any)?.FR?._id).then((res)=>{
+                      console.log(res.data, 'daa98');
+                      setData6(res.data);
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ]:[]),
             {
               id: 'notification',
               text: 'Send notification',
@@ -1809,6 +1831,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       </Grid> */}
                   </Grid>
                 </DialogContent>
+              </Dialog>
+              <Dialog open={Boolean(data6)} onClose={() => setData6(null)} maxWidth="xs" fullWidth>
+                <DialogTitle> Print Fr</DialogTitle>
+                <DialogContent>
+                  <Container>
+                                            Download the FR Auth Letter for {data6?.FRno} <br />
+                    {data6 && (
+                      <PDFDownloadLink
+                        document={<SanctionLetter data={data6 as any}/>}
+                        fileName="AuthLetter.pdf"
+                        style={{ color: 'blue' }}
+                      >
+                        {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
+                      </PDFDownloadLink>
+                    )}{' '}
+                  </Container>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      setData6(null);
+                    }}
+                    variant="text"
+                  >
+                                            Cancel
+                  </Button>
+                </DialogActions>
               </Dialog>
               <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>

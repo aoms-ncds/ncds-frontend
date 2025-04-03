@@ -56,6 +56,8 @@ import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import CloseIcon from '@mui/icons-material/Close';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
+import SanctionLetter from '../FR/components/authLatter';
+import FRServices from '../FR/extras/FRServices';
 
 
 const ViewIRO = (props: any) => {
@@ -68,6 +70,8 @@ const ViewIRO = (props: any) => {
   const [Data, setData] = useState<any>();
   const [showFileUploaderCustomOfficeMngr, setShowFileUploaderCustomOfficeMngr] = useState(false);
   const [addSignaturePr, toggleAddSignaturePr] = useState(false);
+  const [data2, setData2] = useState<FR | null>(null);
+  const [openPrintFr, setOpenPrintFr] = useState(false);
 
   const [IRO, setIRO] = useState<any>({
     _id: '',
@@ -356,7 +360,7 @@ const ViewIRO = (props: any) => {
     event.currentTarget.blur();
   };
   const [openLog, setOpenLog] = useState(false);
-  console.log(IROstatus, 'IROstatus');
+  console.log(props, 'IROstatus');
 
   // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
   //   // Prevent changing the value when the up or down arrow key is pressed
@@ -1193,8 +1197,23 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                           fullWidth
                         />
                       </Grid> */}
-
                       <Grid item xs={12}>
+                        {IRO.specialsanction =='Yes'&&(
+
+                          <Button variant="contained" color="primary"
+                            onClick={() => {
+                              FRServices.getAllOptimizedById(IRO?.FR).then((res)=>{
+                                console.log(res.data, 'daa98');
+                                setData2(res.data);
+                              });
+                              setOpenPrintFr(true);
+                              setTimeout(() => {
+                                setOpenPrintFr(false);
+                              }, 2000);
+                            }}>
+                            Auth letter print
+                          </Button>
+                        )}
                         {IRO.reasonForRevertIRO && <><span style={{ fontWeight: 'bold', color: 'red' }}> Revert reason: </span><span style={{ color: 'red' }}>{IRO.reasonForRevertIRO ?? 'N/A'}</span></> }
                         {/* {props.action === 'edit' && ( */}
                         {IRO?.status >= IROLifeCycleStates.AMOUNT_RELEASED && IRO?.status == IROLifeCycleStates.IRO_CLOSED && (
@@ -1722,6 +1741,33 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+      <Dialog open={Boolean(data2)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+        <DialogTitle> Print Fr</DialogTitle>
+        <DialogContent>
+          <Container>
+                        Download the FR Auth Letter for {data2?.FRno} <br />
+            {data2 && (
+              <PDFDownloadLink
+                document={<SanctionLetter data={data2 as any}/>}
+                fileName="AuthLetter.pdf"
+                style={{ color: 'blue' }}
+              >
+                {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
+              </PDFDownloadLink>
+            )}{' '}
+          </Container>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setData(null);
+            }}
+            variant="text"
+          >
+                        Cancel
+          </Button>
+        </DialogActions>
       </Dialog>
       <FileUploader
         title="Attachments"
