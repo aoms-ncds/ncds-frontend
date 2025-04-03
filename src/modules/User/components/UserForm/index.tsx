@@ -728,6 +728,7 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
           <DialogContent>
             <br />
             <Grid container spacing={3}>
+
               {/* {props.options?.childprofilePic?.setChildPhoto && ( */}
               <Grid item xs={12}>
                 <label htmlFor="imagePicker">
@@ -787,6 +788,21 @@ const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
             <br />
             <Container>
               <Grid container spacing={3}>
+                <Grid item xs={12} md={6} lg={8}>
+                  <TextField
+                    label={'Child Code'}
+                    value={newChild.childCode}
+                    variant={props.options?.textField.variant}
+                    InputProps={{
+                      readOnly: true,
+                      disabled: true,
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    fullWidth
+                  />
+                </Grid>
                 <Grid item xs={12} md={6}>
                   <TextField
                     label=" First Name"

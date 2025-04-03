@@ -209,7 +209,7 @@ const openDilog = () => {
 
 const handleClick = (e: any) => {
   e.preventDefault();
-  if (props.value?.particulars?.[0].sanctionedAsPer != null && props.value.sanctionedBank !=null && props.value.sourceOfAccount != null) {
+  if (props.value?.particulars?.every((item) => item.sanctionedAsPer != null)&& props.value?.particulars?.every((item) => item.sanctionedAmount != null) && props.value.sanctionedBank !=null && props.value.sourceOfAccount != null) {
     if (props.onSubmit) {
       {
         const approvalSnack = enqueueSnackbar({ message: 'Approving FR', variant: 'info' });

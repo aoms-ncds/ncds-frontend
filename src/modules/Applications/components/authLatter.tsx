@@ -99,7 +99,7 @@ const SanctionLetter = (data:any) => {
         {/* Subject */}
         <View style={[styles.section, { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }]}>
           <Text style={styles.boldText}>Subject: Sanction Letter for </Text>
-          <Text>{data.data.applicantName}</Text>
+          <Text>{data.data.name}</Text>
         </View>
 
 
@@ -109,7 +109,7 @@ const SanctionLetter = (data:any) => {
             <Text>Dear {data.data.coordinatorName?.basicDetails?.firstName } {data.data.coordinatorName?.basicDetails?.lastName },</Text>
           </View>
           <Text>
-              I am pleased to inform you that, after careful review and consideration, the mission organization has officially sanctioned for {data.data.applicantName}. This approval aligns with our commitment to advancing our mission objectives and serving the community effectively.
+              I am pleased to inform you that, after careful review and consideration, the mission organization has officially sanctioned for {data.data.name}. This approval aligns with our commitment to advancing our mission objectives and serving the community effectively.
           </Text>
         </View>
 
@@ -122,7 +122,7 @@ const SanctionLetter = (data:any) => {
           {/* Purpose */}
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text>• Purpose: </Text>
-            <Text> {data.data?.applicantName}</Text>
+            <Text> {data.data?.name}</Text>
           </View>
           <Text>{'\n'}</Text>
           {/* Sanctioned Amount */}

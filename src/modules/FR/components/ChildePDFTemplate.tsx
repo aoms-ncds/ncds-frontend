@@ -156,10 +156,16 @@ const ChildePDFTemplate = (props:{frNo:string; divisionId:string|null;data:Child
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Educational Assistance ${div?.[0]}`}  - {props.data?.[0]?.childOf?.officialDetails?.divisionHistory[props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.length - 1]?.subDivision?.name ?? ''}
+            {`IET Child Educational Assistance - ${div?.[0]}`} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+              '- ' + props.data[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+              ''}
+
+
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.month}`}</Text>
-          <Text style={styles.FRNO}>{(props as any)?.frNo}</Text>
+          <Text style={styles.FRNO}>
+            {'IRO' + (props as any)?.frNo?.slice(4)}
+          </Text>
 
           {/* <Text style={styles.frno}>{`FR No: ${props.FrNo}`}</Text> */}
         </div>
