@@ -60,6 +60,9 @@ declare global {
     transferredDate?:Moment;
     modeOfPayment?:string;
     beneficiaryName?:string;
+    presidentRemarks?: string;
+    Validity?: string;
+    presidentSanctionedAmount?: string;
   }
   type FRPurpose = 'Worker' | 'Subdivision' | 'Division' | 'Coordinator' | 'Others';
 

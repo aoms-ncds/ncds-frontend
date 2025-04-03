@@ -332,7 +332,10 @@ const IROReconciliationPdf = (props: {
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} - {workers?.[0].officialDetails.divisionHistory[workers[0].officialDetails?.divisionHistory.length - 1]?.subDivision?.name}
+            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+              '- ' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+              ''}
+
           </Text>
           <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>

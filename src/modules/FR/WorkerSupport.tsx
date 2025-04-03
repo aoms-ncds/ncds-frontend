@@ -168,7 +168,7 @@ const WorkerSupportPage = () => {
           res2.data.purpose == 'Worker' && selectedWorker?._id ? selectedWorker?._id : null,
         subDivisionId: subDivision?._id ?? null,
         designationParticularID: designationParticular?._id ?? null,
-        FrNo: res2.data.FRno,
+        FrNo: 'IRO'+res2.data.FRno.slice(-7),
         FrMonth: month,
       }));
       setSignPdfProps({ purpose: purpose??'Division',
@@ -1182,7 +1182,7 @@ const WorkerSupportPage = () => {
                     (worker?.supportStructure?.MUTDeduction ?? 0)
                   ) : 0,
                   unitPrice: total.total,
-                  quantity: index+1, // Each entry represents one worker
+                  quantity: 1, // Each entry represents one worker
                   year: requisition?.particulars?.[0]?.year,
                   attachment: [],
                   worker: worker, // Add worker reference if needed

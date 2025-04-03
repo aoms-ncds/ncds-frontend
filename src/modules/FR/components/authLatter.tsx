@@ -67,10 +67,10 @@ const SanctionLetter = (data:any) => {
         </View>
         <View style={styles.header} >
           <Text style={styles.title}>Sanction Letter</Text>
-          <Text style={styles.text1}>Date:{data.data.approvedDate ? moment(data.data.approvedDate).format('DD-MM-yyyy') : ''}</Text>
+          <Text style={styles.text1}>Date:{data.data.presidentApproveDate ? moment(data.data.presidentApproveDate).format('DD-MM-yyyy') : ''}</Text>
           <Text style={styles.text1}>
-            {data.data.approvedDate ?
-              `${moment(data.data.approvedDate).format('DD-MM-yyyy')}/IET/${data.data.applicationCode}` :
+            {data.data.presidentApproveDate ?
+              `${moment(data.data.presidentApproveDate).format('DD-MM-yyyy')}/IET/${data.data.FRno}` :
               ''}
           </Text>
         </View>
@@ -92,24 +92,24 @@ const SanctionLetter = (data:any) => {
           <Text style={styles.boldText}>To,</Text>
         </View>
         <View>
-          <Text>{data.data.coordinatorName?.basicDetails?.firstName } {data.data.coordinatorName?.basicDetails?.lastName }</Text>
-          <Text>{data.data.division?.details?.name}</Text>
+          <Text>{data?.data?.division?.details?.coordinator?.name?.basicDetails?.firstName } {data?.data?.division?.details?.coordinator?.name?.basicDetails?.lastName }</Text>
+          <Text>{data?.data?.division?.details?.name}</Text>
         </View>
         <Text>{'\n'}</Text>
         {/* Subject */}
         <View style={[styles.section, { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }]}>
-          <Text style={styles.boldText}>Subject: Sanction Letter for </Text>
-          <Text>{data.data.name}</Text>
+          <Text style={styles.boldText}>Subject: Sanction for the concerned FRNO: {data.data.FRno} </Text>
+          <Text>{data?.data.applicantName}</Text>
         </View>
 
 
         {/* Letter Content */}
         <View style={styles.section}>
           <View style={styles.section}>
-            <Text>Dear {data.data.coordinatorName?.basicDetails?.firstName } {data.data.coordinatorName?.basicDetails?.lastName },</Text>
+            <Text>Dear {data?.data?.division?.details?.coordinator?.name?.basicDetails?.firstName } {data?.data?.division?.details?.coordinator?.name?.basicDetails?.lastName },</Text>
           </View>
           <Text>
-              I am pleased to inform you that, after careful review and consideration, the mission organization has officially sanctioned for {data.data.name}. This approval aligns with our commitment to advancing our mission objectives and serving the community effectively.
+              I am pleased to inform you that, after careful review and consideration, the mission organization has officially sanctioned for {data.data.FRno}. This approval aligns with our commitment to advancing our mission objectives and serving the community effectively.
           </Text>
         </View>
 
@@ -120,28 +120,24 @@ const SanctionLetter = (data:any) => {
         </View>
         <View style={styles.section}>
           {/* Purpose */}
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text>• Purpose: </Text>
-            <Text> {data.data?.name}</Text>
-          </View>
           <Text>{'\n'}</Text>
           {/* Sanctioned Amount */}
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text>• Sanctioned Amount: </Text>
-            <Text>Rs. {data.data?.sanctionedAmount}</Text>
+            <Text>Rs. {data.data?.presidentSanctionedAmount}</Text>
           </View>
           <Text>{'\n'}</Text>
           {/* Duration/Validity */}
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text>• Duration/Validity: </Text>
-            <Text>{data.data?.validityDate}</Text>
+            <Text>{data.data?.Validity}</Text>
           </View>
           <Text>{'\n'}</Text>
           {/* Conditions/Remarks */}
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <Text>• Conditions/Remarks: </Text>
             <Text style={[{ flex: 1, maxWidth: '100%' }]}>
-              {data.data?.presidentRemark}
+              {data.data?.presidentRemarks}
             </Text>
           </View>
 
@@ -164,9 +160,9 @@ const SanctionLetter = (data:any) => {
               height: 35,
               width: 50,
             }}
-            src={`data:${data.data.presidentSignature?.type};base64, ${data.data.presidentSignature?.base64} `} />
+            src={`data:${data.data.signature?.president?.type};base64, ${data.data.signature?.president?.base64} `} />
           </View>
-          <Text style={styles.signature}>{data.data.presidentName}</Text>
+          <Text style={styles.signature}>{data.data.names?.president}</Text>
           <Text>President, IET.</Text>
         </View>
 

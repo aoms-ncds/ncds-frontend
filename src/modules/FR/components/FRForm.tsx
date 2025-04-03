@@ -95,6 +95,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [paymnetMethod, setPaymentMethod] = useState<IPaymentMethod[]>([]);
   const [allCoortinators, setAllCoortinators] = useState<any | null>(null);
   const [sanctionedAsPers, setSanctionedAsPers] = useState<any[]>([]);
+  const [isCoordinator, setisCoordinator] = useState<any>(false);
 
   const [showFileUploader, setShowFileUploader] = useState(false);
   const [ApplicationShowFileUploader, setApplicationShowFileUploader] = useState(false);
@@ -138,9 +139,13 @@ const FRForm = (props: FormComponentProps<any>) => {
     PaymentMethodService.getAll().then((res) => {
       setPaymentMethod(res.data);
     });
-    DivisionsServices.getcoordinators().then((res) => {
-      //   setDivision(res.data ?? null);
-      setAllCoortinators(res.data);
+
+    DivisionsServices.isCoordinator()
+    .then((res) => {
+      setisCoordinator(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
     });
   }, []);
   useEffect(() => {
@@ -174,7 +179,7 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
-    } else if (props.value.purpose === 'Subdivision') {
+    } else if (props.value.purpose === 'Subdivision' && !isCoordinator) {
       WorkersServices.getSubDivisionsByDivisionId()
         .then((res) => {
           setSubDivisions(res.data);
@@ -196,7 +201,7 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
-    } else if (props.value.purpose === 'Division') {
+    } else if (props.value.purpose === 'Division'&& !isCoordinator) {
       DivisionsServices.getDivisions()
         .then((res) => {
           setAllDivisions(res.data);
@@ -204,6 +209,11 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
+    } else if (props.value.purpose === 'Coordinator'&& !isCoordinator) {
+      DivisionsServices.getcoordinators().then((res) => {
+        //   setDivision(res.data ?? null);
+        setAllCoortinators(res.data);
+      });
     }
   }, [props.value.purpose]);
   let asPer;
