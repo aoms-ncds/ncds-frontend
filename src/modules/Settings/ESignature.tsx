@@ -420,8 +420,7 @@ const ESignature = () => {
               onClose={() => setShowPresidentFileUploader(false)}
               getFiles={selectedSignaturePresident?.presidentSignature ? [selectedSignaturePresident?.presidentSignature]:[]}
               deleteFile={(fileId: string) => {
-                ESignatureService.removeESignaturepr('presidentSignature');
-                return FileUploaderServices.deleteFile(fileId);
+                return ESignatureService.removePreESignature('prevOfficeManagerSignature') as Promise<StandardResponse<void>>;
               }}
             />
             <Dialog

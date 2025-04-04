@@ -827,7 +827,10 @@ const FRForm = (props: FormComponentProps<any>) => {
                         quantity: undefined,
                         unitPrice: undefined,
                         requestedAmount: undefined,
+                        year: undefined,
+                        applicationReferenceNo: undefined,
                         attachment: [],
+                        applicationAttachment: [],
                       }));
                       setShowAddParticularDialog(true);
                       setSelectedSubCategory1(null);
