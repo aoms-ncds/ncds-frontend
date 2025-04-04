@@ -63,6 +63,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [subDivisions, setSubDivisions] = useState<SubDivision[]>();
   const [AllSubDivisions, setAllSubDivisions] = useState<SubDivision[]>();
   const [AllDivisions, setAllDivisions] = useState<Division[]>();
+  const [division, setDivision] = useState<Division>();
   const [mainCategories, setMainCategories] = useState<MainCategory[]>();
   const [selectedMainCategory, setSelectedMainCategory] = useState<MainCategory | undefined>();
   const [selectedSubCategory1, setSelectedSubCategory1] = useState<SubCategory1 | null>(null);
@@ -151,7 +152,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(newParticular, 'newParticular');
+  // console.log(division?.details.coordinator.name, 'newParticular33');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -162,6 +163,22 @@ const FRForm = (props: FormComponentProps<any>) => {
           message: error.message,
         }),
       );
+    DivisionsServices.getDivisionById((user as any)?.division ?? '')
+      .then((res2) => setDivision(res2.data))
+      // .then((res) => console.log(res.data, 'sec'))
+      .catch((error) =>
+        enqueueSnackbar({
+          variant: 'error',
+          message: error.message,
+        }),
+      );
+    WorkersServices.getSubDivisionsByDivisionId()
+        .then((res) => {
+          setSubDivisions(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
   }, [props.value]);
   useEffect(() => {
     if (props.value.purpose === 'Worker') {
@@ -701,7 +718,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props.value.division ?? null}
-                    options={AllDivisions ?? []}
+                    options={AllDivisions ?? [division]}
                     disabled={props.actionAdi =='view'}
                     getOptionLabel={(division) => division.details?.name || ''}
                     onChange={(_e, purposeDivision) => {
@@ -736,7 +753,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 <Grid item xs={12} md={6}>
                   <Autocomplete
                     value={props?.value.purposeCoordinator}
-                    options={(allCoortinators) ?? []}
+                    options={(allCoortinators) ?? [(division as any)?.details.coordinator.name]}
                     onChange={(_e, purposeCoordinator) => {
                       props.onChange({
                         ...props.value,
