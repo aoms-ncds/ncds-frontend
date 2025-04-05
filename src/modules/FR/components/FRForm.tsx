@@ -2368,6 +2368,10 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
           return FileUploaderServices.renameFile(fileId, newName);
         }}
         deleteFile={(fileId: string) => {
+          enqueueSnackbar({
+            variant: 'info',
+            message: 'Should be saved form after deleting the file',
+          });
           setNewParticular((particularDetails) => ({
             ...particularDetails,
             applicationAttachment: particularDetails?.applicationAttachment?.filter((file) => file._id !== fileId),

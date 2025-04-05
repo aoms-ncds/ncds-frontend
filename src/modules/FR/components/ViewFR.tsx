@@ -58,7 +58,7 @@ import FileUploaderServices from '../../../components/FileUploader/extras/FileUp
 import TransactionLogDialog from './TransactionLogDialog';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import SanctionLetter from './authLatter';
-import ReceiptIcon from '@mui/icons-material/Receipt'
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {
@@ -382,15 +382,15 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
                     disabled />
                 </Grid><Grid item xs={12} md={6}>
-                    <TextField
-                      label="Division"
-                      value={props.value?.division?.details?.name}
-                      fullWidth
-                      disabled
-                      InputLabelProps={{
-                        shrink: true,
-                      }} />
-                  </Grid></>
+                  <TextField
+                    label="Division"
+                    value={props.value?.division?.details?.name}
+                    fullWidth
+                    disabled
+                    InputLabelProps={{
+                      shrink: true,
+                    }} />
+                </Grid></>
               ) : null}
               {props.value.purpose === 'Division' ? (
                 <Grid item xs={12} md={6}>
@@ -483,11 +483,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                                   <><IconButton>
                                     <EditIcon onClick={() => editParticular(item, index)} />
                                   </IconButton>
-                                    <Tooltip title="Add Sanction as per">
-                                      <IconButton>
-                                        <AddIcon onClick={() => handleClickOpen(item, index)} />
-                                      </IconButton>
-                                    </Tooltip>
+                                  <Tooltip title="Add Sanction as per">
+                                    <IconButton>
+                                      <AddIcon onClick={() => handleClickOpen(item, index)} />
+                                    </IconButton>
+                                  </Tooltip>
                                   </>}
                               />
                               )}
@@ -821,24 +821,31 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   </PDFDownloadLink>
                 </Button>}
                 &nbsp;
+                {props.value.status === FRLifeCycleStates.WAITING_FOR_PRESIDENT && (
+                  (hasPermissions(['PRESIDENT_ACCESS']) && props.value.status === FRLifeCycleStates.WAITING_FOR_PRESIDENT) ||
+  props.value.specialsanction === 'Yes' ? (
+                      <Button
+                        variant="contained"
+                        color="info"
+                        style={{
+                          textAlign: 'left',
+                          textDecoration: 'none',
+                        }}
+                        onClick={() => {
+                          setAuthLetterinput(true);
+                          // FRServices.getAllOptimizedById(props.value?._id).then((res)=>{
+                          //   console.log(res.data, 'daa98');
+                          //   setData2(res.data);
+                          // });
+                        }}
+                      >
 
-                {(hasPermissions(['PRESIDENT_ACCESS'])) && props.value.status == FRLifeCycleStates.WAITING_FOR_PRESIDENT || props.value.specialsanction == 'Yes' ? <Button
-                  variant="contained"
-                  color="info"
-                  style={{
-                    textAlign: 'left', textDecoration: 'none',
-                  }}
-                  onClick={() => {
-                    setAuthLetterinput(true);
-                    // FRServices.getAllOptimizedById(props.value?._id).then((res)=>{
-                    //   console.log(res.data, 'daa98');
-                    //   setData2(res.data);
-                    // });
-                  }}
+                          Auth Letter input
 
-                >
-                  {props.value.status == FRLifeCycleStates.FR_APPROVED ? 'View Auth Letter input' : 'Auth Letter input'}
-                </Button> : []}
+                      </Button>
+                    ) : null
+                )}
+
                 &nbsp;
 
                 {props.value.specialsanction == 'Yes' && <Button
@@ -1175,18 +1182,18 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     //                       props.onSubmit(updatedValue);
                     //                     }
 
-                    //                     setTimeout(() => {
-                    //                       closeSnackbar(processingSnack);
-                    //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
-                    //                       setTimeout(() => closeSnackbar(processedSnack), 500);
-                    //                     }, 500);
-                    //                     navigate('/fr/manage');
-                    //                   }}
-                    //                 >
-                    // Submit
-                    //                 </Button>
-                    //               }
-                    //             />
+                  //                     setTimeout(() => {
+                  //                       closeSnackbar(processingSnack);
+                  //                       const processedSnack = enqueueSnackbar({ message: 'Submitted FR To Accounts!', variant: 'success' });
+                  //                       setTimeout(() => closeSnackbar(processedSnack), 500);
+                  //                     }, 500);
+                  //                     navigate('/fr/manage');
+                  //                   }}
+                  //                 >
+                  // Submit
+                  //                 </Button>
+                  //               }
+                  //             />
                   ) : null}
 
 
