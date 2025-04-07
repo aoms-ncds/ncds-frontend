@@ -4,60 +4,64 @@ import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 
 Font.register({
-  family: 'Teko',
-  src: 'https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap',
+  family: 'CourierPrime',
+  src: '/arial.ttf',
+  fonts: [
+    { src: '/arial_bold.ttf', fontWeight: 'bold' },
+    { src: '/ARIALBD 1.TTF', fontWeight: 500 },
+  ],
 });
+
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: 'white',
+
+    flexDirection: 'column',
+    padding: 20,
+    width: 841.89,
+    height: 595.28,
+    fontSize: 10,
+    fontFamily: 'Helvetica',
   },
   image: {
-    position: 'absolute',
-    left: 385,
-    height: 50,
+    height: 70,
     width: 50,
-    marginTop: 15,
+    left: 250,
+    marginBottom: 10,
   },
   title: {
-    marginTop: 65,
     fontSize: 14,
-    position: 'absolute',
-    left: 270,
+    fontWeight: 'bold',
+    textAlign: 'center',
     color: 'darkblue',
-  },
 
+    marginBottom: 4,
+  },
+  c1: { width: '5%', textAlign: 'center', paddingVertical: 0 },
+  c2: { width: '15%', textAlign: 'center', paddingVertical: 0 },
+  c3: { width: '25%', textAlign: 'center', paddingVertical: 0 },
+  c4: { width: '25%', textAlign: 'center', paddingVertical: 0 },
+  c5: { width: '10%', textAlign: 'center', paddingVertical: 0 },
+  c6: { width: '20%', textAlign: 'center', paddingVertical: 0 },
   month: {
-    marginTop: 80,
     fontSize: 12,
-    position: 'absolute',
-    left: 350,
-    color: 'black',
+    textAlign: 'center',
+    marginBottom: 2,
   },
   IRONo: {
-    marginTop: 90,
     fontSize: 12,
-    position: 'absolute',
-    left: 365,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    textAlign: 'center',
+    marginBottom: 6,
   },
   line: {
-    position: 'absolute',
-    left: '20',
-    right: 22,
-    top: 113,
-    borderBottom: 1,
-    borderColor: 'black',
+    borderBottomWidth: 1,
+    borderColor: '#000',
+    marginBottom: 5,
   },
   tableContainer: {
-    display: 'flex',
     flexDirection: 'column',
-    marginTop: 114, // Adjust this value to set the table's position
-    width: 800,
-    flex: 1, // This will make the table fill the width of the page
-    flexShrink: 0,
+    marginTop: 4,
+    right: 25,
   },
   tableRow: {
     display: 'flex',
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#000',
     borderTopStyle: 'solid',
     alignItems: 'center',
-    height: 70,
+    height: 62,
     left: 20,
   },
   tableHead: {
@@ -79,6 +83,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontFamily: 'Oswald',
+    color: 'darkblue',
+
   },
 
   tableCell: {
@@ -89,10 +95,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Oswald',
   },
+  watermark: {
+    position: 'absolute',
+    top: '40%',
+    left: '15%',
+    fontSize: 60,
+    color: 'rgba(150, 150, 150, 0.3)',
+    transform: 'rotate(-45deg)',
+    zIndex: -1,
+  },
+  watermarkImage: {
+    position: 'absolute',
+    top: '10%',
+    left: '20%',
+    width: 400,
+    height: 'auto',
+    opacity: 0.1,
+    // transform: 'rotate(-45deg)',
+    // zIndex: -1,
+  },
   headGrid: {
     borderRight: 1,
     height: 30,
-    marginRight: 5,
+    // marginRight: 5,
   },
   headGridCopyy: {
     borderRight: 1,
@@ -101,7 +126,7 @@ const styles = StyleSheet.create({
   },
   cellGrid: {
     borderRight: 1,
-    height: 70,
+    height: 62,
   },
   cellGridCopy: {
     borderRight: 1,
@@ -116,7 +141,7 @@ const styles = StyleSheet.create({
   cellGridCopy2: {
     borderRight: 1,
     height: 30,
-    marginLeft: 5,
+    // marginLeft: 5,
   },
 });
 
@@ -129,14 +154,22 @@ const IROReconciliationPdf = (props: {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
-  const rowsPerPage = 6;
-  const totalPages = Math.ceil((workers ?? []).length / rowsPerPage);
-  console.log(props, 'totalPages');
+  const rowsPerPage = 9;
+  const totalPages = Math.ceil((workers ?? []).length / rowsPerPage)-1;
+  console.log(totalPages, 'totalPages');
+  const getRowsPerPage = (page: number) => (page === 0 ? 9 : 11);
 
   // Function to get rows for a specific page
-  const getRowsForPage = (page: any) => {
-    const start = page * rowsPerPage;
-    return workers?.slice(start, start + rowsPerPage);
+  const getRowsForPage = (page: number) => {
+    let start = 0;
+
+    // First page (0) starts at 0
+    if (page > 0) {
+      start = 9 + (page - 1) * 11;
+    }
+
+    const count = getRowsPerPage(page);
+    return workers?.slice(start, start + count);
   };
   useEffect(() => {
     console.log(props, 'props');
@@ -328,7 +361,8 @@ const IROReconciliationPdf = (props: {
   }, [workers]);
   return (
     <Document>
-      <Page size={'A4'} style={styles.page} orientation='landscape'>
+      <Page size={'A4'} style={styles.page} orientation='portrait'>
+
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
@@ -341,13 +375,31 @@ const IROReconciliationPdf = (props: {
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
-        {Array.from({ length: totalPages }).map((_, pageIndex) => (
 
-          <><View style={styles.line} />
+        {Array.from({ length: totalPages }).map((_, pageIndex) => (
+          <>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 12,
+                bottom: 30,
+                left: 0,
+                right: 0,
+                textAlign: 'center',
+                color: 'grey',
+              }}
+              render={({ pageNumber, totalPages }) =>
+                `${pageNumber} / ${totalPages}`
+              }
+              fixed
+            >{pageIndex}</Text>
+
+            {/* <View style={styles.line} /> */}
             <View style={styles.tableContainer}>
+              <Image src="/3D Logo 3.png" style={styles.watermarkImage} />
               <View style={{ ...styles.tableRow, height: 30 }} key={0}>
                 <div style={styles.headGrid}></div>
-                <Text style={styles.tableHead}>Sl No.</Text>
+                <Text style={{ ...styles.tableHead, flex: 0.5 }}>Sl No.</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={styles.tableHead}>Worker Code</Text>
                 <div style={styles.headGrid}></div>
@@ -357,7 +409,7 @@ const IROReconciliationPdf = (props: {
     <div style={styles.headGrid}></div> */}
                 {/* <Text style={styles.tableHead}>Division</Text>
               <div style={styles.headGrid}></div> */}
-                <Text style={styles.tableHead}>Net Amount</Text>
+                <Text style={{ ...styles.tableHead, flex: 0.7 }}>Net Amount</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={{ ...styles.tableHead, textAlign: 'right' }}>Signature</Text>
                 <Text style={styles.tableHead}></Text>
@@ -372,7 +424,7 @@ const IROReconciliationPdf = (props: {
 
                   <View style={styles.tableRow} key={row._id}>
                     <div style={styles.cellGrid}></div>
-                    <Text style={styles.tableCell}>{globalIndex}</Text>
+                    <Text style={{ ...styles.tableCell, flex: 0.5 }}>{globalIndex}</Text>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{row.workerCode}</Text>
                     <div style={styles.cellGrid}></div>
@@ -382,7 +434,7 @@ const IROReconciliationPdf = (props: {
         <div style={styles.cellGrid}></div> */}
                     {/* <Text style={styles.tableCell}>{row.division?.details.name}</Text>
                   <div style={styles.cellGrid}></div> */}
-                    <Text style={styles.tableCell}>{row.supportStructure?.supportEnabled ?
+                    <Text style={{ ...styles.tableCell, flex: 0.7 }}>{row.supportStructure?.supportEnabled ?
                       (row.supportStructure?.basic ?? 0) +
                     (row.supportStructure?.HRA ?? 0) +
                     (row.supportStructure?.spouseAllowance ?? 0) +
@@ -403,7 +455,7 @@ const IROReconciliationPdf = (props: {
                   </View>
                 );
               })}
-              {pageIndex === totalPages - 1 && (
+              {pageIndex === totalPages-1&& (
                 <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
                   <div style={styles.headGrid}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
@@ -416,9 +468,9 @@ const IROReconciliationPdf = (props: {
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                  <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
+                  {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div> */}
                   <Text style={{
-                    flex: 2,
+                    flex: 1.4,
                     fontSize: 12,
                     padding: 2,
                     textAlign: 'center', fontWeight: 'bold',
@@ -431,7 +483,9 @@ const IROReconciliationPdf = (props: {
 
                 </View>
               )}
-            </View></>
+            </View>
+            <div>{pageIndex}</div>
+          </>
         ))}
       </Page>
     </Document>

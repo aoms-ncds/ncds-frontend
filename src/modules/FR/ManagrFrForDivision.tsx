@@ -38,6 +38,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import IROReconciliationPdf from '../IRO/components/IROReconciliationPdf';
 import TransactionLogDialog from './components/TransactionLogDialog';
+import SanctionLetter from './components/authLatter';
 
 const ManageFrForDivision = () => {
   const location = useLocation();
@@ -69,6 +70,7 @@ const ManageFrForDivision = () => {
   } | null>(null);
   const [supportAttachment, setSupportAttachment] = useState<boolean>(false);
   const [openLog, setOpenLog] = useState(false);
+  const [data6, setData6] = useState<FR | null>(null);
 
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -382,6 +384,25 @@ const ManageFrForDivision = () => {
                 }, 2000);
               },
             },
+            ...(props.row.specialsanction =='Yes' ?
+              [
+
+                {
+                  id: 'print',
+                  text: 'Print FR Auth letter',
+                  icon: PrintIcon,
+                  onClick: () => {
+                    FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
+                      console.log(res.data, 'daa98');
+                      setData6(res.data);
+                    });
+                    setOpenPrintFr(true);
+                    setTimeout(() => {
+                      setOpenPrintFr(false);
+                    }, 2000);
+                  },
+                },
+              ]:[]),
             ...(hasPermissions(['ADMIN_ACCESS'])&&props.row.workerSupport || isCoordinator ?
               [
                 {
@@ -1127,6 +1148,33 @@ const ManageFrForDivision = () => {
                 </form>
               </Dialog>
             </Grid>
+            <Dialog open={Boolean(data6)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
+              <DialogTitle> Print Fr</DialogTitle>
+              <DialogContent>
+                <Container>
+                              Download the FR Auth Letter for {data6?.FRno} <br />
+                  {data6 && (
+                    <PDFDownloadLink
+                      document={<SanctionLetter data={data6 as any}/>}
+                      fileName="AuthLetter.pdf"
+                      style={{ color: 'blue' }}
+                    >
+                      {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
+                    </PDFDownloadLink>
+                  )}{' '}
+                </Container>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setData6(null);
+                  }}
+                  variant="text"
+                >
+                              Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
               <DialogTitle> Signature Attachment </DialogTitle>
               <DialogContent>
