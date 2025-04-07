@@ -30,7 +30,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 14,
+    fontFamily: 'CourierPrime',
+
+    fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'darkblue',
@@ -44,11 +46,15 @@ const styles = StyleSheet.create({
   c5: { width: '10%', textAlign: 'center', paddingVertical: 0 },
   c6: { width: '20%', textAlign: 'center', paddingVertical: 0 },
   month: {
+    fontFamily: 'CourierPrime',
+
     fontSize: 12,
     textAlign: 'center',
     marginBottom: 2,
   },
   IRONo: {
+    fontFamily: 'CourierPrime',
+
     fontSize: 12,
     textAlign: 'center',
     marginBottom: 6,
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
   tableContainer: {
     flexDirection: 'column',
     marginTop: 4,
-    right: 25,
+    right: 21,
   },
   tableRow: {
     display: 'flex',
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#000',
     borderTopStyle: 'solid',
     alignItems: 'center',
-    height: 62,
+    height: 60,
     left: 20,
   },
   tableHead: {
@@ -82,18 +88,18 @@ const styles = StyleSheet.create({
     padding: 2,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    fontFamily: 'CourierPrime',
     color: 'darkblue',
 
   },
 
   tableCell: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 12,
     padding: 2,
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    // fontWeight: 'bold',
+    fontFamily: 'CourierPrime',
   },
   watermark: {
     position: 'absolute',
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
   },
   cellGrid: {
     borderRight: 1,
-    height: 62,
+    height: 60,
   },
   cellGridCopy: {
     borderRight: 1,
@@ -409,7 +415,7 @@ const IROReconciliationPdf = (props: {
     <div style={styles.headGrid}></div> */}
                 {/* <Text style={styles.tableHead}>Division</Text>
               <div style={styles.headGrid}></div> */}
-                <Text style={{ ...styles.tableHead, flex: 0.7 }}>Net Amount</Text>
+                <Text style={{ ...styles.tableHead, flex: 0.7 }}>Net Amt</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={{ ...styles.tableHead, textAlign: 'right' }}>Signature</Text>
                 <Text style={styles.tableHead}></Text>

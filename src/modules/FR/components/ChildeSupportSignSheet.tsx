@@ -6,14 +6,18 @@ import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
 
 Font.register({
-  family: 'Teko',
-  src: 'https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap',
+  family: 'CourierPrime',
+  src: '/arial.ttf',
+  fonts: [
+    { src: '/arial_bold.ttf', fontWeight: 'bold' },
+    { src: '/ARIALBD 1.TTF', fontWeight: 500 },
+  ],
 });
 
 const styles = StyleSheet.create({
   page: {
     backgroundColor: 'white',
-	paddingTop:10
+    paddingTop: 10,
   },
 
   image: {
@@ -28,15 +32,18 @@ const styles = StyleSheet.create({
     marginTop: 65,
     fontSize: 14,
     position: 'absolute',
-    left: 270,
+    left: 290,
     color: 'darkblue',
+    fontFamily: 'CourierPrime',
   },
 
   month: {
+    fontFamily: 'CourierPrime',
+
     marginTop: 80,
     fontSize: 12,
     position: 'absolute',
-    left: 350,
+    left: 340,
     color: 'black',
   },
 
@@ -47,7 +54,7 @@ const styles = StyleSheet.create({
     left: 389,
     color: 'black',
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    fontFamily: 'CourierPrime',
   },
 
   line1: {
@@ -88,16 +95,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  c1: { width: '5%', textAlign: 'center',paddingVertical: 0},
-  c2: { width: '15%', textAlign: 'center',paddingVertical: 0 },
-  c3: { width: '25%', textAlign: 'center',paddingVertical: 0 },
-  c4: { width: '25%', textAlign: 'center',paddingVertical: 0 },
-  c5: { width: '10%', textAlign: 'center',paddingVertical: 0 },
-  c6: { width: '20%', textAlign: 'center',paddingVertical: 0 },
+  c1: { width: '10%', textAlign: 'center', paddingVertical: 0 },
+  c2: { width: '15%', textAlign: 'center', paddingVertical: 0 },
+  c3: { width: '25%', textAlign: 'left', paddingVertical: 0 },
+  c4: { width: '25%', textAlign: 'left', paddingVertical: 0 },
+  c3C: { width: '25%', textAlign: 'center', paddingVertical: 0 },
+  c4C: { width: '25%', textAlign: 'center', paddingVertical: 0 },
+  c5: { width: '10%', textAlign: 'center', paddingVertical: 0 },
+  c6: { width: '20%', textAlign: 'center', paddingVertical: 0 },
   tableCellHead: {
     fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    fontFamily: 'CourierPrime',
     paddingVertical: 5,
     color: 'darkblue',
     borderBottomWidth: 1,
@@ -106,16 +115,16 @@ const styles = StyleSheet.create({
   },
   tableCell: {
     fontSize: 12,
-    fontFamily: 'Oswald',
+    fontFamily: 'CourierPrime',
     paddingVertical: 5,
-	minHeight:20
+    minHeight: 20,
 
   },
   tableCellBottom: {
     fontSize: 14,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontFamily: 'Oswald',
+    fontFamily: 'CourierPrime',
     flex: 1,
     height: 30,
     flexWrap: 'wrap',
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1, // Border for last row of the group
     borderTopColor: '#000',
     borderTopStyle: 'solid',
-	paddingTop:0
+    paddingTop: 0,
   },
   withBorderBottom: {
     borderBottomWidth: 1, // Border for last row of the group
@@ -150,7 +159,7 @@ const styles = StyleSheet.create({
   noBottomBorderForGroup: {
     borderBottomWidth: 0, // Remove bottom border from entire row unless it's the last one
   },
-   noTopBorderForGroup: {
+  noTopBorderForGroup: {
     borderTopWidth: 0, // Remove bottom border from entire row unless it's the last one
   },
 
@@ -221,7 +230,7 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
           </Text>
           <Text style={styles.month}>{`For the Month of ${props?.month ?? ''}`}</Text>
           <Text style={styles.IRONo}>
-            {'IRO' + (props as any)?.frNo?.slice(4)}
+            {'IRO' + (props as any)?.frNo?.slice(2)}
           </Text>         {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
@@ -238,13 +247,13 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
               <Text style={[styles.tableCellHead, styles.c2]}>Child Code</Text>
               <View style={styles.cellGrid} />
 
-              <Text style={[styles.tableCellHead, styles.c4]}>Child Of</Text>
-              <View style={styles.cellGrid} />
-			  
-			  <Text style={[styles.tableCellHead, styles.c3]}>Child Name</Text>
+              <Text style={[styles.tableCellHead, styles.c4C]}>Child Of</Text>
               <View style={styles.cellGrid} />
 
-              <Text style={[styles.tableCellHead, styles.c5]}>Net Amount</Text>
+			  <Text style={[styles.tableCellHead, styles.c3C]}>Child Name</Text>
+              <View style={styles.cellGrid} />
+
+              <Text style={[styles.tableCellHead, styles.c5]}>Net Amt</Text>
               <View style={styles.cellGrid} />
 
               <Text style={[styles.tableCellHead, styles.c6]}>Signature</Text>
@@ -269,53 +278,54 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
                       wrap={false}
                     >
 					  <div style={styles.cellGrid}></div>
-					  <View style={[styles.c1, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder,styles.withTopBorder]}> 
-                      <Text style={[styles.tableCell]}>{serialNumber ++}</Text>
+					  <View style={[styles.c1, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                        <Text style={[styles.tableCell]}>{serialNumber ++}</Text>
                       </View>
 					  <div style={styles.cellGrid}></div>
-                      <View style={[styles.c2, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder,styles.withTopBorder]}> 
-                      <Text style={[styles.tableCell]}>{row.childCode}</Text>
+                      <View style={[styles.c2, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                        <Text style={[styles.tableCell]}>{row.childCode}</Text>
 					  </View>
-                      
-					  
+
+
                       <div style={styles.cellGrid}></div>
                       {/* Child Of Column - Border Only in Last Row of Group */}
                       {isFirstInGroup ? (
 					   <View style={[styles.c4,
-                            styles.childOfColumn,
-                            isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
-							isFirstInGroup ? styles.noTopBorder : styles.noTopBorder,]}>
-                        <Text
-                          style={[
-                            styles.tableCell
-                          ]}
-                        >
-                          {row.childOf?.basicDetails?.firstName} {row.childOf?.basicDetails?.lastName}
-                        </Text>
-						</View>
+                          styles.childOfColumn,
+                          isLastInGroup ? styles.noBottomBorder : styles.noBottomBorder,
+                          isFirstInGroup ? styles.noTopBorder : styles.noTopBorder]}>
+                          <Text
+                            style={{
+                              ...styles.tableCell,
+                              left: 5,
+                            }}
+                          >
+                            {row.childOf?.basicDetails?.firstName} {row.childOf?.basicDetails?.lastName}
+                          </Text>
+                        </View>
                       ) : (
 					  <View style={[styles.c4, styles.childOfColumn]}>
-                        <Text style={[styles.tableCell]}></Text>
+                          <Text style={[styles.tableCell]}></Text>
 					  </View>
                       )}
 					  <div style={styles.cellGrid}></div>
-                      <View style={[styles.c3, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder,styles.withTopBorder]}> 
-                      <Text style={[styles.tableCell]}>{row.firstName} {row.lastName}</Text>
+                      <View style={[styles.c3, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                        <Text style={{ ...styles.tableCell, left: 5 }}>{row.firstName} {row.lastName}</Text>
 					  </View>
                       <div style={styles.cellGrid}></div>
-					  <View style={[styles.c5, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder,styles.withTopBorder]}> 
-                      <Text style={[styles.tableCell,]}>{row.childSupport?.amount ?? ''}</Text>
+					  <View style={[styles.c5, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                        <Text style={[styles.tableCell]}>{row.childSupport?.amount ?? ''}</Text>
 					  </View>
                       {/* Signature Column - Border Only in Last Row of Group */}
                       <div style={styles.cellGrid}></div>
 					  <View style={[styles.c6,
-                          isLastInGroup ? styles.nill : styles.noBottomBorder,
-						  isFirstInGroup ? styles.noTopBorder : styles.noTopBorder,]}>
-                      <Text
-                        style={[
-                          styles.tableCell, 
-                        ]}
-                      ></Text>
+                        isLastInGroup ? styles.nill : styles.noBottomBorder,
+						  isFirstInGroup ? styles.noTopBorder : styles.noTopBorder]}>
+                        <Text
+                          style={[
+                            styles.tableCell,
+                          ]}
+                        ></Text>
 					  </View>
                       <div style={styles.cellGrid}></div>
                     </View>
@@ -337,7 +347,7 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
                   textAlign: 'center',
                   fontWeight: 'bold',
 	  color: 'black',
-                  fontFamily: 'Oswald',
+                  fontFamily: 'CourierPrime',
                 },
               ]}>
     Total Net Amount
@@ -354,7 +364,7 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
                   fontSize: 16,
 	  color: 'black',
                   textAlign: 'center',
-                  fontFamily: 'Oswald',
+                  fontFamily: 'CourierPrime',
 	  fontWeight: 'ultrabold',
                 },
               ]}>

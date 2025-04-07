@@ -119,7 +119,19 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [showJrLeaderName, setJrLeaderName] = useState(false);
   const [showSrLeaderName, setSrLeaderName] = useState(false);
   const [showPresidentName, setPresidentName] = useState(false);
+  useEffect(() => {
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
+    });
 
+    DivisionsServices.isCoordinator()
+    .then((res) => {
+      setisCoordinator(res.data);
+    })
+    .catch((res) => {
+      console.log(res);
+    });
+  }, []);
   const handleClose = () => {
     setShowAddParticularDialog(false);
     ('add');
@@ -136,19 +148,7 @@ const FRForm = (props: FormComponentProps<any>) => {
     event.preventDefault();
     event.currentTarget.blur();
   };
-  useEffect(() => {
-    PaymentMethodService.getAll().then((res) => {
-      setPaymentMethod(res.data);
-    });
 
-    DivisionsServices.isCoordinator()
-    .then((res) => {
-      setisCoordinator(res.data);
-    })
-    .catch((res) => {
-      console.log(res);
-    });
-  }, []);
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
@@ -218,14 +218,16 @@ const FRForm = (props: FormComponentProps<any>) => {
         .catch((res) => {
           console.log(res);
         });
-    } else if (props.value.purpose === 'Division'&& !isCoordinator) {
-      DivisionsServices.getDivisions()
-        .then((res) => {
-          setAllDivisions(res.data);
-        })
-        .catch((res) => {
-          console.log(res);
-        });
+    } else if (props.value.purpose === 'Division' && !isCoordinator) {
+      if (isCoordinator) {
+        DivisionsServices.getDivisions()
+          .then((res) => {
+            setAllDivisions(res.data);
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
     } else if (props.value.purpose === 'Coordinator'&& !isCoordinator) {
       DivisionsServices.getcoordinators().then((res) => {
         //   setDivision(res.data ?? null);

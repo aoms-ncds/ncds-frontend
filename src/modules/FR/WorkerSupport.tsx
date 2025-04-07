@@ -475,9 +475,9 @@ const WorkerSupportPage = () => {
         setDivisions(res.data ? [res.data] : null);
       });
     } else {
-      DivisionsServices.getDivisions().then((res) => {
+      // DivisionsServices.getDivisions().then((res) => {
         // setDivision(res.data ?? null);
-        setDivisions(res.data);
+        // setDivisions(res.data);
         // WorkersServices.getAll({
         //   status: UserLifeCycleStates.ACTIVE,
         //   division: res.data._id,
@@ -499,8 +499,8 @@ const WorkerSupportPage = () => {
               variant: 'error',
               message: error.message,
             }),
-          );
-      })
+          )
+      // })
         .catch((error) =>
           enqueueSnackbar({
             variant: 'error',
