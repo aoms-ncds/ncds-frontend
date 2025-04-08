@@ -498,10 +498,17 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   }, [attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
   // console.log(mngrName, 'mngrName');
   useEffect(()=>{
-    IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1 }).then((res) => {
-      setNotFound(true);
-      setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
-    });
+    if (userPermissions?.LOCAL_ACCOUNT_ACCESS && !userPermissions?.FCRA_ACCOUNTS_ACCESS) {
+      IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1, sourceOfAccount: 'Local' }).then((res) => {
+        setNotFound(true);
+        setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+      });
+    } else {
+      IROServices.getAllOptimizedSuportEx({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter, support: statusFilter1, sourceOfAccount: 'FCRA' }).then((res) => {
+        setNotFound(true);
+        setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+      });
+    }
   }, [statusFilter1, statusFilter, finder]);
 
   const [selectedSignature, setSignature] = useState<Esignature>({

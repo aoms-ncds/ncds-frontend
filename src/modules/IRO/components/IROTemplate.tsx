@@ -138,7 +138,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   const totalSacntion = props.rowData.particulars?.forEach((e:any) => {
     totalAmount2 += e?.sanctionedAmount != undefined ? e?.sanctionedAmount : 0;
   });
-  console.log(props.rowData, 'total');
+  console.log(props, 'total');
 
   NewTot += props?.rowData.particulars?.sanctionedAmount != undefined ? props?.fr?.sanctionedAmount : 0;
   console.log(NewTot, 'eee');
@@ -205,7 +205,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Div. Co-ordinator</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {`${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ? props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName.trim() : ''}${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName ? ' ' + props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.middleName.trim() : ''} ${props?.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {`${props?.fr?.names?.coordinator?.basicDetails?.firstName ? props?.fr?.names?.coordinator.basicDetails?.firstName.trim() : ''}${props?.fr?.names?.coordinator?.basicDetails?.middleName ? ' ' + props?.fr?.names?.coordinator.basicDetails?.middleName.trim() : ''} ${props?.fr?.names?.coordinator?.basicDetails?.lastName ?? ''}`}</Text>
                 </View>
               </View>
             </View>

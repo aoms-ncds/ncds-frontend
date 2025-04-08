@@ -177,8 +177,8 @@ const IROReconciliationPdf = (props: {
     const count = getRowsPerPage(page);
     return workers?.slice(start, start + count);
   };
+  console.log(props, 'props');
   useEffect(() => {
-    console.log(props, 'props');
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
       WorkersServices.getById(props.data.workerId).then((res) => {
         if (res?.data) {

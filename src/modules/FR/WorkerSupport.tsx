@@ -147,11 +147,11 @@ const WorkerSupportPage = () => {
         message: res.message,
         variant: 'success',
       });
-      setConfirmAttach(true);
-      setDisableAttach(true);
+      res && setDisableAttach(true);
+      res&& setConfirmAttach(true);
       setTimeout(() => {
         setDisableAttach(false);
-      }, 2000); // 2 seconds
+      }, 5000); // 2 seconds
 
       const currentYear = moment().year(); // Ensure `year` is called as a method
       const particulars = requisition.particulars || [];
@@ -475,9 +475,9 @@ const WorkerSupportPage = () => {
         setDivisions(res.data ? [res.data] : null);
       });
     } else {
-      // DivisionsServices.getDivisions().then((res) => {
+      DivisionsServices.getDivisions().then((res) => {
         // setDivision(res.data ?? null);
-        // setDivisions(res.data);
+        setDivisions(res.data);
         // WorkersServices.getAll({
         //   status: UserLifeCycleStates.ACTIVE,
         //   division: res.data._id,
@@ -499,8 +499,8 @@ const WorkerSupportPage = () => {
               variant: 'error',
               message: error.message,
             }),
-          )
-      // })
+          );
+      })
         .catch((error) =>
           enqueueSnackbar({
             variant: 'error',
@@ -1564,7 +1564,7 @@ const WorkerSupportPage = () => {
         <DialogTitle> Add attachment</DialogTitle>
         <DialogContent>
           <Container>FR created. Do you want to add attachment &nbsp;
-            {pdfProps &&
+            {pdfProps!=null &&
               <PDFDownloadLink
                 document={<PDFTemplate
                   divisionId={pdfProps?.divisionId}
@@ -1580,7 +1580,7 @@ const WorkerSupportPage = () => {
                 {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
 
               </PDFDownloadLink>} and &nbsp;
-            {signPdfProps&&<PDFDownloadLink
+            {signPdfProps !=null &&<PDFDownloadLink
               document={<IROReconciliationPdf
                 data={signPdfProps}
               />}
