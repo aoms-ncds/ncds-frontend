@@ -265,6 +265,27 @@ const ChildeSupportPage = () => {
               }) : [],
               signatureSheet: signFile.data._id,
             });
+            const downloadFile = (url: any, filename: any) => {
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              // a.target = '_blank'; // optional: helps with CORS/CDN behavior
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            };
+
+            // Add a small delay to avoid browser blocking multiple downloads
+            const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+            // If you're downloading just one file:
+            if (signFile.data.downloadURL) {
+              // Add delay to ensure the browser doesn't block it
+              delay(200).then(() => {
+                downloadFile(signFile?.data?.downloadURL, signFileBlob.name);
+              });
+            }
+
 
             // Update local state and UI
             setRequisition2((await FRServices.getById(requisition2._id)).data);

@@ -161,7 +161,9 @@ const IROReconciliationPdf = (props: {
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
   const rowsPerPage = 9;
-  const totalPages = Math.ceil((workers ?? []).length / rowsPerPage)-1;
+  const totalPages = (workers ?? []).length > 9 ?
+    Math.ceil((workers ?? []).length / rowsPerPage) - 1 :
+    Math.ceil((workers ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
   const getRowsPerPage = (page: number) => (page === 0 ? 9 : 11);
 
@@ -177,7 +179,7 @@ const IROReconciliationPdf = (props: {
     const count = getRowsPerPage(page);
     return workers?.slice(start, start + count);
   };
-  console.log(props, 'props');
+  console.log(workers, 'props');
   useEffect(() => {
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
       WorkersServices.getById(props.data.workerId).then((res) => {
@@ -233,7 +235,7 @@ const IROReconciliationPdf = (props: {
         });
     } else if (props.data.purpose == 'Division' && props.data.divisionId) {
       if (props.data.designationParticularID) {
-        console.log('');
+        console.log('diivv');
         WorkersServices.getWorkersByDesignation({
           division: props.data.divisionId,
           designationParticular: props.data.designationParticularID,
@@ -424,6 +426,7 @@ const IROReconciliationPdf = (props: {
               </View>
 
               {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
+                console.log(row, 'rowquery');
                 const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
 
                 return (
@@ -490,7 +493,7 @@ const IROReconciliationPdf = (props: {
                 </View>
               )}
             </View>
-            <div>{pageIndex}</div>
+
           </>
         ))}
       </Page>
