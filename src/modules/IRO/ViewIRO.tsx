@@ -1775,7 +1775,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         <DialogActions>
           <Button
             onClick={() => {
-              setData(null);
+              setData2(null);
             }}
             variant="text"
           >
