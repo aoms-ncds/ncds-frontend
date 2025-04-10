@@ -172,7 +172,25 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
   // const raiseddate = new Date(raiseddateString);
   // const option = { day: 'numeric', month: 'long', year: 'numeric' as const };
   // const raisformattedDate = raiseddate.toLocaleDateString('en-GB', option);
+  const { prev, rowData, fr } = props;
 
+  let coordinatorName = '';
+
+  if (prev) {
+    coordinatorName = rowData?.division?.details?.prevCoordinator?.name ?? '';
+  } else {
+    if (fr?.names?.coordinator !=null) {
+      const first = fr?.names?.coordinator?.basicDetails?.firstName?.trim() ?? '';
+      const middle = fr?.names?.coordinator?.basicDetails?.middleName?.trim() ?? '';
+      const last = fr?.names?.coordinator?.basicDetails?.lastName ?? '';
+      coordinatorName = [first, middle, last].filter(Boolean).join(' ');
+    } else {
+      const first = rowData?.division?.details.coordinator?.name?.basicDetails?.firstName?.trim() ?? '';
+      const middle = rowData?.division?.details.coordinator?.name?.basicDetails?.middleName?.trim() ?? '';
+      const last = rowData?.division?.details.coordinator?.name?.basicDetails?.lastName?.trim() ?? '';
+      coordinatorName = [first, middle, last].filter(Boolean).join(' ');
+    }
+  }
   return (
     <Document >
       <Page size="A4" style={styles.page} >
@@ -205,7 +223,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 </View>
                 <View style={{ width: 300, flexDirection: 'row' }}>
                   <Text style={{ ...styles.text, marginTop: 3, left: 5, fontFamily: 'CourierPrime', fontSize: 11, top: 2, marginBottom: 3 }}>Div. Co-ordinator</Text>
-                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {`${props?.fr?.names?.coordinator?.basicDetails?.firstName ? props?.fr?.names?.coordinator.basicDetails?.firstName.trim() : ''}${props?.fr?.names?.coordinator?.basicDetails?.middleName ? ' ' + props?.fr?.names?.coordinator.basicDetails?.middleName.trim() : ''} ${props?.fr?.names?.coordinator?.basicDetails?.lastName ?? ''}`}</Text>
+                  <Text style={{ ...styles.text, marginTop: 6, left: 19, marginBottom: 3 }}>: {coordinatorName}</Text>
                 </View>
               </View>
             </View>
@@ -619,7 +637,7 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                   fontSize: 11,
                   textAlign: 'center',
                   fontWeight: 500,
-                  right: 14,
+                  right: 22,
 
                   fontFamily: 'CourierPrime',
                 }}>
