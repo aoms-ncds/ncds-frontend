@@ -17,7 +17,7 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     backgroundColor: 'white',
-    paddingTop: 10,
+    // paddingTop: 10,
   },
 
   image: {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     marginTop: 90,
     fontSize: 12,
     position: 'absolute',
-    left: 389,
+    left: 380,
     color: 'black',
     fontWeight: 'bold',
     fontFamily: 'CourierPrime',
@@ -94,6 +94,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+
+  },
+  t1: {
+    bottom: 30,
   },
   c1: { width: '10%', textAlign: 'center', paddingVertical: 0 },
   c2: { width: '15%', textAlign: 'center', paddingVertical: 0 },
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontFamily: 'CourierPrime',
-    flex: 1,
+    flex: 2,
     height: 30,
     flexWrap: 'wrap',
     paddingVertical: 5,
@@ -179,6 +183,13 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   // const rowsPerPage = 6;
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 16; // or make it dynamic
+  const totalPages = (props?.data ?? []).length > 50?
+    Math.ceil((props?.data ?? []).length / rowsPerPage)-1 :
+    Math.ceil((props?.data ?? []).length / rowsPerPage);
+  console.log(totalPages, 'totalPages');
+  console.log(props?.data?.length, 'totalPages');
   // const totalPages = Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(props, 'totalPages');
   // Function to get rows for a specific page
@@ -200,9 +211,26 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
   };
 
 
-  const getRowsForPage = () => {
-	  return groupByParent(props?.data ?? []);
+  const getRowsPerPage = (page: number) => (page === 0 ? 16: 18);
+
+  const getRowsForPage = (page: number) => {
+    const grouped = groupByParent(props?.data ?? []);
+    const flatRows = grouped.flat();
+
+    // Calculate pagination bounds
+    let start = 0;
+    if (page > 0) {
+      start = 16 + (page - 1) * 18;
+    }
+
+    const count = getRowsPerPage(page);
+    const paginatedRows = flatRows.slice(start, start + count);
+
+    // Re-group just the paginated rows
+    return groupByParent(paginatedRows);
   };
+
+
   const [purpose, setPurpose] = useState('Division');
   // console.log(props?.data?.map((e)=>e?.childOf?.division?.details?.name), 'rte');
   const [total, setTotal] = useState<number>(0);
@@ -234,35 +262,51 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
           </Text>         {/* <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text> */}
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
+        {Array.from({ length: totalPages }).map((_, pageIndex) => (
+          <>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 12,
+                bottom: 26,
+                left: 0,
+                right: 0,
+                textAlign: 'center',
+                color: 'grey',
+              }}
+              render={({ pageNumber, totalPages }) =>
+                `${pageNumber} / ${totalPages}`
+              }
+              fixed
+            ></Text>
+            <View style={[styles.tableContainer, {
+              bottom: pageIndex >0? 30: 0,
+            }]}>
+              <View style={styles.line} />
+              <View style={styles.tableRow}>
+                <View style={styles.cellGrid} />
+                <Text style={[styles.tableCellHead, styles.c1]}>Sl No.</Text>
+                <View style={styles.cellGrid} />
 
-        <>
+                <Text style={[styles.tableCellHead, styles.c2]}>Child Code</Text>
+                <View style={styles.cellGrid} />
 
-          <View style={styles.tableContainer}>
-            <View style={styles.line} />
-            <View style={styles.tableRow}>
-              <View style={styles.cellGrid} />
-              <Text style={[styles.tableCellHead, styles.c1]}>Sl No.</Text>
-              <View style={styles.cellGrid} />
-
-              <Text style={[styles.tableCellHead, styles.c2]}>Child Code</Text>
-              <View style={styles.cellGrid} />
-
-              <Text style={[styles.tableCellHead, styles.c4C]}>Child Of</Text>
-              <View style={styles.cellGrid} />
+                <Text style={[styles.tableCellHead, styles.c4C]}>Child Of</Text>
+                <View style={styles.cellGrid} />
 
 			  <Text style={[styles.tableCellHead, styles.c3C]}>Child Name</Text>
-              <View style={styles.cellGrid} />
+                <View style={styles.cellGrid} />
 
-              <Text style={[styles.tableCellHead, styles.c5]}>Net Amt</Text>
-              <View style={styles.cellGrid} />
+                <Text style={[styles.tableCellHead, styles.c5]}>Net Amt</Text>
+                <View style={styles.cellGrid} />
 
-              <Text style={[styles.tableCellHead, styles.c6]}>Signature</Text>
-              <View style={styles.cellGrid} />
+                <Text style={[styles.tableCellHead, styles.c6]}>Signature</Text>
+                <View style={styles.cellGrid} />
 		    </View>
 
 
-            {
-              getRowsForPage()?.map((group, groupIndex) =>
+              {getRowsForPage(pageIndex)?.map((group, groupIndex) =>
+
                 group.map((row, index) => {
                   const isFirstInGroup = index === 0;
                   const isLastInGroup = index === group.length - 1;
@@ -277,12 +321,13 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
                       key={row._id}
                       wrap={false}
                     >
+
 					  <div style={styles.cellGrid}></div>
-					  <View style={[styles.c1, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+					  <View style={[styles.c1, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>
                         <Text style={[styles.tableCell]}>{serialNumber ++}</Text>
                       </View>
 					  <div style={styles.cellGrid}></div>
-                      <View style={[styles.c2, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                      <View style={[styles.c2, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>
                         <Text style={[styles.tableCell]}>{row.childCode}</Text>
 					  </View>
 
@@ -309,11 +354,11 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
 					  </View>
                       )}
 					  <div style={styles.cellGrid}></div>
-                      <View style={[styles.c3, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+                      <View style={[styles.c3, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>
                         <Text style={{ ...styles.tableCell, left: 5 }}>{row.firstName} {row.lastName}</Text>
 					  </View>
                       <div style={styles.cellGrid}></div>
-					  <View style={[styles.c5, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder, styles.withTopBorder]}>
+					  <View style={[styles.c5, isLastInGroup ? styles.noBottomBorderForGroup : styles.withBorder]}>
                         <Text style={[styles.tableCell]}>{row.childSupport?.amount ?? ''}</Text>
 					  </View>
                       {/* Signature Column - Border Only in Last Row of Group */}
@@ -332,53 +377,56 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
                   );
                 }),
               )}
-            <View style={[styles.tableRow, styles.withBorderBottom]} key={1000} wrap={false}>
-              <View style={styles.cellGrid} />
-              <Text style={[styles.tableCellBottom, styles.c1]}></Text>
-              <Text style={[styles.tableCellBottom, styles.c2]}></Text>
-              <Text style={[styles.tableCellBottom, styles.c3]}></Text>
-              <Text style={[
-                styles.tableCellBottom,
+              {pageIndex === totalPages-1&& (
 
-                {
+                <View style={[styles.tableRow, styles.withBorderBottom]} key={1000} wrap={false}>
+                  <View style={styles.cellGrid} />
+                  <Text style={[styles.tableCellBottom, styles.c1]}></Text>
+                  <Text style={[styles.tableCellBottom, styles.c2]}></Text>
+                  <Text style={[styles.tableCellBottom, styles.c3]}></Text>
+                  <Text style={[
+                    styles.tableCellBottom,
+
+                    {
 	  padding: 0,
 	  width: '35%',
-                  fontSize: 14,
-                  textAlign: 'center',
-                  fontWeight: 'bold',
+                      fontSize: 14,
+                      textAlign: 'center',
+                      fontWeight: 'bold',
 	  color: 'black',
-                  fontFamily: 'CourierPrime',
-                },
-              ]}>
+                      fontFamily: 'CourierPrime',
+                    },
+                  ]}>
     Total Net Amount
-              </Text>
+                  </Text>
 
-              <View style={styles.cellGrid} />
+                  <View style={[styles.cellGrid, { left: 8 }]} />
 
-              <Text style={[
-                styles.tableCellBottom,
+                  <Text style={[
+                    styles.tableCellBottom,
 
-                {
+                    {
 	  padding: 0,
 	  width: '20%',
-                  fontSize: 16,
+                      fontSize: 16,
 	  color: 'black',
-                  textAlign: 'center',
-                  fontFamily: 'CourierPrime',
+                      textAlign: 'center',
+                      fontFamily: 'CourierPrime',
 	  fontWeight: 'ultrabold',
-                },
-              ]}>
-                {Number.isNaN(total) ? 0 : total}
-              </Text>
+                    },
+                  ]}>
+                    {Number.isNaN(total) ? 0 : total}
+                  </Text>
 
-              <View style={styles.cellGrid} />
+                  <View style={styles.cellGrid} />
+
+                </View>
+              )}
+
 
             </View>
-
-
-          </View>
-        </>
-
+          </>
+        ))}
 
       </Page>
     </Document>
