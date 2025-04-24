@@ -39,13 +39,13 @@ const NotificationPage = () => {
     {
       field: 'body',
       renderHeader: () => (<b>Body</b>),
-      minWidth: 500,
+      minWidth: 800,
       type: 'string',
       renderCell: (props) => {
         return (
           <Link to={`/notification/${props.row._id}`} style={{
             textDecoration: 'none',
-            maxWidth: 500,
+            maxWidth: 800,
             whiteSpace: 'normal',
             wordBreak: 'break-word',
           }}>
