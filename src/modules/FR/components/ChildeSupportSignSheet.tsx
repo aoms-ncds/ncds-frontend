@@ -185,8 +185,8 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
   // const rowsPerPage = 6;
   const [page, setPage] = useState(0);
   const rowsPerPage = 16; // or make it dynamic
-  const totalPages = (props?.data ?? []).length > 50?
-    Math.ceil((props?.data ?? []).length / rowsPerPage)-1 :
+  const totalPages = (props?.data ?? []).length > 60?
+    Math.ceil((props?.data ?? []).length / rowsPerPage):
     Math.ceil((props?.data ?? []).length / rowsPerPage);
   console.log(totalPages, 'totalPages');
   console.log(props?.data?.length, 'totalPages');
@@ -211,7 +211,7 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
   };
 
 
-  const getRowsPerPage = (page: number) => (page === 0 ? 16: 18);
+  const getRowsPerPage = (page: number) => (page === 0 ? 16: 16);
 
   const getRowsForPage = (page: number) => {
     const grouped = groupByParent(props?.data ?? []);
@@ -220,7 +220,7 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
     // Calculate pagination bounds
     let start = 0;
     if (page > 0) {
-      start = 16 + (page - 1) * 18;
+      start = 16 + (page - 1) * 16;
     }
 
     const count = getRowsPerPage(page);
