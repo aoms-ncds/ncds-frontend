@@ -15,7 +15,6 @@ Font.register({
 
 const styles = StyleSheet.create({
   page: {
-
     flexDirection: 'column',
     padding: 20,
     width: 841.89,
@@ -68,6 +67,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 4,
     right: 21,
+    top: 18,
+
   },
   tableRow: {
     display: 'flex',
@@ -160,26 +161,29 @@ const IROReconciliationPdf = (props: {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
-  const rowsPerPage = 9;
-  const totalPages = (workers ?? []).length > 9 ?
-    Math.ceil((workers ?? []).length / rowsPerPage) - 1 :
-    Math.ceil((workers ?? []).length / rowsPerPage);
-  console.log(totalPages, 'totalPages');
-  const getRowsPerPage = (page: number) => (page === 0 ? 9 : 11);
+  const firstPageRows = 9;
+  const otherPageRows = 11;
 
-  // Function to get rows for a specific page
-  const getRowsForPage = (page: number) => {
-    let start = 0;
-
-    // First page (0) starts at 0
-    if (page > 0) {
-      start = 9 + (page - 1) * 11;
-    }
-
-    const count = getRowsPerPage(page);
-    return workers?.slice(start, start + count);
+  const getTotalPages = (workers: any[]) => {
+    if (!workers || workers.length === 0) return 0;
+    if (workers.length <= firstPageRows) return 1;
+    return 1 + Math.ceil((workers.length - firstPageRows) / otherPageRows);
   };
-  console.log(workers, 'props');
+
+  const getRowsForPage = (workers: any[], page: number) => {
+    if (page === 0) return workers.slice(0, firstPageRows);
+
+    const start = firstPageRows + (page - 1) * otherPageRows;
+    const end = start + otherPageRows;
+    return workers.slice(start, end);
+  };
+
+  const getSerialNumberOffset = (pageIndex: number) => {
+    if (pageIndex === 0) return 0;
+    return firstPageRows + (pageIndex - 1) * otherPageRows;
+  };
+
+  console.log(workers, '  ');
   useEffect(() => {
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
       WorkersServices.getById(props.data.workerId).then((res) => {
@@ -367,6 +371,9 @@ const IROReconciliationPdf = (props: {
       ),
     );
   }, [workers]);
+  const serialNumber = 1;
+  const totalPages = getTotalPages(workers??[]);
+
   return (
     <Document>
       <Page size={'A4'} style={styles.page} orientation='portrait'>
@@ -384,6 +391,7 @@ const IROReconciliationPdf = (props: {
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
         </div>
 
+
         {Array.from({ length: totalPages }).map((_, pageIndex) => (
           <>
             <Text
@@ -396,16 +404,15 @@ const IROReconciliationPdf = (props: {
                 textAlign: 'center',
                 color: 'grey',
               }}
-              render={({ pageNumber, totalPages }) =>
-                `${pageNumber} / ${totalPages}`
-              }
+              render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
               fixed
-            >{pageIndex}</Text>
+            />
 
-            {/* <View style={styles.line} /> */}
             <View style={styles.tableContainer}>
               <Image src="/3D Logo 3.png" style={styles.watermarkImage} />
-              <View style={{ ...styles.tableRow, height: 30 }} key={0}>
+
+              {/* Table Header */}
+              <View style={{ ...styles.tableRow, height: 30 }} key={`header-${pageIndex}`}>
                 <div style={styles.headGrid}></div>
                 <Text style={{ ...styles.tableHead, flex: 0.5 }}>Sl No.</Text>
                 <div style={styles.headGrid}></div>
@@ -413,89 +420,87 @@ const IROReconciliationPdf = (props: {
                 <div style={styles.headGrid}></div>
                 <Text style={{ ...styles.tableHead, flex: 2 }}>Worker Name</Text>
                 <div style={styles.headGrid}></div>
-                {/* <Text style={styles.tableHead}>Last Name</Text>
-    <div style={styles.headGrid}></div> */}
-                {/* <Text style={styles.tableHead}>Division</Text>
-              <div style={styles.headGrid}></div> */}
                 <Text style={{ ...styles.tableHead, flex: 0.7 }}>Net Amt</Text>
                 <div style={styles.headGrid}></div>
                 <Text style={{ ...styles.tableHead, textAlign: 'right' }}>Signature</Text>
                 <Text style={styles.tableHead}></Text>
-                {/* <div style={styles.cellGridCopy1}></div> */}
                 <div style={styles.cellGridCopy2}></div>
               </View>
 
-              {getRowsForPage(pageIndex)?.map((row: any, index: any) => {
-                console.log(row, 'rowquery');
-                const globalIndex = pageIndex * rowsPerPage + index + 1; // Calculate the global index
+              {/* Table Rows */}
+              {getRowsForPage(workers?? [], pageIndex)?.map((row: any, index: number) => {
+                const serialNumber = getSerialNumberOffset(pageIndex) + index + 1;
 
                 return (
-
                   <View style={styles.tableRow} key={row._id}>
                     <div style={styles.cellGrid}></div>
-                    <Text style={{ ...styles.tableCell, flex: 0.5 }}>{globalIndex}</Text>
+                    <Text style={{ ...styles.tableCell, flex: 0.5 }}>{serialNumber}</Text>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}>{row.workerCode}</Text>
                     <div style={styles.cellGrid}></div>
-                    <Text style={{ ...styles.tableCell, flex: 2 }} >{row.basicDetails.firstName}{' '} {row.basicDetails.lastName}</Text>
+                    <Text style={{ ...styles.tableCell, flex: 2 }}>
+                      {row.basicDetails.firstName} {row.basicDetails.lastName}
+                    </Text>
                     <div style={styles.cellGrid}></div>
-                    {/* <Text style={styles.tableCell}>{row.basicDetails.lastName}</Text>
-        <div style={styles.cellGrid}></div> */}
-                    {/* <Text style={styles.tableCell}>{row.division?.details.name}</Text>
-                  <div style={styles.cellGrid}></div> */}
-                    <Text style={{ ...styles.tableCell, flex: 0.7 }}>{row.supportStructure?.supportEnabled ?
-                      (row.supportStructure?.basic ?? 0) +
-                    (row.supportStructure?.HRA ?? 0) +
-                    (row.supportStructure?.spouseAllowance ?? 0) +
-                    (row.supportStructure?.positionalAllowance ?? 0) +
-                    (row.supportStructure?.specialAllowance ?? 0) +
-                    (row.supportStructure?.PIONMissionaryFund ?? 0) +
-                    (row.supportStructure?.pmaDeduction?.amount ?? 0) +
-                    (row.supportStructure?.telAllowance ?? 0) -
-                    (
-                      (row.supportStructure?.impactDeduction ?? 0) +
-                      (row.supportStructure?.MUTDeduction ?? 0)
-                    ) : ''}</Text>
+                    <Text style={{ ...styles.tableCell, flex: 0.7 }}>
+                      {row.supportStructure?.supportEnabled ?
+                        (row.supportStructure?.basic ?? 0) +
+                  (row.supportStructure?.HRA ?? 0) +
+                  (row.supportStructure?.spouseAllowance ?? 0) +
+                  (row.supportStructure?.positionalAllowance ?? 0) +
+                  (row.supportStructure?.specialAllowance ?? 0) +
+                  (row.supportStructure?.PIONMissionaryFund ?? 0) +
+                  (row.supportStructure?.pmaDeduction?.amount ?? 0) +
+                  (row.supportStructure?.telAllowance ?? 0) -
+                  ((row.supportStructure?.impactDeduction ?? 0) +
+                    (row.supportStructure?.MUTDeduction ?? 0)) :
+                        ''}
+                    </Text>
                     <div style={styles.cellGrid}></div>
                     <Text style={styles.tableCell}></Text>
-                    {/* <div style={styles.cellGridCopy}></div> */}
                     <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                     <div style={styles.cellGrid}></div>
                   </View>
                 );
               })}
-              {pageIndex === totalPages-1&& (
-                <View style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }} key={1}>
+
+              {/* Total Row on Last Page */}
+              {pageIndex === totalPages - 1 && (
+                <View
+                  style={{ ...styles.tableRow, backgroundColor: '#bdbdbd', height: 30 }}
+                  key={`total-${pageIndex}`}
+                >
                   <div style={styles.headGrid}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text>
-                  {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}></Text> */}
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
-                  {/* <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div> */}
-                  <Text style={{
-                    flex: 1.4,
-                    fontSize: 12,
-                    padding: 2,
-                    textAlign: 'center', fontWeight: 'bold',
-                  }}>Total Net Amount</Text>
+                  <Text
+                    style={{
+                      flex: 1.4,
+                      fontSize: 12,
+                      padding: 2,
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}
+                  >
+            Total Net Amount
+                  </Text>
                   <div style={{ ...styles.headGrid }}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold', fontSize: 16 }}>{total}</Text>
                   <div style={{ ...styles.headGrid, borderColor: '#bdbdbd' }}></div>
                   <Text style={{ ...styles.tableCell, fontWeight: 'bold' }}> </Text>
                   <div style={styles.headGridCopyy}></div>
-
                 </View>
               )}
             </View>
-
           </>
         ))}
+
       </Page>
     </Document>
   );

@@ -102,7 +102,25 @@ const WorkerSupportPage = () => {
     workerSupport: true,
   });
   const [requisition2, setRequisition2] = useState<FR | null>(null);
-  const supportEnabledWorkers = workers?.filter((item) => item.supportStructure?.supportEnabled === true);
+  const supportEnabledWorkers = workers?.filter((item) => {
+    const support = item.supportStructure;
+
+    return (
+      support?.supportEnabled === true &&
+      (
+        support.HRA !== 0 ||
+        support.MUTDeduction !== 0 ||
+        support.PIONMissionaryFund !== 0 ||
+        support.basic !== 0 ||
+        support.spouseAllowance !== 0 ||
+        support.positionalAllowance !== 0 ||
+        support.telAllowance !== 0 ||
+        support.specialAllowance !== 0 ||
+        support.impactDeduction !== 0
+      )
+    );
+  });
+
 
   const [designationParticulars, setDesignationParticulars] = useState<IDesignationParticular[]>([]);
   const [designationParticular, setDesignationParticular] = useState<IDesignationParticular | null>(null);
@@ -1163,7 +1181,7 @@ const WorkerSupportPage = () => {
                 narration: requisition?.particulars[0]?.narration,
                 requestedAmount: total.net,
                 unitPrice: total.net,
-                quantity: supportEnabledWorkers?.length,
+                quantity: supportEnabledWorkers?.length ?? 0,
                 year: requisition?.particulars[0].year,
                 attachment: [],
               }] : [],
