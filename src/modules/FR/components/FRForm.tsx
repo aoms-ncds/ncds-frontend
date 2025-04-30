@@ -580,7 +580,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 <Autocomplete
                   value={props.value.purpose ?? null}
                   options={purposes ?? []}
-                  disabled={props.actionAdi =='view'}
+                  disabled={props.actionAdi =='view'|| props.disable}
 
                   getOptionLabel={(requisition) => requisition ?? ''}
                   onChange={(_e, selectedPurpose) => {
@@ -612,6 +612,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                       }}
                       renderInput={(params) => <TextField {...params} label="Choose Worker" required />}
                       fullWidth
+                      disabled={props.disable}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -634,7 +635,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                       onOpen={() => setOpen(true)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                   <TextField
-                    disabled={props.actionAdi =='view'}
+                    disabled={props.actionAdi =='view'|| props.disable}
                     label={props.action === 'custom' ? 'FR No' : 'IRO No'}
                     value={props?.value.FRno}
                     autoComplete="off"
@@ -721,7 +722,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                   <Autocomplete
                     value={props.value.division ?? null}
                     options={AllDivisions ?? [division]}
-                    disabled={props.actionAdi =='view'}
+                    disabled={props.actionAdi =='view'|| props.disable}
                     getOptionLabel={(division) => division.details?.name || ''}
                     onChange={(_e, purposeDivision) => {
                       props.onChange({
@@ -738,7 +739,7 @@ const FRForm = (props: FormComponentProps<any>) => {
               {props.value.purpose === 'Subdivision' ? (
                 <Grid item xs={12} md={6}>
                   <Autocomplete
-                    disabled={props.actionAdi =='view'}
+                    disabled={props.actionAdi =='view'|| props.disable}
 
                     options={(props.action =='add'? subDivisions: AllSubDivisions) ?? []}
                     value={props.value.purposeSubdivision ?? null}
@@ -765,6 +766,8 @@ const FRForm = (props: FormComponentProps<any>) => {
                     getOptionLabel={(coordinator) => coordinator.basicDetails.firstName + ' ' + coordinator.basicDetails.lastName}
                     renderInput={(params) => <TextField {...params} label="Choose Coordinator" />}
                     fullWidth
+                    disabled={props.disable}
+
                   />
                 </Grid>
               ):''}
@@ -807,7 +810,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                     <Autocomplete
                       value={selectedMainCategory ?? null}
                       options={mainCategories ?? []}
-                      disabled={props.actionAdi =='view'}
+                      disabled={props.actionAdi =='view'|| props.disable}
                       getOptionLabel={(mainCategory) => mainCategory.name}
                       onChange={(e, selectedMainCategory) => {
                         if (selectedMainCategory) {
@@ -1767,6 +1770,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                   <Autocomplete
                     value={selectedMainCategory ?? null}
                     options={mainCategories ?? []}
+                    disabled={props.disable == true}
                     getOptionLabel={(mainCategory) => mainCategory.name}
                     onChange={(e, selectedMainCategory) => {
                       if (selectedMainCategory) {

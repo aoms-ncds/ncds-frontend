@@ -166,7 +166,7 @@ const WorkerSupportPage = () => {
         variant: 'success',
       });
       res && setDisableAttach(true);
-      res&& setConfirmAttach(true);
+      res.data && setConfirmAttach(true);
       setTimeout(() => {
         setDisableAttach(false);
       }, 5000); // 2 seconds
