@@ -911,7 +911,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
                     }}
                     fullWidth
                     multiline
-                    required
+                    // required
                   />
                 </Grid>
                 <Grid item md={6}>

@@ -74,6 +74,7 @@ const ChildeSupportPage = () => {
     childSupport: true,
   });
   const supportEnabledChilds = childList?.filter((item) => item.supportEnabled === true);
+  const supportEnabledChildsCount = childList?.filter((item) => item);
 
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [filterdId, setFilterdId] = useState<string[]>([]);
@@ -161,7 +162,7 @@ const ChildeSupportPage = () => {
   // calculateTotalCEAAmount(childList)
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', height: '4vh', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
+    <><div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', height: '4vh', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
       {/* {columns.map((column) => ( */}
       <div style={{ textAlign: 'center' }}>
         <b>Total: </b>
@@ -169,7 +170,15 @@ const ChildeSupportPage = () => {
         </b>
       </div>
       {/* ))} */}
-    </div>
+    </div><div style={{ display: 'flex', justifyContent: 'flex-start', paddingLeft: 5, width: '100%', height: '5vh', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
+      {/* {columns.map((column) => ( */}
+      <div style={{ textAlign: 'end' }}>
+        <b>Total count: </b>
+        <b>{supportEnabledChildsCount.length ?? null}
+        </b>
+      </div>
+      {/* ))} */}
+    </div></>
   );
   useEffect(() => {
     setTotal(0);
@@ -370,6 +379,7 @@ const ChildeSupportPage = () => {
       });
   };
   const columns: GridColDef[] = [
+
     {
       field: 'actions',
       type: 'actions',
@@ -384,6 +394,20 @@ const ChildeSupportPage = () => {
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
+    {
+      field: 'slNo',
+      headerName: 'Sl No',
+      width: 70,
+      headerClassName: 'column-header',
+      renderHeader: () => <b>{'Sl No'}</b>,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: (params) => <div>{params.api.getAllRowIds().indexOf(params.id) + 1}</div>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
     // eslint-disable-next-line max-len
     { field: 'childeCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Child Code'}</b>, valueGetter: (params) => params.row?.childCode, align: 'center', headerAlign: 'center' },
     {
