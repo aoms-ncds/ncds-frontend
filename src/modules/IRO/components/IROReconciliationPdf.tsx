@@ -2,6 +2,8 @@ import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/
 import { useEffect, useState } from 'react';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
 import WorkersServices from '../../Workers/extras/WorkersServices';
+import DivisionsServices from '../../Divisions/extras/DivisionsServices';
+import { set } from 'mongoose';
 
 Font.register({
   family: 'CourierPrime',
@@ -161,6 +163,7 @@ const IROReconciliationPdf = (props: {
   const [workers, setWorkers] = useState<IWorker[] | null>(null);
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
+  const [division, setDivision] = useState('');
   const firstPageRows = 9;
   const otherPageRows = 11;
 
@@ -186,6 +189,7 @@ const IROReconciliationPdf = (props: {
   console.log(workers, '  ');
   useEffect(() => {
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
+      DivisionsServices.getDivisionById(props.data?.divisionId??'').then((res)=>setDivision(res.data.details.name));
       WorkersServices.getById(props.data.workerId).then((res) => {
         if (res?.data) {
           const worker = res.data;
@@ -209,6 +213,8 @@ const IROReconciliationPdf = (props: {
       });
       props.data.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
     } else if (props.data.purpose == 'Subdivision' && props.data.divisionId && props.data.subDivisionId) {
+      DivisionsServices.getDivisionById(props.data?.divisionId??'').then((res)=>setDivision(res.data.details.name));
+
       WorkersServices.getWorkersBySubDivision({ division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID ?? null })
         .then((res) => {
           // console.log(res, 'shibin');
@@ -381,7 +387,7 @@ const IROReconciliationPdf = (props: {
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} {division? '- ' : ''} {division?? division}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
               '- ' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 
