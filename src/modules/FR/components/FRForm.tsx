@@ -120,16 +120,15 @@ const FRForm = (props: FormComponentProps<any>) => {
   const [showSrLeaderName, setSrLeaderName] = useState(false);
   const [showPresidentName, setPresidentName] = useState(false);
   useEffect(() => {
-    PaymentMethodService.getAll().then((res) => {
-      setPaymentMethod(res.data);
-    });
-
     DivisionsServices.isCoordinator()
     .then((res) => {
       setisCoordinator(res.data);
     })
     .catch((res) => {
       console.log(res);
+    });
+    PaymentMethodService.getAll().then((res) => {
+      setPaymentMethod(res.data);
     });
   }, []);
   const handleClose = () => {
@@ -152,7 +151,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  // console.log(division?.details.coordinator.name, 'newParticular33');
+  console.log(isCoordinator, 'newParticular33');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -228,10 +227,22 @@ const FRForm = (props: FormComponentProps<any>) => {
             console.log(res);
           });
       }
-    } else if (props.value.purpose === 'Coordinator'&& !isCoordinator) {
-      DivisionsServices.getcoordinators().then((res) => {
-        //   setDivision(res.data ?? null);
-        setAllCoortinators(res.data);
+    }
+  }, [props.value.purpose]);
+  useEffect(()=>{
+    if (props.value.purpose === 'Coordinator') {
+      DivisionsServices.isCoordinator()
+      .then((res) => {
+        setisCoordinator(res.data);
+        if (!res.data) {
+          DivisionsServices.getcoordinators().then((res) => {
+            //   setDivision(res.data ?? null);
+            setAllCoortinators(res.data);
+          });
+        }
+      })
+      .catch((res) => {
+        console.log(res);
       });
     }
   }, [props.value.purpose]);

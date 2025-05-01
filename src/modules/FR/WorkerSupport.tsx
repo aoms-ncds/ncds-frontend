@@ -120,6 +120,10 @@ const WorkerSupportPage = () => {
       )
     );
   });
+  const supportEnabledWorkersCount = workers?.filter((item) => {
+    return item.supportStructure;
+  });
+  console.log(supportEnabledWorkersCount?.length, 'counte');
 
 
   const [designationParticulars, setDesignationParticulars] = useState<IDesignationParticular[]>([]);
@@ -278,15 +282,17 @@ const WorkerSupportPage = () => {
 
   // eslint-disable-next-line react/no-multi-comp
   const CustomFooter = () => (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
-      {columns.map((column) => (
-        <div key={column.field} style={{ width: column.width, textAlign: 'center' }}>
-          {column.field == 'division' && <b>Total</b>}
-          <b> {typeof total[column.field as keyof TotalSupportStructure] === 'number' ? total[column.field as keyof TotalSupportStructure] : null}
-          </b>
-        </div>
-      ))}
-    </div>
+    <>
+      <h4 style={{ paddingLeft: 5 }}>Total count: {supportEnabledWorkersCount?.length} </h4>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', paddingRight: '16px', backgroundColor: '#B4D4FF' }}>
+        {columns.map((column) => (
+          <div key={column.field} style={{ width: column.width, textAlign: 'center' }}>
+            {column.field == 'division' && <b>Total</b>}
+            <b> {typeof total[column.field as keyof TotalSupportStructure] === 'number' ? total[column.field as keyof TotalSupportStructure] : null}
+            </b>
+          </div>
+        ))}
+      </div></>
   );
   useEffect(() => {
     if (!confirmAttach) {
@@ -296,7 +302,7 @@ const WorkerSupportPage = () => {
       } else if (purpose == 'Subdivision' && division && requisition.purposeSubdivision) {
         WorkersServices.getWorkersBySubDivision({ division: division._id, subDiv: requisition.purposeSubdivision._id as string, designationParticular: requisition.designationParticular ?? null })
           .then((res) => {
-            console.log(res);
+            console.log(res.data, 'rrr');
             setWorkers(res.data);
           })
           .catch((res) => {
@@ -599,6 +605,12 @@ const WorkerSupportPage = () => {
           false,
         ].filter((action) => action !== false) as JSX.Element[],
     },
+
+    { field: 'Slno', width: 70, headerClassName: 'column-header',
+      renderHeader: () => <b>{'Sl no'}</b>,
+      valueGetter: (params) => params.api.getAllRowIds().indexOf(params.id) + 1,
+
+      align: 'center', headerAlign: 'center' },
     { field: 'workerCode', width: 100, headerClassName: 'column-header', renderHeader: () => <b>{'Worker Code'}</b>, align: 'center', headerAlign: 'center' },
     {
       field: 'firstName',
@@ -1027,12 +1039,18 @@ const WorkerSupportPage = () => {
       headerClassName: 'column-grp',
       children: [{ field: 'actions' }],
     },
+    // {
+    //   groupId: '.',
+    //   description: '',
+    //   headerClassName: 'column-grp',
+    //   children: [{ field: 'Slno' },],
+    // },
     {
       groupId: 'details',
       description: '',
       renderHeaderGroup: () => <b>{'Worker Details'}</b>,
       headerClassName: 'column-grp',
-      children: [{ field: 'workerCode' },
+      children: [{ field: 'Slno' }, { field: 'workerCode' },
         { field: 'firstName' }, { field: 'lastName' }, { field: 'division' }, { field: 'sub_division' }, { field: 'designation' }],
     },
     {

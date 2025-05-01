@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import { useEffect, useState } from 'react';
 import UserLifeCycleStates from '../../User/extras/UserLifeCycleStates';
@@ -166,7 +167,10 @@ const IROReconciliationPdf = (props: {
   const [division, setDivision] = useState('');
   const firstPageRows = 9;
   const otherPageRows = 11;
+  useEffect(()=>{
+    setDivision('');
 
+  },[])
   const getTotalPages = (workers: any[]) => {
     if (!workers || workers.length === 0) return 0;
     if (workers.length <= firstPageRows) return 1;
@@ -186,7 +190,7 @@ const IROReconciliationPdf = (props: {
     return firstPageRows + (pageIndex - 1) * otherPageRows;
   };
 
-  console.log(workers, '  ');
+  console.log(division, ' ressoo ');
   useEffect(() => {
     if ((props.data.purpose == 'Coordinator' || props.data.purpose == 'Worker') && props.data.workerId) {
       DivisionsServices.getDivisionById(props.data?.divisionId??'').then((res)=>setDivision(res.data.details.name));
@@ -376,7 +380,16 @@ const IROReconciliationPdf = (props: {
         (MUTDeduction ?? 0)
       ),
     );
+    // setDivision('');
   }, [workers]);
+ 
+  const hasDivision = !!division;
+const showDivision = (purpose === 'Individual' || purpose === 'Coordinator') && hasDivision;
+const showSubDivision = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name 
+  && props.data.purpose !== 'Coordinator';
+
+const subDivisionName = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name;
+
   const serialNumber = 1;
   const totalPages = getTotalPages(workers??[]);
 
@@ -387,11 +400,11 @@ const IROReconciliationPdf = (props: {
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} {division? '- ' : ''} {division?? division}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
-              '- ' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+            {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} {division? '- ' : ''} {division?? division}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name &&props.data.purpose !== 'Coordinator' ?
+              '/ ' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 
-          </Text>
+</Text>
           <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}

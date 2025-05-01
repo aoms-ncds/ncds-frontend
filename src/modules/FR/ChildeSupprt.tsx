@@ -187,8 +187,8 @@ const ChildeSupportPage = () => {
       const tot = childList.reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
       setTotal(tot);
     });
-    console.log(tot, 'tot');
   }, [childList]);
+  console.log(total, 'tot');
   useEffect(() => {
     if (division) {
       DivisionsServices.getSubDivisionsByDivisionId(division?._id as string)
@@ -707,8 +707,8 @@ const ChildeSupportPage = () => {
               subCategory3: 'Select',
               month: moment().format('MMMM'),
               narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
-              requestedAmount: tot,
-              unitPrice: tot,
+              requestedAmount: total,
+              unitPrice: total,
               quantity: supportEnabledChilds?.length,
               attachment: fileObj ? [fileObj] : [],
             }],
