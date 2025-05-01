@@ -301,7 +301,7 @@ export default {
       }),
     ),
 
-  updateFRRequests: (frID: string, frRequest: CreatableFR) => {
+  updateFRRequests: ( frID: string, frRequest?: CreatableFR) => {
     return getStandardResponse<FR>(
       new Promise((resolve, reject) => {
         axios
@@ -310,9 +310,9 @@ export default {
           }, { headers: { ...getAuthHeader() } })
           .then(async (updatedFR) => {
             try {
-              if (frRequest.particulars) {
-                for (let i = 0; i < frRequest.particulars.length; i++) {
-                  const particulars = frRequest.particulars[i];
+              if (frRequest?.particulars) {
+                for (let i = 0; i < frRequest?.particulars.length; i++) {
+                  const particulars = frRequest?.particulars[i];
                   if (particulars._id) {
                     await axios.patch(`/fr/particulars/${particulars._id}`, {
                       FR: updatedFR.data.data._id,

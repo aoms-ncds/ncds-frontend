@@ -1215,6 +1215,10 @@ const ChildeSupportPage = () => {
                           </Button> */}
                           <Button onClick={() =>{
                             setModal(true);
+                            setRequisition2((prev:any) => ({
+                              ...prev,
+                              isSupport: true,
+                            }));
                           } }>
                             {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
                           </Button>
