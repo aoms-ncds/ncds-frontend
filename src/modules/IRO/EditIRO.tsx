@@ -808,7 +808,7 @@ const EditIRO = () => {
                                       </IconButton>
                                     }
                                   />
-                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS'])? (
+                                  {(hasPermissions(['FCRA_ACCOUNTS_ACCESS']) || hasPermissions(['LOCAL_ACCOUNT_ACCESS'])) || hasPermissions(['ADMIN_ACCESS']) || hasPermissions(['ACCOUNTS_MNGR_ACCESS']) || hasPermissions(['OFFICE_MNGR_ACCESS'])? (
                                   // Content to render if the user has access
                                     <IconButton>
                                       <EditIcon onClick={() => editParticular(item)} />
