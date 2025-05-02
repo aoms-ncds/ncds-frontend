@@ -56,7 +56,7 @@ import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import CloseIcon from '@mui/icons-material/Close';
 import ReleaseAmount from './components/ReleaseAmountDialog';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-import ReceiptIcon from '@mui/icons-material/Receipt'
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import SanctionLetter from '../FR/components/authLatter';
 import FRServices from '../FR/extras/FRServices';
 
@@ -1932,7 +1932,13 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
               const rejectionSnack = enqueueSnackbar({ message: 'Reverted to Division ', variant: 'success' });
               IROServices.revertToDivision(iroID as string, reasonForRevertToDiv as string)
                                         .then((res) => {
-                                          navigate('/iro/manage');
+                                          if (IROstatus == 'WAITING_FOR_ACCOUNTS_STATE') {
+                                            navigate('/iro/release_amount');
+                                          } else if (IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT') {
+                                            navigate('/iro/release_amount_fm_request');
+                                          } else if (IROstatus == 'WAITING_FOR_OFFICE_MNGR') {
+                                            navigate('/iro/office_approve');
+                                          }
                                         });
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
@@ -2014,7 +2020,11 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
               }, 500);
               false;
               setrejectDialog(false);
-              navigate('/iro/manage');
+              if (IROstatus == 'WAITING_FOR_ACCOUNTS_STATE') {
+                navigate('/iro/release_amount');
+              } else if (IROstatus == 'WAITTING_FOR_RELEASE_AMOUNT') {
+                navigate('/iro/release_amount_fm_request');
+              }
             }}
             sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
           >
