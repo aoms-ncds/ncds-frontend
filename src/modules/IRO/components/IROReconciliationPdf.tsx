@@ -169,8 +169,7 @@ const IROReconciliationPdf = (props: {
   const otherPageRows = 11;
   useEffect(()=>{
     setDivision('');
-
-  },[])
+  }, []);
   const getTotalPages = (workers: any[]) => {
     if (!workers || workers.length === 0) return 0;
     if (workers.length <= firstPageRows) return 1;
@@ -382,13 +381,13 @@ const IROReconciliationPdf = (props: {
     );
     // setDivision('');
   }, [workers]);
- 
-  const hasDivision = !!division;
-const showDivision = (purpose === 'Individual' || purpose === 'Coordinator') && hasDivision;
-const showSubDivision = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name 
-  && props.data.purpose !== 'Coordinator';
 
-const subDivisionName = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name;
+  const hasDivision = !!division;
+  const showDivision = (purpose === 'Individual' || purpose === 'Coordinator') && hasDivision;
+  const showSubDivision = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name &&
+  props.data.purpose !== 'Coordinator';
+
+  const subDivisionName = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name;
 
   const serialNumber = 1;
   const totalPages = getTotalPages(workers??[]);
@@ -401,10 +400,10 @@ const subDivisionName = workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
             {`WORKER SUPPORT SIGNATURE SHEET OF ${purpose}`} {division? '- ' : ''} {division?? division}{workers?.[0]?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name &&props.data.purpose !== 'Coordinator' ?
-              '/ ' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+              '/' + workers[0].officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 
-</Text>
+          </Text>
           <Text style={styles.month}>{`For the Month of ${props.data.month}`}</Text>
           <Text style={styles.IRONo}>{`IRO No: ${props.data.IRONo}`}</Text>
           {/* <Text style={styles.paymentDate}>{`Date Of payment: ${props.data.date}`}</Text> */}
