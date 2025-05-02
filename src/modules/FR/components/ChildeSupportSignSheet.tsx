@@ -251,8 +251,8 @@ const ChildeSupportSignSheet = (props:{frNo:any; data:Child[]|null; total:number
         <div>
           <Image src="/3D Logo 3.png" style={styles.image} />
           <Text style={styles.title}>
-            {`IET Child Education Assistance - ${div?.[0]}`} {props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
-              '/' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
+            {`IET Child Education Assistance - ${div?.[0]}`}{props.data?.[0]?.childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision?.name ?
+              ' / ' + props.data?.[0].childOf?.officialDetails?.divisionHistory?.at(-1)?.subDivision.name :
               ''}
 
           </Text>
