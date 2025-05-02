@@ -217,7 +217,7 @@ const IROReconciliationPdf = (props: {
       });
       props.data.purpose == 'Coordinator' ? setPurpose('Coordinator') : setPurpose('Individual');
     } else if (props.data.purpose == 'Subdivision' && props.data.divisionId && props.data.subDivisionId) {
-      DivisionsServices.getDivisionById(props.data?.divisionId??'').then((res)=>setDivision(res.data.details.name));
+      // DivisionsServices.getDivisionById(props.data?.divisionId??'').then((res)=>setDivision(res.data.details.name));
 
       WorkersServices.getWorkersBySubDivision({ division: props.data.divisionId, subDiv: props.data.subDivisionId, designationParticular: props.data.designationParticularID ?? null })
         .then((res) => {
