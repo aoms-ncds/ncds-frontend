@@ -861,7 +861,7 @@ const ReopenedIRO = () => {
       rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
       initialRange: 'months',
     }}>
-      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }} >
+      <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2} >
           <Grid item xs={6}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}

@@ -942,8 +942,8 @@ const ManageFrPage = () => {
           <>
             <Grid item xs={12} lg={6}>
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
-                  <Grid container spacing={2} padding={2}>
+                <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
+                  <Grid container spacing={2} padding={1}>
                     <Grid item xs={6}>
                       {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                       <TextField
@@ -952,8 +952,8 @@ const ManageFrPage = () => {
                         value={searchText}
                         placeholder='Enter FRno or FRDate or Division or SubCategory'
                         onChange={handleSearchChange}
-                        fullWidth
-                        // style={{ width: '80%' }}
+                        // fullWidth
+                        // style={{ height: '10%' }}
                       />
                       {/* </div> */}
                     </Grid>
@@ -1003,7 +1003,7 @@ const ManageFrPage = () => {
                           <>
                             <Button
                               variant="contained"
-                              sx={{ float: 'right', marginBottom: 3, mr: 2 }}
+                              sx={{ float: 'right', marginBottom: 1, mr: 2 }}
                               startIcon={<AddIcon />}
                               component={Link}
                               to="/fr/apply"

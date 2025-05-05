@@ -923,36 +923,35 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                       <FormControlLabel value="All" control={<Radio />} label="All" />
                       <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
                     </RadioGroup>
+                    <Grid item>
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="Filter"
+                          value={statusFilter1}
+                          onChange={(e) =>
+                            setStatusFilter1(
+                              e.target.value === 'Support' ?
+                                'Support' :
+                                e.target.value === 'Expanse' ?
+                                  'Expanse' :
+                                  'All',
+                            )
+                          }
+                          name="Filter"
+                          row
+                        >
+                          {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
+                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
+                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
+                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
                   </FormControl>
-                </Grid>
-                <Grid item>
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={statusFilter1}
-                      onChange={(e) =>
-                        setStatusFilter1(
-                          e.target.value === 'Support' ?
-                            'Support' :
-                            e.target.value === 'Expanse' ?
-                              'Expanse' :
-                              'All',
-                        )
-                      }
-                      name="Filter"
-                      row
-                    >
-                      {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sx={{ float: 'right' }}>
-                  <Button
-                    onClick={async () => {
-                      const sheet =
+                  <Grid item xs={2}>
+                    <Button
+                      onClick={async () => {
+                        const sheet =
                         IROrder ?
                           IROrder.map((iro: IROrder) => ([
                             iro.IROno,
@@ -972,32 +971,33 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                             IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
                           ])) :
                           [];
-                      const headers = [
-                        'IRO No',
-                        'Date',
-                        'Division',
-                        'Sub Division',
-                        'Main Category',
-                        'Requested Amt',
-                        'Sanctioned Amt',
-                        'Sanctioned Bank',
-                        'Sanctioned As per',
-                        // 'Released Amt',
-                        // 'Released Date',
-                        'Status',
-                      ];
-                      const worksheet = XLSX.utils.json_to_sheet(sheet);
-                      const workbook = XLSX.utils.book_new();
-                      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                      XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                      XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', { compression: true });
-                    }}
-                    startIcon={<DownloadIcon />}
-                    color="primary" sx={{ float: 'right' }}
-                    variant="contained"
-                  >
+                        const headers = [
+                          'IRO No',
+                          'Date',
+                          'Division',
+                          'Sub Division',
+                          'Main Category',
+                          'Requested Amt',
+                          'Sanctioned Amt',
+                          'Sanctioned Bank',
+                          'Sanctioned As per',
+                          // 'Released Amt',
+                          // 'Released Date',
+                          'Status',
+                        ];
+                        const worksheet = XLSX.utils.json_to_sheet(sheet);
+                        const workbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
+                        XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+                        XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', { compression: true });
+                      }}
+                      startIcon={<DownloadIcon />}
+                      color="primary" sx={{ float: 'right' }}
+                      variant="contained"
+                    >
                     Export
-                  </Button>
+                    </Button>
+                  </Grid>
                 </Grid>
 
                 <br />
@@ -1005,7 +1005,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 <br />
                 <Box
                   sx={{
-                    'height': 300,
+                    'height': 100,
                     'width': '100%',
                     '& .super-app-theme--cell': {
                       backgroundColor: '#f1f5fa',

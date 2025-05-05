@@ -1163,7 +1163,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={4}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}

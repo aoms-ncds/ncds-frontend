@@ -576,7 +576,7 @@ const RejectedIRO = () => {
       }
 
     }>
-      <Card sx={{ maxWidth: '78vw', height: '90vh', alignItems: 'center' }} >
+      <Card sx={{ maxWidth: '78vw', height: '120vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
           <Grid item xs={4}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}

@@ -1391,7 +1391,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         permissions={['READ_IRO']}
         granted={
           <>
-            <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+            <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
@@ -1460,110 +1460,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </Button>
                     }
                   />
-                  {props.action =='manage' && (
 
-                    <Grid
-                      item
-                      sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={
-                            exstatusFilter.includes(69) ? 'NonBankTransfers' :
-                              statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                                statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                  statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                    'ALL'
-                          }
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === 'WFA') {
-                              setExStatusFilter([]);
-                              setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                            } else if (value === 'RTD') {
-                              setExStatusFilter([]);
-                              setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
-                            } else if (value === 'AMT') {
-                              setExStatusFilter([]);
-                              setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                            } else if (value === 'NonBankTransfers') {
-                              setExStatusFilter([69]);
-                              setStatusFilter([]); // Use an empty array for "ALL" to show all items
-                            } else {
-                              setExStatusFilter([]);
-                              setStatusFilter([]); // Use an empty array for "ALL" to show all items
-                            }
-                          }}
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
-                          <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
-                          <FormControlLabel value="AMT" control={<Radio />} label="AMOUNT RELEASED" />
-                          <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
 
-                  )}
-                  <Grid item>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={statusFilter1}
-                        onChange={(e) =>
-                          setStatusFilter1(
-                            e.target.value === 'Support' ?
-                              'Support' :
-                              e.target.value === 'Expanse' ?
-                                'Expanse' :
-                                'All',
-                          )
-                        }
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
-                        <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  {props.action =='release' && (
-
-                    <Grid
-                      item
-                      sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={
-                            exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-
-                          }
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === 'NonBankTransfers') {
-                              setExStatusFilter([69]);
-                            } else {
-                              setExStatusFilter([]);
-                              setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                              // setStatusFilter([]);
-                            }
-                          }}
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="All" control={<Radio />} label="ALL" />
-                          <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-
-                  )}
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                     <Button
                       variant="contained"
@@ -1583,10 +1481,116 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     </Button>
                   ) : null}
                 </Grid>
+
+                {props.action =='manage' && (
+
+                  <Grid
+                    item
+                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={
+                          exstatusFilter.includes(69) ? 'NonBankTransfers' :
+                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                              statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                  'ALL'
+                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === 'WFA') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                          } else if (value === 'RTD') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                          } else if (value === 'AMT') {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                          } else if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                            setStatusFilter([]); // Use an empty array for "ALL" to show all items
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([]); // Use an empty array for "ALL" to show all items
+                          }
+                        }}
+                        name="Filter"
+                        row
+                      >
+                        <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
+                        <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
+                        <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
+                        <FormControlLabel value="AMT" control={<Radio />} label="AMOUNT RELEASED" />
+                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+
+                )}
+                {props.action =='release' && (
+
+                  <Grid
+                    item
+                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="Filter"
+                        value={
+                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
+
+                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                            // setStatusFilter([]);
+                          }
+                        }}
+                        name="Filter"
+                        row
+                      >
+                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
+                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+
+                )}
+                <Grid item>
+
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="Filter"
+                      value={statusFilter1}
+                      onChange={(e) =>
+                        setStatusFilter1(
+                          e.target.value === 'Support' ?
+                            'Support' :
+                            e.target.value === 'Expanse' ?
+                              'Expanse' :
+                              'All',
+                        )
+                      }
+                      name="Filter"
+                      row
+                    >
+                      <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
+                      <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
+                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
                 <Grid item xs={12}>
                   <Card
                     sx={{
-                      'height': '66vh',
+                      'height': '100vh',
                       'width': '100%',
                       '& .super-app-theme--cell': {
                         backgroundColor: '#f1f5fa',

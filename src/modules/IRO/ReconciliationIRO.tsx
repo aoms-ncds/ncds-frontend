@@ -843,7 +843,7 @@ const ReconciliationIRO = () => {
       }
 
     } >
-      <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+      <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
         <Grid container spacing={2} padding={2}>
           <Grid item xs={12}>
             <Grid item xs={12}>
@@ -1034,7 +1034,7 @@ const ReconciliationIRO = () => {
                 },
               }}
             >
-              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '75vh', width: '100%' }} getRowClassName={(params) => {
+              <DataGrid rows={filteredRows ?? []} columns={columns} getRowId={(row) => row._id} style={{ height: '70vh', width: '100%' }} getRowClassName={(params) => {
                 if (params.row.specialsanction == 'Yes') {
                   return 'special-sanction'; // Class for rows with special sanction
                 }

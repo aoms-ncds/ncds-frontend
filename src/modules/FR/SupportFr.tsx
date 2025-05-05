@@ -788,7 +788,7 @@ const SupportFrPage = () => {
           <>
             <Grid item xs={12} lg={6}>
               <Grid item xs={12} md={12}>
-                <Card sx={{ maxWidth: '78vw', height: '85vh', alignItems: 'center' }}>
+                <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={2}>
                     <Grid item xs={6}>
                       {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
