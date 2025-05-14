@@ -577,22 +577,22 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       field: 'name', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Name</b>), width: 150,
     },
-    {
-      field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', renderHeader: () => (<b>Remark</b>),
-      renderCell: (params) => (
-        <p style={{
-          maxWidth: 250,
-          whiteSpace: 'normal',
-          wordBreak: 'break-word',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 3,
-        }}>
-          {params.value}
-        </p>),
-      width: 250,
-    },
+    // {
+    //   field: 'reason', align: 'center', headerClassName: 'super-app-theme--header',
+    //   headerAlign: 'center', renderHeader: () => (<b>Remark</b>),
+    //   renderCell: (params) => (
+    //     <p style={{
+    //       maxWidth: 250,
+    //       whiteSpace: 'normal',
+    //       wordBreak: 'break-word',
+    //       display: '-webkit-box',
+    //       WebkitBoxOrient: 'vertical',
+    //       WebkitLineClamp: 3,
+    //     }}>
+    //       {params.value}
+    //     </p>),
+    //   width: 250,
+    // },
     {
       field: 'appliedFor', align: 'center', headerClassName: 'super-app-theme--header',
       headerAlign: 'center', renderHeader: () => (<b>Applied For</b>),
