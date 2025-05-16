@@ -926,7 +926,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
           <DialogActions>
             <Grid item md={6}>
               <Button variant="contained" sx={{ backgroundColor: 'orange' }} onClick={() => {
-                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='' && applicationFormState.reason!='') {
+                if (applicationFormState.name !=''&& applicationFormState.appliedFor!='') {
                   ApplicationServices.sentToPresident(applicationFormState)
                        .then((res) => {
                          // handleClose();
