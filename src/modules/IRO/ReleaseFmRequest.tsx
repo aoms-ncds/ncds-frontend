@@ -47,10 +47,12 @@ import FRServices from '../FR/extras/FRServices';
 // import IROTemplate from './components/IROTemplate';
 import InfoIcon from '@mui/icons-material/Info';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
+import ReleaseAmountDialogEdit from './components/ReleaseAmountDialogEdit';
 
 const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const [openRemarks, toggleOpenRemarks] = useState(false);
   const [remarks, setRemarks] = useState<Remark[]>([]);
+  const [openReleaseEdit, setOpenReleaseEdit] = useState(false);
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -699,6 +701,14 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 },
               ] :
               []),
+
+
+            {
+              id: 'Release',
+              text: 'Edit Release Amount',
+              onClick: () => [setOpenReleaseEdit(true), setReleaseAmountIROs([params.row])],
+              icon: PreviewIcon,
+            },
 
 
             ...(params.row.status == IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE || (IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR && props.action == 'release') ?
@@ -2303,6 +2313,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
         // isPaused={.state.isPaused}
       />}
       {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
+      <ReleaseAmountDialogEdit action={'add'} onClose={() => setOpenReleaseEdit(false)} open={openReleaseEdit} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
 
     </CommonPageLayout>
   );
