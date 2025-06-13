@@ -370,12 +370,15 @@ const ManageFrPage = () => {
                   onClick: async () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
+                    console.log(rowData, 'rowData');
+
                     rowData.division?.details&& setData({ ...props.row,
                       division: {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
-                          seniorLeader: delhiHQ.details.seniorLeader,
+                          coordinator: delhiHQ.details.coordinator,
+                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: rowData.division.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
