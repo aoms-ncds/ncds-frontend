@@ -33,7 +33,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
   const [users, setUsers] = useState<User[] | null>(null);
   const { editID } = useParams();
-  console.log(newJr, 'jr');
+  console.log(Label, 'jr');
 
   useEffect(() => {
     e();
@@ -186,13 +186,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 <FormControl variant="outlined" fullWidth>
                   <UsersDropdown
                     users={users ?? []}
-                    value={props.value.coordinator?.name ?? null}
-                    onChange={(_e, newValue) => {
+                    value={props.value.seniorLeader?.name ?? null}
+                    onChange={(e, newValue) => {
                       if (newValue) {
                         props.onChange({
                           ...props.value,
-                          coordinator: {
-                            ...props.value.coordinator,
+                          seniorLeader: {
+                            ...props.value.seniorLeader,
                             name: newValue,
                           },
                         });
@@ -314,13 +314,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 <FormControl variant="outlined" fullWidth>
                   <UsersDropdown
                     users={users ?? []}
-                    value={props.value.seniorLeader?.name ?? null}
-                    onChange={(e, newValue) => {
+                    value={props.value.coordinator?.name ?? null}
+                    onChange={(_e, newValue) => {
                       if (newValue) {
                         props.onChange({
                           ...props.value,
-                          seniorLeader: {
-                            ...props.value.seniorLeader,
+                          coordinator: {
+                            ...props.value.coordinator,
                             name: newValue,
                           },
                         });
