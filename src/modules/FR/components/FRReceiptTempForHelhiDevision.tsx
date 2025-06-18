@@ -284,7 +284,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
           <Text style={{ left: 260, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
           <Text style={{ left: 290, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
-          <Image style={{ left: 480, top: 40,
+          <Image style={{ left: 480, top: props?.rowData?.division?._id == '658270549efadc163550a28c'? 20: 40,
             position: 'absolute',
             height: 20,
             width: 50 }}
@@ -299,7 +299,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
-          <Image style={{ left: 480, top: 20,
+          <Image style={{ left: 480, top: props?.rowData?.division?._id == '658270549efadc163550a28c'? 40: 20,
             position: 'absolute',
             height: 20,
             width: 50 }}
