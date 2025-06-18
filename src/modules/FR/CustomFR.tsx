@@ -363,11 +363,12 @@ const CustomFR = () => {
                       division: {
                         ...props.row.division,
                         details: {
-                          ...rowData.division?.details,
+                          ...props.row.division?.details,
                           coordinator: delhiHQ.details.seniorLeader,
-                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: rowData.division.details.coordinator as any,
+                          seniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: props.row.division.details?.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
-                        },
+                          
+                        }
                       },
                     });
                     setOpenPrintFr(true);
