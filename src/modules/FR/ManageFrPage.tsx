@@ -377,8 +377,8 @@ const ManageFrPage = () => {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
-                          coordinator: delhiHQ.details.coordinator,
-                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: rowData.division.details.coordinator as any,
+                          coordinator: delhiHQ.details.seniorLeader,
+                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: rowData.division.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },

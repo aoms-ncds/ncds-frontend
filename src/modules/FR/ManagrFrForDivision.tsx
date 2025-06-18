@@ -354,7 +354,8 @@ const ManageFrForDivision = () => {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
-                          seniorLeader: delhiHQ.details.seniorLeader,
+                          coordinator: delhiHQ.details.seniorLeader,
+                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: rowData.division.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },

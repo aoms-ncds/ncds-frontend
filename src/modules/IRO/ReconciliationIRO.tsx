@@ -435,8 +435,9 @@ const ReconciliationIRO = () => {
                       division: {
                         ...props.row.division,
                         details: {
-                          ...dataDiv[0].division?.details,
-                          seniorLeader: delhiHQ.details.seniorLeader,
+                          ...rowData.division?.details,
+                          coordinator: delhiHQ.details.seniorLeader,
+                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: rowData.division.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
