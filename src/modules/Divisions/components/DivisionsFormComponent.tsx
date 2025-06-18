@@ -205,7 +205,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                   E-signature
                 </Button>
               </Grid>
@@ -335,7 +335,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                   E-signature
                 </Button>
               </Grid>
