@@ -346,7 +346,7 @@ const ClosedIRO = () => {
                         ...props.row.division,
                         details: {
                           ...dataDiv[0].division?.details,
-                          coordinator: delhiHQ.details.seniorLeader,
+                          coordinator: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader:  delhiHQ.details.seniorLeader as any,
                           seniorLeader: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: dataDiv?.[0]?.division?.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },

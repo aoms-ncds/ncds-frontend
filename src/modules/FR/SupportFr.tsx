@@ -332,7 +332,7 @@ const SupportFrPage = () => {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
-                          coordinator: delhiHQ.details.seniorLeader,
+                          coordinator: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader:  delhiHQ.details.seniorLeader as any,
                           seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: rowData.division.details.coordinator as any,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
