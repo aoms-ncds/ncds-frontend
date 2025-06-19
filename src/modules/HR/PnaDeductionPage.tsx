@@ -242,14 +242,14 @@ const PnaDeductionPage = () => {
               />
 
               <TextField
-                label="Start Tonnage"
+                label="Start Tenure"
                 type="number"
                 value={row.monthFrom != 0 ? row.monthFrom: null}
                 onChange={(e) => handleDeductionChange(index, 'monthFrom', Number(e.target.value))}
               />
 
               <TextField
-                label="End Tonnage"
+                label="End Tenure"
                 type="number"
                 value={row.monthTo != 0 ? row.monthTo: null}
                 onChange={(e) => handleDeductionChange(index, 'monthTo', Number(e.target.value))}
