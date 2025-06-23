@@ -136,6 +136,7 @@ const WorkerFormPage = (props: WorkerFormPageProps) => {
           try {
             if (props.action === 'add') {
               const createWorkerResponse = await WorkersServices.create(creatableWorker, userPhoto, childPhotos.filter((_pht)=>_pht.id!==''));
+              
               enqueueSnackbar({ variant: 'success', message: createWorkerResponse.message });
             } else if (props.action === 'edit') {
               const updateWorkerResponse = await WorkersServices.edit(creatableWorker, userPhoto, childPhotos.filter((_pht)=>_pht.id!==''));
