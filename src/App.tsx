@@ -17,7 +17,7 @@ axios.defaults.baseURL = serverURL;
 
 const App = () => {
   // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  CommonHelpers.setLoader(useLoader());
+  CommonHelpers.setLoader(useLoder());
   CommonHelpers.setEnqueueSnackbar(enqueueSnackbar);
 
   const theme = useMemo(

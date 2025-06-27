@@ -53,11 +53,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-  // useEffect(() => {
-  //   ReasonforDeactivationService.getAll().then((res) => {
-  //     setReason(res.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    ReasonforDeactivationService.getAll().then((res) => {
+      setReason(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     if (currentTab == 0) {
