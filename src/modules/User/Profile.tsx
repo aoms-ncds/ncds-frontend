@@ -222,9 +222,18 @@ const Profile = () => {
           </Card>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Button sx={{ float: 'right' }} variant='contained' onClick={() => navigate(`/workers/edit/${user?._id}`)} >
-Edit
-          </Button>
+        <Button
+  sx={{ float: 'right' }}
+  variant="contained"
+  onClick={() => {
+    user?.kind === 'worker'
+      ? navigate(`/workers/edit/${user?._id}`)
+      : navigate(`/hr/edit/${user?._id}`);
+  }}
+>
+  Edit
+</Button>
+
           <br />
           {/* <br /> */}
           <br />

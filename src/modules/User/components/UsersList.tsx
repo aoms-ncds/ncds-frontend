@@ -53,11 +53,11 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
   const switchTab = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
-  useEffect(() => {
-    ReasonforDeactivationService.getAll().then((res) => {
-      setReason(res.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   ReasonforDeactivationService.getAll().then((res) => {
+  //     setReason(res.data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (currentTab == 0) {
@@ -299,30 +299,30 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
               assignRemark(params.row._id);
             }}
           />,
-          props.options?.status != 'reject' &&
-          hasPermissions(['MANAGE_WORKER']) &&
-          (params.row.status == UserLifeCycleStates.ACTIVE ? (
-            <GridLinkAction
-              key={5}
-              label="Deactivate"
-              icon={<NoAccountsIcon />}
-              showInMenu
-              onClick={() => {
-                setRowID(params.row._id);
-                setReasonDialog(true);
-              }}
-            />
-          ) : (
-            <GridLinkAction
-              key={5}
-              label="Activate"
-              icon={<PersonIcon />}
-              showInMenu
-              onClick={() => {
-                activateWorker(params.row._id);
-              }}
-            />
-          )),
+          // props.options?.status != 'reject' &&
+          // hasPermissions(['MANAGE_WORKER']) &&
+          // (params.row.status == UserLifeCycleStates.ACTIVE ? (
+          //   <GridLinkAction
+          //     key={5}
+          //     label="Deactivate"
+          //     icon={<NoAccountsIcon />}
+          //     showInMenu
+          //     onClick={() => {
+          //       setRowID(params.row._id);
+          //       setReasonDialog(true);
+          //     }}
+          //   />
+          // ) : (
+          //   <GridLinkAction
+          //     key={5}
+          //     label="Activate"
+          //     icon={<PersonIcon />}
+          //     showInMenu
+          //     onClick={() => {
+          //       activateWorker(params.row._id);
+          //     }}
+          //   />
+          // )),
           hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction key={6} label="Manage Permissions" icon={<BallotIcon />} showInMenu to={`/users/${params.row._id}/permission_manager`} />,
           false,
         ].filter((action) => action !== false) as JSX.Element[],

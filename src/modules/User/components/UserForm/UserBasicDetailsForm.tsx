@@ -361,25 +361,35 @@ const UserBasicDetailsForm = (
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
-        <TextField
-          label="Phone"
-          type="number"
-          value={props.value.phone}
-          onChange={(e) => props.onChange({ ...props.value, phone: e.target.value })}
-          variant={props.options?.textField?.variant}
-          fullWidth
-          InputLabelProps={{
+      <TextField
+  label="Phone"
+  type="tel"
+  value={props.value.phone}
+  onChange={(e) => {
+    const phone = e.target.value;
+    // Allow only digits and limit to 10 characters
+    if (/^\d{0,10}$/.test(phone)) {
+      props.onChange({ ...props.value, phone });
+    }
+  }}
+  variant={props.options?.textField?.variant}
+  fullWidth
+  required={props.options?.kind === 'staff'}
+  InputLabelProps={{
+    shrink: true,
+    style: { fontSize: '20px' },
+  }}
+  inputProps={{
+    maxLength: 10,
+    inputMode: 'numeric',
+    pattern: '[0-9]*',
+    onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      event.currentTarget.blur();
+    },
+  }}
+/>
 
-            shrink: true,
-            style: { fontSize: '20px' },
-          }}
-          inputProps={{
-            onWheel: (event: React.WheelEvent<HTMLInputElement>) => {
-              event.preventDefault();
-              event.currentTarget.blur();
-            },
-          }}
-        />
       </Grid>
 
       <Grid item xs={12} md={6} lg={4}>
