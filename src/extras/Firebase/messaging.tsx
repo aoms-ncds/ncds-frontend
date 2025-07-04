@@ -50,7 +50,7 @@ const generateToken = () => {
   if (localStorage.getItem('fcm_token') === null) {
     getToken(messaging, {
       vapidKey:
-        'BMBunDqnkoypocH4FxNXgINPbcuRnAHQi7XvuIV7RgNQGHH0zuQ2dmO3-yMBQuEcB_G9bVDtBrl2xFettL2eiU4',
+        'BI-OOak0cIS1DJk1uLlSXMIQxg73BTLShc-Su-UfHDNAS49xQtKwtXIOaK-j2swyjYkk_i7Dlernvhqe3DV3YaQ',
     })
       .then((token) => {
         console.log({ token });
