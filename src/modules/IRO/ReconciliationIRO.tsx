@@ -436,9 +436,9 @@ const ReconciliationIRO = () => {
                         ...props.row.division,
                         details: {
                           ...dataDiv[0].division?.details,
-                          coordinator: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader:  delhiHQ.details.seniorLeader as any,
-                          seniorLeader: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: dataDiv?.[0].division?.details.coordinator as any,
-                          juniorLeader: delhiHQ.details.juniorLeader,
+                          coordinator: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: props.row.division.details.coordinator as any,
+                          seniorLeader: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: props.row.division?.details.coordinator as any,
+                          juniorLeader: delhiHQ.details.coordinator,
                         },
                       },
                     });
