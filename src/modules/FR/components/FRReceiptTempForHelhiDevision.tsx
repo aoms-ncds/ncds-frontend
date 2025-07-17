@@ -305,8 +305,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
               fontFamily: 'Oswald',
             }}
           >
-            {typeof props.rowData?.division?.details.additionalJuniorLeader?.name === 'string' ?
-              props.rowData?.division?.details.additionalJuniorLeader?.name :
+            {
               `${props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName ?? ''}`}
           </Text>
 
@@ -321,11 +320,9 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
               width: 50,
             }}
             src={`data:${
-              props.rowData?.division?.details.additionalJuniorLeader?.sign?.type ??
-      props.rowData?.division?.details.juniorLeader?.sign?.type
+              props.rowData?.division?.details.juniorLeader?.sign?.type
             };base64,${
-              props.rowData?.division?.details.additionalJuniorLeader?.sign?.base64 ??
-      props.rowData?.division?.details.juniorLeader?.sign?.base64
+              props.rowData?.division?.details.juniorLeader?.sign?.base64
             }`}
           />
 
@@ -344,8 +341,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
               fontFamily: 'Oswald',
             }}
           >
-            {typeof props.rowData?.division?.details.additionalSeniorLeader?.name === 'string' ?
-              props.rowData?.division?.details.additionalSeniorLeader?.name :
+            {
               `${props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName ?? ''}`}
           </Text>
           {/* Modified juniorLeader with Delhi HQ's juniorLeader.'s details*/}
@@ -359,10 +355,8 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
               width: 50,
             }}
             src={`data:${
-              props.rowData?.division?.details.additionalSeniorLeader?.sign?.type??
               props.rowData?.division?.details.seniorLeader?.sign?.type
             };base64,${
-              props.rowData?.division?.details.additionalSeniorLeader?.sign?.base64??
               props.rowData?.division?.details.seniorLeader?.sign?.base64
             }`}
           />
