@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     flexDirection: 'column',
-    marginTop: 4,
+    marginTop: 2,
     right: 21,
     top: 18,
 
@@ -165,6 +165,7 @@ const IROReconciliationPdf = (props: {
   const [total, setTotal] = useState(0);
   const [purpose, setPurpose] = useState('Division');
   const [division, setDivision] = useState('');
+  
   const firstPageRows = 9;
   const otherPageRows = 11;
   useEffect(()=>{
