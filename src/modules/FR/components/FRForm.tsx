@@ -151,7 +151,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   useEffect(() => {
     console.log({ submit });
   }, [submit]);
-  console.log(isCoordinator, 'newParticular33');
+  console.log(user, 'newParticular33');
   useEffect(() => {
     DivisionsServices.getSubDivisionsByDivisionId(props.value.division?._id ?? '')
       .then((res2) => setAllSubDivisions(res2.data))
@@ -179,6 +179,17 @@ const FRForm = (props: FormComponentProps<any>) => {
           console.log(res);
         });
   }, [props.value]);
+  useEffect(() => {
+    if ((user as any)?.permissions?.READ_ALL_DIVISIONS==true) {
+      DivisionsServices.getDivisions()
+      .then((res) => {
+        setAllDivisions(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  }, [props.value.purpose]);
   useEffect(() => {
     if (props.value.purpose === 'Worker') {
       WorkersServices.getWorkersByDivision()
