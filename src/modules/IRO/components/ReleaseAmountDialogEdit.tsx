@@ -2,8 +2,7 @@
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
-import { AttachFile as AttachmentIcon, Preview as PreviewIcon,
-} from '@mui/icons-material';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../../components/FileUploader/extras/FileUploaderServices';
 import { MB } from '../../../extras/CommonConfig';
@@ -13,7 +12,6 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
-import DropdownButton from '../../../components/DropDownButton';
 
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
@@ -248,48 +246,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
   }, [props.data]);
 
   const columns: GridColDef<IROrder>[] = [
-    {
-      field: '_manage',
-      headerName: 'Actions',
-      width: 100,
-      align: 'center',
-      headerAlign: 'center',
-      type: 'string',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      renderCell: (params) => (
-        <DropdownButton
-          useIconButton={true}
-          id="IRO action"
-          primaryText="Actions"
-          key={'IRO action'}
-          items={[
-            {
-              id: 'View',
-              text: 'View IRO ',
-              // component: Link,
-              // to: `/iro/${params.row._id}`,
-              onClick: () => {
-                window.open( `/iro/${params.row._id}`, '_blank');
-              },
-              icon: PreviewIcon,
-            },
-            {
-              id: 'View',
-              text: 'View FR ',
-              // component: Link,
-              // to: `/iro/${params.row._id}`,
-              onClick: () => {
-                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
-              },
-              icon: PreviewIcon,
-            },
-
-
-          ]}
-        />
-      ),
-    },
-    { field: 'IROno', headerName: 'IRO NoS', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
+    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
       headerName: 'IRO Date',
