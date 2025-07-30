@@ -188,15 +188,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     users={users ?? []}
                     value={props.value.seniorLeader?.name ?? null}
                     onChange={(e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          seniorLeader: {
-                            ...props.value.seniorLeader,
-                            name: newValue,
-                          },
-                        });
-                      }
+                      // if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        seniorLeader: {
+                          ...props.value.seniorLeader,
+                          name: newValue?? undefined,
+                        },
+                      });
+                      // }
                     }}
                     disabled={props.action === 'view'}
                     label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[0]?.name : '')}
@@ -221,15 +221,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     disabled={props.action == 'view'}
                     value={props.value.juniorLeader?.name ?? null}
                     onChange={(e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          juniorLeader: {
-                            ...props.value.juniorLeader,
-                            name: newValue,
-                          },
-                        });
-                      }
+                      // if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        juniorLeader: {
+                          ...props.value.juniorLeader,
+                          name: newValue ?? undefined,
+                        },
+                      });
+                      // }
                     }}
                     // label={'Junior Leader 2'}
                     label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[2]?.name || '' : '')}
@@ -255,15 +255,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     disabled={props.action == 'view'}
                     value={props.value.president?.name ?? null}
                     onChange={(e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          president: {
-                            ...props.value.president,
-                            name: newValue,
-                          },
-                        });
-                      }
+                      // if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        president: {
+                          ...props.value.president,
+                          name: newValue ?? undefined,
+                        },
+                      });
+                      // }
                     }}
                     // label={'Junior Leader 2'}
                     label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[3]?.name || '' : '')}
@@ -286,15 +286,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     disabled={props.action == 'view'}
                     value={props.value.officeManager?.name ?? null}
                     onChange={(e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          officeManager: {
-                            ...props.value.officeManager,
-                            name: newValue,
-                          },
-                        });
-                      }
+                      // if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        officeManager: {
+                          ...props.value.officeManager,
+                          name: newValue ?? undefined,
+                        },
+                      });
+                      // }
                     }}
                     // label={'Junior Leader 2'}
                     label={(props?.value?.name === 'DELHI OFFICE' ? Label?.[4]?.name || '' : '')}
@@ -316,15 +316,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     users={users ?? []}
                     value={props.value.coordinator?.name ?? null}
                     onChange={(_e, newValue) => {
-                      if (newValue) {
-                        props.onChange({
-                          ...props.value,
-                          coordinator: {
-                            ...props.value.coordinator,
-                            name: newValue,
-                          },
-                        });
-                      }
+                      // if (newValue) {
+                      props.onChange({
+                        ...props.value,
+                        coordinator: {
+                          ...props.value.coordinator,
+                          name: newValue?? undefined,
+                        },
+                      });
+                      // }
                     }}
                     disabled={props.action == 'view'}
                     // label={'Junior Leader 1'}
@@ -350,15 +350,15 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                       users={users ?? []}
                       value={props.value.coordinator?.name ?? null}
                       onChange={(_e, newValue) => {
-                        if (newValue) {
-                          props.onChange({
-                            ...props.value,
-                            coordinator: {
-                              ...props.value.coordinator,
-                              name: newValue,
-                            },
-                          });
-                        }
+                        // if (newValue) {
+                        props.onChange({
+                          ...props.value,
+                          coordinator: {
+                            ...props.value.coordinator,
+                            name: newValue?? undefined,
+                          },
+                        });
+                        // }
                       }}
                       disabled={props.action === 'view'}
                       label={'Co-ordinator Name'}
@@ -380,16 +380,16 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         users={users ?? []}
                         value={props.value.seniorLeader?.name ?? null}
                         onChange={(e, newValue) => {
-                          if (newValue) {
-                            props.onChange({
-                              ...props.value,
-                              additionalJuniorLeader: { name: undefined, sign: undefined },
-                              seniorLeader: {
-                                ...props.value.seniorLeader,
-                                name: newValue,
-                              },
-                            });
-                          }
+                          // if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            additionalJuniorLeader: { name: undefined, sign: undefined },
+                            seniorLeader: {
+                              ...props.value.seniorLeader,
+                              name: newValue?? undefined,
+                            },
+                          });
+                          // }
                         } }
 
                         disabled={props.action == 'view'}
@@ -447,16 +447,16 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         disabled={props.action == 'view'}
                         value={props.value.juniorLeader?.name ?? null}
                         onChange={(e, newValue) => {
-                          if (newValue) {
-                            props.onChange({
-                              ...props.value,
-                              additionalSeniorLeader: { name: undefined, sign: undefined },
-                              juniorLeader: {
-                                ...props.value.juniorLeader,
-                                name: newValue,
-                              },
-                            });
-                          }
+                          // if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            additionalSeniorLeader: { name: undefined, sign: undefined },
+                            juniorLeader: {
+                              ...props.value.juniorLeader,
+                              name: newValue?? undefined,
+                            },
+                          });
+                          // }
                         } }
                         // label={'Junior Leader 2'}
                         label={'Junior Leader 2'}
