@@ -13,6 +13,7 @@ const LeaderDetails = () => {
   const [languageToDelete, setLanguageToDelete] = useState<ILeaderDetails | null>(null);
   const [newHeading, setNewLeader] = useState<CreatableLeaderDetails>({
     name: '',
+    order: 0,
   });
   const [dialogAction, setDialogAction] = React.useState<'add' | 'edit' | false>(false);
 
@@ -164,6 +165,7 @@ const LeaderDetails = () => {
                 setNewLeader({
                   name: '',
                 });
+                window.location.reload();
               });
             } else {
               LeaderDetailsService.edit(newHeading).then((res) => {
@@ -191,6 +193,21 @@ const LeaderDetails = () => {
               onChange={(e) => setNewLeader((leaders) => ({ ...leaders, name: e.target.value }))}
               required
             />
+            {dialogAction !=='edit'&&(
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="order"
+                label="Enter Order number"
+                type="number"
+                fullWidth
+                variant="outlined"
+                value={newHeading.order}
+                onChange={(e) => setNewLeader((leaders:any) => ({ ...leaders, order: e.target.value }))}
+                required
+              />
+            )}
           </DialogContent>
           <DialogActions>
             <Button
