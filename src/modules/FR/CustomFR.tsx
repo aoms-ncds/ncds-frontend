@@ -364,10 +364,9 @@ const CustomFR = () => {
                         ...props.row.division,
                         details: {
                           ...props.row.division?.details,
-                          coordinator: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: props.row.division.details.coordinator as any,
-                          seniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any,
-                          juniorLeader: delhiHQ.details.coordinator as any,
-
+                          coordinator: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.coordinator: props.row.division.details.coordinator as any,
+                          seniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: delhiHQ.details.seniorLeader as any,
+                          juniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any,
                         },
                       },
                     });

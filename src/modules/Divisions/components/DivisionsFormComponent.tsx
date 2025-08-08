@@ -186,13 +186,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 <FormControl variant="outlined" fullWidth>
                   <UsersDropdown
                     users={users ?? []}
-                    value={props.value.seniorLeader?.name ?? null}
+                    value={props.value.coordinator?.name ?? null}
                     onChange={(e, newValue) => {
                       // if (newValue) {
                       props.onChange({
                         ...props.value,
-                        seniorLeader: {
-                          ...props.value.seniorLeader,
+                        coordinator: {
+                          ...props.value.coordinator,
                           name: newValue?? undefined,
                         },
                       });
@@ -205,7 +205,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                   E-signature
                 </Button>
               </Grid>
@@ -219,13 +219,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   <UsersDropdown
                     users={users ?? []}
                     disabled={props.action == 'view'}
-                    value={props.value.juniorLeader?.name ?? null}
+                    value={props.value.seniorLeader?.name ?? null}
                     onChange={(e, newValue) => {
                       // if (newValue) {
                       props.onChange({
                         ...props.value,
-                        juniorLeader: {
-                          ...props.value.juniorLeader,
+                        seniorLeader: {
+                          ...props.value.seniorLeader,
                           name: newValue ?? undefined,
                         },
                       });
@@ -238,7 +238,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                   E-signature
                 </Button>
               </Grid>
@@ -314,13 +314,13 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 <FormControl variant="outlined" fullWidth>
                   <UsersDropdown
                     users={users ?? []}
-                    value={props.value.coordinator?.name ?? null}
+                    value={props.value.juniorLeader?.name ?? null}
                     onChange={(_e, newValue) => {
                       // if (newValue) {
                       props.onChange({
                         ...props.value,
-                        coordinator: {
-                          ...props.value.coordinator,
+                        juniorLeader: {
+                          ...props.value.juniorLeader,
                           name: newValue?? undefined,
                         },
                       });
@@ -335,7 +335,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant="contained" onClick={() => setShowFileUploader1(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                <Button variant="contained" onClick={() => setShowFileUploader3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
                   E-signature
                 </Button>
               </Grid>
