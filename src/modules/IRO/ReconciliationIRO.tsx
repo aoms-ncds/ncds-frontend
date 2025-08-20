@@ -430,15 +430,16 @@ const ReconciliationIRO = () => {
                   icon: PrintIcon,
                   onClick: async () => {
                     const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
+                    console.log(dataDiv, 'dataDiv');
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     props.row.division?.details&& setData5({ ...dataDiv[0],
                       division: {
                         ...props.row.division,
                         details: {
-                          ...dataDiv[0].division?.details,
-                          coordinator: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: dataDiv[0].division?.details.coordinator as any,
-                          seniorLeader: dataDiv?.[0].division?._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any as any,
-                          juniorLeader: delhiHQ.details.coordinator,
+                          ...dataDiv?.[0]?.division?.details,
+                          coordinator: dataDiv?.[0].FR as any,
+                          seniorLeader: dataDiv?.[0]?.division?._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: delhiHQ.details.seniorLeader as any,
+                          juniorLeader: dataDiv?.[0]?.division?._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any,
                         },
                       },
                     });

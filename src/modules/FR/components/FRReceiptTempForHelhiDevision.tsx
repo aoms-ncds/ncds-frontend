@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 });
 
 
-const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;president:EsignaturePresident}) => {
+const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;president:EsignaturePresident}) => {
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
@@ -282,13 +282,13 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: FR; label: any;presiden
           <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[0]?.name}</Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.name?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.name?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.lastName} </Text>
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480, top: 20,
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.coordinator?.sign?.type};base64, ${props.rowData?.division?.details.coordinator?.sign?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.coordinator?.signature?.coordinator?.type};base64, ${props.rowData?.division?.details.coordinator?.signature?.coordinator?.base64} `}/>
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name}</Text>
