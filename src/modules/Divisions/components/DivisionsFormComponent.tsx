@@ -670,7 +670,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -725,7 +725,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -779,7 +779,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -833,7 +833,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -888,7 +888,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -943,7 +943,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -998,7 +998,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -1053,7 +1053,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -1109,7 +1109,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
@@ -1166,7 +1166,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                 sign: undefined,
               },
             });
-            return FileUploaderServices.deleteFile(fileId);
+            return FileUploaderServices.getFile(fileId) as any;
           },
         })}
       />
