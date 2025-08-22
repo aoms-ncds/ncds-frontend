@@ -128,6 +128,7 @@ declare global {
   interface OfficialDetails {
     dateOfJoining?: Moment;
     dateOfLeaving?: Moment | null;
+    eSign?: FileObject | null;
     reasonForDeactivation?: DeactivationReason;
     remarks?: string;
     divisionHistory: DivisionHistory[];

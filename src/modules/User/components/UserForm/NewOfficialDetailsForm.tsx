@@ -5,6 +5,11 @@ import DivisionsServices from '../../../Divisions/extras/DivisionsServices';
 import { enqueueSnackbar } from 'notistack';
 import { useAuth } from '../../../../hooks/Authentication';
 import ReasonforDeactivationService from '../../../Settings/extras/ReasonforDeactivationService';
+import { AttachFile as AttachmentIcon } from '@mui/icons-material';
+import FileUploaderServices from '../../../../components/FileUploader/extras/FileUploaderServices';
+import FileUploader from '../../../../components/FileUploader/FileUploader';
+import { MB } from '../../../../extras/CommonConfig';
+import { log } from 'node:console';
 
 // const defaultDivisionDetails:Division = {
 //   details: {
@@ -58,6 +63,7 @@ const NewOfficialDetailsForm = (
   const [openDivConfirm, toggleOpenDivConfirm] = useState<boolean>(false);
   const user = useAuth();
   const [reason, setReason] = useState<IReason[]>([]);
+  const [showFileUploader2, setShowFileUploader2] = useState(false);
 
   const handleWheel = (event: React.WheelEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -120,6 +126,8 @@ const NewOfficialDetailsForm = (
         );
     }
   }, []);
+  console.log(props.value, 'off');
+  
   return (
     <>
       {/* {console.log({ abc: props.value.dateOfJoining })} */}
@@ -388,6 +396,11 @@ const NewOfficialDetailsForm = (
 
         />}
       </Grid>
+      <Grid item xs={4}>
+        <Button variant="contained" onClick={() => setShowFileUploader2(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
+                        E-signature
+        </Button>
+      </Grid>
       {/* <Grid item xs={12} md={6} lg={4}>
         {props.options?.kind === 'worker' && <FormControlLabel
           label="Self Support"
@@ -403,6 +416,47 @@ const NewOfficialDetailsForm = (
           }
         />}
       </Grid> */}
+      <FileUploader
+        title="E-signature"
+        types={['image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 1,
+          maxTotalSize: 1 * MB,
+        }}
+        open={showFileUploader2}
+        onClose={() => setShowFileUploader2(false)}
+        action={props.action == 'view' ? 'view' : 'add'}
+        getFiles={props.value.eSign ? [props.value.eSign] : []}
+        uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
+          const resp = FileUploaderServices.uploadFile(file, onProgress, 'Division/eSignature', file.name).then((res) => {
+            props.onChange({
+              ...props.value,
+              eSign: res.data,
+
+            });
+            return res;
+          });
+          return resp;
+        }}
+        renameFile={(fileId: string, newName: string) => {
+          props.onChange({
+            ...props.value,
+            eSign: { ...props.value.eSign, originalName: newName } as FileObject,
+          });
+          return FileUploaderServices.renameFile(fileId, newName);
+        }}
+        {...((props.action === 'edit' || props.action === 'add') && {
+          deleteFile: (fileId: string) => {
+            props.onChange({
+              ...props.value,
+              eSign: null,
+            });
+            return FileUploaderServices.getFile(fileId) as any;
+          },
+        })}
+      />
       <Dialog open={openDivConfirm} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>

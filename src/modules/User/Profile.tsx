@@ -47,11 +47,13 @@ const Profile = () => {
 
   const [adharAttachments, setAdharAttachments] = useState<FileObject[]>([]);
   const [voterAttachments, setVoterAttachments] = useState<FileObject[]>([]);
+  const [eSignAttachments, setEsignAttachments] = useState<FileObject[]>([]);
   const [user, setUser] = useState<IWorker | Staff | null>(null);
   const { userId, userKind, tabNO } = useParams();
   const [currentTab, setCurrentTab] = React.useState(0);
   const [viewAdharFile, setviewAdharFile] = useState(false);
   const [viewVoterIdFile, setViewVoterId] = useState(false);
+  const [viewEsign, setViewSign] = useState(false);
   const [showLotImage, setShowLotImage] = useState<boolean>(false);
   const columns: GridColDef<DivisionHistory>[] = [
     {
@@ -121,6 +123,7 @@ const Profile = () => {
     }
   }, []);
 
+console.log(user?.officialDetails, 'user?.officialDetails');
 
   return (
     <CommonPageLayout
@@ -222,17 +225,17 @@ const Profile = () => {
           </Card>
         </Grid>
         <Grid item xs={12} md={9}>
-        <Button
-  sx={{ float: 'right' }}
-  variant="contained"
-  onClick={() => {
-    user?.kind === 'worker'
-      ? navigate(`/workers/edit/${user?._id}`)
-      : navigate(`/hr/edit/${user?._id}`);
-  }}
->
+          <Button
+            sx={{ float: 'right' }}
+            variant="contained"
+            onClick={() => {
+              user?.kind === 'worker' ?
+                navigate(`/workers/edit/${user?._id}`) :
+                navigate(`/hr/edit/${user?._id}`);
+            }}
+          >
   Edit
-</Button>
+          </Button>
 
           <br />
           {/* <br /> */}
@@ -339,6 +342,17 @@ const Profile = () => {
 
                     <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Churches Planted:</Typography> {user?.officialDetails.noOfChurches} </Grid>
                   )}
+
+                  <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>E-Sign: </Typography>
+                    <IconButton
+                      onClick={() => {
+                        setViewSign(true);
+                        setEsignAttachments(user?.officialDetails.eSign ? [user.officialDetails.eSign] : []);
+                      } }
+                    >
+                      <AttachmentIcon />
+                    </IconButton>
+                  </Grid>
 
 
                   {/* <Grid item xs={12} lg={4}> <Typography variant='body1' component='span' sx={{ fontWeight: 'bolder' }}>Self Support:</Typography> {user?.officialDetails.selfSupport ? 'Yes' : 'No'} </Grid> */}
@@ -551,7 +565,8 @@ const Profile = () => {
         open={viewAdharFile}
         action="view"
         onClose={() => setviewAdharFile(false)}
-        getFiles={adharAttachments} /><FileUploader
+        getFiles={adharAttachments} />'
+      <FileUploader
         title="Attachments"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
@@ -564,6 +579,19 @@ const Profile = () => {
         action="view"
         onClose={() => setViewVoterId(false)}
         getFiles={voterAttachments} />
+      <FileUploader
+        title="E-Signature"
+        types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
+        limits={{
+          // types: [],
+          maxItemSize: 1 * MB,
+          maxItemCount: 3,
+          maxTotalSize: 3 * MB,
+        }}
+        open={viewEsign}
+        action="view"
+        onClose={() => setViewSign(false)}
+        getFiles={eSignAttachments} />
 
     </CommonPageLayout>
   );
