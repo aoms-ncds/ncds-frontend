@@ -13,6 +13,8 @@ import { useParams } from 'react-router-dom';
 import LeaderDetailsService from '../../Settings/extras/LeaderDetailsService';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ICustomUsers } from '../../Settings/extras/LanguageTypes';
+import CustomUserService from '../../Settings/extras/CustomUserService';
 
 const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { title: string }>) => {
   const [showFileUploader1, setShowFileUploader1] = useState(false);
@@ -30,10 +32,11 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
   const [selectedTime, setSelectedTime] = useState('');
   const [newJr, setNewJr] = useState<boolean>(false);
   const [newSr, setNewSr] = useState<boolean>(false);
+  const [customUsers, setCustomUsers] = useState<ICustomUsers[]>([]);
 
   const [users, setUsers] = useState<User[] | null>(null);
   const { editID } = useParams();
-  console.log(Label, 'jr');
+  console.log(editID, 'jr');
 
   useEffect(() => {
     e();
@@ -60,6 +63,19 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
           message: res.message,
         });
       });
+    CustomUserService.getAll()
+      .then((res) => {
+        console.log(res.data, 'customUsers');
+
+        setCustomUsers((res.data as ICustomUsers[]).filter((user) => user.division._id === editID));
+      })
+      .catch((res) => {
+        console.log(res);
+        enqueueSnackbar({
+          variant: 'error',
+          message: res.message,
+        });
+      });
   }, []);
   console.log(props, 'pp');
   useEffect(() => {
@@ -71,7 +87,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
     }
   }, [props.value]);
 
-  const e =()=>{
+  const e = () => {
     console.log(props.value.additionalJuniorLeader?.name, 'dd');
   };
   return (
@@ -193,7 +209,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         ...props.value,
                         coordinator: {
                           ...props.value.coordinator,
-                          name: newValue?? undefined,
+                          name: newValue ?? undefined,
                         },
                       });
                       // }
@@ -321,7 +337,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                         ...props.value,
                         juniorLeader: {
                           ...props.value.juniorLeader,
-                          name: newValue?? undefined,
+                          name: newValue ?? undefined,
                         },
                       });
                       // }
@@ -355,7 +371,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                           ...props.value,
                           coordinator: {
                             ...props.value.coordinator,
-                            name: newValue?? undefined,
+                            name: newValue ?? undefined,
                           },
                         });
                         // }
@@ -371,7 +387,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   </Button>
                 </Grid>
               </Grid><Grid item xs={12} md={4}>
-                {newJr ==false &&(
+                {newJr == false && (
 
                   <><Grid item xs={12}>
                     <FormControl variant="outlined" fullWidth>
@@ -386,11 +402,11 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                             additionalJuniorLeader: { name: undefined, sign: undefined },
                             seniorLeader: {
                               ...props.value.seniorLeader,
-                              name: newValue?? undefined,
+                              name: newValue ?? undefined,
                             },
                           });
                           // }
-                        } }
+                        }}
 
                         disabled={props.action == 'view'}
                         // label={'Junior Leader 1'}
@@ -406,39 +422,42 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   </IconButton></>
                 )}
 
-                {newJr &&(
+                {newJr && (
 
-                  <><TextField
-                    id="outlined-basic"
-                    sx={{ width: '23vw' }}
 
-                    value={props.value.additionalJuniorLeader?.name ?? null}
-                    onChange={(e) => {
-                      if (e) {
-                        props.onChange({
-                          ...props.value,
-                          seniorLeader: { name: undefined, sign: undefined },
-                          additionalJuniorLeader: {
-                            ...props.value.additionalJuniorLeader,
-                            name: e.target.value as unknown as User,
-                          },
-                        });
-                      }
-                    } }
-                    label=" Custom Junior Leader 1"
-                    InputLabelProps={{ shrink: true }}
-                    disabled={props.action === 'view'}
-                    variant="outlined" />
-                  <IconButton onClick={()=>setNewJr(false)} aria-label="delete" size="small">
-                    <DeleteIcon fontSize="inherit" />
-                  </IconButton>
-                  <br /><Button variant="contained" onClick={() => setShowFileUploaderJr(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                      E-signature
-                  </Button></>
+                  <>
+                    <FormControl variant="outlined" fullWidth>
+                      <UsersDropdown
+                        users={customUsers as any ?? []}
+                        value={props.value.additionalJuniorLeader?.name ?? null}
+                        onChange={(e, newValue) => {
+                          // if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            juniorLeader: { name: undefined, sign: undefined },
+                            additionalJuniorLeader: {
+                              ...props.value.additionalJuniorLeader,
+                              name: newValue ?? undefined,
+                            },
+                          });
+                          // }
+                        }}
+                        disabled={props.action === 'view'}
+                        label={('Custom Junior Leader 1')}
+                        required={false}
+                      />
+                    </FormControl>
+
+
+                    <IconButton onClick={() => setNewJr(false)} aria-label="delete" size="small">
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                  </>
+
                 )}
               </Grid>
               <Grid item xs={12} md={4}>
-                {newSr ==false &&(
+                {newSr == false && (
 
                   <><Grid item xs={12}>
                     <FormControl variant="outlined" fullWidth>
@@ -453,11 +472,11 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                             additionalSeniorLeader: { name: undefined, sign: undefined },
                             juniorLeader: {
                               ...props.value.juniorLeader,
-                              name: newValue?? undefined,
+                              name: newValue ?? undefined,
                             },
                           });
                           // }
-                        } }
+                        }}
                         // label={'Junior Leader 2'}
                         label={'Junior Leader 2'}
                         required={false} />
@@ -472,33 +491,44 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   </>
                 )}
                 {newSr && (
-                  <><TextField
-                    sx={{ width: '23vw' }}
-                    id="outlined-basic"
-                    value={props.value.additionalSeniorLeader?.name ?? null}
-                    onChange={(e) => {
-                      if (e) {
-                        props.onChange({
-                          ...props.value,
-                          juniorLeader: { name: undefined, sign: undefined },
-                          additionalSeniorLeader: {
-                            ...props.value.additionalSeniorLeader,
-                            name: e.target.value as unknown as User,
-                          },
-                        });
-                      }
-                    } }
-                    label=" Custom Junior Leader 2"
-                    InputLabelProps={{ shrink: true }}
-                    disabled={props.action === 'view'}
-                    variant="outlined" />
-                  <IconButton onClick={()=>setNewSr(false)} aria-label="delete" size="small">
-                    <DeleteIcon fontSize="inherit" />
-                  </IconButton>
+                  <>
+                    <FormControl variant="outlined" fullWidth>
+                      <UsersDropdown
+                        users={customUsers ?? []}
+                        value={props.value.additionalSeniorLeader?.name ?? null}
+                        onChange={(e, newValue) => {
+                          // if (newValue) {
+                          props.onChange({
+                            ...props.value,
+                            juniorLeader: { name: undefined, sign: undefined },
+                            additionalSeniorLeader: {
+                              ...props.value.additionalSeniorLeader,
+                              name: newValue ?? undefined,
+                            },
+                          });
+                          // }
+                        }}
+                        disabled={props.action === 'view'}
+                        label={('Custom Junior Leader 2')}
+                        required={false}
+                      />
+                    </FormControl>
 
-                  <br /><Button variant="contained" onClick={() => setShowFileUploaderSr(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                      E-signature
-                  </Button>
+
+                    <IconButton onClick={() => setNewSr(false)} aria-label="delete" size="small">
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+
+                    <br />
+
+                    {/* <Button
+                      variant="contained"
+                      onClick={() => setShowFileUploaderSr(true)}
+                      startIcon={<AttachmentIcon />}
+                      sx={{ mt: 1, float: 'right' }}
+                    >
+    E-signature
+                    </Button> */}
                   </>
 
                 )}
@@ -507,7 +537,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
             </>
 
           )}
-          {props.action =='view' || props.action =='edit' ?(
+          {props.action == 'view' || props.action == 'edit' ? (
 
             <>
               <Grid item xs={12} md={4}>
@@ -516,7 +546,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     <TextField
                       variant="outlined"
                       fullWidth
-                      label={ props.value.name != 'DELHI OFFICE'? 'Prev Co-ordinator Name' :`Prev ${Label?.[0]?.name}`}
+                      label={props.value.name != 'DELHI OFFICE' ? 'Prev Co-ordinator Name' : `Prev ${Label?.[0]?.name}`}
                       value={props.value?.prevCoordinator?.name ?? ''}
                       onChange={(e) => {
                         props.onChange({
@@ -545,7 +575,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     <TextField
                       variant="outlined"
                       fullWidth
-                      label={props.value.name != 'DELHI OFFICE'? 'Prev Junior Leader 1': `Prev ${Label?.[1]?.name}` }
+                      label={props.value.name != 'DELHI OFFICE' ? 'Prev Junior Leader 1' : `Prev ${Label?.[1]?.name}`}
                       value={props.value?.prevJuniorLeader1?.name ?? ''}
                       onChange={(e) => {
                         props.onChange({
@@ -562,7 +592,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
                 </Grid><Grid item xs={12}>
                   <Button variant="contained" onClick={() => setShowFileUploader2Prev(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                        E-signature
+                      E-signature
                   </Button>
                 </Grid>
                 {/* <IconButton onClick={() => setNewJr(true)} aria-label="add" size="small">
@@ -580,7 +610,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                     <TextField
                       variant="outlined"
                       fullWidth
-                      label={ props.value.name != 'DELHI OFFICE'? 'Prev Junior Leader 2': `Prev ${Label?.[2]?.name}`}
+                      label={props.value.name != 'DELHI OFFICE' ? 'Prev Junior Leader 2' : `Prev ${Label?.[2]?.name}`}
                       value={props.value.prevJuniorLeader2?.name ?? ''}
                       onChange={(e) => {
                         props.onChange({
@@ -597,7 +627,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
                 </Grid><Grid item xs={12}>
                   <Button variant="contained" onClick={() => setShowFileUploaderPrev3(true)} startIcon={<AttachmentIcon />} sx={{ mt: 1, float: 'right' }}>
-                        E-signature
+                      E-signature
                   </Button>
                 </Grid>
                 </>
@@ -606,7 +636,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
 
               </Grid>
             </>
-          ):[]}
+          ) : []}
 
 
           {/* {props?.value?.name === 'DELHI OFFICE' && (

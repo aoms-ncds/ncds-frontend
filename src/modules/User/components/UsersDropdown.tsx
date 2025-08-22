@@ -42,7 +42,7 @@ const UsersDropdown = (props: UserDropdownProps) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      getOptionLabel={(option) => option.basicDetails.firstName + ' ' + option.basicDetails.lastName}
+      getOptionLabel={(option) => option.name?? (option.basicDetails.firstName + ' ' + option.basicDetails.lastName)}
       disabled={props.disabled === undefined ? false : props.disabled}
       onChange={props.onChange}
       renderInput={(params) => (

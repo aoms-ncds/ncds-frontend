@@ -74,6 +74,13 @@ const SettingsDashboard = () => {
             </Grid>
           )} />
         <PermissionChecks
+          permissions={[]}
+          granted={(
+            <Grid item xs={12} md={4} xl={3} width={350}>
+              <ButtonCard secondaryText="Add Custom User" count={LanguageCount?.toString()} color="#fff" targetRoute="/settings/customUsers" />
+            </Grid>
+          )} />
+        <PermissionChecks
           permissions={['SETTINGS_DESIGNATION_ACCESS']}
           granted={(
             <Grid item xs={12} md={4} xl={3} width={350}>

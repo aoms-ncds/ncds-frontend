@@ -17,6 +17,7 @@ import TransactionLog from '../TransactionLog';
 import ApplicationSettings from '../ApplicationSettings';
 import ApplicationNames from '../ApplicationNames';
 import AppliedFor from '../AppliedFor';
+import CustomUsers from '../CustomUsers';
 
 const settingsRoutes: ModuleRoute = {
   base: '/settings',
@@ -37,6 +38,15 @@ const settingsRoutes: ModuleRoute = {
       element: <Languages />,
       private: true,
       requiredAccessRights: ['WRITE_STAFFS'],
+      showInDrawer: false,
+      icon: <Lang />,
+    },
+    {
+      title: 'Custom Users',
+      path: '/customUsers',
+      element: <CustomUsers />,
+      private: true,
+      requiredAccessRights: [],
       showInDrawer: false,
       icon: <Lang />,
     },

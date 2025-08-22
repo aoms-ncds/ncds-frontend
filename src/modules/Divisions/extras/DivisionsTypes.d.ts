@@ -85,7 +85,7 @@ declare global {
     };
     additionalJuniorLeader?:{
 
-      name?:User;
+      name?:User|null;
       sign?:FileObject;
     };
     additionalSeniorLeader?:{
