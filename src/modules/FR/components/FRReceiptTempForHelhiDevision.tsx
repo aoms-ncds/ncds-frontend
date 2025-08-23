@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props, 'prop');
+  console.log(props.rowData, 'prop');
 
   let totalAmount=0;
   return (
@@ -288,7 +288,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={`data:${props.rowData?.division?.details.coordinator?.signature?.coordinator?.type};base64, ${props.rowData?.division?.details.coordinator?.signature?.coordinator?.base64} `}/>
+          src={`data:${props.rowData?.division?.details.coordinator?.names?.coordinator?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.coordinator?.officialDetails?.eSign?.base64} `}/>
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name}</Text>

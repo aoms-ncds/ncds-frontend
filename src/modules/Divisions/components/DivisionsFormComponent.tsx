@@ -434,7 +434,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                           // if (newValue) {
                           props.onChange({
                             ...props.value,
-                            juniorLeader: { name: undefined, sign: undefined },
+                            seniorLeader: { name: undefined, sign: undefined },
                             additionalJuniorLeader: {
                               ...props.value.additionalJuniorLeader,
                               name: newValue ?? undefined,

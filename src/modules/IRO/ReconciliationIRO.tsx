@@ -412,7 +412,7 @@ const ReconciliationIRO = () => {
                 } else {
                   IROServices.getByIdOptimized(props.row._id).then((res)=>{
                     console.log(res.data, 'res98');
-                    setData2(res.data[0]);
+                    setData2(res.data[0].FR);
                     // console.log(props.row.fr, 'res98');
                   });
                   setOpenPrintFr(true);

@@ -166,13 +166,13 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
     NewTot = 0;
     totalAmount2 = 0;
   }, []);
-  console.log(totalAmount, 'hr');
 
   // const raiseddateString = printdetails?.IROdate;
   // const raiseddate = new Date(raiseddateString);
   // const option = { day: 'numeric', month: 'long', year: 'numeric' as const };
   // const raisformattedDate = raiseddate.toLocaleDateString('en-GB', option);
   const { prev, rowData, fr } = props;
+  console.log(fr, 'hre');
 
   let coordinatorName = '';
 

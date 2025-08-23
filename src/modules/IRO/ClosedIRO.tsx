@@ -321,7 +321,7 @@ const ClosedIRO = () => {
                 } else {
                   IROServices.getByIdOptimized(props.row._id).then((res)=>{
                     console.log(res.data, 'res98');
-                    setData2(res.data[0]);
+                    setData2(res.data[0].FR);
                     console.log(res.data[0].FR, 'res98');
                   });
                   // setData2(props.row.FR);

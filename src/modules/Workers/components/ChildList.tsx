@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import ChildrenServices from '../extras/ChildrenServices';
 import CloseIcon from '@mui/icons-material/Close';
 import * as XLSX from 'xlsx';
+import { IChildSupport } from '../../Settings/extras/LanguageTypes';
 
 const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 'active' }>) => {
   // const [childList, setChildList] = useState<Child[]>();

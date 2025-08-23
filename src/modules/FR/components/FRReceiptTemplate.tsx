@@ -124,7 +124,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  // console.log(props.rowData.FRno, 'pro');
+  console.log(props.rowData, 'pro');
 
 
   const additionalJr = props.rowData?.division?.details?.additionalJuniorLeader?.name;
@@ -237,21 +237,24 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 position: 'absolute',
                 height: 50,
                 width: 50 }}
-              src={`data:${props.rowData?.signature?.coordinator?.type?? props.rowData?.signature?.srLeader?.type?? props.rowData?.division?.details?.coordinator?.sign?.type};base64, ${props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.coordinator?.base64?? props.rowData?.signature?.srLeader?.type?? props.rowData?.division?.details?.coordinator?.sign?.base64} `}/>
+              src={`data:${(props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.type };base64,${(props.rowData as any)?.names?.coordinator?.officialDetails?.eSign?.base64}`}
+              />
 
 
               <Image style={{ left: 260,
                 position: 'absolute',
                 height: 50,
                 width: 50 }}
-              src={`data:${props.rowData?.signature?.srLeader?.type ?? props.rowData?.division?.details?.seniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.type};base64, ${props.rowData?.signature?.srLeader?.base64 ?? props.rowData?.division?.details?.seniorLeader?.sign?.base64 ?? props.rowData?.division?.details?.additionalJuniorLeader?.sign?.base64} `}/>
+              src={`data:${(props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??(props.rowData as any)?.signatureCustom?.srLeaderCustom.eSign?.type};base64,${(props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64??(props.rowData as any)?.signatureCustom?.srLeaderCustom.eSign?.base64}`}
+              />
 
 
               <Image style={{ left: 460,
                 height: 50,
                 width: 50,
               }}
-              src={`data:${props.rowData?.signature?.jrLeader?.type ?? props.rowData?.division?.details?.juniorLeader?.sign?.type ?? props.rowData?.division?.details?.additionalSeniorLeader?.sign?.type};base64, ${props.rowData?.signature?.jrLeader?.base64 ?? props.rowData?.division?.details?.juniorLeader?.sign?.base64 ??props.rowData?.division?.details?.additionalSeniorLeader?.sign?.base64} `} />
+              src={`data:${(props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??(props.rowData as any)?.signatureCustom?.jrLeaderCustom.eSign?.type};base64,${(props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64??(props.rowData as any)?.signatureCustom?.jrLeaderCustom.eSign?.base64}`}
+              />
 
 
               {props.rowData?.specialsanction == 'Yes' ? (
@@ -296,31 +299,29 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                   fontFamily: 'Oswald',
                 }}
               >
-                {props.rowData?.names?.coordinator?.basicDetails?.firstName ?
-                  `${props.rowData.names.coordinator.basicDetails.firstName} ${props.rowData.names.coordinator.basicDetails.lastName}` :
+                {(props.rowData as any)?.names?.coordinator?.basicDetails?.firstName ?
+                  `${(props.rowData as any).names.coordinator.basicDetails.firstName} ${(props.rowData as any).names.coordinator.basicDetails.lastName}` :
                   `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName}`
                 }
               </Text>
               <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
               <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-                {props.rowData?.names?.srLeader?.basicDetails?.firstName ?
-                  `${props.rowData?.names.srLeader.basicDetails.firstName} ${props.rowData?.names.srLeader.basicDetails.lastName || ''}` :
-                  props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?
-                    `${props.rowData?.division.details?.seniorLeader?.name?.basicDetails.firstName} ${props.rowData?.division.details?.seniorLeader?.name?.basicDetails.lastName || ''}` :
-                    typeof props.rowData?.division?.details?.additionalJuniorLeader?.name === 'string' ?
-                      props.rowData?.division.details?.additionalJuniorLeader?.name :
-                      ''}
+                {(props.rowData as any)?.names?.srLeader?.basicDetails?.firstName ?
+                  `${(props.rowData as any).names.srLeader.basicDetails.firstName} ${(props.rowData as any).names.srLeader.basicDetails.lastName}` :
+                  (props.rowData as any)?.signatureCustom?.srLeaderCustom.name ?
+                    `${(props.rowData as any)?.signatureCustom?.srLeaderCustom.name}`:
+                    `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName}`
+                }
               </Text>
 
               <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
               <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-                {props.rowData?.names?.jrLeader?.basicDetails?.firstName ?
-                  `${props.rowData?.names.jrLeader?.basicDetails.firstName} ${props.rowData?.names.jrLeader?.basicDetails.lastName || ''}` :
-                  props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName ?
-                    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails.firstName} ${props.rowData.division.details?.juniorLeader?.name?.basicDetails.lastName || ''}` :
-                    typeof props.rowData?.division?.details?.additionalSeniorLeader?.name === 'string' ?
-                      props.rowData?.division?.details?.additionalSeniorLeader?.name :
-                      ''}
+                {(props.rowData as any)?.names?.jrLeader?.basicDetails?.firstName ?
+                  `${(props.rowData as any).names.jrLeader.basicDetails.firstName} ${(props.rowData as any).names.jrLeader.basicDetails.lastName}` :
+                  (props.rowData as any)?.signatureCustom?.jrLeaderCustom.name ?
+                    `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom.name}`:
+                    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName}`
+                }
 
               </Text>
               {props.rowData?.specialsanction == 'Yes' ? (
