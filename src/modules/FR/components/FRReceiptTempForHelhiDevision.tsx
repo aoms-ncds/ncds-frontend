@@ -235,7 +235,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 50, borderRightColor: '#90e5fc' }}></div>
                 <PDFCell style={{ textAlign: 'center', fontSize: 10 }} width={'25%'}>
-                  {String(item.requestedAmount)}
+                  {String(item.requestedAmount?.toFixed(2))}
                 </PDFCell>
               </PDFTableRow>;
             })}
@@ -251,7 +251,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               </PDFCell>
               <div style={{ borderRight: 1, height: 24, borderRightColor: '#90e5fc' }}></div>
               <PDFCell style={{ textAlign: 'center', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }} width={'25%'}>
-                {totalAmount.toString()}
+                {totalAmount.toFixed(2)}
               </PDFCell>
             </PDFTableRow>
           </PDFTable>

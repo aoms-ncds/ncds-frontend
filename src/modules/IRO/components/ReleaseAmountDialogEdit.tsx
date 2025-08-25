@@ -350,7 +350,7 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
                 <TextField
                   label="Release Amount"
                   type="number"
-                  value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount : ''}
+                  value={releaseAmount?.releaseAmount != 0 ? releaseAmount?.releaseAmount?.toFixed(2) : ''}
                   onChange={(e) =>
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     setReleaseAmount(() => ({

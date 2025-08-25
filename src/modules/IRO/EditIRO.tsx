@@ -836,7 +836,7 @@ const EditIRO = () => {
                                 <TableCell align="center">{item.quantity}</TableCell>
                                 <TableCell align="center">{item.month}</TableCell>
                                 <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                                <TableCell align="center">{item.sanctionedAmount}</TableCell>
+                                <TableCell align="center">{item.sanctionedAmount?.toFixed(2)}</TableCell>
                                 <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                 <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                               </TableRow>

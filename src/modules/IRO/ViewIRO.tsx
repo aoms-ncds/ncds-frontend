@@ -650,7 +650,7 @@ const ViewIRO = (props: any) => {
                                     <TableCell align="center">{item.quantity}</TableCell>
                                     <TableCell align="center">{item.month}</TableCell>
                                     <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                                    <TableCell align="center">{item.sanctionedAmount}</TableCell>
+                                    <TableCell align="center">{(item as any).sanctionedAmount?.toFixed(2)}</TableCell>
                                     <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                                     <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                                     {(item as any).presidentSanctionAmt && <TableCell align="center">{(item as any).presidentSanctionAmt}</TableCell> }

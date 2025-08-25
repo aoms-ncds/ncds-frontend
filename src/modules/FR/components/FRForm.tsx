@@ -950,7 +950,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                             { props.value.status == FRLifeCycleStates.REOPENED||props.value.status == FRLifeCycleStates.FR_APPROVED||props.value.status == FRLifeCycleStates.FR_CLOSED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
-                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                              <><TableCell align="center">{item.sanctionedAmount?.toFixed(2)}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
                             ):[]}
                             <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
@@ -998,7 +998,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
                             { props.value.status == FRLifeCycleStates.REOPENED|| props.action =='customIRO'||props.action =='custom' || props.action =='customEdit' ? (
-                              <><TableCell align="center">{item.sanctionedAmount}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
+                              <><TableCell align="center">{item.sanctionedAmount?.toFixed(2)}</TableCell><TableCell align="center">{item.sanctionedAsPer}</TableCell></>
                             ):[]}
                             <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                           </TableRow>
@@ -1018,7 +1018,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                 <TextField
                   label="Requested Amount"
                   InputLabelProps={{ shrink: true }}
-                  value={grandTotalReust}
+                  value={grandTotalReust.toFixed(2)}
                   fullWidth
                   disabled
                 />
@@ -1034,7 +1034,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     <TextField
                       label="Sanctioned Amount"
                       // type={'number'}
-                      value={(props?.value.sanctionedAmount !== 0 ? props?.value.sanctionedAmount : null) ?? (grandTotal !== 0 ? grandTotal : null)}
+                      value={(props?.value.sanctionedAmount !== 0 ? props?.value.sanctionedAmount : null) ?? (grandTotal !== 0 ? grandTotal.toFixed(2) : null)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
                       disabled

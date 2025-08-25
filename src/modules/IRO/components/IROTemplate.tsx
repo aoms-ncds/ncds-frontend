@@ -489,11 +489,11 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
           </PDFCell>
           <div style={{ borderRight: 1, height: rowHeight }}></div>
           <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'32%'}>
-            {String(item.requestedAmount)}
+            {String(item.requestedAmount?.toFixed(2))}
           </PDFCell>
           <div style={{ borderRight: 1, height: rowHeight }}></div>
           <PDFCell style={{ textAlign: 'center', fontSize: FONT_SIZE }} width={'32%'}>
-            {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount)}
+            {String(props.rowData.sanctionedAmount ?? item?.sanctionedAmount?.toFixed(2))}
           </PDFCell>
         </PDFTableRow>
       </View>
@@ -514,12 +514,12 @@ const IROTemplate = (props: { rowData?: any; prev?: boolean; fr?: FR; mngrName?:
                 <div style={{ borderRight: 1, right: 0.1, height: 24 }}></div>
 
                 <PDFCell style={{ color: 'red', textAlign: 'center', fontSize: 10, fontFamily: 'CourierPrime' }} width={'50%'}>
-                  {totalAmount as any ?? ''}
+                  {totalAmount.toFixed(2) as any ?? ''}
                 </PDFCell>
                 <div style={{ borderRight: 1, height: 24 }}></div>
 
                 <PDFCell style={{ textAlign: 'center', color: 'red', fontSize: 10, fontFamily: 'CourierPrime' }} width={'50%'}>
-                  <br />{NewTot != 0 ? NewTot : totalAmount2}
+                  <br />{NewTot != 0 ? NewTot : totalAmount2.toFixed(2) as any ?? ''}
                 </PDFCell>
               </PDFTableRow>
               <View wrap={false}>
