@@ -1033,7 +1033,7 @@ onOpen={() => setOpen(true)}
 title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                     <TextField
                       label="Sanctioned Amount"
-                      type={'number'}
+                      // type={'number'}
                       value={(props?.value.sanctionedAmount !== 0 ? props?.value.sanctionedAmount : null) ?? (grandTotal !== 0 ? grandTotal : null)}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
@@ -2619,38 +2619,41 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                 <TextField
                   label="Sanctioned Amount"
-                  // type="text" // 👈 not "number"
-                  value={newParticular?.sanctionedAmount ?? ''}
+                  type={'number'}
+                  // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                  value={(newParticular?.sanctionedAmount!=0 ? newParticular?.sanctionedAmount: null)}
+
                   required
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
-                  autoComplete="off"
+                  autoComplete='off'
+                  // disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                   onChange={(e) => {
-                    const value = e.target.value;
-
-                    // allow only numbers with up to 2 decimals
-                    if (/^\d*\.?\d{0,2}$/.test(value)) {
-                      setNewParticular((amount: any) => ({
-                        ...amount,
-                        sanctionedAmount: value, // keep as string
-                      }));
-
-                      setAddParticulars((prev: any) =>
-                        prev.map((particular: any, index: number) =>
-                          index === selectedParticularIndex ?
-                            { ...particular, sanctionedAmount: value } :
-                            particular,
-                        ),
-                      );
-                    }
-                  }}
+                    // if (totalRequestedAmount) {
+                    setNewParticular((amount: any) => ({
+                      ...amount,
+                      sanctionedAmount: Number(e.target.value),
+                    }));
+                    // }
+                    setAddParticulars((prev: any) =>
+                      prev.map((particular: any, index: number) =>
+                        index === selectedParticularIndex ? { ...particular, sanctionedAmount: e.target.value } : particular,
+                      ),
+                    );
+                  }
+                  }
+                  // onFocus={() => setFocused(true)}
+                  // onBlur={() => setFocused(false)}
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   inputProps={{
-                    inputMode: 'decimal', // still shows decimal keyboard on mobile
+                    max: totalRequestedAmount,
+                    min: 0,
+                    step: 0.01, // Allows up to two decimal places
+                    onWheel: handleWheel,
                   }}
+                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                 />
-
                 {/* </Tooltip> */}
               </Grid>
               <br />
