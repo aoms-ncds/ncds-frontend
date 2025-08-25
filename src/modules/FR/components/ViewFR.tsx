@@ -526,8 +526,11 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                             <TableCell align="center">{item.quantity}</TableCell>
                             <TableCell align="center">{item.month}</TableCell>
                             <TableCell align="center">{item.requestedAmount?.toFixed(2)}</TableCell>
-                            <TableCell align="center">{item.sanctionedAmount}</TableCell>
-                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
+                            <TableCell align="center">
+                              {item.sanctionedAmount !== undefined && item.sanctionedAmount !== null ?
+                                Number(item.sanctionedAmount).toFixed(2) :
+                                ''}
+                            </TableCell>                            <TableCell align="center">{item.sanctionedAsPer}</TableCell>
                             <TableCell align="center">{item.applicationReferenceNo}</TableCell>
                             {item.presidentSanctionAmt && <TableCell align="center">{item.presidentSanctionAmt}</TableCell>}
                           </TableRow>
@@ -561,7 +564,10 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                     <TextField
                       label="Sanctioned Amount"
                       type={'number'}
-                      value={props.value?.sanctionedAmount ?? total == 0 ? '' : total.toFixed(2)}
+                      value={
+                        props.value?.sanctionedAmount ??
+  (total && !isNaN(Number(total)) ? Number(total).toFixed(2) : '')
+                      }
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                       autoComplete='off'
@@ -1558,8 +1564,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} followCursor arrow > */}
                 <TextField
                   label="Sanctioned Amount"
-                  type={'number'}
-                  // value={newParticular.sanctionedAmount ?? total==0 ? '':total}
+                  type="text" // 👈 use text, not number
                   value={
                     newParticular.sanctionedAmount !== undefined ?
                       newParticular.sanctionedAmount :
@@ -1569,30 +1574,32 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }
                   required
                   title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
-                  autoComplete='off'
-                  disabled={!hasPermissions(['MANAGE_FR']) || props.value.status != FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
+                  autoComplete="off"
+                  disabled={
+                    !hasPermissions(['MANAGE_FR']) ||
+    props.value.status !== FRLifeCycleStates.WAITING_FOR_ACCOUNTS
+                  }
                   onChange={(e) => {
-                    if (totalRequestedAmount) {
+                    const value = e.target.value;
+
+                    // only allow valid decimal numbers up to 2 decimals
+                    if (/^\d*\.?\d{0,2}$/.test(value)) {
                       setNewParticular((amount: any) => ({
                         ...amount,
-                        sanctionedAmount: Number(e.target.value),
+                        sanctionedAmount: value, // 👈 keep as string
                       }));
                     }
-                  }
-                  }
-                  // onFocus={() => setFocused(true)}
-                  // onBlur={() => setFocused(false)}
+                  }}
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
                   inputProps={{
+                    inputMode: 'decimal', // mobile: decimal keyboard
                     max: totalRequestedAmount,
                     min: 0,
-                    step: 0.01, // Allows up to two decimal places
-                    onWheel: handleWheel,
                   }}
-                // helperText={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
                 />
+
                 {/* </Tooltip> */}
               </Grid>
               <br />
