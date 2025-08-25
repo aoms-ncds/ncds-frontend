@@ -6,6 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import PaymentMethodService from './extras/PaymentMethodService';
+import { IPaymentMethod, CreatablePaymentMethod } from './extras/LanguageTypes';
 
 const PaymentMethod = () => {
   const [payment, setPayment] = useState<IPaymentMethod[] | null>(null);

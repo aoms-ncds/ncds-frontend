@@ -7,6 +7,7 @@ import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/ico
 import ChildSupportService from '../Settings/extras/ChildSupportService';
 import StaffServices from './extras/StaffServices';
 import InfoIcon from '@mui/icons-material/Info';
+import { ILanguage } from '../Settings/extras/LanguageTypes';
 export interface IPmaDedution{
     option?: string;
     amount?: number;

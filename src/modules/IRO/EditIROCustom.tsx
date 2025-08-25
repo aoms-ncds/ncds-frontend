@@ -55,6 +55,7 @@ import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import PaymentMethodService from '../Settings/extras/PaymentMethodService';
 import { log } from 'console';
+import { IPaymentMethod } from '../Settings/extras/LanguageTypes';
 
 const EditIROCustom = () => {
   const navigate = useNavigate();

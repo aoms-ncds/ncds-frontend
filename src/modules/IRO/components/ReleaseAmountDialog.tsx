@@ -12,6 +12,7 @@ import { hasPermissions } from '../../User/components/PermissionChecks';
 import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
+import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';

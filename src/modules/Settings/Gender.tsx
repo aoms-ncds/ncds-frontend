@@ -6,6 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import GenderService from './extras/GenderService';
+import { IGender, CreatableGender } from './extras/LanguageTypes';
 
 const Gender = () => {
   const [gender, setGender] = useState<IGender[] | null>(null);

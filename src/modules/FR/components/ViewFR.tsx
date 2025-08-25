@@ -59,6 +59,7 @@ import TransactionLogDialog from './TransactionLogDialog';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import SanctionLetter from './authLatter';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 
 
 const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boolean }>) => {

@@ -4,6 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import LanguagesService from '../../../Settings/extras/LanguagesService';
+import { ILanguage } from '../../../Settings/extras/LanguageTypes';
 
 
 const SpouseForm = (

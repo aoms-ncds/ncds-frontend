@@ -67,7 +67,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
       .then((res) => {
         console.log(res.data, 'customUsers');
 
-        setCustomUsers((res.data as ICustomUsers[]).filter((user) => user.division._id === editID));
+        setCustomUsers((res.data as ICustomUsers[]).filter((user:any) => user.division._id === editID));
       })
       .catch((res) => {
         console.log(res);
@@ -494,7 +494,7 @@ const DivisionsFormComponent = (props: FormComponentProps<DivisionDetails, { tit
                   <>
                     <FormControl variant="outlined" fullWidth>
                       <UsersDropdown
-                        users={customUsers ?? []}
+                        users={(customUsers as any) ?? []}
                         value={props.value.additionalSeniorLeader?.name ?? null}
                         onChange={(e, newValue) => {
                           // if (newValue) {

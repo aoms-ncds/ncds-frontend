@@ -42,6 +42,7 @@ import { useAuth } from '../../../hooks/Authentication';
 import MessageItem from '../../../components/MessageItem';
 import IRO from '../../IRO';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
+import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 
 const FRFormEdit = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);

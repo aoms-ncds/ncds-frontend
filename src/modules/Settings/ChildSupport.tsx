@@ -5,6 +5,7 @@ import { GridColDef, DataGrid } from '@mui/x-data-grid';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import ChildSupportService from './extras/ChildSupportService';
+import { IChildSupport, ILanguage, MyCreatableChildSupport } from './extras/LanguageTypes';
 
 const ChildSupport = () => {
   const [childSupport, setChildSupport] = useState<IChildSupport[] | null>(null);

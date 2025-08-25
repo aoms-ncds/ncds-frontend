@@ -39,6 +39,7 @@ import { enqueueSnackbar } from 'notistack';
 import UserLifeCycleStates from '../../extras/UserLifeCycleStates';
 import CommonLifeCycleStates from '../../../../extras/CommonLifeCycleStates';
 import UserServices from '../../extras/UserServices';
+import { IChildSupport, IGender } from '../../../Settings/extras/LanguageTypes';
 
 const UserForm = <UserType extends CreatableStaff | CreatableIWorker>(
   props: FormComponentProps<

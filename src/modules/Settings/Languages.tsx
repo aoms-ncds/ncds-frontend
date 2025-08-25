@@ -6,6 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import LanguagesServices from '../Settings/extras/LanguagesService';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
+import { ILanguage, CreatableLanguage } from './extras/LanguageTypes';
 
 const Languages = () => {
   const [languages, setLanguages] = useState<ILanguage[] | null>(null);

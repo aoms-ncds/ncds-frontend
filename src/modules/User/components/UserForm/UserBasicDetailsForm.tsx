@@ -13,7 +13,7 @@ import FileUploaderServices from '../../../../components/FileUploader/extras/Fil
 import { MB } from '../../../../extras/CommonConfig';
 import GenderService from '../../../Settings/extras/GenderService';
 import ReligionService from '../../../Settings/extras/ReligionService';
-import { IGender, IReligion } from '../../../Settings/extras/LanguageTypes';
+import { IGender, ILanguage, IReligion } from '../../../Settings/extras/LanguageTypes';
 
 const UserBasicDetailsForm = (
   props: FormComponentProps<

@@ -51,6 +51,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SanctionedAsPerService from '../../Settings/extras/SanctionedAsPerService';
 import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import TransactionLogDialog from './TransactionLogDialog';
+import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 
 const FRFormAdmin = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);

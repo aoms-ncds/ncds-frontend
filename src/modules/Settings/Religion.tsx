@@ -6,6 +6,7 @@ import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import ReligionService from './extras/ReligionService';
+import { IReligion, CreatableReligion } from './extras/LanguageTypes';
 
 const Relogion = () => {
   const [religion, setReligion] = useState<IReligion[] | null>(null);

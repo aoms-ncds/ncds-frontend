@@ -53,6 +53,7 @@ import IROLifeCycleStates from '../../IRO/extras/IROLifeCycleStates';
 import TransactionLogDialog from './TransactionLogDialog';
 import moment from 'moment';
 import InfoIcon from '@mui/icons-material/Info';
+import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
 const FRForm = (props: FormComponentProps<any>) => {
   const [showAddParticularDialog, setShowAddParticularDialog] = useState(false);
   // const [purposes, setPurposes] = useState<FRPurpose[]>();

@@ -52,6 +52,7 @@ import WorkersServices from '../Workers/extras/WorkersServices';
 import { useAuth } from '../../hooks/Authentication';
 import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import PaymentMethodService from '../Settings/extras/PaymentMethodService';
+import { IPaymentMethod } from '../Settings/extras/LanguageTypes';
 
 const EditIRO = () => {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
 import { getStandardResponse, getAuthHeader } from '../../../extras/CommonHelpers';
 import axios from 'axios';
+import { CreatablePaymentMethod, IPaymentMethod } from './LanguageTypes';
 export default {
 
   getAll: () =>
