@@ -25,6 +25,10 @@ declare global {
       srLeader?: IWorker;
       president?: string;
     };
+    signatureDelhiDiv?: {
+      jrLeader?: FileObject;
+      srLeader?: FileObject;
+    };
   }
 
   interface CreatableFR extends Creatable<FR> {

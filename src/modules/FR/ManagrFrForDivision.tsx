@@ -355,8 +355,8 @@ const ManageFrForDivision = () => {
                         details: {
                           ...rowData.division?.details,
                           coordinator: rowData as any,
-                          seniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: delhiHQ.details.seniorLeader as any,
-                          juniorLeader: rowData.division._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any,
+                          seniorLeader: rowData as any,
+                          juniorLeader: rowData as any,
                         },
                       },
                     });

@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props.rowData, 'prop');
+  console.log(props.rowData.division._id, 'prop');
 
   let totalAmount=0;
   return (
@@ -306,7 +306,11 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
             }}
           >
 
-            {props.rowData?.division?.details.juniorLeader?.names?.jrLeader?.basicDetails?.firstName?? ''} {props.rowData?.division?.details.juniorLeader?.names?.jrLeader?.basicDetails?.lastName??''}
+            {
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                `${props.rowData?.division?.details?.juniorLeader?.names?.jrLeader?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details?.juniorLeader?.names?.jrLeader?.basicDetails?.lastName ?? ''}` :
+                `${props.rowData?.division?.details?.juniorLeader?.signatureDelhiDiv?.jrLeader?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details?.juniorLeader?.signatureDelhiDiv?.jrLeader?.basicDetails?.lastName ?? ''}`
+            }
           </Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
@@ -319,7 +323,15 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               height: 20,
               width: 50,
             }}
-            src={`data:${props.rowData?.division?.details.coordinator?.names?.jrLeader?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.jrLeader?.officialDetails?.eSign?.base64} `}
+            src={`data:${
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                props.rowData?.division?.details?.coordinator?.names?.jrLeader?.officialDetails?.eSign?.type :
+                props.rowData?.division?.details?.coordinator?.signatureDelhiDiv?.jrLeader?.officialDetails?.eSign?.type
+            };base64,${
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                props.rowData?.division?.details?.coordinator?.names?.jrLeader?.officialDetails?.eSign?.base64 :
+                props.rowData?.division?.details?.coordinator?.signatureDelhiDiv?.jrLeader?.officialDetails?.eSign?.base64
+            }`}
           />
 
           <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
@@ -337,7 +349,11 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.division?.details.seniorLeader?.names?.srLeader?.basicDetails?.firstName?? ''} {props.rowData?.division?.details.seniorLeader?.names?.srLeader?.basicDetails?.lastName??''}
+            {
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                `${props.rowData?.division?.details?.seniorLeader?.names?.srLeader?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details?.seniorLeader?.names?.srLeader?.basicDetails?.lastName ?? ''}` :
+                `${props.rowData?.division?.details?.seniorLeader?.signatureDelhiDiv?.srLeader?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details?.seniorLeader?.signatureDelhiDiv?.srLeader?.basicDetails?.lastName ?? ''}`
+            }
           </Text>
           {/* Modified juniorLeader with Delhi HQ's juniorLeader.'s details*/}
           <Text style={{ left: 460, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
@@ -349,7 +365,15 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               height: 20,
               width: 50,
             }}
-            src={`data:${props.rowData?.division?.details.coordinator?.names?.srLeader?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.srLeader?.officialDetails?.eSign?.base64} `}
+            src={`data:${
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                props.rowData?.division?.details?.coordinator?.names?.srLeader?.officialDetails?.eSign?.type :
+                props.rowData?.division?.details?.coordinator?.signatureDelhiDiv?.srLeader?.officialDetails?.eSign?.type
+            };base64,${
+              props.rowData.division._id === '658270549efadc163550a28c' ?
+                props.rowData?.division?.details?.coordinator?.names?.srLeader?.officialDetails?.eSign?.base64 :
+                props.rowData?.division?.details?.coordinator?.signatureDelhiDiv?.srLeader?.officialDetails?.eSign?.base64
+            }`}
 
           />
           {/* {props.label[3]?.name && (

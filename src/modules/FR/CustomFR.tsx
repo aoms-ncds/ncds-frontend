@@ -365,8 +365,8 @@ const CustomFR = () => {
                         details: {
                           ...props.row.division?.details,
                           coordinator: props.row as any,
-                          seniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.seniorLeader: delhiHQ.details.seniorLeader as any,
-                          juniorLeader: props.row.division._id =='658270549efadc163550a28c'? delhiHQ.details.juniorLeader: delhiHQ.details.juniorLeader as any,
+                          seniorLeader: props.row as any,
+                          juniorLeader: props.row as any,
                         },
                       },
                     });
