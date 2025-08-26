@@ -305,8 +305,8 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {
-              `${props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details.juniorLeader?.name?.basicDetails?.lastName ?? ''}`}
+
+            {props.rowData?.division?.details.juniorLeader?.names?.jrLeader?.basicDetails?.firstName?? ''} {props.rowData?.division?.details.juniorLeader?.names?.jrLeader?.basicDetails?.lastName??''}
           </Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
@@ -319,11 +319,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               height: 20,
               width: 50,
             }}
-            src={`data:${
-              props.rowData?.division?.details.juniorLeader?.sign?.type
-            };base64,${
-              props.rowData?.division?.details.juniorLeader?.sign?.base64
-            }`}
+            src={`data:${props.rowData?.division?.details.coordinator?.names?.jrLeader?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.jrLeader?.officialDetails?.eSign?.base64} `}
           />
 
           <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
@@ -341,8 +337,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               fontFamily: 'Oswald',
             }}
           >
-            {
-              `${props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.firstName ?? ''} ${props.rowData?.division?.details.seniorLeader?.name?.basicDetails?.lastName ?? ''}`}
+            {props.rowData?.division?.details.seniorLeader?.names?.srLeader?.basicDetails?.firstName?? ''} {props.rowData?.division?.details.seniorLeader?.names?.srLeader?.basicDetails?.lastName??''}
           </Text>
           {/* Modified juniorLeader with Delhi HQ's juniorLeader.'s details*/}
           <Text style={{ left: 460, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
@@ -354,11 +349,8 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
               height: 20,
               width: 50,
             }}
-            src={`data:${
-              props.rowData?.division?.details.seniorLeader?.sign?.type
-            };base64,${
-              props.rowData?.division?.details.seniorLeader?.sign?.base64
-            }`}
+            src={`data:${props.rowData?.division?.details.coordinator?.names?.srLeader?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.srLeader?.officialDetails?.eSign?.base64} `}
+
           />
           {/* {props.label[3]?.name && (
             <><Text style={{ left: 60, top: 80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
