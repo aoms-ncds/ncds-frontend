@@ -282,7 +282,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
           <Text style={{ left: 115, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[0]?.name}</Text>
           <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-          <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.firstName} {props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.lastName} </Text>
+          <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.firstName?? ''} {props.rowData?.division?.details.coordinator?.names?.coordinator?.basicDetails?.lastName??''} </Text>
           <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text>
           <Image style={{ left: 480, top: 20,
             position: 'absolute',
@@ -291,7 +291,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           src={`data:${props.rowData?.division?.details.coordinator?.names?.coordinator?.officialDetails?.eSign?.type};base64, ${props.rowData?.division?.details.coordinator?.names?.coordinator?.officialDetails?.eSign?.base64} `}/>
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
-          <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name}</Text>
+          <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.label?.[1]?.name??''}</Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
           <Text style={{ left: 260, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
@@ -387,7 +387,7 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
           {props.rowData?.specialsanction == 'Yes' ? (
             <><Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text><Text style={{ left: 115, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
               <Text style={{ left: 260, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-              <Text style={{ left: 290, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{(props.president as any)?.presidentName}</Text>
+              <Text style={{ left: 290, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{(props.president as any)?.presidentName?? ''}</Text>
               <Text style={{ left: 460, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text><Image style={{
                 left: 480, top: 120,
                 position: 'absolute',

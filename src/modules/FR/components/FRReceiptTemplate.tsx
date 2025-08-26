@@ -300,27 +300,27 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 }}
               >
                 {(props.rowData as any)?.names?.coordinator?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.coordinator.basicDetails.firstName} ${(props.rowData as any).names.coordinator.basicDetails.lastName}` :
-                  `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName}`
+                  `${(props.rowData as any).names.coordinator.basicDetails.firstName?? ''} ${(props.rowData as any).names.coordinator.basicDetails.lastName??''}` :
+                  `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName??''}`
                 }
               </Text>
               <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
               <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.srLeader?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.srLeader.basicDetails.firstName} ${(props.rowData as any).names.srLeader.basicDetails.lastName}` :
+                  `${(props.rowData as any).names.srLeader.basicDetails.firstName??''} ${(props.rowData as any).names.srLeader.basicDetails.lastName??''}` :
                   (props.rowData as any)?.signatureCustom?.srLeaderCustom.name ?
-                    `${(props.rowData as any)?.signatureCustom?.srLeaderCustom.name}`:
-                    `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName}`
+                    `${(props.rowData as any)?.signatureCustom?.srLeaderCustom.name??''}`:
+                    `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName??''}`
                 }
               </Text>
 
               <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
               <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.jrLeader?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.jrLeader.basicDetails.firstName} ${(props.rowData as any).names.jrLeader.basicDetails.lastName}` :
+                  `${(props.rowData as any).names.jrLeader.basicDetails.firstName??''} ${(props.rowData as any).names.jrLeader.basicDetails.lastName??''}` :
                   (props.rowData as any)?.signatureCustom?.jrLeaderCustom.name ?
-                    `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom.name}`:
-                    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName}`
+                    `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom.name??''}`:
+                    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName??''}`
                 }
 
               </Text>
