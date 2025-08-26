@@ -135,14 +135,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
   let total = 0;
   props.value?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
-      total += particular?.sanctionedAmount;
+      total += Number(particular.sanctionedAmount);
     }
   });
-  let total2: any = 0;
 
+  let total2: any = 0;
   props.value?.particulars?.forEach((particular) => {
     if (particular?.presidentSanctionAmt) {
-      total2 += particular?.presidentSanctionAmt;
+      total2 += Number(particular?.presidentSanctionAmt);
     }
   });
   console.log(total2, 'total2');
@@ -566,7 +566,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                       type={'number'}
                       value={
                         props.value?.sanctionedAmount ??
-  (total && !isNaN(Number(total)) ? Number(total).toFixed(2) : '')
+                        (total && !isNaN(Number(total)) ? Number(total).toFixed(2) : '')
                       }
                       required={props.value.status == FRLifeCycleStates.WAITING_FOR_ACCOUNTS}
                       title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`}
@@ -1580,7 +1580,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
     props.value.status !== FRLifeCycleStates.WAITING_FOR_ACCOUNTS
                   }
                   onChange={(e) => {
-                    const value = e.target.value;
+                    const value = (e.target.value);
 
                     // only allow valid decimal numbers up to 2 decimals
                     if (/^\d*\.?\d{0,2}$/.test(value)) {

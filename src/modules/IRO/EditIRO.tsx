@@ -447,7 +447,7 @@ const EditIRO = () => {
   let total = 0;
   IRO?.particulars?.forEach((particular) => {
     if (particular?.sanctionedAmount) {
-      total += particular?.sanctionedAmount;
+      total += Number(particular?.sanctionedAmount);
     }
   });
   let total2 = 0;

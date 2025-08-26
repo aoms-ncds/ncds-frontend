@@ -495,7 +495,7 @@ const FRForm = (props: FormComponentProps<any>) => {
   let total = 0;
   props.value?.particulars?.forEach((particular: any) => {
     if (particular?.sanctionedAmount) {
-      total += particular?.sanctionedAmount;
+      total += Number(particular?.sanctionedAmount);
     }
   });
   let total2 = 0;

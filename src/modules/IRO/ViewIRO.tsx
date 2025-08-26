@@ -349,7 +349,7 @@ const ViewIRO = (props: any) => {
   let total = 0;
   IRO?.particulars?.forEach((particular: { sanctionedAmount: number }) => {
     if (particular?.sanctionedAmount) {
-      total += particular?.sanctionedAmount;
+      total += Number(particular?.sanctionedAmount);
     }
   });
   const [openRelease, setOpenRelease] = useState(false);
