@@ -303,16 +303,16 @@ const ReleaseAmountDialogEdit = (props: ReleaseDialogProps) => {
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as IROrder;
         const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return <p>{particularAmount}</p>;
+        return <p>{particularAmount.toFixed(2)}</p>;
       },
     },
     { field: 'sanctionedAmount', headerName: 'Sanctioned Amount', width: 180,
       valueGetter: (params) => {
         if (params.row.sanctionedAmount !== undefined) {
-          return params.row.sanctionedAmount;
+          return params.row.sanctionedAmount?.toFixed(2);
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0);
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
         }
         return 0; // or return a suitable default value
       },
