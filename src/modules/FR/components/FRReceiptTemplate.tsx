@@ -245,15 +245,30 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 position: 'absolute',
                 height: 50,
                 width: 50 }}
-              src={`data:${(props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??(props.rowData as any)?.signatureCustom?.srLeaderCustom.eSign?.type};base64,${(props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64??(props.rowData as any)?.signatureCustom?.srLeaderCustom.eSign?.base64}`}
-              />
+              src={`data:${
+                (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??
+  (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.type ??
+  (props.rowData as any)?.division.details.seniorLeader?.sign?.type
+              };base64,${
+                (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64 ??
+  (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.base64 ??
+  (props.rowData as any)?.division.details.seniorLeader.sign?.base64
+              }`} />
 
 
               <Image style={{ left: 460,
                 height: 50,
                 width: 50,
               }}
-              src={`data:${(props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??(props.rowData as any)?.signatureCustom?.jrLeaderCustom.eSign?.type};base64,${(props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64??(props.rowData as any)?.signatureCustom?.jrLeaderCustom.eSign?.base64}`}
+              src={`data:${
+                (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??
+  (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.type ??
+  (props.rowData as any)?.division.details.seniorLeader?.sign?.type
+              };base64,${
+                (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64 ??
+  (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.base64 ??
+  (props.rowData as any)?.division.details.junior?.sign?.type
+              }`}
               />
 
 
