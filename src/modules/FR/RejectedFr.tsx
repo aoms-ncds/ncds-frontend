@@ -273,7 +273,7 @@ const RejectedFr = () => {
           (total, particular) => total + Number(particular.requestedAmount || 0), // Ensure we handle potential undefined values
           0,
         );
-        return particularAmount || 0; // Return 0 if the total is undefined
+        return particularAmount.toFixed(2) || 0; // Return 0 if the total is undefined
       },
       renderCell: (params: GridCellParams) => {
         const frRequest = params.row as FR;
@@ -281,7 +281,7 @@ const RejectedFr = () => {
           (total, particular) => total + Number(particular.requestedAmount || 0),
           0,
         );
-        return <p>{particularAmount}</p>;
+        return <p>{particularAmount.toFixed(2)}</p>;
       },
     },
     // { field: 'updatedAt', align: 'center',

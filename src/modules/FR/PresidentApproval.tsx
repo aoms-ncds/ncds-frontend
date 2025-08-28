@@ -381,7 +381,7 @@ const PresidentApproval = () => {
           (total, particular) => total + Number(particular.requestedAmount),
           0,
         );
-        return particularAmount;
+        return particularAmount.toFixed(2);
       },
     },
 

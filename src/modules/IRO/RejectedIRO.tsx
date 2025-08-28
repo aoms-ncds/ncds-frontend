@@ -446,7 +446,7 @@ const RejectedIRO = () => {
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount;
+        return particularAmount.toFixed(2);
       },
     },
     // {
@@ -475,7 +475,7 @@ const RejectedIRO = () => {
           return params.row.sanctionedAmount;
         }
         if (Array.isArray(params.row.particulars)) {
-          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0);
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
         }
         return 0; // or return a suitable default value
       }, headerAlign: 'center', renderHeader: () => (<b>Sanctioned Amount</b>), width: 150,

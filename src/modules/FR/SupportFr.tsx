@@ -657,7 +657,7 @@ const SupportFrPage = () => {
       valueGetter(params) {
         const frRequest = params.row as FR;
         const particularAmount = frRequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
-        return particularAmount;
+        return particularAmount.toFixed(2);
       },
     },
     {

@@ -1733,10 +1733,10 @@ const EditIRO = () => {
                   variant="outlined"
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                  // inputProps={{
-                  //   max: totalRequestedAmount, min: 0,
-                  //   onWheel: handleWheel,
-                  // }}
+                  inputProps={{
+                    max: newParticular?.requestedAmount, min: 0,
+                    onWheel: handleWheel,
+                  }}
                   // inputProps={{
                   //   max: totalRequestedAmount,
                   //   min: 0,

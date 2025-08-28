@@ -323,7 +323,7 @@ const Resubmitted = () => {
           (total, particular) => total + Number(particular.requestedAmount || 0),
           0,
         );
-        return <p>{particularAmount}</p>;
+        return <p>{particularAmount.toFixed(2)}</p>;
       },
     },
     { field: 'updatedAt', align: 'center',
