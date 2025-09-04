@@ -323,8 +323,8 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.srLeader?.basicDetails?.firstName ?
                   `${(props.rowData as any).names.srLeader.basicDetails.firstName??''} ${(props.rowData as any).names.srLeader.basicDetails.lastName??''}` :
-                  (props.rowData as any)?.signatureCustom?.srLeaderCustom.name ?
-                    `${(props.rowData as any)?.signatureCustom?.srLeaderCustom.name??''}`:
+                  (props.rowData as any)?.signatureCustom?.srLeaderCustom?.name ?
+                    `${(props.rowData as any)?.signatureCustom?.srLeaderCustom?.name??''}`:
                     `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName??''}`
                 }
               </Text>
@@ -333,8 +333,8 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.jrLeader?.basicDetails?.firstName ?
                   `${(props.rowData as any).names.jrLeader.basicDetails.firstName??''} ${(props.rowData as any).names.jrLeader.basicDetails.lastName??''}` :
-                  (props.rowData as any)?.signatureCustom?.jrLeaderCustom.name ?
-                    `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom.name??''}`:
+                  (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.name ?
+                    `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom?.name??''}`:
                     `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName??''}`
                 }
 

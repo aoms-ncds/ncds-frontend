@@ -379,7 +379,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   <Autocomplete
                     options={[]}
                     value={props.value.purposeSubdivision}
-                    getOptionLabel={(subDiv) => subDiv.name}
+                    getOptionLabel={(subDiv) => subDiv?.name}
                     onChange={(event, newVal) => props.onChange({ ...props.value, purposeSubdivision: newVal ?? undefined })}
                     renderInput={(params) => <TextField {...params} label="Subdivision" />}
                     disabled />
@@ -399,7 +399,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   <Autocomplete
                     value={props.value.division}
                     options={[]}
-                    getOptionLabel={(division) => division.details.name}
+                    getOptionLabel={(division) => division.details?.name}
                     onChange={(e, selectedDivision) => {
                       if (selectedDivision && props.action !== 'view') {
                         props.onChange({
@@ -1996,7 +1996,7 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
         // getFiles={TestServices.getBills}
         getFiles={props.value.additionalSignature ? [props.value.additionalSignature] : []}
         uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
-          return FileUploaderServices.uploadFile(file, onProgress, 'Settings/eSignature', file.name).then((res) => {
+          return FileUploaderServices.uploadFile(file, onProgress, 'Settings/eSignature', file?.name).then((res) => {
             console.log(res.data, 'poo');
             // props.onChange(() => ({
             //   ...props.value, // Include existing properties
