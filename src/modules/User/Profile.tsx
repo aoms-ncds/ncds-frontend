@@ -9,6 +9,7 @@ import StaffServices from '../HR/extras/StaffServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Attachment as AttachmentIcon } from '@mui/icons-material';
 import FileUploader from '../../components/FileUploader/FileUploader';
+import { hasPermissions } from '../User/components/PermissionChecks';
 import { MB } from '../../extras/CommonConfig';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import moment from 'moment';
@@ -123,7 +124,7 @@ const Profile = () => {
     }
   }, []);
 
-console.log(user?.officialDetails, 'user?.officialDetails');
+  console.log(user?.officialDetails, 'user?.officialDetails');
 
   return (
     <CommonPageLayout
@@ -225,17 +226,23 @@ console.log(user?.officialDetails, 'user?.officialDetails');
           </Card>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Button
-            sx={{ float: 'right' }}
-            variant="contained"
-            onClick={() => {
-              user?.kind === 'worker' ?
-                navigate(`/workers/edit/${user?._id}`) :
-                navigate(`/hr/edit/${user?._id}`);
-            }}
-          >
-  Edit
-          </Button>
+
+          {hasPermissions(['MANAGE_WORKER']) && (
+            <Button
+              sx={{ float: 'right' }}
+              variant="contained"
+              onClick={() => {
+                if (user?.kind === 'worker') {
+                  navigate(`/workers/edit/${user?._id}`);
+                } else {
+                  navigate(`/hr/edit/${user?._id}`);
+                }
+              }}
+            >
+          Edit
+            </Button>
+          )}
+
 
           <br />
           {/* <br /> */}
