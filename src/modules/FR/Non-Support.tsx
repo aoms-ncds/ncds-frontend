@@ -30,7 +30,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import * as XLSX from 'xlsx';
 import moment from 'moment';
 import FRReceiptTemplate from './components/FRReceiptTemplate';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import clsx from 'clsx';
 import FRReceiptTempForDelhiDivision from './components/FRReceiptTempForHelhiDevision';
 import LeaderDetailsService from '../Settings/extras/LeaderDetailsService';
@@ -1121,17 +1121,35 @@ const NonSupport = () => {
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
                 <Container>
-                                    Download the FR Receipt, Delhi for {data?.FRno} <br />
-                  {data && (
-                    <PDFDownloadLink
-                      document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
-                      fileName="FRReceiptDelhi.pdf"
-                      style={{ color: 'blue' }}
-                    >
-                      {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
-                    </PDFDownloadLink>
-                  )}{' '}
-                </Container>
+  Download the FR Receipt, Delhi for {data?.FRno}
+  <br />
+
+  {data && (
+    <BlobProvider
+      document={
+        <FRReceiptTempForDelhiDivision
+          label={Label}
+          president={selectedSignaturePresident}
+          rowData={data as FR}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceiptDelhi.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceiptDelhi.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -1147,15 +1165,35 @@ const NonSupport = () => {
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-                <Container>
-                                    Downloading the FRReceipt for {data2?.FRno}
-                  <br />
-                  {data2 && (
-                    <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
-                      {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
-                    </PDFDownloadLink>
-                  )}{' '}
-                </Container>
+               <Container>
+  Downloading the FRReceipt for {data2?.FRno}
+  <br />
+
+  {data2 && (
+    <BlobProvider
+      document={
+        <FRReceiptTemplate
+          rowData={data2 as FR}
+          president={selectedSignaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceipt.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceipt.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -1202,15 +1240,22 @@ const NonSupport = () => {
                     }
                   }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-                <PDFDownloadLink
-                  document={<IROReconciliationPdf
-                    data={pdfProps}
-                  />}
-                  fileName="WorkersSignatureSheet.pdf"
-                  style={{ color: 'blue' }}
-                >
-                  {({ loading }) => loading ? '....' : 'WorkersSignatureSheet.pdf'}
-                </PDFDownloadLink><br />
+               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+  {({ loading, url }) =>
+    loading ? (
+      <span style={{ color: 'blue' }}>....</span>
+    ) : (
+      <a
+        href={url ?? ''}
+        download="WorkersSignatureSheet.pdf"
+        style={{ color: 'blue' }}
+      >
+        WorkersSignatureSheet.pdf
+      </a>
+    )
+  }
+</BlobProvider>
+<br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1239,15 +1284,22 @@ const NonSupport = () => {
                     }
                   }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-                <PDFDownloadLink
-                  document={<IROReconciliationPdf
-                    data={pdfProps}
-                  />}
-                  fileName="ChildrenSignatureSheet.pdf"
-                  style={{ color: 'blue' }}
-                >
-                  {({ loading }) => loading ? '....' : 'ChildrenSignatureSheet.pdf'}
-                </PDFDownloadLink><br />
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+  {({ loading, url }) =>
+    loading ? (
+      <span style={{ color: 'blue' }}>....</span>
+    ) : (
+      <a
+        href={url ?? ''}
+        download="ChildrenSignatureSheet.pdf"
+        style={{ color: 'blue' }}
+      >
+        ChildrenSignatureSheet.pdf
+      </a>
+    )
+  }
+</BlobProvider>
+<br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>

@@ -14,7 +14,7 @@ import { useAuth } from '../../hooks/Authentication';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import ChildrenServices from '../Workers/extras/ChildrenServices';
@@ -1124,27 +1124,68 @@ const ChildeSupportPage = () => {
       }} maxWidth="xs" fullWidth>
         <DialogTitle> Add attachment</DialogTitle>
         <DialogContent>
-          <Container>FR created. Do you want to add attachment &nbsp;
-            {pdfProps &&
-              <PDFDownloadLink
-                document={<ChildePDFTemplate month={getMonth() ?? null} total={total}frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled==true)}/>}
+          
+<Container>
+  FR created. Do you want to add attachment&nbsp;
 
-                fileName="ChildSupport.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading||disableAttach? '....' : 'ChildSupport.pdf'}
+  {pdfProps && (
+    <BlobProvider
+      document={
+        <ChildePDFTemplate
+          month={getMonth() ?? null}
+          total={total}
+          frNo={requisition2?.FRno ?? ''}
+          divisionId={pdfProps.divisionId}
+          data={childList.filter((e) => e.supportEnabled === true)}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || disableAttach ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="ChildSupport.pdf"
+            style={{ color: 'blue' }}
+          >
+            ChildSupport.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
 
-              </PDFDownloadLink>}
-              &nbsp; and &nbsp;
-            <PDFDownloadLink
-              document={<ChildeSupportSignSheet frNo={requisition2?.FRno?? ''}
-                month={getMonth()} total={total} data={childList.filter((e)=>e.supportEnabled ==true)} subDiv={subDivision||null}
-              />} fileName="ChildrenSignatureSheet.pdf"
-              style={{ color: 'blue' }}
-            >
-              {({ loading }) => loading||disableAttach?'....':'ChildrenSignatureSheet.pdf'}
-            </PDFDownloadLink>
-              ?</Container>
+  &nbsp; and &nbsp;
+
+  <BlobProvider
+    document={
+      <ChildeSupportSignSheet
+        frNo={requisition2?.FRno ?? ''}
+        month={getMonth()}
+        total={total}
+        data={childList.filter((e) => e.supportEnabled === true)}
+        subDiv={subDivision ?? null}
+      />
+    }
+  >
+    {({ loading, url }) =>
+      loading || disableAttach ? (
+        <span style={{ color: 'blue' }}>....</span>
+      ) : (
+        <a
+          href={url ?? ''}
+          download="ChildrenSignatureSheet.pdf"
+          style={{ color: 'blue' }}
+        >
+          ChildrenSignatureSheet.pdf
+        </a>
+      )
+    }
+  </BlobProvider>
+
+  ?
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1158,75 +1199,80 @@ const ChildeSupportPage = () => {
           <>
             {(selectedWorker || division) && pdfProps && (
               <>
-                <PDFDownloadLink
-                  document={<ChildeSupportSignSheet
-                    month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} data={childList.filter((e)=>e.supportEnabled ==true)}
-                  />} fileName="ChildSignatureSheet.pdf"
-                  style={{ color: 'blue' }}
-                >
-                  {({ blob: signBlob, loading: loading1 }) => (
-                    <PDFDownloadLink
-                      document={<ChildePDFTemplate frNo={requisition2?.FRno?? ''} month={getMonth() ?? null} total={total} divisionId={pdfProps.divisionId} data={childList.filter((e)=>e.supportEnabled ==true)}/>}
+                <BlobProvider
+  document={
+    <ChildeSupportSignSheet
+      month={getMonth() ?? null}
+      total={total}
+      frNo={requisition2?.FRno ?? ''}
+      data={childList.filter((e) => e.supportEnabled === true)}
+    />
+  }
+>
+  {({ blob: signBlob, loading: loading1 }) => (
+    <BlobProvider
+      document={
+        <ChildePDFTemplate
+          frNo={requisition2?.FRno ?? ''}
+          month={getMonth() ?? null}
+          total={total}
+          divisionId={pdfProps.divisionId}
+          data={childList.filter((e) => e.supportEnabled === true)}
+        />
+      }
+    >
+      {({ blob: supportBlob, loading: loading2 }) => (
+        <>
+          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
+            <DialogContent>
+              <Typography sx={{ color: 'red' }}>
+                Did you download the signature sheet?
+              </Typography>
+            </DialogContent>
 
-                      fileName="ChildSupport.pdf"
-                      style={{ textDecoration: 'none', color: 'blue' }}
-                    >
-                      {({ blob: supportBlob, loading: loading2 }) => (
-                        <>
-                          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
-                            <DialogContent>
-                              <Typography sx={{ color: 'red' }}>Did you download the signature sheet?</Typography>
-                            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setModal(false)}>Close</Button>
 
-                            <DialogActions>
-                              <Button onClick={()=>setModal(false)}>Close</Button>
-                              <Button
-                                endIcon={<AttachIcon />}
-                                variant="contained"
-                                color="info"
-                                onClick={async () => {
-                                  if (signBlob && supportBlob) {
-                                    setLoading(true);
-                                    attach(signBlob, supportBlob);
-                                  }
-                                } }
-                                // disabled={loading1 || loading2 || disableAttach || loading}
-                              >
-                                {loading ? <Box sx={{ display: 'flex' }}>
-                                  <CircularProgress />
-                                </Box> : 'Yes'}
-                              </Button>
-                            </DialogActions>
+              <Button
+                endIcon={<AttachIcon />}
+                variant="contained"
+                color="info"
+                onClick={async () => {
+                  if (signBlob && supportBlob) {
+                    setLoading(true);
+                    await attach(signBlob, supportBlob);
+                  }
+                }}
+                disabled={loading1 || loading2 || loading}
+              >
+                {loading ? (
+                  <Box sx={{ display: 'flex' }}>
+                    <CircularProgress size={20} />
+                  </Box>
+                ) : (
+                  'Yes'
+                )}
+              </Button>
+            </DialogActions>
+          </Dialog>
 
-                          </Dialog>
-                          {/* <Button
-                            endIcon={<AttachIcon />}
-                            variant="contained"
-                            color="info"
-                            onClick={async () => {
-                              if (signBlob && supportBlob) {
-                                setLoading(true);
-                                attach(signBlob, supportBlob);
-                              }
-                            }}
-                            disabled={loading1 || loading2 || disableAttach||loading}
-                          >
-                            {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
-                          </Button> */}
-                          <Button onClick={() =>{
-                            setModal(true);
-                            setRequisition2((prev:any) => ({
-                              ...prev,
-                              isSupport: true,
-                            }));
-                          } }>
-                            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
-                          </Button>
-                        </>
-                      )}
-                    </PDFDownloadLink>
-                  )}
-                </PDFDownloadLink>
+          <Button
+            onClick={() => {
+              setModal(true);
+              setRequisition2((prev: any) => ({
+                ...prev,
+                isSupport: true,
+              }));
+            }}
+            disabled={loading1 || loading2}
+          >
+            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
+          </Button>
+        </>
+      )}
+    </BlobProvider>
+  )}
+</BlobProvider>
 
               </>
             )}

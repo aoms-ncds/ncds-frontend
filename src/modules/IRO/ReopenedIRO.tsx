@@ -2,7 +2,7 @@
 
 import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { useState, SetStateAction, useEffect } from 'react';
@@ -1027,17 +1027,40 @@ const ReopenedIRO = () => {
       <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
-          <Container>
-            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
-            <br />
-            {iroData && mngrName&&selectedSignature&& (
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  {`Are you sure you want to close this IRO No ${iroData?.IROno}
+    from ${iroData?.division?.details.name}
+    related to FR No ${FrData?.FRno ?? ''} ?`}
+  <br />
+
+  {iroData && mngrName && selectedSignature && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1052,24 +1075,33 @@ const ReopenedIRO = () => {
             {iroData && mngrName&&selectedSignature&& (
 
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-                    </Button> }
-                </PDFDownloadLink>
+               <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+    </Button>
+  )}
+</BlobProvider>
 
               </>
             )}

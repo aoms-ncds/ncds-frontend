@@ -1,7 +1,7 @@
 
 import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { useState, SetStateAction, useEffect } from 'react';
@@ -609,17 +609,34 @@ const ReopenedFr = () => {
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
           <Container>
-                  Download the FR Receipt, Delhi for {data?.FRno} <br />
-            {data && (
-              <PDFDownloadLink
-                document={<FRReceiptTempForDelhiDivision label={Label} president={selectedSignaturePresident} rowData={data as unknown as FR} />}
-                fileName="FRReceiptDelhi.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+  Download the FR Receipt, Delhi for {data?.FRno}
+  <br />
+  {data && (
+    <BlobProvider
+      document={
+        <FRReceiptTempForDelhiDivision
+          label={Label}
+          president={selectedSignaturePresident}
+          rowData={data as unknown as FR}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceiptDelhi.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceiptDelhi.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -635,15 +652,35 @@ const ReopenedFr = () => {
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-          <Container>
-                  Downloading the FRReceipt for {data2?.FRno}
-            <br />
-            {data2 && (
-              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Downloading the FRReceipt for {data2?.FRno}
+  <br />
+  {data2 && (
+    <BlobProvider
+      document={
+        <FRReceiptTemplate
+          rowData={data2 as FR}
+          president={selectedSignaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceipt.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceipt.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
+
         </DialogContent>
         <DialogActions>
           <Button

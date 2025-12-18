@@ -19,7 +19,7 @@ import {
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link, useLocation } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
@@ -459,7 +459,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter ?? '', sourceOfAccount: 'FCRA' })
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', ...(statusFilter !== undefined && { status: statusFilter }), })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -1854,18 +1854,29 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               <Dialog open={Boolean(data6)} onClose={() => setData6(null)} maxWidth="xs" fullWidth>
                 <DialogTitle> Print Fr</DialogTitle>
                 <DialogContent>
-                  <Container>
-                                            Download the FR Auth Letter for {data6?.FRno} <br />
-                    {data6 && (
-                      <PDFDownloadLink
-                        document={<SanctionLetter data={data6 as any}/>}
-                        fileName="AuthLetter.pdf"
-                        style={{ color: 'blue' }}
-                      >
-                        {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
-                      </PDFDownloadLink>
-                    )}{' '}
-                  </Container>
+                 <Container>
+  Download the FR Auth Letter for {data6?.FRno}
+  <br />
+
+  {data6 && (
+    <BlobProvider document={<SanctionLetter data={data6 as any} />}>
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="AuthLetter.pdf"
+            style={{ color: 'blue' }}
+          >
+            AuthLetter.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
+
                 </DialogContent>
                 <DialogActions>
                   <Button
@@ -2241,27 +2252,55 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
-          <Container>Please download and attach the signature sheet: &nbsp;
-            {selectedIRO.signatureSheet ? <a href="#" onClick={async () => {
-              const file = (await FileUploaderServices.getFile(selectedIRO?.signatureSheet ?? '')).data;
-              if (file.downloadURL) {
-                const link = document.createElement('a');
-                link.href = file.downloadURL;
-                link.download = 'WorkersSignatureSheet.pdf'; // You can specify a custom file name here
-                link.click();
-              }
-            }}>WorkersSignatureSheet.pdf</a> : (pdfProps &&
-              <>
-                <PDFDownloadLink
-                  document={<IROReconciliationPdf
-                    data={pdfProps}
-                  />}
-                  fileName="WorkersSignatureSheet.pdf"
-                  style={{ color: 'blue' }}
-                >
-                  {({ loading }) => loading ? '....' : 'WorkersSignatureSheet.pdf'}
-                </PDFDownloadLink><br />
-              </>)}NB: Ignore if already attached </Container>
+          <Container>
+  Please download and attach the signature sheet:&nbsp;
+
+  {selectedIRO.signatureSheet ? (
+    <a
+      href="#"
+      onClick={async (e) => {
+        e.preventDefault();
+        const file = (
+          await FileUploaderServices.getFile(
+            selectedIRO?.signatureSheet ?? ''
+          )
+        ).data;
+
+        if (file.downloadURL) {
+          const link = document.createElement('a');
+          link.href = file.downloadURL;
+          link.download = 'WorkersSignatureSheet.pdf';
+          link.click();
+        }
+      }}
+    >
+      WorkersSignatureSheet.pdf
+    </a>
+  ) : (
+    pdfProps && (
+      <>
+        <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+          {({ loading, url }) =>
+            loading ? (
+              <span style={{ color: 'blue' }}>....</span>
+            ) : (
+              <a
+                href={url ?? ''}
+                download="WorkersSignatureSheet.pdf"
+                style={{ color: 'blue' }}
+              >
+                WorkersSignatureSheet.pdf
+              </a>
+            )
+          }
+        </BlobProvider>
+        <br />
+      </>
+    )
+  )}
+
+  NB: Ignore if already attached
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2303,17 +2342,37 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
-            <br />
-            {iroData && mngrName && selectedSignature && FrData && (
+  {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
+  <br />
 
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+  {iroData && mngrName && selectedSignature && FrData && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2328,25 +2387,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             {iroData && mngrName && selectedSignature && FrData && (
 
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-                    </Button>}
-                </PDFDownloadLink>
-
+              <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+    </Button>
+  )}
+</BlobProvider>
               </>
             )}
           </>

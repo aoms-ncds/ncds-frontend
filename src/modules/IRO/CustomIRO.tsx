@@ -17,7 +17,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useAuth } from '../../hooks/Authentication';
 import * as XLSX from 'xlsx';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
@@ -923,16 +923,37 @@ const CustomIRO = () => {
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno?? ''} ?`}
-            <br />
-            {iroData && mngrName&&selectedSignature&&FrData&& (
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+  {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
+  <br />
+
+  {iroData && mngrName && selectedSignature && FrData && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -947,24 +968,33 @@ const CustomIRO = () => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-                    </Button> }
-                </PDFDownloadLink>
+              <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+    </Button>
+  )}
+</BlobProvider>
 
               </>
             )}
@@ -1014,17 +1044,36 @@ const CustomIRO = () => {
       <Dialog open={Boolean(openPrintIro)} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-          <Container>
-                  Downloading the FRReceipt for {selectedIRO?.IROno}
-            <br />
-            {selectedIRO && (
-              <PDFDownloadLink document={<IROTemplateCustom rowData={selectedIRO as any}
-                officeMngrSign={selectedIRO.officeManagerSign as any}
-                officeMngrName={selectedIRO.officeManagerName as any}/>} fileName="IRO.pdf" style={{ color: 'blue' }}>
-                {({ loading }) => (loading ? '....' : 'IRO.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Downloading the FRReceipt for {selectedIRO?.IROno}
+  <br />
+
+  {selectedIRO && (
+    <BlobProvider
+      document={
+        <IROTemplateCustom
+          rowData={selectedIRO as any}
+          officeMngrSign={selectedIRO.officeManagerSign as any}
+          officeMngrName={selectedIRO.officeManagerName as any}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="IRO.pdf"
+            style={{ color: 'blue' }}
+          >
+            IRO.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
