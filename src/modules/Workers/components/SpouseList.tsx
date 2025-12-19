@@ -13,6 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import SpousesServices from '../extras/SpousesServices';
+// Add these imports at the top with other imports
+import * as XLSX from 'xlsx';
+import DownloadIcon from '@mui/icons-material/Download';
 
 const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' | 'active' }>) => {
   const navigate = useNavigate();
@@ -370,7 +373,12 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       </Dialog>
       <br />
       <Grid item xs={6}>
-        <Grid sx={{ mb: 3, mt: 0, mx: 2 }}>
+        <Grid sx={{ mb: 3, mt: 0, mx: 2 }}
+          spacing={2}
+          alignItems="center"
+          justifyContent="space-between"
+          style={{ display: 'flex' }}
+        >
           <TextField
             label="Search"
             variant="outlined"
@@ -379,6 +387,64 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
             fullWidth
             style={{ width: '25%', alignItems: 'start' }}
           />
+
+           {/* Export Button */}
+                <Button
+  onClick={async () => {
+    const dataToExport = filteredRows.length > 0 ? filteredRows : (props.value || []);
+    const sheet = dataToExport.map((spouse: any) => [
+      spouse.spouseCode || '-',
+      spouse.firstName || '-',
+      spouse.lastName || '-',
+      spouse.division?.details?.name || '-',
+      spouse.phone || '-',
+      spouse.dateOfBirth && moment(spouse.dateOfBirth).isValid() 
+        ? moment(spouse.dateOfBirth).format('DD/MM/YYYY') 
+        : '-',
+      spouse.qualification || '-',
+      `${spouse.spouseOf?.basicDetails?.firstName || ''} ${spouse.spouseOf?.basicDetails?.lastName || ''}`.trim() || '-',
+      spouse.email || '-',
+      spouse.reasonForDeactivation || '-',
+      spouse.deactivationDate && moment(spouse.deactivationDate).isValid()
+        ? moment(spouse.deactivationDate).format('DD/MM/YYYY')
+        : '-',
+    ]);
+
+    const headers = [
+      'Spouse Code',
+      'First Name',
+      'Last Name',
+      'Division',
+      'Mobile No',
+      'DOB',
+      'Qualification',
+      'Spouse Of',
+      'Email ID',
+      'Reason for Deactivation',
+      'Deactivation Date',
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet([headers, ...sheet]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Spouses');
+    
+    const colWidths = [
+      { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, 
+      { wch: 15 }, { wch: 12 }, { wch: 15 }, { wch: 25 }, 
+      { wch: 25 }, { wch: 25 }, { wch: 20 }
+    ];
+    worksheet['!cols'] = colWidths;
+
+    XLSX.writeFile(workbook, 'Spouses_Report.xlsx');
+  }}
+  startIcon={<DownloadIcon />}
+  color="primary"
+  variant="contained"
+  sx={{ marginRight: 10 }}
+>
+  Export
+</Button>
+
         </Grid>
       </Grid>
       <Grid item xs={12} md={12}>
