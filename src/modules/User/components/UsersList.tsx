@@ -61,13 +61,13 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
 
   useEffect(() => {
     if (currentTab == 0) {
-      // WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
-      //   .then((res) => {
-      //     setUsers(res.data);
-      //   })
-      //   .catch((res) => {
-      //     console.log(res);
-      //   });
+      WorkersServices.getAll({ status: UserLifeCycleStates.ACTIVE })
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
     } else if (currentTab == 1) {
       SpousesServices.getAll({ status: UserLifeCycleStates.ACTIVE })
         .then((res) => {
@@ -480,6 +480,8 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
     //   valueGetter: (params) => params.row.basicDetails.licenseNumber,
     // },
   ];
+
+  console.log('users ',users)
   return (
     <>
       <Grid container spacing={2} padding={2}>
@@ -650,6 +652,7 @@ const UsersList = <StaffOrWorker extends User>(props: FormComponentProps<StaffOr
                         XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
                         XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
                         XLSX.writeFile(workbook, 'WorkerReport.xlsx', { compression: true });
+                      
                       }}
                       startIcon={<DownloadIcon />}
                       color="primary"

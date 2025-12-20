@@ -1243,7 +1243,7 @@ const ChildeSupportPage = () => {
                     await attach(signBlob, supportBlob);
                   }
                 }}
-                disabled={loading1 || loading2 || loading}
+                disabled={Boolean(loading1 || loading2 || loading)}
               >
                 {loading ? (
                   <Box sx={{ display: 'flex' }}>
