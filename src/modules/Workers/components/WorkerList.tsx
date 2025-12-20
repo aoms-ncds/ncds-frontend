@@ -334,45 +334,55 @@ const UserCard: React.FC<UserCardProps> = ({ user, reason, removeUser }) => {
         </form>
       </Dialog>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">
-        <DialogTitle>Reason</DialogTitle>
-        <DialogContent>
-          <br />
-          <Autocomplete
-            options={reason ?? null}
-            value={reasonForDeactivation as IReason}
-            getOptionLabel={(option) => option.reason ?? ''}
-            onChange={(e, selectedReason) => {
-              setReasonForDeactivation(selectedReason ?? null);
-            }}
-            renderInput={(params) => <TextField {...params} label="Reason for Deactivation" required />}
-            fullWidth />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setReasonDialog(false);
-              false;
-            }}
-            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
-          >
-            <CloseIcon sx={{ color: 'white' }} />
-          </Button>
+  <DialogTitle>Reason</DialogTitle>
 
-          <Button
-            variant="contained"
-            onClick={() => {
-              if (reasonForDeactivation) {
-                deactivateWorker(rowID, reasonForDeactivation);
-              }
-              setReasonDialog(false);
-            }}
-            sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
-          >
-            submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+  <DialogContent>
+    <br />
+
+    <Autocomplete<IReason|any>
+      options={reason ?? []}
+      value={reasonForDeactivation}
+      getOptionLabel={(option) => option?.reason ?? ''}
+      onChange={(_, selectedReason) => {
+        setReasonForDeactivation(selectedReason);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Reason for Deactivation"
+          required
+        />
+      )}
+      fullWidth
+    />
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      variant="contained"
+      onClick={() => {
+        setReasonDialog(false);
+      }}
+      sx={{ mx: '1rem', py: 1.7, height: 50, background: 'red' }}
+    >
+      <CloseIcon sx={{ color: 'white' }} />
+    </Button>
+
+    <Button
+      variant="contained"
+      onClick={() => {
+        if (reasonForDeactivation) {
+          deactivateWorker(rowID, reasonForDeactivation);
+        }
+        setReasonDialog(false);
+      }}
+      sx={{ mx: '1rem', py: 1.7, height: 50, background: 'green' }}
+    >
+      Submit
+    </Button>
+  </DialogActions>
+</Dialog>
+
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         {/* <DialogContent>
           <Typography sx={{ color: 'red' }}>Are you sure you want to delete this User?</Typography>
@@ -462,13 +472,17 @@ const WorkerList: React.FC<UserListProps> = ({ users, reason, onScroll, deleteUs
 
   // Attach scroll event listener when component mounts
   React.useEffect(() => {
-    if (!listRef.current) return;
-    listRef.current.addEventListener('scroll', handleScroll);
-    return () => {
-      if (!listRef.current) return;
-      listRef.current.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+  const element = listRef.current;
+  if (!element) {
+    return () => {}; //  consistent return
+  }
+
+  element.addEventListener('scroll', handleScroll);
+
+  return () => {
+    element.removeEventListener('scroll', handleScroll);
+  };
+}, [handleScroll]);
 
   const callDelete = (userId: string) => {
     deleteUser(userId);

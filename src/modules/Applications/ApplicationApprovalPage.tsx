@@ -12,7 +12,7 @@ import CommonLifeCycleStates from '../../extras/CommonLifeCycleStates';
 import CloseIcon from '@mui/icons-material/Close';
 import ApplicationLifeCycleStates from './extras/ApplicationLifCyclrStates';
 import ApplicationNamesService from '../Settings/extras/ApplicationNamesService';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import SanctionLetter from './components/authLatter';
 const dataaa = {
   approvalDate: '2025-03-27',
@@ -186,7 +186,7 @@ const ApplicationApprovalPage = () => {
 
             <CardActions>
               <PermissionChecks
-                permissions={['MANAGE_APPLICATION'] || ['PRESIDENT_ACCESS']}
+                permissions={['MANAGE_APPLICATION', 'PRESIDENT_ACCESS']}
                 granted={(
                   <>
 
@@ -351,17 +351,29 @@ const ApplicationApprovalPage = () => {
         <DialogTitle> Print Sanction Letter</DialogTitle>
         <DialogContent>
           <Container>
-                  Download the SanctionLetter <br />
-            {data && (
-              <PDFDownloadLink
-                document={<SanctionLetter data={data} />}
-                fileName="SanctionLetter.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => (loading || openPrintFr ? '....' : 'SanctionLetter.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+  Download the SanctionLetter
+  <br />
+  {data && (
+    <BlobProvider
+      document={<SanctionLetter data={data} />}
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="SanctionLetter.pdf"
+            style={{ color: 'blue' }}
+          >
+            SanctionLetter.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
+
         </DialogContent>
         <DialogActions>
           <Button

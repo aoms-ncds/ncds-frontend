@@ -20,7 +20,7 @@ import { MB } from '../../extras/CommonConfig';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
@@ -945,15 +945,35 @@ const ClosedIRO = () => {
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-          <Container>
-                  Downloading the FRReceipt for {data2?.FRno}
-            <br />
-            {data2 && (
-              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={signaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Downloading the FRReceipt for {data2?.FRno}
+  <br />
+
+  {data2 && (
+    <BlobProvider
+      document={
+        <FRReceiptTemplate
+          rowData={data2 as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceipt.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceipt.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -969,18 +989,36 @@ const ClosedIRO = () => {
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-          <Container>
-                  Download the FR Receipt, Delhi for {data?.FRno} <br />
-            {data && (
-              <PDFDownloadLink
-                document={<FRReceiptTempForDelhiDivision label={Label} president={signaturePresident} rowData={data as unknown as FR} />}
-                fileName="FRReceiptDelhi.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceiptDelhi.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Download the FR Receipt, Delhi for {data?.FRno}
+  <br />
+
+  {data && (
+    <BlobProvider
+      document={
+        <FRReceiptTempForDelhiDivision
+          label={Label}
+          president={signaturePresident}
+          rowData={data as FR}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceiptDelhi.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceiptDelhi.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1021,17 +1059,38 @@ const ClosedIRO = () => {
       <Dialog open={ openAttachReceipt } onClose={() => setOpenAttachReceipt(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
-          <Container>
-          Do you want to attach receipt for {iroData?.IROno}?
-            <br />
-            {iroData && mngrName&&selectedSignature&& (
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+        <Container>
+  Do you want to attach receipt for {iroData?.IROno}?
+  <br />
+
+  {iroData && mngrName && selectedSignature && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1046,24 +1105,33 @@ const ClosedIRO = () => {
           <>
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-                    </Button> }
-                </PDFDownloadLink>
+              <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+    </Button>
+  )}
+</BlobProvider>
 
               </>
             )}
@@ -1074,16 +1142,38 @@ const ClosedIRO = () => {
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
           <Container>
-          Do you want to attach receipt for {iroData?.IROno}?
-            <br />
-            {iroData && mngrName&&selectedSignature&& (
-              <PDFDownloadLink
-                document={<IROTemplate prev={true} rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+  Do you want to attach receipt for {iroData?.IROno}?
+  <br />
+
+  {iroData && mngrName && selectedSignature && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          prev={true}
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1098,24 +1188,35 @@ const ClosedIRO = () => {
           <>
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} prev={true} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-                    </Button> }
-                </PDFDownloadLink>
+               <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      prev={true}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+    </Button>
+  )}
+</BlobProvider>
+
 
               </>
             )}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { Grid, Button, Card, Box, TextField, Container, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import DropdownButton from '../../components/DropDownButton';
 import IROLifeCycleStates from '../IRO/extras/IROLifeCycleStates';
 import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
@@ -496,15 +496,35 @@ const SentBack = () => {
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-          <Container>
-                  Downloading the FRReceipt for {data2?.FRno}
-            <br />
-            {data2 && (
-              <PDFDownloadLink document={<FRReceiptTemplate rowData={data2 as FR} president={selectedSignaturePresident} />} fileName="FRReceipt.pdf" style={{ color: 'blue' }}>
-                {({ loading }) => (loading || openPrintFr ? '....' : 'FRReceipt.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Downloading the FRReceipt for {data2?.FRno}
+  <br />
+  {data2 && (
+    <BlobProvider
+      document={
+        <FRReceiptTemplate
+          rowData={data2 as FR}
+          president={selectedSignaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="FRReceipt.pdf"
+            style={{ color: 'blue' }}
+          >
+            FRReceipt.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
+
         </DialogContent>
         <DialogActions>
           <Button
