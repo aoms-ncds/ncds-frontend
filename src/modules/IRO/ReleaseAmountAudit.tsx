@@ -20,7 +20,7 @@ import {
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import MessageItem from '../../components/MessageItem';
 import SendIcon from '@mui/icons-material/Send';
@@ -1892,15 +1892,22 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
               }
             }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
             <>
-              <PDFDownloadLink
-                document={<IROReconciliationPdf
-                  data={pdfProps}
-                />}
-                fileName="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading?'....':'WorkersSignatureSheet.pdf'}
-              </PDFDownloadLink><br/>
+             <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+  {({ loading, url }) =>
+    loading ? (
+      <span style={{ color: 'blue' }}>....</span>
+    ) : (
+      <a
+        href={url ?? ''}
+        download="WorkersSignatureSheet.pdf"
+        style={{ color: 'blue' }}
+      >
+        WorkersSignatureSheet.pdf
+      </a>
+    )
+  }
+</BlobProvider>
+<br />
             </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
@@ -1947,11 +1954,31 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
+            <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ loading, url }) =>
+    loading || printIroLoading ? (
+      <span style={{ color: 'blue' }}>....</span>
+    ) : (
+      <a
+        href={url ?? ''}
+        download={`${iroData?.IROno}_Receipt.pdf`}
+        style={{ color: 'blue' }}
+      >
+        {`${iroData?.IROno}_Receipt.pdf`}
+      </a>
+    )
+  }
+</BlobProvider>
             )}{' '}
           </Container>
         </DialogContent>
@@ -1968,25 +1995,33 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident} />}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-                    </Button> }
-                </PDFDownloadLink>
-
+                <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+    </Button>
+  )}
+</BlobProvider>
               </>
             )}
           </>

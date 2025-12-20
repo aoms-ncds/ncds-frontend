@@ -12,7 +12,7 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import PermissionChecks from '../User/components/PermissionChecks';
 import FRForm from './components/FRForm';
 import FRServices from './extras/FRServices';
-import { pdf, PDFDownloadLink } from '@react-pdf/renderer';
+import { pdf, PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import { purposes } from './extras/FRConfig';
@@ -214,7 +214,7 @@ const WorkerSupportPage = () => {
     }
   };
 
-  const attach = async (signBlob: Blob, supportBlob: Blob) => {
+  const attach = async (signBlob: Blob|null, supportBlob: Blob|null) => {
     try {
       if (selectedWorker || division) {
         // File Blob creation
@@ -1613,35 +1613,49 @@ const WorkerSupportPage = () => {
         }
       }} maxWidth="xs" fullWidth>
         <DialogTitle> Add attachment</DialogTitle>
-        <DialogContent>
-          <Container>FR created. Do you want to add attachment &nbsp;
-            {pdfProps!=null &&
-              <PDFDownloadLink
-                document={<PDFTemplate
-                  divisionId={pdfProps?.divisionId}
-                  workerId={pdfProps?.workerId}
-                  purpose={pdfProps?.purpose}
-                  designationParticularID={pdfProps?.designationParticularID}
-                  subDivisionId={pdfProps?.subDivisionId}
-                  FrNo={pdfProps?.FrNo}
-                  FrMonth={pdfProps?.FrMonth} />}
-                fileName="WorkerSupport.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => loading||disableAttach? '....' : 'WorkerSupport.pdf'}
+       <DialogContent>
+  <Container>
+    FR created. Do you want to add attachment&nbsp;
 
-              </PDFDownloadLink>} and &nbsp;
-            {signPdfProps !=null &&<PDFDownloadLink
-              document={<IROReconciliationPdf
-                data={signPdfProps}
-              />}
-              fileName="WorkersSignatureSheet.pdf"
-              style={{ color: 'blue' }}
-            >
-              {({ loading }) => loading||disableAttach?'....':'WorkersSignatureSheet.pdf'}
-            </PDFDownloadLink>}
-              ?</Container>
-        </DialogContent>
+    {pdfProps != null && (
+      <PDFDownloadLink
+        document={<PDFTemplate {...pdfProps} />}
+        fileName="WorkerSupport.pdf"
+      >
+        {(({
+          loading,
+        }: any) => (
+          <span>
+            {loading || disableAttach ? '....' : 'WorkerSupport.pdf'}
+            &nbsp;
+          </span>
+        )) as unknown as React.ReactNode}
+      </PDFDownloadLink>
+    )}
+
+    and&nbsp;
+
+    {signPdfProps != null && (
+      <PDFDownloadLink
+        document={<IROReconciliationPdf data={signPdfProps} />}
+        fileName="WorkersSignatureSheet.pdf"
+        style={{ color: 'blue' }}
+      >
+        {(({
+          loading,
+        }: any) => (
+          <span>
+            {loading || disableAttach ? '....' : 'WorkersSignatureSheet.pdf'}
+            &nbsp;
+          </span>
+        )) as unknown as React.ReactNode}
+      </PDFDownloadLink>
+    )}
+
+    ?
+  </Container>
+</DialogContent>
+
         <DialogActions>
           <Button
             onClick={() => {
@@ -1654,13 +1668,9 @@ const WorkerSupportPage = () => {
           <>
             {(selectedWorker || division) && signPdfProps && pdfProps && (
               <>
-                <PDFDownloadLink
-                  document={<IROReconciliationPdf data={signPdfProps} />}
-                  fileName="WorkersSignatureSheet.pdf"
-                  style={{ color: 'blue' }}
-                >
+                <BlobProvider document={<IROReconciliationPdf data={signPdfProps} />}>
                   {({ blob: signBlob, loading: loading1 }) => (
-                    <PDFDownloadLink
+                    <BlobProvider
                       document={<PDFTemplate
                         divisionId={pdfProps?.divisionId}
                         workerId={pdfProps?.workerId}
@@ -1670,8 +1680,6 @@ const WorkerSupportPage = () => {
                         FrNo={pdfProps?.FrNo}
                         FrMonth={pdfProps?.FrMonth}
                       />}
-                      fileName="WorkerSupport.pdf"
-                      style={{ textDecoration: 'none', color: 'blue' }}
                     >
                       {({ blob: supportBlob, loading: loading2 }) => (
                         <>
@@ -1726,9 +1734,9 @@ const WorkerSupportPage = () => {
                           </Button>
                         </>
                       )}
-                    </PDFDownloadLink>
+                    </BlobProvider>
                   )}
-                </PDFDownloadLink>
+                </BlobProvider>
 
               </>
             )}

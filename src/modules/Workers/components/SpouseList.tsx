@@ -325,7 +325,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
       renderHeader: () => (<b>Deactivation Date</b>),
       headerClassName: 'super-app-theme--cell',
     },
-  ].filter((action) => action !== false) as GridColDef<Spouse>[];
+  ].filter((action:any) => action !== false) as GridColDef<Spouse>[];
   return (
     <>
       <Dialog open={reasonDialog} fullWidth maxWidth="md">

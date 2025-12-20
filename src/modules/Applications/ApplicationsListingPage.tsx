@@ -520,7 +520,7 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
             setStatusId(params.id as string);
           }}
         />,
-      ].filter((action) => action !== false) as JSX.Element[]),
+      ].filter((action:any) => action !== false) as JSX.Element[]),
     },
     // { field: '_id', headerName: 'SI NO', width: 150 },
     {

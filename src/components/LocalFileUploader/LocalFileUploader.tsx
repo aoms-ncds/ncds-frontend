@@ -481,7 +481,7 @@ const LocalFileUploader = (props: FileUploaderProps) => {
               props.deleteFile && props
               .deleteFile(deleteFileId??'')
               .then(() => {
-                setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== deleteFileId ?? null)));
+                setFileObjects((fileObjects) => (!fileObjects ? null : fileObjects.filter((fileObject) => fileObject._id !== deleteFileId)));
               })
               .catch((error) => {
                 console.log({ error });

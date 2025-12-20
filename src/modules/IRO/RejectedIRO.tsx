@@ -20,7 +20,7 @@ import { MB } from '../../extras/CommonConfig';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import moment from 'moment';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import Lottie from 'react-lottie';
 import Animations from '../../Animations';
 import IROTemplate from './components/IROTemplate';
@@ -825,17 +825,38 @@ const RejectedIRO = () => {
       <Dialog open={ openAttachReceipt } onClose={() => setOpenAttachReceipt(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
-          <Container>
-          Do you want to attach receipt for {iroData?.IROno}?
-            <br />
-            {iroData && mngrName&&selectedSignature&& (
-              <PDFDownloadLink
-                document={<IROTemplate rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                {({ loading }) => (loading || printIroLoading ? '....' : `${iroData?.IROno}_Receipt.pdf`)}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+         <Container>
+  Do you want to attach receipt for {iroData?.IROno}?
+  <br />
+
+  {iroData && mngrName && selectedSignature && (
+    <BlobProvider
+      document={
+        <IROTemplate
+          rowData={iroData}
+          mngrName={mngrName}
+          officeMngrSign={selectedSignature}
+          fr={FrData as FR}
+          president={signaturePresident}
+        />
+      }
+    >
+      {({ loading, url }) =>
+        loading || printIroLoading ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download={`${iroData?.IROno}_Receipt.pdf`}
+            style={{ color: 'blue' }}
+          >
+            {`${iroData?.IROno}_Receipt.pdf`}
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -850,24 +871,33 @@ const RejectedIRO = () => {
           <>
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
-                <PDFDownloadLink document={<IROTemplate
-                  rowData={iroData} mngrName={mngrName} officeMngrSign={selectedSignature} fr={FrData as FR} president={signaturePresident}/>}
-                fileName={`${iroData?.IROno}_Receipt.pdf`} style={{ color: 'blue' }}>
-                  {({ blob, loading }) =>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      onClick={async () => {
-                        if (blob) {
-                          setLoading(true);
-                          attach(blob);
-                        }
-                      }}
-                      disabled={loading || printIroLoading}
-                    >
-                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-                    </Button> }
-                </PDFDownloadLink>
+               <BlobProvider
+  document={
+    <IROTemplate
+      rowData={iroData}
+      mngrName={mngrName}
+      officeMngrSign={selectedSignature}
+      fr={FrData as FR}
+      president={signaturePresident}
+    />
+  }
+>
+  {({ blob, loading }) => (
+    <Button
+      variant="contained"
+      color="info"
+      onClick={async () => {
+        if (blob) {
+          setLoading(true);
+          await attach(blob);
+        }
+      }}
+      disabled={loading || printIroLoading}
+    >
+      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+    </Button>
+  )}
+</BlobProvider>
 
               </>
             )}

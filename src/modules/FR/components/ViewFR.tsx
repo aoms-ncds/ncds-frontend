@@ -39,7 +39,7 @@ import FileUploader from '../../../components/FileUploader/FileUploader';
 import SendIcon from '@mui/icons-material/Send';
 import { MB } from '../../../extras/CommonConfig';
 import PermissionChecks, { hasPermissions } from '../../User/components/PermissionChecks';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import FRReceiptTemplate from './FRReceiptTemplate';
 import { monthNames, purposes } from '../extras/FRConfig';
 import { AttachFile as AttachmentIcon, Edit as EditIcon, History as HistoryIcon } from '@mui/icons-material';
@@ -1871,18 +1871,28 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-          <Container>
-            Download the FR Auth Letter for {data?.FRno} <br />
-            {data && (
-              <PDFDownloadLink
-                document={<SanctionLetter data={data as any} />}
-                fileName="AuthLetter.pdf"
-                style={{ color: 'blue' }}
-              >
-                {({ loading }) => (loading || openPrintFr ? '....' : 'AuthLatter.pdf')}
-              </PDFDownloadLink>
-            )}{' '}
-          </Container>
+       <Container>
+  Download the FR Auth Letter for {data?.FRno}
+  <br />
+
+  {data && (
+    <BlobProvider document={<SanctionLetter data={data as any} />}>
+      {({ loading, url }) =>
+        loading || openPrintFr ? (
+          <span style={{ color: 'blue' }}>....</span>
+        ) : (
+          <a
+            href={url ?? ''}
+            download="AuthLetter.pdf"
+            style={{ color: 'blue' }}
+          >
+            AuthLetter.pdf
+          </a>
+        )
+      }
+    </BlobProvider>
+  )}
+</Container>
         </DialogContent>
         <DialogActions>
           <Button
