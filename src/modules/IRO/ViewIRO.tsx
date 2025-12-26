@@ -1372,7 +1372,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                                         IROServices.officeManagerApprove(iroID as string)
                                           .then((res) => {
                                             navigate('/IRO/office_approve');
-                                            // window.location.reload();
+                                            window.location.reload();
                                           });
                                         // if (props.onSubmit) {
                                         //   const updatedValue = { ...IRO, status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR }; // Create a new object with updated status
