@@ -400,19 +400,19 @@ const ApplicationsListingPage = (props: { action: 'manage' | 'hr' | 'president' 
       width: 80,
       getActions: (params: GridRowParams) => ([
         <GridLinkAction key={1} label="View" icon={<PreviewIcon />} showInMenu to={`/application/${params.id}/approval`} />,
-        showLinkAction && params.row.status !== ApplicationLifeCycleStates.APPROVED && <GridLinkAction
-          key={2}
-          label="Edit"
-          icon={<EditIcon />}
-          showInMenu
-          onClick={() => {
-            setEditId(params.id as string);
-            setAction('edit');
-            ApplicationServices.getById(params.row._id)
-              .then((res) => setApplicationFormState(res.data));
-            setShowApplicationFormDialog(true);
-          }}
-        />,
+        // showLinkAction && params.row.status !== ApplicationLifeCycleStates.APPROVED && <GridLinkAction
+        //   key={2}
+        //   label="Edit"
+        //   icon={<EditIcon />}
+        //   showInMenu
+        //   onClick={() => {
+        //     setEditId(params.id as string);
+        //     setAction('edit');
+        //     ApplicationServices.getById(params.row._id)
+        //       .then((res) => setApplicationFormState(res.data));
+        //     setShowApplicationFormDialog(true);
+        //   }}
+        // />,
         showLinkAction && params.row.status == ApplicationLifeCycleStates.APPROVED && hasPermissions(['ADMIN_ACCESS']) && <GridLinkAction
           key={2}
           label="Edit for admin"
