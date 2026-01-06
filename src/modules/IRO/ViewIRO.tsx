@@ -34,8 +34,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { closeSnackbar, enqueueSnackbar } from 'notistack';
 import moment from 'moment';
 import SendIcon from '@mui/icons-material/Send';
-import {  PDFDownloadLink } from '@react-pdf/renderer';
-import { BlobProvider } from '@react-pdf/renderer';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { AttachFile as AttachmentIcon, History as HistoryIcon } from '@mui/icons-material';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { useState, useEffect, Key, ReactChild, ReactFragment, ReactPortal, SetStateAction } from 'react';
@@ -1760,28 +1760,28 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
       <Dialog open={Boolean(data2)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-         <Container>
-  Download the FR Auth Letter for {data2?.FRno}
-  <br />
+          <Container>
+     Download the FR Auth Letter for {data2?.FRno}
+            <br />
 
-  {data2 && (
-    <BlobProvider document={<SanctionLetter data={data2 as any} />}>
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="AuthLetter.pdf"
-            style={{ color: 'blue' }}
-          >
+            {data2 && (
+              <BlobProvider document={<SanctionLetter data={data2 as any} />}>
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="AuthLetter.pdf"
+                      style={{ color: 'blue' }}
+                    >
             AuthLetter.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
