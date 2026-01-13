@@ -42,6 +42,7 @@ const LoginPage = () => {
   const [unknownError, setUnknownError] = useState<string>();
   const [resetrequest, setResetRequest] = useState(false);
   const [verifyOTP, setverifyOTP] = useState(false);
+  const defaultOTP:any="0000"
 
 
   const doLogin: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -49,12 +50,35 @@ const LoginPage = () => {
     setLoading(true);
     UserServices.login(loginCred)
       .then((res) => {
-        setLoading(false);
+       if(res?.data?.auth_process_id){
+                      UserServices.verifyOTP({
+                        auth_process_id:res?.data?.auth_process_id,
+                        OTP:defaultOTP, // "0000"
+                      })
+                        .then((res) => {
+                          console.log(res, 'res');
+                          
+                          setLoading(false);
+                          localStorage.setItem('userToken', res.data.token);
+                          localStorage.setItem('userData', JSON.stringify(res.data.user));
+                          setUser(res.data.user as Staff | IWorker);
+                          console.log(user,'dd');
+                          const urlParams = new URLSearchParams(window.location.search);
+                          subscribe();
+                           return  navigate('/');
+       })
+       }else{
+         setLoading(false);
+     
         setverifyOTP(true);
         setotpRequest((authProcessId) => ({
           ...authProcessId,
           auth_process_id: res.data.auth_process_id,
         }));
+
+       }
+
+       
       })
       .catch((err) => {
         console.log(err);
