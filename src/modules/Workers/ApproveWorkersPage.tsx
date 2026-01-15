@@ -102,10 +102,17 @@ const ApproveWorkerPage = () => {
   };
 
   const filteredRows = (workers ?? []).filter((row) => {
-    if ((row.basicDetails.firstName && row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.basicDetails.lastName && row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase()))) {
-      return true;
-    }
+   if (
+  (row.basicDetails.firstName &&
+    row.basicDetails.firstName.toLowerCase().includes(searchText.toLowerCase())) ||
+  (row.basicDetails.lastName &&
+    row.basicDetails.lastName.toLowerCase().includes(searchText.toLowerCase())) ||
+  (row.basicDetails.phone &&
+    row.basicDetails.phone.toString().includes(searchText))
+) {
+  return true;
+}
+
     return Object.values(row).some((value) =>
       value && value.toString().toLowerCase().includes(searchText.toLowerCase()),
     );
