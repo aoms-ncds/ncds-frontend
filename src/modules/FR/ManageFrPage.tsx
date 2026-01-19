@@ -372,14 +372,13 @@ const ManageFrPage = () => {
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
                     console.log(rowData, 'rowData');
 
-                    rowData.division?.details&& setData({ ...props.row,
+                     rowData.division?.details&& setData4({ ...props.row,
                       division: {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
-                          coordinator: rowData as any,
-                          seniorLeader: rowData as any,
-                          juniorLeader: rowData as any,
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
