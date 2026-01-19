@@ -2804,13 +2804,17 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        deleteFile={(fileId: string) => {
-          props.onChange({
-            ...props.value,
-            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
-          });
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        
+deleteFile={(fileId: string) => {
+  props.onChange({
+    ...props.value,
+    CoordinatorSign: (props.value.CoordinatorSign ?? []).filter(
+      (file: any) => file._id !== fileId
+    ),
+  });
+
+  return FileUploaderServices.deleteFile(fileId);
+}}
       />
       <FileUploader
         title="Attachments"
@@ -2846,6 +2850,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
         deleteFile={(fileId: string) => {
+          console.log('call came')
           props.onChange({
             ...props.value,
             attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
@@ -2886,13 +2891,16 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        deleteFile={(fileId: string) => {
-          props.onChange({
-            ...props.value,
-            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
-          });
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+          deleteFile={(fileId: string) => {
+    props.onChange({
+      ...props.value,
+      jrLeaderSign: (props.value.jrLeaderSign ?? []).filter(
+        (file: any) => file._id !== fileId
+      ),
+    });
+
+    return FileUploaderServices.deleteFile(fileId);
+  }}
       />
       <FileUploader
         title="Attachments"
@@ -2927,13 +2935,24 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        deleteFile={(fileId: string) => {
-          props.onChange({
-            ...props.value,
-            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
-          });
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        // deleteFile={(fileId: string) => {
+        //   props.onChange({
+        //     ...props.value,
+        //     attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+        //   });
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
+
+          deleteFile={(fileId: string) => {
+    props.onChange({
+      ...props.value,
+      srLeaderSign: (props.value.srLeaderSign ?? []).filter(
+        (file: any) => file._id !== fileId
+      ),
+    });
+
+    return FileUploaderServices.deleteFile(fileId);
+  }}
       />
       <FileUploader
         title="Attachments"
@@ -2968,13 +2987,26 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         //   }));
         //   return FileUploaderServices.renameFile(fileId, newName);
         // }}
-        deleteFile={(fileId: string) => {
-          props.onChange({
-            ...props.value,
-            attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
-          });
-          return FileUploaderServices.deleteFile(fileId);
-        }}
+        // deleteFile={(fileId: string) => {
+        //   props.onChange({
+        //     ...props.value,
+        //     attachment: props.value.attachment.filter((file: any) => file._id !== fileId),
+        //   });
+        //   return FileUploaderServices.deleteFile(fileId);
+        // }}
+
+         deleteFile={(fileId: string) => {
+  props.onChange({
+    ...props.value,
+    presidentSign: (props.value.presidentSign ?? []).filter(
+      (file: any) => file._id !== fileId
+    ),
+  });
+
+  return FileUploaderServices.deleteFile(fileId);
+}}
+
+        
       />
       <FileUploader
         title="Attachments"
