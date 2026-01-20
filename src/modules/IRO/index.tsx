@@ -14,7 +14,7 @@ const IRODashboard = () => {
   interface Icounts {
     IRAppliedCount:number;
   }
-  const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<Icounts>();
+  const [waitingtoofficemanagerCount, setWaitingToOfficeManagerCount] = useState<Number>();
   const [reconciliationCount, setReconciliationCount] = useState<number | null>(null);
   const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
@@ -22,11 +22,56 @@ const IRODashboard = () => {
   console.log(iroDivCOunt, 'iroDivCOunt');
 
   useEffect(() => {
+  IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
+  .then((res) => {
+    console.log('WAITING_FOR_ACCOUNTS_MNGR:', res.data);
+    setIroDivCount(res.data);
+  });
+
+IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+  .then((res) => {
+    console.log('WAITING_FOR_ACCOUNTS_STATE:', res.data);
+    setIroDivCount(res.data);
+  });
+
+IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+  .then((res) => {
+    console.log('WAITTING_FOR_RELEASE_AMOUNT:', res.data);
+    setIroDivCount(res.data);
+  });
+
+IROServices.getCount({ status: IROLifeCycleStates.IRO_REJECTED })
+  .then((res) => {
+    console.log('IRO_REJECTED:', res.data);
+    setIroDivCount(res.data);
+  });
+
+IROServices.getCount({ status: IROLifeCycleStates.IRO_IN_PROCESS })
+  .then((res) => {
+    console.log('IRO_IN_PROCESS:', res.data);
+    setIroDivCount(res.data);
+  });
+
+IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION })
+  .then((res) => {
+    console.log('REVERTED_TO_DIVISION:', res.data);
+    setIroDivCount(res.data);
+  });
+
+
+
+IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
+  .then((res) => {
+    console.log('REOPENED:', res.data);
+    setIroDivCount(res.data);
+  });
+
   // IROServices.getCount()
   //   .then((res) => setIROCount(res.data))
   //   .catch((error) => {
   //     console.log(error);
   //   });
+
     IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
@@ -37,8 +82,11 @@ const IRODashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    IROServices.getAppliedCount()
-      .then((res) => setWaitingToOfficeManagerCount(res.data as unknown as Icounts))
+    IROServices.getAppliedCount() 
+     .then((res) => {
+  console.log(res?.data, 'response here');
+  setWaitingToOfficeManagerCount(res.data  as Number);
+})
       .catch((error) => {
         console.log({ error });
       });
@@ -65,7 +113,7 @@ const IRODashboard = () => {
               onClick={()=>{
                 navigate(`/iro/manage?id=${4}`); // Pass numbers as query string
               }}
-              count={waitingtoofficemanagerCount?.IRAppliedCount.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
+              count={waitingtoofficemanagerCount?.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
             )} />
           <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
             style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()}
