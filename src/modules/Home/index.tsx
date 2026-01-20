@@ -26,9 +26,10 @@ const HomePage = () => {
   const [frCount, setFrCount] = useState<string | null>(null);
   const [iroCount, setIroCount] = useState<string | null>(null);
   useEffect(()=>{
-    DivisionsServices.getCount()
+    DivisionsServices.getCountIT()
     .then((res) => {
-      setDivisionsCount(res.data.toString());
+      console.log(res?.data,'response')
+      setDivisionsCount(res.data?.length?.toString());
     })
     .catch((error) => {
       setDivisionsCount('Unable to load!');

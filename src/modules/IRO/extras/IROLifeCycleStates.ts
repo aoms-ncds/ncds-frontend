@@ -2,15 +2,15 @@ import FRLifeCycleStates from '../../FR/extras/FRLifeCycleStates';
 
 // eslint-disable-next-line require-jsdoc
 export default class IROLifeCycleStates extends FRLifeCycleStates {
-  public static readonly IRO_CLOSED = -210;
+  public static readonly IRO_CLOSED = -210; //
   // public static readonly IRO_SEND_BACK = -211;
 
   // Active states
-  public static readonly WAITING_FOR_OFFICE_MNGR= 211;
+  public static readonly WAITING_FOR_OFFICE_MNGR= 211;//
   public static readonly WAITING_FOR_ACCOUNTS_MNGR = 212;
   public static readonly WAITING_FOR_ACCOUNTS_STATE = 213;
-  public static readonly AMOUNT_RELEASED = 214;
-  public static readonly RECONCILIATION_DONE = 215;
+  public static readonly AMOUNT_RELEASED = 214;//
+  public static readonly RECONCILIATION_DONE = 215; //
   public static readonly WAITTING_FOR_RELEASE_AMOUNT = 216;
   public static readonly IRO_REJECTED = 217;
   public static readonly IRO_IN_PROCESS = 218;
