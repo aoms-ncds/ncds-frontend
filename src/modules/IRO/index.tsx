@@ -22,49 +22,49 @@ const IRODashboard = () => {
   console.log(iroDivCOunt, 'iroDivCOunt');
 
   useEffect(() => {
-  IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
-  .then((res) => {
-    console.log('WAITING_FOR_ACCOUNTS_MNGR:', res.data);
-    setIroDivCount(res.data);
-  });
+//   IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
+//   .then((res) => {
+//     console.log('WAITING_FOR_ACCOUNTS_MNGR:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
-IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
-  .then((res) => {
-    console.log('WAITING_FOR_ACCOUNTS_STATE:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE })
+//   .then((res) => {
+//     console.log('WAITING_FOR_ACCOUNTS_STATE:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
-IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
-  .then((res) => {
-    console.log('WAITTING_FOR_RELEASE_AMOUNT:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.WAITTING_FOR_RELEASE_AMOUNT })
+//   .then((res) => {
+//     console.log('WAITTING_FOR_RELEASE_AMOUNT:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
-IROServices.getCount({ status: IROLifeCycleStates.IRO_REJECTED })
-  .then((res) => {
-    console.log('IRO_REJECTED:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.IRO_REJECTED })
+//   .then((res) => {
+//     console.log('IRO_REJECTED:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
-IROServices.getCount({ status: IROLifeCycleStates.IRO_IN_PROCESS })
-  .then((res) => {
-    console.log('IRO_IN_PROCESS:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.IRO_IN_PROCESS })
+//   .then((res) => {
+//     console.log('IRO_IN_PROCESS:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
-IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION })
-  .then((res) => {
-    console.log('REVERTED_TO_DIVISION:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.REVERTED_TO_DIVISION })
+//   .then((res) => {
+//     console.log('REVERTED_TO_DIVISION:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
 
 
-IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
-  .then((res) => {
-    console.log('REOPENED:', res.data);
-    setIroDivCount(res.data);
-  });
+// IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
+//   .then((res) => {
+//     console.log('REOPENED:', res.data);
+//     setIroDivCount(res.data);
+//   });
 
   // IROServices.getCount()
   //   .then((res) => setIROCount(res.data))
@@ -104,24 +104,43 @@ IROServices.getCount({ status: IROLifeCycleStates.REOPENED })
   return (
     <CommonPageLayout title="IRO Dashboard">
       <Grid container spacing={3}>
-        <Grid item xs={6} md={3} xl={3}>
-          <PermissionChecks
-            permissions={['MANAGE_IRO']}
-            granted={(
-              <><FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-                style={{ width: '70px', height: '70px' }} />}
-              onClick={()=>{
-                navigate(`/iro/manage?id=${4}`); // Pass numbers as query string
-              }}
-              count={waitingtoofficemanagerCount?.toString()} secondaryText={'Total Applied'} color="#fff" /><br /></>
-            )} />
-          <FRCountCard icon={<img src="/mod_icons/Approved IRO.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />} count={iroDivCOunt?.toString()}
-          onClick={()=>{
-            navigate(`/iro/manage?id=${5}`); // Pass numbers as query string
-          }} secondaryText={'New Applied'} color="#fff" />
+         <Grid item xs={6} md={3} xl={3}>
+    <PermissionChecks
+      permissions={['MANAGE_IRO']}
+      granted={
+        <FRCountCard
+          icon={
+            <img
+              src="/mod_icons/Approved IRO.png"
+              alt="Logo"
+              style={{ width: '70px', height: '70px' }}
+            />
+          }
+          onClick={() => navigate(`/iro/manage?id=${4}`)}
+          count={waitingtoofficemanagerCount?.toString()}
+          secondaryText="Total Applied"
+          color="#fff"
+        />
+      }
+    />
+  </Grid>
 
-        </Grid>
+  {/* New Applied – comes right after Total Applied */}
+  <Grid item xs={6} md={3} xl={3}>
+    <FRCountCard
+      icon={
+        <img
+          src="/mod_icons/Approved IRO.png"
+          alt="Logo"
+          style={{ width: '70px', height: '70px' }}
+        />
+      }
+      count={iroDivCOunt?.toString()}
+      onClick={() => navigate(`/iro/manage?id=${5}`)}
+      secondaryText="New Applied"
+      color="#fff"
+    />
+  </Grid>
         <Grid item xs={6} md={3} xl={3}>
           <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"
             style={{ width: '70px', height: '70px' }} />}
