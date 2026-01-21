@@ -103,11 +103,13 @@ const IRODashboard = () => {
   }, []);
   return (
     <CommonPageLayout title="IRO Dashboard">
-      <Grid container spacing={3}>
-         <Grid item xs={6} md={3} xl={3}>
-    <PermissionChecks
-      permissions={['MANAGE_IRO']}
-      granted={
+     <Grid container spacing={3}>
+
+  {/* Total Applied – permission based */}
+  <PermissionChecks
+    permissions={['MANAGE_IRO']}
+    granted={
+      <Grid item xs={6} md={3} xl={3}>
         <FRCountCard
           icon={
             <img
@@ -121,11 +123,11 @@ const IRODashboard = () => {
           secondaryText="Total Applied"
           color="#fff"
         />
-      }
-    />
-  </Grid>
+      </Grid>
+    }
+  />
 
-  {/* New Applied – comes right after Total Applied */}
+  {/* New Applied – always visible */}
   <Grid item xs={6} md={3} xl={3}>
     <FRCountCard
       icon={
@@ -141,27 +143,42 @@ const IRODashboard = () => {
       color="#fff"
     />
   </Grid>
-        <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard icon={<img src="/mod_icons/Amount Released.png" alt="Logo"
-            style={{ width: '70px', height: '70px' }} />}
-          onClick={()=>{
-            navigate(`/iro/manage/?id=${1}`); // Pass numbers as query string
-          }}
-          count={amountReleasedCount?.toString()} secondaryText={'Amount Released'} color={'#fff'} />
-        </Grid>
-        <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard icon={<img src="/mod_icons/Reconciliation on Process.png"
-            alt="Logo" style={{ width: '70px', height: '70px' }} />} onClick={()=>{
-            navigate(`/iro/manage/?id=${2}`); // Pass numbers as query string
-          }}count={reconciliationCount?.toString()} secondaryText={'Reconciliation'} color={'#fff'} />
-        </Grid>
-        <Grid item xs={6} md={3} xl={3}>
-          <FRCountCard icon={<img src="/mod_icons/Closed .png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
-            count={closedIROCount?.toString()} secondaryText={'Closed'} color={'#fff'} onClick={()=>{
-              navigate('/iro/closed'); // Pass numbers as query string
-            }} />
-        </Grid>
-      </Grid>
+
+  {/* Amount Released */}
+  <Grid item xs={6} md={3} xl={3}>
+    <FRCountCard
+      icon={<img src="/mod_icons/Amount Released.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+      onClick={() => navigate(`/iro/manage/?id=${1}`)}
+      count={amountReleasedCount?.toString()}
+      secondaryText="Amount Released"
+      color="#fff"
+    />
+  </Grid>
+
+  {/* Reconciliation */}
+  <Grid item xs={6} md={3} xl={3}>
+    <FRCountCard
+      icon={<img src="/mod_icons/Reconciliation on Process.png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+      onClick={() => navigate(`/iro/manage/?id=${2}`)}
+      count={reconciliationCount?.toString()}
+      secondaryText="Reconciliation"
+      color="#fff"
+    />
+  </Grid>
+
+  {/* Closed */}
+  <Grid item xs={6} md={3} xl={3}>
+    <FRCountCard
+      icon={<img src="/mod_icons/Closed .png" alt="Logo" style={{ width: '70px', height: '70px' }} />}
+      count={closedIROCount?.toString()}
+      secondaryText="Closed"
+      color="#fff"
+      onClick={() => navigate('/iro/closed')}
+    />
+  </Grid>
+
+</Grid>
+
       <br />
       <br />
       <Grid container spacing={3}>
