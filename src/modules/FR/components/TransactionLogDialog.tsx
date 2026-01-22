@@ -32,7 +32,7 @@ const TransactionLogDialog = (props:{open:boolean;onClose:()=>void;TRId:string})
             <li key={index}>
               <Typography variant="body1" color="initial" >
                 {`${log.TRNo} ${log.action} by 
-                ${log.doneBy.basicDetails.firstName} ${log.doneBy.basicDetails.middleName?log.doneBy.basicDetails.middleName+' ':''}${log.doneBy.basicDetails.lastName}
+                ${log?.doneBy?.basicDetails?.firstName} ${log?.doneBy?.basicDetails?.middleName?log?.doneBy?.basicDetails?.middleName+' ':''}${log?.doneBy?.basicDetails?.lastName}
                  on ${moment(log.createdAt).format('DD/MM/YYYY hh:mm:ss a')}` }
               </Typography>
             </li>
