@@ -7,6 +7,7 @@ import PermissionChecks from '../User/components/PermissionChecks';
 import FRCountCard from '../FR/components/FRCountCard';
 import IROLifeCycleStates from './extras/IROLifeCycleStates';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/Authentication';
 
 const IRODashboard = () => {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ const IRODashboard = () => {
   const [amountReleasedCount, setAmountReleasedCount] = useState<number | null>(null);
   const [closedIROCount, setClosedIROCount] = useState<number | null>(null);
   const [iroDivCOunt, setIroDivCount] = useState<number | null>(null);
+  const [divisionBasedCount, setDivisionBasedCount] = useState<Number | null>(null);
+  const auth:any = useAuth();
   console.log(iroDivCOunt, 'iroDivCOunt');
+  console.log(divisionBasedCount, 'divisionBasedCount');
+  console.log(auth, 'auth user');
 
   useEffect(() => {
 //   IROServices.getCount({ status: IROLifeCycleStates.WAITING_FOR_ACCOUNTS_MNGR })
@@ -72,6 +77,12 @@ const IRODashboard = () => {
   //     console.log(error);
   //   });
 
+    IROServices.getAppliedCountByID(auth?.user?.division) 
+     .then((res) => {
+  console.log(res?.data, 'divisionBasedCount');
+  setDivisionBasedCount(res.data  as Number);
+})
+
     IROServices.getCount({ status: IROLifeCycleStates.IRO_CLOSED })
       .then((res) => setClosedIROCount(res.data))
       .catch((error) => {
@@ -105,27 +116,46 @@ const IRODashboard = () => {
     <CommonPageLayout title="IRO Dashboard">
      <Grid container spacing={3}>
 
-  {/* Total Applied – permission based */}
-  <PermissionChecks
-    permissions={['MANAGE_IRO']}
-    granted={
-      <Grid item xs={6} md={3} xl={3}>
-        <FRCountCard
-          icon={
-            <img
-              src="/mod_icons/Approved IRO.png"
-              alt="Logo"
-              style={{ width: '70px', height: '70px' }}
-            />
-          }
-          onClick={() => navigate(`/iro/manage?id=${4}`)}
-          count={waitingtoofficemanagerCount?.toString()}
-          secondaryText="Total Applied"
-          color="#fff"
-        />
-      </Grid>
-    }
-  />
+{/* Total Applied – permission based */}
+
+
+<PermissionChecks
+  permissions={['MANAGE_IRO']}
+  granted={
+    <Grid item xs={6} md={3} xl={3}>
+      <FRCountCard
+        icon={
+          <img
+            src="/mod_icons/Approved IRO.png"
+            alt="Logo"
+            style={{ width: '70px', height: '70px' }}
+          />
+        }
+        onClick={() => navigate(`/iro/manage?id=${4}`)}
+        count={waitingtoofficemanagerCount?.toString()}
+        secondaryText="Total Applied"
+        color="#fff"
+      />
+    </Grid>
+  }
+  denied={() => (   // division baset total count
+    <Grid item xs={6} md={3} xl={3}>
+      <FRCountCard
+        icon={
+          <img
+            src="/mod_icons/Approved IRO.png"
+            alt="Logo"
+            style={{ width: '70px', height: '70px' }}
+          />
+        }
+        onClick={() => navigate(`/iro/manage`)}
+        count={divisionBasedCount?.toString()}
+        secondaryText="Total Applied"
+        color="#fff"
+      />
+    </Grid>
+  )}
+/>
 
   {/* New Applied – always visible */}
   <Grid item xs={6} md={3} xl={3}>
