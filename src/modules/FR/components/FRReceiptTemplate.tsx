@@ -255,11 +255,14 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               src={`data:${
                 (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.type ??
   (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.type ??
-  (props.rowData as any)?.division.details?.seniorLeader?.sign?.type
+  (props.rowData as any)?.division?.details?.seniorLeader?.sign?.type ??
+   (props.rowData as any)?.division?.details?.juniorLeader?.sign?.base64
               };base64,${
                 (props.rowData as any)?.names?.srLeader?.officialDetails?.eSign?.base64 ??
   (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.base64 ??
-  (props.rowData as any)?.division.details?.seniorLeader?.sign?.base64
+  (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.eSign?.base64 ??
+  (props.rowData as any)?.division?.details?.seniorLeader?.sign?.base64 ??
+  (props.rowData as any)?.division?.details?.juniorLeader?.sign?.base64
               }`} />
 
 
@@ -270,11 +273,13 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               src={`data:${
                 (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.type ??
   (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.type ??
-  (props.rowData as any)?.division.details?.seniorLeader?.sign?.type
+  (props.rowData as any)?.division?.details?.seniorLeader?.sign?.type ??
+  (props.rowData as any)?.division?.details?.seniorLeader?.sign?.base64
               };base64,${
                 (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64 ??
+                (props.rowData as any)?.names?.jrLeader?.officialDetails?.eSign?.base64 ??
   (props.rowData as any)?.signatureCustom?.srLeaderCustom?.eSign?.base64 ??
-  (props.rowData as any)?.division?.details?.junior?.sign?.type
+  (props.rowData as any)?.division?.details?.seniorLeader?.sign?.base64
               }`}
               />
 
@@ -322,14 +327,14 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
                 }}
               >
                 {(props.rowData as any)?.names?.coordinator?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.coordinator.basicDetails.firstName?? ''} ${(props.rowData as any).names.coordinator.basicDetails.lastName??''}` :
+                  `${(props.rowData as any).names?.coordinator?.basicDetails?.firstName?? ''} ${(props.rowData as any).names?.coordinator?.basicDetails?.lastName??''}` :
                   `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName??''}`
                 }
               </Text>
               <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 1</Text>
               <Text style={{ left: 260, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.srLeader?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.srLeader.basicDetails.firstName??''} ${(props.rowData as any).names.srLeader.basicDetails.lastName??''}` :
+                  `${(props.rowData as any).names?.srLeader?.basicDetails?.firstName??''} ${(props.rowData as any).names?.srLeader?.basicDetails?.lastName??''}` :
                   (props.rowData as any)?.signatureCustom?.jrLeaderCustom?.name ?
                     `${(props.rowData as any)?.signatureCustom?.jrLeaderCustom?.name??''}`:
                     `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName??''}`
@@ -339,7 +344,7 @@ const FRReceiptTemplate = (props: { rowData: FR; president: EsignaturePresident 
               <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Junior Leader 2</Text>
               <Text style={{ left: 460, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
                 {(props.rowData as any)?.names?.jrLeader?.basicDetails?.firstName ?
-                  `${(props.rowData as any).names.jrLeader.basicDetails.firstName??''} ${(props.rowData as any).names.jrLeader.basicDetails.lastName??''}` :
+                  `${(props.rowData as any).names?.jrLeader?.basicDetails?.firstName??''} ${(props.rowData as any).names?.jrLeader?.basicDetails?.lastName??''}` :
                   (props.rowData as any)?.signatureCustom?.srLeaderCustom?.name ?
                     `${(props.rowData as any)?.signatureCustom?.srLeaderCustom?.name??''}`:
                     `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName??''} ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName??''}`
