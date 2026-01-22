@@ -9,6 +9,7 @@ export default {
   groupedIRO: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIRO', { params: conditions, headers: { ...getAuthHeader() } })),
   groupedIROView: (conditions?: { Exstatus?:any; status?: number[];dateRange?: DateRange; support?: 'Expanse' | 'Support'|'All'| null}) => getStandardResponse<number>(axios.get('/iro/groupedIROView', { params: conditions, headers: { ...getAuthHeader() } })),
   getAppliedCount: () => getStandardResponse<number>(axios.get('/iro/appliedCount', { headers: { ...getAuthHeader() } })),
+  getAppliedCountByID: (divisionID?: number) => getStandardResponse<number>(axios.get(`/iro/appliedCount/${divisionID}`, { headers: { ...getAuthHeader() } })),
   getCloseCount: (conditions?: unknown) => getStandardResponse<number>(axios.get('/iro/count/close', { params: conditions, headers: { ...getAuthHeader() } })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
