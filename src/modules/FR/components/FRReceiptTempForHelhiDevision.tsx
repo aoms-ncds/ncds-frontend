@@ -281,73 +281,147 @@ const FRReceiptTempForHelhiDevision = (props: { rowData: any; label: any;preside
         <div style={{ marginTop: 10, fontSize: 10 }}>
 
   {/* ================= COORDINATOR ================= */}
-  <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Designation:
-  </Text>
-  <Text style={{ left: 115, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.label?.[0]?.name ?? ''}
-  </Text>
+ <Text style={{ left: 60, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Designation:
+</Text>
+<Text style={{ left: 115, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  {props.label?.[0]?.name ?? ''}
+</Text>
 
-  <Text style={{ left: 260, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Name:
-  </Text>
-  <Text style={{ left: 290, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.rowData?.coordinatorName ?? ''}
-  </Text>
+<Text
+  style={{
+    left: 260,
+    top: 20,
+    position: 'absolute',
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  }}
+>
+  Name:
+</Text>
 
-  <Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Sign:
-  </Text>
-  <Image
-    style={{ left: 480, top: 20, position: 'absolute', height: 20, width: 50 }}
-    src={`data:${props.rowData?.CoordinatorSign?.[0]?.type};base64,${props.rowData?.CoordinatorSign?.[0]?.base64}`}
-  />
+<Text
+  wrap={false}
+  style={{
+    left: 290,
+    top: 20,
+    position: 'absolute',
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  }}
+>
+  {props.rowData?.coordinatorName ??
+    `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName ?? ''} ${
+      props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName ?? ''
+    }`}
+</Text>
+
+
+
+<Text style={{ left: 460, top: 20, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Sign:
+</Text>
+<Image
+  style={{ left: 480, top: 20, position: 'absolute', height: 20, width: 50 }}
+  src={`data:${
+    props.rowData?.CoordinatorSign?.[0]?.type ??
+    props.rowData?.division?.details?.coordinator?.sign?.type
+  };base64,${
+    props.rowData?.CoordinatorSign?.[0]?.base64 ??
+    props.rowData?.division?.details?.coordinator?.sign?.base64
+  }`}
+/>
+
 
   {/* ================= JUNIOR LEADER ================= */}
-  <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Designation:
-  </Text>
-  <Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.label?.[1]?.name ?? ''}
-  </Text>
+ <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Designation:
+</Text>
+<Text style={{ left: 115, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  {props.label?.[1]?.name ?? ''}
+</Text>
 
-  <Text style={{ left: 260, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Name:
-  </Text>
-  <Text style={{ left: 290, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.rowData?.jrLeaderName ?? ''}
-  </Text>
+<Text style={{ left: 260, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Name:
+</Text>
+<Text
+  wrap={false}
+  style={{
+    left: 290,
+    top: 40,
+    position: 'absolute',
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  }}
+>
+  {props.rowData?.jrLeaderName ??
+    `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName ?? ''} ${
+      props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName ?? ''
+    }`}
+</Text>
 
-  <Text style={{ left: 460, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Sign:
-  </Text>
-  <Image
-    style={{ left: 480, top: 40, position: 'absolute', height: 20, width: 50 }}
-    src={`data:${props.rowData?.jrLeaderSign?.[0]?.type};base64,${props.rowData?.jrLeaderSign?.[0]?.base64}`}
-  />
+<Text style={{ left: 460, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Sign:
+</Text>
+<Image
+  style={{ left: 480, top: 40, position: 'absolute', height: 20, width: 50 }}
+  src={`data:${
+    props.rowData?.jrLeaderSign?.[0]?.type ??
+    props.rowData?.division?.details?.juniorLeader?.sign?.type
+  };base64,${
+    props.rowData?.jrLeaderSign?.[0]?.base64 ??
+    props.rowData?.division?.details?.juniorLeader?.sign?.base64
+  }`}
+/>
+
 
   {/* ================= SENIOR LEADER ================= */}
-  <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Designation:
-  </Text>
-  <Text style={{ left: 115, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.label?.[2]?.name ?? ''}
-  </Text>
+ <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Designation:
+</Text>
+<Text style={{ left: 115, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  {props.label?.[2]?.name ?? ''}
+</Text>
 
-  <Text style={{ left: 260, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Name:
-  </Text>
-  <Text style={{ left: 290, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    {props.rowData?.srLeaderName ?? ''}
-  </Text>
+<Text style={{ left: 260, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Name:
+</Text>
+<Text
+  wrap={false}
+  style={{
+    left: 290,
+    top: 60,
+    position: 'absolute',
+    fontSize: 10,
+    fontWeight: 'bold',
+    fontFamily: 'Oswald',
+  }}
+>
+  {props.rowData?.srLeaderName ??
+    `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName ?? ''} ${
+      props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName ?? ''
+    }`}
+</Text>
 
-  <Text style={{ left: 460, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
-    Sign:
-  </Text>
-  <Image
-    style={{ left: 480, top: 60, position: 'absolute', height: 20, width: 50 }}
-    src={`data:${props.rowData?.srLeaderSign?.[0]?.type};base64,${props.rowData?.srLeaderSign?.[0]?.base64}`}
-  />
+
+
+<Text style={{ left: 460, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>
+  Sign:
+</Text>
+<Image
+  style={{ left: 480, top: 60, position: 'absolute', height: 20, width: 50 }}
+  src={`data:${
+    props.rowData?.srLeaderSign?.[0]?.type ??
+    props.rowData?.division?.details?.seniorLeader?.sign?.type
+  };base64,${
+    props.rowData?.srLeaderSign?.[0]?.base64 ??
+    props.rowData?.division?.details?.seniorLeader?.sign?.base64
+  }`}
+/>
+
 
   {/* ================= PRESIDENT (SPECIAL SANCTION) ================= */}
   {props.rowData?.specialsanction === 'Yes' && (

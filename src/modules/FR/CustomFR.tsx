@@ -363,10 +363,10 @@ const CustomFR = () => {
                       division: {
                         ...props.row.division,
                         details: {
-                          ...props.row.division?.details,
-                          coordinator: props.row as any,
-                          seniorLeader: props.row as any,
-                          juniorLeader: props.row as any,
+                               ...delhiHQ.details,            // ✅ USE DELHI HQ
+      coordinator: delhiHQ.details.coordinator,
+      seniorLeader: delhiHQ.details.seniorLeader,
+      juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
