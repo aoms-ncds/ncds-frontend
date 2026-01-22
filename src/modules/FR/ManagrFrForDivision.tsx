@@ -353,8 +353,7 @@ const ManageFrForDivision = () => {
                       division: {
                         ...rowData.division,
                         details: {
-                           ...delhiHQ.details,            // ✅ USE DELHI HQ
-      coordinator: delhiHQ.details.coordinator,
+                          ...rowData.division?.details,          // ✅ USE DELHI HQ
       seniorLeader: delhiHQ.details.seniorLeader,
       juniorLeader: delhiHQ.details.juniorLeader,
                         },
