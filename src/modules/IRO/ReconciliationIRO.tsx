@@ -428,26 +428,44 @@ const ReconciliationIRO = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                  onClick: async () => {
-                    const dataDiv= await (await IROServices.getByIdOptimized(props.row._id)).data;
-                    console.log(dataDiv, 'dataDiv');
-                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    props.row.division?.details&& setData5({ ...dataDiv[0],
-                      division: {
-                        ...props.row.division,
-                        details: {
-                              ...delhiHQ.details,            // ✅ USE DELHI HQ
-      coordinator: delhiHQ.details.coordinator,
-      seniorLeader: delhiHQ.details.seniorLeader,
-      juniorLeader: delhiHQ.details.juniorLeader,
-                        },
-                      },
-                    });
-                    setOpenPrintFr(true);
-                    setTimeout(() => {
-                      setOpenPrintFr(false);
-                    }, 2000);
-                  },
+                onClick: async () => {
+  try {
+    const [rowRes, delhiRes] = await Promise.all([
+      IROServices.getByIdOptimized(props.row._id),
+      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+    ]);
+
+    const rowData = rowRes.data?.[0];       // expecting array
+    const delhiHQ = delhiRes.data;
+
+    if (rowData?.division?.details as any) {
+      setData5({
+           ...props.row,
+        division: {
+           ...rowData?.division as any,
+          details: {
+             ...rowData?.division?.details,
+            seniorLeader: delhiHQ?.details?.seniorLeader,
+            juniorLeader: delhiHQ?.details?.juniorLeader,
+          },
+        },
+      });
+    }
+
+    setOpenPrintFr(true);
+
+    const timer = setTimeout(() => {
+      setOpenPrintFr(false);
+    }, 2000);
+
+    return undefined;
+
+  } catch (error) {
+    console.error('Failed to load IRO / Division data', error);
+    return undefined;
+  }
+}
+
                 },
               ] :
               []),
