@@ -184,12 +184,12 @@ const ReopenedFr = () => {
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
 
-                    rowData.division?.details&& setData({ ...props.row,
+                    rowData.division?.details&& setData({ 
+                      ...props.row,
                       division: {
                         ...rowData.division,
                         details: {
-                            ...delhiHQ.details,            // ✅ USE DELHI HQ
-      coordinator: delhiHQ.details.coordinator,
+                             ...rowData.division?.details,              // ✅ USE DELHI HQ
       seniorLeader: delhiHQ.details.seniorLeader,
       juniorLeader: delhiHQ.details.juniorLeader,
                         },
