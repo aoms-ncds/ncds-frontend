@@ -345,10 +345,10 @@ const ClosedIRO = () => {
                       division: {
                         ...props.row.division,
                         details: {
-                          ...dataDiv?.[0].division?.details,
-                          coordinator: dataDiv?.[0].FR as any,
-                          seniorLeader: dataDiv?.[0].FR as any,
-                          juniorLeader: dataDiv?.[0].FR as any,
+                            ...delhiHQ.details,            // ✅ USE DELHI HQ
+      coordinator: delhiHQ.details.coordinator,
+      seniorLeader: delhiHQ.details.seniorLeader,
+      juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });

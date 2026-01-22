@@ -188,10 +188,10 @@ const ReopenedFr = () => {
                       division: {
                         ...rowData.division,
                         details: {
-                          ...rowData.division?.details,
-                          coordinator: rowData as any,
-                          seniorLeader: rowData as any,
-                          juniorLeader: rowData as any,
+                            ...delhiHQ.details,            // ✅ USE DELHI HQ
+      coordinator: delhiHQ.details.coordinator,
+      seniorLeader: delhiHQ.details.seniorLeader,
+      juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
