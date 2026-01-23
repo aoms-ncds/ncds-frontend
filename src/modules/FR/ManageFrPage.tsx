@@ -369,25 +369,28 @@ const ManageFrPage = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
-                    const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
-                    const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
-                    console.log(rowData, 'rowData');
+  const delhiHQ = (await DivisionsServices.getDivisionById(
+  '658270549efadc163550a28c'
+)).data;
 
-                     rowData.division?.details&& setData4({ ...props.row,
-                      division: {
-                        ...rowData.division,
-                        details: {
-                          ...rowData.division?.details,
-                          seniorLeader: delhiHQ.details.seniorLeader,
-                          juniorLeader: delhiHQ.details.juniorLeader,
-                        },
-                      },
-                    });
-                    setOpenPrintFr(true);
-                    setTimeout(() => {
-                      setOpenPrintFr(false);
-                    }, 2000);
-                  },
+const rowData = (await FRServices.getAllOptimizedById(props.row?._id)).data;
+console.log(rowData, 'rowData');
+console.log(delhiHQ, 'delhiHQ');
+
+rowData.division?.details &&
+  setData4({
+    ...props.row,
+    division: {
+      ...rowData.division,
+      details: {
+        ...rowData.division.details,
+        seniorLeader: delhiHQ.details.seniorLeader,
+        juniorLeader: delhiHQ.details.juniorLeader,
+      },
+    },
+  });
+
+},
                 },
               ] :
               []),
@@ -449,6 +452,7 @@ const ManageFrPage = () => {
                         ...rowData.division,
                         details: {
                           ...rowData.division?.details,
+                          // seniorLeader: delhiHQ.details.seniorLeader,
                           seniorLeader: delhiHQ.details.seniorLeader,
                           juniorLeader: delhiHQ.details.juniorLeader,
                         },
@@ -1213,6 +1217,51 @@ const ManageFrPage = () => {
                   </Grid>
                 </DialogContent>
               </Dialog>
+              {/* <Dialog
+  open={openPrintFrDelhi}
+  onClose={() => {
+    setOpenPrintFrDelhi(false);
+    setData4(null);
+  }}
+  maxWidth="xs"
+  fullWidth
+>
+  <DialogTitle>Print FR HQ DELHI</DialogTitle>
+  <DialogContent>
+    <Container>
+      Download the FR Receipt HQ Delhi for {data4?.FRno}
+      <br />
+
+      {data4 && (
+        <PDFDownloadLink
+          document={
+            <FRReceiptTempForHelhiDevisionPrev 
+              label={Label}
+              president={selectedSignaturePresident}
+              rowData={data4 as FR}
+            />
+          }
+          fileName="FRReceiptDelhi.pdf"
+          style={{ color: 'blue' }}
+        >
+          FRReceiptDelhi.pdf
+        </PDFDownloadLink>
+      )}
+    </Container>
+  </DialogContent>
+  <DialogActions>
+    <Button
+      onClick={() => {
+        setOpenPrintFrDelhi(false);
+        setData4(null);
+      }}
+      variant="text"
+    >
+      Cancel
+    </Button>
+  </DialogActions>
+</Dialog> */}
+
               <Dialog open={openRemarks} fullWidth maxWidth="md">
                 <DialogTitle>Remarks</DialogTitle>
                 <DialogContent>
