@@ -814,14 +814,14 @@ const ViewFRRequests = (props: FormComponentProps<CreatableFR, { FRLoaded: boole
                   }}
                   onClick={() => {
                     FRServices.getAllOptimizedById(props.value?._id).then((res) => {
-                      console.log(res.data, 'daa98');
+                      console.log(res.data, 'daa989');
                       setData2(res.data);
                     });
                   }}
 
                 >
                   <PDFDownloadLink
-                    document={<FRReceiptTemplate president={selectedSignaturePresident} rowData={props.value as FR} />}
+                    document={<FRReceiptTemplate president={selectedSignaturePresident} rowData={data2 as any} />}
                     fileName="FRReceipt.pdf"
                     style={{ color: 'White', textDecoration: 'none' }}
                   >

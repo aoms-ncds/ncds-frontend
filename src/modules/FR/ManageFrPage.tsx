@@ -333,7 +333,8 @@ const ManageFrPage = () => {
               icon: PrintIcon,
               onClick: () => {
                 FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
-                  console.log(res.data, 'daa98');
+                  console.log(props.row?._id, 'propsid1');
+                  console.log(res.data, 'daa988');
                   setData2(res.data);
                 });
                 setOpenPrintFr(true);
@@ -424,7 +425,7 @@ const ManageFrPage = () => {
               icon: PrintIcon,
               onClick: () => {
                 FRServices.getAllOptimizedById(props.row?._id).then((res)=>{
-                  console.log(res.data, 'daa98');
+                  console.log(res.data, 'data came her');
                   setData5(res.data);
                 });
                 setOpenPrintFrPrev(true);
@@ -1553,14 +1554,14 @@ const ManageFrPage = () => {
               <DialogTitle> Print Prev Fr</DialogTitle>
            <DialogContent>
   <Container>
-    Downloading the FRReceipt for {data2?.FRno}
+    Downloading the FRReceipt for {data5?.FRno}
     <br />
 
     {data5 && (
       <BlobProvider
         document={
           <FRReceiptTemplatePrev
-            rowData={data5 as FR}
+            rowData={data5 as any}
             president={selectedSignaturePresident}
           />
         }
