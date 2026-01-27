@@ -494,7 +494,7 @@ const CustomFR = () => {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
-      width: 100,
+      width: 150,
       align: 'center',
 
       headerAlign: 'center',
