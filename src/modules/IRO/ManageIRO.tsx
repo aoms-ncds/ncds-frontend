@@ -62,6 +62,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data6, setData6] = useState<FR | null>(null);
+  const [bulkWarningOpen, setBulkWarningOpen] = useState(false);
+  const [bulkWarningMessages, setBulkWarningMessages] = useState<string[]>([]);
+
 
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
@@ -1472,39 +1475,46 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
     if (!releaseAmountIROs || releaseAmountIROs.length === 0) return;
 
+    const warnings: string[] = [];
+
+    // Division validation
     const sameDivision = releaseAmountIROs.every(
       (iro) =>
         iro?.division?._id === releaseAmountIROs[0]?.division?._id
     );
 
     if (!sameDivision) {
-      enqueueSnackbar({
-        message: 'IROs from different divisions cannot be approved together',
-        variant: 'error',
-      });
-      return;
+      warnings.push(
+        'IROs from different divisions cannot be approved together.'
+      );
     }
 
-    //  Check if all sanctioned banks are same
+    // Bank validation
     const sameBank = releaseAmountIROs.every(
       (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
     );
 
     if (!sameBank) {
-      enqueueSnackbar({
-        message: 'IROs of different sanctioned banks selected',
-        variant: 'error',
-      });
+      warnings.push(
+        'IROs of different sanctioned banks cannot be released together.'
+      );
+    }
+
+    // Show modal if warnings exist
+    if (warnings.length > 0) {
+      setBulkWarningMessages(warnings);
+      setBulkWarningOpen(true);
       return;
     }
 
-    //  All validations passed
+    // All validations passed
     setOpenRelease(true);
     setNewTest(releaseAmountIROs);
   }}
 >
   Bulk Release
 </Button>
+
 
                   ) : null}
                 </Grid>
@@ -2466,6 +2476,47 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         </DialogActions>
 
       </Dialog>
+      
+      <Dialog
+  open={bulkWarningOpen}
+  onClose={() => setBulkWarningOpen(false)}
+  maxWidth="sm"
+  fullWidth
+>
+  <DialogTitle sx={{ fontWeight: 700 }}>
+    Bulk Release Not Allowed
+  </DialogTitle>
+
+  <DialogContent>
+    <Alert severity="error" sx={{ mb: 2 }}>
+      Please resolve the following issues before proceeding:
+    </Alert>
+
+    <Box component="ul" sx={{ pl: 3 }}>
+      {bulkWarningMessages.map((msg, index) => (
+        <li key={index}>
+          <Typography variant="body1">{msg}</Typography>
+        </li>
+      ))}
+    </Box>
+
+    <Divider sx={{ my: 2 }} />
+
+    <Typography variant="body2" color="text.secondary">
+      Tip: Select IROs belonging to the same division and sanctioned bank to
+      proceed with bulk release.
+    </Typography>
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      variant="contained"
+      onClick={() => setBulkWarningOpen(false)}
+    >
+      OK
+    </Button>
+  </DialogActions>
+</Dialog>
       {loading &&
         <Lottie
           options={{
