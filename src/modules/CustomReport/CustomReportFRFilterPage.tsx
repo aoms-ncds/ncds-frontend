@@ -276,18 +276,17 @@ const CustomReportFRFilterPage = () => {
   const handleSearchChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchText(event.target.value);
   };
-  const filteredRows = (data ?? []).filter((row:IROrder) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase()))
-    // (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-    // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-    // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-    // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
-    // (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
-  });
+  const filteredRows = (data ?? []).filter((row: any) => {
+  const search = searchText.toLowerCase();
+
+  return (
+    row.FRno?.toLowerCase().includes(search) ||
+    row.IROdata?.IROno?.toLowerCase().includes(search) ||
+    row.divisionData?.details?.name?.toLowerCase().includes(search) ||
+    row.particularsData?.mainCategory?.toLowerCase().includes(search)
+  );
+});
+
   console.log(filteredRows, 'filteredRows');
 
   if (searchText && filteredRows.length ===0) {
