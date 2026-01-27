@@ -1469,13 +1469,21 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       startIcon={<AttachMoneyIcon />}
                       disabled={releaseAmountIROs.length == 0}
                       onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank == releaseAmountIROs[0].sanctionedBank)) {
-                          setOpenRelease(true);
-                          setNewTest(releaseAmountIROs);
-                        } else {
-                          enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
-                        }
-                      }}
+  if (
+    releaseAmountIROs.every(
+      (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+    )
+  ) {
+    setOpenRelease(true);
+    setNewTest(releaseAmountIROs);
+  } else {
+    enqueueSnackbar({
+      message: 'IRO of Different Sanctioned Bank selected',
+      variant: 'error',
+    });
+    return; // ✅ explicit void return
+  }
+}}
                     >
                       Bulk Release
                     </Button>
