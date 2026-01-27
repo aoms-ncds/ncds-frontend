@@ -1463,22 +1463,49 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
 
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                    <Button
-                      variant="contained"
-                      sx={{ float: 'right', mt: 2, mr: 2 }}
-                      startIcon={<AttachMoneyIcon />}
-                      disabled={releaseAmountIROs.length == 0}
-                      onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank == releaseAmountIROs[0].sanctionedBank)) {
-                          setOpenRelease(true);
-                          setNewTest(releaseAmountIROs);
-                        } else {
-                          enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
-                        }
-                      }}
-                    >
-                      Bulk Release
-                    </Button>
+                   <Button
+  variant="contained"
+  sx={{ float: 'right', mt: 2, mr: 2 }}
+  startIcon={<AttachMoneyIcon />}
+  disabled={releaseAmountIROs.length === 0}
+  onClick={() => {
+
+    if (!releaseAmountIROs || releaseAmountIROs.length === 0) return;
+
+    const sameDivision = releaseAmountIROs.every(
+      (iro) =>
+        iro?.division?._id === releaseAmountIROs[0]?.division?._id
+    );
+
+    if (!sameDivision) {
+      enqueueSnackbar({
+        message: 'IROs from different divisions cannot be approved together',
+        variant: 'error',
+      });
+      return;
+    }
+
+    //  Check if all sanctioned banks are same
+    const sameBank = releaseAmountIROs.every(
+      (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+    );
+
+    if (!sameBank) {
+      enqueueSnackbar({
+        message: 'IROs of different sanctioned banks selected',
+        variant: 'error',
+      });
+      return;
+    }
+
+    //  All validations passed
+    setOpenRelease(true);
+    setNewTest(releaseAmountIROs);
+  }}
+>
+  Bulk Release
+</Button>
+
                   ) : null}
                 </Grid>
 
