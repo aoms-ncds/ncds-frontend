@@ -63,6 +63,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data6, setData6] = useState<FR | null>(null);
 
+
   const [FrData, setFrData] = useState<FR | null>(null);
   const [remark, setRemark] = useState<CreatableRemark>({
     remark: '',
@@ -1463,12 +1464,12 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
 
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                    <Button
-                      variant="contained"
-                      sx={{ float: 'right', mt: 2, mr: 2 }}
-                      startIcon={<AttachMoneyIcon />}
-                      disabled={releaseAmountIROs.length == 0}
-                      onClick={() => {
+                   <Button
+  variant="contained"
+  sx={{ float: 'right', mt: 2, mr: 2 }}
+  startIcon={<AttachMoneyIcon />}
+  disabled={releaseAmountIROs.length === 0}
+  onClick={() => {
   if (
     releaseAmountIROs.every(
       (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
@@ -1484,9 +1485,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     return; // ✅ explicit void return
   }
 }}
-                    >
-                      Bulk Release
-                    </Button>
+>
+  Bulk Release
+</Button>
+
+
                   ) : null}
                 </Grid>
 
@@ -2447,6 +2450,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         </DialogActions>
 
       </Dialog>
+    
       {loading &&
         <Lottie
           options={{
