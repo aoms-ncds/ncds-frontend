@@ -612,6 +612,44 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       IROServices.updateIRO(selectedIRO._id, selectedIRO, false, true);
     }
   }, [file]);
+
+ const getTransferredAccountNumber = (iro: IROrder): string | null => {
+  const division = iro.division;
+  if (!division || !iro.sanctionedBank) return null;
+
+  const bank = iro.sanctionedBank.split('-')[0].trim();
+
+  switch (bank) {
+    case 'Division Bank FCRA':
+      return division.DivisionBankFCRA?.accountNumber ?? null;
+
+    case 'Division Bank Local':
+      return division.DivisionBankLocal?.accountNumber ?? null;
+
+    case 'Local Bank':
+      return division.localBankDetails?.accountNumber ?? null;
+
+    case 'FCRA':
+      return division.FCRABankDetails?.accountNumber ?? null;
+
+    case 'Beneficiary Bank 1':
+      return division.BeneficiaryBank1?.accountNumber ?? null;
+
+    case 'Beneficiary Bank 2':
+      return division.BeneficiaryBank2?.accountNumber ?? null;
+
+    case 'Beneficiary Bank 3':
+      return division.BeneficiaryBank3?.accountNumber ?? null;
+
+    case 'Beneficiary Bank 4':
+      return division.BeneficiaryBank4?.accountNumber ?? null;
+
+    default:
+      return null;
+  }
+};
+
+
   // useEffect(() => {
   //   if (selectedIRO._id != '') {
   //     IROServices.updateIRO(selectedIRO._id, selectedIRO);
@@ -1470,21 +1508,55 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   startIcon={<AttachMoneyIcon />}
   disabled={releaseAmountIROs.length === 0}
   onClick={() => {
-  if (
-    releaseAmountIROs.every(
-      (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
-    )
-  ) {
-    setOpenRelease(true);
-    setNewTest(releaseAmountIROs);
-  } else {
+  if (releaseAmountIROs.length === 0) return;
+
+  // 1️⃣ Check sanctioned bank is same
+  const sameSanctionedBank = releaseAmountIROs.every(
+    (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+  );
+
+  if (!sameSanctionedBank) {
     enqueueSnackbar({
       message: 'IRO of Different Sanctioned Bank selected',
       variant: 'error',
     });
-    return; // ✅ explicit void return
+    return;
   }
+
+  // 2️⃣ Get account numbers of all selected IROs
+  const accountNumbers = releaseAmountIROs.map((iro) =>
+    getTransferredAccountNumber(iro)
+  );
+
+  // 3️⃣ Validate account numbers exist
+  if (accountNumbers.some((acc) => !acc)) {
+    enqueueSnackbar({
+      message: 'Account number missing for one or more selected IROs',
+      variant: 'error',
+    });
+    return;
+  }
+
+  // 4️⃣ Check all account numbers are SAME
+  const isSameAccountNumber = accountNumbers.every(
+    (acc) => acc === accountNumbers[0]
+  );
+
+  if (!isSameAccountNumber) {
+    enqueueSnackbar({
+      message: 'Selected IROs have different account numbers',
+      variant: 'error',
+    });
+    return;
+  }
+
+  // ✅ ALL CHECKS PASSED
+  console.log('Bulk Release Account Number:', accountNumbers[0]);
+
+  setOpenRelease(true);
+  setNewTest(releaseAmountIROs);
 }}
+
 >
   Bulk Release
 </Button>
