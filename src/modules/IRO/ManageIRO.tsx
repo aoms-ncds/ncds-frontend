@@ -1509,7 +1509,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   disabled={releaseAmountIROs.length === 0}
   
   onClick={() => {
-//       allowedPaymentMethods in bulkrelease
+//   added new allowedPaymentMethods in bulk Release
 
   // if (releaseAmountIROs.length === 0) return;
 
@@ -1531,6 +1531,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     'NEFT',
     'Credit Card',
     'Closing Balance Adjsted',
+    'Website Payment',
   ].map(method => method.toLowerCase().trim());
 
   const allowedPaymentMethodsInclude = releaseAmountIROs.some(
