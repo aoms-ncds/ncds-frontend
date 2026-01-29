@@ -1507,10 +1507,65 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   sx={{ float: 'right', mt: 2, mr: 2 }}
   startIcon={<AttachMoneyIcon />}
   disabled={releaseAmountIROs.length === 0}
+  
   onClick={() => {
-  if (releaseAmountIROs.length === 0) return;
+//       allowedPaymentMethods in bulkrelease
 
-  // 1️⃣ Check sanctioned bank is same
+  // if (releaseAmountIROs.length === 0) return;
+
+  if (releaseAmountIROs.length === 1) {
+    enqueueSnackbar({
+      message: 'Select atleast two items for release',
+      variant: 'error',
+    });
+    return;
+  }
+
+  const allowedPaymentMethods = [
+    'Debit Card',
+    'Net Banking',
+    'Other',
+    'UPI',
+    'Online Payment',
+    'Cash',
+    'NEFT',
+    'Credit Card',
+    'Closing Balance Adjsted',
+  ].map(method => method.toLowerCase().trim());
+
+  const allowedPaymentMethodsInclude = releaseAmountIROs.some(
+  iro =>
+    iro.sanctionedBank &&
+    allowedPaymentMethods.some(method =>
+      iro.sanctionedBank.toLowerCase().trim().includes(method)
+    )
+);
+  console.log('Allowed Payment Methods Include Check:', allowedPaymentMethodsInclude);
+
+  if (allowedPaymentMethodsInclude) {
+    // 1️⃣ Check sanctioned bank is same
+    const sameSanctionedBank = releaseAmountIROs.every(
+      iro => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+    );
+
+    if (!sameSanctionedBank) {
+      enqueueSnackbar({
+        message: 'IRO of Different Sanctioned Bank selected',
+        variant: 'error',
+      });
+      return;
+    }else{
+       console.log('call came on same sanctioned bank');
+  
+      setOpenRelease(true);
+      setNewTest(releaseAmountIROs);
+    
+    return console.log('allowed payment method selected');
+
+    }
+     
+  } else {
+     // 1️⃣ Check sanctioned bank is same
   const sameSanctionedBank = releaseAmountIROs.every(
     (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
   );
@@ -1551,11 +1606,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   }
 
   // ✅ ALL CHECKS PASSED
-  console.log('Bulk Release Account Number:', accountNumbers[0]);
 
   setOpenRelease(true);
   setNewTest(releaseAmountIROs);
+  }
+
 }}
+
 
 >
   Bulk Release
