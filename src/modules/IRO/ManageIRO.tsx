@@ -1701,7 +1701,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
                     </RadioGroup>
                   </FormControl>
-                  
+                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
                   <FormControl sx={{maxWidth:150, minWidth: 150, ml: 5 }}>
   <InputLabel>Division</InputLabel>
 
@@ -1749,6 +1749,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     ))}
   </Select>
 </FormControl>
+) : null}
 
                 </Grid>
                 
