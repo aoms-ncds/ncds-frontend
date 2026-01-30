@@ -2,7 +2,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ListSubheader } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -16,6 +16,14 @@ import {
   Message as MessageIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  SelectChangeEvent
+} from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link, useLocation } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -62,6 +70,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data6, setData6] = useState<FR | null>(null);
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState<string[]>([]);
+  const [divisionSearch, setDivisionSearch] = useState('');
 
 
   const [FrData, setFrData] = useState<FR | null>(null);
@@ -99,22 +111,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     sanctionedBank: '',
     mainCategory: '',
     particulars: [],
-    // releaseAmount: {
-    //   _id: '',
-    //   modeOfPayment: '',
-    //   releaseAmount: 0,
-    //   transactionNumber: '',
-    //   transferredAmount: 0,
-    //   transferredDate: null,
-    //   transferredBank: {
-    //     bankName: '',
-    //     branchName: '',
-    //     accountNumber: '',
-    //     IFSCCode: '',
-    //   },
-    //   attachment: [],
-    //   division: '',
-    // },
     division: {
       _id: '',
       details: {
@@ -649,18 +645,30 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   }
 };
 
+  useEffect(() => {
+    DivisionsServices.getDivisions().then((res) => {
+      const names = res.data.map((d: any) => d.details.name);
+      setDivisions(names);
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   if (selectedIRO._id != '') {
-  //     IROServices.updateIRO(selectedIRO._id, selectedIRO);
-  //   }
-  // }, [selectedIRO]);
+  // Handle division selection change
+  const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[];
+     if (value.includes('__ALL__')) {
+    setSelectedDivisions([]); // empty = show all
+    return;
+  }
+    setSelectedDivisions(value);
+  };
+  const filteredDivisions = divisions.filter((name) =>
+  name
+    .toLowerCase()
+    .replace(/\s/g, '')          // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, ''))
+);
 
-  // useEffect(() => {
-  //   if (selectedIRO._id != '') {
-  //     IROServices.updateIRO(selectedIRO._id, selectedIRO);
-  //   }
-  // }, [selectedIRO.signature]);
+
 
   const columns: GridColDef<IROrder>[] = [
     {
@@ -1194,7 +1202,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       width: 200,
       valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
       renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-
       align: 'center',
       headerAlign: 'center',
     },
@@ -1388,17 +1395,20 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     setSearchText(event.target.value);
   };
 
-  const filteredRows = (IROrder ?? []).filter((row) => {
-    if ((row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
+  // Update the filteredRows function to include division filtering
+  const filteredRows = (IROrder ?? []).filter((row:any) => {
+    // Division filtering logic - show rows from selected divisions OR all if none selected
+    const divisionMatch = selectedDivisions.length === 0 || 
+      selectedDivisions.includes(row?.division?.details.name);
+    
+    // Search text filtering logic
+    const searchMatch = searchText ? (
+      (row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory1 && row.particulars[0]?.subCategory1.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory2 && row.particulars[0]?.subCategory2.toLowerCase().includes(searchText.toLowerCase())) ||
-      // (row.particulars[0]?.subCategory3 && row.particulars[0]?.subCategory3.toLowerCase().includes(searchText.toLowerCase())) ||
       (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) {
-      return true;
-    }
-    return Object.values(row).some((value) => value && value.toString().toLowerCase().includes(searchText.toLowerCase()));
+    ) : true;
+    
+    return divisionMatch && searchMatch;
   });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
@@ -1406,13 +1416,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       variant: 'warning',
     });
   }
-  // console.log(filteredRows, 'filteredRows');
 
   return (
     <CommonPageLayout
       title={props.action == 'manage' ? 'Manage IRO' : 'Release Amount'}
       momentFilter={
-
         {
           dateRange: dateRange,
           onChange: (newDateRange) => {
@@ -1422,10 +1430,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           rangeTypes: ['weeks', 'months', 'quarter_years', 'years', 'customRange', 'customDay'],
           initialRange: 'months',
         }
-
       }
     >
-
       <PermissionChecks
         permissions={['READ_IRO']}
         granted={
@@ -1433,7 +1439,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
                 <Grid item xs={6}>
-                  {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
                     variant="outlined"
@@ -1441,9 +1446,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     placeholder='Enter IROno or IRODate or Division or SubCategory'
                     onChange={handleSearchChange}
                     fullWidth
-                    // style={{ width: '80%' }}
                   />
-                  {/* </div> */}
                 </Grid>
 
                 <Grid item xs={6}>
@@ -1500,131 +1503,106 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     }
                   />
 
-
                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                   <Button
-  variant="contained"
-  sx={{ float: 'right', mt: 2, mr: 2 }}
-  startIcon={<AttachMoneyIcon />}
-  disabled={releaseAmountIROs.length === 0}
-  
-  onClick={() => {
-//   added new allowedPaymentMethods in bulk Release
+                    <Button
+                      variant="contained"
+                      sx={{ float: 'right', mt: 2, mr: 2 }}
+                      startIcon={<AttachMoneyIcon />}
+                      disabled={releaseAmountIROs.length === 0}
+                      onClick={() => {
+                        if (releaseAmountIROs.length === 1) {
+                          enqueueSnackbar({
+                            message: 'Select atleast two items for release',
+                            variant: 'error',
+                          });
+                          return;
+                        }
 
-  // if (releaseAmountIROs.length === 0) return;
+                        const allowedPaymentMethods = [
+                          'Debit Card',
+                          'Net Banking',
+                          'Other',
+                          'UPI',
+                          'Online Payment',
+                          'Cash',
+                          'NEFT',
+                          'Credit Card',
+                          'Closing Balance Adjsted',
+                          'Website Payment',
+                        ].map(method => method.toLowerCase().trim());
 
-  if (releaseAmountIROs.length === 1) {
-    enqueueSnackbar({
-      message: 'Select atleast two items for release',
-      variant: 'error',
-    });
-    return;
-  }
+                        const allowedPaymentMethodsInclude = releaseAmountIROs.some(
+                          iro =>
+                            iro.sanctionedBank &&
+                            allowedPaymentMethods.some(method =>
+                              iro.sanctionedBank.toLowerCase().trim().includes(method)
+                            )
+                        );
+                        
+                        if (allowedPaymentMethodsInclude) {
+                          const sameSanctionedBank = releaseAmountIROs.every(
+                            iro => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                          );
 
-  const allowedPaymentMethods = [
-    'Debit Card',
-    'Net Banking',
-    'Other',
-    'UPI',
-    'Online Payment',
-    'Cash',
-    'NEFT',
-    'Credit Card',
-    'Closing Balance Adjsted',
-    'Website Payment',
-  ].map(method => method.toLowerCase().trim());
+                          if (!sameSanctionedBank) {
+                            enqueueSnackbar({
+                              message: 'IRO of Different Sanctioned Bank selected',
+                              variant: 'error',
+                            });
+                            return;
+                          } else {
+                            setOpenRelease(true);
+                            setNewTest(releaseAmountIROs);
+                            return;
+                          }
+                        } else {
+                          const sameSanctionedBank = releaseAmountIROs.every(
+                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                          );
 
-  const allowedPaymentMethodsInclude = releaseAmountIROs.some(
-  iro =>
-    iro.sanctionedBank &&
-    allowedPaymentMethods.some(method =>
-      iro.sanctionedBank.toLowerCase().trim().includes(method)
-    )
-);
-  console.log('Allowed Payment Methods Include Check:', allowedPaymentMethodsInclude);
+                          if (!sameSanctionedBank) {
+                            enqueueSnackbar({
+                              message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
+                              variant: 'error',
+                            });
+                            return;
+                          }
 
-  if (allowedPaymentMethodsInclude) {
-    // 1️⃣ Check sanctioned bank is same
-    const sameSanctionedBank = releaseAmountIROs.every(
-      iro => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
-    );
+                          const accountNumbers = releaseAmountIROs.map((iro) =>
+                            getTransferredAccountNumber(iro)
+                          );
 
-    if (!sameSanctionedBank) {
-      enqueueSnackbar({
-        message: 'IRO of Different Sanctioned Bank selected',
-        variant: 'error',
-      });
-      return;
-    }else{
-       console.log('call came on same sanctioned bank');
-  
-      setOpenRelease(true);
-      setNewTest(releaseAmountIROs);
-    
-    return console.log('allowed payment method selected');
+                          if (accountNumbers.some((acc) => !acc)) {
+                            enqueueSnackbar({
+                              message: 'Account number missing for one or more selected IROs',
+                              variant: 'error',
+                            });
+                            return;
+                          }
 
-    }
-     
-  } else {
-     // 1️⃣ Check sanctioned bank is same
-  const sameSanctionedBank = releaseAmountIROs.every(
-    (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
-  );
+                          const isSameAccountNumber = accountNumbers.every(
+                            (acc) => acc === accountNumbers[0]
+                          );
 
-  if (!sameSanctionedBank) {
-    enqueueSnackbar({
-      message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
-      variant: 'error',
-    });
-    return;
-  }
+                          if (!isSameAccountNumber) {
+                            enqueueSnackbar({
+                              message: 'Selected IROs have different account numbers',
+                              variant: 'error',
+                            });
+                            return;
+                          }
 
-  // 2️⃣ Get account numbers of all selected IROs
-  const accountNumbers = releaseAmountIROs.map((iro) =>
-    getTransferredAccountNumber(iro)
-  );
-
-  // 3️⃣ Validate account numbers exist
-  if (accountNumbers.some((acc) => !acc)) {
-    enqueueSnackbar({
-      message: 'Account number missing for one or more selected IROs',
-      variant: 'error',
-    });
-    return;
-  }
-
-  // 4️⃣ Check all account numbers are SAME
-  const isSameAccountNumber = accountNumbers.every(
-    (acc) => acc === accountNumbers[0]
-  );
-
-  if (!isSameAccountNumber) {
-    enqueueSnackbar({
-      message: 'Selected IROs have different account numbers',
-      variant: 'error',
-    });
-    return;
-  }
-
-  // ✅ ALL CHECKS PASSED
-
-  setOpenRelease(true);
-  setNewTest(releaseAmountIROs);
-  }
-
-}}
-
-
->
-  Bulk Release
-</Button>
-
-
+                          setOpenRelease(true);
+                          setNewTest(releaseAmountIROs);
+                        }
+                      }}
+                    >
+                      Bulk Release
+                    </Button>
                   ) : null}
                 </Grid>
-
+                              
                 {props.action =='manage' && (
-
                   <Grid
                     item
                     sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
@@ -1652,10 +1630,10 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
                           } else if (value === 'NonBankTransfers') {
                             setExStatusFilter([69]);
-                            setStatusFilter([]); // Use an empty array for "ALL" to show all items
+                            setStatusFilter([]);
                           } else {
                             setExStatusFilter([]);
-                            setStatusFilter([]); // Use an empty array for "ALL" to show all items
+                            setStatusFilter([]);
                           }
                         }}
                         name="Filter"
@@ -1669,10 +1647,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </RadioGroup>
                     </FormControl>
                   </Grid>
-
                 )}
+                
                 {props.action =='release' && (
-
                   <Grid
                     item
                     sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
@@ -1682,7 +1659,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         aria-labelledby="Filter"
                         value={
                           exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-
                         }
                         onChange={(e) => {
                           const value = e.target.value;
@@ -1691,7 +1667,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           } else {
                             setExStatusFilter([]);
                             setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                            // setStatusFilter([]);
                           }
                         }}
                         name="Filter"
@@ -1702,10 +1677,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       </RadioGroup>
                     </FormControl>
                   </Grid>
-
                 )}
+                
                 <Grid item>
-
                   <FormControl>
                     <RadioGroup
                       aria-labelledby="Filter"
@@ -1727,7 +1701,57 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
                     </RadioGroup>
                   </FormControl>
+                  
+                  <FormControl sx={{maxWidth:150, minWidth: 150, ml: 5 }}>
+  <InputLabel>Division</InputLabel>
+
+  <Select
+    multiple
+    value={selectedDivisions}
+    label="Division"
+    onChange={handleDivisionChange}
+    sx={{ maxHeight: 50 }}
+    renderValue={(selected) =>
+      selected.length === 0 ? 'None' : selected.join(', ')
+    }
+
+    MenuProps={{
+      PaperProps: {
+        style: { maxHeight: 300, width: 250 },
+      },
+    }}
+  >
+    {/* 🔍 SEARCH FIELD */}
+    <ListSubheader>
+      <TextField
+        size="small"
+        placeholder="Search division..."
+        fullWidth
+        autoFocus
+        value={divisionSearch}
+        onChange={(e) => setDivisionSearch(e.target.value)}
+        onKeyDown={(e) => e.stopPropagation()} // VERY IMPORTANT
+      />
+    </ListSubheader>
+
+    {/* NONE OPTION */}
+    <MenuItem value="__ALL__">
+      <Checkbox checked={selectedDivisions.length === 0} />
+      <ListItemText primary="None" />
+    </MenuItem>
+
+    {/* FILTERED LIST */}
+    {filteredDivisions.map((name) => (
+      <MenuItem key={name} value={name}>
+        <Checkbox checked={selectedDivisions.includes(name)} />
+        <ListItemText primary={name} />
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
                 </Grid>
+                
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -1766,85 +1790,74 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           backgroundColor: '#fff',
                         },
                         '& .orange-light': {
-                          backgroundColor: '#ffa500', /* Light orange */
+                          backgroundColor: '#ffa500',
                         },
                         '& .orange-dark': {
-                          backgroundColor: '#cc8400', /* Darker orange */
+                          backgroundColor: '#cc8400',
                         },
                         '& .yellow-light': {
-                          backgroundColor: '#ffffe0', /* Light yellow */
+                          backgroundColor: '#ffffe0',
                         },
                         '& .yellow-dark ': {
-                          backgroundColor: '#ffd700', /* Darker yellow */
+                          backgroundColor: '#ffd700',
                         },
                         '& .green-light ': {
-                          backgroundColor: '#90ee90', /* Light green */
+                          backgroundColor: '#90ee90',
                         },
                         '& .green-medium': {
-                          backgroundColor: '#32cd32', /* Medium green */
+                          backgroundColor: '#32cd32',
                         },
                         '& .green-dark ': {
-                          backgroundColor: '#008000', /* Dark green */
+                          backgroundColor: '#008000',
                         },
                         '&  .red-light ': {
-                          backgroundColor: '#ff7f7f', /* Light red */
+                          backgroundColor: '#ff7f7f',
                         },
                         '&   .red-dark ': {
-                          backgroundColor: '#ff0000', /* Darker red */
+                          backgroundColor: '#ff0000',
                         },
                         '&   .dark-orange': {
-                          backgroundColor: '#FFD243', /* Darker red */
+                          backgroundColor: '#FFD243',
                         },
                       }} >
                       <DataGrid
-                        rows={filteredRows ?? []}
+                        rows={filteredRows}
                         columns={columns}
                         getRowId={(row) => row._id}
                         checkboxSelection={props.action == 'release'}
                         disableRowSelectionOnClick={props.action == 'release'}
-                        onRowSelectionModelChange={(newRowSelectionModel) => {
-                          // setSelectedIROrelease(newRowSelectionModel);
-
-                          setReleaseAmountIROs(() => {
-                            const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
-                            return selectedIROs;
-                          });
-                          setNewTest(releaseAmountIROs);
+                        rowSelectionModel={rowSelectionModel}
+                        
+                        isRowSelectable={(params:any) =>
+                          selectedDivisions.length === 0
+                            ? true
+                            : selectedDivisions.includes(params?.row?.division?.details?.name)
+                        }
+                        
+                        onRowSelectionModelChange={(newSelection) => {
+                          setRowSelectionModel(newSelection as string[]);
+                          
+                          const selectedIROs =
+                            IROrder?.filter((iro) => newSelection.includes(iro._id)) ?? [];
+                          
+                          setReleaseAmountIROs(selectedIROs);
                         }}
+                        
                         getRowClassName={(params) => {
                           if (params.row.specialsanction == 'Yes') {
-                            return 'special-sanction'; // Class for rows with special sanction
+                            return 'special-sanction';
                           }
-                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'; // Default classes
-                        }} style={{ height: '65vh', width: '100%' }}
-                      // rowSelectionModel={selectedIROrelease}
-                      //
+                          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+                        }}
+                        style={{ height: '65vh', width: '100%' }}
                       />
                     </Box>
-                    {/* <DataGrid
-                      rows={filteredRows ?? []}
-                      columns={columns}
-                      getRowId={(row) => row._id}
-                      checkboxSelection={props.action == 'release'}
-                      disableRowSelectionOnClick={props.action == 'release'}
-                      onRowSelectionModelChange={(newRowSelectionModel) => {
-                        // setSelectedIROrelease(newRowSelectionModel);
-
-                        setReleaseAmountIROs(() => {
-                          const selectedIROs = IROrder ? IROrder.filter((iro) => newRowSelectionModel.includes(iro._id)) : [];
-
-                          return selectedIROs;
-                        });
-                      }}
-                      style={{ height: '80vh', width: '100%' }}
-                    // rowSelectionModel={selectedIROrelease}
-                    //
-                    /> */}
                   </Card>
                 </Grid>
               </Grid>
             </Card>
 
+            {/* Rest of the component remains the same */}
             <Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
@@ -1874,7 +1887,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         endIcon={<SendIcon />}
                       >
-                        {' '}
                         Send to President
                       </Button>
                     </Grid>
@@ -1897,7 +1909,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         endIcon={<SendIcon />}
                       >
-                        {' '}
                         Send to accounts
                       </Button>
                     </Grid>
@@ -1920,7 +1931,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         endIcon={<SendIcon />}
                       >
-                        {' '}
                         Send to office manager
                       </Button>
                     </Grid>
@@ -1943,10 +1953,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         endIcon={<SendIcon />}
                       >
-                        {' '}
                         Send to account manager
                       </Button>
-                      {/* <br /><br /> */}
                     </Grid>
                     <Grid item xs={12}>
                       <Button
@@ -1967,7 +1975,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         }}
                         endIcon={<SendIcon />}
                       >
-                        {' '}
                         Send to division head
                       </Button>
                     </Grid>
@@ -1977,7 +1984,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         variant="contained"
                         onClick={() => {
                           toggleSendNotification(false);
-                          // setSelectedIROId('');
                         }}
                         sx={{ marginBottom: 3, width: 260 }}
                         endIcon={<CloseIcon />}
@@ -1985,39 +1991,35 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         close
                       </Button>
                     </Grid>
-                    {/* <Grid item xs={12}>
-        <Button variant="contained" color='inherit'> Send to division head</Button>
-
-      </Grid> */}
                   </Grid>
                 </DialogContent>
               </Dialog>
+              
+              {/* Rest of the dialogs and components remain the same */}
               <Dialog open={Boolean(data6)} onClose={() => setData6(null)} maxWidth="xs" fullWidth>
                 <DialogTitle> Print Fr</DialogTitle>
                 <DialogContent>
-                 <Container>
-  Download the FR Auth Letter for {data6?.FRno}
-  <br />
-
-  {data6 && (
-    <BlobProvider document={<SanctionLetter data={data6 as any} />}>
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="AuthLetter.pdf"
-            style={{ color: 'blue' }}
-          >
-            AuthLetter.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
-
+                  <Container>
+                    Download the FR Auth Letter for {data6?.FRno}
+                    <br />
+                    {data6 && (
+                      <BlobProvider document={<SanctionLetter data={data6 as any} />}>
+                        {({ loading, url }) =>
+                          loading || openPrintFr ? (
+                            <span style={{ color: 'blue' }}>....</span>
+                          ) : (
+                            <a
+                              href={url ?? ''}
+                              download="AuthLetter.pdf"
+                              style={{ color: 'blue' }}
+                            >
+                              AuthLetter.pdf
+                            </a>
+                          )
+                        }
+                      </BlobProvider>
+                    )}
+                  </Container>
                 </DialogContent>
                 <DialogActions>
                   <Button
@@ -2026,10 +2028,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     }}
                     variant="text"
                   >
-                                            Cancel
+                    Cancel
                   </Button>
                 </DialogActions>
               </Dialog>
+              
               <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
@@ -2045,13 +2048,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="success"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          // setShowAccountManagerFileUploader(false);
-                          // setShowAccountFileUploader(false);
                           setShowHRFileUploader(true);
-                          // toggleAddSignature(false);
                         }}
                       >
-                        {' '}
                         HR signature
                       </Button>
                     </Grid>
@@ -2061,13 +2060,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         color="info"
                         sx={{ width: 260 }}
                         onClick={() => {
-                          // setShowAccountFileUploader(false);
-                          // setShowHRFileUploader(false);
-                          // toggleAddSignature(false);
                           setShowAccountManagerFileUploader(true);
                         }}
                       >
-                        {' '}
                         Account Manager Signature
                       </Button>
                     </Grid>
@@ -2078,12 +2073,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         sx={{ width: 260 }}
                         onClick={() => {
                           setShowAccountFileUploader(true);
-                          // setShowAccountManagerFileUploader(false);
-                          // setShowHRFileUploader(false);
-                          // toggleAddSignature(false);
                         }}
                       >
-                        {' '}
                         Accountant Signature
                       </Button>
                     </Grid>
@@ -2104,14 +2095,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                         Close
                       </Button>
                     </Grid>
-                    {/* <Grid item xs={12}>
-        <Button variant="contained" color='inherit'> Send to division head</Button>
-
-      </Grid> */}
                   </Grid>
                 </DialogContent>
               </Dialog>
             </Grid>
+            
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
@@ -2183,29 +2171,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    // setSelectedFR(props.row._id);
                     toggleSendNotification(true);
                   }}
-                  // sx={{ ml: 'auto' }}
                 >
-                      Send notification
+                  Send notification
                 </Button>
               </DialogActions>
             </Dialog>
+            
             <FileUploader
               title="HR Signature"
               action="add"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
-                // types: [],
                 maxItemSize: 1 * MB,
                 maxItemCount: 3,
                 maxTotalSize: 3 * MB,
               }}
-              // accept={['video/*']}
               open={showHRFileUploader}
               onClose={() => setShowHRFileUploader(false)}
-              // getFiles={selectedIRO?.signature?.hrSignature}
               getFiles={selectedIRO?.signature?.hrSignature ? [selectedIRO.signature.hrSignature] : []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/eSignature', file.name).then((res) => {
@@ -2216,7 +2200,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       hrSignature: res.data,
                     },
                   }));
-
                   return res;
                 });
               }}
@@ -2231,17 +2214,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            
             <FileUploader
               title="Account manager Signature"
               action="add"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
-                // types: [],
                 maxItemSize: 1 * MB,
                 maxItemCount: 3,
                 maxTotalSize: 3 * MB,
               }}
-              // accept={['video/*']}
               open={showAccountManagerFileUploader}
               onClose={() => setShowAccountManagerFileUploader(false)}
               getFiles={selectedIRO?.signature?.accountManagerSignature ? [selectedIRO.signature.accountManagerSignature] : []}
@@ -2254,7 +2236,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       accountManagerSignature: res.data,
                     },
                   }));
-
                   return res;
                 });
               }}
@@ -2269,17 +2250,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            
             <FileUploader
               title="Accountant Signature"
               action="add"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
-                // types: [],
                 maxItemSize: 1 * MB,
                 maxItemCount: 3,
                 maxTotalSize: 3 * MB,
               }}
-              // accept={['video/*']}
               open={showAccountFileUploader}
               onClose={() => setShowAccountFileUploader(false)}
               getFiles={selectedIRO?.signature?.accountantSignature ? [selectedIRO.signature.accountantSignature] : []}
@@ -2292,7 +2272,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                       accountantSignature: res.data,
                     },
                   }));
-
                   return res;
                 });
               }}
@@ -2307,13 +2286,14 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            
             <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
               <DialogTitle>Reminder</DialogTitle>
               <DialogContent>
                 <Typography sx={{ color: 'red' }}>
-         This {IROrder?.[0]?.IROno} is part of a bulk release, the following IROs will also be released along with it:<li></li></Typography>
+                  This {IROrder?.[0]?.IROno} is part of a bulk release, the following IROs will also be released along with it:<li></li>
+                </Typography>
               </DialogContent>
-
               <DialogActions>
                 <Button onClick={()=>setOpenReleaseConform(false)}>Close</Button>
                 <Button
@@ -2324,28 +2304,25 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     setOpenRelease(true);
                   } }
                 >
-                 Delete
+                  Delete
                 </Button>
               </DialogActions>
-
             </Dialog>
+            
             <FileUploader
               title=" Bill Upload"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
               limits={{
-                // types: [],
                 maxItemSize: 6 * MB,
                 maxItemCount: 10,
                 maxTotalSize: 30 * MB,
               }}
-              // accept={['video/*']}
               open={attachment}
               action={fileUploaderAction}
               postApprove={() => IROServices.reconciliationCompleted(selectedIRO._id)}
               onClose={() => {
                 setAttachment(false), setFile(false);
               }}
-              // getFiles={TestServices.getBills}
               getFiles={selectedIRO?.billAttachment ?? []}
               uploadFile={(file: File, onProgress: (progress: AJAXProgress) => void) => {
                 return FileUploaderServices.uploadFile(file, onProgress, 'IRO/reconciliation', file.name, selectedIRO._id).then((res) => {
@@ -2363,6 +2340,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
+            
             <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
@@ -2374,74 +2352,71 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </Grid>
         )}
       />
+      
       <FileUploader
         title="Attachments"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
         limits={{
-          // types: [],
           maxItemSize: 1 * MB,
           maxItemCount: 3,
           maxTotalSize: 3 * MB,
         }}
-        // accept={['video/*']}
         open={viewFileUploader}
         action="view"
         onClose={() => setViewFileUploader(false)}
-        // getFiles={TestServices.getBills}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
+      
       <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
           <Container>
-  Please download and attach the signature sheet:&nbsp;
-
-  {selectedIRO.signatureSheet ? (
-    <a
-      href="#"
-      onClick={async (e) => {
-        e.preventDefault();
-        const file = (
-          await FileUploaderServices.getFile(
-            selectedIRO?.signatureSheet ?? ''
-          )
-        ).data;
-
-        if (file.downloadURL) {
-          const link = document.createElement('a');
-          link.href = file.downloadURL;
-          link.download = 'WorkersSignatureSheet.pdf';
-          link.click();
-        }
-      }}
-    >
-      WorkersSignatureSheet.pdf
-    </a>
-  ) : (
-    pdfProps && (
-      <>
-        <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-          {({ loading, url }) =>
-            loading ? (
-              <span style={{ color: 'blue' }}>....</span>
-            ) : (
+            Please download and attach the signature sheet:&nbsp;
+            {selectedIRO.signatureSheet ? (
               <a
-                href={url ?? ''}
-                download="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
+                href="#"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const file = (
+                    await FileUploaderServices.getFile(
+                      selectedIRO?.signatureSheet ?? ''
+                    )
+                  ).data;
+
+                  if (file.downloadURL) {
+                    const link = document.createElement('a');
+                    link.href = file.downloadURL;
+                    link.download = 'WorkersSignatureSheet.pdf';
+                    link.click();
+                  }
+                }}
               >
                 WorkersSignatureSheet.pdf
               </a>
-            )
-          }
-        </BlobProvider>
-        <br />
-      </>
-    )
-  )}
-
-  NB: Ignore if already attached
-</Container>
+            ) : (
+              pdfProps && (
+                <>
+                  <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                    {({ loading, url }) =>
+                      loading ? (
+                        <span style={{ color: 'blue' }}>....</span>
+                      ) : (
+                        <a
+                          href={url ?? ''}
+                          download="WorkersSignatureSheet.pdf"
+                          style={{ color: 'blue' }}
+                        >
+                          WorkersSignatureSheet.pdf
+                        </a>
+                      )
+                    }
+                  </BlobProvider>
+                  <br />
+                </>
+              )
+            )}
+            NB: Ignore if already attached
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2454,19 +2429,22 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      
       <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO Receipt </DialogTitle>
         <DialogContent>
-          <Container>  Download the IRO for {selectedIRO?.IROno} &nbsp;
+          <Container>
+            Download the IRO for {selectedIRO?.IROno} &nbsp;
             {selectedIRO.closedIroPdf && <a href="#" onClick={async () => {
               const file = (await FileUploaderServices.getFile(selectedIRO?.closedIroPdf ?? '')).data;
               if (file.downloadURL) {
                 const link = document.createElement('a');
                 link.href = file.downloadURL;
-                link.download = file.filename; // You can specify a custom file name here
+                link.download = file.filename;
                 link.click();
               }
-            }}>{`${selectedIRO.IROno}_Receipt.pdf`}</a>}</Container>
+            }}>{`${selectedIRO.IROno}_Receipt.pdf`}</a>}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2479,41 +2457,41 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
-
-  {iroData && mngrName && selectedSignature && FrData && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
+            <br />
+            {iroData && mngrName && selectedSignature && FrData && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2526,45 +2504,44 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           </Button>
           <>
             {iroData && mngrName && selectedSignature && FrData && (
-
               <>
-              <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
               </>
             )}
           </>
         </DialogActions>
       </Dialog>
+      
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this IRO No ${IRO?.IROno?? '...'} from ${IRO?.division?.details?.name?? '...'} related to FR No ${FR?.FRno?? ''} ?`}</Typography>
         </DialogContent>
-
         <DialogActions>
           <Button onClick={() => setDeleteModel(false)}>Close</Button>
           <Button
@@ -2578,9 +2555,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
             Delete
           </Button>
         </DialogActions>
-
       </Dialog>
-    
+      
       {loading &&
         <Lottie
           options={{
@@ -2594,11 +2570,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           height={200}
           width={200}
           style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
-        // isStopped={.state.isStopped}
-        // isPaused={.state.isPaused}
-        />}
+        />
+      }
       {selectedIROId&&<TransactionLogDialog open={openLog} onClose={()=>setOpenLog(false)} TRId={selectedIROId}/>}
-
     </CommonPageLayout>
   );
 };
