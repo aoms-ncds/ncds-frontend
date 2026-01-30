@@ -1573,7 +1573,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
   if (!sameSanctionedBank) {
     enqueueSnackbar({
-      message: 'IRO of Different Sanctioned Bank selected',
+      message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
       variant: 'error',
     });
     return;
