@@ -1396,20 +1396,36 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   };
 
   // Update the filteredRows function to include division filtering
-  const filteredRows = (IROrder ?? []).filter((row:any) => {
-    // Division filtering logic - show rows from selected divisions OR all if none selected
-    const divisionMatch = selectedDivisions.length === 0 || 
-      selectedDivisions.includes(row?.division?.details.name);
-    
-    // Search text filtering logic
-    const searchMatch = searchText ? (
-      (row.IROno && row.IROno.toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchText.toLowerCase())) ||
-      (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchText.toLowerCase()))
-    ) : true;
-    
-    return divisionMatch && searchMatch;
-  });
+  const filteredRows = (IROrder ?? []).filter((row: any) => {
+  // Division filtering logic
+  const divisionMatch = selectedDivisions.length === 0 || 
+    selectedDivisions.includes(row?.division?.details.name);
+  
+  if (!searchText) return divisionMatch;
+  
+  const searchLower = searchText.toLowerCase();
+  
+  // Check all searchable fields
+  const searchMatch = 
+    (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
+    (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
+    (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
+    (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
+    // Add subCategory search
+    (row.particulars && row.particulars.some((particular:any) => 
+      (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower))
+    )) ||
+    // Add mainCategory search
+    (row.particulars && row.particulars.some((particular:any) => 
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower)
+    )) ||
+    // Add beneficiary name search
+    (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
+  
+  return divisionMatch && searchMatch;
+});
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
