@@ -2154,7 +2154,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                    Coordinator Name
+                    Coordinator/Requester Name
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2167,7 +2167,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                Coordinator Sign
+                Coordinator/Requester Sign
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2180,7 +2180,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                    Jr Leader 1 Name
+                    Jr Leader 1/Accounts Dept Name
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2193,7 +2193,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                    Jr Leader 1 Signature
+                    Jr Leader 1/Accounts Dept Signature
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2206,7 +2206,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                Jr Leader 2 Name
+                Jr Leader 2/Office Manager Name
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2220,7 +2220,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 }}
               >
                 {' '}
-                Jr Leader 2 Signature
+                Jr Leader 2/Office Manager Signature
               </Button>
             </Grid>
             <Grid item xs={12}>
@@ -2453,7 +2453,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={showCoordinatorName}
         onClose={() => setCoordinatorName(false)}
       >
-        <DialogTitle>Coordinator Name</DialogTitle>
+        <DialogTitle>Coordinator/Requester Name</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
@@ -2519,7 +2519,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={showJrLeaderName}
         onClose={() => setJrLeaderName(false)}
       >
-        <DialogTitle>Junior Leader Name</DialogTitle>
+        <DialogTitle>Junior Leader/Accounts Dept Name</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
@@ -2701,7 +2701,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
         open={showSrLeaderName}
         onClose={() => setSrLeaderName(false)}
       >
-        <DialogTitle>Senior Leader Name</DialogTitle>
+        <DialogTitle>Senior Leader/Office Manager Name</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
