@@ -145,7 +145,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/:frID/editCustom',
       element: <FRFormPage action="customEdit" />,
       private: true,
-      requiredAccessRights: ['WRITE_FR'],
+      requiredAccessRights: ['MANAGE_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
     {
@@ -201,7 +201,7 @@ const divisionsPageRoutes: ModuleRoute = {
       path: '/CustomFR',
       element: <CustomFR/>,
       private: true,
-      requiredAccessRights: ['MANAGE_FR'],
+      requiredAccessRights: ['READ_FR'],
       icon: <RequestPageOutlinedIcon />,
     },
   ],
