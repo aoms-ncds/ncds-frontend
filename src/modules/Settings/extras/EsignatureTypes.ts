@@ -12,5 +12,6 @@ interface Esignature{
 interface EsignaturePresident{
     _id:string;
     presidentSignature?:FileObject;
+    presidentName?:any;
 }
 }
