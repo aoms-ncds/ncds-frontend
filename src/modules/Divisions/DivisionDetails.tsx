@@ -276,6 +276,18 @@ const DivisionDetailsPage = (props: DivisionFormPageProps) => {
     }
   }, []);
 
+   useEffect(() => {
+    if (action === 'edit' && divisionDetails) {
+      let total = 0;
+      for (let i = 2; i <= 20; i++) {
+        const key = `BeneficiaryBank${i}` as keyof Division;
+        const value = divisionDetails[key];
+        if (value && typeof value === 'object' && 'bankName' in value && value.bankName) total++;
+      }
+      setOtherBankDetailsCount(total);
+    }
+  }, [divisionDetails, action]);
+
   if (divisionDetails?.FCRABankDetails?.bankName != null || divisionDetails?.DivisionBankFCRA?.bankName !=null) {
     // setOtherBankDetailsCount(1);
     count.push(1);
