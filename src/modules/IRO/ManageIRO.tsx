@@ -640,6 +640,15 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     case 'Beneficiary Bank 4':
       return division.BeneficiaryBank4?.accountNumber ?? null;
 
+    case 'Beneficiary Bank 5':
+      return division.BeneficiaryBank5?.accountNumber ?? null;
+
+    case 'Beneficiary Bank 6':
+      return division.BeneficiaryBank6?.accountNumber ?? null;
+      
+    case 'Beneficiary Bank 7':
+      return division.BeneficiaryBank7?.accountNumber ?? null;
+
     default:
       return null;
   }
