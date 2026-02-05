@@ -149,7 +149,7 @@ const FRReceiptTempForHelhiDevisionPrev = (props: { rowData: FR; label: any;pres
   // const month=moment(props.rowData.FRdate);
   // const monthName = month.format('MMMM');
   // const [imageData, setImageData] = React.useState('');
-  console.log(props, 'prop');
+  console.log(props, 'prop here');
   const coordinatorName =
   props.rowData?.division?.details?.name === 'DELHI OFFICE'
     ? `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} 
@@ -303,6 +303,7 @@ console.log('Coordinator Name:', coordinatorName);
 
             {props.rowData?.division?.details?.name === "DELHI OFFICE" ?
               `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`:
+              `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`||
               props.rowData?.division?.details?.prevCoordinator?.name 
             }
 
@@ -316,6 +317,7 @@ console.log('Coordinator Name:', coordinatorName);
             props.rowData?.division?.details?.name === "DELHI OFFICE" ?
             `data:${props.rowData?.division?.details?.coordinator?.sign?.type};base64,${props.rowData?.division?.details?.coordinator?.sign?.base64}` :
               `data:${props.rowData?.division?.details?.prevCoordinator?.sign?.type};base64,${props.rowData?.division?.details?.prevCoordinator?.sign?.base64}` 
+              
           }
           />
 
@@ -337,9 +339,9 @@ console.log('Coordinator Name:', coordinatorName);
             {
   props.rowData?.division?.details?.name === "DELHI OFFICE"
     ? props.rowData?.division?.details?.prevJuniorLeader1?.name
-    : `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''} 
-       ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
-}
+    : `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''}   ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
+} 
+     
           </Text>
 
           {/* Modified seniorLeader with Delhi HQ's seniorLeader.'s details*/}
@@ -414,7 +416,7 @@ console.log('Coordinator Name:', coordinatorName);
           {props.rowData?.specialsanction == 'Yes' ? (
             <><Text style={{ left: 60, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text><Text style={{ left: 115, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>President</Text>
               <Text style={{ left: 260, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Name: </Text>
-              <Text style={{ left: 290, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} </Text>
+              <Text style={{ left: 290, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>{props.rowData?.division?.details.president?.name?.basicDetails?.firstName} {props.rowData?.division?.details.president?.name?.basicDetails?.lastName} {props?.president?.presidentName} </Text>
               <Text style={{ left: 460, top: 120, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Sign: </Text><Image style={{
                 left: 480, top: 120,
                 position: 'absolute',

@@ -360,6 +360,10 @@ const FileUploader = (props: FileUploaderProps) => {
                             sx={{ ml: 'auto' }}
                             color="error"
                             onClick={() => {
+                              // if(file.downloadURL){
+                              //       return  console.log('Download URL:', file.downloadURL);
+                              // }
+                             
                               if (file.downloadURL) {
                                 const link = document.createElement('a');
                                 link.href = file.downloadURL;

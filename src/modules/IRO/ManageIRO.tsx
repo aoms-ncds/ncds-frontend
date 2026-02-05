@@ -58,6 +58,12 @@ import DivisionsServices from '../Divisions/extras/DivisionsServices';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
 import SanctionLetter from '../FR/components/authLatter';
 
+
+type BankDetails = {
+  accountNumber?: string;
+  beneficiary?: string;
+};
+
 const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -609,50 +615,100 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [file]);
 
- const getTransferredAccountNumber = (iro: IROrder): string | null => {
+//  const getTransferredAccountNumber = (iro: IROrder): string | null => {
+//   const division = iro.division;
+//   if (!division || !iro.sanctionedBank) return null;
+
+//   const bank = iro.sanctionedBank.split('-')[0].trim();
+//   console.log(bank, 'bank here');
+
+//   switch (bank) {
+//     case 'FCRA Bank Details':
+//       return division.FCRABankDetails?.accountNumber ?? null;
+
+//     case 'local Bank Details':
+//       return division.localBankDetails?.accountNumber ?? null;
+
+//     case 'otherBankDetails':
+//       return division.otherBankDetails?.accountNumber ?? null;
+
+//     case 'Division Bank FCRA':
+//       return division.DivisionBankFCRA?.accountNumber ?? null;
+
+//     case 'Division Bank Local':
+//       return division.DivisionBankLocal?.accountNumber ?? null;
+
+//     case 'Local Bank':
+//       return division.localBankDetails?.accountNumber ?? null;
+
+//     case 'FCRA':
+//       return division.FCRABankDetails?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 1':
+//       return division.BeneficiaryBank1?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 2':
+//       return division.BeneficiaryBank2?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 3':
+//       return division.BeneficiaryBank3?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 4':
+//       return division.BeneficiaryBank4?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 5':
+//       return division.BeneficiaryBank5?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 6':
+//       return division.BeneficiaryBank6?.accountNumber ?? null;
+
+//     case 'Beneficiary Bank 7':
+//       return division.BeneficiaryBank7?.accountNumber ?? null;
+
+//     default:
+//       return null;
+//   }
+// };
+
+
+
+const getTransferredAccountNumber = (iro: IROrder): string | null => {
   const division = iro.division;
   if (!division || !iro.sanctionedBank) return null;
+  const [bankName, beneficiaryName] = iro.sanctionedBank
+    .split('-')
+    .map(v => v.trim());
+  const divisionRecord =
+    division as unknown as Record<string, BankDetails | undefined>;
+  if (bankName.startsWith('Beneficiary Bank')) {
+    for (const key in divisionRecord) {
+      if (!key.startsWith('BeneficiaryBank')) continue;
 
-  const bank = iro.sanctionedBank.split('-')[0].trim();
+      const bank = divisionRecord[key];
 
-  switch (bank) {
-    case 'Division Bank FCRA':
-      return division.DivisionBankFCRA?.accountNumber ?? null;
-
-    case 'Division Bank Local':
-      return division.DivisionBankLocal?.accountNumber ?? null;
-
-    case 'Local Bank':
-      return division.localBankDetails?.accountNumber ?? null;
-
-    case 'FCRA':
-      return division.FCRABankDetails?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 1':
-      return division.BeneficiaryBank1?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 2':
-      return division.BeneficiaryBank2?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 3':
-      return division.BeneficiaryBank3?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 4':
-      return division.BeneficiaryBank4?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 5':
-      return division.BeneficiaryBank5?.accountNumber ?? null;
-
-    case 'Beneficiary Bank 6':
-      return division.BeneficiaryBank6?.accountNumber ?? null;
-      
-    case 'Beneficiary Bank 7':
-      return division.BeneficiaryBank7?.accountNumber ?? null;
-
-    default:
-      return null;
+      if (bank?.beneficiary === beneficiaryName) {
+        return bank.accountNumber ?? null;
+      }
+    }
+    return divisionRecord['otherBankDetails']?.accountNumber ?? null;
   }
+
+  const fixedMap: Record<string, string> = {
+    'FCRA Bank Details': 'FCRABankDetails',
+    'local Bank Details': 'localBankDetails',
+    'otherBankDetails': 'otherBankDetails',
+    'Division Bank FCRA': 'DivisionBankFCRA',
+    'Division Bank Local': 'DivisionBankLocal',
+    'Local Bank': 'localBankDetails',
+    'FCRA': 'FCRABankDetails',
+  };
+  const key = fixedMap[bankName];
+  if (key) {
+    return divisionRecord[key]?.accountNumber ?? null;
+  }
+  return null;
 };
+
 
   useEffect(() => {
     DivisionsServices.getDivisions().then((res) => {
@@ -1584,7 +1640,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                           const sameSanctionedBank = releaseAmountIROs.every(
                             (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
                           );
-
                           if (!sameSanctionedBank) {
                             enqueueSnackbar({
                               message: 'IRO of Different Sanctioned Bank or diffrent Beneficiary Name selected',
@@ -1592,10 +1647,13 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                             });
                             return;
                           }
+                          const normalizeAccount = (acc?: string | null) =>
+  acc?.toString().replace(/\s+/g, '').trim() ?? null;
 
-                          const accountNumbers = releaseAmountIROs.map((iro) =>
-                            getTransferredAccountNumber(iro)
-                          );
+const accountNumbers = releaseAmountIROs.map((iro) =>
+  normalizeAccount(getTransferredAccountNumber(iro))
+);
+                          console.log(accountNumbers, 'accountNumbers');
 
                           if (accountNumbers.some((acc) => !acc)) {
                             enqueueSnackbar({

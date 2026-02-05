@@ -386,6 +386,7 @@ rowData.division?.details &&
         ...rowData.division.details,
         seniorLeader: delhiHQ.details.seniorLeader,
         juniorLeader: delhiHQ.details.juniorLeader,
+        president: delhiHQ.details.president,
       },
     },
   });
