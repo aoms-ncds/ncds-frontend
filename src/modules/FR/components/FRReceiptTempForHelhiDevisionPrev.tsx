@@ -313,12 +313,15 @@ console.log('Coordinator Name:', coordinatorName);
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={
-            props.rowData?.division?.details?.name === "DELHI OFFICE" ?
-            `data:${props.rowData?.division?.details?.coordinator?.sign?.type};base64,${props.rowData?.division?.details?.coordinator?.sign?.base64}` :
-              `data:${props.rowData?.division?.details?.prevCoordinator?.sign?.type};base64,${props.rowData?.division?.details?.prevCoordinator?.sign?.base64}` 
-              
-          }
+         src={(() => {
+  const signData = 
+    props.rowData?.division?.details?.coordinator?.sign ||
+    props.rowData?.division?.details?.prevCoordinator?.sign;
+  
+  return signData?.type && signData?.base64 
+    ? `data:${signData.type};base64,${signData.base64}`
+    : '';
+})()}
           />
 
           <Text style={{ left: 60, top: 40, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation: </Text>
