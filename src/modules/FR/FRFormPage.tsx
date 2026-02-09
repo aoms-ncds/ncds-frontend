@@ -153,10 +153,13 @@ const FRFormPage = (props: FRFormPageProps) => {
           console.log(requisition, '0990');
 
           const res = await FRServices.updateFRRequests(frID, requisition);
+          navigate('/fr/manage');
           enqueueSnackbar({
             message: res.message,
             variant: 'success',
           });
+          window.location.reload();
+          return; // 🔥 THIS IS REQUIRED
         }
       }
       if (requisition.status ==FRLifeCycleStates.REOPENED) {
@@ -166,10 +169,13 @@ const FRFormPage = (props: FRFormPageProps) => {
         }, 1000);
       } else if (props.action === 'customEdit') {
         navigate('/fr/CustomFR');
+        window.location.reload();
       } else if (requisition.status ==FRLifeCycleStates.FR_SEND_BACK) {
         navigate('/fr/sentBack');
+        window.location.reload();
       } else {
         navigate('/fr');
+        window.location.reload();
       }
 
       enqueueSnackbar({

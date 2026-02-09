@@ -45,14 +45,6 @@ const divisionsPageRoutes: ModuleRoute = {
       icon: <RequestPageOutlinedIcon />,
     },
     {
-      title: 'Manage FR',
-      path: '/manage',
-      element: <ManageFRPage />,
-      private: true,
-      requiredAccessRights: ['READ_FR'],
-      icon: <RequestPageOutlinedIcon />,
-    },
-    {
       title: 'FR Verify',
       path: '/Approve',
       element: <PresidentApproval />,
