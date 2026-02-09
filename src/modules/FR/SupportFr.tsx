@@ -327,13 +327,13 @@ const SupportFrPage = () => {
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
 
                     rowData.division?.details && setData({
-                         ...props.row,
+                      ...props.row,
                       division: {
                         ...rowData.division,
                         details: {
-                             ...rowData.division?.details,             // ✅ USE DELHI HQ
-      seniorLeader: delhiHQ.details.seniorLeader,
-      juniorLeader: delhiHQ.details.juniorLeader,
+                          ...rowData.division?.details, // ✅ USE DELHI HQ
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
@@ -479,7 +479,7 @@ const SupportFrPage = () => {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
-      width: 100,
+      width: 150,
       align: 'center',
 
       headerAlign: 'center',
@@ -1115,36 +1115,36 @@ const SupportFrPage = () => {
             <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-               <Container>
+                <Container>
   Download the FR Receipt, Delhi for {data?.FRno}
-  <br />
+                  <br />
 
-  {data && (
-    <BlobProvider
-      document={
-        <FRReceiptTempForDelhiDivision
-          label={Label}
-          president={selectedSignaturePresident}
-          rowData={data as FR}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceiptDelhi.pdf"
-            style={{ color: 'blue' }}
-          >
+                  {data && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTempForDelhiDivision
+                          label={Label}
+                          president={selectedSignaturePresident}
+                          rowData={data as FR}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceiptDelhi.pdf"
+                            style={{ color: 'blue' }}
+                          >
             FRReceiptDelhi.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -1160,35 +1160,35 @@ const SupportFrPage = () => {
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-               <Container>
+                <Container>
   Downloading the FRReceipt for {data2?.FRno}
-  <br />
+                  <br />
 
-  {data2 && (
-    <BlobProvider
-      document={
-        <FRReceiptTemplate
-          rowData={data2 as FR}
-          president={selectedSignaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+                  {data2 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplate
+                          rowData={data2 as FR}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
             FRReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -1235,22 +1235,22 @@ const SupportFrPage = () => {
                     }
                   }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="WorkersSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+                <br />
 
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
@@ -1281,21 +1281,21 @@ const SupportFrPage = () => {
                   }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
                 <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="ChildrenSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="ChildrenSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         ChildrenSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+                <br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>

@@ -162,7 +162,7 @@ const SentBack = () => {
         />
       ),
     },
-    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 100, align: 'center',
+    { field: 'FRno', renderHeader: () => (<b>FR No</b>), width: 150, align: 'center',
       headerAlign: 'center' },
     // { field: 'FRdate', align: 'center',
     //   headerAlign: 'center', renderHeader: () => (<b>FR Date</b>), width: 90, renderCell: (props) => (
@@ -496,34 +496,34 @@ const SentBack = () => {
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-         <Container>
+          <Container>
   Downloading the FRReceipt for {data2?.FRno}
-  <br />
-  {data2 && (
-    <BlobProvider
-      document={
-        <FRReceiptTemplate
-          rowData={data2 as FR}
-          president={selectedSignaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+            <br />
+            {data2 && (
+              <BlobProvider
+                document={
+                  <FRReceiptTemplate
+                    rowData={data2 as FR}
+                    president={selectedSignaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
             FRReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
 
         </DialogContent>
         <DialogActions>

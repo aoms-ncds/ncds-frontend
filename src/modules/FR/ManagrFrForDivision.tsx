@@ -353,9 +353,9 @@ const ManageFrForDivision = () => {
                       division: {
                         ...rowData.division,
                         details: {
-                          ...rowData.division?.details,          // ✅ USE DELHI HQ
-      seniorLeader: delhiHQ.details.seniorLeader,
-      juniorLeader: delhiHQ.details.juniorLeader,
+                          ...rowData.division?.details, // ✅ USE DELHI HQ
+                          seniorLeader: delhiHQ.details.seniorLeader,
+                          juniorLeader: delhiHQ.details.juniorLeader,
                         },
                       },
                     });
@@ -486,7 +486,7 @@ const ManageFrForDivision = () => {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
-      width: 100,
+      width: 190,
       align: 'center',
 
       headerAlign: 'center',
@@ -1151,29 +1151,29 @@ const ManageFrForDivision = () => {
             <Dialog open={Boolean(data6)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-                
-<Container>
-  Download the FR Auth Letter for {data6?.FRno}
-  <br />
 
-  {data6 && (
-    <BlobProvider document={<SanctionLetter data={data6 as any} />}>
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="AuthLetter.pdf"
-            style={{ color: 'blue' }}
-          >
+                <Container>
+  Download the FR Auth Letter for {data6?.FRno}
+                  <br />
+
+                  {data6 && (
+                    <BlobProvider document={<SanctionLetter data={data6 as any} />}>
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="AuthLetter.pdf"
+                            style={{ color: 'blue' }}
+                          >
             AuthLetter.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
               </DialogContent>
               <DialogActions>
                 <Button
@@ -1200,22 +1200,22 @@ const ManageFrForDivision = () => {
                     }
                   }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-             <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) =>
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="WorkersSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+                <br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1249,39 +1249,39 @@ const ManageFrForDivision = () => {
             </Dialog>
             <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
-               
-<DialogContent>
-  <Container>
-    Download the FR Receipt, Delhi for {data?.FRno}
-    <br />
 
-    {data && (
-      <BlobProvider
-        document={
-          <FRReceiptTempForDelhiDivision
-            label={Label}
-            president={selectedSignaturePresident}
-            rowData={data as FR}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceiptDelhi.pdf"
-              style={{ color: 'blue' }}
-            >
+              <DialogContent>
+                <Container>
+    Download the FR Receipt, Delhi for {data?.FRno}
+                  <br />
+
+                  {data && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTempForDelhiDivision
+                          label={Label}
+                          president={selectedSignaturePresident}
+                          rowData={data as FR}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceiptDelhi.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceiptDelhi.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {
@@ -1295,37 +1295,37 @@ const ManageFrForDivision = () => {
             </Dialog>
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
-             <DialogContent>
-  <Container>
+              <DialogContent>
+                <Container>
     Downloading the FRReceipt for {data2?.FRno}
-    <br />
+                  <br />
 
-    {data2 && (
-      <BlobProvider
-        document={
-          <FRReceiptTemplate
-            rowData={data2 as FR}
-            president={selectedSignaturePresident}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceipt.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data2 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplate
+                          rowData={data2 as FR}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceipt.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {

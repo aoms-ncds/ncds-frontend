@@ -414,8 +414,6 @@ const ESignature = () => {
                 }));
                 return res;
               }}
-
-
               open={showPresidentUploader}
               onClose={() => setShowPresidentFileUploader(false)}
               getFiles={selectedSignaturePresident?.presidentSignature ? [selectedSignaturePresident?.presidentSignature]:[]}
