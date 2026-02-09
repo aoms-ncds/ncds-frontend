@@ -39,8 +39,10 @@ function MessageContent() {
             </Typography>
             <br />
             {message?.ref_url && (
-              <Typography variant='body1' >
-                <Link to={message?.ref_url}> {message?.ref_url}</Link>
+              <Typography variant="body1">
+                <Link to={message?.ref_url?.replace('iet.pro910.com', 'aoms.ietapps.org')}>
+                  {message?.ref_url?.replace('iet.pro910.com', 'aoms.ietapps.org')}
+                </Link>
               </Typography>
             )}
             <br />
