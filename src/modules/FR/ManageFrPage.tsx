@@ -448,7 +448,9 @@ rowData.division?.details &&
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
 
-                    rowData.division?.details&& setData4({ ...props.row,
+                    rowData.division?.details&& setData4({ 
+                      ...props.row,
+                      status: 'Prev Cord' as any,
                       division: {
                         ...rowData.division,
                         details: {
