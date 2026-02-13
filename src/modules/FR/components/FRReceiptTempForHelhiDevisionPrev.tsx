@@ -301,9 +301,8 @@ console.log('Coordinator Name:', coordinatorName);
             }}
           >
 
-            {props.rowData?.division?.details?.name === "DELHI OFFICE" ?
+            {props?.rowData?.status as any !== `Prev Cord` ?
               `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`:
-              `${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.coordinator?.name?.basicDetails?.lastName || ''}`||
               props.rowData?.division?.details?.prevCoordinator?.name 
             }
 
@@ -340,9 +339,8 @@ console.log('Coordinator Name:', coordinatorName);
             }}
           >
             {
-  props.rowData?.division?.details?.name === "DELHI OFFICE"
-    ? props.rowData?.division?.details?.prevJuniorLeader1?.name
-    : `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''}   ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
+ 
+     props.rowData?.division?.details?.prevJuniorLeader1?.name || `${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.firstName || ''}   ${props.rowData?.division?.details?.juniorLeader?.name?.basicDetails?.lastName || ''}`
 } 
      
           </Text>
@@ -353,11 +351,20 @@ console.log('Coordinator Name:', coordinatorName);
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={
-            props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
-              `data:${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.base64}` :
-              `data:${props.rowData?.division?.details?.juniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.juniorLeader?.sign?.base64}`
-          }
+          // src={
+          
+          //     `data:${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader1?.sign?.base64}` ||
+          //     `data:${props.rowData?.division?.details?.juniorLeader?.sign?.base64};base64,${props.rowData?.division?.details?.juniorLeader?.sign?.type}`
+          // }
+          src={(() => {
+  const signData = 
+    props.rowData?.division?.details?.prevJuniorLeader1?.sign ||
+    props.rowData?.division?.details?.juniorLeader?.sign;
+  
+  return signData?.type && signData?.base64 
+    ? `data:${signData.type};base64,${signData.base64}`
+    : '';
+})()}
           />
 
           <Text style={{ left: 60, top: 60, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
@@ -375,8 +382,8 @@ console.log('Coordinator Name:', coordinatorName);
               fontFamily: 'Oswald',
             }}
           >
-            {props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
-              props.rowData?.division?.details?.prevJuniorLeader2?.name :
+            {
+              props.rowData?.division?.details?.prevJuniorLeader2?.name ||
               `${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.firstName || ''} ${props.rowData?.division?.details?.seniorLeader?.name?.basicDetails?.lastName || ''}`
             }
           </Text>
@@ -386,11 +393,20 @@ console.log('Coordinator Name:', coordinatorName);
             position: 'absolute',
             height: 20,
             width: 50 }}
-          src={
-            props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
-              `data:${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.base64}` :
-              `data:${props.rowData?.division?.details?.seniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.seniorLeader?.sign?.base64}`
-          }
+          // src={
+          //   props.rowData?.division?.details?.name === 'DELHI OFFICE' ?
+          //     `data:${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.type};base64,${props.rowData?.division?.details?.prevJuniorLeader2?.sign?.base64}` :
+          //     `data:${props.rowData?.division?.details?.seniorLeader?.sign?.type};base64,${props.rowData?.division?.details?.seniorLeader?.sign?.base64}`
+          // }
+          src={(() => {
+  const signData = 
+    props.rowData?.division?.details?.prevJuniorLeader2?.sign ||
+    props.rowData?.division?.details?.seniorLeader?.sign;
+  
+  return signData?.type && signData?.base64 
+    ? `data:${signData.type};base64,${signData.base64}`
+    : '';
+})()}
           />
           {/* {props.label[3]?.name && (
             <><Text style={{ left: 60, top: 80, position: 'absolute', fontSize: 10, fontWeight: 'bold', fontFamily: 'Oswald' }}>Designation:</Text>
