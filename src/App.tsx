@@ -12,7 +12,7 @@ import { useLoader } from './hooks/Loader';
 // const serverURL = 'https://iet-staging.apis.pro910.app/';
 // const serverURLOld = 'https://iet-apis.pro910.app';//old
 
-const serverURL = 'https://iet-apis.ietapps.org';// new
+const serverURL = 'https://iet-apis.ietapps.org';// neww
 axios.defaults.baseURL = serverURL;
 // window.location.hostname === 'localhost' ? 'http://localhost:8002' : 'https://iet-apis.pro910.app';
 
