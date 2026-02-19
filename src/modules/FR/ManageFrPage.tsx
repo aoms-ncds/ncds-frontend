@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link, useLocation } from 'react-router-dom';
-import { Alert, Box, Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CardContent, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import FRServices from './extras/FRServices';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 // import SendIcon from '@mui/icons-material/Send';
@@ -369,15 +369,15 @@ const ManageFrPage = () => {
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
                   onClick: async () => {
-  const delhiHQ = (await DivisionsServices.getDivisionById(
-  '658270549efadc163550a28c'
-)).data;
+                    const delhiHQ = (await DivisionsServices.getDivisionById(
+                      '658270549efadc163550a28c',
+                    )).data;
 
-const rowData = (await FRServices.getAllOptimizedById(props.row?._id)).data;
-console.log(rowData, 'rowData');
-console.log(delhiHQ, 'delhiHQ');
+                    const rowData = (await FRServices.getAllOptimizedById(props.row?._id)).data;
+                    console.log(rowData, 'rowData');
+                    console.log(delhiHQ, 'delhiHQ');
 
-rowData.division?.details &&
+                    rowData.division?.details &&
   setData4({
     ...props.row,
     division: {
@@ -390,8 +390,7 @@ rowData.division?.details &&
       },
     },
   });
-
-},
+                  },
                 },
               ] :
               []),
@@ -448,7 +447,7 @@ rowData.division?.details &&
                     const delhiHQ=(await DivisionsServices.getDivisionById('658270549efadc163550a28c')).data;
                     const rowData= (await FRServices.getAllOptimizedById(props.row?._id)).data;
 
-                    rowData.division?.details&& setData4({ 
+                    rowData.division?.details&& setData4({
                       ...props.row,
                       status: 'Prev Cord' as any,
                       division: {
@@ -602,6 +601,76 @@ rowData.division?.details &&
     //   headerAlign: 'center',
     // },
     {
+      field: 'status',
+      headerClassName: 'status-header',
+      renderHeader: () => <b>Status</b>,
+      cellClassName: (params) => {
+        const statusName = params.formattedValue;
+        if (params.value == null) return '';
+
+        switch (statusName) {
+        case 'REVERTED':
+          return clsx('status-cell', 'red-light');
+        case 'PENDING VERIF.':
+          return clsx('status-cell', 'VERIF');
+        case 'IRO CLOSED':
+        case 'FR VERIFIED':
+        case 'FR CLOSED':
+          return clsx('status-cell', 'green');
+        case ' FR_REJECTED':
+          return clsx('status-cell', 'red');
+        case 'PENDING APPR.':
+          return clsx('status-cell', 'Appr');
+        case 'RE-SUBMITTED':
+          return clsx('status-cell', 're-sum');
+        case 'IRO DISAPPROVED':
+          return clsx('status-cell', 'red-dark');
+        case 'FR DISAPPROVED':
+          return clsx('status-cell', 'DIS');
+        default:
+          return 'status-cell';
+        }
+      },
+      width: 205,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params) => {
+        let statusName =
+      IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
+
+        switch (statusName) {
+        case 'SEND_BACK':
+          statusName = 'REVERTED';
+          break;
+        case 'FR_APPROVED':
+          statusName = 'FR VERIFIED';
+          break;
+        case 'WAITING_FOR_ACCOUNTS':
+          if ((params.row as any)?.isReverted === true) {
+            statusName = 'RE-SUBMITTED';
+          } else {
+            statusName = 'PENDING VERIF.';
+          }
+          break;
+        case 'WAITING_FOR_PRESIDENT':
+          statusName = 'PENDING APPR.';
+          break;
+        case 'FR_REJECTED':
+          statusName = 'FR DISAPPROVED';
+          break;
+        case 'IRO_REJECTED':
+        case 'REOPEND':
+          statusName = 'IRO DISAPPROVED';
+          break;
+        default:
+          statusName = statusName.replaceAll('_', ' ');
+          break;
+        }
+        return statusName;
+      },
+    },
+
+    {
       field: 'FRno',
       headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>FR No</b>,
@@ -622,7 +691,7 @@ rowData.division?.details &&
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -634,70 +703,7 @@ rowData.division?.details &&
     //   align: 'center',
     //   headerAlign: 'center',
     // },
-    {
-      field: 'status',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Status</b>,
-      cellClassName: (params) => {
-        console.log('CellClassName params:', params);
-        const statusName = params.formattedValue;
-        console.log('Status Name###:', statusName);
-        if (params.value == null) {
-          return '';
-        }
-        switch (statusName) {
-        case 'REVERTED':
-          return clsx('red-light');
-        case 'WAITING FOR ACCOUNTS':
-          return clsx('orange');
-        case 'IRO CLOSED':
-          return clsx('green');
-        case 'FR VERIFIED':
-          return clsx('green');
-        case 'FR CLOSED':
-          return clsx('green');
-        case ' FR_REJECTED':
-          return clsx('red');
-        case 'WAITING FOR PRESIDENT':
-          return clsx('orange');
-        case 'IRO DISAPPROVED':
-          return clsx('red-dark');
-        default:
-          console.log('No class applied');
-          return '';
-        }
-      },
-      width: 205,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-        console.log(statusName, 'lolpß');
-        // Check if the status name needs to be changed
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = ' FR DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'REOPEND':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-          // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
-        }
-        return statusName;
-      },
-    },
+
     {
       field: 'divisionName',
       headerClassName: 'super-app-theme--cell',
@@ -962,7 +968,7 @@ rowData.division?.details &&
                         value={searchText}
                         placeholder='Enter FRno or FRDate or Division or SubCategory'
                         onChange={handleSearchChange}
-                        // fullWidth
+                        fullWidth
                         // style={{ height: '10%' }}
                       />
                       {/* </div> */}
@@ -1026,48 +1032,84 @@ rowData.division?.details &&
                         }
                       />
                     </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS)?'WFA': statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK)? 'RVT':'ALL'}
-                          onChange={(e) =>setStatusFilter(e.target.value==='WFA'?[FRLifeCycleStates.WAITING_FOR_ACCOUNTS]: e.target.value==='RVT'? [FRLifeCycleStates.FR_SEND_BACK]:[])}
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="ALL" control={<Radio />} label="All" />
-                          <FormControlLabel sx={{ m: 2 }} value="WFA" control={<Radio />} label="Waiting for Accounts" />
-                          <FormControlLabel value="RVT" control={<Radio />} label="Reverted" />
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Card elevation={2}>
+                          <CardContent>
+                            {/* <Typography variant="subtitle2" gutterBottom>
+          Status
+                            </Typography> */}
 
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-                    <Grid item >
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter1}
-                          onChange={(e) =>
-                            setStatusFilter1(
-                              e.target.value === 'Support' ?
-                                'Support' :
-                                e.target.value === 'Resubmitted' ?
-                                  'Resubmitted' :
-                                  e.target.value === 'All' ?
-                                    'All': 'Expanse',
-                            )
-                          }
-                          name="Filter"
-                          row
-                        >
-                          <FormControlLabel value="Resubmitted" control={<Radio />} label="Re Submitted" />
-                          <FormControlLabel sx={{ m: 2 }} value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel sx={{ m: 2 }} value="Expanse" control={<Radio />} label="Expense" />
-                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                            {/* FLEX WRAPPER */}
+                            <Grid
+                              container
+                              spacing={1}
+                              alignItems="center"
+                              sx={{
+                                flexWrap: { xs: 'wrap', md: 'nowrap' },
+                              }}
+                            >
+                              {/* STATUS */}
+                              <Grid item xs={12} md={6}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={
+                                    statusFilter.includes(FRLifeCycleStates.WAITING_FOR_ACCOUNTS) ?
+                                      'WFA' :
+                                      statusFilter.includes(FRLifeCycleStates.FR_APPROVED) ?
+                                        'VRY' :
+                                        statusFilter.includes(FRLifeCycleStates.REJECTED) ?
+                                          'DIS' :
+                                          statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                            'RVT' :
+                                            'ALL'
+                                  }
+                                  onChange={(_, val) => {
+                                    if (!val) return;
+                                    setStatusFilter(
+                                      val === 'WFA' ?
+                                        [FRLifeCycleStates.WAITING_FOR_ACCOUNTS] :
+                                        val === 'VRY' ?
+                                          [FRLifeCycleStates.FR_APPROVED] :
+                                          val === 'RVT' ?
+                                            [FRLifeCycleStates.FR_SEND_BACK] :
+                                            val === 'DIS' ?
+                                              [FRLifeCycleStates.REJECTED] :
+                                              [],
+                                    );
+                                  }}
+                                >
+                                  <ToggleButton value="ALL">All</ToggleButton>
+                                  <ToggleButton value="WFA">Pending</ToggleButton>
+                                  <ToggleButton value="RVT">Reverted</ToggleButton>
+                                  <ToggleButton value="VRY">Verified</ToggleButton>
+                                  <ToggleButton value="DIS">Disapprove</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <ToggleButtonGroup
+                                  fullWidth
+                                  exclusive
+                                  size="small"
+                                  value={statusFilter1}
+                                  onChange={(_, val) => val && setStatusFilter1(val)}
+                                >
+                                  <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
+                                  <ToggleButton value="Support">Support</ToggleButton>
+                                  <ToggleButton value="Expanse">Expense</ToggleButton>
+                                  <ToggleButton value="All">Both</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
 
-                        </RadioGroup>
-                      </FormControl>
+                              {/* CATEGORY */}
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Grid>
                     </Grid>
+
                   </Grid>
 
                   <Box
@@ -1238,7 +1280,7 @@ rowData.division?.details &&
       {data4 && (
         <PDFDownloadLink
           document={
-            <FRReceiptTempForHelhiDevisionPrev 
+            <FRReceiptTempForHelhiDevisionPrev
               label={Label}
               president={selectedSignaturePresident}
               rowData={data4 as FR}
@@ -1374,21 +1416,21 @@ rowData.division?.details &&
                     }
                   }}>WorkersSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) => (
-    loading ? (
-      <span>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) => (
+                    loading ? (
+                      <span>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="WorkersSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  )}
-</BlobProvider>
+                      </a>
+                    )
+                  )}
+                </BlobProvider>
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1416,23 +1458,23 @@ rowData.division?.details &&
                     }
                   }}>ChildrenSignatureSheet.pdf</a> <br /></>: (pdfProps &&
               <>
-               
-<BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) => (
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="ChildrenSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+
+                <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                  {({ loading, url }) => (
+                    loading ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="ChildrenSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
         ChildrenSignatureSheet.pdf
-      </a>
-    )
-  )}
-</BlobProvider>
-<br />
+                      </a>
+                    )
+                  )}
+                </BlobProvider>
+                <br />
               </>)} NB: Ignore if already attached </Container>
               </DialogContent>
               <DialogActions>
@@ -1521,37 +1563,37 @@ rowData.division?.details &&
             </Dialog>
             <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
-            <DialogContent>
-  <Container>
+              <DialogContent>
+                <Container>
     Downloading the FRReceipt for {data2?.FRno}
-    <br />
+                  <br />
 
-    {data2 && (
-      <BlobProvider
-        document={
-          <FRReceiptTemplate
-            rowData={data2 as FR}
-            president={selectedSignaturePresident}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceipt.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data2 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplate
+                          rowData={data2 as FR}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceipt.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {
@@ -1566,31 +1608,31 @@ rowData.division?.details &&
             <Dialog open={Boolean(data6)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Fr</DialogTitle>
               <DialogContent>
-  <Container>
+                <Container>
     Download the FR Auth Letter for {data6?.FRno}
-    <br />
+                  <br />
 
-    {data6 && (
-      <BlobProvider
-        document={<SanctionLetter data={data6 as any} />}
-      >
-        {({ loading, url }) =>
-          loading || openPrintFr ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="AuthLetter.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data6 && (
+                    <BlobProvider
+                      document={<SanctionLetter data={data6 as any} />}
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFr ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="AuthLetter.pdf"
+                            style={{ color: 'blue' }}
+                          >
               AuthLetter.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {
@@ -1604,37 +1646,37 @@ rowData.division?.details &&
             </Dialog>
             <Dialog open={Boolean(data5)} onClose={() => setData5(null)} maxWidth="xs" fullWidth>
               <DialogTitle> Print Prev Fr</DialogTitle>
-           <DialogContent>
-  <Container>
+              <DialogContent>
+                <Container>
     Downloading the FRReceipt for {data5?.FRno}
-    <br />
+                  <br />
 
-    {data5 && (
-      <BlobProvider
-        document={
-          <FRReceiptTemplatePrev
-            rowData={data5 as any}
-            president={selectedSignaturePresident}
-          />
-        }
-      >
-        {({ loading, url }) =>
-          loading || openPrintFrPrev ? (
-            <span style={{ color: 'blue' }}>....</span>
-          ) : (
-            <a
-              href={url ?? ''}
-              download="FRReceipt.pdf"
-              style={{ color: 'blue' }}
-            >
+                  {data5 && (
+                    <BlobProvider
+                      document={
+                        <FRReceiptTemplatePrev
+                          rowData={data5 as any}
+                          president={selectedSignaturePresident}
+                        />
+                      }
+                    >
+                      {({ loading, url }) =>
+                        loading || openPrintFrPrev ? (
+                          <span style={{ color: 'blue' }}>....</span>
+                        ) : (
+                          <a
+                            href={url ?? ''}
+                            download="FRReceipt.pdf"
+                            style={{ color: 'blue' }}
+                          >
               FRReceipt.pdf
-            </a>
-          )
-        }
-      </BlobProvider>
-    )}
-  </Container>
-</DialogContent>
+                          </a>
+                        )
+                      }
+                    </BlobProvider>
+                  )}
+                </Container>
+              </DialogContent>
               <DialogActions>
                 <Button
                   onClick={() => {

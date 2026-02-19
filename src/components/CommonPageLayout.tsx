@@ -416,8 +416,8 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
                 rangeTypes={props.momentFilter.rangeTypes}
                 initialRange={props.momentFilter.initialRange}
                 sx={{
-                  minHeight: 40,
-                  minWidth: 268,
+                  minHeight: 25,
+                  minWidth: 240,
                   justifyContent: 'flex-end',
                 }}
                 min={props.momentFilter.min}
@@ -438,9 +438,9 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           <ArrowBackIcon />
         </Button>
 
-        <br />
+        {/* <br />
         <Divider />
-        <br />
+        <br /> */}
 
         {props.children}
       </Box>

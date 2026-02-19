@@ -1,7 +1,7 @@
 body {
   cursor: url('http://www.rw-designer.com/cursor-extern.php?id=35090'), auto;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -15,9 +15,9 @@ body {
 .group-color-3 {
   background-color: #E83AA2; /* Light red for group 2 */
 }
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
+} */
 
 .send-back-color {
   color: red;
@@ -33,4 +33,59 @@ code {
 
 .odd {
   background-color: white;
+}
+/* HEADER: dark + blur */
+.status-header {
+  background: #f0f4fa;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #000000;
+  font-weight: 700;
+  /* text-transform: uppercase; */
+}
+
+/* BASE CELL STYLE */
+.status-cell {
+  background-color: #e3f2fd; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* STATUS COLORS */
+.red-light {
+  background-color: #FFB74D;
+}
+.Appr {
+  background-color: #0b57d0;
+}
+.VERIF {
+  background-color: #a964f4;
+}
+.DIS {
+  background-color: #EF5350 ;
+}
+
+.red-dark {
+  background-color: #c62828;
+}
+.re-sum {
+  background-color: #4DB6AC;
+}
+
+.orange {
+  background-color: #fb8c00;
+}
+
+.green {
+  background-color: #43a047;
+}
+
+b{
+  color: #060f71;
+   font-weight: 600;
 }

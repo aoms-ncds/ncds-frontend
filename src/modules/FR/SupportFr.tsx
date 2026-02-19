@@ -496,7 +496,7 @@ const SupportFrPage = () => {
       headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
