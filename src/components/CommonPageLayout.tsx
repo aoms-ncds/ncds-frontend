@@ -121,7 +121,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
   }, [loader.count]);
 
   useEffect(() => {
-    document.title = props.title ? `IET : ${props.title}` : 'Indian Evangelical Team';
+    document.title = 'IET-AOMS';
   }, [props.title]);
 
 
@@ -146,16 +146,16 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
     <div>
 
       {/* <Toolbar /> */}
-      <Grid sx={{ height: 100 }}>
+      {/* <Grid sx={{ height: 100 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <img src="/favicon.ico" alt="" style={{ height: 90, marginTop: 20 }} />
           <br />
-          {/* <b>IET</b> */}
+         
           <div>
           </div>
         </div>
       </Grid>
-      <Divider />
+      <Divider /> */}
       <List>
         {allModuleRoutes
           .map((moduleRoute, index) =>
@@ -253,18 +253,21 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         {/* <ArrowBackIcon/> */}
 
         <Toolbar >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <img src="/favicon.ico" alt="" style={{ height: 50 }} />
+          </div>
           <Typography variant="h6" noWrap component="div" sx={{ padding: '10px', fontSize: '17px', marginRight: '15px' }}>
-            {CommonConstants.appName}
+            {'IET - AOMS'}
           </Typography>
+          &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+          {/* <Divider /> */}
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawer} sx={{ mr: 2, display: isMobile ? 'none' : 'inherit' }}>
             {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
           <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2, display: { sm: 'none' } }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ fontSize: '13px' }}>
-            {props.title}
-          </Typography>
+
           <Typography variant="h6" noWrap component="div" sx={{ ml: 'auto', fontSize: '13px' }}>
             Last Login: {logs?.createdAt?.format('hh:mm A DD/MM/YYYY')}
           </Typography>
@@ -291,6 +294,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
               <PersonIcon fontSize="large" />
             </IconButton>
           </Tooltip> */}
+
           {auth?.user && (
 
             <>
@@ -401,13 +405,15 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
         <Grid sx={{ p: 2 }} container spacing={2} alignItems="start" justifyContent="space-between">
           {/* Left Side: Back Icon + Title */}
           <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-            {/* {props.title && !props.hidePageHeader && (
-              <Typography variant="h5" color="text.secondary" sx={{ ml: 1 }}>
+            {props.title && !props.hidePageHeader && (
+              <Typography variant="h6" fontWeight={600} color="text.primary">
                 {props.title}
+                <Divider />
               </Typography>
-            )} */}
+            )}
           </Grid>
           {/* Right Side: MomentFilter */}
+
           {props.momentFilter && (
             <Grid item>
               <MomentFilter
@@ -427,6 +433,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )}
 
         </Grid>
+
         <Button
           sx={{
             backgroundColor: 'orange',

@@ -957,6 +957,7 @@ const ManageFrPage = () => {
         granted={
           <>
             <Grid item xs={12} lg={6}>
+
               <Grid item xs={12} md={12}>
                 <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
                   <Grid container spacing={2} padding={1}>
@@ -1036,21 +1037,13 @@ const ManageFrPage = () => {
                       <Grid item xs={12}>
                         <Card elevation={2}>
                           <CardContent>
-                            {/* <Typography variant="subtitle2" gutterBottom>
-          Status
-                            </Typography> */}
-
-                            {/* FLEX WRAPPER */}
                             <Grid
                               container
-                              spacing={1}
+                              spacing={2}
                               alignItems="center"
-                              sx={{
-                                flexWrap: { xs: 'wrap', md: 'nowrap' },
-                              }}
                             >
-                              {/* STATUS */}
-                              <Grid item xs={12} md={6}>
+                              {/* LEFT TOGGLE */}
+                              <Grid item xs={12} md={6} minWidth={0}>
                                 <ToggleButtonGroup
                                   fullWidth
                                   exclusive
@@ -1080,6 +1073,7 @@ const ManageFrPage = () => {
                                               [],
                                     );
                                   }}
+                                  sx={{ whiteSpace: 'nowrap' }}
                                 >
                                   <ToggleButton value="ALL">All</ToggleButton>
                                   <ToggleButton value="WFA">Pending</ToggleButton>
@@ -1088,13 +1082,16 @@ const ManageFrPage = () => {
                                   <ToggleButton value="DIS">Disapprove</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
-                              <Grid item xs={12} md={6}>
+
+                              {/* RIGHT TOGGLE */}
+                              <Grid item xs={12} md={6} minWidth={0}>
                                 <ToggleButtonGroup
                                   fullWidth
                                   exclusive
                                   size="small"
                                   value={statusFilter1}
                                   onChange={(_, val) => val && setStatusFilter1(val)}
+                                  sx={{ whiteSpace: 'nowrap' }}
                                 >
                                   <ToggleButton value="Resubmitted">Re-Submitted</ToggleButton>
                                   <ToggleButton value="Support">Support</ToggleButton>
@@ -1102,8 +1099,6 @@ const ManageFrPage = () => {
                                   <ToggleButton value="All">Both</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
-
-                              {/* CATEGORY */}
                             </Grid>
                           </CardContent>
                         </Card>

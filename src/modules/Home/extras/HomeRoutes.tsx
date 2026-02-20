@@ -6,7 +6,7 @@ const homePageRoutes: ModuleRoute = {
   base: '',
   pages: [
     {
-      title: 'Home Page',
+      title: 'Home',
       path: '/',
       element: <HomePage />,
       private: true,
