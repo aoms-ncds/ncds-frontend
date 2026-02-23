@@ -2,7 +2,14 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ListSubheader } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ListSubheader,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  SelectChangeEvent,
+} from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -16,14 +23,7 @@ import {
   Message as MessageIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import {
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  SelectChangeEvent
-} from "@mui/material";
+
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Link, useLocation } from 'react-router-dom';
 import DropdownButton from '../../components/DropDownButton';
@@ -462,7 +462,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       //     });
       // }
       if (userPermissions?.FCRA_ACCOUNTS_ACCESS && !userPermissions?.LOCAL_ACCOUNT_ACCESS) {
-        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', ...(statusFilter !== undefined && { status: statusFilter }), })
+        IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, sourceOfAccount: 'FCRA', ...(statusFilter !== undefined && { status: statusFilter }) })
           .then((res) => {
             // console.log(res.data, 'KKK');
             setNotFound(true);
@@ -615,99 +615,98 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     }
   }, [file]);
 
-//  const getTransferredAccountNumber = (iro: IROrder): string | null => {
-//   const division = iro.division;
-//   if (!division || !iro.sanctionedBank) return null;
+  //  const getTransferredAccountNumber = (iro: IROrder): string | null => {
+  //   const division = iro.division;
+  //   if (!division || !iro.sanctionedBank) return null;
 
-//   const bank = iro.sanctionedBank.split('-')[0].trim();
-//   console.log(bank, 'bank here');
+  //   const bank = iro.sanctionedBank.split('-')[0].trim();
+  //   console.log(bank, 'bank here');
 
-//   switch (bank) {
-//     case 'FCRA Bank Details':
-//       return division.FCRABankDetails?.accountNumber ?? null;
+  //   switch (bank) {
+  //     case 'FCRA Bank Details':
+  //       return division.FCRABankDetails?.accountNumber ?? null;
 
-//     case 'local Bank Details':
-//       return division.localBankDetails?.accountNumber ?? null;
+  //     case 'local Bank Details':
+  //       return division.localBankDetails?.accountNumber ?? null;
 
-//     case 'otherBankDetails':
-//       return division.otherBankDetails?.accountNumber ?? null;
+  //     case 'otherBankDetails':
+  //       return division.otherBankDetails?.accountNumber ?? null;
 
-//     case 'Division Bank FCRA':
-//       return division.DivisionBankFCRA?.accountNumber ?? null;
+  //     case 'Division Bank FCRA':
+  //       return division.DivisionBankFCRA?.accountNumber ?? null;
 
-//     case 'Division Bank Local':
-//       return division.DivisionBankLocal?.accountNumber ?? null;
+  //     case 'Division Bank Local':
+  //       return division.DivisionBankLocal?.accountNumber ?? null;
 
-//     case 'Local Bank':
-//       return division.localBankDetails?.accountNumber ?? null;
+  //     case 'Local Bank':
+  //       return division.localBankDetails?.accountNumber ?? null;
 
-//     case 'FCRA':
-//       return division.FCRABankDetails?.accountNumber ?? null;
+  //     case 'FCRA':
+  //       return division.FCRABankDetails?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 1':
-//       return division.BeneficiaryBank1?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 1':
+  //       return division.BeneficiaryBank1?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 2':
-//       return division.BeneficiaryBank2?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 2':
+  //       return division.BeneficiaryBank2?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 3':
-//       return division.BeneficiaryBank3?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 3':
+  //       return division.BeneficiaryBank3?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 4':
-//       return division.BeneficiaryBank4?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 4':
+  //       return division.BeneficiaryBank4?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 5':
-//       return division.BeneficiaryBank5?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 5':
+  //       return division.BeneficiaryBank5?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 6':
-//       return division.BeneficiaryBank6?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 6':
+  //       return division.BeneficiaryBank6?.accountNumber ?? null;
 
-//     case 'Beneficiary Bank 7':
-//       return division.BeneficiaryBank7?.accountNumber ?? null;
+  //     case 'Beneficiary Bank 7':
+  //       return division.BeneficiaryBank7?.accountNumber ?? null;
 
-//     default:
-//       return null;
-//   }
-// };
+  //     default:
+  //       return null;
+  //   }
+  // };
 
 
-
-const getTransferredAccountNumber = (iro: IROrder): string | null => {
-  const division = iro.division;
-  if (!division || !iro.sanctionedBank) return null;
-  const [bankName, beneficiaryName] = iro.sanctionedBank
+  const getTransferredAccountNumber = (iro: IROrder): string | null => {
+    const division = iro.division;
+    if (!division || !iro.sanctionedBank) return null;
+    const [bankName, beneficiaryName] = iro.sanctionedBank
     .split('-')
-    .map(v => v.trim());
-  const divisionRecord =
+    .map((v) => v.trim());
+    const divisionRecord =
     division as unknown as Record<string, BankDetails | undefined>;
-  if (bankName.startsWith('Beneficiary Bank')) {
-    for (const key in divisionRecord) {
-      if (!key.startsWith('BeneficiaryBank')) continue;
+    if (bankName.startsWith('Beneficiary Bank')) {
+      for (const key in divisionRecord) {
+        if (!key.startsWith('BeneficiaryBank')) continue;
 
-      const bank = divisionRecord[key];
+        const bank = divisionRecord[key];
 
-      if (bank?.beneficiary === beneficiaryName) {
-        return bank.accountNumber ?? null;
+        if (bank?.beneficiary === beneficiaryName) {
+          return bank.accountNumber ?? null;
+        }
       }
+      return divisionRecord['otherBankDetails']?.accountNumber ?? null;
     }
-    return divisionRecord['otherBankDetails']?.accountNumber ?? null;
-  }
 
-  const fixedMap: Record<string, string> = {
-    'FCRA Bank Details': 'FCRABankDetails',
-    'local Bank Details': 'localBankDetails',
-    'otherBankDetails': 'otherBankDetails',
-    'Division Bank FCRA': 'DivisionBankFCRA',
-    'Division Bank Local': 'DivisionBankLocal',
-    'Local Bank': 'localBankDetails',
-    'FCRA': 'FCRABankDetails',
+    const fixedMap: Record<string, string> = {
+      'FCRA Bank Details': 'FCRABankDetails',
+      'local Bank Details': 'localBankDetails',
+      'otherBankDetails': 'otherBankDetails',
+      'Division Bank FCRA': 'DivisionBankFCRA',
+      'Division Bank Local': 'DivisionBankLocal',
+      'Local Bank': 'localBankDetails',
+      'FCRA': 'FCRABankDetails',
+    };
+    const key = fixedMap[bankName];
+    if (key) {
+      return divisionRecord[key]?.accountNumber ?? null;
+    }
+    return null;
   };
-  const key = fixedMap[bankName];
-  if (key) {
-    return divisionRecord[key]?.accountNumber ?? null;
-  }
-  return null;
-};
 
 
   useEffect(() => {
@@ -720,19 +719,18 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
   // Handle division selection change
   const handleDivisionChange = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[];
-     if (value.includes('__ALL__')) {
-    setSelectedDivisions([]); // empty = show all
-    return;
-  }
+    if (value.includes('__ALL__')) {
+      setSelectedDivisions([]); // empty = show all
+      return;
+    }
     setSelectedDivisions(value);
   };
   const filteredDivisions = divisions.filter((name) =>
-  name
+    name
     .toLowerCase()
-    .replace(/\s/g, '')          // remove spaces
-    .includes(divisionSearch.toLowerCase().replace(/\s/g, ''))
-);
-
+    .replace(/\s/g, '') // remove spaces
+    .includes(divisionSearch.toLowerCase().replace(/\s/g, '')),
+  );
 
 
   const columns: GridColDef<IROrder>[] = [
@@ -1463,34 +1461,34 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
   // Update the filteredRows function to include division filtering
   const filteredRows = (IROrder ?? []).filter((row: any) => {
   // Division filtering logic
-  const divisionMatch = selectedDivisions.length === 0 || 
+    const divisionMatch = selectedDivisions.length === 0 ||
     selectedDivisions.includes(row?.division?.details.name);
-  
-  if (!searchText) return divisionMatch;
-  
-  const searchLower = searchText.toLowerCase();
-  
-  // Check all searchable fields
-  const searchMatch = 
+
+    if (!searchText) return divisionMatch;
+
+    const searchLower = searchText.toLowerCase();
+
+    // Check all searchable fields
+    const searchMatch =
     (row.IROno && row.IROno.toLowerCase().includes(searchLower)) ||
     (row.IRODate && row.IRODate.format('DD/MM/YYYY').toLowerCase().includes(searchLower)) ||
     (row.division?.details.name && row.division?.details.name.toLowerCase().includes(searchLower)) ||
     (row.purposeSubdivision?.name && row.purposeSubdivision.name.toLowerCase().includes(searchLower)) ||
     // Add subCategory search
-    (row.particulars && row.particulars.some((particular:any) => 
+    (row.particulars && row.particulars.some((particular:any) =>
       (particular.subCategory1 && particular.subCategory1.toLowerCase().includes(searchLower)) ||
       (particular.subCategory2 && particular.subCategory2.toLowerCase().includes(searchLower)) ||
-      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower))
+      (particular.subCategory3 && particular.subCategory3.toLowerCase().includes(searchLower)),
     )) ||
     // Add mainCategory search
-    (row.particulars && row.particulars.some((particular:any) => 
-      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower)
+    (row.particulars && row.particulars.some((particular:any) =>
+      particular.mainCategory && particular.mainCategory.toLowerCase().includes(searchLower),
     )) ||
     // Add beneficiary name search
     (row.sanctionedBank && row.sanctionedBank.toLowerCase().includes(searchLower));
-  
-  return divisionMatch && searchMatch;
-});
+
+    return divisionMatch && searchMatch;
+  });
   if (searchText && filteredRows.length ===0) {
     enqueueSnackbar({
       message: ` ${searchText} not found`,
@@ -1610,19 +1608,19 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                           'Credit Card',
                           'Closing Balance Adjsted',
                           'Website Payment',
-                        ].map(method => method.toLowerCase().trim());
+                        ].map((method) => method.toLowerCase().trim());
 
                         const allowedPaymentMethodsInclude = releaseAmountIROs.some(
-                          iro =>
+                          (iro) =>
                             iro.sanctionedBank &&
-                            allowedPaymentMethods.some(method =>
-                              iro.sanctionedBank.toLowerCase().trim().includes(method)
-                            )
+                            allowedPaymentMethods.some((method) =>
+                              iro.sanctionedBank.toLowerCase().trim().includes(method),
+                            ),
                         );
-                        
+
                         if (allowedPaymentMethodsInclude) {
                           const sameSanctionedBank = releaseAmountIROs.every(
-                            iro => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
                           );
 
                           if (!sameSanctionedBank) {
@@ -1638,7 +1636,7 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                           }
                         } else {
                           const sameSanctionedBank = releaseAmountIROs.every(
-                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank
+                            (iro) => iro.sanctionedBank === releaseAmountIROs[0].sanctionedBank,
                           );
                           if (!sameSanctionedBank) {
                             enqueueSnackbar({
@@ -1648,11 +1646,11 @@ const getTransferredAccountNumber = (iro: IROrder): string | null => {
                             return;
                           }
                           const normalizeAccount = (acc?: string | null) =>
-  acc?.toString().replace(/\s+/g, '').trim() ?? null;
+                            acc?.toString().replace(/\s+/g, '').trim() ?? null;
 
-const accountNumbers = releaseAmountIROs.map((iro) =>
-  normalizeAccount(getTransferredAccountNumber(iro))
-);
+                          const accountNumbers = releaseAmountIROs.map((iro) =>
+                            normalizeAccount(getTransferredAccountNumber(iro)),
+                          );
                           console.log(accountNumbers, 'accountNumbers');
 
                           if (accountNumbers.some((acc) => !acc)) {
@@ -1664,7 +1662,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                           }
 
                           const isSameAccountNumber = accountNumbers.every(
-                            (acc) => acc === accountNumbers[0]
+                            (acc) => acc === accountNumbers[0],
                           );
 
                           if (!isSameAccountNumber) {
@@ -1684,7 +1682,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                     </Button>
                   ) : null}
                 </Grid>
-                              
+
                 {props.action =='manage' && (
                   <Grid
                     item
@@ -1731,7 +1729,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                     </FormControl>
                   </Grid>
                 )}
-                
+
                 {props.action =='release' && (
                   <Grid
                     item
@@ -1761,7 +1759,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                     </FormControl>
                   </Grid>
                 )}
-                
+
                 <Grid item>
                   <FormControl>
                     <RadioGroup
@@ -1784,58 +1782,58 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                       <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
                     </RadioGroup>
                   </FormControl>
-                   {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                  <FormControl sx={{maxWidth:150, minWidth: 150, ml: 5 }}>
-  <InputLabel>Division</InputLabel>
+                  {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
+                    <FormControl sx={{ maxWidth: 150, minWidth: 150, ml: 5 }}>
+                      <InputLabel>Division</InputLabel>
 
-  <Select
-    multiple
-    value={selectedDivisions}
-    label="Division"
-    onChange={handleDivisionChange}
-    sx={{ maxHeight: 50 }}
-    renderValue={(selected) =>
-      selected.length === 0 ? 'None' : selected.join(', ')
-    }
+                      <Select
+                        multiple
+                        value={selectedDivisions}
+                        label="Division"
+                        onChange={handleDivisionChange}
+                        sx={{ maxHeight: 50 }}
+                        renderValue={(selected) =>
+                          selected.length === 0 ? 'None' : selected.join(', ')
+                        }
 
-    MenuProps={{
-      PaperProps: {
-        style: { maxHeight: 300, width: 250 },
-      },
-    }}
-  >
-    {/* 🔍 SEARCH FIELD */}
-    <ListSubheader>
-      <TextField
-        size="small"
-        placeholder="Search division..."
-        fullWidth
-        autoFocus
-        value={divisionSearch}
-        onChange={(e) => setDivisionSearch(e.target.value)}
-        onKeyDown={(e) => e.stopPropagation()} // VERY IMPORTANT
-      />
-    </ListSubheader>
+                        MenuProps={{
+                          PaperProps: {
+                            style: { maxHeight: 300, width: 250 },
+                          },
+                        }}
+                      >
+                        {/* 🔍 SEARCH FIELD */}
+                        <ListSubheader>
+                          <TextField
+                            size="small"
+                            placeholder="Search division..."
+                            fullWidth
+                            autoFocus
+                            value={divisionSearch}
+                            onChange={(e) => setDivisionSearch(e.target.value)}
+                            onKeyDown={(e) => e.stopPropagation()} // VERY IMPORTANT
+                          />
+                        </ListSubheader>
 
-    {/* NONE OPTION */}
-    <MenuItem value="__ALL__">
-      <Checkbox checked={selectedDivisions.length === 0} />
-      <ListItemText primary="None" />
-    </MenuItem>
+                        {/* NONE OPTION */}
+                        <MenuItem value="__ALL__">
+                          <Checkbox checked={selectedDivisions.length === 0} />
+                          <ListItemText primary="None" />
+                        </MenuItem>
 
-    {/* FILTERED LIST */}
-    {filteredDivisions.map((name) => (
-      <MenuItem key={name} value={name}>
-        <Checkbox checked={selectedDivisions.includes(name)} />
-        <ListItemText primary={name} />
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
-) : null}
+                        {/* FILTERED LIST */}
+                        {filteredDivisions.map((name) => (
+                          <MenuItem key={name} value={name}>
+                            <Checkbox checked={selectedDivisions.includes(name)} />
+                            <ListItemText primary={name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  ) : null}
 
                 </Grid>
-                
+
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -1911,22 +1909,22 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                         checkboxSelection={props.action == 'release'}
                         disableRowSelectionOnClick={props.action == 'release'}
                         rowSelectionModel={rowSelectionModel}
-                        
+
                         isRowSelectable={(params:any) =>
-                          selectedDivisions.length === 0
-                            ? true
-                            : selectedDivisions.includes(params?.row?.division?.details?.name)
+                          selectedDivisions.length === 0 ?
+                            true :
+                            selectedDivisions.includes(params?.row?.division?.details?.name)
                         }
-                        
+
                         onRowSelectionModelChange={(newSelection) => {
                           setRowSelectionModel(newSelection as string[]);
-                          
+
                           const selectedIROs =
                             IROrder?.filter((iro) => newSelection.includes(iro._id)) ?? [];
-                          
+
                           setReleaseAmountIROs(selectedIROs);
                         }}
-                        
+
                         getRowClassName={(params) => {
                           if (params.row.specialsanction == 'Yes') {
                             return 'special-sanction';
@@ -2078,7 +2076,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   </Grid>
                 </DialogContent>
               </Dialog>
-              
+
               {/* Rest of the dialogs and components remain the same */}
               <Dialog open={Boolean(data6)} onClose={() => setData6(null)} maxWidth="xs" fullWidth>
                 <DialogTitle> Print Fr</DialogTitle>
@@ -2116,7 +2114,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   </Button>
                 </DialogActions>
               </Dialog>
-              
+
               <Dialog open={addSignature} sx={{ width: 400, margin: '0 auto' }}>
                 <DialogContent style={{ display: 'flex', justifyContent: 'center' }}>
                   <Grid container spacing={2} sx={{ display: 'grid', alignItems: 'center', justifyItems: 'center' }}>
@@ -2183,7 +2181,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </DialogContent>
               </Dialog>
             </Grid>
-            
+
             <Dialog open={openRemarks} fullWidth maxWidth="md">
               <DialogTitle>Remarks</DialogTitle>
               <DialogContent>
@@ -2262,7 +2260,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </Button>
               </DialogActions>
             </Dialog>
-            
+
             <FileUploader
               title="HR Signature"
               action="add"
@@ -2298,7 +2296,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <FileUploader
               title="Account manager Signature"
               action="add"
@@ -2334,7 +2332,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <FileUploader
               title="Accountant Signature"
               action="add"
@@ -2370,7 +2368,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <Dialog open={Boolean(openReleaseConform)} onClose={() => setOpenReleaseConform(false)}>
               <DialogTitle>Reminder</DialogTitle>
               <DialogContent>
@@ -2392,7 +2390,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 </Button>
               </DialogActions>
             </Dialog>
-            
+
             <FileUploader
               title=" Bill Upload"
               types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
@@ -2424,7 +2422,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            
+
             <ReleaseAmount action={props.action == 'release' ? 'add' : 'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
@@ -2436,7 +2434,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Grid>
         )}
       />
-      
+
       <FileUploader
         title="Attachments"
         types={['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']}
@@ -2450,7 +2448,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
         onClose={() => setViewFileUploader(false)}
         getFiles={selectedIRO?.billAttachment ?? []}
       />
-      
+
       <Dialog open={supportAttachment} onClose={() => setSupportAttachment(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Signature Attachment </DialogTitle>
         <DialogContent>
@@ -2463,7 +2461,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
                   e.preventDefault();
                   const file = (
                     await FileUploaderServices.getFile(
-                      selectedIRO?.signatureSheet ?? ''
+                      selectedIRO?.signatureSheet ?? '',
                     )
                   ).data;
 
@@ -2513,7 +2511,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO Receipt </DialogTitle>
         <DialogContent>
@@ -2541,7 +2539,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
@@ -2621,7 +2619,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </>
         </DialogActions>
       </Dialog>
-      
+
       <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
         <DialogContent>
           <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this IRO No ${IRO?.IROno?? '...'} from ${IRO?.division?.details?.name?? '...'} related to FR No ${FR?.FRno?? ''} ?`}</Typography>
@@ -2640,7 +2638,7 @@ const accountNumbers = releaseAmountIROs.map((iro) =>
           </Button>
         </DialogActions>
       </Dialog>
-      
+
       {loading &&
         <Lottie
           options={{
