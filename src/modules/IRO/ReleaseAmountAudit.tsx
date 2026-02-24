@@ -376,7 +376,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
     }
   });
   console.log(releaseAmountIROs, '#ODD');
-  console.log(newTest, '#NEW');
+  console.log(selectedIROId, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -445,6 +445,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   };
   // useEffect(()=>{
   // }, [releaseAmountIROs]);
+console.log(selectedIROId, 'selectedIROId');
 
   const userPermissions = (user.user as User)?.permissions;
 
@@ -926,8 +927,8 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
       valueGetter: (params) => {
-        if (params.row.sanctionedAmount !== undefined) {
-          return params.row.sanctionedAmount;
+        if (params.row.releaseAmount?.transferredAmount !== undefined) {
+          return params.row.releaseAmount?.transferredAmount;
         }
         if (Array.isArray(params.row.particulars)) {
           return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);

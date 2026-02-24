@@ -235,7 +235,7 @@ const IRODashboard = () => {
               permissions={['OFFICE_MNGR_ACCESS']}
               granted={(
                 <Grid item xs={12} md={4} xl={3}>
-                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Office Manager " secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
+                  <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Awaiting Approval" secondaryText="Approval" color="#fff" targetRoute="/IRO/office_approve" />
                 </Grid>
               )} />
             <PermissionChecks
