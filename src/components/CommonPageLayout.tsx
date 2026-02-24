@@ -217,7 +217,7 @@ const CommonPageLayout = (props: { children: React.ReactNode; title?: string; hi
           )
           .flat()}
       </List>
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 

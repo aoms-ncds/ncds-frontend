@@ -96,7 +96,6 @@ const SettingsDashboard = () => {
           )} />
 
 
-
         <PermissionChecks
           permissions={['SETTINGS_E_SIGN_ACCESS']}
           granted={(

@@ -13,6 +13,7 @@ import IROLifeCycleStates from '../extras/IROLifeCycleStates';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import PaymentMethodService from '../../Settings/extras/PaymentMethodService';
 import { IPaymentMethod } from '../../Settings/extras/LanguageTypes';
+import DropdownButton from '../../../components/DropDownButton';
 
 // import FileUploader from '../../components/FileUploader/FileUploader';
 // import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
@@ -247,6 +248,47 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
   }, [props.data]);
 
   const columns: GridColDef<IROrder>[] = [
+    {
+      field: '_manage',
+      headerClassName: 'super-app-theme--cell',
+      headerName: '',
+      renderHeader: () => <b>Action</b>,
+      width: 80,
+      align: 'center',
+      headerAlign: 'center',
+      type: 'string',
+      renderCell: (params) => (
+        <DropdownButton
+          useIconButton={true}
+          id="IRO action"
+          primaryText="Actions"
+          key={'IRO action'}
+          items={[
+            {
+              id: 'View',
+              text: 'View Details ',
+              // component: Link,
+              // to: `/iro/${params.row._id}`,
+              // icon: PreviewIcon,
+              onClick: () => {
+                window.open( `/iro/${params.row._id}`, '_blank');
+              },
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              // icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
+              },
+
+            },
+          ]}
+        />
+      ),
+    },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',

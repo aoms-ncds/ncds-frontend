@@ -683,7 +683,7 @@ const ChildeSupportPage = () => {
   };
   return (
     <CommonPageLayout title="Child Support">
-      <Card sx={{ width: '100%', borderRadius: 3, marginTop: 2 }}>
+      <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
           const tot = childList
@@ -724,7 +724,7 @@ const ChildeSupportPage = () => {
         }}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6} >
+              <Grid item xs={12} md={2} >
                 <Autocomplete
                   // disabled={props.kind=='child'}
                   options={divisions ?? []}
@@ -770,7 +770,7 @@ const ChildeSupportPage = () => {
                   disabled={loadingDiv != true}
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid item xs={12} md={2}>
                 <Autocomplete
                   options={subDivisions ?? []}
                   value={subDivision ?? null}
@@ -820,7 +820,7 @@ const ChildeSupportPage = () => {
                     variant='standard' />}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={2}>
                 <Autocomplete<IWorker>
                   value={workersSelect as unknown as IWorker}
                   options={(workers ?? [])}
@@ -869,7 +869,7 @@ const ChildeSupportPage = () => {
 
                 />
               </Grid> */}
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={2}>
                 <Autocomplete<IWorker>
                   value={selectedCoordinators ?? null}
                   options={(coordinators ?? [])}

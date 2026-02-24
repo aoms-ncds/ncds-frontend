@@ -1867,6 +1867,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                 </Grid>
                 <Grid item md={12}>
                   <Autocomplete
+
                     disabled={props.disable == true}
                     value={selectedSubCategory3}
                     options={selectedSubCategory2?.subcategory3 ?? []}
@@ -1883,6 +1884,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     }}
                     renderInput={(params) => <TextField {...params} label="Sub Category 3" />}
                     fullWidth
+                    
                   />
                 </Grid>
                 <Grid item md={12}>
@@ -2047,6 +2049,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                     value={newParticular.narration}
                     multiline
                     maxRows={4}
+                    required
                     onChange={(e) =>
                       setNewParticular((particularDetails) => ({
                         ...particularDetails,
@@ -2054,6 +2057,7 @@ title={`Sanctioned amount should not be greater than ${totalRequestedAmount}`} f
                       }))
                     }
                     fullWidth
+                    
                   />
                 </Grid>
                 <Grid item md={12}>

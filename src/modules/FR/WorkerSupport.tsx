@@ -1179,7 +1179,7 @@ const WorkerSupportPage = () => {
 
   return (
     <CommonPageLayout title="Workers Support">
-      <Card sx={{ width: '40%', borderRadius: 3, marginTop: 2 }}>
+      <Card sx={{ width: '30%', borderRadius: 3, marginTop: 2 }}>
         <form onSubmit={(e) => {
           e.preventDefault();
           if (frAction=='add') {
@@ -1246,7 +1246,7 @@ const WorkerSupportPage = () => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={2}>
                     <Autocomplete
                       value={purpose ?? null}
                       options={purposes.filter((pur) => pur != 'Others') ?? []}
@@ -1281,7 +1281,7 @@ const WorkerSupportPage = () => {
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12} md={4} >
+                  <Grid item xs={12} md={2} >
                     <Autocomplete
                       // disabled={props.kind=='worker'}
                       options={divisions ?? []}
@@ -1333,7 +1333,7 @@ const WorkerSupportPage = () => {
                     />
                   </Grid>
                   {requisition.purpose === 'Subdivision' &&
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={2}>
                       <Autocomplete
                         options={subDivisions ?? []}
                         value={subDivision ?? null}
@@ -1361,7 +1361,7 @@ const WorkerSupportPage = () => {
                     </Grid>
                   }
                   {requisition.purpose === 'Worker' &&
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={2}>
                       <Autocomplete<IWorker>
                         value={selectedWorker ?? null}
                         options={(workers ?? [])}
@@ -1387,7 +1387,7 @@ const WorkerSupportPage = () => {
                         fullWidth
                       />
                     </Grid>}
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={2}>
                     <Autocomplete
                       value={designationParticular ?? null}
                       options={designationParticulars ?? []}
@@ -1441,7 +1441,7 @@ const WorkerSupportPage = () => {
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={2} lg={2}>
                 <TextField
                   label="Total Amount"
                   value={total.total}
@@ -1452,7 +1452,7 @@ const WorkerSupportPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={2}>
                 <TextField
                   label="Total Deduction"
                   value={total.deduction}
@@ -1462,7 +1462,7 @@ const WorkerSupportPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={2}>
                 <TextField
                   label="Net Amount"
                   value={total.net}

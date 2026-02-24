@@ -55,10 +55,20 @@ body {
   align-items: center;
   justify-content: center;
 }
+.status-cell1 {
+  background-color: #269811; /* light blue */
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* STATUS COLORS */
 .red-light {
-  background-color: #FFB74D;
+  background-color: #FCA017;
 }
 .Appr {
   background-color: #0b57d0;

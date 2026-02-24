@@ -107,7 +107,7 @@ const frDashboard = () => {
               <Grid item xs={12} sm={6} md={3} xl={2}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                   count={waitingForPresidentFrCount?.toString()}
-                  secondaryText={'Waiting for PR '}
+                  secondaryText={'Awaiting Aprov.'}
                   onClick={()=>{
                     if (isCoordinator) {
                       navigate(`/fr/manageForDivision/?id=${2}`); // Pass numbers as query string
@@ -250,7 +250,7 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={['MANAGE_FR']}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Manage FR" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manage" />
                       </Grid>
@@ -258,7 +258,7 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={['WRITE_FR']}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Manage FR- Division" secondaryText="Finance Request" color="#fff" targetRoute="/fr/manageForDivision" />
                       </Grid>
@@ -266,7 +266,7 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={['PRESIDENT_ACCESS']}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Awaiting for President Approval"
                           secondaryText="Approval" color="#fff" targetRoute="/fr/Approve" />
@@ -276,10 +276,10 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={['HR_DPARTMENT_ACCESS']}
                     granted={(
-                      <><Grid item xs={6} md={4} xl={3}>
+                      <><Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Support FR" secondaryText="FR" color="#fff" targetRoute="/fr/support" />
-                      </Grid><Grid item xs={6} md={4} xl={3}>
+                      </Grid><Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Expense FR" secondaryText="FR" color="#fff" targetRoute="/fr/Non-support" />
                       </Grid></>
@@ -288,7 +288,7 @@ const frDashboard = () => {
                   {/* <PermissionChecks
                 permissions={['WRITE_FR']}
                 granted={(
-                  <Grid item xs={6} md={4} xl={2}>
+                  <Grid item xs={12} md={4} xl={2}>
                     <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                       primaryText="New FR" secondaryText="Finance Request" color="#fff" targetRoute="/fr/apply" />
                   </Grid>
@@ -297,22 +297,22 @@ const frDashboard = () => {
 
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
-                granted={(<Grid item xs={6} md={4} xl={2}>
+                granted={(<Grid item xs={12} md={4} xl={2}>
                   <DashboardCardButton primaryText="New Workers Support" secondaryText="Workers Support" color="#fff" targetRoute="/fr/worker_support" />
                 </Grid>)} /> */}
                   {/* <PermissionChecks
                 permissions={['RAISE_WORKERS_FR']}
-                granted={(<Grid item xs={6} md={4} xl={2}>
+                granted={(<Grid item xs={12} md={4} xl={2}>
                   <DashboardCardButton primaryText="New Child Support" secondaryText="Child Support" color="#fff" targetRoute="/fr/child_support" />
                 </Grid>)} /> */}
-                  <Grid item xs={6} md={4} xl={3}>
+                  <Grid item xs={12} md={4} xl={3}>
                     <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Reverted FR"
                       secondaryText="FR" color="#fff" targetRoute="/fr/sentBack" />
                   </Grid>
                   <PermissionChecks
                     permissions={['MANAGE_FR']}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Resubmitted FR" secondaryText="FR" color="#fff" targetRoute="/fr/resubmitted" />
                       </Grid>
@@ -320,17 +320,17 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={[]}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Re Opened FR" secondaryText="FRs" color="#fff" targetRoute="/fr/reopened" />
                       </Grid>
                     )} />
-                  <Grid item xs={6} md={4} xl={3}>
+                  <Grid item xs={12} md={4} xl={3}>
                     <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />} primaryText="Disapproved FR"
                       secondaryText="FR" color="#fff" targetRoute="/fr/rejected" />
                   </Grid>
 
-                  <Grid item xs={6} md={4} xl={3}>
+                  <Grid item xs={12} md={4} xl={3}>
                     <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                       primaryText="Closed FR" secondaryText="Finance Request" color="#fff" targetRoute="/fr/closed" />
                   </Grid>
@@ -339,7 +339,7 @@ const frDashboard = () => {
                   <PermissionChecks
                     permissions={['CUSTOM_FR_IRO']}
                     granted={(
-                      <Grid item xs={6} md={4} xl={3}>
+                      <Grid item xs={12} md={4} xl={3}>
                         <DashboardCardButton icon={<img src="/mod_icons/Waiting for Verification.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                           primaryText="Custom FR" secondaryText="FRs" color="#fff" targetRoute="/fr/CustomFR" />
                       </Grid>

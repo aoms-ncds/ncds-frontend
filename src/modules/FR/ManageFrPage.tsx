@@ -193,16 +193,25 @@ const ManageFrPage = () => {
       });
   }, []);
   useEffect(() => {
-    FRServices.getAllOptimized({ dateRange: dateRange, status: statusFilter })
-      .then((res) => {
-        if (res.data) {
-          setFRRequests(res.data?.map((fr, index) => ({ ...fr, serialNumber: index + 1 })));
-        }
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }, [dateRange, statusFilter, statusFilter]);
+    Promise.all([
+      FRServices.getAllOptimized({ dateRange, status: statusFilter }),
+      FRServices.getAllCustom({ dateRange, status: statusFilter }),
+    ])
+    .then(([optimizedRes, customRes]) => {
+      const optimizedData = optimizedRes.data ?? [];
+      const customData = customRes.data ?? [];
+
+      const combinedData = [...optimizedData, ...customData].map(
+        (fr, index) => ({
+          ...fr,
+          serialNumber: index + 1,
+        }),
+      );
+
+      setFRRequests(combinedData);
+    })
+    .catch((err) => console.log(err));
+  }, [dateRange, statusFilter]);
   useEffect(() => {
     FRServices.getAllOptimizedExSupprt({ dateRange: dateRange, support: statusFilter1, status: statusFilter })
       .then((res) => {
@@ -616,7 +625,7 @@ const ManageFrPage = () => {
         case 'IRO CLOSED':
         case 'FR VERIFIED':
         case 'FR CLOSED':
-          return clsx('status-cell', 'green');
+          return clsx('status-cell1');
         case ' FR_REJECTED':
           return clsx('status-cell', 'red');
         case 'PENDING APPR.':

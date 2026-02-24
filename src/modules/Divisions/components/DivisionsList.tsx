@@ -218,8 +218,8 @@ const DivisionsList = (arg: any) => {
       headerClassName: 'super-app-theme--cell',
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Name</b>),
-      valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.firstName ?? '',
-      width: 150,
+      valueGetter: (props) => ((props.row.details.coordinator?.name?.basicDetails?.firstName ?? '') + ' ' + (props.row.details.coordinator?.name?.basicDetails?.lastName ?? '')).trim(),
+      width: 200,
 
 
     },
@@ -230,7 +230,7 @@ const DivisionsList = (arg: any) => {
       headerAlign: 'center',
       renderHeader: () => (<b>Coordinator Email</b>),
       valueGetter: (props) => props.row.details.coordinator?.name?.basicDetails?.email,
-      width: 150,
+      width: 250,
     },
     {
       field: 'coordinatorPhone',
