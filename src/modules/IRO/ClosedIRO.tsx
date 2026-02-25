@@ -338,43 +338,43 @@ const ClosedIRO = () => {
                   id: 'print',
                   text: 'Print FR HQ DELHI',
                   icon: PrintIcon,
-                 onClick: async () => {
-  try {
-    const [rowRes, delhiRes] = await Promise.all([
-      IROServices.getByIdOptimized(props.row._id),
-      DivisionsServices.getDivisionById('658270549efadc163550a28c'),
-    ]);
+                  onClick: async () => {
+                    try {
+                      const [rowRes, delhiRes] = await Promise.all([
+                        IROServices.getByIdOptimized(props.row._id),
+                        DivisionsServices.getDivisionById('658270549efadc163550a28c'),
+                      ]);
 
-    const rowData = rowRes.data?.[0];
-    const delhiHQ = delhiRes.data;
+                      const rowData = rowRes.data?.[0];
+                      const delhiHQ = delhiRes.data;
 
-    if (rowData?.division?.details as any) {
-      setData({
-        ...props.row,
-        division: {
-          ...rowData.division as any,
-          details: {
-            ...rowData?.division?.details,
-            seniorLeader: delhiHQ?.details?.seniorLeader,
-            juniorLeader: delhiHQ?.details?.juniorLeader,
-          },
-        },
-      });
-    }
+                      if (rowData?.division?.details as any) {
+                        setData({
+                          ...props.row,
+                          division: {
+                            ...rowData.division as any,
+                            details: {
+                              ...rowData?.division?.details,
+                              seniorLeader: delhiHQ?.details?.seniorLeader,
+                              juniorLeader: delhiHQ?.details?.juniorLeader,
+                            },
+                          },
+                        });
+                      }
 
-    setOpenPrintFr(true);
+                      setOpenPrintFr(true);
 
-    const timer = setTimeout(() => {
-      setOpenPrintFr(false);
-    }, 2000);
+                      const timer = setTimeout(() => {
+                        setOpenPrintFr(false);
+                      }, 2000);
 
-    // optional cleanup safety
-    return undefined;
-  } catch (error) {
-    console.error('Failed to load IRO / Division data', error);
-    return undefined;
-  }
-}
+                      // optional cleanup safety
+                      return undefined;
+                    } catch (error) {
+                      console.error('Failed to load IRO / Division data', error);
+                      return undefined;
+                    }
+                  },
 
                 },
               ] :
@@ -532,7 +532,7 @@ const ClosedIRO = () => {
       headerName: 'IRO Date',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -621,7 +621,7 @@ const ClosedIRO = () => {
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -644,7 +644,7 @@ const ClosedIRO = () => {
       headerName: 'Amount Release Date',
       width: 200,
       valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -653,7 +653,7 @@ const ClosedIRO = () => {
       headerName: 'IRO Closed Date',
       width: 200,
       valueGetter: (params) => params.row.iroClosedOn?.format('DD/MM/YYYY') ?? 'N/A',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -964,35 +964,35 @@ const ClosedIRO = () => {
       <Dialog open={Boolean(data2)} onClose={() => setData2(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-         <Container>
+          <Container>
   Downloading the FRReceipt for {data2?.FRno}
-  <br />
+            <br />
 
-  {data2 && (
-    <BlobProvider
-      document={
-        <FRReceiptTemplate
-          rowData={data2 as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceipt.pdf"
-            style={{ color: 'blue' }}
-          >
+            {data2 && (
+              <BlobProvider
+                document={
+                  <FRReceiptTemplate
+                    rowData={data2 as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceipt.pdf"
+                      style={{ color: 'blue' }}
+                    >
             FRReceipt.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1008,36 +1008,36 @@ const ClosedIRO = () => {
       <Dialog open={Boolean(data)} onClose={() => setData(null)} maxWidth="xs" fullWidth>
         <DialogTitle> Print Fr</DialogTitle>
         <DialogContent>
-         <Container>
+          <Container>
   Download the FR Receipt, Delhi for {data?.FRno}
-  <br />
+            <br />
 
-  {data && (
-    <BlobProvider
-      document={
-        <FRReceiptTempForDelhiDivision
-          label={Label}
-          president={signaturePresident}
-          rowData={data as FR}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || openPrintFr ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="FRReceiptDelhi.pdf"
-            style={{ color: 'blue' }}
-          >
+            {data && (
+              <BlobProvider
+                document={
+                  <FRReceiptTempForDelhiDivision
+                    label={Label}
+                    president={signaturePresident}
+                    rowData={data as FR}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || openPrintFr ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="FRReceiptDelhi.pdf"
+                      style={{ color: 'blue' }}
+                    >
             FRReceiptDelhi.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1078,38 +1078,38 @@ const ClosedIRO = () => {
       <Dialog open={ openAttachReceipt } onClose={() => setOpenAttachReceipt(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Are you sure</DialogTitle>
         <DialogContent>
-        <Container>
+          <Container>
   Do you want to attach receipt for {iroData?.IROno}?
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1124,33 +1124,33 @@ const ClosedIRO = () => {
           <>
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
-              <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
               </>
             )}
@@ -1162,37 +1162,37 @@ const ClosedIRO = () => {
         <DialogContent>
           <Container>
   Do you want to attach receipt for {iroData?.IROno}?
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          prev={true}
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    prev={true}
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1207,34 +1207,34 @@ const ClosedIRO = () => {
           <>
             {iroData && mngrName&&selectedSignature&&FrData&& (
               <>
-               <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      prev={true}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      prev={true}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Attach'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
 
               </>

@@ -728,7 +728,7 @@ const ReopenedIRO = () => {
       headerName: 'IRODate',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1027,40 +1027,40 @@ const ReopenedIRO = () => {
       <Dialog open={Boolean(conform1)} onClose={() => setConform1(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
-         <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno}
+          <Container>
+            {`Are you sure you want to close this IRO No ${iroData?.IROno}
     from ${iroData?.division?.details.name}
     related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1075,33 +1075,33 @@ const ReopenedIRO = () => {
             {iroData && mngrName&&selectedSignature&& (
 
               <>
-               <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
               </>
             )}

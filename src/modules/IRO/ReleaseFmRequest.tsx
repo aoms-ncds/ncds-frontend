@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -377,6 +377,18 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedIros, setSelectedIros] = useState<string[]>([]);
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>, iros: string[]) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedIros(iros);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedIros([]);
+  };
   console.log(releaseAmountIROs, '#ODD');
   console.log(newTest, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
@@ -653,7 +665,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--cell',
       headerName: '',
       renderHeader: () => <b>Action</b>,
       width: 80,
@@ -926,27 +937,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       ),
     },
     {
-      field: 'IROno',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO No',
-      width: 130,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'IRODate',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO Date',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
       field: 'status',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Status</b>,
       width: 300,
       align: 'center',
@@ -1008,8 +999,25 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
       },
     },
     {
+      field: 'IROno',
+      headerName: 'IRO No',
+      width: 130,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'IRODate',
+      headerName: 'IRO Date',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
+    {
       field: 'iroGroup',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'IroGroup',
       width: 350,
       renderHeader: () => <b>Groups IROs</b>,
@@ -1022,26 +1030,31 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
         // Apply color based on the parent group index
         if (parentGroupIndex % 3 === 0) {
-          backgroundColor = '#D63AE8'; // Light red
+          backgroundColor = '#ffe39a'; // Light red
         } else if (parentGroupIndex % 3 === 1) {
-          backgroundColor = '#9D3AE8'; // Light green
+          backgroundColor = '#f3c6c1'; // Light green
         } else {
-          backgroundColor = '#E83AA2'; // Light blue
+          backgroundColor = '#E1F5FE '; // Light blue
         }
 
         return (
-          <div style={{
-            backgroundColor,
-            padding: '10px',
-            borderRadius: '4px',
-            maxHeight: '60px', // Fixed height for the scrollable container
-            overflowY: 'auto', // Enables vertical scrolling
-            whiteSpace: 'pre-wrap', // Allows line breaks within the container
-            wordBreak: 'break-word', // Breaks long words if needed
-            maxWidth: '40ch', // Limits the width to approx. 30 characters
-          }}>
+          <Box
+            onClick={(e) => handleOpen(e, params.row?.groupIros || [])}
+            sx={{
+              backgroundColor: backgroundColor,
+              px: 1.5,
+              py: 1,
+              borderRadius: 1,
+              cursor: 'pointer',
+              width: '100%',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              fontSize: 13,
+            }}
+          >
             {params.row?.groupIros?.join(', ')}
-          </div>
+          </Box>
         );
       },
     },
@@ -1050,7 +1063,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      headerClassName: 'super-app-theme--cell',
       valueGetter: (params) => params.row.division?.details?.name,
       width: 130,
       align: 'center',
@@ -1058,7 +1070,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'subDivisionName',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Division Name</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
       width: 160,
@@ -1067,7 +1078,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
@@ -1088,7 +1098,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
@@ -1123,12 +1132,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -1138,7 +1146,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     // {
     //   field: 'updatedAt',
     //   headerName: 'Last Updated',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   width: 130,
     //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
     //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -1148,14 +1156,13 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
-      headerClassName: 'super-app-theme--cell',
       width: 200,
       valueGetter: (params) =>
         params.row.releaseAmount?.transferredDate ?
           moment(params.row.releaseAmount.transferredDate).format('DD/MM/YYYY') :
           'N/A',
 
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
 
       align: 'center',
       headerAlign: 'center',
@@ -1163,7 +1170,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   headerName: 'Sanctioned Amount',
     //   width: 150,
     //   renderHeader: () => <b>Sanctioned Amount</b>,
@@ -1172,7 +1179,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     // },
     {
       field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Amount',
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
@@ -1190,7 +1196,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
     // {
     //   field: 'sanctionedAsPer',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Sanction As Per</b>,
     //   renderCell: (props) => (
     //     <p
@@ -1213,7 +1219,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
     {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
@@ -1235,7 +1240,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'sanctionedBank',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
@@ -1258,7 +1262,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'beneficiary',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Beneficiary Name',
       width: 200,
       renderHeader: () => <b>Beneficiary Name</b>,
@@ -1281,7 +1284,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     },
     // {
     //   field: 'status',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Status</b>,
     //   width: 300,
     //   align: 'center',
@@ -1342,7 +1345,6 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
       width: 130,
       renderCell: (props) => (
         <p
@@ -1358,7 +1360,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           {moment(props.row.updatedAt).format('DD/MM/YYYY')}
         </p>
       ),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -2113,7 +2115,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
@@ -2155,21 +2157,21 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
             }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
             <>
               <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+                {({ loading, url }) =>
+                  loading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="WorkersSignatureSheet.pdf"
+                      style={{ color: 'blue' }}
+                    >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                    </a>
+                  )
+                }
+              </BlobProvider>
+              <br />
             </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
@@ -2208,43 +2210,65 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+      >
+        <Box sx={{ p: 2, maxWidth: 400, maxHeight: 300, overflowY: 'auto' }}>
+          <Typography fontWeight={600} mb={1}>
+      Group IROs
+          </Typography>
+
+          {selectedIros.map((iro, index) => (
+            <Chip
+              key={index}
+              label={iro}
+              sx={{ mr: 1, mb: 1 }}
+              size="small"
+            />
+          ))}
+        </Box>
+      </Popover>
       <Dialog open={Boolean(iroData)} onClose={() => setIroData(null)} maxWidth="xs" fullWidth>
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
-         <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno}
+          <Container>
+            {`Are you sure you want to close this IRO No ${iroData?.IROno}
     from ${iroData?.division?.details.name}
     related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
+            <br />
 
-  {iroData && mngrName && selectedSignature && FrData && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && FrData && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -2260,32 +2284,32 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
 
               <>
                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
               </>
             )}
           </>

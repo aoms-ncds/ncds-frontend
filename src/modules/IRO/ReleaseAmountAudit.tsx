@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -375,6 +375,19 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
       total += particular?.sanctionedAmount;
     }
   });
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedIros, setSelectedIros] = useState<string[]>([]);
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>, iros: string[]) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedIros(iros);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedIros([]);
+  };
   console.log(releaseAmountIROs, '#ODD');
   console.log(selectedIROId, '#NEW');
   const [pdfProps, setPdfProps] = useState<{
@@ -445,7 +458,7 @@ const ReleaseAmountAudit = (props: { action: 'manage' | 'release' }) => {
   };
   // useEffect(()=>{
   // }, [releaseAmountIROs]);
-console.log(selectedIROId, 'selectedIROId');
+  console.log(selectedIROId, 'selectedIROId');
 
   const userPermissions = (user.user as User)?.permissions;
 
@@ -558,7 +571,6 @@ console.log(selectedIROId, 'selectedIROId');
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--cell',
       headerName: '',
       renderHeader: () => <b>Action</b>,
       width: 80,
@@ -676,27 +688,7 @@ console.log(selectedIROId, 'selectedIROId');
       ),
     },
     {
-      field: 'IROno',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO No',
-      width: 130,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'IRODate',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO Date',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
       field: 'status',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Status</b>,
       width: 300,
       align: 'center',
@@ -758,8 +750,25 @@ console.log(selectedIROId, 'selectedIROId');
       },
     },
     {
+      field: 'IROno',
+      headerName: 'IRO No',
+      width: 130,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'IRODate',
+      headerName: 'IRO Date',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
+    {
       field: 'iroGroup',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'IroGroup',
       width: 350,
       renderHeader: () => <b>Groups IROs</b>,
@@ -770,28 +779,28 @@ console.log(selectedIROId, 'selectedIROId');
         const parentGroupIndex = (params.row as any).parentGroupIndex;
         let backgroundColor;
 
-        // Apply color based on the parent group index
-        if (parentGroupIndex % 3 === 0) {
-          backgroundColor = '#D63AE8'; // Light red
-        } else if (parentGroupIndex % 3 === 1) {
-          backgroundColor = '#9D3AE8'; // Light green
-        } else {
-          backgroundColor = '#E83AA2'; // Light blue
-        }
+        if (parentGroupIndex % 3 === 0) backgroundColor = '#ffe39a';
+        else if (parentGroupIndex % 3 === 1) backgroundColor = '#f3c6c1';
+        else backgroundColor = '#E1F5FE';
 
         return (
-          <div style={{
-            backgroundColor,
-            padding: '10px',
-            borderRadius: '4px',
-            maxHeight: '60px', // Fixed height for the scrollable container
-            overflowY: 'auto', // Enables vertical scrolling
-            whiteSpace: 'pre-wrap', // Allows line breaks within the container
-            wordBreak: 'break-word', // Breaks long words if needed
-            maxWidth: '40ch', // Limits the width to approx. 30 characters
-          }}>
+          <Box
+            onClick={(e) => handleOpen(e, params.row?.groupIros || [])}
+            sx={{
+              backgroundColor: backgroundColor,
+              px: 1.5,
+              py: 1,
+              borderRadius: 1,
+              cursor: 'pointer',
+              width: '100%',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              fontSize: 13,
+            }}
+          >
             {params.row?.groupIros?.join(', ')}
-          </div>
+          </Box>
         );
       },
     },
@@ -800,7 +809,6 @@ console.log(selectedIROId, 'selectedIROId');
     {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      headerClassName: 'super-app-theme--cell',
       valueGetter: (params) => params.row.division?.details?.name,
       width: 130,
       align: 'center',
@@ -808,7 +816,6 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'subDivisionName',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Division Name</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
       width: 160,
@@ -817,7 +824,6 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
@@ -838,7 +844,6 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
@@ -873,12 +878,11 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -888,7 +892,7 @@ console.log(selectedIROId, 'selectedIROId');
     // {
     //   field: 'updatedAt',
     //   headerName: 'Last Updated',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   width: 130,
     //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
     //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -898,14 +902,13 @@ console.log(selectedIROId, 'selectedIROId');
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
-      headerClassName: 'super-app-theme--cell',
       width: 200,
       valueGetter: (params) =>
         params.row.releaseAmount?.transferredDate ?
           moment(params.row.releaseAmount.transferredDate).format('DD/MM/YYYY') :
           'N/A',
 
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
 
       align: 'center',
       headerAlign: 'center',
@@ -913,7 +916,7 @@ console.log(selectedIROId, 'selectedIROId');
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   headerName: 'Sanctioned Amount',
     //   width: 150,
     //   renderHeader: () => <b>Sanctioned Amount</b>,
@@ -922,10 +925,25 @@ console.log(selectedIROId, 'selectedIROId');
     // },
     {
       field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Amount',
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
+      valueGetter: (params) => {
+        if (params.row.sanctionedAmount !== undefined) {
+          return params.row.sanctionedAmount;
+        }
+        if (Array.isArray(params.row.particulars)) {
+          return params.row.particulars.reduce((sum, item) => sum + (item.sanctionedAmount || 0), 0).toFixed(2);
+        }
+        return 0; // or return a suitable default value
+      }, align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'amountTransfered',
+      headerName: 'Amount Transferred',
+      width: 180,
+      renderHeader: () => <b>Amount Transferred</b>,
       valueGetter: (params) => {
         if (params.row.releaseAmount?.transferredAmount !== undefined) {
           return params.row.releaseAmount?.transferredAmount;
@@ -940,7 +958,7 @@ console.log(selectedIROId, 'selectedIROId');
 
     // {
     //   field: 'sanctionedAsPer',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Sanction As Per</b>,
     //   renderCell: (props) => (
     //     <p
@@ -963,7 +981,6 @@ console.log(selectedIROId, 'selectedIROId');
 
     {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
@@ -985,7 +1002,6 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'sanctionedBank',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
@@ -1008,7 +1024,6 @@ console.log(selectedIROId, 'selectedIROId');
     },
     {
       field: 'beneficiary',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Beneficiary Name',
       width: 200,
       renderHeader: () => <b>Beneficiary Name</b>,
@@ -1031,7 +1046,7 @@ console.log(selectedIROId, 'selectedIROId');
     },
     // {
     //   field: 'status',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Status</b>,
     //   width: 300,
     //   align: 'center',
@@ -1092,7 +1107,6 @@ console.log(selectedIROId, 'selectedIROId');
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
       width: 130,
       renderCell: (props) => (
         <p
@@ -1108,7 +1122,7 @@ console.log(selectedIROId, 'selectedIROId');
           {moment(props.row.updatedAt).format('DD/MM/YYYY')}
         </p>
       ),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1232,80 +1246,6 @@ console.log(selectedIROId, 'selectedIROId');
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <PermissionChecks
-                    permissions={['MANAGE_IRO']}
-                    granted={
-                      <Button
-                        onClick={async () => {
-                          const sheet = IROrder ?
-                            IROrder.map((iro: IROrder) => [
-                              iro.IROno,
-                              iro.IRODate.format('DD/MM/YYYY'),
-                              iro.division?.details.name,
-                              iro.purposeSubdivision?.name,
-                              iro.mainCategory,
-                              iro.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0),
-                              iro.sanctionedAmount?? iro.particulars?.reduce((total, particular) => Number(particular.sanctionedAmount), 0),
-                              iro.sanctionedBank,
-                              iro.sanctionedAsPer,
-                              iro.releaseAmount?.releaseAmount,
-                              iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                              IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                            ]) :
-                            [];
-                          const headers = [
-                            'IRO No',
-                            'Date',
-                            'Division',
-                            'Sub Division',
-                            'Main Category',
-                            'Requested Amt',
-                            'Sanctioned Amt',
-                            'Sanctioned Bank',
-                            'Sanctioned As per',
-                            'Released Amt',
-                            'Released Date',
-                            'Status',
-                          ];
-                          const worksheet = XLSX.utils.json_to_sheet(sheet);
-                          const workbook = XLSX.utils.book_new();
-                          XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
-                          XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                          XLSX.writeFile(workbook, props.action == 'manage' ? 'IRO_Report.xlsx' : 'Release_Amt_IRO_Report.xlsx', { compression: true });
-                        }}
-                        startIcon={<DownloadIcon />}
-                        color="primary"
-                        sx={{ float: 'right', mr: 2, mt: 2 }}
-                        variant="contained"
-                      >
-                        Export
-                      </Button>
-                    }
-                  />
-                  {/* {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                    <Button
-                      variant="contained"
-                      sx={{ float: 'right', mt: 2, mr: 2 }}
-                      startIcon={<AttachMoneyIcon />}
-                      disabled={releaseAmountIROs.length == 0}
-                      onClick={() => {
-                        if (releaseAmountIROs.every((iro) => iro.sanctionedBank== releaseAmountIROs[0].sanctionedBank)) {
-                          // setOpenRelease(true);
-                          IROServices.getReleaseAmountById(releaseAmountIROs[0]?.releaseAmount?._id?? '').then((res) => {
-                            setReleaseAmount(res.data);
-                          });
-                          setOpenReleaseConform(true);
-                          setNewTest(releaseAmountIROs);
-                        } else {
-                          enqueueSnackbar({ message: 'IRO of Different Sanctioned Bank selected', variant: 'error' });
-                        }
-                      }}
-                    >
-                      Bulk Release
-                    </Button>
-                  ) : null} */}
-                </Grid>
-                <Grid item xs={12}>
                   <Card
                     sx={{
                       'height': '66vh',
@@ -1357,6 +1297,7 @@ console.log(selectedIROId, 'selectedIROId');
                         <DataGrid
                           rows={filteredRows}
                           columns={columns}
+                          // rowHeight={100}
                           getRowId={(row) => row._id}
                           checkboxSelection={props.action === 'release'}
                           disableRowSelectionOnClick={props.action === 'release'}
@@ -1852,7 +1793,7 @@ console.log(selectedIROId, 'selectedIROId');
                 return FileUploaderServices.deleteFile(fileId);
               }}
             />
-            <ReleaseAmount action={'manage'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
+            <ReleaseAmount action={'view'} onClose={() => setOpenRelease(false)} open={openRelease} data={ releaseAmountIROs?.length === 0 ? newTest : releaseAmountIROs} />
           </>
         }
         denied={(missingPermissions) => (
@@ -1893,22 +1834,22 @@ console.log(selectedIROId, 'selectedIROId');
               }
             }}>WorkersSignatureSheet.pdf</a>:(pdfProps&&
             <>
-             <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
-  {({ loading, url }) =>
-    loading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
+              <BlobProvider document={<IROReconciliationPdf data={pdfProps} />}>
+                {({ loading, url }) =>
+                  loading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="WorkersSignatureSheet.pdf"
+                      style={{ color: 'blue' }}
+                    >
         WorkersSignatureSheet.pdf
-      </a>
-    )
-  }
-</BlobProvider>
-<br />
+                    </a>
+                  )
+                }
+              </BlobProvider>
+              <br />
             </>)}NB: Ignore if already attached </Container>
         </DialogContent>
         <DialogActions>
@@ -1922,6 +1863,28 @@ console.log(selectedIROId, 'selectedIROId');
           </Button>
         </DialogActions>
       </Dialog>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+      >
+        <Box sx={{ p: 2, maxWidth: 400, maxHeight: 300, overflowY: 'auto' }}>
+          <Typography fontWeight={600} mb={1}>
+      Group IROs - {selectedIros[0]}
+          </Typography>
+
+          {selectedIros.map((iro, index) => (
+            <Chip
+              key={index}
+              label={iro}
+              sx={{ mr: 1, mb: 1 }}
+              size="small"
+            />
+          ))}
+        </Box>
+      </Popover>
       <Dialog open={openPrintIro} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO Receipt </DialogTitle>
         <DialogContent>
@@ -1955,31 +1918,31 @@ console.log(selectedIROId, 'selectedIROId');
             <br />
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
-            <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ loading, url }) =>
-    loading || printIroLoading ? (
-      <span style={{ color: 'blue' }}>....</span>
-    ) : (
-      <a
-        href={url ?? ''}
-        download={`${iroData?.IROno}_Receipt.pdf`}
-        style={{ color: 'blue' }}
-      >
-        {`${iroData?.IROno}_Receipt.pdf`}
-      </a>
-    )
-  }
-</BlobProvider>
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
             )}{' '}
           </Container>
         </DialogContent>
@@ -1997,32 +1960,32 @@ console.log(selectedIROId, 'selectedIROId');
 
               <>
                 <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
               </>
             )}
           </>

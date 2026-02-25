@@ -436,8 +436,10 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
     {
       field: '_manage',
       headerName: '',
-      width: 50,
+      width: 70,
       align: 'center',
+      renderHeader: () => <b>Action</b>,
+
       headerAlign: 'center',
       type: 'string',
       renderCell: (params) => (
@@ -449,13 +451,24 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           items={[
             {
               id: 'View',
-              text: 'View Details ',
+              text: 'View & Manage',
               // component: Link,
               // to: `/iro/${params.row._id}`,
               onClick: () => {
                 window.open( `/iro/${params.row._id}`, '_blank');
               },
               icon: PreviewIcon,
+            },
+            {
+              id: 'View',
+              text: 'View Fr ',
+              icon: PreviewIcon,
+              // component: Link,
+              // to: `/fr/${(params.row as any).FR}/view`,
+              onClick: () => {
+                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
+              },
+
             },
             ...(hasPermissions(['OFFICE_MNGR_ACCESS']) ?
               [
@@ -641,25 +654,6 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
-    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
-    {
-      field: 'IRODate',
-      headerName: 'IRO Date',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'divisionName',
-      renderHeader: () => <b>Division Name</b>,
-      // renderCell: (props) => <p> {props.row.division?.details.name}</p>,
-      valueGetter: (params) => params.row.division?.details.name,
-      width: 130,
-      align: 'center',
-      headerAlign: 'center',
-    },
     {
       field: 'status',
       renderHeader: () => <b>Status</b>,
@@ -733,6 +727,26 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
         return statusName;
       },
     },
+    { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>, align: 'center', headerAlign: 'center' },
+    {
+      field: 'IRODate',
+      headerName: 'IRO Date',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'divisionName',
+      renderHeader: () => <b>Division Name</b>,
+      // renderCell: (props) => <p> {props.row.division?.details.name}</p>,
+      valueGetter: (params) => params.row.division?.details.name,
+      width: 130,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
     {
       field: 'subDivisionName',
       renderHeader: () => <b>Sub Division Name</b>,
@@ -803,7 +817,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -858,7 +872,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
       headerName: 'Last Updated',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },

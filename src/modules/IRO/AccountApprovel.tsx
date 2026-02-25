@@ -605,6 +605,27 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
         />
       ),
     },
+    {
+      field: 'status',
+      renderHeader: () => <b>Status</b>,
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+      // renderCell: (props) => (
+      //   <p
+      //     style={{
+      //       maxWidth: 250,
+      //       whiteSpace: 'normal',
+      //       wordBreak: 'break-word',
+      //     }}
+      //   >
+      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
+      //   </p>
+      // ),
+      valueGetter: (params) => {
+        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
+      },
+    },
     { field: 'IROno', headerName: 'IRO No', width: 130, renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>, align: 'center', headerAlign: 'center' },
     {
       field: 'IRODate',
@@ -744,27 +765,7 @@ const AccountApprove = (props: { action: 'manage' | 'release' }) => {
       headerAlign: 'center',
     },
     { field: 'sanctionedBank', headerName: 'Sanctioned Bank', width: 150, renderHeader: () => <b>Sanctioned Bank</b>, align: 'center', headerAlign: 'center' },
-    {
-      field: 'status',
-      renderHeader: () => <b>Status</b>,
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-      // renderCell: (props) => (
-      //   <p
-      //     style={{
-      //       maxWidth: 250,
-      //       whiteSpace: 'normal',
-      //       wordBreak: 'break-word',
-      //     }}
-      //   >
-      //     {IROLifeCycleStates.getStatusNameByCodeTransaction(props.value).replaceAll('_', ' ')}
-      //   </p>
-      // ),
-      valueGetter: (params) => {
-        return IROLifeCycleStates.getStatusNameByCodeTransaction(params.value).replaceAll('_', ' ');
-      },
-    },
+
     {
       field: 'updatedAt',
       headerName: 'Last Updated',

@@ -1179,7 +1179,17 @@ const WorkerSupportPage = () => {
 
   return (
     <CommonPageLayout title="Workers Support">
-      <Card sx={{ width: '30%', borderRadius: 3, marginTop: 2 }}>
+      <Card
+        sx={{
+          width: {
+            xs: '8%', // mobile
+            sm: '10%', // tablet
+            md: '30%', // desktop
+          },
+          borderRadius: 3,
+          mt: 2,
+        }}
+      >
         <form onSubmit={(e) => {
           e.preventDefault();
           if (frAction=='add') {
@@ -1613,48 +1623,48 @@ const WorkerSupportPage = () => {
         }
       }} maxWidth="xs" fullWidth>
         <DialogTitle> Add attachment</DialogTitle>
-       <DialogContent>
-  <Container>
+        <DialogContent>
+          <Container>
     FR created. Do you want to add attachment&nbsp;
 
-    {pdfProps != null && (
-      <PDFDownloadLink
-        document={<PDFTemplate {...pdfProps} />}
-        fileName="WorkerSupport.pdf"
-      >
-        {(({
-          loading,
-        }: any) => (
-          <span>
-            {loading || disableAttach ? '....' : 'WorkerSupport.pdf'}
+            {pdfProps != null && (
+              <PDFDownloadLink
+                document={<PDFTemplate {...pdfProps} />}
+                fileName="WorkerSupport.pdf"
+              >
+                {(({
+                  loading,
+                }: any) => (
+                  <span>
+                    {loading || disableAttach ? '....' : 'WorkerSupport.pdf'}
             &nbsp;
-          </span>
-        )) as unknown as React.ReactNode}
-      </PDFDownloadLink>
-    )}
+                  </span>
+                )) as unknown as React.ReactNode}
+              </PDFDownloadLink>
+            )}
 
     and&nbsp;
 
-    {signPdfProps != null && (
-      <PDFDownloadLink
-        document={<IROReconciliationPdf data={signPdfProps} />}
-        fileName="WorkersSignatureSheet.pdf"
-        style={{ color: 'blue' }}
-      >
-        {(({
-          loading,
-        }: any) => (
-          <span>
-            {loading || disableAttach ? '....' : 'WorkersSignatureSheet.pdf'}
+            {signPdfProps != null && (
+              <PDFDownloadLink
+                document={<IROReconciliationPdf data={signPdfProps} />}
+                fileName="WorkersSignatureSheet.pdf"
+                style={{ color: 'blue' }}
+              >
+                {(({
+                  loading,
+                }: any) => (
+                  <span>
+                    {loading || disableAttach ? '....' : 'WorkersSignatureSheet.pdf'}
             &nbsp;
-          </span>
-        )) as unknown as React.ReactNode}
-      </PDFDownloadLink>
-    )}
+                  </span>
+                )) as unknown as React.ReactNode}
+              </PDFDownloadLink>
+            )}
 
     ?
-  </Container>
-</DialogContent>
+          </Container>
+        </DialogContent>
 
         <DialogActions>
           <Button

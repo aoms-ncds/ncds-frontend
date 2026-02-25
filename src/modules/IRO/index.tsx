@@ -169,7 +169,7 @@ const IRODashboard = () => {
             }
             count={iroDivCOunt?.toString()}
             onClick={() => navigate(`/iro/manage?id=${5}`)}
-            secondaryText="New Applied"
+            secondaryText="Pending Approval"
             color="#00ddff"
           />
         </Grid>

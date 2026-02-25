@@ -736,7 +736,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const columns: GridColDef<IROrder>[] = [
     {
       field: '_manage',
-      headerClassName: 'super-app-theme--cell',
+
       headerName: '',
       renderHeader: () => <b>Action</b>,
       width: 80,
@@ -803,7 +803,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
               []),
             {
               id: 'View',
-              text: 'View Details ',
+              text: 'View & Manage',
               // component: Link,
               // to: `/iro/${params.row._id}`,
               icon: PreviewIcon,
@@ -1068,27 +1068,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       ),
     },
     {
-      field: 'IROno',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO No',
-      width: 130,
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'IRODate',
-      headerClassName: 'super-app-theme--cell',
-      headerName: 'IRO Date',
-      width: 130,
-      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
       field: 'status',
-      headerClassName: 'super-app-theme--cell',
+
       renderHeader: () => <b>Status</b>,
       width: 250,
       align: 'center',
@@ -1161,9 +1142,26 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       },
     },
     {
+      field: 'IROno',
+      headerName: 'IRO No',
+      width: 130,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'IRODate',
+      headerName: 'IRO Date',
+      width: 130,
+      valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
+    {
       field: 'divisionName',
       renderHeader: () => <b>Division Name</b>,
-      headerClassName: 'super-app-theme--cell',
       valueGetter: (params) => params.row.division?.details.name,
       width: 130,
       align: 'center',
@@ -1171,7 +1169,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'subDivisionName',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Division Name</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
       width: 160,
@@ -1180,7 +1177,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'mainCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Main Category</b>,
       width: 240,
       align: 'center',
@@ -1201,7 +1197,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sub Category</b>,
       width: 240,
       align: 'center',
@@ -1236,12 +1231,11 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'requestAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Requested Amount',
       width: 150,
       align: 'center',
       headerAlign: 'center',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       valueGetter(params) {
         const IRORequest = params.row as IROrder;
         const particularAmount = IRORequest.particulars?.reduce((total, particular) => total + Number(particular.requestedAmount), 0);
@@ -1251,7 +1245,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // {
     //   field: 'updatedAt',
     //   headerName: 'Last Updated',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   width: 130,
     //   valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
     //   renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
@@ -1261,17 +1255,16 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'Amount Release Date',
       headerName: 'Amount Release Date',
-      headerClassName: 'super-app-theme--cell',
       width: 200,
       valueGetter: (params) => params.row.releaseAmount?.transferredDate?.format('DD/MM/YYYY') ?? 'N/A',
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
     // { field: 'sanction', headerName: 'Special Sanction', width: 150, renderHeader: () => <b>Special Sanction</b>, align: 'center', headerAlign: 'center' },
     // {
     //   field: 'sanctionedAmount',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   headerName: 'Sanctioned Amount',
     //   width: 150,
     //   renderHeader: () => <b>Sanctioned Amount</b>,
@@ -1280,7 +1273,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     // },
     {
       field: 'sanctionedAmount',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Amount',
       width: 180,
       renderHeader: () => <b>Sanctioned Amount</b>,
@@ -1301,7 +1293,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
     // {
     //   field: 'sanctionedAsPer',
-    //   headerClassName: 'super-app-theme--cell',
+
     //   renderHeader: () => <b>Sanction As Per</b>,
     //   renderCell: (props) => (
     //     <p
@@ -1324,7 +1316,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
 
     {
       field: 'specialsanction',
-      headerClassName: 'super-app-theme--cell',
       renderHeader: () => <b>Sanction as per</b>,
       renderCell: (props) => (
         <p
@@ -1346,7 +1337,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'sanctionedBank',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Sanctioned Bank',
       width: 150,
       renderHeader: () => <b>Sanctioned Bank</b>,
@@ -1369,7 +1359,6 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     },
     {
       field: 'beneficiary',
-      headerClassName: 'super-app-theme--cell',
       headerName: 'Beneficiary Name',
       width: 200,
       renderHeader: () => <b>Beneficiary Name</b>,
@@ -1394,7 +1383,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       [
         {
           field: 'reasonForRejectIRO',
-          headerClassName: 'super-app-theme--cell',
+
           headerName: 'Beneficiary Name',
           width: 200,
           renderHeader: () => <b>Reason For Reject</b>,
@@ -1420,7 +1409,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       [
         {
           field: 'reasonForRevertToDivision',
-          headerClassName: 'super-app-theme--cell',
+
           headerName: 'Beneficiary Name',
           width: 250,
           renderHeader: () => <b>Reason For Revert To Division</b>,
@@ -1446,10 +1435,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
     {
       field: 'updatedAt',
       headerName: 'Last Updated',
-      headerClassName: 'super-app-theme--cell',
       width: 130,
       valueGetter: (params) => params.value?.format('DD/MM/YYYY'),
-      renderHeader: (params) => <div style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</div>,
+      renderHeader: (params) => <b style={{ fontWeight: 'bold' }}>{params.colDef.headerName}</b>,
       align: 'center',
       headerAlign: 'center',
     },
@@ -1522,7 +1510,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                     label="Search"
                     variant="outlined"
                     value={searchText}
-                    placeholder='Enter IROno or IRODate or Division or SubCategory'
+                    placeholder='Enter IROno, IRODate, Division,Sub ,Division, Main & SubCategory, Sanctioned Bank, Beneficiary Name'
                     onChange={handleSearchChange}
                     fullWidth
                   />

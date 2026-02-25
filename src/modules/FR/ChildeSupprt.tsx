@@ -683,8 +683,17 @@ const ChildeSupportPage = () => {
   };
   return (
     <CommonPageLayout title="Child Support">
-      <Card sx={{ width: '50%', borderRadius: 3, marginTop: 2 }}>
-        <form onSubmit={(e) => {
+      <Card
+        sx={{
+          width: {
+            xs: '15%', // mobile
+            sm: '16%', // tablet
+            md: '40%', // desktop
+          },
+          borderRadius: 3,
+          mt: 2,
+        }}
+      >           <form onSubmit={(e) => {
           e.preventDefault();
           const tot = childList
           .filter((child) => child.supportEnabled) // Filter only enabled children

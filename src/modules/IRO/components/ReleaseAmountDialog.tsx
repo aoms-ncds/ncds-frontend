@@ -59,7 +59,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
     e.preventDefault();
     setOpen(true);
   };
-  console.log(props.data, 'props.data');
+  console.log(props.action, 'props.data');
   let saveReleaseAmount;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [showFileUploader, setShowFileUploader] = useState(false);
@@ -266,7 +266,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
           items={[
             {
               id: 'View',
-              text: 'View Details ',
+              text: 'View IRO ',
               // component: Link,
               // to: `/iro/${params.row._id}`,
               // icon: PreviewIcon,
@@ -276,7 +276,7 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
             },
             {
               id: 'View',
-              text: 'View Fr ',
+              text: 'View FR',
               // icon: PreviewIcon,
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,

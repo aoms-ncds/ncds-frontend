@@ -619,7 +619,7 @@ const ManageFrPage = () => {
 
         switch (statusName) {
         case 'REVERTED':
-          return clsx('status-cell', 'red-light');
+          return clsx('status-cell2');
         case 'PENDING VERIF.':
           return clsx('status-cell', 'VERIF');
         case 'IRO CLOSED':
