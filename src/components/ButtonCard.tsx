@@ -21,6 +21,11 @@ const ButtonCard = (props: {
   return (
 
     <Card
+      // onClick={props.onClick}
+      // {...(props.targetRoute && {
+      //   component: StyledLink,
+      //   to: props.targetRoute,
+      // })}
       sx={{
         // width: 340,
         borderRadius: 4,
@@ -54,7 +59,7 @@ const ButtonCard = (props: {
         }}
       >
         <Typography sx={{ fontWeight: 600, fontSize: '1.1rem' }}>
-      Total Applied
+          {props.secondaryText}
         </Typography>
 
         <Button
