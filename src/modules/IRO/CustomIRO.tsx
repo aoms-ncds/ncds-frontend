@@ -2,12 +2,12 @@ import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
 import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography } from '@mui/material';
 import { Send as SendIcon, Add as AddIcon,
-  Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
+  Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import DropdownButton from '../../components/DropDownButton';
 import IROServices from './extras/IROServices';
 import moment from 'moment';
-import { enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
 import MessageItem from '../../components/MessageItem';
@@ -24,7 +24,7 @@ import IROTemplate from './components/IROTemplate';
 import ESignatureService from '../Settings/extras/ESignatureService';
 import FRServices from '../FR/extras/FRServices';
 import ReleaseAmount from './components/ReleaseAmountDialog';
-import PermissionChecks from '../User/components/PermissionChecks';
+import PermissionChecks, { hasPermissions } from '../User/components/PermissionChecks';
 import { Link } from 'react-router-dom';
 import IROTemplateCustom from './components/IROTemplateCustom';
 import TransactionLogDialog from '../FR/components/TransactionLogDialog';
@@ -57,6 +57,8 @@ const CustomIRO = () => {
   const [printIroLoading, setPrintIroLoading] = useState(false);
   const [mngrName, setMngrName] = useState('');
   // const [openPrintIro, setOpenPrintIro] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
+
   const [FR, setFR] = useState<FR>();
   const [openPrintIro, setOpenPrintIro] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -180,6 +182,38 @@ const CustomIRO = () => {
       variant: 'warning',
     });
   }
+  const deleteFR = (id: string) => {
+    console.log(id, 'dsds');
+
+    const snackbarId = enqueueSnackbar({
+      message: 'Removing FR',
+      variant: 'info',
+    });
+    IROServices.deleteCustomIRO(id)
+        .then((res) => {
+          if (reconciliationIRO) {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            const fr = reconciliationIRO.filter((FRRequests) => {
+              return FRRequests._id !== id;
+            });
+            setReconcilationIRO(fr);
+            setDeleteModel(false);
+          }
+          // closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: res.message,
+            variant: 'success',
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          closeSnackbar(snackbarId);
+          enqueueSnackbar({
+            message: err.message,
+            variant: 'error',
+          });
+        });
+  };
   const [selectedIROId, setSelectedIROId] = useState<string | null>(null);
   const permissions = (user.user as User)?.permissions;
   useEffect(() => {
@@ -320,6 +354,25 @@ const CustomIRO = () => {
               },
               icon: EditIcon,
             },
+            ...(hasPermissions(['ADMIN_ACCESS']) ?
+              [
+                {
+                  id: 'delete',
+                  text: 'Delete',
+                  component: Link,
+                  icon: DeleteIcon,
+                  onClick: () => {
+                    console.log(props.row._id, '090909');
+                    setSelectedIRO(props.row._id);
+                    // IROServices.getById(props.row._id?? '').then((res) => {
+                    // });
+                    // deleteFR(props.row._id);
+                    setSelectedIROId(props.row._id);
+                    setDeleteModel(true);
+                  },
+                },
+              ] :
+              []),
             // ...(props.row.closedIroPdf ?
             // [
             {
@@ -923,37 +976,37 @@ const CustomIRO = () => {
         <DialogTitle>Warning</DialogTitle>
         <DialogContent>
           <Container>
-  {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
-  <br />
+            {`Are you sure you want to close this IRO No ${iroData?.IROno} from ${iroData?.division?.details.name} related to FR No ${FrData?.FRno ?? ''} ?`}
+            <br />
 
-  {iroData && mngrName && selectedSignature && FrData && (
-    <BlobProvider
-      document={
-        <IROTemplate
-          rowData={iroData}
-          mngrName={mngrName}
-          officeMngrSign={selectedSignature}
-          fr={FrData as FR}
-          president={signaturePresident}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || printIroLoading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download={`${iroData?.IROno}_Receipt.pdf`}
-            style={{ color: 'blue' }}
-          >
-            {`${iroData?.IROno}_Receipt.pdf`}
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+            {iroData && mngrName && selectedSignature && FrData && (
+              <BlobProvider
+                document={
+                  <IROTemplate
+                    rowData={iroData}
+                    mngrName={mngrName}
+                    officeMngrSign={selectedSignature}
+                    fr={FrData as FR}
+                    president={signaturePresident}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading || printIroLoading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download={`${iroData?.IROno}_Receipt.pdf`}
+                      style={{ color: 'blue' }}
+                    >
+                      {`${iroData?.IROno}_Receipt.pdf`}
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -968,38 +1021,58 @@ const CustomIRO = () => {
             {iroData && mngrName&&selectedSignature&&FrData&& (
 
               <>
-              <BlobProvider
-  document={
-    <IROTemplate
-      rowData={iroData}
-      mngrName={mngrName}
-      officeMngrSign={selectedSignature}
-      fr={FrData as FR}
-      president={signaturePresident}
-    />
-  }
->
-  {({ blob, loading }) => (
-    <Button
-      variant="contained"
-      color="info"
-      onClick={async () => {
-        if (blob) {
-          setLoading(true);
-          await attach(blob);
-        }
-      }}
-      disabled={loading || printIroLoading}
-    >
-      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
-    </Button>
-  )}
-</BlobProvider>
+                <BlobProvider
+                  document={
+                    <IROTemplate
+                      rowData={iroData}
+                      mngrName={mngrName}
+                      officeMngrSign={selectedSignature}
+                      fr={FrData as FR}
+                      president={signaturePresident}
+                    />
+                  }
+                >
+                  {({ blob, loading }) => (
+                    <Button
+                      variant="contained"
+                      color="info"
+                      onClick={async () => {
+                        if (blob) {
+                          setLoading(true);
+                          await attach(blob);
+                        }
+                      }}
+                      disabled={loading || printIroLoading}
+                    >
+                      {loading || printIroLoading ? 'Loading...' : 'Yes, Close'}
+                    </Button>
+                  )}
+                </BlobProvider>
 
               </>
             )}
           </>
         </DialogActions>
+      </Dialog>
+      <Dialog open={Boolean(deleteModel)} onClose={() => setDeleteModel(false)}>
+        <DialogContent>
+          <Typography sx={{ color: 'red' }}>{`Are you sure you want to delete this FR No ${FR?.FRno} from  ${FR?.division?.details.name} ?`}</Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={()=>setDeleteModel(false)}>Close</Button>
+          <Button
+            endIcon={<DeleteIcon />}
+            variant="contained"
+            color="info"
+            onClick={async () => {
+              deleteFR(selectedIRO ?? '');
+            } }
+          >
+                       Delete
+          </Button>
+        </DialogActions>
+
       </Dialog>
       {loading&&
       <Lottie
@@ -1044,36 +1117,36 @@ const CustomIRO = () => {
       <Dialog open={Boolean(openPrintIro)} onClose={() => setOpenPrintIro(false)} maxWidth="xs" fullWidth>
         <DialogTitle> Print IRO</DialogTitle>
         <DialogContent>
-         <Container>
+          <Container>
   Downloading the FRReceipt for {selectedIRO?.IROno}
-  <br />
+            <br />
 
-  {selectedIRO && (
-    <BlobProvider
-      document={
-        <IROTemplateCustom
-          rowData={selectedIRO as any}
-          officeMngrSign={selectedIRO.officeManagerSign as any}
-          officeMngrName={selectedIRO.officeManagerName as any}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="IRO.pdf"
-            style={{ color: 'blue' }}
-          >
+            {selectedIRO && (
+              <BlobProvider
+                document={
+                  <IROTemplateCustom
+                    rowData={selectedIRO as any}
+                    officeMngrSign={selectedIRO.officeManagerSign as any}
+                    officeMngrName={selectedIRO.officeManagerName as any}
+                  />
+                }
+              >
+                {({ loading, url }) =>
+                  loading ? (
+                    <span style={{ color: 'blue' }}>....</span>
+                  ) : (
+                    <a
+                      href={url ?? ''}
+                      download="IRO.pdf"
+                      style={{ color: 'blue' }}
+                    >
             IRO.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
-</Container>
+                    </a>
+                  )
+                }
+              </BlobProvider>
+            )}
+          </Container>
         </DialogContent>
         <DialogActions>
           <Button
@@ -1091,3 +1164,5 @@ const CustomIRO = () => {
 };
 
 export default CustomIRO;
+
+
