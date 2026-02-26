@@ -119,7 +119,7 @@ const ManageFrPage = () => {
   });
 
   const [statusFilter, setStatusFilter] = useState([FRLifeCycleStates.WAITING_FOR_ACCOUNTS]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'|null| 'All'>(null); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' | 'Expanse'| 'Resubmitted'| 'Custom'|null| 'All'>(null); // default WFA: Waiting for access or Reverted
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -303,7 +303,11 @@ const ManageFrPage = () => {
               component: Link,
               // to: `/fr/${props.row._id}/view`,
               onClick: () => {
-                window.open(`/fr/${props.row._id}/view`, '_blank');
+                if ((props.row as any).isCustom) {
+                  window.open(`/fr/${props.row._id}/viewCustom`, '_blank');
+                } else {
+                  window.open(`/fr/${props.row._id}/view`, '_blank');
+                }
               },
               icon: PreviewIcon,
 
@@ -632,6 +636,8 @@ const ManageFrPage = () => {
           return clsx('status-cell', 'Appr');
         case 'RE-SUBMITTED':
           return clsx('status-cell', 're-sum');
+        case 'CUSTOM FR':
+          return clsx('status-cell3');
         case 'IRO DISAPPROVED':
           return clsx('status-cell', 'red-dark');
         case 'FR DISAPPROVED':
@@ -646,7 +652,7 @@ const ManageFrPage = () => {
       valueGetter: (params) => {
         let statusName =
       IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
-
+        const iscustom = (params.row as any)?.isCustom;
         switch (statusName) {
         case 'SEND_BACK':
           statusName = 'REVERTED';
@@ -657,6 +663,8 @@ const ManageFrPage = () => {
         case 'WAITING_FOR_ACCOUNTS':
           if ((params.row as any)?.isReverted === true) {
             statusName = 'RE-SUBMITTED';
+          } else if (iscustom === true) {
+            statusName = 'CUSTOM FR';
           } else {
             statusName = 'PENDING VERIF.';
           }
@@ -1064,9 +1072,11 @@ const ManageFrPage = () => {
                                         'VRY' :
                                         statusFilter.includes(FRLifeCycleStates.REJECTED) ?
                                           'DIS' :
-                                          statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
-                                            'RVT' :
-                                            'ALL'
+                                          statusFilter.includes(FRLifeCycleStates.WAITING_FOR_PRESIDENT) ?
+                                            'PRES' :
+                                            statusFilter.includes(FRLifeCycleStates.FR_SEND_BACK) ?
+                                              'RVT' :
+                                              'ALL'
                                   }
                                   onChange={(_, val) => {
                                     if (!val) return;
@@ -1077,9 +1087,11 @@ const ManageFrPage = () => {
                                           [FRLifeCycleStates.FR_APPROVED] :
                                           val === 'RVT' ?
                                             [FRLifeCycleStates.FR_SEND_BACK] :
-                                            val === 'DIS' ?
-                                              [FRLifeCycleStates.REJECTED] :
-                                              [],
+                                            val === 'PRES' ?
+                                              [FRLifeCycleStates.WAITING_FOR_PRESIDENT] :
+                                              val === 'DIS' ?
+                                                [FRLifeCycleStates.REJECTED] :
+                                                [],
                                     );
                                   }}
                                   sx={{ whiteSpace: 'nowrap' }}
@@ -1089,6 +1101,7 @@ const ManageFrPage = () => {
                                   <ToggleButton value="RVT">Reverted</ToggleButton>
                                   <ToggleButton value="VRY">Verified</ToggleButton>
                                   <ToggleButton value="DIS">Disapprove</ToggleButton>
+                                  <ToggleButton value="PRES">Awaiting Aprve.</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
 
@@ -1106,6 +1119,7 @@ const ManageFrPage = () => {
                                   <ToggleButton value="Support">Support</ToggleButton>
                                   <ToggleButton value="Expanse">Expense</ToggleButton>
                                   <ToggleButton value="All">Both</ToggleButton>
+                                  <ToggleButton value="Custom">Custom FR</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
                             </Grid>
