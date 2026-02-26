@@ -156,6 +156,8 @@ const WorkerSupportPage = () => {
 
   const addFR = async (requisition: CreatableFR) => {
     try {
+      console.log('calll99');
+
       // const snackbarId =
       enqueueSnackbar({
         message: 'Creating FR Request',
@@ -1190,47 +1192,191 @@ const WorkerSupportPage = () => {
           mt: 2,
         }}
       >
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          if (frAction=='add') {
-            setRequisition((requisition) => ({
-              ...requisition,
-              purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
-              purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
-              division: division ?? undefined,
-              mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
-              particulars: requisition?.particulars && requisition?.particulars?.length > 0 ? [{
-                _id: '',
-                mainCategory: requisition?.particulars[0]?.mainCategory,
-                subCategory1: requisition?.particulars[0]?.subCategory1,
-                subCategory2: requisition?.particulars[0]?.subCategory2,
-                subCategory3: requisition?.particulars[0]?.subCategory3,
-                month: moment().format('MMMM'),
-                narration: requisition?.particulars[0]?.narration,
-                requestedAmount: total.net,
-                unitPrice: total.net,
-                quantity: supportEnabledWorkers?.length ?? 0,
-                year: requisition?.particulars[0].year,
-                attachment: [],
-              }] : [],
-            }));
-          } else {
-            setRequisition((requisition:any) => ({
-              ...requisition,
-              purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
-              purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
-              division: division ?? undefined,
-              mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
-              particulars: supportEnabledWorkers && supportEnabledWorkers?.length > 0 ?
-                supportEnabledWorkers?.map((worker, index) => ({
+        {frAction&&(
+          <FRForm
+            value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={frAction ?? 'view'}
+            onSubmit={addFR} // Pass the addFR function to the onSubmit prop
+            disable= {true}
+          />
+        )}
+        {confirmAttach?(
+
+          <Card sx={{
+            width: {
+              xs: '100%', // mobile
+              sm: '100%', // tablet
+              md: '50%', // desktop
+            },
+            borderRadius: 3,
+            mt: 2,
+          }} >
+            <CardContent>
+              <Typography variant="h6">File Attachment</Typography>
+              <Container>
+    FR created. Do you want to add attachment&nbsp;
+
+                {pdfProps != null && (
+                  <PDFDownloadLink
+                    document={<PDFTemplate {...pdfProps} />}
+                    fileName="WorkerSupport.pdf"
+                  >
+                    {(({
+                      loading,
+                    }: any) => (
+                      <span>
+                        {loading || disableAttach ? '....' : 'WorkerSupport.pdf'}
+            &nbsp;
+                      </span>
+                    )) as unknown as React.ReactNode}
+                  </PDFDownloadLink>
+                )}
+
+    and&nbsp; <br />
+
+                {signPdfProps != null && (
+                  <PDFDownloadLink
+                    document={<IROReconciliationPdf data={signPdfProps} />}
+                    fileName="WorkersSignatureSheet.pdf"
+                    style={{ color: 'blue' }}
+                  >
+                    {(({
+                      loading,
+                    }: any) => (
+                      <span>
+                        {loading || disableAttach ? '....' : 'WorkersSignatureSheet.pdf'}
+            &nbsp;
+                      </span>
+                    )) as unknown as React.ReactNode}
+                  </PDFDownloadLink>
+                )}
+
+    ?
+              </Container>
+            </CardContent>
+
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setConfirmAttach(false);
+                }}
+                variant="text"
+                disabled={modal}
+              >
+            No, Cancel
+              </Button>
+              <>
+                {(selectedWorker || division) && signPdfProps && pdfProps && (
+                  <>
+                    <BlobProvider document={<IROReconciliationPdf data={signPdfProps} />}>
+                      {({ blob: signBlob, loading: loading1 }) => (
+                        <BlobProvider
+                          document={<PDFTemplate
+                            divisionId={pdfProps?.divisionId}
+                            workerId={pdfProps?.workerId}
+                            purpose={pdfProps?.purpose}
+                            designationParticularID={pdfProps?.designationParticularID}
+                            subDivisionId={pdfProps?.subDivisionId}
+                            FrNo={pdfProps?.FrNo}
+                            FrMonth={pdfProps?.FrMonth}
+                          />}
+                        >
+                          {({ blob: supportBlob, loading: loading2 }) => (
+                            <>
+                              {modal&&(
+
+                                <Card >
+                                  <CardContent>
+                                    <Typography sx={{ color: 'red' }}>Did you download the signature sheet?</Typography>
+                                    <DialogActions>
+                                      <Button onClick={()=>setModal(false)}>Close</Button>
+                                      <Button
+                                        endIcon={<AttachIcon />}
+                                        variant="contained"
+                                        color="info"
+                                        onClick={async () => {
+                                          if (signBlob && supportBlob) {
+                                            setLoading(true);
+                                            attach(signBlob, supportBlob);
+                                          }
+                                        } }
+                                        disabled={loading1 || loading2 || disableAttach || loading}
+                                      >
+                                        {loading1 || loading2 || loading|| disableAttach ? <Box sx={{ display: 'flex' }}>
+                                          <CircularProgress />
+                                        </Box> : 'Yes'}
+                                      </Button>
+                                    </DialogActions>
+                                  </CardContent>
+
+
+                                </Card>
+                              )}
+                              <Button disabled={modal} onClick={async () =>{
+                                // setConfirmAttach(false);
+                                setModal(true);
+                                setRequisition2((prev:any) => ({
+                                  ...prev,
+                                  isSupport: true,
+                                }));
+                              } }>
+                                {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
+                              </Button>
+                            </>
+                          )}
+                        </BlobProvider>
+                      )}
+                    </BlobProvider>
+
+                  </>
+                )}
+              </>
+            </DialogActions>
+          </Card>
+        ):(
+
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (frAction=='add') {
+              setRequisition((requisition) => ({
+                ...requisition,
+                purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
+                purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
+                division: division ?? undefined,
+                mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
+                particulars: requisition?.particulars && requisition?.particulars?.length > 0 ? [{
                   _id: '',
-                  mainCategory: requisition?.particulars?.[0]?.mainCategory,
-                  subCategory1: requisition?.particulars?.[0]?.subCategory1,
-                  subCategory2: requisition?.particulars?.[0]?.subCategory2,
-                  subCategory3: requisition?.particulars?.[0]?.subCategory3,
+                  mainCategory: requisition?.particulars[0]?.mainCategory,
+                  subCategory1: requisition?.particulars[0]?.subCategory1,
+                  subCategory2: requisition?.particulars[0]?.subCategory2,
+                  subCategory3: requisition?.particulars[0]?.subCategory3,
                   month: moment().format('MMMM'),
-                  narration: requisition?.particulars?.[0]?.narration + worker.basicDetails.firstName + worker.basicDetails.lastName|| '',
-                  requestedAmount: worker?.supportStructure?.supportEnabled ? (worker?.supportStructure?.basic ?? 0) +
+                  narration: requisition?.particulars[0]?.narration,
+                  requestedAmount: total.net,
+                  unitPrice: total.net,
+                  quantity: supportEnabledWorkers?.length ?? 0,
+                  year: requisition?.particulars[0].year,
+                  attachment: [],
+                }] : [],
+              }));
+            } else {
+              setRequisition((requisition:any) => ({
+                ...requisition,
+                purposeWorker: requisition.purpose == 'Worker' && selectedWorker ? selectedWorker : undefined,
+                purposeCoordinator: requisition.purpose == 'Coordinator' && division ? division.details.coordinator?.name : undefined,
+                division: division ?? undefined,
+                mainCategory: requisition?.particulars ? requisition?.particulars[0]?.mainCategory : 'Maintenance Of Priest & Preachers',
+                particulars: supportEnabledWorkers && supportEnabledWorkers?.length > 0 ?
+                  supportEnabledWorkers?.map((worker, index) => ({
+                    _id: '',
+                    mainCategory: requisition?.particulars?.[0]?.mainCategory,
+                    subCategory1: requisition?.particulars?.[0]?.subCategory1,
+                    subCategory2: requisition?.particulars?.[0]?.subCategory2,
+                    subCategory3: requisition?.particulars?.[0]?.subCategory3,
+                    month: moment().format('MMMM'),
+                    narration: requisition?.particulars?.[0]?.narration + worker.basicDetails.firstName + worker.basicDetails.lastName|| '',
+                    requestedAmount: worker?.supportStructure?.supportEnabled ? (worker?.supportStructure?.basic ?? 0) +
                   (worker?.supportStructure?.HRA ?? 0) +
                   (worker?.supportStructure?.spouseAllowance ?? 0) +
                   (worker?.supportStructure?.positionalAllowance ?? 0) +
@@ -1242,107 +1388,108 @@ const WorkerSupportPage = () => {
                     (worker?.supportStructure?.impactDeduction ?? 0) +
                     (worker?.supportStructure?.MUTDeduction ?? 0)
                   ) : 0,
-                  unitPrice: total.total,
-                  quantity: 1, // Each entry represents one worker
-                  year: requisition?.particulars?.[0]?.year,
-                  attachment: [],
-                  worker: worker, // Add worker reference if needed
-                })) :
-                [],
-            }));
-          }
-        }}>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={2}>
-                    <Autocomplete
-                      value={purpose ?? null}
-                      options={purposes.filter((pur) => pur != 'Others') ?? []}
-                      getOptionLabel={(requisition) => requisition ?? ''}
-                      onChange={(_e, selectedPurpose) => {
-                        if (selectedPurpose) {
-                          setRequisition((requisition) => ({
-                            ...requisition,
-                            purpose: selectedPurpose as FRPurpose,
-                            purposeSubdivision: undefined,
-                            designationParticular: undefined,
-                            purposeWorker: undefined,
-                            purposeCoordinator: undefined,
-                          }));
-                        } else {
-                          setRequisition((requisition) => ({
-                            ...requisition,
-                            purpose: undefined,
-                            purposeSubdivision: undefined,
-                            designationParticular: undefined,
-                            purposeWorker: undefined,
-                            purposeCoordinator: undefined,
-                          }));
-                        }
-                        setPurpose(selectedPurpose);
-                        // setDivision(null);
-                        setDesignationParticular(null);
-                        setSelectedWorker(null);
-                        setSubDivision(null);
-                      }}
-                      renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard' />}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={2} >
-                    <Autocomplete
-                      // disabled={props.kind=='worker'}
-                      options={divisions ?? []}
-                      // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
-                      value={division}
-                      getOptionLabel={(div) => div.details?.name}
-                      onChange={(event, newVal) => {
-                        if (newVal) {
-                          const coordinator = newVal.details.coordinator?.name;
-                          if (requisition.purpose === 'Coordinator' && coordinator) {
+                    unitPrice: total.total,
+                    quantity: 1, // Each entry represents one worker
+                    year: requisition?.particulars?.[0]?.year,
+                    attachment: [],
+                    worker: worker, // Add worker reference if needed
+                  })) :
+                  [],
+              }));
+            }
+          }}>
+            <CardContent>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={2}>
+                      <Autocomplete
+                        value={purpose ?? null}
+                        options={purposes.filter((pur) => pur != 'Others') ?? []}
+                        getOptionLabel={(requisition) => requisition ?? ''}
+                        onChange={(_e, selectedPurpose) => {
+                          if (selectedPurpose) {
                             setRequisition((requisition) => ({
                               ...requisition,
-                              division: newVal,
-                              purposeCoordinator: coordinator,
+                              purpose: selectedPurpose as FRPurpose,
                               purposeSubdivision: undefined,
+                              designationParticular: undefined,
                               purposeWorker: undefined,
-                              // purpose: undefined,
+                              purposeCoordinator: undefined,
                             }));
                           } else {
                             setRequisition((requisition) => ({
                               ...requisition,
-                              division: newVal,
+                              purpose: undefined,
+                              purposeSubdivision: undefined,
+                              designationParticular: undefined,
+                              purposeWorker: undefined,
+                              purposeCoordinator: undefined,
+                            }));
+                          }
+                          setPurpose(selectedPurpose);
+                          // setDivision(null);
+                          setDesignationParticular(null);
+                          setSelectedWorker(null);
+                          setSubDivision(null);
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Requisition For" required variant='standard' />}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={2} >
+                      <Autocomplete
+                      // disabled={props.kind=='worker'}
+                        options={divisions ?? []}
+                        // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
+                        value={division}
+                        getOptionLabel={(div) => div.details?.name}
+                        onChange={(event, newVal) => {
+                          if (newVal) {
+                            const coordinator = newVal.details.coordinator?.name;
+                            if (requisition.purpose === 'Coordinator' && coordinator) {
+                              setRequisition((requisition) => ({
+                                ...requisition,
+                                division: newVal,
+                                purposeCoordinator: coordinator,
+                                purposeSubdivision: undefined,
+                                purposeWorker: undefined,
+                              // purpose: undefined,
+                              }));
+                            } else {
+                              setRequisition((requisition) => ({
+                                ...requisition,
+                                division: newVal,
+                                purposeSubdivision: undefined,
+                                purposeCoordinator: undefined,
+                                purposeWorker: undefined,
+                              }));
+                            }
+                            setDivision(newVal);
+                          } else {
+                            setRequisition((requisition) => ({
+                              ...requisition,
+                              division: undefined,
                               purposeSubdivision: undefined,
                               purposeCoordinator: undefined,
                               purposeWorker: undefined,
                             }));
+                            setDivision(null);
                           }
-                          setDivision(newVal);
-                        } else {
-                          setRequisition((requisition) => ({
-                            ...requisition,
-                            division: undefined,
-                            purposeSubdivision: undefined,
-                            purposeCoordinator: undefined,
-                            purposeWorker: undefined,
-                          }));
-                          setDivision(null);
+                          setSelectedWorker(null);
+                          setSubDivision(null);
                         }
-                        setSelectedWorker(null);
-                        setSubDivision(null);
-                      }
-                      }
-                      renderInput={(params) => (
-                        <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
-                          required />
-                      )}
-                      disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
+                        }
+                        renderInput={(params) => (
+                          <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
+                            required />
+                        )}
+                        disabled={Boolean(user.user && (user.user as User).kind == 'worker')}
 
-                    />
-                  </Grid>
-                  {requisition.purpose === 'Subdivision' &&
+                      />
+                    </Grid>
+                    {requisition.purpose === 'Subdivision' &&
                     <Grid item xs={12} md={2}>
                       <Autocomplete
                         options={subDivisions ?? []}
@@ -1369,8 +1516,8 @@ const WorkerSupportPage = () => {
                           variant='standard' />}
                       />
                     </Grid>
-                  }
-                  {requisition.purpose === 'Worker' &&
+                    }
+                    {requisition.purpose === 'Worker' &&
                     <Grid item xs={12} md={2}>
                       <Autocomplete<IWorker>
                         value={selectedWorker ?? null}
@@ -1397,94 +1544,94 @@ const WorkerSupportPage = () => {
                         fullWidth
                       />
                     </Grid>}
-                  <Grid item xs={12} md={2}>
-                    <Autocomplete
-                      value={designationParticular ?? null}
-                      options={designationParticulars ?? []}
-                      getOptionLabel={(des) => des.title ?? ''}
-                      onChange={(_e, selectedDesignationParticular) => {
-                        setDesignationParticular(selectedDesignationParticular);
-                        if (selectedDesignationParticular && division) {
-                          setRequisition((requisition) => ({
-                            ...requisition,
-                            designationParticular: selectedDesignationParticular._id,
-                            particulars: [{
-                              _id: '',
+                    <Grid item xs={12} md={2}>
+                      <Autocomplete
+                        value={designationParticular ?? null}
+                        options={designationParticulars ?? []}
+                        getOptionLabel={(des) => des.title ?? ''}
+                        onChange={(_e, selectedDesignationParticular) => {
+                          setDesignationParticular(selectedDesignationParticular);
+                          if (selectedDesignationParticular && division) {
+                            setRequisition((requisition) => ({
+                              ...requisition,
+                              designationParticular: selectedDesignationParticular._id,
+                              particulars: [{
+                                _id: '',
 
-                              mainCategory: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.name ?? '',
+                                mainCategory: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.name ?? '',
 
-                              subCategory1: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
+                                subCategory1: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory1)?.name ?? '',
 
-                              subCategory2: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
+                                subCategory2: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory2)?.name ?? '',
 
-                              subCategory3: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
+                                subCategory3: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory2)?.subcategory3
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory3)?.name ?? '',
 
-                              narration: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
+                                narration: mainCategories?.find((mainCat) => mainCat._id == selectedDesignationParticular.mainCategory)?.subcategory1
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory1)?.subcategory2
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory2)?.subcategory3
                                 .find((subCat) => subCat._id == selectedDesignationParticular.subCategory3)?.narration ?? '',
 
-                              month: moment().format('MMMM'),
-                              requestedAmount: total.net,
-                              unitPrice: total.net,
-                              quantity: supportEnabledWorkers?.length,
-                              attachment: [],
-                            }],
-                          }));
-                        } else {
-                          setRequisition((requisition) => ({
-                            ...requisition,
-                            designationParticular: undefined,
-                          }));
-                        }
-                      }}
-                      renderInput={(params) => <TextField {...params} label="Designation Particulars" required variant='standard' />}
-                      fullWidth
-                    />
+                                month: moment().format('MMMM'),
+                                requestedAmount: total.net,
+                                unitPrice: total.net,
+                                quantity: supportEnabledWorkers?.length,
+                                attachment: [],
+                              }],
+                            }));
+                          } else {
+                            setRequisition((requisition) => ({
+                              ...requisition,
+                              designationParticular: undefined,
+                            }));
+                          }
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Designation Particulars" required variant='standard' />}
+                        fullWidth
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
 
-              <Grid item xs={12} md={2} lg={2}>
-                <TextField
-                  label="Total Amount"
-                  value={total.total}
-                  variant='standard'
-                  fullWidth
-                  disabled
+                <Grid item xs={12} md={2} lg={2}>
+                  <TextField
+                    label="Total Amount"
+                    value={total.total}
+                    variant='standard'
+                    fullWidth
+                    disabled
 
-                />
-              </Grid>
+                  />
+                </Grid>
 
-              <Grid item xs={12} md={6} lg={2}>
-                <TextField
-                  label="Total Deduction"
-                  value={total.deduction}
-                  variant='standard'
-                  fullWidth
-                  disabled
-                />
-              </Grid>
+                <Grid item xs={12} md={6} lg={2}>
+                  <TextField
+                    label="Total Deduction"
+                    value={total.deduction}
+                    variant='standard'
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
 
-              <Grid item xs={12} md={6} lg={2}>
-                <TextField
-                  label="Net Amount"
-                  value={total.net}
-                  variant='standard'
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <div style={{ float: 'left' }}>
+                <Grid item xs={12} md={6} lg={2}>
+                  <TextField
+                    label="Net Amount"
+                    value={total.net}
+                    variant='standard'
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <div style={{ float: 'left' }}>
 
-                  {/* <Button
+                    {/* <Button
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
@@ -1493,56 +1640,57 @@ const WorkerSupportPage = () => {
                      Upload File
                   </Button> */}
                   &nbsp;
-                  <PermissionChecks
-                    permissions={['WRITE_FR']}
-                    granted={
+                    <PermissionChecks
+                      permissions={['WRITE_FR']}
+                      granted={
 
-                      <Button
-                        variant="contained"
-                        color="info"
-                        type='submit'
-                        onClick={() => {
-                          if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
-                            setFrAction('add');
-                          }
-                        }}
-                      >
+                        <Button
+                          variant="contained"
+                          color="info"
+                          type='submit'
+                          onClick={() => {
+                            if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                              setFrAction('add');
+                            }
+                          }}
+                        >
                         Raise FR
-                      </Button>
+                        </Button>
 
-                    }
+                      }
 
-                  />
+                    />
                   &nbsp;
-                  <PermissionChecks
-                    permissions={['WRITE_FR']}
-                    granted={
+                    <PermissionChecks
+                      permissions={['WRITE_FR']}
+                      granted={
 
-                      <Button
-                        sx={{ backgroundColor: 'orange' }}
-                        onClick={() =>{
-                          if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
-                            setFrAction('multi');
-                          }
-                        } }
+                        <Button
+                          sx={{ backgroundColor: 'orange' }}
+                          onClick={() =>{
+                            if (requisition.purpose !== undefined && requisition.division !== undefined && requisition.designationParticular !== undefined) {
+                              setFrAction('multi');
+                            }
+                          } }
 
-                        variant="contained"
-                        color="info"
-                        type='submit'
-                      >
+                          variant="contained"
+                          color="info"
+                          type='submit'
+                        >
                         Raise FR ( Multiple narration )
-                      </Button>
+                        </Button>
 
-                    }
+                      }
 
-                  />
-                  {/* <br /> */}
-                  {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
-                </div>
+                    />
+                    {/* <br /> */}
+                    {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </form>
+            </CardContent>
+          </form>
+        )}
       </Card>
       <br />
       <Card>
@@ -1593,15 +1741,9 @@ const WorkerSupportPage = () => {
           </Grid>
         </Grid>
       </Card>
-      <Dialog open={Boolean(frAction)} onClose={() => setFrAction(null)} >
+      {/* <Dialog open={Boolean(frAction)} onClose={() => setFrAction(null)} >
         <DialogContent >
-          <FRForm
-            value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={frAction ?? 'view'}
-            onSubmit={addFR} // Pass the addFR function to the onSubmit prop
-            disable= {true}
-          />
+
         </DialogContent>
         {frAction == 'view' &&
           <DialogActions>
@@ -1616,143 +1758,8 @@ const WorkerSupportPage = () => {
             </Button>
           </DialogActions>
         }
-      </Dialog>
-      <Dialog open={confirmAttach} onClose={(event, reason) => {
-        if (reason !== 'backdropClick') {
-          setConfirmAttach(false);
-        }
-      }} maxWidth="xs" fullWidth>
-        <DialogTitle> Add attachment</DialogTitle>
-        <DialogContent>
-          <Container>
-    FR created. Do you want to add attachment&nbsp;
+      </Dialog> */}
 
-            {pdfProps != null && (
-              <PDFDownloadLink
-                document={<PDFTemplate {...pdfProps} />}
-                fileName="WorkerSupport.pdf"
-              >
-                {(({
-                  loading,
-                }: any) => (
-                  <span>
-                    {loading || disableAttach ? '....' : 'WorkerSupport.pdf'}
-            &nbsp;
-                  </span>
-                )) as unknown as React.ReactNode}
-              </PDFDownloadLink>
-            )}
-
-    and&nbsp;
-
-            {signPdfProps != null && (
-              <PDFDownloadLink
-                document={<IROReconciliationPdf data={signPdfProps} />}
-                fileName="WorkersSignatureSheet.pdf"
-                style={{ color: 'blue' }}
-              >
-                {(({
-                  loading,
-                }: any) => (
-                  <span>
-                    {loading || disableAttach ? '....' : 'WorkersSignatureSheet.pdf'}
-            &nbsp;
-                  </span>
-                )) as unknown as React.ReactNode}
-              </PDFDownloadLink>
-            )}
-
-    ?
-          </Container>
-        </DialogContent>
-
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setConfirmAttach(false);
-            }}
-            variant="text"
-          >
-            No, Cancel
-          </Button>
-          <>
-            {(selectedWorker || division) && signPdfProps && pdfProps && (
-              <>
-                <BlobProvider document={<IROReconciliationPdf data={signPdfProps} />}>
-                  {({ blob: signBlob, loading: loading1 }) => (
-                    <BlobProvider
-                      document={<PDFTemplate
-                        divisionId={pdfProps?.divisionId}
-                        workerId={pdfProps?.workerId}
-                        purpose={pdfProps?.purpose}
-                        designationParticularID={pdfProps?.designationParticularID}
-                        subDivisionId={pdfProps?.subDivisionId}
-                        FrNo={pdfProps?.FrNo}
-                        FrMonth={pdfProps?.FrMonth}
-                      />}
-                    >
-                      {({ blob: supportBlob, loading: loading2 }) => (
-                        <>
-                          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
-                            <DialogContent>
-                              <Typography sx={{ color: 'red' }}>Did you download the signature sheet?</Typography>
-                            </DialogContent>
-
-                            <DialogActions>
-                              <Button onClick={()=>setModal(false)}>Close</Button>
-                              <Button
-                                endIcon={<AttachIcon />}
-                                variant="contained"
-                                color="info"
-                                onClick={async () => {
-                                  if (signBlob && supportBlob) {
-                                    setLoading(true);
-                                    attach(signBlob, supportBlob);
-                                  }
-                                } }
-                                disabled={loading1 || loading2 || disableAttach || loading}
-                              >
-                                {loading1 || loading2 || loading|| disableAttach ? <Box sx={{ display: 'flex' }}>
-                                  <CircularProgress />
-                                </Box> : 'Yes'}
-                              </Button>
-                            </DialogActions>
-
-                          </Dialog>
-                          {/* <Button
-                            endIcon={<AttachIcon />}
-                            variant="contained"
-                            color="info"
-                            onClick={async () => {
-                              if (signBlob && supportBlob) {
-                                setLoading(true);
-                                attach(signBlob, supportBlob);
-                              }
-                            }}
-                            disabled={loading1 || loading2 || disableAttach||loading}
-                          >
-                            {loading1 || loading2 || disableAttach ? 'Loading...' : 'Yes, Attach'}
-                          </Button> */}
-                          <Button onClick={async () =>{
-                            setModal(true);
-                            setRequisition2((prev:any) => ({
-                              ...prev,
-                              isSupport: true,
-                            }));
-                          } }>
-                            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
-                          </Button>
-                        </>
-                      )}
-                    </BlobProvider>
-                  )}
-                </BlobProvider>
-
-              </>
-            )}
-          </>
-        </DialogActions>
-      </Dialog>
 
       {loading&&
       <Lottie

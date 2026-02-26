@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, TextField, Button, Box, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Typography, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { GridColDef, GridCellParams, DataGrid } from '@mui/x-data-grid';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import moment from 'moment';
@@ -317,6 +317,27 @@ const ReopenedIRO = () => {
     signature: {},
     specialsanction: '',
   });
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': { borderRight: 'none' },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const [pdfProps, setPdfProps] = useState<{
     purpose: FRPurpose | null;
     divisionId: string | null;
@@ -863,7 +884,7 @@ const ReopenedIRO = () => {
     }}>
       <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2} >
-          <Grid item xs={6}>
+          <Grid item xs={9}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -876,59 +897,58 @@ const ReopenedIRO = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid
-            item
-            sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-          >
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={
-                  exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                }
-                onChange={(e) => {
-                  const value = e.target.value;
+          <>
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={statusFilter1}
+                onChange={(_, value) => {
+                  if (!value) return;
+
+                  setStatusFilter1(
+                    value === 'Support' ?
+                      'Support' :
+                      value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  );
+                }}
+                sx={toggleSx}
+              >
+                <ToggleButton value="Support">SUPPORT</ToggleButton>
+                <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                <ToggleButton value="All">BOTH CATEGORIES</ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+            {/* ===== STATUS FILTER (ALL / NON BANK TRANSFERS) ===== */}
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                onChange={(_, value) => {
+                  if (!value) return;
+
                   if (value === 'NonBankTransfers') {
                     setExStatusFilter([69]);
                   } else {
                     setExStatusFilter([]);
                     setStatusFilter([IROLifeCycleStates.REOPENED]);
-                    // setStatusFilter([]);
                   }
                 }}
-                name="Filter"
-                row
+                sx={toggleSx}
               >
-                <FormControlLabel value="All" control={<Radio />} label="All" />
-                <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item >
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={statusFilter1}
-                onChange={(e) =>
-                  setStatusFilter1(
-                    e.target.value === 'Support' ?
-                      'Support' :
-                      e.target.value === 'Expanse' ?
-                        'Expanse' :
-                        'All',
-                  )
-                }
-                name="Filter"
-                row
-              >
-                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
+                <ToggleButton value="All">ALL</ToggleButton>
+                <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
 
-              </RadioGroup>
-            </FormControl>
-          </Grid>
+            {/* ===== CATEGORY FILTER (SUPPORT / EXPENSE / BOTH) ===== */}
+
+          </>
 
           {/* <Grid item>
 

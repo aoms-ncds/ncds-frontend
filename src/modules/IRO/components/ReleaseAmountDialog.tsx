@@ -281,7 +281,9 @@ const ReleaseAmount = (props: ReleaseDialogProps) => {
               // component: Link,
               // to: `/fr/${(params.row as any).FR}/view`,
               onClick: () => {
-                window.open( `/fr/${(params.row as any).FR._id}/view`, '_blank');
+                console.log(params.row.FR, '89854');
+                
+                window.open( `/fr/${(params.row as any).FR}/view`, '_blank');
               },
 
             },

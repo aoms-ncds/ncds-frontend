@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Preview as PreviewIcon, Download as DownloadIcon } from '@mui/icons-material';
 import PrintIcon from '@mui/icons-material/Print';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -124,6 +124,27 @@ const ClosedIRO = () => {
       updatedAt: moment(),
     },
   });
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': { borderRight: 'none' },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   useEffect(() => {
     ESignatureService.getESignature()
       .then((res) => {
@@ -744,7 +765,7 @@ const ClosedIRO = () => {
     }>
       <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }} >
         <Grid container spacing={2} padding={2}>
-          <Grid item xs={4}>
+          <Grid item xs={8}>
             {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
             <TextField
               label="Search"
@@ -757,58 +778,7 @@ const ClosedIRO = () => {
             />
             {/* </div> */}
           </Grid>
-          <Grid
-            item
-            sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-          >
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={
-                  exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                }
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === 'NonBankTransfers') {
-                    setExStatusFilter([69]);
-                  } else {
-                    setExStatusFilter([]);
-                    setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
-                    // setStatusFilter([]);
-                  }
-                }}
-                name="Filter"
-                row
-              >
-                <FormControlLabel value="All" control={<Radio />} label="All" />
-                <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item>
-            <FormControl>
-              <RadioGroup
-                aria-labelledby="Filter"
-                value={statusFilter1}
-                onChange={(e) =>
-                  setStatusFilter1(
-                    e.target.value === 'Support' ?
-                      'Support' :
-                      e.target.value === 'Expanse' ?
-                        'Expanse' :
-                        'All',
-                  )
-                }
-                name="Filter"
-                row
-              >
-                {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
+              <Grid item xs={4}>
             <Button
               onClick={async () => {
                 const sheet =
@@ -858,6 +828,57 @@ const ClosedIRO = () => {
               Export
             </Button>
           </Grid>
+          <>
+            {/* ===== STATUS FILTER ===== */}
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                onChange={(_, value) => {
+                  if (!value) return;
+
+                  if (value === 'NonBankTransfers') {
+                    setExStatusFilter([69]);
+                  } else {
+                    setExStatusFilter([]);
+                    setStatusFilter([IROLifeCycleStates.IRO_CLOSED]);
+                  }
+                }}
+                sx={toggleSx}
+              >
+                <ToggleButton value="All">ALL</ToggleButton>
+                <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+
+            {/* ===== CATEGORY FILTER ===== */}
+            <Grid item>
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={statusFilter1}
+                onChange={(_, value) => {
+                  if (!value) return;
+
+                  setStatusFilter1(
+                    value === 'Support' ?
+                      'Support' :
+                      value === 'Expanse' ?
+                        'Expanse' :
+                        'All',
+                  );
+                }}
+                sx={toggleSx}
+              >
+                <ToggleButton value="Support">SUPPORT</ToggleButton>
+                <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+          </>
+      
           <Grid item xs={12}>
             <Box
               sx={{

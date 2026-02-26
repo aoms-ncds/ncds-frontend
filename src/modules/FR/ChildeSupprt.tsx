@@ -687,42 +687,219 @@ const ChildeSupportPage = () => {
         sx={{
           width: {
             xs: '15%', // mobile
-            sm: '16%', // tablet
+            sm: '20%', // tablet
             md: '40%', // desktop
           },
           borderRadius: 3,
           mt: 2,
         }}
-      >           <form onSubmit={(e) => {
-          e.preventDefault();
-          const tot = childList
+      >
+        {toggleRaiseFR &&(
+          <FRForm
+            value={requisition}
+            onChange={(newReq) => setRequisition(newReq)}
+            action={'add'}
+            onSubmit={addFR}
+            disable= {true}
+            // Pass the addFR function to the onSubmit prop
+          />
+        )}
+        {confirmAttach?(
+
+          <Card >
+            <CardContent>
+              <Typography variant="h6">File Attachment</Typography>
+
+              <Container>
+  FR created. Do you want to add attachment&nbsp;
+
+                {pdfProps && (
+                  <BlobProvider
+                    document={
+                      <ChildePDFTemplate
+                        month={getMonth() ?? null}
+                        total={total}
+                        frNo={requisition2?.FRno ?? ''}
+                        divisionId={pdfProps.divisionId}
+                        data={childList.filter((e) => e.supportEnabled === true)}
+                      />
+                    }
+                  >
+                    {({ loading, url }) =>
+                      loading || disableAttach ? (
+                        <span style={{ color: 'blue' }}>....</span>
+                      ) : (
+                        <a
+                          href={url ?? ''}
+                          download="ChildSupport.pdf"
+                          style={{ color: 'blue' }}
+                        >
+            ChildSupport.pdf
+                        </a>
+                      )
+                    }
+                  </BlobProvider>
+                )}
+
+  &nbsp; and &nbsp;
+
+                <BlobProvider
+                  document={
+                    <ChildeSupportSignSheet
+                      frNo={requisition2?.FRno ?? ''}
+                      month={getMonth()}
+                      total={total}
+                      data={childList.filter((e) => e.supportEnabled === true)}
+                      subDiv={subDivision ?? null}
+                    />
+                  }
+                >
+                  {({ loading, url }) =>
+                    loading || disableAttach ? (
+                      <span style={{ color: 'blue' }}>....</span>
+                    ) : (
+                      <a
+                        href={url ?? ''}
+                        download="ChildrenSignatureSheet.pdf"
+                        style={{ color: 'blue' }}
+                      >
+          ChildrenSignatureSheet.pdf
+                      </a>
+                    )
+                  }
+                </BlobProvider>
+
+  ?
+              </Container>
+            </CardContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setConfirmAttach(false);
+                }}
+                variant="text"
+                disabled={modal}
+              >
+            No, Cancel
+              </Button>
+              <>
+                {(selectedWorker || division) && pdfProps && (
+                  <>
+                    <BlobProvider
+                      document={
+                        <ChildeSupportSignSheet
+                          month={getMonth() ?? null}
+                          total={total}
+                          frNo={requisition2?.FRno ?? ''}
+                          data={childList.filter((e) => e.supportEnabled === true)}
+                        />
+                      }
+                    >
+                      {({ blob: signBlob, loading: loading1 }) => (
+                        <BlobProvider
+                          document={
+                            <ChildePDFTemplate
+                              frNo={requisition2?.FRno ?? ''}
+                              month={getMonth() ?? null}
+                              total={total}
+                              divisionId={pdfProps.divisionId}
+                              data={childList.filter((e) => e.supportEnabled === true)}
+                            />
+                          }
+                        >
+                          {({ blob: supportBlob, loading: loading2 }) => (
+                            <>
+                              {modal &&(
+
+                                <Card>
+                                  <CardContent>
+                                    <Typography sx={{ color: 'red' }}>
+                Did you download the signature sheet?
+                                    </Typography>
+                                    <DialogActions>
+                                      <Button onClick={() => setModal(false)}>Close</Button>
+
+                                      <Button
+                                        endIcon={<AttachIcon />}
+                                        variant="contained"
+                                        color="info"
+                                        onClick={async () => {
+                                          if (signBlob && supportBlob) {
+                                            setLoading(true);
+                                            await attach(signBlob, supportBlob);
+                                          }
+                                        }}
+                                        disabled={Boolean(loading1 || loading2 || loading)}
+                                      >
+                                        {loading ? (
+                                          <Box sx={{ display: 'flex' }}>
+                                            <CircularProgress size={20} />
+                                          </Box>
+                                        ) : (
+                                          'Yes'
+                                        )}
+                                      </Button>
+                                    </DialogActions>
+                                  </CardContent>
+
+                                </Card>
+                              )}
+
+                              <Button
+                                onClick={() => {
+                                  setModal(true);
+                                  setRequisition2((prev: any) => ({
+                                    ...prev,
+                                    isSupport: true,
+                                  }));
+                                }}
+                                disabled={loading1 || loading2 ||modal}
+                              >
+                                {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
+                              </Button>
+                            </>
+                          )}
+                        </BlobProvider>
+                      )}
+                    </BlobProvider>
+
+                  </>
+                )}
+              </>
+            </DialogActions>
+          </Card>
+        ):(
+
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const tot = childList
           .filter((child) => child.supportEnabled) // Filter only enabled children
           .reduce((sum, i) => sum + (i.childSupport?.amount || 0), 0);
-          handleAction();
-          // if (fileObj) {
-          // setTimeout(() => {
-          setToggleRaiseFR(true);
-          setRequisition((requisition) => ({
-            ...requisition,
-            // purpose: selectedWorker?'child':'Division',
-            // purposeWorker: selectedWorker??undefined,
-            division: division ?? undefined,
-            mainCategory: 'Welfare of Children',
-            particulars: [{
-              _id: '',
+            handleAction();
+            // if (fileObj) {
+            // setTimeout(() => {
+            setToggleRaiseFR(true);
+            setRequisition((requisition) => ({
+              ...requisition,
+              // purpose: selectedWorker?'child':'Division',
+              // purposeWorker: selectedWorker??undefined,
+              division: division ?? undefined,
               mainCategory: 'Welfare of Children',
-              subCategory1: 'Children Welfare',
-              subCategory2: 'Child Education Assistance',
-              subCategory3: 'Select',
-              month: moment().format('MMMM'),
-              narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
-              requestedAmount: total,
-              unitPrice: total,
-              quantity: supportEnabledChilds?.length,
-              attachment: fileObj ? [fileObj] : [],
-            }],
-          }));
-          console.log(tot, '00');
+              particulars: [{
+                _id: '',
+                mainCategory: 'Welfare of Children',
+                subCategory1: 'Children Welfare',
+                subCategory2: 'Child Education Assistance',
+                subCategory3: 'Select',
+                month: moment().format('MMMM'),
+                narration: 'Towards the Monthly Support of <DESIGNATION NAME> Mr/Ms/Mrs <NAME>for the month of <MONTH, YEAR>',
+                requestedAmount: total,
+                unitPrice: total,
+                quantity: supportEnabledChilds?.length,
+                attachment: fileObj ? [fileObj] : [],
+              }],
+            }));
+            console.log(tot, '00');
           // }, 2000);
           // // } else {
           // //   enqueueSnackbar({
@@ -730,133 +907,133 @@ const ChildeSupportPage = () => {
           // //     variant: 'info',
           // //   });
           // }
-        }}>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={2} >
-                <Autocomplete
+          }}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={2} >
+                  <Autocomplete
                   // disabled={props.kind=='child'}
-                  options={divisions ?? []}
-                  // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
-                  value={division}
-                  getOptionLabel={(div) => div.details?.name}
-                  onChange={(event, newVal) => {
-                    console.log(newVal, 'roro');
-                    if (newVal) {
-                      const coordinator: any = newVal.details?.coordinator?.name;
-                      setCoordinator(coordinator);
-                      setChildList(() =>
-                        allChild?.filter((child: any) => {
-                          const lastDivisionHistory =
+                    options={divisions ?? []}
+                    // value={(props.value.divisionHistory?.length>0)?props.value.divisionHistory[props.value.divisionHistory?.length-1]?.division: null}
+                    value={division}
+                    getOptionLabel={(div) => div.details?.name}
+                    onChange={(event, newVal) => {
+                      console.log(newVal, 'roro');
+                      if (newVal) {
+                        const coordinator: any = newVal.details?.coordinator?.name;
+                        setCoordinator(coordinator);
+                        setChildList(() =>
+                          allChild?.filter((child: any) => {
+                            const lastDivisionHistory =
                             child.childOf?.officialDetails?.divisionHistory?.[
                               child.childOf?.officialDetails?.divisionHistory?.length - 1
                             ];
 
-                          return (
-                            child.division?._id === newVal?._id &&
+                            return (
+                              child.division?._id === newVal?._id &&
                             !lastDivisionHistory?.subDivision?.name && // Exclude children with a sub-division
                             child.childOf?._id !== coordinator?._id &&
                             child.childSupport?.amount !== 0 &&
                             child.childOf?.supportDetails?.designation?.name !== 'Officiating Co-Ordinator'
-                          );
-                        }) ?? [],
-                      );
+                            );
+                          }) ?? [],
+                        );
 
 
-                      setDivision(newVal);
-                      setSubDivision(null);
-                    } else {
-                      setChildList(allChild ?? []);
-                      setDivision(null);
+                        setDivision(newVal);
+                        setSubDivision(null);
+                      } else {
+                        setChildList(allChild ?? []);
+                        setDivision(null);
+                      }
+                      setSelectedWorker(null);
                     }
-                    setSelectedWorker(null);
-                  }
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
-                      required />
-                  )}
-                  disabled={loadingDiv != true}
-                />
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <Autocomplete
-                  options={subDivisions ?? []}
-                  value={subDivision ?? null}
-                  getOptionLabel={(subDiv) => subDiv.name}
-                  onChange={(event, newVal) => {
-                    if (newVal) {
-                      setChildList(() =>
-                        allChild ?
-                          allChild.filter((child: any) => {
-                            const lastDivisionHistory =
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} label="Division" helperText={!divisions ? 'Loading divisions...' : 'Select a Division'} variant='standard'
+                        required />
+                    )}
+                    disabled={loadingDiv != true}
+                  />
+                </Grid>
+                <Grid item xs={12} md={2}>
+                  <Autocomplete
+                    options={subDivisions ?? []}
+                    value={subDivision ?? null}
+                    getOptionLabel={(subDiv) => subDiv.name}
+                    onChange={(event, newVal) => {
+                      if (newVal) {
+                        setChildList(() =>
+                          allChild ?
+                            allChild.filter((child: any) => {
+                              const lastDivisionHistory =
                                 child.childOf?.officialDetails?.divisionHistory?.[
                                   child.childOf?.officialDetails?.divisionHistory?.length - 1
                                 ];
 
-                            return (
-                              lastDivisionHistory?.subDivision?._id?.toString() === newVal?._id?.toString() &&
+                              return (
+                                lastDivisionHistory?.subDivision?._id?.toString() === newVal?._id?.toString() &&
                                 child.childOf?._id !== coordinatorId?._id &&
                                 child.childSupport?.amount !== 0 &&
                                 child.childOf?.supportDetails?.designation?.name !== 'Officiating Co-Ordinator'
-                            );
-                          }) :
-                          [], // Ensure setChildList always gets an array
-                      );
-                      setRequisition((requisition:any) => ({
-                        ...requisition,
-                        purpose: 'Subdivision' as FRPurpose,
-                        purposeSubdivision: newVal,
-
-                      }));
-                    } else {
-                      setChildList(allChild ?? []);
-                      // setDivision(null);
-                      setRequisition((requisition) => ({
-                        ...requisition,
-                        purpose: 'Division',
-                        purposeSubdivision: undefined,
-                        designationParticular: undefined,
-                        purposeWorker: undefined,
-                        purposeCoordinator: undefined,
-                      }));
-                    }
-                    setSubDivision(newVal);
-                  }}
-                  renderInput={(params) => <TextField {...params}
-                    label="Subdivision"
-                    helperText={!subDivisions ? 'Loading sub-divisions...' : 'Select a sub-division'}
-                    variant='standard' />}
-                />
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <Autocomplete<IWorker>
-                  value={workersSelect as unknown as IWorker}
-                  options={(workers ?? [])}
-                  getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
-                  onChange={(_e, newVal) => {
-                    setWorkersSelect(newVal as IWorker);
-                    if (newVal) {
-                      const coordinatorId = newVal._id;
-                      console.log(coordinatorId, 'coordinatorId');
-                      if (coordinatorId) {
-                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
-                        setDivision(() =>
-                          newVal && 'division' in newVal && newVal.division ?
-                            divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
-                            null,
+                              );
+                            }) :
+                            [], // Ensure setChildList always gets an array
                         );
+                        setRequisition((requisition:any) => ({
+                          ...requisition,
+                          purpose: 'Subdivision' as FRPurpose,
+                          purposeSubdivision: newVal,
+
+                        }));
+                      } else {
+                        setChildList(allChild ?? []);
+                        // setDivision(null);
+                        setRequisition((requisition) => ({
+                          ...requisition,
+                          purpose: 'Division',
+                          purposeSubdivision: undefined,
+                          designationParticular: undefined,
+                          purposeWorker: undefined,
+                          purposeCoordinator: undefined,
+                        }));
                       }
-                    } else {
-                      setWorkersSelect(null);
-                      setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Choose Worker" variant="standard" />}
-                  fullWidth
-                />
-              </Grid>
-              {/* <Grid item xs={12} md={6} >
+                      setSubDivision(newVal);
+                    }}
+                    renderInput={(params) => <TextField {...params}
+                      label="Subdivision"
+                      helperText={!subDivisions ? 'Loading sub-divisions...' : 'Select a sub-division'}
+                      variant='standard' />}
+                  />
+                </Grid>
+                <Grid item xs={12} md={2}>
+                  <Autocomplete<IWorker>
+                    value={workersSelect as unknown as IWorker}
+                    options={(workers ?? [])}
+                    getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
+                    onChange={(_e, newVal) => {
+                      setWorkersSelect(newVal as IWorker);
+                      if (newVal) {
+                        const coordinatorId = newVal._id;
+                        console.log(coordinatorId, 'coordinatorId');
+                        if (coordinatorId) {
+                          setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
+                          setDivision(() =>
+                            newVal && 'division' in newVal && newVal.division ?
+                              divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
+                              null,
+                          );
+                        }
+                      } else {
+                        setWorkersSelect(null);
+                        setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
+                      }
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Worker" variant="standard" />}
+                    fullWidth
+                  />
+                </Grid>
+                {/* <Grid item xs={12} md={6} >
                 <Autocomplete
                   value={workersSelect as unknown as IWorker}
                   options={(workers ?? [])}
@@ -878,44 +1055,44 @@ const ChildeSupportPage = () => {
 
                 />
               </Grid> */}
-              <Grid item xs={12} md={2}>
-                <Autocomplete<IWorker>
-                  value={selectedCoordinators ?? null}
-                  options={(coordinators ?? [])}
-                  getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
-                  onChange={(_e, newVal) => {
-                    setSelectedCoordinators(newVal ?? null);
-                    if (newVal) {
-                      const coordinatorId = newVal._id;
-                      console.log(coordinatorId, 'coordinatorId');
-                      if (coordinatorId) {
-                        setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
-                        setDivision(() =>
-                          newVal && 'division' in newVal && newVal.division ?
-                            divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
-                            null,
-                        );
+                <Grid item xs={12} md={2}>
+                  <Autocomplete<IWorker>
+                    value={selectedCoordinators ?? null}
+                    options={(coordinators ?? [])}
+                    getOptionLabel={(child) => `${child?.basicDetails?.firstName || ''} ${child?.basicDetails?.lastName || ''}`} // Handle null or undefined workers
+                    onChange={(_e, newVal) => {
+                      setSelectedCoordinators(newVal ?? null);
+                      if (newVal) {
+                        const coordinatorId = newVal._id;
+                        console.log(coordinatorId, 'coordinatorId');
+                        if (coordinatorId) {
+                          setChildList(() => allChild?.filter((child: any) => child.childOf?._id === coordinatorId && child.childSupport?.amount != 0) ?? []);
+                          setDivision(() =>
+                            newVal && 'division' in newVal && newVal.division ?
+                              divisions?.find((div) => div._id === (newVal.division as unknown as Division)?._id) ?? null :
+                              null,
+                          );
+                          setRequisition((requisition) => ({
+                            ...requisition,
+                            purposeCoordinator: newVal,
+                            purpose: 'Coordinator',
+                          }));
+                        }
+                      } else {
+                        setSelectedCoordinators(null);
+                        setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
                         setRequisition((requisition) => ({
                           ...requisition,
-                          purposeCoordinator: newVal,
-                          purpose: 'Coordinator',
+                          purpose: 'Division',
                         }));
                       }
-                    } else {
-                      setSelectedCoordinators(null);
-                      setChildList(() => (division ? allChild?.filter((child: any) => child.division?._id === division._id) : allChild) ?? []);
-                      setRequisition((requisition) => ({
-                        ...requisition,
-                        purpose: 'Division',
-                      }));
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant="standard" />}
-                  fullWidth
-                />
-              </Grid>
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Choose Coordinator" variant="standard" />}
+                    fullWidth
+                  />
+                </Grid>
 
-              {/* <Grid item xs={12} md={6} lg={4}>
+                {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Total Amount"
                   value={total.total }
@@ -926,7 +1103,7 @@ const ChildeSupportPage = () => {
                 />
               </Grid> */}
 
-              {/* <Grid item xs={12} md={6} lg={4}>
+                {/* <Grid item xs={12} md={6} lg={4}>
                 <TextField
                   label="Total Deduction"
                   value={total.deduction}
@@ -936,24 +1113,24 @@ const ChildeSupportPage = () => {
                 />
               </Grid> */}
 
-              <Grid item xs={12} md={6} lg={4}>
-                <TextField
-                  label="Net Amount"
-                  value={total}
-                  variant='standard'
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <div style={{ float: 'left' }}>
-                  {(selectedWorker || division) && (
-                    <PDFDownloadLink
-                      document={<ChildePDFTemplate month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList} />}
-                      fileName="ChildeSupport.pdf"
-                      style={{ textDecoration: 'none', color: 'blue' }}
-                    >
-                      {/* {({ blob, loading }) => (
+                <Grid item xs={12} md={6} lg={4}>
+                  <TextField
+                    label="Net Amount"
+                    value={total}
+                    variant='standard'
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <div style={{ float: 'left' }}>
+                    {(selectedWorker || division) && (
+                      <PDFDownloadLink
+                        document={<ChildePDFTemplate month={getMonth() ?? null} total={total} frNo={requisition2?.FRno?? ''} divisionId={pdfProps.divisionId} data={childList} />}
+                        fileName="ChildeSupport.pdf"
+                        style={{ textDecoration: 'none', color: 'blue' }}
+                      >
+                        {/* {({ blob, loading }) => (
                         <>
                           <Button
 
@@ -978,9 +1155,9 @@ const ChildeSupportPage = () => {
                           </Button>
                         </>
                       )} */}
-                    </PDFDownloadLink>
-                  )}
-                  {/* <Button
+                      </PDFDownloadLink>
+                    )}
+                    {/* <Button
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
@@ -990,31 +1167,31 @@ const ChildeSupportPage = () => {
                      Upload File
                   </Button> */}
                   &nbsp;
-                  <PermissionChecks
-                    permissions={['WRITE_FR']}
-                    granted={
-                      <Tooltip open={open}
-                        onClose={() => setOpen(false)}
-                        onOpen={() => setOpen(true)}
-                        title={''} >
-                        <Button
-                          variant="contained"
-                          color="info"
-                          type='submit'
-                          onClick={handleAction}
-                        >
+                    <PermissionChecks
+                      permissions={['WRITE_FR']}
+                      granted={
+                        <Tooltip open={open}
+                          onClose={() => setOpen(false)}
+                          onOpen={() => setOpen(true)}
+                          title={''} >
+                          <Button
+                            variant="contained"
+                            color="info"
+                            type='submit'
+                            onClick={handleAction}
+                          >
                           Raise FR
-                        </Button></Tooltip>
+                          </Button></Tooltip>
 
-                    }
+                      }
 
-                  />
-                  <br />
-                  {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
-                </div>
-                <Grid item xs={12}>
-                  <div style={{ float: 'right' }}>
-                    {/* {(selectedWorker || division) && (
+                    />
+                    <br />
+                    {/* <Typography sx={{ fontSize: '12px', color: '#8c8d8f' }} >(Before raising the FR, click on Attach File to export as a sheet and attach with the FR )</Typography> */}
+                  </div>
+                  <Grid item xs={12}>
+                    <div style={{ float: 'right' }}>
+                      {/* {(selectedWorker || division) && (
                       <PDFDownloadLink
                         document={<ChildeSupportSignSheet month={getMonth() ?? null} total={total} data={childList} />}
                         fileName="ChildeSupport.pdf"
@@ -1046,7 +1223,7 @@ const ChildeSupportPage = () => {
                         )}
                       </PDFDownloadLink>
                     )} */}
-                    {/* <Button
+                      {/* <Button
                     variant="contained"
                     color="info"
                     onClick={()=> file && FileUploaderServices.uploadFile(file, undefined, 'FR', file.name).then((res) => {
@@ -1055,12 +1232,13 @@ const ChildeSupportPage = () => {
                   >
                      Upload File
                   </Button> */}
-                  </div>
+                    </div>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </form>
+            </CardContent>
+          </form>
+        )}
       </Card>
       <br />
       <Card>
@@ -1114,180 +1292,8 @@ const ChildeSupportPage = () => {
           </Grid>
         </Grid>
       </Card>
-      <Dialog open={toggleRaiseFR} onClose={() => setToggleRaiseFR(false)} >
-        <DialogContent >
-          <FRForm
-            value={requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={'add'}
-            onSubmit={addFR}
-            disable= {true}
-            // Pass the addFR function to the onSubmit prop
-          />
-        </DialogContent>
-      </Dialog>
-      <Dialog open={confirmAttach} onClose={(event, reason) => {
-        if (reason !== 'backdropClick') {
-          setConfirmAttach(false);
-        }
-      }} maxWidth="xs" fullWidth>
-        <DialogTitle> Add attachment</DialogTitle>
-        <DialogContent>
-          
-<Container>
-  FR created. Do you want to add attachment&nbsp;
 
-  {pdfProps && (
-    <BlobProvider
-      document={
-        <ChildePDFTemplate
-          month={getMonth() ?? null}
-          total={total}
-          frNo={requisition2?.FRno ?? ''}
-          divisionId={pdfProps.divisionId}
-          data={childList.filter((e) => e.supportEnabled === true)}
-        />
-      }
-    >
-      {({ loading, url }) =>
-        loading || disableAttach ? (
-          <span style={{ color: 'blue' }}>....</span>
-        ) : (
-          <a
-            href={url ?? ''}
-            download="ChildSupport.pdf"
-            style={{ color: 'blue' }}
-          >
-            ChildSupport.pdf
-          </a>
-        )
-      }
-    </BlobProvider>
-  )}
 
-  &nbsp; and &nbsp;
-
-  <BlobProvider
-    document={
-      <ChildeSupportSignSheet
-        frNo={requisition2?.FRno ?? ''}
-        month={getMonth()}
-        total={total}
-        data={childList.filter((e) => e.supportEnabled === true)}
-        subDiv={subDivision ?? null}
-      />
-    }
-  >
-    {({ loading, url }) =>
-      loading || disableAttach ? (
-        <span style={{ color: 'blue' }}>....</span>
-      ) : (
-        <a
-          href={url ?? ''}
-          download="ChildrenSignatureSheet.pdf"
-          style={{ color: 'blue' }}
-        >
-          ChildrenSignatureSheet.pdf
-        </a>
-      )
-    }
-  </BlobProvider>
-
-  ?
-</Container>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setConfirmAttach(false);
-            }}
-            variant="text"
-          >
-            No, Cancel
-          </Button>
-          <>
-            {(selectedWorker || division) && pdfProps && (
-              <>
-                <BlobProvider
-  document={
-    <ChildeSupportSignSheet
-      month={getMonth() ?? null}
-      total={total}
-      frNo={requisition2?.FRno ?? ''}
-      data={childList.filter((e) => e.supportEnabled === true)}
-    />
-  }
->
-  {({ blob: signBlob, loading: loading1 }) => (
-    <BlobProvider
-      document={
-        <ChildePDFTemplate
-          frNo={requisition2?.FRno ?? ''}
-          month={getMonth() ?? null}
-          total={total}
-          divisionId={pdfProps.divisionId}
-          data={childList.filter((e) => e.supportEnabled === true)}
-        />
-      }
-    >
-      {({ blob: supportBlob, loading: loading2 }) => (
-        <>
-          <Dialog open={Boolean(modal)} onClose={() => setModal(false)}>
-            <DialogContent>
-              <Typography sx={{ color: 'red' }}>
-                Did you download the signature sheet?
-              </Typography>
-            </DialogContent>
-
-            <DialogActions>
-              <Button onClick={() => setModal(false)}>Close</Button>
-
-              <Button
-                endIcon={<AttachIcon />}
-                variant="contained"
-                color="info"
-                onClick={async () => {
-                  if (signBlob && supportBlob) {
-                    setLoading(true);
-                    await attach(signBlob, supportBlob);
-                  }
-                }}
-                disabled={Boolean(loading1 || loading2 || loading)}
-              >
-                {loading ? (
-                  <Box sx={{ display: 'flex' }}>
-                    <CircularProgress size={20} />
-                  </Box>
-                ) : (
-                  'Yes'
-                )}
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          <Button
-            onClick={() => {
-              setModal(true);
-              setRequisition2((prev: any) => ({
-                ...prev,
-                isSupport: true,
-              }));
-            }}
-            disabled={loading1 || loading2}
-          >
-            {loading1 || loading2 ? 'Loading...' : 'Yes, Attach'}
-          </Button>
-        </>
-      )}
-    </BlobProvider>
-  )}
-</BlobProvider>
-
-              </>
-            )}
-          </>
-        </DialogActions>
-      </Dialog>
     </CommonPageLayout>
   );
 };

@@ -11,7 +11,7 @@ import {
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 // eslint-disable-next-line max-len
-import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Grid, Box, Container, Typography, FormControl, FormControlLabel, Radio, RadioGroup, Divider, ListItemIcon, ListItemText, Menu, MenuItem, ToggleButton, ToggleButtonGroup } from '@mui/material';
 // eslint-disable-next-line no-duplicate-imports
 import { Send as SendIcon, Edit as EditIcon, Preview as PreviewIcon, Print as PrintIcon, Download as DownloadIcon } from '@mui/icons-material';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -167,6 +167,29 @@ const ReconciliationIRO = () => {
     endDate: moment().endOf('M'),
     rangeType: 'months',
   });
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const [selectedSignature, setSignature] = useState<Esignature>({
     _id: '',
     officeManagerSignature: {
@@ -815,98 +838,9 @@ const ReconciliationIRO = () => {
                   value={searchText}
                   placeholder="Enter IROno, IRODate, Division, or SubCategory"
                   onChange={handleSearchChange}
-                  sx={{ width: '40%' }}
+                  sx={{ width: '60%' }}
                 />
                 {/* Count Box with Reset Button */}
-                <Grid container justifyContent="flex-end">
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                          // setStatusFilter([]);
-                          }
-                        }}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={statusFilter1}
-                        onChange={(e) =>
-                          setStatusFilter1(
-                            e.target.value === 'Support' ?
-                              'Support' :
-                              e.target.value === 'Expanse' ?
-                                'Expanse' :
-                                'All',
-                          )
-                        }
-                        name="Filter"
-                        row
-                      >
-                        {/* <FormControlLabel value="All" control={<Radio />} label="ALL" /> */}
-                        <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                        <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
-                        <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                  <Grid item>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        backgroundColor: '#f5f5f5',
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        boxShadow: 1,
-                      }}
-                    >
-                      <Typography variant="subtitle1" fontWeight="bold">
-        New Bills Attached:
-                      </Typography>
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                        color="primary"
-                        sx={{ background: '#fff', px: 2, py: 1, borderRadius: '4px', boxShadow: 1 }}
-                      >
-                        {count}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        size="small"
-                        onClick={async () => await NotificationService.markAllAsReadForBill().then((res) => setCount(0))}
-                      >
-        Reset
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
 
 
                 {/* Export Button */}
@@ -961,6 +895,111 @@ const ReconciliationIRO = () => {
                 </Button>
 
               </Box>
+              <br />
+              <Grid
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="flex-start"
+                wrap="wrap"
+              >
+                {/* ================= STATUS FILTER ================= */}
+                <Grid item>
+                  <ToggleButtonGroup
+                    exclusive
+                    size="small"
+                    value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                    onChange={(_, value) => {
+                      if (!value) return;
+
+                      if (value === 'NonBankTransfers') {
+                        setExStatusFilter([69]);
+                      } else {
+                        setExStatusFilter([]);
+                        setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                      }
+                    }}
+                    sx={toggleSx}
+                  >
+                    <ToggleButton value="All">ALL</ToggleButton>
+                    <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Grid>
+
+                {/* ================= CATEGORY FILTER ================= */}
+                <Grid item>
+                  <ToggleButtonGroup
+                    exclusive
+                    size="small"
+                    value={statusFilter1}
+                    onChange={(_, value) => {
+                      if (!value) return;
+                      setStatusFilter1(
+                        value === 'Support' ?
+                          'Support' :
+                          value === 'Expanse' ?
+                            'Expanse' :
+                            'All',
+                      );
+                    }}
+                    sx={toggleSx}
+                  >
+                    <ToggleButton value="Support">SUPPORT</ToggleButton>
+                    <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                    <ToggleButton value="All">BOTH CATEGORIES</ToggleButton>
+                  </ToggleButtonGroup>
+                </Grid>
+
+                {/* ================= INFO BOX (UNCHANGED) ================= */}
+                <Grid item xs={12} md="auto">
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      backgroundColor: '#f5f5f5',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      boxShadow: 1,
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+        New Bills Attached:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      color="primary"
+                      sx={{
+                        background: '#fff',
+                        px: 2,
+                        py: 1,
+                        borderRadius: '4px',
+                        boxShadow: 1,
+                      }}
+                    >
+                      {count}
+                    </Typography>
+
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                      onClick={async () =>
+                        await NotificationService
+            .markAllAsReadForBill()
+            .then(() => setCount(0))
+                      }
+                    >
+        Reset
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
             </Grid>
 
           </Grid>

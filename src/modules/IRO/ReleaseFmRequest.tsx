@@ -3,7 +3,7 @@
 /* eslint-disable no-constant-condition */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Container, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, Chip, Popover, ToggleButton, ToggleButtonGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Print as PrintIcon,
@@ -379,7 +379,29 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
   });
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedIros, setSelectedIros] = useState<string[]>([]);
-
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const handleOpen = (event: React.MouseEvent<HTMLElement>, iros: string[]) => {
     setAnchorEl(event.currentTarget);
     setSelectedIros(iros);
@@ -1418,7 +1440,7 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -1431,59 +1453,8 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                   />
                   {/* </div> */}
                 </Grid>
-                <Grid
-                  item
-                >
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={
-                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === 'NonBankTransfers') {
-                          setExStatusFilter([69]);
-                        } else {
-                          setExStatusFilter([]);
-                          setStatusFilter([]);
-                          // setStatusFilter([]);
-                        }
-                      }}
-                      name="Filter"
-                      row
-                    >
-                      <FormControlLabel value="All" control={<Radio />} label="All" />
-                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item>
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={statusFilter1}
-                      onChange={(e) =>
-                        setStatusFilter1(
-                          e.target.value === 'Support' ?
-                            'Support' :
-                            e.target.value === 'Expanse' ?
-                              'Expanse' :
-                              'All',
-                        )
-                      }
-                      name="Filter"
-                      row
-                    >
-                      {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                      <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                      <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} >
+                
+                <Grid item xs={6} >
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
@@ -1557,6 +1528,57 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                     </Button>
                   ) : null}
                 </Grid>
+                <>
+                  {/* ================= STATUS FILTER ================= */}
+                  <Grid item>
+                    <ToggleButtonGroup
+                      exclusive
+                      size="small"
+                      value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                      onChange={(_, value) => {
+                        if (!value) return;
+
+                        if (value === 'NonBankTransfers') {
+                          setExStatusFilter([69]);
+                        } else {
+                          setExStatusFilter([]);
+                          setStatusFilter([]);
+                        }
+                      }}
+                      sx={toggleSx}
+                    >
+                      <ToggleButton value="All">ALL</ToggleButton>
+                      <ToggleButton value="NonBankTransfers">
+        NON BANK TRANSFERS
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </Grid>
+
+                  {/* ================= CATEGORY FILTER ================= */}
+                  <Grid item>
+                    <ToggleButtonGroup
+                      exclusive
+                      size="small"
+                      value={statusFilter1}
+                      onChange={(_, value) => {
+                        if (!value) return;
+
+                        setStatusFilter1(
+                          value === 'Support' ?
+                            'Support' :
+                            value === 'Expanse' ?
+                              'Expanse' :
+                              'All',
+                        );
+                      }}
+                      sx={toggleSx}
+                    >
+                      <ToggleButton value="Support">SUPPORT</ToggleButton>
+                      <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                      <ToggleButton value="All">BOTH CATEGORIES</ToggleButton>
+                    </ToggleButtonGroup>
+                  </Grid>
+                </>
                 <Grid item xs={12}>
                   <Card
                     sx={{
@@ -1656,8 +1678,11 @@ const ReleaseFmRequest = (props: { action: 'manage' | 'release' }) => {
                     /> */}
                   </Card>
                 </Grid>
+                
               </Grid>
+              
             </Card>
+            
 
             <Grid>
               <Dialog open={sendNotification} sx={{ width: 400, margin: '0 auto' }}>

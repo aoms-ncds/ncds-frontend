@@ -1,6 +1,6 @@
 import React from 'react';
 import { Badge, Card, CardActionArea, Grid, CardContent, Typography, styled, IconButton, Box, Button, CardActions } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -18,14 +18,10 @@ const ButtonCard = (props: {
   badgeColor?: 'default' | 'error' | 'primary' | 'secondary'; // Allow customizing badge color
   contentAlignment?: 'left' | 'center' | 'right'; // Allow customizing content alignment
 }) => {
+  const navigate = useNavigate();
   return (
-
     <Card
-      // onClick={props.onClick}
-      // {...(props.targetRoute && {
-      //   component: StyledLink,
-      //   to: props.targetRoute,
-      // })}
+      onClick={() => props.targetRoute && navigate(props.targetRoute)}
       sx={{
         // width: 340,
         borderRadius: 4,
@@ -62,7 +58,7 @@ const ButtonCard = (props: {
           {props.secondaryText}
         </Typography>
 
-        <Button
+        {/* <Button
           variant="outlined"
           size="small"
           // endIcon={r}
@@ -75,7 +71,7 @@ const ButtonCard = (props: {
           }}
         >
       2026
-        </Button>
+        </Button> */}
       </Box>
 
       {/* CONTENT */}

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { SetStateAction, useEffect, useState } from 'react';
 import CommonPageLayout from '../../components/CommonPageLayout';
-import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Alert, Typography, Divider, Box, Tooltip, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
   Edit as EditIcon,
@@ -52,7 +52,29 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
   const [searchText, setSearchText] = useState('');
   const [openLog, setOpenLog] = useState(false);
   const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
-
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'display': 'flex',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      'whiteSpace': 'nowrap',
+      'minHeight': 36,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -596,6 +618,15 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                 setOpenLog(true);
               },
             },
+            {
+              id: 'log',
+              text: 'FR Log',
+              icon: PreviewIcon,
+              onClick: () => {
+                setSelectedIROId((params.row.FR as any)?._id);
+                setOpenLog(true);
+              },
+            },
             // {
             //   id: 'signature',
             //   text: 'Add signature',
@@ -898,7 +929,7 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={4}>
+                <Grid item xs={8}>
                   {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
                   <TextField
                     label="Search"
@@ -912,79 +943,106 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                   {/* </div> */}
                 </Grid>
                 <Grid
-                  item
-                  sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  wrap="wrap"
                 >
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={
-                        exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === 'NonBankTransfers') {
-                          setExStatusFilter([69]);
-                        } else {
-                          setExStatusFilter([]);
-                          setStatusFilter([IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR, IROLifeCycleStates.IRO_IN_PROCESS]);
-                          // setStatusFilter([]);
-                        }
+                  {/* ================= LEFT FILTERS ================= */}
+                  <Grid item xs={12} md>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: 2,
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        pl: 2,
                       }}
-                      name="Filter"
-                      row
                     >
-                      <FormControlLabel value="All" control={<Radio />} label="All" />
-                      <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                    </RadioGroup>
-                    <Grid item>
-                      <FormControl>
-                        <RadioGroup
-                          aria-labelledby="Filter"
-                          value={statusFilter1}
-                          onChange={(e) =>
-                            setStatusFilter1(
-                              e.target.value === 'Support' ?
-                                'Support' :
-                                e.target.value === 'Expanse' ?
-                                  'Expanse' :
-                                  'All',
-                            )
+                      {/* -------- STATUS FILTER -------- */}
+                      <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                        onChange={(_, value) => {
+                          if (!value) return;
+
+                          if (value === 'NonBankTransfers') {
+                            setExStatusFilter([69]);
+                          } else {
+                            setExStatusFilter([]);
+                            setStatusFilter([
+                              IROLifeCycleStates.WAITING_FOR_OFFICE_MNGR,
+                              IROLifeCycleStates.IRO_IN_PROCESS,
+                            ]);
                           }
-                          name="Filter"
-                          row
-                        >
-                          {/* <FormControlLabel value="All" control={<Radio />} label="All" /> */}
-                          <FormControlLabel value="Support" control={<Radio />} label="Support" />
-                          <FormControlLabel value="Expanse" control={<Radio />} label="Expense" />
-                          <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                        </RadioGroup>
-                      </FormControl>
-                    </Grid>
-                  </FormControl>
-                  <Grid item xs={2}>
+                        }}
+                        sx={toggleSx}
+                      >
+                        <ToggleButton value="All">ALL</ToggleButton>
+                        <ToggleButton value="NonBankTransfers">
+          NON BANK TRANSFERS
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+
+                      {/* -------- CATEGORY FILTER -------- */}
+                      <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={statusFilter1}
+                        onChange={(_, value) => {
+                          if (!value) return;
+
+                          setStatusFilter1(
+                            value === 'Support' ?
+                              'Support' :
+                              value === 'Expanse' ?
+                                'Expanse' :
+                                'All',
+                          );
+                        }}
+                        sx={toggleSx}
+                      >
+                        <ToggleButton value="Support">SUPPORT</ToggleButton>
+                        <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                        <ToggleButton value="All">BOTH </ToggleButton>
+                      </ToggleButtonGroup>
+                    </Box>
+                  </Grid>
+
+                  {/* ================= EXPORT BUTTON ================= */}
+                  <Grid
+                    item
+                    xs={12}
+                    md="auto"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                    }}
+                  >
                     <Button
                       onClick={async () => {
-                        const sheet =
-                        IROrder ?
-                          IROrder.map((iro: IROrder) => ([
+                        const sheet = IROrder ?
+                          IROrder.map((iro: IROrder) => [
                             iro.IROno,
                             iro.IRODate.format('DD/MM/YYYY'),
                             iro.division?.details.name,
                             iro.purposeSubdivision?.name,
                             iro.mainCategory,
                             iro.particulars?.reduce(
-                              (total, particular) => total + Number(particular.requestedAmount),
+                              (total, particular) =>
+                                total + Number(particular.requestedAmount),
                               0,
                             ),
                             iro.sanctionedAmount,
                             iro.sanctionedBank,
                             iro.sanctionedAsPer,
-                            // iro.releaseAmount?.releaseAmount,
-                            // iro.releaseAmount?.transferredDate?.format('DD/MM/YYYY'),
-                            IROLifeCycleStates.getStatusNameByCodeTransaction(iro.status).replaceAll('_', ' '),
-                          ])) :
+                            IROLifeCycleStates.getStatusNameByCodeTransaction(
+                              iro.status,
+                            ).replaceAll('_', ' '),
+                          ]) :
                           [];
+
                         const headers = [
                           'IRO No',
                           'Date',
@@ -995,21 +1053,21 @@ const OfficeMangerApprove = (props: { action: 'manage' | 'release' }) => {
                           'Sanctioned Amt',
                           'Sanctioned Bank',
                           'Sanctioned As per',
-                          // 'Released Amt',
-                          // 'Released Date',
                           'Status',
                         ];
+
                         const worksheet = XLSX.utils.json_to_sheet(sheet);
                         const workbook = XLSX.utils.book_new();
                         XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet');
                         XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-                        XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', { compression: true });
+                        XLSX.writeFile(workbook, 'IRO_Office_Mngr.xlsx', {
+                          compression: true,
+                        });
                       }}
                       startIcon={<DownloadIcon />}
-                      color="primary" sx={{ float: 'right' }}
                       variant="contained"
                     >
-                    Export
+      Export
                     </Button>
                   </Grid>
                 </Grid>

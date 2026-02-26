@@ -9,6 +9,9 @@ import { Grid, Card, Button, Dialog, DialogActions, DialogContent, DialogTitle, 
   Checkbox,
   ListItemText,
   SelectChangeEvent,
+  CardContent,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 // eslint-disable-next-line max-len
 import {
@@ -104,7 +107,27 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [isCoordinator, setisCoordinator] = useState<any>(false);
   console.log(releaseAmountIROs, 'exstatusFilter');
   const [openLog, setOpenLog] = useState(false);
-
+  const toggleSx = {
+    'border': '1px solid #dcdcdc',
+    'borderRadius': 1,
+    'overflow': 'hidden',
+    'flexWrap': 'wrap',
+    '& .MuiToggleButton-root': {
+      'border': 'none',
+      'borderRight': '1px solid #dcdcdc',
+      'textTransform': 'none',
+      'fontSize': '0.85rem',
+      'fontWeight': 500,
+      'px': 2.5,
+      '&:last-of-type': {
+        borderRight: 'none',
+      },
+      '&.Mui-selected': {
+        backgroundColor: '#eaeaea',
+        color: '#000',
+      },
+    },
+  };
   const [selectedIRO, setSelectedIRO] = useState<IROrder>({
     _id: '',
     IROno: '',
@@ -493,9 +516,33 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
         });
       }
     } else {
-      IROServices.getAllOptimized({ Exstatus: exstatusFilter, dateRange: dateRange, status: statusFilter }).then((res) => {
+      Promise.all([
+        IROServices.getAllOptimized({
+          Exstatus: exstatusFilter,
+          dateRange: dateRange,
+          status: statusFilter,
+        }),
+        IROServices.getAllCustom({
+          dateRange: dateRange,
+          status: statusFilter,
+        }),
+      ]).then(([optimizedRes, customRes]) => {
         setNotFound(true);
-        setIROrder(res.data.filter((iro) => iro.IRODate.isSameOrAfter(dateRange.startDate) && iro.IRODate.isSameOrBefore(dateRange.endDate)));
+
+        const filteredOptimized = optimizedRes.data.filter((iro) =>
+          iro.IRODate.isSameOrAfter(dateRange.startDate) &&
+    iro.IRODate.isSameOrBefore(dateRange.endDate),
+        );
+
+        const filteredCustom = customRes.data.filter((iro) =>
+          iro.IRODate.isSameOrAfter(dateRange.startDate) &&
+    iro.IRODate.isSameOrBefore(dateRange.endDate),
+        );
+
+        // ✅ MERGE BOTH
+        const combinedData = [...filteredOptimized, ...filteredCustom];
+
+        setIROrder(combinedData); // or whatever main list state
       });
     }
   }, [attachment, addSignature, dateRange, iroData, statusFilter, exstatusFilter]);
@@ -1505,7 +1552,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           <>
             <Card sx={{ maxWidth: '78vw', height: '100vh', alignItems: 'center' }}>
               <Grid container spacing={2} padding={2}>
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                   <TextField
                     label="Search"
                     variant="outlined"
@@ -1516,7 +1563,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <PermissionChecks
                     permissions={['MANAGE_IRO']}
                     granted={
@@ -1671,157 +1718,175 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                   ) : null}
                 </Grid>
 
-                {props.action =='manage' && (
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :
-                            statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
-                              statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
-                                statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
-                                  'ALL'
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'WFA') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                          } else if (value === 'RTD') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
-                          } else if (value === 'AMT') {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
-                          } else if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                            setStatusFilter([]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([]);
-                          }
-                        }}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="ALL" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="WFA" control={<Radio />} label="IRO APPROVED" />
-                        <FormControlLabel value="RTD" control={<Radio />} label="REVERTED TO DIVISION" />
-                        <FormControlLabel value="AMT" control={<Radio />} label="AMOUNT RELEASED" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                )}
-
-                {props.action =='release' && (
-                  <Grid
-                    item
-                    sx={{ alignContent: 'start', display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <FormControl>
-                      <RadioGroup
-                        aria-labelledby="Filter"
-                        value={
-                          exstatusFilter.includes(69) ? 'NonBankTransfers' :'All'
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'NonBankTransfers') {
-                            setExStatusFilter([69]);
-                          } else {
-                            setExStatusFilter([]);
-                            setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
-                          }
-                        }}
-                        name="Filter"
-                        row
-                      >
-                        <FormControlLabel value="All" control={<Radio />} label="ALL" />
-                        <FormControlLabel value="NonBankTransfers" control={<Radio />} label="NON BANK TRANSFERS" />
-                      </RadioGroup>
-                    </FormControl>
-                  </Grid>
-                )}
-
-                <Grid item>
-                  <FormControl>
-                    <RadioGroup
-                      aria-labelledby="Filter"
-                      value={statusFilter1}
-                      onChange={(e) =>
-                        setStatusFilter1(
-                          e.target.value === 'Support' ?
-                            'Support' :
-                            e.target.value === 'Expanse' ?
-                              'Expanse' :
-                              'All',
-                        )
-                      }
-                      name="Filter"
-                      row
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Card
+                      elevation={2}
+                      sx={{
+                        border: '1px solid #dcdcdc',
+                        borderRadius: 1,
+                        overflow: 'hidden',
+                      }}
                     >
-                      <FormControlLabel value="Support" control={<Radio />} label="SUPPORT" />
-                      <FormControlLabel value="Expanse" control={<Radio />} label="EXPENSE" />
-                      <FormControlLabel value="All" control={<Radio />} label="BOTH CATEGORIES " />
-                    </RadioGroup>
-                  </FormControl>
-                  {hasPermissions(['MANAGE_IRO']) && props.action == 'release' ? (
-                    <FormControl sx={{ maxWidth: 150, minWidth: 150, ml: 5 }}>
-                      <InputLabel>Division</InputLabel>
+                      <CardContent sx={{ pb: '20px !important' }}>
+                        <Grid
+                          container
+                          spacing={2}
+                          alignItems="center"
+                          wrap="wrap"
+                        >
 
-                      <Select
-                        multiple
-                        value={selectedDivisions}
-                        label="Division"
-                        onChange={handleDivisionChange}
-                        sx={{ maxHeight: 50 }}
-                        renderValue={(selected) =>
-                          selected.length === 0 ? 'None' : selected.join(', ')
-                        }
+                          {/* ================= MANAGE MODE ================= */}
+                          {props.action === 'manage' && (
+                            <>
+                              {/* LEFT STATUS FILTER */}
+                              <Grid item xs={12} lg={9}>
+                                <ToggleButtonGroup
+                                  exclusive
+                                  size="small"
+                                  value={
+                                    exstatusFilter.includes(69) ? 'NonBankTransfers' :
+                                      statusFilter.includes(IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE) ? 'WFA' :
+                                        statusFilter.includes(IROLifeCycleStates.AMOUNT_RELEASED) ? 'AMT' :
+                                          statusFilter.includes(IROLifeCycleStates.REVERTED_TO_DIVISION) ? 'RTD' :
+                                            'ALL'
+                                  }
+                                  onChange={(_, value) => {
+                                    if (!value) return;
 
-                        MenuProps={{
-                          PaperProps: {
-                            style: { maxHeight: 300, width: 250 },
-                          },
-                        }}
-                      >
-                        {/* 🔍 SEARCH FIELD */}
-                        <ListSubheader>
-                          <TextField
-                            size="small"
-                            placeholder="Search division..."
-                            fullWidth
-                            autoFocus
-                            value={divisionSearch}
-                            onChange={(e) => setDivisionSearch(e.target.value)}
-                            onKeyDown={(e) => e.stopPropagation()} // VERY IMPORTANT
-                          />
-                        </ListSubheader>
+                                    if (value === 'WFA') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                                    } else if (value === 'RTD') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.REVERTED_TO_DIVISION]);
+                                    } else if (value === 'AMT') {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.AMOUNT_RELEASED]);
+                                    } else if (value === 'NonBankTransfers') {
+                                      setExStatusFilter([69]);
+                                      setStatusFilter([]);
+                                    } else {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([]);
+                                    }
+                                  }}
+                                  sx={toggleSx}
+                                >
+                                  <ToggleButton value="ALL">ALL</ToggleButton>
+                                  <ToggleButton value="WFA">IRO APPRO.</ToggleButton>
+                                  <ToggleButton value="RTD">REVERTED TO DIVISION</ToggleButton>
+                                  <ToggleButton value="AMT">AMOUNT RELEASED</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
 
-                        {/* NONE OPTION */}
-                        <MenuItem value="__ALL__">
-                          <Checkbox checked={selectedDivisions.length === 0} />
-                          <ListItemText primary="None" />
-                        </MenuItem>
+                              {/* RIGHT CATEGORY FILTER */}
+                            </>
+                          )}
+                          <Grid item xs={12} lg={4}>
+                            <ToggleButtonGroup
+                              exclusive
+                              size="small"
+                              value={statusFilter1}
+                              onChange={(_, value) => {
+                                if (!value) return;
+                                setStatusFilter1(
+                                  value === 'Support' ?
+                                    'Support' :
+                                    value === 'Expanse' ?
+                                      'Expanse' :
+                                      'All',
+                                );
+                              }}
+                              sx={toggleSx}
+                            >
+                              <ToggleButton value="Support">SUPPORT</ToggleButton>
+                              <ToggleButton value="Expanse">EXPENSE</ToggleButton>
+                              <ToggleButton value="All">BOTH</ToggleButton>
+                            </ToggleButtonGroup>
+                          </Grid>
 
-                        {/* FILTERED LIST */}
-                        {filteredDivisions.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={selectedDivisions.includes(name)} />
-                            <ListItemText primary={name} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  ) : null}
+                          {/* ================= RELEASE MODE ================= */}
+                          {props.action === 'release' && (
+                            <>
+                              {/* RELEASE STATUS */}
+                              <Grid item xs={12} md="auto">
+                                <ToggleButtonGroup
+                                  exclusive
+                                  size="small"
+                                  value={exstatusFilter.includes(69) ? 'NonBankTransfers' : 'All'}
+                                  onChange={(_, value) => {
+                                    if (!value) return;
 
+                                    if (value === 'NonBankTransfers') {
+                                      setExStatusFilter([69]);
+                                    } else {
+                                      setExStatusFilter([]);
+                                      setStatusFilter([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]);
+                                    }
+                                  }}
+                                  sx={toggleSx}
+                                >
+                                  <ToggleButton value="All">ALL</ToggleButton>
+                                  <ToggleButton value="NonBankTransfers">NON BANK TRANSFERS</ToggleButton>
+                                </ToggleButtonGroup>
+                              </Grid>
+
+                              {/* DIVISION FILTER */}
+                              {hasPermissions(['MANAGE_IRO']) && (
+                                <Grid item xs={12} md="auto">
+                                  <FormControl sx={{ minWidth: 150 }}>
+                                    <InputLabel>Division</InputLabel>
+                                    <Select
+                                      multiple
+                                      value={selectedDivisions}
+                                      label="Division"
+                                      onChange={handleDivisionChange}
+                                      renderValue={(selected) =>
+                                        selected.length === 0 ? 'None' : selected.join(', ')
+                                      }
+                                      MenuProps={{
+                                        PaperProps: {
+                                          style: { maxHeight: 300, width: 250 },
+                                        },
+                                      }}
+                                    >
+                                      <ListSubheader>
+                                        <TextField
+                                          size="small"
+                                          placeholder="Search division..."
+                                          fullWidth
+                                          autoFocus
+                                          value={divisionSearch}
+                                          onChange={(e) => setDivisionSearch(e.target.value)}
+                                          onKeyDown={(e) => e.stopPropagation()}
+                                        />
+                                      </ListSubheader>
+
+                                      <MenuItem value="__ALL__">
+                                        <Checkbox checked={selectedDivisions.length === 0} />
+                                        <ListItemText primary="None" />
+                                      </MenuItem>
+
+                                      {filteredDivisions.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                          <Checkbox checked={selectedDivisions.includes(name)} />
+                                          <ListItemText primary={name} />
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+                              )}
+                            </>
+                          )}
+
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                 </Grid>
-
                 <Grid item xs={12}>
                   <Card
                     sx={{
