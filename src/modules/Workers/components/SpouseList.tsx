@@ -93,6 +93,8 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
         console.log(res.data._id, 'gfgg');
         setId(res.data._id);
         navigate(`/users/worker/${res.data._id}/2`);
+        window.open(`/users/worker/${res.data._id}/2`, '_blank');
+
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
@@ -142,6 +144,7 @@ const SpouseListPage = (props: FormComponentProps<Spouse[], { status?: 'reject' 
     WorkersServices.getById(rowId.row.spouseOf._id)
       .then((res) => {
         navigate(`/workers/edit/${rowId.row.spouseOf._id}/2`);
+        window.open(`/workers/edit/${rowId.row.spouseOf._id}/2`, '_blank');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);

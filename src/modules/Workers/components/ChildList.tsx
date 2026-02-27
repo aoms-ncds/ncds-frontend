@@ -84,6 +84,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
     ChildrenServices.getById(rowId.id)
       .then((res) => {
         navigate(`/users/worker/${res.data.childOf}/3`);
+        window.open(`/users/worker/${res.data.childOf}/3`, '_blank');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
@@ -94,6 +95,7 @@ const ChildListPage = (props: FormComponentProps<Child[], { status?: 'reject' | 
     ChildrenServices.getById(rowId.id)
       .then((res) => {
         navigate(`/workers/edit/${res.data.childOf}/3`);
+        window.open(`/workers/edit/${res.data.childOf}/3`, '_blank');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);

@@ -76,7 +76,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
   const [remarks, setRemarks] = useState<Remark[]>([]);
   const [statusFilter, setStatusFilter] = useState([IROLifeCycleStates.WAITING_FOR_ACCOUNTS_STATE]); // default WFA: Waiting for access or Reverted
   const [exstatusFilter, setExStatusFilter] = useState<any>([]); // default WFA: Waiting for access or Reverted
-  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'| null>('All'); // default WFA: Waiting for access or Reverted
+  const [statusFilter1, setStatusFilter1] = useState<'Support' |'All' | 'Expanse'|'Custom'| null>('All'); // default WFA: Waiting for access or Reverted
   const [openPrintFr, setOpenPrintFr] = useState(false);
   const [data6, setData6] = useState<FR | null>(null);
   const [divisions, setDivisions] = useState<string[]>([]);
@@ -1133,6 +1133,8 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
           return clsx('yellow-dark');
         case 'IRO APPROVED':
           return clsx('orange-light');
+        case 'RE-SUBMITTED':
+          return clsx('status-cell', 're-sum');
         case 'WAITING FOR RELEASE AMOUNT':
           return clsx('orange-dark');
         case 'AMOUNT RELEASED':
@@ -1154,36 +1156,45 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
       valueGetter: (params) => {
         let statusName = IROLifeCycleStates.getStatusNameByCodeTransaction(params.value);
         // Check if the status name needs to be changed
-        console.log(statusName, 'sjhivi');
-        switch (statusName) {
-        case 'SEND_BACK':
-          statusName = 'REVERTED';
-          break;
-        case 'FR_APPROVED':
-          statusName = 'FR VERIFIED'; // Change to whatever new name you want
-          break;
-        case 'FR_REJECTED':
-          statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_OFFICE_MNGR':
-          statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
-          break;
-        case 'WAITING_FOR_ACCOUNTS_STATE':
-          statusName = 'IRO APPROVED'; // Change to whatever new name you want
-          break;
-        case 'IRO_IN_PROCESS':
-          statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
-          break;
-          // case 'WAITING_FOR_ACCOUNTS_MNGR':
-          //   statusName = 'WAITING FOR ACCOUNTS MNGR';
-          //   if (props.action === 'release') {
-          //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
-          //   }
-          break;
+        const iscustom = (params.row as any)?.isCustom;
+
+        if (iscustom === true) {
+          statusName = 'RE-SUBMITTED';
+        } else {
+          console.log(statusName, 'sjhivi');
+          switch (statusName) {
+          case 'SEND_BACK':
+            statusName = 'REVERTED';
+            break;
+          case iscustom:
+            statusName = 'RE-Submited';
+            break;
+          case 'FR_APPROVED':
+            statusName = 'FR VERIFIED'; // Change to whatever new name you want
+            break;
+          case 'FR_REJECTED':
+            statusName = 'IRO DISAPPROVED'; // Change to whatever new name you want
+            break;
+          case 'WAITING_FOR_OFFICE_MNGR':
+            statusName = 'WAITING FOR APPROVAL'; // Change to whatever new name you want
+            break;
+          case 'WAITING_FOR_ACCOUNTS_STATE':
+            statusName = 'IRO APPROVED'; // Change to whatever new name you want
+            break;
+          case 'IRO_IN_PROCESS':
+            statusName = 'IRO IN PROCESS'; // Change to whatever new name you want
+            break;
+            // case 'WAITING_FOR_ACCOUNTS_MNGR':
+            //   statusName = 'WAITING FOR ACCOUNTS MNGR';
+            //   if (props.action === 'release') {
+            //     statusName = 'WAITTING FOR RELEASE AMOUNT'; // Change to whatever new name you want
+            //   }
+            break;
           // Add more cases for other status names you want to change
-        default:
-          statusName = statusName.replaceAll('_', ' ');
-          break;
+          default:
+            statusName = statusName.replaceAll('_', ' ');
+            break;
+          }
         }
         return statusName;
       },
@@ -1784,7 +1795,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               {/* RIGHT CATEGORY FILTER */}
                             </>
                           )}
-                          <Grid item xs={12} lg={4}>
+                          <Grid item xs={12} lg={5}>
                             <ToggleButtonGroup
                               exclusive
                               size="small"
@@ -1796,7 +1807,9 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                                     'Support' :
                                     value === 'Expanse' ?
                                       'Expanse' :
-                                      'All',
+                                      value === 'Custom' ?
+                                        'Custom' :
+                                        'All',
                                 );
                               }}
                               sx={toggleSx}
@@ -1804,6 +1817,7 @@ const ManageIRO = (props: { action: 'manage' | 'release' }) => {
                               <ToggleButton value="Support">SUPPORT</ToggleButton>
                               <ToggleButton value="Expanse">EXPENSE</ToggleButton>
                               <ToggleButton value="All">BOTH</ToggleButton>
+                              <ToggleButton value="Custom">Custom IRO</ToggleButton>
                             </ToggleButtonGroup>
                           </Grid>
 

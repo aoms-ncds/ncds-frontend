@@ -910,7 +910,7 @@ const FRForm = (props: FormComponentProps<any>) => {
                         {particulars.map((item, index) => (
                           <TableRow key={item._id}>
                             <TableCell component="th" sx={{ display: 'flex' }}>
-                              {props.action !== 'view'&& props.actionAdi !=='view' && (
+                              {props.action !== 'view'&& props.actionAdi !=='view' && !props.disable && (
                                 <>
                                   <PermissionChecks
                                     permissions={['WRITE_FR']}

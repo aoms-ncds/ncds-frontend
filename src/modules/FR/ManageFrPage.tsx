@@ -632,7 +632,7 @@ const ManageFrPage = () => {
           return clsx('status-cell1');
         case ' FR_REJECTED':
           return clsx('status-cell', 'red');
-        case 'PENDING APPR.':
+        case 'PENDING APPROV.':
           return clsx('status-cell', 'Appr');
         case 'RE-SUBMITTED':
           return clsx('status-cell', 're-sum');
@@ -670,7 +670,7 @@ const ManageFrPage = () => {
           }
           break;
         case 'WAITING_FOR_PRESIDENT':
-          statusName = 'PENDING APPR.';
+          statusName = 'PENDING APPROV.';
           break;
         case 'FR_REJECTED':
           statusName = 'FR DISAPPROVED';
@@ -747,62 +747,81 @@ const ManageFrPage = () => {
       renderHeader: () => <b>{'Sub-Division'}</b>,
       valueGetter: (params) => params.row.purposeSubdivision?.name,
     },
-    {
-      field: 'mainCategory',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Main Category</b>,
-      width: 240,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (props) => (
-        <p
-          style={{
-            maxWidth: 240,
-            whiteSpace: 'normal',
-            wordBreak: 'break-word',
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-        >
-          {props.row?.particulars?.[0]?.mainCategory}
-        </p>
-      ),
-    },
-    {
-      field: 'subCategory',
-      headerClassName: 'super-app-theme--cell',
-      renderHeader: () => <b>Sub Category</b>,
-      width: 240,
-      align: 'center',
-      headerAlign: 'center',
-      valueGetter: (params) => {
-        const subCategory3 = params.row.particulars?.[0]?.subCategory3;
-        const subCategory2 = params.row.particulars?.[0]?.subCategory2;
-        const subCategory1 = params.row.particulars?.[0]?.subCategory1;
-        if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
-          return subCategory3;
-        } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
-          return subCategory2;
-        } else {
-          return subCategory1;
-        }
-      },
-      renderCell: (params) => {
-        return (
-          <p
-            style={{
-              maxWidth: 240,
-              whiteSpace: 'normal',
-              wordBreak: 'break-word',
-              justifyContent: 'center',
-              textAlign: 'center',
-            }}
-          >
-            {params.value}
-          </p>
-        );
-      },
-    },
+   {
+  field: 'mainCategory',
+  headerClassName: 'super-app-theme--cell',
+  renderHeader: () => <b>Main Category</b>,
+  width: 240,
+  align: 'center',
+  headerAlign: 'center',
+
+  renderCell: (params) => {
+    const mainCategory =
+      params.row?.particulars?.[0]?.mainCategory
+        ?.split(' ')
+        ?.at(0) ?? '';
+
+    const { subCategory1, subCategory2, subCategory3 } =
+      params.row?.particulars?.[0] || {};
+
+    let subCategory = subCategory1;
+
+    if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '.') {
+      subCategory = subCategory3;
+    } else if (subCategory2 && subCategory2 !== 'Select') {
+      subCategory = subCategory2;
+    }
+
+    return (
+      <p
+        style={{
+          maxWidth: 240,
+          whiteSpace: 'normal',
+          wordBreak: 'break-word',
+          textAlign: 'center',
+          margin: 0,
+        }}
+      >
+        {mainCategory} / {subCategory}
+      </p>
+    );
+  },
+},
+    // {
+    //   field: 'subCategory',
+    //   headerClassName: 'super-app-theme--cell',
+    //   renderHeader: () => <b>Sub Category</b>,
+    //   width: 240,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   valueGetter: (params) => {
+    //     const subCategory3 = params.row.particulars?.[0]?.subCategory3;
+    //     const subCategory2 = params.row.particulars?.[0]?.subCategory2;
+    //     const subCategory1 = params.row.particulars?.[0]?.subCategory1;
+    //     if (subCategory3 && subCategory3 !== 'Select' && subCategory3 !== '' && subCategory3 !== '.') {
+    //       return subCategory3;
+    //     } else if (subCategory2 && subCategory2 !== 'Select' && subCategory2 !== '') {
+    //       return subCategory2;
+    //     } else {
+    //       return subCategory1;
+    //     }
+    //   },
+    //   renderCell: (params) => {
+    //     return (
+    //       <p
+    //         style={{
+    //           maxWidth: 240,
+    //           whiteSpace: 'normal',
+    //           wordBreak: 'break-word',
+    //           justifyContent: 'center',
+    //           textAlign: 'center',
+    //         }}
+    //       >
+    //         {params.value}
+    //       </p>
+    //     );
+    //   },
+    // },
     {
       field: 'requestedAmount',
       headerClassName: 'super-app-theme--cell',
@@ -1101,7 +1120,7 @@ const ManageFrPage = () => {
                                   <ToggleButton value="RVT">Reverted</ToggleButton>
                                   <ToggleButton value="VRY">Verified</ToggleButton>
                                   <ToggleButton value="DIS">Disapprove</ToggleButton>
-                                  <ToggleButton value="PRES">Awaiting Aprve.</ToggleButton>
+                                  <ToggleButton value="PRES">Awaiting Approv.</ToggleButton>
                                 </ToggleButtonGroup>
                               </Grid>
 

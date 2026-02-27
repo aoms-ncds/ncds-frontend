@@ -15,7 +15,7 @@ import FRServices from './extras/FRServices';
 import { pdf, PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
 import PDFTemplate from './components/PDFTemplate';
 import FileUploaderServices from '../../components/FileUploader/extras/FileUploaderServices';
-import { purposes } from './extras/FRConfig';
+import { monthNames, purposes } from './extras/FRConfig';
 import DesignationParticularService from '../Settings/extras/DesignationParticularService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/Authentication';
@@ -1181,6 +1181,29 @@ const WorkerSupportPage = () => {
 
   return (
     <CommonPageLayout title="Workers Support">
+      <Card sx={{
+        width: {
+          xs: '8%', // mobile
+          sm: '10%', // tablet
+          md: '30%', // desktop
+        },
+        borderRadius: 3,
+        mt: 2,
+      }}>
+
+        {frAction&&(
+          <CardContent>
+
+            <FRForm
+              value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
+              onChange={(newReq) => setRequisition(newReq)}
+              action={frAction ?? 'view'}
+              onSubmit={addFR} // Pass the addFR function to the onSubmit prop
+              disable= {true}
+            />
+          </CardContent>
+        )}
+      </Card>
       <Card
         sx={{
           width: {
@@ -1192,15 +1215,6 @@ const WorkerSupportPage = () => {
           mt: 2,
         }}
       >
-        {frAction&&(
-          <FRForm
-            value={frAction == 'view' ? requisition2 as CreatableFR : requisition}
-            onChange={(newReq) => setRequisition(newReq)}
-            action={frAction ?? 'view'}
-            onSubmit={addFR} // Pass the addFR function to the onSubmit prop
-            disable= {true}
-          />
-        )}
         {confirmAttach?(
 
           <Card sx={{
@@ -1351,7 +1365,7 @@ const WorkerSupportPage = () => {
                   subCategory1: requisition?.particulars[0]?.subCategory1,
                   subCategory2: requisition?.particulars[0]?.subCategory2,
                   subCategory3: requisition?.particulars[0]?.subCategory3,
-                  month: moment().format('MMMM'),
+                  month: (requisition as any).month,
                   narration: requisition?.particulars[0]?.narration,
                   requestedAmount: total.net,
                   unitPrice: total.net,
@@ -1592,6 +1606,24 @@ const WorkerSupportPage = () => {
                           }
                         }}
                         renderInput={(params) => <TextField {...params} label="Designation Particulars" required variant='standard' />}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                      <Autocomplete
+                        // disabled={props.disable==true}
+                        value={(requisition as any).month}
+                        options={monthNames ?? []}
+                        getOptionLabel={(monthName) => monthName}
+                        onChange={(e, selectedMonth) => {
+                          if (selectedMonth) {
+                            setRequisition((particularDetails) => ({
+                              ...particularDetails,
+                              month: selectedMonth,
+                            }));
+                          }
+                        }}
+                        renderInput={(params) => <TextField {...params} label="For the Month" required variant='standard' />}
                         fullWidth
                       />
                     </Grid>

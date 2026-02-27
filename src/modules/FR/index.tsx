@@ -35,6 +35,16 @@ const frDashboard = () => {
       color: 'linear-gradient(90deg, #0284c7, #0ea5e9)',
       route: '/fr/child_support',
     },
+    {
+      label: 'New Custom FR',
+      color: 'linear-gradient(90deg, #0a772a, #014404)',
+      route: '/fr/applyCustom',
+    },
+    {
+      label: 'New Custom IRO',
+      color: 'linear-gradient(90deg, #750e94, #0ea5e9)',
+      route: '/iro/applyCustom',
+    },
   ];
   useEffect(() => {
     FRServices.getCount()
@@ -107,7 +117,7 @@ const frDashboard = () => {
               <Grid item xs={12} sm={6} md={3} xl={2}>
                 <FRCountCard icon={<img src="/mod_icons/Waiting for President Sanction.png" alt="Logo" style={{ width: '50px', height: '50px' }} />}
                   count={waitingForPresidentFrCount?.toString()}
-                  secondaryText={'Awaiting Aprov.'}
+                  secondaryText={'Awaiting Approv.'}
                   onClick={()=>{
                     if (isCoordinator) {
                       navigate(`/fr/manageForDivision/?id=${2}`); // Pass numbers as query string
